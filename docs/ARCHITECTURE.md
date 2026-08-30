@@ -1,43 +1,48 @@
 # Architecture
 
-## Статус документа
-
-Каркас архитектуры. Подтверждены только Next.js, Payload CMS, отдельный SourceCraft-репозиторий и серверный контур SZ Rostov. Остальные решения помечены `TODO`.
-
 ## Контуры
 
 ```mermaid
 flowchart LR
-    visitor["Посетитель"] --> public["Next.js public web"]
-    editor["Редактор"] --> admin["Payload Admin"]
-    public --> payload["Payload server API"]
+    visitor["Посетитель"] --> public["Next.js public shell"]
+    editor["CONTENT_MANAGER / DIRECTOR / SUPER_ADMIN"] --> admin["Payload Admin"]
+    public --> queries["Future data/view-model layer"]
+    queries --> payload["Payload inside Next.js runtime"]
     admin --> payload
-    payload --> db["Database — TODO"]
-    payload --> media["Media storage — TODO"]
-    public --> leads["Lead delivery — TODO"]
+    payload --> db["PostgreSQL 18"]
+    payload --> media["Local media storage"]
+    payload -. later .-> timeweb["Managed PostgreSQL Timeweb"]
+    public -. later .-> leads["Lead delivery / integrations"]
 ```
 
-## Предварительные границы
+## Подтверждённые границы
 
-- **Public web:** публичные маршруты, каталог, SEO, формы и отображение контента.
-- **Payload:** коллекции, административная панель, server-side validation, hooks и access control.
-- **Data:** выбранная Payload-совместимая база и migrations; конкретный адаптер `TODO`.
-- **Media:** загрузка и выдача изображений/документов; способ хранения и резервирования `TODO`.
-- **Integrations:** лиды, импорт объектов и внешние API подключаются через явные server-side contracts.
-- **Operations:** отдельный runtime на SZ Rostov; Nginx/systemd/container topology и release path `TODO`.
+- **Public shell:** пока только foundation-заглушка. Полноценный UI и 40 страниц будут добавлены следующим потоком.
+- **Payload core:** коллекции `users`, `media`, `pages`, global `site-settings`, hooks, RBAC и admin UI.
+- **Data:** `@payloadcms/db-postgres` поверх PostgreSQL 18, schema changes только через Payload migrations.
+- **Media:** локальное хранение в `media/` на foundation-этапе с последующим переходом на S3-compatible storage.
+- **Integrations:** лиды, импорт объектов, CRM и analytics пока за пределами foundation.
+- **Operations:** canonical Git — SourceCraft, целевой runtime-контур — `sz-rostov`, secrets — `szrostov-server/prd`.
 
-## Решения, которые нельзя принять молча
+## Слои кода
 
-- монолит Next + Payload или разделённые runtime;
-- версия Node.js и package manager;
-- database adapter и migration strategy;
-- локальная БД и production managed DB;
-- media storage, CDN и image processing;
-- способ импорта объектов недвижимости;
-- auth/RBAC Payload;
-- кэширование, revalidation и preview;
-- observability, backups и disaster recovery;
-- CI/CD и exact-SHA deploy.
+- `src/app/(frontend)` — текущий foundation-shell публичной части;
+- `src/app/(payload)` — штатные admin / REST / GraphQL routes Payload;
+- `src/payload/collections` — schema collections;
+- `src/payload/globals` — globals;
+- `src/payload/access` — централизованный RBAC;
+- `src/payload/hooks` — локальная нормализация без рекурсивных обновлений;
+- `src/payload/admin/components` — ограниченная кастомизация Payload Admin;
+- `src/project/config.ts` — минимальная типизированная конфигурация проекта;
+- `styles/` — будущая точка входа дизайн-системы.
+
+## Нельзя делать без отдельного решения
+
+- возвращать Prisma или отдельный backend;
+- заводить второй auth layer;
+- строить бизнес-логику внутри React-компонентов или access functions;
+- создавать каталог недвижимости и импорт до отдельного data-contract;
+- переносить production домен в рамках foundation.
 
 ## Migration boundary
 
@@ -45,4 +50,4 @@ flowchart LR
 
 ## Extension points
 
-Новые интеграции добавляются через отдельные server modules с явным входным контрактом, валидацией, idempotency и наблюдаемостью. UI не обращается напрямую к базе или секретам.
+Новые интеграции добавляются через отдельные server modules с явным входным контрактом, валидацией, idempotency и наблюдаемостью. Будущий публичный UI работает через data/query/view-model слой и не обращается напрямую к Payload documents, базе или секретам.

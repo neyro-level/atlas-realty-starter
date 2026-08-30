@@ -1,39 +1,83 @@
-# Союз застройщиков Ростов — Next
+# Союз застройщиков Ростов — Foundation
 
-Новая веб-платформа «Союза застройщиков Ростов». Проект создаётся на Next.js и Payload CMS и должен в дальнейшем заменить действующий Astro-сайт после отдельной проверенной миграции домена.
+Единое приложение `Next.js 16 + Payload CMS 3 + PostgreSQL 18`, которое готовит техническое ядро нового сайта и административного кабинета для дальнейшей сборки 40 страниц UI.
 
-## Статус
+## Stack
 
-Стадия: документальный bootstrap. Репозиторий создан, но приложение и зависимости ещё не инициализированы.
+- Next.js `16.3.0`
+- React / React DOM `19.2.8`
+- TypeScript `6.0.3`
+- Payload CMS `3.88.0`
+- PostgreSQL `18`
+- Node.js `24.20.0 LTS`
+- pnpm `11.24.0`
 
-Подтверждено:
+## Architecture
 
-- frontend/runtime: Next.js;
-- CMS: Payload CMS;
-- canonical Git: SourceCraft `integrator-p/soyuz-rostov-next`;
-- целевой серверный контур: SZ Rostov, Timeweb `sz-rostov`, SSH alias `szrostov`;
-- секреты серверного контура: Doppler `szrostov-server/prd`;
-- текущий production остаётся на старом Astro-проекте до отдельного cutover.
+```text
+Frontend shell
+↓
+Data / view-model layer
+↓
+Payload CMS
+↓
+PostgreSQL
+```
 
-Требует решения:
+Payload работает внутри Next.js. Prisma, отдельного backend-runtime, второй auth-системы и второй админки в проекте нет.
 
-- точные версии Node.js, Next.js, Payload и остальных пакетов;
-- package manager и структура приложения;
-- адаптер и версия базы данных;
-- объектное хранилище и обработка медиа;
-- модель коллекций Payload, роли и права;
-- локальная среда, CI/CD и production runbook.
+## Runtime
+
+- canonical Git: SourceCraft `integrator-p/soyuz-rostov-next`
+- целевой сервер: Timeweb `sz-rostov`
+- SSH alias: `szrostov`
+- server secrets: Doppler `szrostov-server/prd`
+- production PostgreSQL: будущая отдельная managed database Timeweb, не создаётся на foundation-этапе
+
+## Core entities
+
+- `users`
+- `media`
+- `pages`
+- `site-settings`
+
+## Development
+
+1. Установить зависимости:
+   `corepack pnpm@11.24.0 install`
+2. Подготовить env:
+   скопировать `.env.example` в `.env` и подставить локальные безопасные значения (по умолчанию порт PostgreSQL 5434, чтобы не конфликтовать с другими AMS-проектами)
+3. Поднять локальную PostgreSQL 18:
+   `pnpm db:up`
+4. Сгенерировать артефакты Payload:
+   `pnpm generate:types && pnpm generate:importmap`
+5. Запустить приложение:
+   `pnpm dev`
+6. Открыть:
+   `http://127.0.0.1:3000/admin`
+
+## Checks
+
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm build`
+- `pnpm test:int`
+- `pnpm test:e2e`
+
+## Database
+
+- локальная БД поднимается через `docker-compose.yml` и образ `postgres:18-alpine`
+- source of truth по schema — Payload collections/globals
+- production schema changes проходят только через Payload migrations
 
 ## Документация
 
-1. [AGENTS.md](AGENTS.md) — правила работы AI и разработчика.
-2. [docs/PRODUCT.md](docs/PRODUCT.md) — продукт и границы проекта.
-3. [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — архитектурный контракт.
-4. [docs/DATA_MODEL.md](docs/DATA_MODEL.md) — данные и будущие коллекции.
-5. [SECURITY.md](SECURITY.md) — безопасность и секреты.
-6. [docs/MASTER_PLAN.md](docs/MASTER_PLAN.md) — этапы до переноса домена.
-7. [WORKLOG.md](WORKLOG.md) — журнал подтверждённых изменений.
+- [AGENTS.md](AGENTS.md)
+- [docs/PRODUCT.md](docs/PRODUCT.md)
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- [docs/DATA_MODEL.md](docs/DATA_MODEL.md)
+- [docs/PAYLOAD_CONTRACT.md](docs/PAYLOAD_CONTRACT.md)
+- [SECURITY.md](SECURITY.md)
+- [docs/MASTER_PLAN.md](docs/MASTER_PLAN.md)
+- [WORKLOG.md](WORKLOG.md)
 
-## Команды
-
-Команды установки, разработки, проверок и сборки будут зафиксированы после утверждения точного стека. До этого не добавлять зависимости и не выдумывать команды.

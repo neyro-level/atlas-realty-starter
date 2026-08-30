@@ -1,6 +1,7 @@
 # Dependencies and package-manager state
 node_modules/
 .pnpm-store/
+.pnpm-patch/
 
 # Next.js and build output
 .next/
@@ -13,6 +14,7 @@ media/
 uploads/
 *.sqlite
 *.sqlite3
+c-tmp-*/
 
 # Environment and secrets
 .env
@@ -32,6 +34,8 @@ Thumbs.db
 .idea/
 .vscode/
 .cursor/mcp.json
+next-env.d.ts
+*.tsbuildinfo
 
 # Logs and temporary files
 *.log

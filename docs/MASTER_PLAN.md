@@ -1,24 +1,16 @@
 # Master plan
 
-## Текущий этап — 0. Bootstrap
+## Текущий этап — 1. Foundation
 
 - [x] Подтверждён отдельный серверный контур SZ Rostov.
 - [x] Подтверждён Doppler `szrostov-server/prd`.
 - [x] Создан отдельный приватный SourceCraft-репозиторий.
-- [x] Заложено документальное ядро проекта.
-- [ ] Получить от владельца точную спецификацию стека.
-
-## Этап 1. Архитектурное решение и foundation
-
-- утвердить версии Node.js, Next.js, Payload и package manager;
-- выбрать database adapter, локальную и production БД;
-- выбрать media storage;
-- определить структуру runtime и deploy topology;
-- определить Payload collections, роли и access control;
-- зарегистрировать команды dev/check/build и CI contract;
-- создать `.env.example` без секретов.
-
-Критерий этапа: локально запускается минимальное приложение и Payload Admin, архитектурные документы соответствуют runtime.
+- [x] Развёрнут официальный Payload blank scaffold.
+- [x] Зафиксирован стек Next 16 + Payload 3 + PostgreSQL 18.
+- [x] Созданы `Users`, `Media`, `Pages`, `SiteSettings`.
+- [x] Подготовлен Payload Admin как рабочий кабинет.
+- [x] Создан `docs/PAYLOAD_CONTRACT.md` и ADR по Payload.
+- [ ] Повторно прогнать полный gate локально на чистой PostgreSQL и production smoke после финальной установки зависимостей.
 
 ## Этап 2. Инвентаризация текущего сайта
 
@@ -32,7 +24,7 @@
 
 ## Этап 3. Реализация
 
-- публичный shell и дизайн-система;
+- публичный shell и дизайн-система для 40 страниц;
 - Payload collections и административные процессы;
 - каталог и карточки объектов;
 - контентные страницы и журнал;
@@ -65,8 +57,8 @@
 
 ## Текущие ограничения
 
-- точный стек ещё не предоставлен;
-- приложение и зависимости не созданы;
-- project-specific Doppler scope для runtime не определён;
+- managed PostgreSQL Timeweb ещё не создавалась;
+- S3-compatible object storage ещё не подключено;
 - deploy runbook и DNS plan отсутствуют;
+- каталог недвижимости, лиды и публичный UI ещё не реализованы;
 - старый production не изменяется.

@@ -1,42 +1,37 @@
 # Data model
 
-## Статус
+## Foundation model
 
-Фактической схемы данных пока нет. Source of truth появится в Payload collections/config и migrations после утверждения стека. Этот документ фиксирует только границы проектирования.
+| Сущность | Назначение | Ключевые поля | Доступ |
+|---|---|---|---|
+| `users` | административные аккаунты Payload | `name`, `email`, `password`, `role` | полный management только `SUPER_ADMIN` |
+| `media` | базовый media layer | файл, `alt`, `caption`, `isPublic`, focal point | public read только при `isPublic = true` |
+| `pages` | минимальная CMS-модель страниц | `title`, `slug`, `content`, `seo`, `_status` | public read только published |
+| `site-settings` | глобальные настройки проекта | `projectName`, `brandName`, `companyName`, контакты, social links, default SEO | update `DIRECTOR | SUPER_ADMIN` |
 
-## Предварительные домены
+## Инварианты foundation
 
-| Домен | Возможное содержимое | Статус |
-|---|---|---|
-| Content | страницы, секции, меню, настройки сайта | TODO после content inventory |
-| Real estate | объекты, жилые комплексы, типы, география, цены, характеристики | TODO после анализа источника данных |
-| Editorial | статьи, рубрики, авторы, SEO-поля | TODO |
-| Media | изображения, документы, alt, размеры, storage metadata | TODO |
-| Leads | заявка и delivery status либо ссылка на внешний lead-контур | TODO: определить ownership |
-| Access | Payload users, roles и permissions | TODO |
-| Migration | legacy URL, source ID, import run, redirect status | рекомендуется для доказуемого переноса |
-
-## Обязательные инварианты будущей модели
-
-- внешние идентификаторы уникальны в пределах источника;
-- повторный импорт не создаёт дубли;
-- удаление или исчезновение объекта из источника не ведёт автоматически к физическому удалению;
-- публикация отделена от наличия записи в базе;
-- SEO slug и redirect history контролируются;
-- media имеет проверяемый owner/reference и lifecycle;
-- sensitive data минимизируется и не попадает в публичные Payload responses;
+- `users.role` хранится в самой коллекции и сохраняется в JWT;
+- первый пользователь автоматически получает `SUPER_ADMIN`;
+- `pages.slug` уникален и индексируется;
+- публикация `pages` отделена от наличия записи через drafts/versions Payload;
+- `media` не становится публичным автоматически;
+- sensitive data не попадает в публичные Payload responses;
 - timestamps и audit fields задаются единообразно.
 
 ## Lifecycle и удаление
 
-Точный lifecycle определяется для каждой коллекции до реализации. По умолчанию контент архивируется или снимается с публикации. Физическое удаление данных, импортированных из внешних источников, требует отдельного решения и проверки ссылок.
+По умолчанию:
 
-## Требует решения
+- `pages` снимаются с публикации либо удаляются только директором/суперадмином;
+- `media` управляется через Payload upload lifecycle;
+- `users` не удаляются и не меняют роль без суперадмина;
+- `site-settings` обновляется in-place как единый global.
 
-- Payload database adapter;
-- кто владеет объектами недвижимости: Payload или внешний источник;
-- где хранятся заявки и какой сервис является их source of truth;
-- версии и черновики контента;
-- локализация;
-- политика retention и backups;
-- стратегия legacy IDs и redirects.
+## Отложено
+
+- реальные сущности каталога недвижимости;
+- ownership лидов и интеграция с внешним lead-контуром;
+- import IDs, redirect registry и migration tables;
+- локализация публичного сайта;
+- retention, backup policy и production object storage.
