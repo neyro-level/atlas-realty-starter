@@ -1,0 +1,39 @@
+# Dependencies and package-manager state
+node_modules/
+.pnpm-store/
+
+# Next.js and build output
+.next/
+out/
+dist/
+build/
+
+# Payload and local runtime data
+media/
+uploads/
+*.sqlite
+*.sqlite3
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Tests, reports and generated analysis
+coverage/
+playwright-report/
+test-results/
+outputs/
+graphify-out/
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.cursor/mcp.json
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
