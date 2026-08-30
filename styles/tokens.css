@@ -1,0 +1,17 @@
+:root {
+  --sz-color-bg: #f4f2ed;
+  --sz-color-surface: #ffffff;
+  --sz-color-surface-strong: #0e2a3a;
+  --sz-color-text: #17232d;
+  --sz-color-text-muted: #55636e;
+  --sz-color-line: rgba(23, 35, 45, 0.12);
+  --sz-color-accent: #bc6c25;
+  --sz-color-accent-soft: rgba(188, 108, 37, 0.14);
+  --sz-color-success: #2d6a4f;
+  --sz-shadow-card: 0 18px 50px rgba(23, 35, 45, 0.08);
+  --sz-radius-card: 24px;
+  --sz-radius-control: 14px;
+  --sz-font-body: 'Segoe UI', 'Noto Sans', 'Helvetica Neue', sans-serif;
+  --sz-font-display: 'Trebuchet MS', 'Arial Narrow', 'Segoe UI', sans-serif;
+  --sz-container: 1120px;
+}
