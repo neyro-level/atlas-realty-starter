@@ -27,11 +27,11 @@ test.describe.serial('Payload admin foundation', () => {
     await page.click('button[type="submit"]')
 
     await expect(page).toHaveURL(/\/admin/)
-    await expect(page.getByText('Союз застройщиков Ростов')).toBeVisible()
-    await expect(page.getByText('Страницы')).toBeVisible()
-    await expect(page.getByText('Медиа')).toBeVisible()
-    await expect(page.getByText('Пользователи')).toBeVisible()
-    await expect(page.getByText('Настройки')).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Союз застройщиков Ростов' })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Страницы/ })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Медиа/ })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Пользователи/ })).toBeVisible()
+    await expect(page.getByRole('link', { name: /Настройки/ })).toBeVisible()
 
     await page.goto('/admin/logout', { waitUntil: 'domcontentloaded' })
     await expect(page).toHaveURL(/\/admin\/login/)
@@ -46,17 +46,21 @@ test.describe.serial('Payload admin foundation', () => {
     await page.click('button[type="submit"]')
 
     await expect(page).toHaveURL(/\/admin/)
+    await expect(page.getByRole('heading', { level: 1, name: 'Союз застройщиков Ростов' })).toBeVisible()
+    await expect
+      .poll(async () => (await page.context().cookies()).some(({ name }) => name.startsWith('payload-token')))
+      .toBe(true)
 
     await page.goto('/admin/collections/pages', { waitUntil: 'domcontentloaded' })
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Страницы')
+    await expect(page).toHaveURL(/\/admin\/collections\/pages/)
 
     await page.goto('/admin/collections/media', { waitUntil: 'domcontentloaded' })
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Медиа')
+    await expect(page).toHaveURL(/\/admin\/collections\/media/)
 
     await page.goto('/admin/collections/users', { waitUntil: 'domcontentloaded' })
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Пользователи')
+    await expect(page).toHaveURL(/\/admin\/collections\/users/)
 
     await page.goto('/admin/globals/site-settings', { waitUntil: 'domcontentloaded' })
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Настройки сайта')
+    await expect(page).toHaveURL(/\/admin\/globals\/site-settings/)
   })
 })
