@@ -51,13 +51,23 @@ set +a
 export NODE_ENV=production
 export RELEASE_SHA="${RELEASE_SHA}"
 export NEXT_PUBLIC_RELEASE_SHA="${RELEASE_SHA}"
+export HOME="${APP_ROOT}"
+export COREPACK_HOME="${APP_ROOT}/.cache/node/corepack"
+export PNPM_HOME="${APP_ROOT}/.local/share/pnpm"
+export PATH="/usr/local/bin:/usr/bin:/bin"
+unset BASH_ENV ENV
 
-runuser --preserve-environment -u "${APP_USER}" -- /usr/local/bin/pnpm --dir "${release_dir}" install --frozen-lockfile
+run_as_app() {
+  runuser --preserve-environment -u "${APP_USER}" -- /bin/bash -c 'cd "$1"; shift; exec "$@"' _ "${release_dir}" "$@"
+}
+
+run_as_app /usr/local/bin/pnpm install --frozen-lockfile
+run_as_app /usr/local/bin/pnpm build
+run_as_app /usr/local/bin/pnpm payload migrate
+
 printf 'RELEASE_SHA=%s\n' "${RELEASE_SHA}" > /etc/soyuz-rostov/release.env
 chmod 0640 /etc/soyuz-rostov/release.env
 chown root:"${APP_USER}" /etc/soyuz-rostov/release.env
-runuser --preserve-environment -u "${APP_USER}" -- /usr/local/bin/pnpm --dir "${release_dir}" build
-runuser --preserve-environment -u "${APP_USER}" -- /usr/local/bin/pnpm --dir "${release_dir}" payload migrate
 
 ln -sfn "${release_dir}" "${APP_ROOT}/current.next"
 mv -Tf "${APP_ROOT}/current.next" "${APP_ROOT}/current"
