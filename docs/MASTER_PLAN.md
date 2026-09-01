@@ -26,24 +26,27 @@
 
 ## Этап 3. Public platform
 
-- public shell и design system;
-- public DTO/query layer поверх Payload;
-- catalog and SEO pages;
-- forms и validated lead/anti-spam ingestion;
-- media pipeline через S3;
-- production metadata/redirects.
+- [x] public shell, exact design tokens, mega menu, mobile overlay and footer;
+- [x] public DTO/query layer поверх Payload для объектов, ЖК, сотрудников, отзывов, офисов и контактов;
+- [x] Home, catalog presets/filters/cards/session collections, property/ЖК detail templates and shared commercial routes;
+- [x] employees, reviews, contacts, HTML sitemap, legal status and noindex leadgen route shells;
+- [ ] production content/media seed;
+- [ ] canonical Payload article collection and approved legal documents;
+- [ ] validated public lead/anti-spam ingestion; current CTA routes do not imitate delivery;
+- [x] public metadata, sitemap, robots and responsive proof at 1440/1280/768/390.
 
 ## Этап 4. Mass catalog
 
-Контракт уже зафиксирован, реализация после реального feed:
+Текущий incremental state:
 
-- `ResidentialComplex`;
-- `Building`;
-- `Unit`;
-- optional `UnitLayout`/`Developer`;
-- concrete XML adapter;
-- idempotency/deactivate rules;
-- performance proof для десятков тысяч units.
+- [x] `ResidentialComplex` collection + migration + access/audit;
+- [ ] загрузить утверждённые данные 30 ЖК через Payload;
+- [ ] подтвердить источник, актуальность и media ownership каждого ЖК;
+- [ ] `Building`;
+- [ ] `Unit`;
+- [ ] concrete XML adapter;
+- [ ] idempotency/deactivate rules;
+- [ ] performance proof для mass feed.
 
 ## Этап 5. Client production foundation
 

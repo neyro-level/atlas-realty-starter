@@ -1,6 +1,6 @@
-# Союз застройщиков Ростов — Foundation
+# Союз застройщиков Ростов — Next + Payload platform
 
-Единое приложение `Next.js 16 + Payload CMS 3 + PostgreSQL 18`, которое готовит техническое ядро нового сайта и административного кабинета для дальнейшей сборки 40 страниц UI.
+Единое приложение `Next.js 16 + Payload CMS 3 + PostgreSQL 18`: production backend, административный кабинет и публичные commercial/catalog route families на UI-контракте «Союза Застройщиков».
 
 ## Stack
 
@@ -41,6 +41,8 @@ Payload работает внутри Next.js. Prisma, отдельного back
 - `users`
 - `media`
 - `pages`
+- `residential-complexes`
+- `properties`, `employees`, `reviews`, `offices`, `leads`
 - `site-settings`
 
 ## Development
@@ -56,7 +58,7 @@ Payload работает внутри Next.js. Prisma, отдельного back
 5. Запустить приложение:
    `pnpm dev`
 6. Открыть:
-   `http://127.0.0.1:3000/admin`
+   public `http://127.0.0.1:3000/`, admin `http://127.0.0.1:3000/admin`
 
 ## Checks
 
@@ -87,5 +89,7 @@ Payload работает внутри Next.js. Prisma, отдельного back
 - [docs/FEED_OWNERSHIP_CONTRACT.md](docs/FEED_OWNERSHIP_CONTRACT.md)
 - [docs/PRODUCTION_FOUNDATION.md](docs/PRODUCTION_FOUNDATION.md)
 - [docs/PRODUCTION_RUNBOOK.md](docs/PRODUCTION_RUNBOOK.md)
+- [docs/UI_IMPLEMENTATION_CONTRACT.md](docs/UI_IMPLEMENTATION_CONTRACT.md)
+- [docs/UI_PARITY_MATRIX.md](docs/UI_PARITY_MATRIX.md)
 - [WORKLOG.md](WORKLOG.md)
 

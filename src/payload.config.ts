@@ -23,6 +23,7 @@ import { Media } from './payload/collections/Media'
 import { Offices } from './payload/collections/Offices'
 import { Pages } from './payload/collections/Pages'
 import { Properties } from './payload/collections/Properties'
+import { ResidentialComplexes } from './payload/collections/ResidentialComplexes'
 import { Reviews } from './payload/collections/Reviews'
 import { Users } from './payload/collections/Users'
 import { SiteSettings } from './payload/globals/SiteSettings'
@@ -92,6 +93,7 @@ export default buildConfig({
     Leads,
     LeadNotes,
     Properties,
+    ResidentialComplexes,
     Employees,
     Reviews,
     Offices,

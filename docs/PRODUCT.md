@@ -43,20 +43,20 @@
 
 ## Текущий scope
 
-- foundation-ядро на Next.js 16 + Payload;
-- рабочий кабинет Payload Admin с parity-ориентированной IA по Bastion reference;
-- локальная PostgreSQL 18 и безопасный env-контур;
-- подготовить повторяемый single-client production foundation и upgrade profile;
-- collections, access control, audit trail и import/analytics operational layer;
-- без production cutover и без публичного redesign.
+- hardened `Next.js + Payload` foundation и production runtime;
+- публичный UI реализован по verified reference UI contract без Prisma/Better Auth/backend code;
+- canonical Ростов routes: Home, новостройки, квартиры, строительство, ипотека, about, reviews, contacts и careers;
+- Payload collection `residential-complexes` для 30 ЖК;
+- public DTO/query layer с `overrideAccess: false`;
+- catalog/detail families для ЖК и самостоятельных `properties`;
+- metadata, sitemap, robots, responsive states and empty states.
 
 ## Non-goals текущего этапа
 
-- изменение действующего Astro-сайта;
-- перенос домена или DNS;
-- production deploy;
-- реальный XML parser/adapter под неизвестную внешнюю спецификацию;
-- финальная интеграция lead delivery во внешнюю CRM;
-- page builder и публичный дизайн новой платформы;
-- перенос production-данных и файлов;
-- подключение новых внешних сервисов без отдельной задачи.
+- изменение действующего Astro-сайта или domain/DNS cutover;
+- production seed жилых комплексов без отдельного data approval;
+- выдуманные недостающие 10 ЖК, цены, отзывы или квартиры;
+- реальный XML parser/adapter под неизвестную спецификацию;
+- финальная CRM delivery и public lead ingestion;
+- `Building -> Unit` mass catalog до полного feed;
+- journal, favorites/compare и advertising leadgen migration.

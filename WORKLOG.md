@@ -1,5 +1,19 @@
 # Worklog
 
+## 2026-09-01 — Public and Payload Admin UI implementation
+
+- UI reference зафиксирован как external evidence; старый Astro implementation не использовался как UI или catalog data source.
+- Transferred exact global tokens, public header/mega menu/mobile overlay/footer, breadcrumbs, status states, catalog controls/cards and session favorites/compare patterns.
+- Implemented Payload-backed catalog presets and indexed URL filters, full property/ЖК detail templates with gallery/video/map/lightbox, commercial/content route families, employees/reviews/offices directories, HTML sitemap, legal status and isolated noindex leadgen shells.
+- Expanded `properties` public filter/detail schema and ЖК video field; generated additive `20260901_134719_public_ui_parity` migration.
+- Payload остаётся единственной CMS/backend/auth platform. Admin получил responsive sidebar, mobile header/drawer, `Ctrl+K` command menu, workspace frames, metrics, tables and lead kanban; native Payload document/media/status/audit views remain authoritative.
+- Public Local API calls use `overrideAccess: false`; no Prisma, Better Auth, second backend, fake lead delivery, Astro fixtures or foreign client catalog records were added.
+- Clean five-migration chain passed on an isolated PostgreSQL database. `lint`, `typecheck`, production build, integration `9/9` and production Admin e2e `3/3` passed; development e2e had one first-attempt auth-route flake and passed on retry.
+- Browser QA passed at `1440×1000`, `1280×800`, `768×1024` and `390×844`, including public navigation/filter sheets and authenticated Admin desktop/mobile layouts without horizontal overflow.
+- Data-dependent detail/card/timeline states remain `BLOCKED_DATA` until approved Rostov objects, complexes, employees, reviews and media exist. Journal articles, approved legal documents and validated public lead ingestion remain explicit prerequisites.
+- Production data, migrations, domain and deploy were not changed by this WORK stream. Changes remain uncommitted on the feature branch.
+
+
 ## 2026-09-01 — first isolated production runtime
 
 - SourceCraft `main` deployed to dedicated `sz-rostov` as immutable release `a1c7591c64093f7169bae79c714ee486d1e4729d`.
@@ -20,7 +34,7 @@
 ## 2026-08-31 — Payload admin parity and platform hardening
 
 - Payload сохранён единственной CMS/backend platform; Prisma, Better Auth, второй ORM/backend не добавлены.
-- Восстановлена business IA Bastion reference через штатные Payload Nav/Custom Views.
+- Восстановлена business IA проекта через штатные Payload Nav/Custom Views.
 - Добавлены collections/globals/access/hooks/migrations для cabinet domains.
 - Устранён access bypass custom dashboards: views используют Payload Admin context, server capability guard и `overrideAccess: false`.
 - Добавлены field-level permissions и ownership hooks для publish/origin/import metadata и XML employee public profile.

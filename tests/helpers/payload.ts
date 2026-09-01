@@ -38,6 +38,7 @@ export async function resetFoundationState() {
     'reviews',
     'lead-notes',
     'leads',
+    'residential-complexes',
     'properties',
     'offices',
     'employees',

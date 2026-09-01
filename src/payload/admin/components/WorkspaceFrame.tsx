@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
+import { ADMIN_SECTION_LINKS } from '@/payload/admin/lib/constants'
 
 export function WorkspaceFrame(props: {
   actions?: React.ReactNode
@@ -11,15 +12,24 @@ export function WorkspaceFrame(props: {
 
   return (
     <section className="sz-workspace">
+      <div className="sz-mobile-admin-header">
+        <strong>Управление сайтом</strong>
+        <details className="sz-mobile-admin-menu">
+          <summary>Меню</summary>
+          <nav aria-label="Мобильные разделы кабинета">{ADMIN_SECTION_LINKS.map((item) => <Link href={item.href} key={item.href}>{item.label}</Link>)}</nav>
+        </details>
+      </div>
       <header className="sz-workspace__header">
-        <div>
-          <p className="sz-workspace__eyebrow">Союз Застройщиков</p>
+        <div className="sz-workspace__heading">
+          <p className="sz-workspace__eyebrow">Управление сайтом / {title}</p>
           <h1 className="sz-workspace__title">{title}</h1>
-          {description ? <p className="sz-workspace__description">{description}</p> : null}
         </div>
         {actions ? <div className="sz-workspace__actions">{actions}</div> : null}
       </header>
-      <div className="sz-workspace__body">{children}</div>
+      <main className="sz-workspace__body">
+        {description ? <p className="sz-workspace__description">{description}</p> : null}
+        {children}
+      </main>
     </section>
   )
 }

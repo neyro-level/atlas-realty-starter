@@ -51,14 +51,16 @@ Prisma, Better Auth, второй ORM, repository layer и отдельный ad
 
 ## Code layers
 
-- `src/app/(frontend)` — foundation public shell;
+- `src/app/(frontend)` — public route families: Home, catalogs, details, commercial pages, employees, journal empty state, legal/sitemap and isolated noindex leadgen shells;
+- `src/components/layout`, `src/components/catalog`, `src/components/public` — exact shell/catalog primitives, session collections, content directories and responsive detail templates;
+- `src/payload/public/queries.ts` — public Payload DTO/query boundary for properties, complexes, employees, reviews, offices and contacts;
 - `src/app/(payload)` — Payload admin/REST/GraphQL и health routes;
 - `src/payload/collections` — business schema;
 - `src/payload/globals` — globals;
 - `src/payload/access` — RBAC/capabilities/append-only policies;
 - `src/payload/hooks` — invariants и transactional audit;
-- `src/payload/admin/components` — nav/shared workspace UI;
-- `src/payload/admin/views` — Payload custom views;
+- `src/payload/admin/components` — Payload-compatible Admin chrome, responsive mobile header, command menu and shared workspace UI;
+- `src/payload/admin/views` — business dashboards, server-filtered tables, metrics and lead kanban;
 - `src/payload/admin/queries` — domain-specific server query modules;
 - `src/payload/admin/lib/context.ts` — authenticated Payload context и capability guard;
 - `src/project/env.ts` — production environment contract;
@@ -79,10 +81,11 @@ Prisma, Better Auth, второй ORM, repository layer и отдельный ad
 
 ## Catalog boundary
 
-- `properties` — самостоятельные объявления;
-- future mass catalog — `ResidentialComplex -> Building -> Unit`;
-- feed ownership и idempotency зафиксированы отдельно;
-- concrete collections создаются только после реального feed/business contract.
+- `residential-complexes` — самостоятельный public/admin module для первых 30 ЖК;
+- `properties` — самостоятельные объявления, вторичка, дома, участки и коммерция;
+- future mass feed extension — `ResidentialComplex -> Building -> Unit`;
+- committed UI layer contains no foreign client or Astro catalog fixtures; runtime source truth is Payload;
+- feed ownership и idempotency зафиксированы отдельно.
 
 ## Production extension points
 

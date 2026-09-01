@@ -20,7 +20,7 @@ test.describe.serial('Payload admin foundation', () => {
     await expect(page).toHaveURL(/\/admin\/?$/)
     await expect(page.getByRole('heading', { level: 1, name: 'Посетители' })).toBeVisible()
 
-    for (const label of ['Посетители', 'Заявки', 'Объекты', 'Сотрудники', 'Отзывы', 'Офисы', 'Контакты', 'Антиспам', 'XML-импорт']) {
+    for (const label of ['Посетители', 'Заявки', 'Объекты', 'Новостройки', 'Сотрудники', 'Отзывы', 'Офисы', 'Контакты', 'Антиспам', 'XML-импорт']) {
       await expect(page.getByRole('link', { name: label })).toBeVisible()
     }
 
@@ -40,6 +40,7 @@ test.describe.serial('Payload admin foundation', () => {
     for (const [path, heading] of [
       ['/admin/zayavki', 'Заявки'],
       ['/admin/obekty', 'Объекты'],
+      ['/admin/collections/residential-complexes', 'Жилые комплексы'],
       ['/admin/sotrudniki', 'Сотрудники'],
       ['/admin/otzyvy', 'Отзывы'],
       ['/admin/ofisy', 'Офисы'],

@@ -3,8 +3,8 @@ import type { Page } from '@playwright/test'
 
 import { foundationUsers, resetFoundationState, seedPrivilegedUsers } from '../helpers/payload'
 
-const businessSections = ['Посетители', 'Заявки', 'Объекты', 'Сотрудники', 'Отзывы', 'Офисы', 'Контакты', 'Антиспам', 'XML-импорт']
-const contentManagerSections = ['Объекты', 'Сотрудники', 'Отзывы', 'Офисы', 'Контакты']
+const businessSections = ['Посетители', 'Заявки', 'Объекты', 'Новостройки', 'Сотрудники', 'Отзывы', 'Офисы', 'Контакты', 'Антиспам', 'XML-импорт']
+const contentManagerSections = ['Объекты', 'Новостройки', 'Сотрудники', 'Отзывы', 'Офисы', 'Контакты']
 
 async function login(page: Page, email: string, password: string) {
   await page.goto('/admin/login', { waitUntil: 'domcontentloaded' })
