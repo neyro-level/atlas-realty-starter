@@ -3,8 +3,8 @@ import dotenv from 'dotenv'
 
 dotenv.config({ path: 'test.env' })
 
-const baseURL =
-  process.env.PLAYWRIGHT_BASE_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://127.0.0.1:3000'
+const testPort = process.env.PORT || '3010'
+const baseURL = process.env.PLAYWRIGHT_BASE_URL || `http://127.0.0.1:${testPort}`
 const isProductionSmoke = process.env.APP_RUNTIME === 'production'
 const readinessURL = `${baseURL}/admin/create-first-user`
 
@@ -14,7 +14,7 @@ const webServerEnv: Record<string, string> = {
   NEXT_PUBLIC_APP_URL: baseURL,
   NODE_ENV: isProductionSmoke ? 'production' : 'development',
   PAYLOAD_SECRET: process.env.PAYLOAD_SECRET || 'foundation-test-secret-please-change',
-  PORT: process.env.PORT || '3000',
+  PORT: testPort,
 }
 
 export default defineConfig({
@@ -31,7 +31,7 @@ export default defineConfig({
     baseURL,
     trace: 'on-first-retry',
   },
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
   projects: [
     {
       name: 'chromium',

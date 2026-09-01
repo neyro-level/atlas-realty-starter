@@ -70,16 +70,64 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
+    leads: Lead;
+    'lead-notes': LeadNote;
+    properties: Property;
+    employees: Employee;
+    reviews: Review;
+    offices: Office;
+    'analytics-events': AnalyticsEvent;
+    'anti-spam-events': AntiSpamEvent;
+    'import-sources': ImportSource;
+    'import-runs': ImportRun;
+    'import-errors': ImportError;
+    'admin-activities': AdminActivity;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    leads: {
+      notes: 'lead-notes';
+      antiSpamAttempts: 'anti-spam-events';
+      activity: 'admin-activities';
+    };
+    properties: {
+      activity: 'admin-activities';
+    };
+    employees: {
+      properties: 'properties';
+      reviews: 'reviews';
+      activity: 'admin-activities';
+    };
+    reviews: {
+      activity: 'admin-activities';
+    };
+    offices: {
+      activity: 'admin-activities';
+    };
+    'import-runs': {
+      errors: 'import-errors';
+      activity: 'admin-activities';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
+    'lead-notes': LeadNotesSelect<false> | LeadNotesSelect<true>;
+    properties: PropertiesSelect<false> | PropertiesSelect<true>;
+    employees: EmployeesSelect<false> | EmployeesSelect<true>;
+    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
+    offices: OfficesSelect<false> | OfficesSelect<true>;
+    'analytics-events': AnalyticsEventsSelect<false> | AnalyticsEventsSelect<true>;
+    'anti-spam-events': AntiSpamEventsSelect<false> | AntiSpamEventsSelect<true>;
+    'import-sources': ImportSourcesSelect<false> | ImportSourcesSelect<true>;
+    'import-runs': ImportRunsSelect<false> | ImportRunsSelect<true>;
+    'import-errors': ImportErrorsSelect<false> | ImportErrorsSelect<true>;
+    'admin-activities': AdminActivitiesSelect<false> | AdminActivitiesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -204,6 +252,343 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  name?: string | null;
+  phone: string;
+  email?: string | null;
+  status:
+    | 'new'
+    | 'in_work'
+    | 'deferred'
+    | 'interest_confirmed'
+    | 'selecting_options'
+    | 'deposit_booking'
+    | 'successful'
+    | 'unsuccessful'
+    | 'spam_duplicate';
+  responsibleEmployee?: (number | null) | Employee;
+  direction?: ('new_building' | 'construction' | 'flat' | 'house' | 'land' | 'commercial' | 'other') | null;
+  formType?: string | null;
+  source?: string | null;
+  sourcePage?: string | null;
+  visitorKeyHash?: string | null;
+  interestType?: string | null;
+  budget?: number | null;
+  preferredDistrict?: string | null;
+  desiredRooms?: number | null;
+  paymentMethod?: string | null;
+  purchaseTimeline?: string | null;
+  nextContactAt?: string | null;
+  message?: string | null;
+  normalizedPhone?: string | null;
+  duplicateCount?: number | null;
+  lastDuplicateAt?: string | null;
+  notes?: {
+    docs?: (number | LeadNote)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  antiSpamAttempts?: {
+    docs?: (number | AntiSpamEvent)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  activity?: {
+    docs?: (number | AdminActivity)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "employees".
+ */
+export interface Employee {
+  id: number;
+  fullName: string;
+  publicName?: string | null;
+  origin: 'MANUAL' | 'XML';
+  status: 'active' | 'inactive';
+  isPublic?: boolean | null;
+  teamSection: 'sales' | 'support' | 'office' | 'management' | 'other';
+  position?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  sortOrder?: number | null;
+  photo?: (number | null) | Media;
+  publicBio?: string | null;
+  properties?: {
+    docs?: (number | Property)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  reviews?: {
+    docs?: (number | Review)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  activity?: {
+    docs?: (number | AdminActivity)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "properties".
+ */
+export interface Property {
+  id: number;
+  title: string;
+  objectCode?: string | null;
+  externalId?: string | null;
+  origin: 'MANUAL' | 'XML';
+  workflowStatus: 'draft' | 'active' | 'archived' | 'hidden';
+  isPublished?: boolean | null;
+  category: 'flat' | 'room' | 'house' | 'land' | 'commercial';
+  responsibleEmployee?: (number | null) | Employee;
+  feedSource?: (number | null) | ImportSource;
+  price?: number | null;
+  city?: string | null;
+  district?: string | null;
+  addressLine?: string | null;
+  rooms?: number | null;
+  updatedFromSourceAt?: string | null;
+  publicSlug?: string | null;
+  description?: string | null;
+  gallery?:
+    | {
+        file: number | Media;
+        kind: 'photo' | 'floor_plan';
+        isMain?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  activity?: {
+    docs?: (number | AdminActivity)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "import-sources".
+ */
+export interface ImportSource {
+  id: number;
+  title: string;
+  endpointHint?: string | null;
+  isActive?: boolean | null;
+  adapterConfigured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "admin-activities".
+ */
+export interface AdminActivity {
+  id: number;
+  event:
+    | 'LEAD_CREATED'
+    | 'LEAD_STAGE_CHANGED'
+    | 'LEAD_NOTE_ADDED'
+    | 'PROPERTY_CREATED'
+    | 'PROPERTY_UPDATED'
+    | 'PROPERTY_PUBLISHED'
+    | 'PROPERTY_ARCHIVED'
+    | 'PROPERTY_MEDIA_UPDATED'
+    | 'EMPLOYEE_UPDATED'
+    | 'OFFICE_UPDATED'
+    | 'REVIEW_PUBLISHED'
+    | 'REVIEW_RETURNED_TO_MODERATION'
+    | 'REVIEW_REJECTED'
+    | 'CONTACTS_UPDATED'
+    | 'IMPORT_FINISHED';
+  label: string;
+  details?: string | null;
+  triggeredBy: string;
+  lead?: (number | null) | Lead;
+  property?: (number | null) | Property;
+  employee?: (number | null) | Employee;
+  review?: (number | null) | Review;
+  office?: (number | null) | Office;
+  importRun?: (number | null) | ImportRun;
+  before?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  after?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: number;
+  authorName: string;
+  publicName?: string | null;
+  employee: number | Employee;
+  rating: number;
+  status: 'pending' | 'published' | 'rejected';
+  reviewDate: string;
+  text: string;
+  publishedText?: string | null;
+  authorPhone?: string | null;
+  consentGiven?: boolean | null;
+  activity?: {
+    docs?: (number | AdminActivity)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "offices".
+ */
+export interface Office {
+  id: number;
+  title: string;
+  address: string;
+  photo?: (number | null) | Media;
+  sortOrder: number;
+  isPublished?: boolean | null;
+  activity?: {
+    docs?: (number | AdminActivity)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "import-runs".
+ */
+export interface ImportRun {
+  id: number;
+  source?: (number | null) | ImportSource;
+  status: 'running' | 'success' | 'partial_success' | 'failed' | 'cancelled';
+  startedAt: string;
+  finishedAt?: string | null;
+  receivedCount?: number | null;
+  createdCount?: number | null;
+  updatedCount?: number | null;
+  skippedCount?: number | null;
+  failedCount?: number | null;
+  unchangedCount?: number | null;
+  summary?: string | null;
+  diagnostics?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  errors?: {
+    docs?: (number | ImportError)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  activity?: {
+    docs?: (number | AdminActivity)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "import-errors".
+ */
+export interface ImportError {
+  id: number;
+  run: number | ImportRun;
+  externalId?: string | null;
+  code?: string | null;
+  message: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-notes".
+ */
+export interface LeadNote {
+  id: number;
+  lead: number | Lead;
+  body: string;
+  authorName?: string | null;
+  notedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "anti-spam-events".
+ */
+export interface AntiSpamEvent {
+  id: number;
+  verdict: 'accepted' | 'duplicate_suppressed' | 'rate_limited' | 'honeypot' | 'blocked_too_fast' | 'suspicious_burst';
+  reason?: string | null;
+  sourcePage?: string | null;
+  formType?: string | null;
+  lead?: (number | null) | Lead;
+  clientIpHash?: string | null;
+  visitorKeyHash?: string | null;
+  requestFingerprintHash?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analytics-events".
+ */
+export interface AnalyticsEvent {
+  id: number;
+  eventType: 'visit' | 'lead_conversion';
+  occurredAt: string;
+  section?: string | null;
+  page: string;
+  utmSource?: string | null;
+  device: 'desktop' | 'mobile' | 'tablet' | 'unknown';
+  visitorKeyHash: string;
+  sessionKeyHash?: string | null;
+  lead?: (number | null) | Lead;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -237,6 +622,54 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'leads';
+        value: number | Lead;
+      } | null)
+    | ({
+        relationTo: 'lead-notes';
+        value: number | LeadNote;
+      } | null)
+    | ({
+        relationTo: 'properties';
+        value: number | Property;
+      } | null)
+    | ({
+        relationTo: 'employees';
+        value: number | Employee;
+      } | null)
+    | ({
+        relationTo: 'reviews';
+        value: number | Review;
+      } | null)
+    | ({
+        relationTo: 'offices';
+        value: number | Office;
+      } | null)
+    | ({
+        relationTo: 'analytics-events';
+        value: number | AnalyticsEvent;
+      } | null)
+    | ({
+        relationTo: 'anti-spam-events';
+        value: number | AntiSpamEvent;
+      } | null)
+    | ({
+        relationTo: 'import-sources';
+        value: number | ImportSource;
+      } | null)
+    | ({
+        relationTo: 'import-runs';
+        value: number | ImportRun;
+      } | null)
+    | ({
+        relationTo: 'import-errors';
+        value: number | ImportError;
+      } | null)
+    | ({
+        relationTo: 'admin-activities';
+        value: number | AdminActivity;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -344,6 +777,239 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  name?: T;
+  phone?: T;
+  email?: T;
+  status?: T;
+  responsibleEmployee?: T;
+  direction?: T;
+  formType?: T;
+  source?: T;
+  sourcePage?: T;
+  visitorKeyHash?: T;
+  interestType?: T;
+  budget?: T;
+  preferredDistrict?: T;
+  desiredRooms?: T;
+  paymentMethod?: T;
+  purchaseTimeline?: T;
+  nextContactAt?: T;
+  message?: T;
+  normalizedPhone?: T;
+  duplicateCount?: T;
+  lastDuplicateAt?: T;
+  notes?: T;
+  antiSpamAttempts?: T;
+  activity?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-notes_select".
+ */
+export interface LeadNotesSelect<T extends boolean = true> {
+  lead?: T;
+  body?: T;
+  authorName?: T;
+  notedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "properties_select".
+ */
+export interface PropertiesSelect<T extends boolean = true> {
+  title?: T;
+  objectCode?: T;
+  externalId?: T;
+  origin?: T;
+  workflowStatus?: T;
+  isPublished?: T;
+  category?: T;
+  responsibleEmployee?: T;
+  feedSource?: T;
+  price?: T;
+  city?: T;
+  district?: T;
+  addressLine?: T;
+  rooms?: T;
+  updatedFromSourceAt?: T;
+  publicSlug?: T;
+  description?: T;
+  gallery?:
+    | T
+    | {
+        file?: T;
+        kind?: T;
+        isMain?: T;
+        id?: T;
+      };
+  activity?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "employees_select".
+ */
+export interface EmployeesSelect<T extends boolean = true> {
+  fullName?: T;
+  publicName?: T;
+  origin?: T;
+  status?: T;
+  isPublic?: T;
+  teamSection?: T;
+  position?: T;
+  phone?: T;
+  email?: T;
+  sortOrder?: T;
+  photo?: T;
+  publicBio?: T;
+  properties?: T;
+  reviews?: T;
+  activity?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews_select".
+ */
+export interface ReviewsSelect<T extends boolean = true> {
+  authorName?: T;
+  publicName?: T;
+  employee?: T;
+  rating?: T;
+  status?: T;
+  reviewDate?: T;
+  text?: T;
+  publishedText?: T;
+  authorPhone?: T;
+  consentGiven?: T;
+  activity?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "offices_select".
+ */
+export interface OfficesSelect<T extends boolean = true> {
+  title?: T;
+  address?: T;
+  photo?: T;
+  sortOrder?: T;
+  isPublished?: T;
+  activity?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analytics-events_select".
+ */
+export interface AnalyticsEventsSelect<T extends boolean = true> {
+  eventType?: T;
+  occurredAt?: T;
+  section?: T;
+  page?: T;
+  utmSource?: T;
+  device?: T;
+  visitorKeyHash?: T;
+  sessionKeyHash?: T;
+  lead?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "anti-spam-events_select".
+ */
+export interface AntiSpamEventsSelect<T extends boolean = true> {
+  verdict?: T;
+  reason?: T;
+  sourcePage?: T;
+  formType?: T;
+  lead?: T;
+  clientIpHash?: T;
+  visitorKeyHash?: T;
+  requestFingerprintHash?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "import-sources_select".
+ */
+export interface ImportSourcesSelect<T extends boolean = true> {
+  title?: T;
+  endpointHint?: T;
+  isActive?: T;
+  adapterConfigured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "import-runs_select".
+ */
+export interface ImportRunsSelect<T extends boolean = true> {
+  source?: T;
+  status?: T;
+  startedAt?: T;
+  finishedAt?: T;
+  receivedCount?: T;
+  createdCount?: T;
+  updatedCount?: T;
+  skippedCount?: T;
+  failedCount?: T;
+  unchangedCount?: T;
+  summary?: T;
+  diagnostics?: T;
+  errors?: T;
+  activity?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "import-errors_select".
+ */
+export interface ImportErrorsSelect<T extends boolean = true> {
+  run?: T;
+  externalId?: T;
+  code?: T;
+  message?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "admin-activities_select".
+ */
+export interface AdminActivitiesSelect<T extends boolean = true> {
+  event?: T;
+  label?: T;
+  details?: T;
+  triggeredBy?: T;
+  lead?: T;
+  property?: T;
+  employee?: T;
+  review?: T;
+  office?: T;
+  importRun?: T;
+  before?: T;
+  after?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -388,12 +1054,15 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface SiteSetting {
   id: number;
-  projectName: string;
-  brandName: string;
   companyName: string;
+  brandName: string;
   phone?: string | null;
   email?: string | null;
   address?: string | null;
+  workingHours?: string | null;
+  telegramUrl?: string | null;
+  vkUrl?: string | null;
+  projectName?: string | null;
   socialLinks?:
     | {
         label: string;
@@ -413,12 +1082,15 @@ export interface SiteSetting {
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
-  projectName?: T;
-  brandName?: T;
   companyName?: T;
+  brandName?: T;
   phone?: T;
   email?: T;
   address?: T;
+  workingHours?: T;
+  telegramUrl?: T;
+  vkUrl?: T;
+  projectName?: T;
   socialLinks?:
     | T
     | {

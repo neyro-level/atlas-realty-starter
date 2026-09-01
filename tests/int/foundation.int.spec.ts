@@ -1,13 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import {
-  foundationUsers,
-  getTestPayload,
-  resetFoundationState,
-  seedPrivilegedUsers,
-} from '../helpers/payload'
+import { foundationUsers, getTestPayload, resetFoundationState, seedPrivilegedUsers } from '../helpers/payload'
+import { getLeadsWorkspace, getPropertiesWorkspace } from '@/payload/admin/lib/workspaces'
 
-describe('foundation access and CRUD rules', () => {
+describe('admin cabinet parity contracts', () => {
   beforeEach(async () => {
     await resetFoundationState()
   })
@@ -30,106 +26,397 @@ describe('foundation access and CRUD rules', () => {
     expect(firstUser.role).toBe('SUPER_ADMIN')
   })
 
-  it('applies role-based CRUD and public read access', async () => {
+  it('lets director create and update leads with notes and audit history', async () => {
     const payload = await getTestPayload()
-    const { contentManager, director, superAdmin } = await seedPrivilegedUsers()
+    const { director, superAdmin } = await seedPrivilegedUsers()
 
-    const createdPage = await payload.create({
-      collection: 'pages',
+    const employee = await payload.create({
+      collection: 'employees',
       data: {
-        slug: 'Главная страница',
-        title: 'Главная страница',
+        fullName: 'Иван Петров',
+        origin: 'MANUAL',
+        status: 'active',
+        teamSection: 'sales',
+      },
+      draft: false,
+      overrideAccess: false,
+      user: director,
+    })
+
+    const lead = await payload.create({
+      collection: 'leads',
+      data: {
+        direction: 'flat',
+        email: 'lead@example.com',
+        formType: 'hero',
+        name: 'Новый клиент',
+        phone: '+79000000001',
+        source: 'yandex',
+        sourcePage: '/kvartiry',
+        status: 'new',
+        visitorKeyHash: 'visitor-1',
+      },
+      draft: false,
+      overrideAccess: false,
+      user: director,
+    })
+
+    const updatedLead = await payload.update({
+      collection: 'leads',
+      data: {
+        responsibleEmployee: employee.id,
+        status: 'in_work',
+      },
+      id: lead.id,
+      overrideAccess: false,
+      user: director,
+    })
+
+    const note = await payload.create({
+      collection: 'lead-notes',
+      data: {
+        body: 'Перезвонить завтра',
+        lead: lead.id,
+      },
+      draft: false,
+      overrideAccess: false,
+      user: director,
+    })
+
+    expect(updatedLead.status).toBe('in_work')
+    expect(note.body).toBe('Перезвонить завтра')
+    expect(note.authorName).toBe(director.name)
+    expect(typeof updatedLead.responsibleEmployee === 'object' && updatedLead.responsibleEmployee ? updatedLead.responsibleEmployee.id : updatedLead.responsibleEmployee).toBe(employee.id)
+
+    await expect(
+      payload.update({
+        collection: 'leads',
+        data: { status: 'successful' },
+        id: lead.id,
+        overrideAccess: false,
+        user: superAdmin,
+      }),
+    ).resolves.toBeTruthy()
+
+    const activity = await payload.find({
+      collection: 'admin-activities',
+      overrideAccess: true,
+      pagination: false,
+      where: {
+        lead: {
+          equals: lead.id,
+        },
+      },
+    })
+    const activityEvents = activity.docs.map((entry) => entry.event)
+    expect(activityEvents).toHaveLength(4)
+    expect(activityEvents).toEqual(
+      expect.arrayContaining(['LEAD_CREATED', 'LEAD_STAGE_CHANGED', 'LEAD_NOTE_ADDED']),
+    )
+  })
+
+  it('enforces property permissions and publication workflow', async () => {
+    const payload = await getTestPayload()
+    const { contentManager } = await seedPrivilegedUsers()
+
+    const property = await payload.create({
+      collection: 'properties',
+      data: {
+        category: 'flat',
+        origin: 'XML',
+        title: 'Квартира на Пушкинской',
+        workflowStatus: 'active',
+        isPublished: true,
       },
       draft: false,
       overrideAccess: false,
       user: contentManager,
     })
 
-    expect(createdPage.slug).toBe('glavnaya-stranica')
+    expect(property.origin).toBe('MANUAL')
+    expect(property.workflowStatus).toBe('draft')
+    expect(property.isPublished).toBe(false)
+
+    const publishAttempt = await payload.update({
+      collection: 'properties',
+      data: {
+        isPublished: true,
+        workflowStatus: 'active',
+      },
+      id: property.id,
+      overrideAccess: false,
+      user: contentManager,
+    })
+
+    expect(publishAttempt.isPublished).toBe(false)
+    expect(publishAttempt.workflowStatus).toBe('draft')
+    const xmlProperty = await payload.create({
+      collection: 'properties',
+      data: {
+        category: 'flat',
+        origin: 'XML',
+        title: 'Импортный объект',
+        workflowStatus: 'active',
+      },
+      draft: false,
+      context: { systemWrite: true },
+      overrideAccess: true,
+    })
 
     await expect(
-      payload.delete({
-        collection: 'pages',
-        id: createdPage.id,
+      payload.update({
+        collection: 'properties',
+        data: {
+          title: 'Нельзя менять XML',
+        },
+        id: xmlProperty.id,
         overrideAccess: false,
         user: contentManager,
       }),
     ).rejects.toThrow()
 
+    await expect(
+      payload.delete({
+        collection: 'properties',
+        id: xmlProperty.id,
+        overrideAccess: false,
+        user: contentManager,
+      }),
+    ).rejects.toThrow()
+  })
+
+  it('supports review moderation and public published visibility', async () => {
+    const payload = await getTestPayload()
+    const { director } = await seedPrivilegedUsers()
+
+    const employee = await payload.create({
+      collection: 'employees',
+      data: {
+        fullName: 'Мария Иванова',
+        origin: 'MANUAL',
+        status: 'active',
+        teamSection: 'sales',
+      },
+      draft: false,
+      overrideAccess: false,
+      user: director,
+    })
+
+    const review = await payload.create({
+      collection: 'reviews',
+      data: {
+        authorName: 'Клиент',
+        employee: employee.id,
+        rating: 5,
+        reviewDate: new Date().toISOString(),
+        status: 'pending',
+        text: 'Очень помогли с выбором квартиры.',
+      },
+      draft: false,
+      overrideAccess: false,
+      user: director,
+    })
+
+    const moderatedReview = await payload.update({
+      collection: 'reviews',
+      data: {
+        publishedText: 'Очень помогли с выбором квартиры.',
+        status: 'published',
+      },
+      id: review.id,
+      overrideAccess: false,
+      user: director,
+    })
+
+    expect(moderatedReview.status).toBe('published')
+
+    const publicReviews = await payload.find({
+      collection: 'reviews',
+      overrideAccess: false,
+      pagination: false,
+    })
+
+    expect(publicReviews.docs.map((doc) => doc.id)).toContain(review.id)
+  })
+
+  it('restricts contacts settings update to director and super admin', async () => {
+    const payload = await getTestPayload()
+    const { contentManager, director } = await seedPrivilegedUsers()
+
     const updatedSettings = await payload.updateGlobal({
       slug: 'site-settings',
       data: {
+        address: 'Ростов-на-Дону, Пушкинская, 5',
         brandName: 'Союз Ростов',
         companyName: 'Союз застройщиков Ростов',
-        defaultSEO: {
-          description: 'SEO по умолчанию для сайта.',
-          title: 'Союз Ростов',
-        },
-        email: 'info@example.com',
-        projectName: 'Союз Ростов',
+        email: 'office@example.com',
+        phone: '+7 (900) 111-11-11',
       },
       overrideAccess: false,
       user: director,
     })
 
-    expect(updatedSettings.brandName).toBe('Союз Ростов')
+    expect(updatedSettings.phone).toBe('+7 (900) 111-11-11')
 
     await expect(
-      payload.create({
-        collection: 'users',
+      payload.updateGlobal({
+        slug: 'site-settings',
         data: {
-          email: 'forbidden@example.com',
-          name: 'Нельзя',
-          password: 'Forbidden123!',
-          role: 'DIRECTOR',
+          phone: '+7 (900) 222-22-22',
         },
-        draft: false,
         overrideAccess: false,
         user: contentManager,
       }),
     ).rejects.toThrow()
+  })
 
-    const managedUser = await payload.create({
-      collection: 'users',
-      data: {
-        email: 'manager@example.com',
-        name: 'Новый менеджер',
-        password: 'Manager123!',
-        role: 'CONTENT_MANAGER',
+  it('enforces custom workspace capabilities and XML employee field ownership', async () => {
+    const payload = await getTestPayload()
+    const { contentManager, director } = await seedPrivilegedUsers()
+
+    await expect(getLeadsWorkspace({ payload, user: contentManager }, {})).rejects.toThrow()
+    await expect(getLeadsWorkspace({ payload, user: director }, {})).resolves.toMatchObject({
+      summary: {
+        totalLeads: 0,
       },
-      draft: false,
-      overrideAccess: false,
-      user: superAdmin,
     })
 
-    expect(managedUser.role).toBe('CONTENT_MANAGER')
-
-    const publicPage = await payload.create({
-      collection: 'pages',
+    const xmlEmployee = await payload.create({
+      collection: 'employees',
+      context: { systemWrite: true },
       data: {
-        _status: 'published',
-        slug: 'Публичная страница',
-        title: 'Публичная страница',
+        fullName: 'XML сотрудник',
+        origin: 'XML',
+        status: 'active',
+        teamSection: 'sales',
       },
       draft: false,
       overrideAccess: true,
     })
 
-    const publicPages = await payload.find({
-      collection: 'pages',
+    const updatedEmployee = await payload.update({
+      collection: 'employees',
+      data: {
+        fullName: 'Запрещённое изменение',
+        publicName: 'Публичное имя',
+      },
+      id: xmlEmployee.id,
       overrideAccess: false,
+      user: contentManager,
     })
 
-    expect(publicPages.docs.map((doc) => doc.id)).toContain(publicPage.id)
-    expect(publicPages.docs.map((doc) => doc.id)).not.toContain(createdPage.id)
+    expect(updatedEmployee.fullName).toBe('XML сотрудник')
+    expect(updatedEmployee.publicName).toBe('Публичное имя')
 
-    const deletedPage = await payload.delete({
-      collection: 'pages',
-      id: createdPage.id,
+    await expect(
+      payload.delete({
+        collection: 'employees',
+        id: xmlEmployee.id,
+        overrideAccess: false,
+        user: contentManager,
+      }),
+    ).rejects.toThrow()
+  })
+
+  it('paginates property workspaces on the server', async () => {
+    const payload = await getTestPayload()
+    const { director } = await seedPrivilegedUsers()
+    const properties = Array.from({ length: 45 }, (_, index) => ({
+      category: 'flat' as const,
+      origin: 'MANUAL' as const,
+      price: 5000000 + index,
+      title: `Квартира ${index + 1}`,
+      workflowStatus: 'draft' as const,
+    }))
+
+    await Promise.all(
+      properties.map((data) =>
+        payload.create({
+          collection: 'properties',
+          context: { skipAudit: true, systemWrite: true },
+          data,
+          draft: false,
+          overrideAccess: true,
+        }),
+      ),
+    )
+
+    const workspace = await getPropertiesWorkspace({ payload, user: director }, { page: '2' })
+    expect(workspace.properties).toHaveLength(20)
+    expect(workspace.pagination.total).toBe(45)
+    expect(workspace.pagination.totalPages).toBe(3)
+  })
+
+  it('stores import history and linked errors without fake parser logic', async () => {
+    const payload = await getTestPayload()
+    const { director } = await seedPrivilegedUsers()
+
+    const source = await payload.create({
+      collection: 'import-sources',
+      data: {
+        adapterConfigured: false,
+        endpointHint: 'https://example.com/feed.xml',
+        isActive: true,
+        title: 'Основной XML',
+      },
+      draft: false,
       overrideAccess: false,
       user: director,
     })
 
-    expect(deletedPage.id).toBe(createdPage.id)
+    await expect(
+      payload.create({
+        collection: 'import-runs',
+        data: {
+          source: source.id,
+          startedAt: new Date().toISOString(),
+          status: 'running',
+        },
+        draft: false,
+        overrideAccess: false,
+        user: director,
+      }),
+    ).rejects.toThrow()
+
+    const run = await payload.create({
+      collection: 'import-runs',
+      data: {
+        createdCount: 2,
+        failedCount: 1,
+        receivedCount: 5,
+        source: source.id,
+        startedAt: new Date().toISOString(),
+        status: 'partial_success',
+        summary: 'Один объект не прошёл валидацию.',
+        updatedCount: 1,
+      },
+      draft: false,
+      overrideAccess: true,
+      user: director,
+    })
+
+    await payload.create({
+      collection: 'import-errors',
+      data: {
+        code: 'VALIDATION_ERROR',
+        externalId: 'xml-42',
+        message: 'Не удалось определить категорию объекта.',
+        run: run.id,
+      },
+      draft: false,
+      overrideAccess: true,
+      user: director,
+    })
+
+    const runs = await payload.find({
+      collection: 'import-runs',
+      depth: 2,
+      overrideAccess: false,
+      pagination: false,
+      user: director,
+    })
+
+    expect(runs.docs[0]?.status).toBe('partial_success')
+    expect(runs.docs[0]?.errors?.docs?.length).toBe(1)
   })
 })

@@ -2,52 +2,65 @@
 
 ## Trust boundaries
 
-- публичный браузер не считается доверенным;
-- Payload Admin доступен только аутентифицированным пользователям коллекции `users`;
-- server runtime имеет доступ к базе, хранилищу и интеграционным секретам;
-- SourceCraft CI получает только минимальные credentials своего workflow;
-- production secrets хранятся в Doppler, а не в Git.
+- публичный браузер не доверен;
+- Payload Admin доступен только users collection;
+- custom admin views не получают автоматического права на business data: каждая view проверяет capability server-side;
+- server runtime владеет DB/storage/integration secrets;
+- production secrets хранятся в Doppler;
+- каждый клиент имеет изолированные runtime, DB, bucket и secret scope.
 
 ## Инварианты
 
-- секреты, PAT, ключи, пароли и database URLs не коммитятся и не выводятся в логи;
-- публичные endpoints валидируют входные данные и ограничивают частоту запросов по мере появления таких endpoint;
-- access control Payload проверяется на сервере для каждой чувствительной collection/action;
-- административный интерфейс не полагается только на скрытие элементов UI;
-- загрузки ограничены изображениями и server-side access;
-- внешние URL и webhooks будут защищаться отдельно при появлении интеграций;
-- production migrations и destructive operations требуют отдельной команды и rollback;
-- PII в заявках пока вне scope foundation и будет документироваться отдельным этапом;
-- Local API от имени пользователя вызывается с `overrideAccess: false`;
-- первый пользователь автоматически получает `SUPER_ADMIN`, но дальнейшее управление пользователями остаётся только у суперадмина.
-
-## Secrets
-
-- server scope: Doppler `szrostov-server/prd`;
-- project runtime scope: `TODO` — зарегистрировать до первого deploy;
-- локальный development scope: `.env`, созданный из `.env.example`, без Git;
-- в репозитории допускается только `.env.example` без реальных значений.
+- secrets, PAT, passwords и database URLs не коммитятся и не логируются;
+- user-scoped Local API: `overrideAccess: false` + explicit user/req;
+- system `overrideAccess: true` только в controlled adapters/hooks/migrations/tests;
+- access control применяется на collection и field level;
+- `origin`, feed IDs и import metadata не меняются редактором;
+- `CONTENT_MANAGER` не публикует и не архивирует property;
+- XML employee разрешает только public-profile fields;
+- analytics, anti-spam, import history/errors, notes и audit append-only;
+- audit hook использует transaction `req` основной mutation;
+- anti-spam/analytics identifiers хранятся как hashes, не raw IP/cookies;
+- Sentry: `sendDefaultPii: false`, Replay off, raw forms/cookies/auth headers не отправляются;
+- production migrations требуют backup, restore proof и rollback/forward-fix plan.
 
 ## Роли
 
-- `SUPER_ADMIN` — полный доступ, пользователи, роли, удаление;
-- `DIRECTOR` — контент, медиа, `SiteSettings`, удаление контента;
-- `CONTENT_MANAGER` — создание и обновление контента без управления пользователями.
+### SUPER_ADMIN
 
-Публичный доступ:
+Полный доступ, users, roles, recovery и controlled maintenance.
 
-- `Pages` — только `_status = published`;
-- `Media` — только `isPublic = true`;
-- `SiteSettings` — read-only публично, update только `DIRECTOR | SUPER_ADMIN`.
+### DIRECTOR
 
-## Перед production
+Analytics/export, leads, manual property publish/media, employee public profile/manual CRUD, review moderation, offices, contacts, anti-spam read, import read/run.
 
-- threat model публичных форм, CMS, uploads и integrations;
-- проверка auth, sessions, cookies, CSRF/CORS и security headers;
-- backup/restore БД и media;
-- secret rotation и least privilege;
-- dependency и container/runtime проверки;
-- закрытый административный контур и audit evidence;
-- проверенный rollback;
-- переход медиа на S3-compatible object storage;
-- отдельная managed PostgreSQL Timeweb.
+### CONTENT_MANAGER
+
+Manual content и media без lead/admin/import/security rights и без property publish/origin changes.
+
+## Public read
+
+- pages: published;
+- media: `isPublic`;
+- properties: `isPublished`;
+- employees: active + public;
+- reviews: published;
+- offices: published;
+- contacts: public read, privileged update.
+
+## Operational commands
+
+- public lead/analytics/anti-spam ingestion появятся как validated endpoints;
+- manual import запускает command, но пользователь не редактирует run/error rows;
+- concrete XML adapter получает credentials только server-side;
+- import parser запрещает external entities/DTD и ограничивает size/time.
+
+## До production
+
+- создать Sentry project и подтвердить test event;
+- provision isolated managed PostgreSQL и S3 bucket;
+- сохранить credentials в project Doppler;
+- выполнить `pnpm db:backup:check` и provider restore rehearsal;
+- проверить `/api/health`, release SHA, admin role smoke и public smoke;
+- закрыть admin network boundary по project deployment runbook;
+- подтвердить retention для analytics, anti-spam, leads и audit.

@@ -2,100 +2,103 @@
 
 ## Назначение
 
-Главный технический контракт foundation-слоя проекта «Союз Ростов». Если код, документация и любые последующие решения расходятся, приоритет у этого документа, `src/payload.config.ts`, `package.json` и реального runtime.
+Главный технический контракт проекта «Союз Ростов». При расхождении приоритет у этого документа, `src/payload.config.ts`, `package.json`, migrations и фактического runtime.
 
-## Зафиксированный стек
+## Stack
 
-- `payload`, `@payloadcms/next`, `@payloadcms/db-postgres`, `@payloadcms/richtext-lexical`, `@payloadcms/ui`, `@payloadcms/translations` — строго `3.88.0`;
-- `next` — `16.3.0`;
-- `react` / `react-dom` — `19.2.8`;
-- `typescript` — `6.0.3`;
-- `node` — `24.20.0 LTS`;
-- `pnpm` — `11.24.0`;
-- `postgresql` — `18`.
+- Payload packages, включая `@payloadcms/storage-s3` — `3.88.0` синхронно;
+- Next.js — `16.3.0`;
+- React — `19.2.8`;
+- TypeScript — `6.0.3`;
+- Node — `24.20.0 LTS`;
+- pnpm — `11.24.0`;
+- PostgreSQL — `18`.
 
-Любое обновление Payload выполняется синхронно для всех `@payloadcms/*` и только после повторной проверки совместимости с Next.js.
+## Запреты
 
-## Архитектурные запреты
-
-- Не добавлять Prisma.
-- Не добавлять отдельный backend-runtime.
-- Не добавлять вторую auth-систему поверх Payload.
-- Не создавать параллельную самописную админку.
-- Не передавать сырые Payload documents глубоко в будущий публичный UI без явного DTO / view-model слоя.
+- Prisma и второй ORM;
+- Better Auth и второй auth layer;
+- отдельный backend runtime;
+- параллельная CMS/admin system;
+- repository pattern без доказанной необходимости;
+- вымышленный XML parser;
+- ручная правка generated types/import map/routes.
 
 ## Access Control
 
-- `SUPER_ADMIN` управляет пользователями, ролями и имеет полный доступ.
-- `DIRECTOR` управляет контентом и `SiteSettings`, но не коллекцией пользователей.
-- `CONTENT_MANAGER` создаёт и обновляет контент, но не удаляет его и не управляет пользователями.
-- Публичный доступ к `Pages` ограничен только `_status = published`.
-- Публичный доступ к `Media` ограничен только `isPublic = true`.
-- UI-скрытие элементов не считается security-мерой: источник истины — access functions в `src/payload/access/`.
+- roles: `SUPER_ADMIN`, `DIRECTOR`, `CONTENT_MANAGER`;
+- server capability matrix: `src/payload/access/capabilities.ts`;
+- custom views получают authenticated Payload context из `AdminViewServerProps`;
+- dashboard query calls используют `overrideAccess: false` + explicit `user`;
+- field access и guard hooks защищают publish/status/origin/import metadata;
+- UI visibility не считается security boundary;
+- operational collections и audit append-only для пользователей.
 
-## Local API
+## Controlled system writes
 
-- Если операция выполняется от имени пользователя, всегда передавать `overrideAccess: false`.
-- Для пользовательских операций передавать явный `user` или `req`, чтобы Payload применял реальный RBAC.
-- `overrideAccess: true` допускается только в документированных внутренних сценариях: bootstrap тестов, controlled migrations и локальные служебные операции.
+`overrideAccess: true` допустим только для:
 
-## Hooks
+- migrations/codegen/test reset;
+- authenticated user bootstrap read;
+- validated analytics/anti-spam ingestion;
+- concrete import adapter;
+- transactional audit hook.
 
-- Hooks используются только для локальной нормализации и безопасных guard'ов.
-- Запрещены рекурсивные `payload.update()` / `payload.create()` внутри hooks той же сущности без явной защиты от цикла.
-- Для `Users` hook только назначает первую роль и не даёт незаметно повысить роль не-суперадмину.
-- Для `Pages` slug нормализуется до сохранения без фоновых повторных обновлений документа.
+System writes передают явный `context.systemWrite` там, где hook защищает ownership fields. Audit create передаёт тот же `req`, чтобы сохранить transaction context.
 
-## Generated Types и Import Map
+## Admin customization
+- navigation remains stable for all admin roles; server capability guard determines actual access.
+- fixed business nav через `admin.components.Nav`;
+- dashboards через `admin.components.views`;
+- record create/edit остаются стандартными Payload document views;
+- navigation order: `Посетители`, `Заявки`, `Объекты`, `Сотрудники`, `Отзывы`, `Офисы`, `Контакты`, `Антиспам`, `XML-импорт`;
+- роль пользователя определяет visible links, server guard определяет фактический доступ.
 
-- `src/payload-types.ts` считается generated-артефактом и обновляется только через `pnpm generate:types`.
-- `src/app/(payload)/admin/importMap.js` считается generated-артефактом и обновляется только через `pnpm generate:importmap`.
-- После любого изменения Payload config, collections, globals или admin-components обязательно проверить, что codegen не оставил незакоммиченных изменений.
+## Query architecture
 
-## Schema и Migrations
+- domain modules: `src/payload/admin/queries/*`;
+- filters and pagination выполняет Payload/PostgreSQL;
+- grouped analytics uses parameterized query через официальный Postgres adapter после capability guard;
+- запрещены `pagination: false` + массовая загрузка business collections для dashboard counts;
+- основные поля фильтрации индексируются.
 
-- Источник схемы — collections/globals и `src/payload.config.ts`.
-- Production-изменения схемы проходят только через Payload migrations.
-- Перед созданием migration обязателен локальный прогон на чистой PostgreSQL 18.
-- Рекомендуемый порядок:
-  1. изменить schema/config;
-  2. `pnpm generate:types`;
-  3. `pnpm generate:importmap`;
-  4. `pnpm payload migrate:create <name>`;
-  5. `pnpm payload migrate`;
-  6. `pnpm lint && pnpm typecheck && pnpm build`.
+## Audit
 
-## Admin Customization
+- единственный source of truth: `admin-activities`;
+- notes: отдельная append-only collection `lead-notes`;
+- before/after markers не содержат secrets;
+- повторное сохранение не должно повторно копировать старую историю.
 
-- Русские подписи, группировка сущностей и branding допустимы только через штатные возможности Payload Admin.
-- Кастомные admin-components лежат в `src/payload/admin/components/`.
-- Dashboard должен оставаться рабочим кабинетом проекта, но без бизнес-виджетов, которые требуют ещё не реализованных модулей.
+## Storage
 
-## Файлы и медиа
+- local development без S3 использует `media/`;
+- production использует официальный `@payloadcms/storage-s3`;
+- partial S3 configuration блокирует startup;
+- production release без S3 запрещён project release gate.
 
-- На foundation-этапе хранение файлов локальное в `media/`.
-- Перед production обязателен переход на постоянное S3-совместимое object storage.
-- Публичная выдача медиа регулируется полем `isPublic` и server-side access.
+## Generated artifacts
 
-## Секреты и окружение
+- `src/payload-types.ts` — только `pnpm generate:types`;
+- `src/app/(payload)/admin/importMap.js` — только `pnpm generate:importmap`;
+- auto-generated Payload route files не редактируются.
 
-- Реальные значения секретов живут только в Doppler.
-- Серверный контур: Timeweb `sz-rostov`, scope `szrostov-server/prd`.
-- Будущая production PostgreSQL планируется как отдельная managed database Timeweb, но на foundation-этапе не создаётся.
-- В репозитории допускается только `.env.example` без реальных значений.
+## Migrations
 
-## Проверки после обновления Next или Payload
+- schema source: collections/globals/config;
+- migration обязана проходить с чистой БД и с предыдущей непустой schema;
+- legacy SiteSettings fields сохраняются hidden до отдельной approved data migration;
+- применённые production migrations не переписываются;
+- production schema changes только `payload migrate`.
 
-- `create first user`;
-- `/admin/login`, `/admin/logout`, `/admin/forgot`;
-- вход без старой cookie;
-- dashboard;
-- list/edit routes `Pages`, `Media`, `Users`, `SiteSettings`;
-- `pnpm generate:types`;
-- `pnpm generate:importmap`;
-- `pnpm lint`;
-- `pnpm typecheck`;
-- `pnpm build`;
-- smoke в production-режиме `pnpm start`.
+## Verification
 
-Если Next 16 снова ломает unauthenticated admin routes, временный патч допускается только через `pnpm patchedDependencies` с точной ссылкой на upstream fix и последующим удалением после официального релиза.
+- `pnpm generate:types`
+- `pnpm generate:importmap`
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm build`
+- `pnpm test:int`
+- `pnpm test:e2e`
+- `pnpm test:e2e:production`
+- `pnpm db:backup:check`
+- `pnpm verify:payload-upgrade` после Next/Payload changes

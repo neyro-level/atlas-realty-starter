@@ -1,53 +1,93 @@
 # Architecture
 
-## Контуры
+## Deployment model
+
+Одна версия codebase разворачивается отдельно для каждого клиента:
+
+```text
+Client deployment
+├── Next.js + Payload runtime
+├── isolated managed PostgreSQL
+├── isolated S3 bucket
+├── isolated Doppler config
+└── isolated Payload users
+```
+
+Multi-tenant shared database не используется. Обновления раскатываются по клиентским контурам последовательно из canonical SourceCraft main на exact SHA.
+
+## Runtime contours
 
 ```mermaid
 flowchart LR
     visitor["Посетитель"] --> public["Next.js public shell"]
-    editor["CONTENT_MANAGER / DIRECTOR / SUPER_ADMIN"] --> admin["Payload Admin"]
-    public --> queries["Future data/view-model layer"]
-    queries --> payload["Payload inside Next.js runtime"]
-    admin --> payload
+    editor["Payload user"] --> admin["Payload Admin cabinet"]
+    public --> queries["Public DTO / view-model layer"]
+    admin --> payload["Payload Local API"]
+    queries --> payload
     payload --> db["PostgreSQL 18"]
-    payload --> media["Local media storage"]
-    payload -. later .-> timeweb["Managed PostgreSQL Timeweb"]
-    public -. later .-> leads["Lead delivery / integrations"]
+    payload --> media["Payload Media + S3 adapter"]
+    payload -. later .-> xml["Concrete XML adapter"]
+    payload -. later .-> crm["Lead delivery"]
+    runtime["Next instrumentation"] --> sentry["Sentry"]
 ```
 
-## Подтверждённые границы
+## Payload ownership
 
-- **Public shell:** пока только foundation-заглушка. Полноценный UI и 40 страниц будут добавлены следующим потоком.
-- **Payload core:** коллекции `users`, `media`, `pages`, global `site-settings`, hooks, RBAC и admin UI.
-- **Data:** `@payloadcms/db-postgres` поверх PostgreSQL 18, schema changes только через Payload migrations.
-- **Media:** локальное хранение в `media/` на foundation-этапе с последующим переходом на S3-compatible storage.
-- **Integrations:** лиды, импорт объектов, CRM и analytics пока за пределами foundation.
-- **Operations:** canonical Git — SourceCraft, целевой runtime-контур — `sz-rostov`, secrets — `szrostov-server/prd`.
+Payload остаётся единственной CMS/backend platform:
 
-## Слои кода
+- auth и sessions;
+- collections/globals;
+- access control и field access;
+- hooks и audit;
+- Local API;
+- REST/GraphQL;
+- migrations;
+- generated types/import map;
+- PostgreSQL adapter;
+- official S3 storage adapter;
+- Admin custom views/navigation.
 
-- `src/app/(frontend)` — текущий foundation-shell публичной части;
-- `src/app/(payload)` — штатные admin / REST / GraphQL routes Payload;
-- `src/payload/collections` — schema collections;
+Prisma, Better Auth, второй ORM, repository layer и отдельный admin backend отсутствуют.
+
+## Code layers
+
+- `src/app/(frontend)` — foundation public shell;
+- `src/app/(payload)` — Payload admin/REST/GraphQL и health routes;
+- `src/payload/collections` — business schema;
 - `src/payload/globals` — globals;
-- `src/payload/access` — централизованный RBAC;
-- `src/payload/hooks` — локальная нормализация без рекурсивных обновлений;
-- `src/payload/admin/components` — ограниченная кастомизация Payload Admin;
-- `src/project/config.ts` — минимальная типизированная конфигурация проекта;
-- `styles/` — будущая точка входа дизайн-системы.
+- `src/payload/access` — RBAC/capabilities/append-only policies;
+- `src/payload/hooks` — invariants и transactional audit;
+- `src/payload/admin/components` — nav/shared workspace UI;
+- `src/payload/admin/views` — Payload custom views;
+- `src/payload/admin/queries` — domain-specific server query modules;
+- `src/payload/admin/lib/context.ts` — authenticated Payload context и capability guard;
+- `src/project/env.ts` — production environment contract;
+- `scripts/verify-backup-restore.mjs` — local restore proof.
 
-## Нельзя делать без отдельного решения
+## Query rules
 
-- возвращать Prisma или отдельный backend;
-- заводить второй auth layer;
-- строить бизнес-логику внутри React-компонентов или access functions;
-- создавать каталог недвижимости и импорт до отдельного data-contract;
-- переносить production домен в рамках foundation.
+- user-scoped Local API calls use `overrideAccess: false` and explicit `user`;
+- raw PostgreSQL aggregation разрешена только внутри server query module после server-side capability guard;
+- list pages use `where`, `count`, `sort`, page/limit;
+- запрещено загружать тысячи documents и фильтровать их в Node.js;
+- business filters/status/date/source fields индексируются;
+- public UI не получает raw Payload documents.
 
-## Migration boundary
+## Audit
 
-Старый Astro-проект остаётся production source до подтверждённого cutover. Его код не является архитектурным шаблоном нового приложения, но его маршруты, контент, SEO, формы, assets и production-поведение являются обязательными входными данными migration-аудита.
+`admin-activities` — единственный source of truth истории. Hooks пишут audit с тем же `req`, поэтому основная mutation и audit используют transaction context Payload. Operational collections append-only для пользователей.
 
-## Extension points
+## Catalog boundary
 
-Новые интеграции добавляются через отдельные server modules с явным входным контрактом, валидацией, idempotency и наблюдаемостью. Будущий публичный UI работает через data/query/view-model слой и не обращается напрямую к Payload documents, базе или секретам.
+- `properties` — самостоятельные объявления;
+- future mass catalog — `ResidentialComplex -> Building -> Unit`;
+- feed ownership и idempotency зафиксированы отдельно;
+- concrete collections создаются только после реального feed/business contract.
+
+## Production extension points
+
+- managed PostgreSQL через `DATABASE_URL`;
+- official `@payloadcms/storage-s3` включается при полном наборе S3 variables;
+- Sentry включается при наличии DSN/project credentials;
+- `/api/health` сообщает database status и release SHA без secrets;
+- backup/restore и Payload upgrade profiles имеют отдельные повторяемые команды.

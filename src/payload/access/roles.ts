@@ -1,3 +1,1 @@
-export const USER_ROLES = ['SUPER_ADMIN', 'DIRECTOR', 'CONTENT_MANAGER'] as const
-
-export type UserRole = (typeof USER_ROLES)[number]
+export { USER_ROLES, type UserRole } from './capabilities'
