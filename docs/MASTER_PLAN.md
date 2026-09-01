@@ -1,64 +1,72 @@
 # Master plan
 
-## Текущий этап — 1. Foundation
+## Этап 1. Foundation + hardened Admin
 
-- [x] Подтверждён отдельный серверный контур SZ Rostov.
-- [x] Подтверждён Doppler `szrostov-server/prd`.
-- [x] Создан отдельный приватный SourceCraft-репозиторий.
-- [x] Развёрнут официальный Payload blank scaffold.
-- [x] Зафиксирован стек Next 16 + Payload 3 + PostgreSQL 18.
-- [x] Созданы `Users`, `Media`, `Pages`, `SiteSettings`.
-- [x] Подготовлен Payload Admin как рабочий кабинет.
-- [x] Создан `docs/PAYLOAD_CONTRACT.md` и ADR по Payload.
-- [ ] Повторно прогнать полный gate локально на чистой PostgreSQL и production smoke после финальной установки зависимостей.
+- [x] Payload/Next/PostgreSQL foundation.
+- [x] Business IA: `Посетители`, `Заявки`, `Объекты`, `Сотрудники`, `Отзывы`, `Офисы`, `Контакты`, `Антиспам`, `XML-импорт`.
+- [x] Server-side capability guards custom views.
+- [x] Field-level ownership/publish protection.
+- [x] Append-only operational logs и единый audit trail.
+- [x] Server-side filters/count/pagination и business indexes.
+- [x] Domain query modules вместо монолитного in-memory workspace.
+- [x] Safe migration path с сохранением legacy SiteSettings data.
+- [x] Official optional S3 adapter, health endpoint, backup/restore check.
+- [x] Conditional Sentry SDK contract без PII/Replay.
+- [x] Role-specific integration/e2e и Payload upgrade profile.
 
-## Этап 2. Инвентаризация текущего сайта
+## Этап 2. Инвентаризация production Astro
 
-- карта URL и redirect requirements;
-- страницы, каталог, статьи, медиа и SEO;
-- формы, lead delivery и внешние интеграции;
-- источники данных и ownership;
-- production performance и аналитика, которые нужно сохранить.
+- URL/redirect map;
+- pages/catalog/articles/media/SEO;
+- forms, lead delivery и external integrations;
+- source ownership;
+- production performance/analytics baseline.
 
-Критерий этапа: утверждён migration scope и отсутствуют неизвестные критичные контуры.
+Критерий: утверждён migration scope и отсутствуют неизвестные критичные контуры.
 
-## Этап 3. Реализация
+## Этап 3. Public platform
 
-- публичный shell и дизайн-система для 40 страниц;
-- Payload collections и административные процессы;
-- каталог и карточки объектов;
-- контентные страницы и журнал;
-- формы и подтверждённая доставка заявок;
-- SEO/GEO и redirect layer;
-- media pipeline.
+- public shell и design system;
+- public DTO/query layer поверх Payload;
+- catalog and SEO pages;
+- forms и validated lead/anti-spam ingestion;
+- media pipeline через S3;
+- production metadata/redirects.
 
-Критерий этапа: функциональный scope готов в staging и покрыт risk-driven проверками.
+## Этап 4. Mass catalog
 
-## Этап 4. Migration rehearsal
+Контракт уже зафиксирован, реализация после реального feed:
 
-- перенос контента и данных в тестовом контуре;
-- проверка URL, metadata, structured data и redirects;
+- `ResidentialComplex`;
+- `Building`;
+- `Unit`;
+- optional `UnitLayout`/`Developer`;
+- concrete XML adapter;
+- idempotency/deactivate rules;
+- performance proof для десятков тысяч units.
+
+## Этап 5. Client production foundation
+
+Для каждого клиента отдельно:
+
+- managed PostgreSQL;
+- S3-compatible bucket;
+- Doppler scope;
+- Sentry project;
 - backup/restore rehearsal;
-- нагрузочный и security gate по фактическому риску;
-- runbook deploy, DNS/SSL cutover и rollback.
+- exact-SHA release and rollback.
 
-Критерий этапа: повторяемая миграция с доказательством результата и временем отката.
+## Этап 6. Migration rehearsal и cutover
 
-## Этап 5. Production cutover
+- test data/content transfer;
+- URL/SEO/forms validation;
+- load/security gate;
+- DNS/SSL/deploy/rollback runbook;
+- cutover только из canonical main.
 
-- release только из canonical SourceCraft `main` на exact SHA;
-- deploy на согласованный runtime SZ Rostov;
-- переключение домена по утверждённому плану;
-- live smoke маршрутов, форм, assets, CMS, SEO и health/version;
-- мониторинг и готовый rollback;
-- синхронизация release proof в документах.
+## Текущие внешние prerequisites
 
-Критерий этапа: домен обслуживается новой платформой, критичные проверки зелёные, старый runtime сохранён на согласованный rollback-window.
-
-## Текущие ограничения
-
-- managed PostgreSQL Timeweb ещё не создавалась;
-- S3-compatible object storage ещё не подключено;
-- deploy runbook и DNS plan отсутствуют;
-- каталог недвижимости, лиды и публичный UI ещё не реализованы;
-- старый production не изменяется.
+- real XML feed/specification отсутствует;
+- client managed PostgreSQL/S3 ещё не provisioned;
+- Sentry project/DSN ещё не создан;
+- production domain/runtime не изменяется этим WORK-потоком.

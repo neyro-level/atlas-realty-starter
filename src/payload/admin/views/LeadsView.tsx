@@ -1,0 +1,21 @@
+import Link from 'next/link'
+import type { AdminViewServerProps } from 'payload'
+
+import { EmptyState, MetricCard, PaginationNav, TableCard, WorkspaceFrame } from '@/payload/admin/components/WorkspaceFrame'
+import { LEAD_STATUS_LABELS } from '@/payload/admin/lib/constants'
+import { formatLeadStatus, getLeadsWorkspace } from '@/payload/admin/lib/workspaces'
+import { getAdminViewContext } from '@/payload/admin/lib/context'
+
+export async function LeadsView(props: AdminViewServerProps) {
+  const context = await getAdminViewContext(props)
+  const data = await getLeadsWorkspace(context, props.searchParams ?? {})
+
+  return (
+    <WorkspaceFrame description="Рабочий мини-CRM: фильтры, ответственные, этапы и история по заявкам." title="Заявки">
+      <div className="sz-metric-grid sz-metric-grid--three"><MetricCard label="Всего заявок" value={data.summary.totalLeads} /><MetricCard accent="blue" label="Уникальные посетители" value={data.summary.uniqueVisitors} /><MetricCard accent="emerald" label="Конверсия" value={`${data.summary.conversion.toFixed(1)}%`} /></div>
+      <TableCard title="Заявки по направлениям"><div className="sz-pill-list">{data.directions.map((item) => <span className="sz-pill" key={item.label}>{item.label}: {item.value}</span>)}</div></TableCard>
+      <form className="sz-filter-grid" method="get"><input name="period" type="hidden" value={data.period.key} /><label><span>Поиск</span><input defaultValue={data.filters.search} name="search" placeholder="Имя, телефон, email" type="text" /></label><label><span>Статус</span><select defaultValue={data.filters.status ?? ''} name="status"><option value="">Все</option>{Object.entries(LEAD_STATUS_LABELS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label><label><span>Ответственный</span><select defaultValue={data.filters.responsible ?? ''} name="responsible"><option value="">Все</option>{data.options.responsible.map((employee) => <option key={employee.id} value={employee.id}>{employee.fullName}</option>)}</select></label><label><span>Источник</span><select defaultValue={data.filters.source ?? ''} name="source"><option value="">Все</option>{data.options.sources.map((source) => <option key={source} value={source}>{source}</option>)}</select></label><label><span>Страница</span><select defaultValue={data.filters.sourcePage ?? ''} name="sourcePage"><option value="">Все</option>{data.options.sourcePages.map((sourcePage) => <option key={sourcePage} value={sourcePage}>{sourcePage}</option>)}</select></label><label><span>Форма</span><select defaultValue={data.filters.formType ?? ''} name="formType"><option value="">Все</option>{data.options.formTypes.map((formType) => <option key={formType} value={formType}>{formType}</option>)}</select></label><button className="sz-button" type="submit">Применить</button></form>
+      <TableCard title="Список заявок">{data.leads.length === 0 ? <EmptyState>По текущим фильтрам заявок нет.</EmptyState> : <><table className="sz-table"><thead><tr><th>Дата</th><th>Клиент</th><th>Статус</th><th>Ответственный</th><th>Источник</th><th>Страница</th><th>Форма</th></tr></thead><tbody>{data.leads.map((lead) => <tr key={lead.id}><td>{new Date(lead.createdAt).toLocaleString('ru-RU')}</td><td><Link href={`/admin/collections/leads/${lead.id}`}>{lead.name || lead.phone}</Link></td><td>{formatLeadStatus(lead.status)}</td><td>{typeof lead.responsibleEmployee === 'object' && lead.responsibleEmployee ? lead.responsibleEmployee.fullName : '—'}</td><td>{lead.source || '—'}</td><td>{lead.sourcePage || '—'}</td><td>{lead.formType || '—'}</td></tr>)}</tbody></table><PaginationNav basePath="/admin/zayavki" page={data.pagination.page} query={{ formType: data.filters.formType, period: data.period.key, responsible: data.filters.responsible, search: data.filters.search, source: data.filters.source, sourcePage: data.filters.sourcePage, status: data.filters.status }} totalPages={data.pagination.totalPages} /></>}</TableCard>
+    </WorkspaceFrame>
+  )
+}

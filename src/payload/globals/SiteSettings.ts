@@ -1,12 +1,13 @@
 import type { GlobalConfig } from 'payload'
 
 import { canReadSiteSettings, canUpdateSiteSettings } from '../access/site-settings'
+import { recordContactsActivity } from '../hooks/business'
 
 export const SiteSettings = {
   slug: 'site-settings',
   label: {
-    en: 'Site settings',
-    ru: 'Настройки сайта',
+    en: 'Contacts',
+    ru: 'Контакты',
   },
   access: {
     read: canReadSiteSettings,
@@ -14,17 +15,17 @@ export const SiteSettings = {
   },
   admin: {
     group: {
-      en: 'Management',
-      ru: 'Управление',
+      en: 'Cabinet',
+      ru: 'Кабинет',
     },
   },
   fields: [
     {
-      name: 'projectName',
+      name: 'companyName',
       type: 'text',
       label: {
-        en: 'Project name',
-        ru: 'Название проекта',
+        en: 'Company name',
+        ru: 'Название компании',
       },
       required: true,
     },
@@ -34,15 +35,6 @@ export const SiteSettings = {
       label: {
         en: 'Brand name',
         ru: 'Название бренда',
-      },
-      required: true,
-    },
-    {
-      name: 'companyName',
-      type: 'text',
-      label: {
-        en: 'Company name',
-        ru: 'Название компании',
       },
       required: true,
     },
@@ -76,59 +68,71 @@ export const SiteSettings = {
       },
     },
     {
-      name: 'socialLinks',
-      type: 'array',
-      label: {
-        en: 'Social links',
-        ru: 'Социальные ссылки',
-      },
+      type: 'row',
       fields: [
         {
-          name: 'label',
+          name: 'workingHours',
           type: 'text',
           label: {
-            en: 'Название',
-            ru: 'Название',
+            en: 'Working hours',
+            ru: 'Режим работы',
           },
-          required: true,
         },
         {
-          name: 'url',
+          name: 'telegramUrl',
           type: 'text',
           label: {
-            en: 'URL',
-            ru: 'Ссылка',
+            en: 'Telegram URL',
+            ru: 'Telegram',
           },
-          required: true,
         },
+      ],
+    },
+    {
+      name: 'vkUrl',
+      type: 'text',
+      label: {
+        en: 'VK URL',
+        ru: 'VK',
+      },
+    },
+    {
+      name: 'projectName',
+      type: 'text',
+      admin: { hidden: true },
+      label: {
+        en: 'Legacy project name',
+        ru: 'Legacy: название проекта',
+      },
+    },
+    {
+      name: 'socialLinks',
+      type: 'array',
+      admin: { hidden: true },
+      label: {
+        en: 'Legacy social links',
+        ru: 'Legacy: социальные ссылки',
+      },
+      fields: [
+        { name: 'label', type: 'text', required: true },
+        { name: 'url', type: 'text', required: true },
       ],
     },
     {
       name: 'defaultSEO',
       type: 'group',
+      admin: { hidden: true },
       label: {
-        en: 'Default SEO',
-        ru: 'SEO по умолчанию',
+        en: 'Legacy default SEO',
+        ru: 'Legacy: SEO по умолчанию',
       },
       fields: [
-        {
-          name: 'title',
-          type: 'text',
-          label: {
-            en: 'Title',
-            ru: 'Заголовок',
-          },
-        },
-        {
-          name: 'description',
-          type: 'textarea',
-          label: {
-            en: 'Description',
-            ru: 'Описание',
-          },
-          maxLength: 160,
-        },
+        { name: 'title', type: 'text' },
+        { name: 'description', type: 'textarea', maxLength: 160 },
       ],
     },
   ],
+  hooks: {
+    afterChange: [recordContactsActivity],
+  },
 } satisfies GlobalConfig

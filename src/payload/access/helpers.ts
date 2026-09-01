@@ -1,50 +1,85 @@
 import type { PayloadRequest, Where } from 'payload'
 
-import { USER_ROLES, type UserRole } from './roles'
+import {
+  canManageContacts,
+  canUseAdminPanel,
+  hasAdminCapability,
+  hasRole,
+  isKnownRole,
+  isSuperAdmin,
+  manualOriginWhere,
+  publicPublishedWhere,
+  type AppUser,
+  type UserRole,
+} from './capabilities'
 
-type AppUser =
-  | {
-      id?: number | string
-      role?: UserRole | null
-    }
-  | null
-  | undefined
+export { canManageContacts, canUseAdminPanel, hasAdminCapability, hasRole, isKnownRole, isSuperAdmin }
+export type { AppUser, UserRole }
 
 export const DEFAULT_USER_ROLE: UserRole = 'CONTENT_MANAGER'
 
-export const isKnownRole = (value: unknown): value is UserRole =>
-  typeof value === 'string' && USER_ROLES.includes(value as UserRole)
+export function canAccessAdmin(user: AppUser) {
+  return canUseAdminPanel(user)
+}
 
-export const hasRole = (user: AppUser, roles: readonly UserRole[]): boolean =>
-  isKnownRole(user?.role) && roles.includes(user.role)
+export function canManageContent(user: AppUser) {
+  return hasRole(user, ['SUPER_ADMIN', 'DIRECTOR', 'CONTENT_MANAGER'])
+}
 
-export const isSuperAdmin = (user: AppUser): boolean => hasRole(user, ['SUPER_ADMIN'])
+export function canManageSettings(user: AppUser) {
+  return canManageContacts(user)
+}
 
-export const canAccessAdmin = (user: AppUser): boolean =>
-  hasRole(user, ['SUPER_ADMIN', 'DIRECTOR', 'CONTENT_MANAGER'])
+export function canDeleteContent(user: AppUser) {
+  return hasRole(user, ['SUPER_ADMIN', 'DIRECTOR'])
+}
 
-export const canManageContent = (user: AppUser): boolean =>
-  hasRole(user, ['SUPER_ADMIN', 'DIRECTOR', 'CONTENT_MANAGER'])
+export function publicPageWhere(): Where {
+  return {
+    _status: {
+      equals: 'published',
+    },
+  }
+}
 
-export const canManageSettings = (user: AppUser): boolean =>
-  hasRole(user, ['SUPER_ADMIN', 'DIRECTOR'])
+export function publicMediaWhere(): Where {
+  return publicPublishedWhere('isPublic')
+}
 
-export const canDeleteContent = (user: AppUser): boolean =>
-  hasRole(user, ['SUPER_ADMIN', 'DIRECTOR'])
+export function publicDocumentWhere(): Where {
+  return publicPublishedWhere('isPublished')
+}
 
-export const publicPageWhere = (): Where => ({
-  _status: {
-    equals: 'published',
-  },
-})
+export function publicEmployeeWhere(): Where {
+  return {
+    and: [
+      {
+        isPublic: {
+          equals: true,
+        },
+      },
+      {
+        status: {
+          equals: 'active',
+        },
+      },
+    ],
+  }
+}
 
-export const publicMediaWhere = (): Where => ({
-  isPublic: {
-    equals: true,
-  },
-})
+export function publicReviewWhere(): Where {
+  return {
+    status: {
+      equals: 'published',
+    },
+  }
+}
 
-export const isFirstUserBootstrap = async (req: PayloadRequest): Promise<boolean> => {
+export function manualOnlyWhere(): Where {
+  return manualOriginWhere()
+}
+
+export async function isFirstUserBootstrap(req: PayloadRequest): Promise<boolean> {
   const { totalDocs } = await req.payload.count({
     collection: 'users',
     overrideAccess: true,

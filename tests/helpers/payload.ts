@@ -29,13 +29,29 @@ export async function getTestPayload() {
 
 export async function resetFoundationState() {
   const payload = await getTestPayload()
-  const collections = ['pages', 'media', 'users'] as const
+  const collections = [
+    'admin-activities',
+    'analytics-events',
+    'anti-spam-events',
+    'import-errors',
+    'import-runs',
+    'reviews',
+    'lead-notes',
+    'leads',
+    'properties',
+    'offices',
+    'employees',
+    'import-sources',
+    'pages',
+    'media',
+    'users',
+  ] as const
 
   for (const collection of collections) {
     const { docs } = await payload.find({
       collection,
       depth: 0,
-      limit: 100,
+      limit: 500,
       overrideAccess: true,
       pagination: false,
     })
@@ -52,13 +68,14 @@ export async function resetFoundationState() {
   await payload.updateGlobal({
     slug: 'site-settings',
     data: {
+      address: 'Ростов-на-Дону, тестовый адрес',
       brandName: 'Союз Застройщиков',
       companyName: 'Союз застройщиков Ростов',
-      defaultSEO: {
-        description: 'Базовое SEO foundation-слоя.',
-        title: 'Союз Ростов',
-      },
-      projectName: 'Союз Ростов',
+      email: 'info@example.com',
+      phone: '+7 (900) 000-00-00',
+      telegramUrl: 'https://t.me/test',
+      vkUrl: 'https://vk.com/test',
+      workingHours: 'Пн-Пт 09:00–18:00',
     },
     overrideAccess: true,
   })

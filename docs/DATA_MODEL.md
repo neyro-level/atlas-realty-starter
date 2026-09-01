@@ -1,37 +1,65 @@
 # Data model
 
-## Foundation model
+## Cabinet model
 
 | Сущность | Назначение | Ключевые поля | Доступ |
 |---|---|---|---|
 | `users` | административные аккаунты Payload | `name`, `email`, `password`, `role` | полный management только `SUPER_ADMIN` |
-| `media` | базовый media layer | файл, `alt`, `caption`, `isPublic`, focal point | public read только при `isPublic = true` |
-| `pages` | минимальная CMS-модель страниц | `title`, `slug`, `content`, `seo`, `_status` | public read только published |
-| `site-settings` | глобальные настройки проекта | `projectName`, `brandName`, `companyName`, контакты, social links, default SEO | update `DIRECTOR | SUPER_ADMIN` |
+| `media` | общий media layer | файл, `alt`, `caption`, `isPublic`, focal point | public read только при `isPublic = true` |
+| `pages` | редакционный слой статических страниц | `title`, `slug`, `content`, `seo`, `_status` | public read только published |
+| `site-settings` | пользовательский раздел `Контакты` | `companyName`, `brandName`, `phone`, `email`, `address`, `workingHours`, messenger URLs | public read, update `DIRECTOR | SUPER_ADMIN` |
+| `leads` | mini-CRM контур заявок | клиент, источник, страница, форма, stage, `responsibleEmployee` | read/update `DIRECTOR | SUPER_ADMIN` |
+| `lead-notes` | append-only заметки по заявкам | `lead`, `body`, `authorName`, `notedAt` | create `DIRECTOR | SUPER_ADMIN`, update/delete запрещены |
+| `properties` | самостоятельные объявления недвижимости | `title`, `category`, `origin`, `workflowStatus`, `isPublished`, `price`, `responsibleEmployee`, `gallery` | public read только `isPublished = true`; mutation manual-scope |
+| `employees` | карточки сотрудников | `fullName`, `origin`, `status`, `teamSection`, `isPublic`, `photo`, `publicBio` | public read только active+public |
+| `reviews` | отзывы и модерация | `authorName`, `employee`, `rating`, `text`, `publishedText`, `status`, `reviewDate` | public read только published |
+| `offices` | офисы и контактные точки | `title`, `address`, `photo`, `sortOrder`, `isPublished` | public read только `isPublished = true` |
+| `analytics-events` | сырые analytics events | `eventType`, `occurredAt`, `section`, `page`, `utmSource`, `device`, safe hashes, `lead` | append-only system collection |
+| `anti-spam-events` | журнал антиспам-попыток | `verdict`, `reason`, `sourcePage`, safe hashes, `lead` | append-only system collection |
+| `import-sources` | registry XML feeds | `title`, `endpointHint`, `isActive`, `adapterConfigured` | privileged configuration |
+| `import-runs` | история XML запусков | status, counts, timings, diagnostics, `errors` | append-only system lifecycle |
+| `import-errors` | ошибки конкретного запуска | `run`, `externalId`, `code`, `message` | append-only system collection |
+| `admin-activities` | единый audit trail | `event`, `details`, `triggeredBy`, subject relationships, `before`, `after` | append-only system collection |
 
-## Инварианты foundation
+## Catalog extension boundary
 
-- `users.role` хранится в самой коллекции и сохраняется в JWT;
-- первый пользователь автоматически получает `SUPER_ADMIN`;
-- `pages.slug` уникален и индексируется;
-- публикация `pages` отделена от наличия записи через drafts/versions Payload;
-- `media` не становится публичным автоматически;
-- sensitive data не попадает в публичные Payload responses;
-- timestamps и audit fields задаются единообразно.
+Массовый каталог новостроек не должен раздувать `properties`. Будущая модель зафиксирована в `docs/MODULE_CATALOG.md`:
 
-## Lifecycle и удаление
+```text
+ResidentialComplex
+└── Building
+    └── Unit
+```
 
-По умолчанию:
+`properties` остаётся для самостоятельных объявлений, вторички, домов, участков и коммерции.
 
-- `pages` снимаются с публикации либо удаляются только директором/суперадмином;
-- `media` управляется через Payload upload lifecycle;
-- `users` не удаляются и не меняют роль без суперадмина;
-- `site-settings` обновляется in-place как единый global.
+## Инварианты
 
-## Отложено
+- `users.role` сохраняется в JWT и доступен самому аутентифицированному пользователю;
+- `origin` и import metadata изменяет только controlled system write;
+- `CONTENT_MANAGER` не публикует и не архивирует объекты;
+- XML employee допускает только public-profile изменения, но не ownership/source fields;
+- public read для employees/reviews/properties/offices ограничен server-side access;
+- operational events и audit append-only для пользователей;
+- audit source of truth только `admin-activities`; embedded дубликата истории нет;
+- dashboard filters/count/pagination выполняются PostgreSQL/Payload queries;
+- основные filter/status/date/source fields индексируются;
+- конкретный XML adapter обязан соблюдать `docs/FEED_OWNERSHIP_CONTRACT.md`.
 
-- реальные сущности каталога недвижимости;
-- ownership лидов и интеграция с внешним lead-контуром;
-- import IDs, redirect registry и migration tables;
-- локализация публичного сайта;
-- retention, backup policy и production object storage.
+## Lifecycle
+
+- `leads`: создаются system/manual, меняют stage, получают отдельные `lead-notes` и anti-spam linkage;
+- `properties`: `draft -> active -> archived|hidden`, публикация отделена флагом `isPublished`;
+- `employees`: `active|inactive`, публичность отделена от статуса;
+- `reviews`: `pending -> published|rejected`, возможен возврат на модерацию;
+- `offices`: CRUD с publish/hide;
+- `anti-spam-events`, `analytics-events`, `import-errors`, `admin-activities`: append-only;
+- `import-runs`: `running|success|partial_success|failed|cancelled`, lifecycle меняет только system adapter.
+
+## Отложено сознательно
+
+- конкретная XML feed-спецификация и parser/adapter;
+- production ingestion analytics events;
+- внешняя CRM / lead delivery;
+- production credentials managed PostgreSQL, S3 и Sentry project;
+- redirect registry и контентная миграция Astro.

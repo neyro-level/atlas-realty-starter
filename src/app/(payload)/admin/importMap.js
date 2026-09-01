@@ -21,9 +21,18 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { AdminNav as AdminNav_c1efe4092835c3e22a4f10dee332935c } from '../../../payload/admin/components/AdminNav.tsx'
 import { BrandIcon as BrandIcon_3ba27f9c4708a4b76aef64a978fce559 } from '../../../payload/admin/components/BrandIcon.tsx'
 import { BrandLogo as BrandLogo_950ace821e464f61cbc7c39bc961309d } from '../../../payload/admin/components/BrandLogo.tsx'
-import { DashboardIntro as DashboardIntro_8cc9a40da1ef5781eae058613d15d83e } from '../../../payload/admin/components/DashboardIntro.tsx'
+import { AntiSpamView as AntiSpamView_f0a587b5ef934268d701b40bef2d3c5f } from '../../../payload/admin/views/AntiSpamView.tsx'
+import { VisitorsView as VisitorsView_738dda7bd2ad0925ca740f77fd7058b0 } from '../../../payload/admin/views/VisitorsView.tsx'
+import { EmployeesView as EmployeesView_01111871925cb20e17e6127a1314bc3a } from '../../../payload/admin/views/EmployeesView.tsx'
+import { ImportRunView as ImportRunView_3498c33bca47ab5a082f2c429b58eb5a } from '../../../payload/admin/views/ImportViews.tsx'
+import { ImportRunsView as ImportRunsView_3498c33bca47ab5a082f2c429b58eb5a } from '../../../payload/admin/views/ImportViews.tsx'
+import { LeadsView as LeadsView_77f6ad70e5f8ddfeedf956b32f3bb9e5 } from '../../../payload/admin/views/LeadsView.tsx'
+import { OfficesView as OfficesView_6e7b646bc7f2b4c05a0d3bb6e8ea884f } from '../../../payload/admin/views/OfficesView.tsx'
+import { PropertiesView as PropertiesView_0dc669eda7bda24ac356ab241f28b75e } from '../../../payload/admin/views/PropertiesView.tsx'
+import { ReviewsView as ReviewsView_c8311e10f5d796fb04b5749fcf859fdd } from '../../../payload/admin/views/ReviewsView.tsx'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -51,8 +60,17 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "./payload/admin/components/AdminNav.tsx#AdminNav": AdminNav_c1efe4092835c3e22a4f10dee332935c,
   "./payload/admin/components/BrandIcon.tsx#BrandIcon": BrandIcon_3ba27f9c4708a4b76aef64a978fce559,
   "./payload/admin/components/BrandLogo.tsx#BrandLogo": BrandLogo_950ace821e464f61cbc7c39bc961309d,
-  "./payload/admin/components/DashboardIntro.tsx#DashboardIntro": DashboardIntro_8cc9a40da1ef5781eae058613d15d83e,
+  "./payload/admin/views/AntiSpamView.tsx#AntiSpamView": AntiSpamView_f0a587b5ef934268d701b40bef2d3c5f,
+  "./payload/admin/views/VisitorsView.tsx#VisitorsView": VisitorsView_738dda7bd2ad0925ca740f77fd7058b0,
+  "./payload/admin/views/EmployeesView.tsx#EmployeesView": EmployeesView_01111871925cb20e17e6127a1314bc3a,
+  "./payload/admin/views/ImportViews.tsx#ImportRunView": ImportRunView_3498c33bca47ab5a082f2c429b58eb5a,
+  "./payload/admin/views/ImportViews.tsx#ImportRunsView": ImportRunsView_3498c33bca47ab5a082f2c429b58eb5a,
+  "./payload/admin/views/LeadsView.tsx#LeadsView": LeadsView_77f6ad70e5f8ddfeedf956b32f3bb9e5,
+  "./payload/admin/views/OfficesView.tsx#OfficesView": OfficesView_6e7b646bc7f2b4c05a0d3bb6e8ea884f,
+  "./payload/admin/views/PropertiesView.tsx#PropertiesView": PropertiesView_0dc669eda7bda24ac356ab241f28b75e,
+  "./payload/admin/views/ReviewsView.tsx#ReviewsView": ReviewsView_c8311e10f5d796fb04b5749fcf859fdd,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

@@ -1,12 +1,18 @@
 # Worklog
 
-## 2026-08-30 — foundation Next 16 + Payload
+## 2026-08-31 — Payload admin parity and platform hardening
 
-- Развёрнут официальный Payload blank scaffold и перенесён в репозиторий `integrator-p/soyuz-rostov-next`.
-- Зафиксирован foundation-стек: Next.js `16.3.0`, React `19.2.8`, TypeScript `6.0.3`, Payload `3.88.0`, PostgreSQL `18`, Node.js `24.20.0`, pnpm `11.24.0`.
-- Настроен единый runtime `Next.js + Payload` без Prisma, Better Auth и отдельного backend.
-- Добавлены `Users`, `Media`, `Pages`, `SiteSettings`, централизованный access-слой и базовые hooks.
-- Подготовлен branded Payload Admin с русскими подписями, группировкой сущностей и стартовым dashboard.
-- Настроены локальная PostgreSQL 18 через Docker Compose, `.env.example`, type generation, import map и базовые test/check scripts.
-- Создан обязательный проектный контракт `docs/PAYLOAD_CONTRACT.md` и ADR про Payload как единое ядро.
-- Production, домен, managed PostgreSQL Timeweb и перенос с Astro по-прежнему не запускались.
+- Payload сохранён единственной CMS/backend platform; Prisma, Better Auth, второй ORM/backend не добавлены.
+- Восстановлена business IA Bastion reference через штатные Payload Nav/Custom Views.
+- Добавлены collections/globals/access/hooks/migrations для cabinet domains.
+- Устранён access bypass custom dashboards: views используют Payload Admin context, server capability guard и `overrideAccess: false`.
+- Добавлены field-level permissions и ownership hooks для publish/origin/import metadata и XML employee public profile.
+- Audit нормализован: `admin-activities` — единственный source of truth; notes вынесены в append-only `lead-notes`.
+- Analytics, anti-spam, import runs/errors и audit сделаны append-only для пользователей.
+- Dashboard queries разделены по доменам; filters/counts/pagination выполняются Payload/PostgreSQL, grouped analytics — parameterized Postgres adapter queries.
+- Добавлены indexes для status/source/date/publication/filter fields.
+- Migration пересобрана и подтверждена на clean database и на непустой foundation fixture с сохранением legacy SiteSettings/social links.
+- Зафиксированы future catalog и feed ownership contracts для `ResidentialComplex -> Building -> Unit`.
+- Подключён conditional official S3 adapter, health endpoint, backup/restore check и conditional Sentry SDK.
+- Добавлены role-specific integration/e2e tests и `verify:payload-upgrade` profile.
+- Production credentials/services, concrete XML adapter и Astro cutover остаются отдельными этапами.

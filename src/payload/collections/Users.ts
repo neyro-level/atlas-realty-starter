@@ -8,7 +8,7 @@ import {
   canUseAdminPanel,
 } from '../access/users'
 import { USER_ROLES } from '../access/roles'
-import { isSuperAdmin } from '../access/helpers'
+import { canAccessAdmin, isSuperAdmin } from '../access/helpers'
 import { assignUserRole } from '../hooks/assignUserRole'
 
 export const Users = {
@@ -61,7 +61,7 @@ export const Users = {
       type: 'select',
       access: {
         create: ({ req }) => isSuperAdmin(req.user),
-        read: ({ req }) => isSuperAdmin(req.user),
+        read: ({ req }) => canAccessAdmin(req.user),
         update: ({ req }) => isSuperAdmin(req.user),
       },
       admin: {

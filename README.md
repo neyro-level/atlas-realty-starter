@@ -32,6 +32,7 @@ Payload работает внутри Next.js. Prisma, отдельного back
 - целевой сервер: Timeweb `sz-rostov`
 - SSH alias: `szrostov`
 - server secrets: Doppler `szrostov-server/prd`
+- production foundation: `docs/PRODUCTION_FOUNDATION.md`
 - production PostgreSQL: будущая отдельная managed database Timeweb, не создаётся на foundation-этапе
 
 ## Core entities
@@ -63,6 +64,8 @@ Payload работает внутри Next.js. Prisma, отдельного back
 - `pnpm build`
 - `pnpm test:int`
 - `pnpm test:e2e`
+- `pnpm db:backup:check`
+- `pnpm verify:payload-upgrade` после обновления Payload/Next
 
 ## Database
 
@@ -79,5 +82,8 @@ Payload работает внутри Next.js. Prisma, отдельного back
 - [docs/PAYLOAD_CONTRACT.md](docs/PAYLOAD_CONTRACT.md)
 - [SECURITY.md](SECURITY.md)
 - [docs/MASTER_PLAN.md](docs/MASTER_PLAN.md)
+- [docs/MODULE_CATALOG.md](docs/MODULE_CATALOG.md)
+- [docs/FEED_OWNERSHIP_CONTRACT.md](docs/FEED_OWNERSHIP_CONTRACT.md)
+- [docs/PRODUCTION_FOUNDATION.md](docs/PRODUCTION_FOUNDATION.md)
 - [WORKLOG.md](WORKLOG.md)
 
