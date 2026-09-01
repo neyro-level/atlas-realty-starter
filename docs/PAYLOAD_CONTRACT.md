@@ -73,6 +73,7 @@ System writes передают явный `context.systemWrite` там, где h
 
 - local development без S3 использует `media/`;
 - production использует официальный `@payloadcms/storage-s3`;
+- storage plugin всегда вставляет schema fields через `alwaysInsertFields`, даже когда local S3 adapter disabled; environment-dependent schema запрещена;
 - partial S3 configuration блокирует startup;
 - production release без S3 запрещён project release gate.
 
