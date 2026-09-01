@@ -34,7 +34,7 @@ Payload работает внутри Next.js. Prisma, отдельного back
 - server secrets: Doppler `szrostov-server/prd`
 - production foundation: `docs/PRODUCTION_FOUNDATION.md`
 - release runbook: `docs/PRODUCTION_RUNBOOK.md`
-- production PostgreSQL: будущая отдельная managed database Timeweb, не создаётся на foundation-этапе
+- production runtime: isolated managed PostgreSQL 18 + private S3 + systemd release на `sz-rostov`
 
 ## Core entities
 
