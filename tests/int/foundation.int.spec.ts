@@ -26,6 +26,59 @@ describe('admin cabinet parity contracts', () => {
     expect(firstUser.role).toBe('SUPER_ADMIN')
   })
 
+  it('enforces residential complex publication and public read', async () => {
+    const payload = await getTestPayload()
+    const { contentManager, director } = await seedPrivilegedUsers()
+
+    const draftComplex = await payload.create({
+      collection: 'residential-complexes',
+      data: {
+        address: 'Ростов-на-Дону, тестовый адрес',
+        district: 'Советский район',
+        slug: 'test-complex',
+        status: 'published',
+        title: 'ЖК Тестовый',
+      },
+      overrideAccess: false,
+      user: contentManager,
+    })
+
+    expect(draftComplex.status).toBe('draft')
+
+    const publishedComplex = await payload.update({
+      collection: 'residential-complexes',
+      data: {
+        status: 'published',
+      },
+      id: draftComplex.id,
+      overrideAccess: false,
+      user: director,
+    })
+
+    expect(publishedComplex.status).toBe('published')
+
+    const publicComplexes = await payload.find({
+      collection: 'residential-complexes',
+      overrideAccess: false,
+      pagination: false,
+    })
+    expect(publicComplexes.docs.map((item) => item.slug)).toEqual(['test-complex'])
+
+    const activity = await payload.find({
+      collection: 'admin-activities',
+      overrideAccess: true,
+      pagination: false,
+      where: {
+        residentialComplex: {
+          equals: draftComplex.id,
+        },
+      },
+    })
+    expect(activity.docs.map((item) => item.event)).toEqual(
+      expect.arrayContaining(['COMPLEX_CREATED', 'COMPLEX_PUBLISHED']),
+    )
+  })
+
   it('lets director create and update leads with notes and audit history', async () => {
     const payload = await getTestPayload()
     const { director, superAdmin } = await seedPrivilegedUsers()

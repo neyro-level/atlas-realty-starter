@@ -16,6 +16,7 @@ type AuditSubject = {
   lead?: number
   office?: number
   property?: number
+  residentialComplex?: number
   review?: number
 }
 
@@ -79,6 +80,7 @@ async function recordAdminActivity(args: {
       lead: args.subject?.lead,
       office: args.subject?.office,
       property: args.subject?.property,
+      residentialComplex: args.subject?.residentialComplex,
       review: args.subject?.review,
       triggeredBy: readActorName(args.req),
     },
@@ -162,6 +164,31 @@ export const protectPropertyMutation: CollectionBeforeChangeHook = ({ data, oper
   }
 
   return protectedRecord
+}
+
+export const protectResidentialComplexMutation: CollectionBeforeChangeHook = ({ data, operation, originalDoc, req }) => {
+  const record = readRecord(data)
+  if (!record || isSuperAdmin(req.user) || readContextFlag(req, 'systemWrite')) {
+    return data
+  }
+
+  if (operation === 'create') {
+    return hasAdminCapability(req.user, 'complex.publish')
+      ? record
+      : {
+          ...record,
+          status: 'draft',
+        }
+  }
+
+  if (!hasAdminCapability(req.user, 'complex.publish')) {
+    return {
+      ...record,
+      status: readRecord(originalDoc)?.status ?? 'draft',
+    }
+  }
+
+  return record
 }
 
 const XML_EMPLOYEE_PUBLIC_FIELDS: Record<string, true> = {
@@ -301,6 +328,40 @@ export const recordPropertyActivity: CollectionAfterChangeHook = async ({ doc, o
       subject: { property: propertyID },
     })
   }
+
+  return doc
+}
+
+export const recordResidentialComplexActivity: CollectionAfterChangeHook = async ({
+  doc,
+  operation,
+  previousDoc,
+  req,
+}) => {
+  const residentialComplexID = readRelationID(doc.id)
+  if (!residentialComplexID) {
+    return doc
+  }
+
+  if (operation === 'create') {
+    await recordAdminActivity({
+      details: 'Создан жилой комплекс',
+      event: 'COMPLEX_CREATED',
+      req,
+      subject: { residentialComplex: residentialComplexID },
+    })
+    return doc
+  }
+
+  const published = previousDoc.status !== 'published' && doc.status === 'published'
+  await recordAdminActivity({
+    after: { status: doc.status },
+    before: { status: previousDoc.status },
+    details: published ? 'Жилой комплекс опубликован' : 'Обновлена карточка жилого комплекса',
+    event: published ? 'COMPLEX_PUBLISHED' : 'COMPLEX_UPDATED',
+    req,
+    subject: { residentialComplex: residentialComplexID },
+  })
 
   return doc
 }

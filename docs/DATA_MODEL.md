@@ -10,7 +10,8 @@
 | `site-settings` | пользовательский раздел `Контакты` | `companyName`, `brandName`, `phone`, `email`, `address`, `workingHours`, messenger URLs | public read, update `DIRECTOR | SUPER_ADMIN` |
 | `leads` | mini-CRM контур заявок | клиент, источник, страница, форма, stage, `responsibleEmployee` | read/update `DIRECTOR | SUPER_ADMIN` |
 | `lead-notes` | append-only заметки по заявкам | `lead`, `body`, `authorName`, `notedAt` | create `DIRECTOR | SUPER_ADMIN`, update/delete запрещены |
-| `properties` | самостоятельные объявления недвижимости | `title`, `category`, `origin`, `workflowStatus`, `isPublished`, `price`, `responsibleEmployee`, `gallery` | public read только `isPublished = true`; mutation manual-scope |
+| `properties` | самостоятельные объявления недвижимости | identity/workflow, `dealType`, category/commercial type, price and price/m², areas, floor/build year/material/repair, studio/exclusive flags, city/district/address/coordinates, publication date, video and gallery | public read only `isPublished = true`; mutation manual-scope |
+| `residential-complexes` | страницы и каталог ЖК | `title`, `slug`, publish status, developer, district/address/coordinates, price/areas/rooms, cover/gallery/video, advantages, purchase terms, SEO | public read only `published`; create/update role-aware; publish `DIRECTOR | SUPER_ADMIN` |
 | `employees` | карточки сотрудников | `fullName`, `origin`, `status`, `teamSection`, `isPublic`, `photo`, `publicBio` | public read только active+public |
 | `reviews` | отзывы и модерация | `authorName`, `employee`, `rating`, `text`, `publishedText`, `status`, `reviewDate` | public read только published |
 | `offices` | офисы и контактные точки | `title`, `address`, `photo`, `sortOrder`, `isPublished` | public read только `isPublished = true` |
@@ -23,7 +24,7 @@
 
 ## Catalog extension boundary
 
-Массовый каталог новостроек не должен раздувать `properties`. Будущая модель зафиксирована в `docs/MODULE_CATALOG.md`:
+Первые 30 страниц ЖК используют самостоятельную collection `residential-complexes`. Массовый feed позже расширяет модель:
 
 ```text
 ResidentialComplex
@@ -31,7 +32,7 @@ ResidentialComplex
     └── Unit
 ```
 
-`properties` остаётся для самостоятельных объявлений, вторички, домов, участков и коммерции.
+`properties` остаётся для самостоятельных объявлений, вторички, домов, участков и коммерции. Indexed public filters: price, deal/commercial type, total area, floor, build year, material, repair, price per m², studio/exclusive, city, district, rooms and publication date. Catalog content в Git не дублируется: ЖК и объекты заводятся через Payload после утверждения источника данных.
 
 ## Инварианты
 
@@ -40,6 +41,7 @@ ResidentialComplex
 - `CONTENT_MANAGER` не публикует и не архивирует объекты;
 - XML employee допускает только public-profile изменения, но не ownership/source fields;
 - public read для employees/reviews/properties/offices ограничен server-side access;
+- public read `residential-complexes` ограничен `status=published`; CONTENT_MANAGER не публикует;
 - operational events и audit append-only для пользователей;
 - audit source of truth только `admin-activities`; embedded дубликата истории нет;
 - dashboard filters/count/pagination выполняются PostgreSQL/Payload queries;

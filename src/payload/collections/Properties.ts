@@ -94,19 +94,88 @@ export const Properties = {
       label: { en: 'Feed source', ru: 'Источник импорта' },
       relationTo: 'import-sources',
     },
-    { name: 'price', type: 'number', label: { en: 'Price', ru: 'Цена' }, min: 0 },
+    { name: 'price', type: 'number', index: true, label: { en: 'Price', ru: 'Цена' }, min: 0 },
     {
       type: 'row',
       fields: [
-        { name: 'city', type: 'text', label: { en: 'City', ru: 'Город' } },
-        { name: 'district', type: 'text', label: { en: 'District', ru: 'Район' } },
+        {
+          name: 'dealType',
+          type: 'select',
+          defaultValue: 'sale',
+          index: true,
+          label: { en: 'Deal type', ru: 'Тип сделки' },
+          options: [
+            { label: 'Продажа', value: 'sale' },
+            { label: 'Аренда', value: 'rent' },
+          ],
+        },
+        {
+          name: 'commercialType',
+          type: 'select',
+          index: true,
+          label: { en: 'Commercial type', ru: 'Тип коммерции' },
+          options: [
+            { label: 'Офис', value: 'office' },
+            { label: 'Торговое помещение', value: 'retail' },
+            { label: 'Склад', value: 'warehouse' },
+            { label: 'Готовый бизнес', value: 'business' },
+            { label: 'Свободное назначение', value: 'free_purpose' },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        { name: 'totalArea', type: 'number', index: true, label: { en: 'Total area', ru: 'Общая площадь' }, min: 0 },
+        { name: 'livingArea', type: 'number', label: { en: 'Living area', ru: 'Жилая площадь' }, min: 0 },
+        { name: 'kitchenArea', type: 'number', label: { en: 'Kitchen area', ru: 'Площадь кухни' }, min: 0 },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        { name: 'floor', type: 'number', index: true, label: { en: 'Floor', ru: 'Этаж' }, min: 0 },
+        { name: 'floorsTotal', type: 'number', label: { en: 'Floors total', ru: 'Этажей в доме' }, min: 0 },
+        { name: 'buildYear', type: 'number', index: true, label: { en: 'Build year', ru: 'Год постройки' }, min: 1800 },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        { name: 'buildingMaterial', type: 'text', index: true, label: { en: 'Building material', ru: 'Материал дома' } },
+        { name: 'repair', type: 'text', index: true, label: { en: 'Repair', ru: 'Ремонт' } },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        { name: 'pricePerSquareMeter', type: 'number', index: true, label: { en: 'Price per square meter', ru: 'Цена за м²' }, min: 0 },
+        { name: 'isStudio', type: 'checkbox', defaultValue: false, index: true, label: { en: 'Studio', ru: 'Студия' } },
+        { name: 'isExclusive', type: 'checkbox', defaultValue: false, index: true, label: { en: 'Exclusive', ru: 'Эксклюзив' } },
+      ],
+    },
+    {
+      type: 'row',
+      fields: [
+        { name: 'city', type: 'text', index: true, label: { en: 'City', ru: 'Город' } },
+        { name: 'district', type: 'text', index: true, label: { en: 'District', ru: 'Район' } },
       ],
     },
     { name: 'addressLine', type: 'text', label: { en: 'Address', ru: 'Адрес' } },
     {
+      name: 'coordinates',
+      type: 'group',
+      label: { en: 'Coordinates', ru: 'Координаты' },
+      fields: [
+        { name: 'latitude', type: 'number', label: { en: 'Latitude', ru: 'Широта' } },
+        { name: 'longitude', type: 'number', label: { en: 'Longitude', ru: 'Долгота' } },
+      ],
+    },
+    {
       type: 'row',
       fields: [
-        { name: 'rooms', type: 'number', label: { en: 'Rooms', ru: 'Комнат' }, min: 0 },
+        { name: 'rooms', type: 'number', index: true, label: { en: 'Rooms', ru: 'Комнат' }, min: 0 },
         {
           name: 'updatedFromSourceAt',
           type: 'date',
@@ -114,10 +183,12 @@ export const Properties = {
           index: true,
           label: { en: 'Updated from source at', ru: 'Дата обновления' },
         },
+        { name: 'publishedAt', type: 'date', index: true, label: { en: 'Published at', ru: 'Дата публикации' } },
       ],
     },
     { name: 'publicSlug', type: 'text', index: true, label: { en: 'Public slug', ru: 'Публичный slug' }, unique: true },
     { name: 'description', type: 'textarea', label: { en: 'Description', ru: 'Описание' } },
+    { name: 'videoUrl', type: 'text', label: { en: 'Video URL', ru: 'Видео' } },
     {
       name: 'gallery',
       type: 'array',

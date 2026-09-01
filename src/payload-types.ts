@@ -73,6 +73,7 @@ export interface Config {
     leads: Lead;
     'lead-notes': LeadNote;
     properties: Property;
+    'residential-complexes': ResidentialComplex;
     employees: Employee;
     reviews: Review;
     offices: Office;
@@ -94,6 +95,9 @@ export interface Config {
       activity: 'admin-activities';
     };
     properties: {
+      activity: 'admin-activities';
+    };
+    'residential-complexes': {
       activity: 'admin-activities';
     };
     employees: {
@@ -119,6 +123,7 @@ export interface Config {
     leads: LeadsSelect<false> | LeadsSelect<true>;
     'lead-notes': LeadNotesSelect<false> | LeadNotesSelect<true>;
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
+    'residential-complexes': ResidentialComplexesSelect<false> | ResidentialComplexesSelect<true>;
     employees: EmployeesSelect<false> | EmployeesSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     offices: OfficesSelect<false> | OfficesSelect<true>;
@@ -357,13 +362,32 @@ export interface Property {
   responsibleEmployee?: (number | null) | Employee;
   feedSource?: (number | null) | ImportSource;
   price?: number | null;
+  dealType?: ('sale' | 'rent') | null;
+  commercialType?: ('office' | 'retail' | 'warehouse' | 'business' | 'free_purpose') | null;
+  totalArea?: number | null;
+  livingArea?: number | null;
+  kitchenArea?: number | null;
+  floor?: number | null;
+  floorsTotal?: number | null;
+  buildYear?: number | null;
+  buildingMaterial?: string | null;
+  repair?: string | null;
+  pricePerSquareMeter?: number | null;
+  isStudio?: boolean | null;
+  isExclusive?: boolean | null;
   city?: string | null;
   district?: string | null;
   addressLine?: string | null;
+  coordinates?: {
+    latitude?: number | null;
+    longitude?: number | null;
+  };
   rooms?: number | null;
   updatedFromSourceAt?: string | null;
+  publishedAt?: string | null;
   publicSlug?: string | null;
   description?: string | null;
+  videoUrl?: string | null;
   gallery?:
     | {
         file: number | Media;
@@ -408,6 +432,9 @@ export interface AdminActivity {
     | 'PROPERTY_PUBLISHED'
     | 'PROPERTY_ARCHIVED'
     | 'PROPERTY_MEDIA_UPDATED'
+    | 'COMPLEX_CREATED'
+    | 'COMPLEX_UPDATED'
+    | 'COMPLEX_PUBLISHED'
     | 'EMPLOYEE_UPDATED'
     | 'OFFICE_UPDATED'
     | 'REVIEW_PUBLISHED'
@@ -420,6 +447,7 @@ export interface AdminActivity {
   triggeredBy: string;
   lead?: (number | null) | Lead;
   property?: (number | null) | Property;
+  residentialComplex?: (number | null) | ResidentialComplex;
   employee?: (number | null) | Employee;
   review?: (number | null) | Review;
   office?: (number | null) | Office;
@@ -442,6 +470,68 @@ export interface AdminActivity {
     | number
     | boolean
     | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "residential-complexes".
+ */
+export interface ResidentialComplex {
+  id: number;
+  title: string;
+  slug: string;
+  status: 'draft' | 'published' | 'hidden';
+  isFeatured?: boolean | null;
+  sortOrder?: number | null;
+  shortDescription?: string | null;
+  description?: string | null;
+  developer?: string | null;
+  completionLabel?: string | null;
+  district?: string | null;
+  address?: string | null;
+  priceFrom?: number | null;
+  areaMin?: number | null;
+  areaMax?: number | null;
+  roomTypes?: ('studio' | '1' | '2' | '3' | '4')[] | null;
+  cover?: (number | null) | Media;
+  externalCoverUrl?: string | null;
+  videoUrl?: string | null;
+  gallery?:
+    | {
+        image?: (number | null) | Media;
+        externalUrl?: string | null;
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  advantages?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  purchaseTerms?:
+    | {
+        title: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  location?: {
+    latitude?: number | null;
+    longitude?: number | null;
+  };
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  activity?: {
+    docs?: (number | AdminActivity)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -635,6 +725,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'properties';
         value: number | Property;
+      } | null)
+    | ({
+        relationTo: 'residential-complexes';
+        value: number | ResidentialComplex;
       } | null)
     | ({
         relationTo: 'employees';
@@ -836,13 +930,34 @@ export interface PropertiesSelect<T extends boolean = true> {
   responsibleEmployee?: T;
   feedSource?: T;
   price?: T;
+  dealType?: T;
+  commercialType?: T;
+  totalArea?: T;
+  livingArea?: T;
+  kitchenArea?: T;
+  floor?: T;
+  floorsTotal?: T;
+  buildYear?: T;
+  buildingMaterial?: T;
+  repair?: T;
+  pricePerSquareMeter?: T;
+  isStudio?: T;
+  isExclusive?: T;
   city?: T;
   district?: T;
   addressLine?: T;
+  coordinates?:
+    | T
+    | {
+        latitude?: T;
+        longitude?: T;
+      };
   rooms?: T;
   updatedFromSourceAt?: T;
+  publishedAt?: T;
   publicSlug?: T;
   description?: T;
+  videoUrl?: T;
   gallery?:
     | T
     | {
@@ -850,6 +965,67 @@ export interface PropertiesSelect<T extends boolean = true> {
         kind?: T;
         isMain?: T;
         id?: T;
+      };
+  activity?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "residential-complexes_select".
+ */
+export interface ResidentialComplexesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  status?: T;
+  isFeatured?: T;
+  sortOrder?: T;
+  shortDescription?: T;
+  description?: T;
+  developer?: T;
+  completionLabel?: T;
+  district?: T;
+  address?: T;
+  priceFrom?: T;
+  areaMin?: T;
+  areaMax?: T;
+  roomTypes?: T;
+  cover?: T;
+  externalCoverUrl?: T;
+  videoUrl?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        externalUrl?: T;
+        alt?: T;
+        id?: T;
+      };
+  advantages?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  purchaseTerms?:
+    | T
+    | {
+        title?: T;
+        value?: T;
+        id?: T;
+      };
+  location?:
+    | T
+    | {
+        latitude?: T;
+        longitude?: T;
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
       };
   activity?: T;
   updatedAt?: T;
@@ -1001,6 +1177,7 @@ export interface AdminActivitiesSelect<T extends boolean = true> {
   triggeredBy?: T;
   lead?: T;
   property?: T;
+  residentialComplex?: T;
   employee?: T;
   review?: T;
   office?: T;

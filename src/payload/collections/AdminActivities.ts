@@ -76,6 +76,15 @@ export const AdminActivities = {
       relationTo: 'properties',
     },
     {
+      name: 'residentialComplex',
+      type: 'relationship',
+      label: {
+        en: 'Residential complex',
+        ru: 'Жилой комплекс',
+      },
+      relationTo: 'residential-complexes',
+    },
+    {
       name: 'employee',
       type: 'relationship',
       label: {

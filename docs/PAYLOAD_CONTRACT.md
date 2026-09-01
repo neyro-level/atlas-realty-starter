@@ -33,6 +33,8 @@
 - field access и guard hooks защищают publish/status/origin/import metadata;
 - UI visibility не считается security boundary;
 - operational collections и audit append-only для пользователей.
+- `residential-complexes`: public only `published`; CONTENT_MANAGER create/update без publish; delete только SUPER_ADMIN;
+- public page queries use `overrideAccess: false` without privileged user.
 
 ## Controlled system writes
 
@@ -51,8 +53,10 @@ System writes передают явный `context.systemWrite` там, где h
 - fixed business nav через `admin.components.Nav`;
 - dashboards через `admin.components.views`;
 - record create/edit остаются стандартными Payload document views;
-- navigation order: `Посетители`, `Заявки`, `Объекты`, `Сотрудники`, `Отзывы`, `Офисы`, `Контакты`, `Антиспам`, `XML-импорт`;
+- navigation order: `Посетители`, `Заявки`, `Объекты`, `Новостройки`, `Сотрудники`, `Отзывы`, `Офисы`, `Контакты`, `Антиспам`, `XML-импорт`;
 - роль пользователя определяет visible links, server guard определяет фактический доступ.
+- custom Admin chrome preserves Payload auth/runtime and adds responsive sidebar, mobile header, `Ctrl+K` command menu, workspace frame, metrics, tables and lead kanban;
+- document create/edit, uploads, status controls and activity relations remain native Payload views styled by `custom.scss`; no parallel form engine is introduced.
 
 ## Query architecture
 
@@ -61,6 +65,8 @@ System writes передают явный `context.systemWrite` там, где h
 - grouped analytics uses parameterized query через официальный Postgres adapter после capability guard;
 - запрещены `pagination: false` + массовая загрузка business collections для dashboard counts;
 - основные поля фильтрации индексируются.
+- public DTO modules: `src/payload/public/*`; raw Payload documents do not cross into public components.
+- property catalog filtering executes indexed Payload/PostgreSQL predicates; URL state never filters a client-side full collection.
 
 ## Audit
 
