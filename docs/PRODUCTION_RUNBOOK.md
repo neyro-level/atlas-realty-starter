@@ -20,6 +20,8 @@ Server public IPv4/IPv6 сохраняется: он нужен для Nginx/web
 
 До готовности DNS и TLS Nginx публикует только frontend shell и `/api/health` по HTTP. `/admin` и остальные `/api/*` снаружи возвращают `403`. Payload Admin проверяется через SSH tunnel к `127.0.0.1:3000`; передавать admin credentials по публичному HTTP запрещено.
 
+Технический preview host: `http://soyuz-rostov.tw1.ru`. Он направлен на тот же production runtime, публикует только frontend shell и `/api/health`, всегда отправляет `X-Robots-Tag: noindex, nofollow, noarchive` и не используется для передачи административных паролей. Payload Admin остаётся доступным только через SSH tunnel до появления основного домена и TLS.
+
 ## Secret names
 
 В Doppler хранятся только реальные значения:
