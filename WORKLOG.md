@@ -5,6 +5,8 @@
 - SourceCraft `main` deployed to dedicated `sz-rostov` as immutable release `a1c7591c64093f7169bae79c714ee486d1e4729d`.
 - Server standardized on Nginx + systemd + Node.js `24.20.0` + pnpm `11.24.0`; active and previous-good releases retained.
 - Isolated managed PostgreSQL 18 created in the same private Timeweb VPC; public DB network disabled; automated backups enabled.
+- Managed DB right-sized through backup + logical dump/restore to `1 vCPU / 1 GiB RAM / 8 GiB`; row counts and three migrations preserved, old `1/2/20` cluster deleted.
+- Database had no public network before or after resize. Server public IPv4/IPv6 remains required for web ingress and SSH; private VPC is used only for server-to-database traffic.
 - Private Timeweb S3 media bucket created; Payload upload/read/delete roundtrip passed.
 - Secrets and production admin credentials stored only in Doppler `szrostov-server/prd`.
 - Provider backups completed before initial and media-prefix migrations; all three Payload migrations applied successfully.

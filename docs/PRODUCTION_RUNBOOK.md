@@ -8,11 +8,13 @@
 - App: `/opt/soyuz-rostov/releases/<full-sha>`; active symlink `/opt/soyuz-rostov/current`.
 - Environment: `/etc/soyuz-rostov/runtime.env`, owner `root`, mode `0640`.
 - Service: `soyuz-rostov.service`, binds only `127.0.0.1:3000`.
-- Database: isolated managed PostgreSQL 18 in Timeweb Cloud.
+- Database: managed PostgreSQL 18 `1 vCPU / 1 GiB / 8 GiB`, private Timeweb VPC, public DB network disabled.
 - Media: isolated private Timeweb S3 bucket.
 - Secrets: Doppler `szrostov-server/prd`.
 
 Production release никогда не выполняется из feature branch. Domain/DNS cutover `souz-home.ru` не входит в первый runtime release и требует отдельной инвентаризации URL, redirects, forms, SEO, SSL и rollback.
+
+Server public IPv4/IPv6 сохраняется: он нужен для Nginx/web ingress и SSH. Private VPC не маршрутизируется из интернета и используется только для server-to-database traffic; удалять server public IP до отдельного ingress/VPN решения запрещено.
 
 ## Pre-domain exposure
 

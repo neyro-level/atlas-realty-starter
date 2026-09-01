@@ -18,7 +18,7 @@
 ## Current SZ Rostov status
 
 - runtime deployed on dedicated `sz-rostov`;
-- managed PostgreSQL 18 attached through private Timeweb VPC, public DB network disabled;
+- managed PostgreSQL 18 right-sized to `1 vCPU / 1 GiB RAM / 8 GiB`, attached through private Timeweb VPC; public DB network disabled;
 - automated provider backups enabled and pre-migration backups proven;
 - private S3 media storage passed Payload create/read/delete roundtrip;
 - production admin credentials live only in Doppler;
