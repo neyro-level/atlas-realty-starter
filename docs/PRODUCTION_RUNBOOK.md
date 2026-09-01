@@ -82,8 +82,8 @@ Installer:
 1. проверяет SHA и checksum;
 2. извлекает новый immutable release;
 3. выполняет `pnpm install --frozen-lockfile`;
-4. выполняет production build;
-5. применяет `payload migrate`;
+4. применяет additive/compatible `payload migrate`;
+5. выполняет production build уже против актуальной schema;
 6. атомарно переключает `current`;
 7. перезапускает systemd service;
 8. проверяет `/api/health`;

@@ -62,8 +62,8 @@ run_as_app() {
 }
 
 run_as_app /usr/local/bin/pnpm install --frozen-lockfile
-run_as_app /usr/local/bin/pnpm build
 run_as_app /usr/local/bin/pnpm payload migrate
+run_as_app /usr/local/bin/pnpm build
 
 printf 'RELEASE_SHA=%s\n' "${RELEASE_SHA}" > /etc/soyuz-rostov/release.env
 chmod 0640 /etc/soyuz-rostov/release.env
