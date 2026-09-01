@@ -49,7 +49,7 @@
 
 Для SZ Rostov:
 
-- [x] isolated managed PostgreSQL 18 в private Timeweb VPC;
+- [x] managed PostgreSQL 18 `1 vCPU / 1 GiB / 8 GiB` в private Timeweb VPC, public DB network disabled;
 - [x] private S3-compatible media bucket;
 - [x] Doppler runtime/admin secrets;
 - [ ] отдельный Sentry project и test event;
