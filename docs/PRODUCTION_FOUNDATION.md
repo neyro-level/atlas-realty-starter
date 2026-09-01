@@ -13,6 +13,8 @@
 
 Кодовая база и версии едины. Обновления проходят через общий SourceCraft workflow и раскатываются по клиентам последовательно на exact SHA.
 
+Операционный bootstrap, immutable source release, systemd/Nginx и rollback описаны в `docs/PRODUCTION_RUNBOOK.md`.
+
 ## PostgreSQL
 
 Production использует `DATABASE_URL` отдельной managed PostgreSQL. Требования:
