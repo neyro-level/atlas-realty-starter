@@ -15,6 +15,17 @@
 
 Операционный bootstrap, immutable source release, systemd/Nginx и rollback описаны в `docs/PRODUCTION_RUNBOOK.md`.
 
+## Current SZ Rostov status
+
+- runtime deployed on dedicated `sz-rostov`;
+- managed PostgreSQL 18 attached through private Timeweb VPC, public DB network disabled;
+- automated provider backups enabled and pre-migration backups proven;
+- private S3 media storage passed Payload create/read/delete roundtrip;
+- production admin credentials live only in Doppler;
+- public admin is blocked by Nginx until domain/TLS cutover and is operated through SSH tunnel;
+- Sentry remains `configured, not connected`;
+- production email adapter remains pending.
+
 ## PostgreSQL
 
 Production использует `DATABASE_URL` отдельной managed PostgreSQL. Требования:

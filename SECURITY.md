@@ -55,12 +55,14 @@ Manual content и media без lead/admin/import/security rights и без prope
 - concrete XML adapter получает credentials только server-side;
 - import parser запрещает external entities/DTD и ограничивает size/time.
 
-## До production
+## Production security status
 
-- создать Sentry project и подтвердить test event;
-- provision isolated managed PostgreSQL и S3 bucket;
-- сохранить credentials в project Doppler;
-- выполнить `pnpm db:backup:check` и provider restore rehearsal;
-- проверить `/api/health`, release SHA, admin role smoke и public smoke;
-- закрыть admin network boundary по project deployment runbook;
-- подтвердить retention для analytics, anti-spam, leads и audit.
+- [x] isolated managed PostgreSQL and S3;
+- [x] credentials stored in project Doppler;
+- [x] local restore rehearsal and provider pre-migration backups;
+- [x] exact release health, admin browser smoke and S3 media roundtrip;
+- [x] public admin blocked by Nginx before TLS; SSH tunnel required;
+- [ ] create Sentry project and confirm a controlled test event;
+- [ ] configure production email adapter before public password recovery;
+- [ ] confirm retention for analytics, anti-spam, leads and audit;
+- [ ] complete domain/DNS/SSL/redirect cutover as a separate RELEASE gate.

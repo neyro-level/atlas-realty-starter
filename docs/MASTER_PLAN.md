@@ -47,14 +47,14 @@
 
 ## Этап 5. Client production foundation
 
-Для каждого клиента отдельно:
+Для SZ Rostov:
 
-- managed PostgreSQL;
-- S3-compatible bucket;
-- Doppler scope;
-- Sentry project;
-- backup/restore rehearsal;
-- exact-SHA release and rollback.
+- [x] isolated managed PostgreSQL 18 в private Timeweb VPC;
+- [x] private S3-compatible media bucket;
+- [x] Doppler runtime/admin secrets;
+- [ ] отдельный Sentry project и test event;
+- [x] provider backup proof и local restore rehearsal;
+- [x] exact-SHA source release, systemd health и previous-good rollback.
 
 ## Этап 6. Migration rehearsal и cutover
 
@@ -67,6 +67,7 @@
 ## Текущие внешние prerequisites
 
 - real XML feed/specification отсутствует;
-- client managed PostgreSQL/S3 ещё не provisioned;
 - Sentry project/DSN ещё не создан;
-- production domain/runtime не изменяется этим WORK-потоком.
+- production email adapter не подключён;
+- retention для analytics, anti-spam, leads и audit не утверждён;
+- domain/DNS/SSL/redirect cutover не выполнен; legacy Astro production остаётся действующим.
