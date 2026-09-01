@@ -11,8 +11,8 @@ build/
 .release-artifacts/
 
 # Payload and local runtime data
-media/
-uploads/
+/media/
+/uploads/
 *.sqlite
 *.sqlite3
 c-tmp-*/
