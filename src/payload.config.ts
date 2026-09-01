@@ -127,16 +127,17 @@ export default buildConfig({
   },
   localization: false,
   maxDepth: 2,
-  plugins: runtimeConfig.s3
-    ? [
-        s3Storage({
-          bucket: runtimeConfig.s3.bucket,
-          collections: {
-            media: {
-              prefix: 'media',
-            },
-          },
-          config: {
+  plugins: [
+    s3Storage({
+      alwaysInsertFields: true,
+      bucket: runtimeConfig.s3?.bucket ?? 'local-disabled',
+      collections: {
+        media: {
+          prefix: 'media',
+        },
+      },
+      config: runtimeConfig.s3
+        ? {
             credentials: {
               accessKeyId: runtimeConfig.s3.accessKeyId,
               secretAccessKey: runtimeConfig.s3.secretAccessKey,
@@ -144,10 +145,13 @@ export default buildConfig({
             endpoint: runtimeConfig.s3.endpoint,
             forcePathStyle: runtimeConfig.s3.forcePathStyle,
             region: runtimeConfig.s3.region,
+          }
+        : {
+            region: 'ru-1',
           },
-        }),
-      ]
-    : [],
+      enabled: Boolean(runtimeConfig.s3),
+    }),
+  ],
   secret: runtimeConfig.payloadSecret,
   sharp,
   typescript: {

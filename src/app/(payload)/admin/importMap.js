@@ -24,6 +24,7 @@ import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0
 import { AdminNav as AdminNav_c1efe4092835c3e22a4f10dee332935c } from '../../../payload/admin/components/AdminNav.tsx'
 import { BrandIcon as BrandIcon_3ba27f9c4708a4b76aef64a978fce559 } from '../../../payload/admin/components/BrandIcon.tsx'
 import { BrandLogo as BrandLogo_950ace821e464f61cbc7c39bc961309d } from '../../../payload/admin/components/BrandLogo.tsx'
+import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 import { AntiSpamView as AntiSpamView_f0a587b5ef934268d701b40bef2d3c5f } from '../../../payload/admin/views/AntiSpamView.tsx'
 import { VisitorsView as VisitorsView_738dda7bd2ad0925ca740f77fd7058b0 } from '../../../payload/admin/views/VisitorsView.tsx'
 import { EmployeesView as EmployeesView_01111871925cb20e17e6127a1314bc3a } from '../../../payload/admin/views/EmployeesView.tsx'
@@ -63,6 +64,7 @@ export const importMap = {
   "./payload/admin/components/AdminNav.tsx#AdminNav": AdminNav_c1efe4092835c3e22a4f10dee332935c,
   "./payload/admin/components/BrandIcon.tsx#BrandIcon": BrandIcon_3ba27f9c4708a4b76aef64a978fce559,
   "./payload/admin/components/BrandLogo.tsx#BrandLogo": BrandLogo_950ace821e464f61cbc7c39bc961309d,
+  "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
   "./payload/admin/views/AntiSpamView.tsx#AntiSpamView": AntiSpamView_f0a587b5ef934268d701b40bef2d3c5f,
   "./payload/admin/views/VisitorsView.tsx#VisitorsView": VisitorsView_738dda7bd2ad0925ca740f77fd7058b0,
   "./payload/admin/views/EmployeesView.tsx#EmployeesView": EmployeesView_01111871925cb20e17e6127a1314bc3a,
