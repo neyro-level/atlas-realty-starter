@@ -8,6 +8,7 @@ node_modules/
 out/
 dist/
 build/
+.release-artifacts/
 
 # Payload and local runtime data
 media/
