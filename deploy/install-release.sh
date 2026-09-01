@@ -58,7 +58,7 @@ export PATH="/usr/local/bin:/usr/bin:/bin"
 unset BASH_ENV ENV
 
 run_as_app() {
-  runuser --preserve-environment -u "${APP_USER}" -- /bin/bash -c 'cd "$1"; shift; exec "$@"' _ "${release_dir}" "$@"
+  /usr/sbin/runuser --preserve-environment -u "${APP_USER}" -- /bin/bash -c 'cd "$1"; shift; exec "$@"' _ "${release_dir}" "$@"
 }
 
 run_as_app /usr/local/bin/pnpm install --frozen-lockfile
