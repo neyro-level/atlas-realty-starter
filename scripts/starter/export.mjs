@@ -59,6 +59,11 @@ if (existsSync(neutralRoot)) {
     copied.push({ classification: 'NEUTRAL_OVERLAY', path: destination })
   }
 }
+const targetManifestPath = join(target, 'starter.manifest.json')
+const targetManifest = JSON.parse(readFileSync(targetManifestPath, 'utf8'))
+targetManifest.sourceProject = manifest.targetTemplate
+writeFileSync(targetManifestPath, `${JSON.stringify(targetManifest, null, 2)}\n`)
+
 
 writeFileSync(join(target, '.starter-source.json'), `${JSON.stringify({
   schemaVersion: 1,
