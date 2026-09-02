@@ -5,103 +5,28 @@ import {
   buildPropertyWhere,
   catalogSortValue,
   complexSortValue,
-  type CatalogFilters,
-} from '@/modules/catalog/query'
-import type { CatalogPreset } from '@/modules/catalog/presets'
+} from '@/payload/public/catalog-query'
+import type { CatalogFilters, CatalogPreset } from '@/shared/types/catalog'
 import config from '@/payload.config'
+import { publicContactFallback } from '@/project/site-config'
 import type { Employee, Media, Office, Property, ResidentialComplex, Review, SiteSetting } from '@/payload-types'
-import type { PublicSiteContacts } from '@/shared/types/public-site-contacts'
+import type {
+  PublicComplex,
+  PublicContacts,
+  PublicEmployee,
+  PublicOffice,
+  PublicProperty,
+  PublicReview,
+} from '@/shared/types/public-content'
 
-export type PublicComplex = {
-  address: string
-  advantages: { description: string; title: string }[]
-  areaLabel: string
-  completionLabel: string
-  description: string
-  developer: string
-  district: string
-  gallery: { alt: string; src: string }[]
-  id: number
-  isFeatured: boolean
-  latitude?: number
-  videoUrl?: string
-  longitude?: number
-  priceFrom?: number
-  purchaseTerms: { title: string; value: string }[]
-  roomTypes: string[]
-  seoDescription: string
-  seoTitle: string
-  shortDescription: string
-  slug: string
-  title: string
-}
-
-export type PublicProperty = {
-  address: string
-  agentId?: string
-  buildYear?: number
-  buildingMaterial?: string
-  category: Property['category']
-  commercialType?: Property['commercialType']
-  dealType?: Property['dealType']
-  description: string
-  district?: string
-  floor?: number
-  floorsTotal?: number
-  id: number
-  images: { alt: string; kind: 'floor_plan' | 'photo'; src: string }[]
-  isExclusive: boolean
-  isStudio: boolean
-  objectCode?: string
-  origin: Property['origin']
-  kitchenArea?: number
-  latitude?: number
-  livingArea?: number
-  longitude?: number
-  price?: number
-  pricePerSquareMeter?: number
-  repair?: string
-  rooms?: number
-  slug: string
-  title: string
-  videoUrl?: string
-  totalArea?: number
-  updatedAt: string
-}
-
-export type PublicContacts = PublicSiteContacts & {
-  address: string
-  telegramUrl?: string
-  vkUrl?: string
-  workingHours: string
-}
-
-export type PublicEmployee = {
-  bio: string
-  email?: string
-  id: number
-  name: string
-  phone?: string
-  photo?: { alt: string; src: string }
-  position: string
-  teamSection: Employee['teamSection']
-}
-
-export type PublicReview = {
-  author: string
-  date: string
-  employee?: string
-  id: number
-  rating: number
-  text: string
-}
-
-export type PublicOffice = {
-  address: string
-  id: number
-  photo?: { alt: string; src: string }
-  title: string
-}
+export type {
+  PublicComplex,
+  PublicContacts,
+  PublicEmployee,
+  PublicOffice,
+  PublicProperty,
+  PublicReview,
+} from '@/shared/types/public-content'
 
 export async function getPublicComplexes(options: { featured?: boolean; limit?: number } = {}) {
   const payload = await getPayload({ config })
@@ -254,13 +179,13 @@ function toPublicComplex(complex: ResidentialComplex): PublicComplex {
     : 'Площадь уточняется'
 
   return {
-    address: complex.address ?? 'Ростов-на-Дону',
+    address: complex.address ?? publicContactFallback.cityName,
     advantages: (complex.advantages ?? []).map((item) => ({ description: item.description ?? '', title: item.title })),
     areaLabel,
     completionLabel: complex.completionLabel ?? 'Срок уточняется',
     description: complex.description ?? complex.shortDescription ?? '',
     developer: complex.developer ?? 'Застройщик уточняется',
-    district: complex.district ?? 'Ростов-на-Дону',
+    district: complex.district ?? publicContactFallback.cityName,
     gallery: uniqueGallery,
     id: complex.id,
     isFeatured: Boolean(complex.isFeatured),
@@ -365,14 +290,14 @@ function resolveMedia(mediaValue: Media | number | null | undefined, externalUrl
 }
 
 function toPublicContacts(settings: SiteSetting): PublicContacts {
-  const phone = settings.phone ?? '+7 (863) 000-00-00'
-  const email = settings.email ?? 'info@souz-home.ru'
-  const address = settings.address ?? 'Ростов-на-Дону'
-  const workingHours = settings.workingHours ?? 'Ежедневно, 09:00–20:00'
+  const phone = settings.phone ?? publicContactFallback.phone
+  const email = settings.email ?? publicContactFallback.email
+  const address = settings.address ?? publicContactFallback.address
+  const workingHours = settings.workingHours ?? publicContactFallback.workingHours
   return {
     address,
-    callbackHref: '/contacts',
-    callbackLabel: 'Подобрать объект',
+    callbackHref: publicContactFallback.callbackHref,
+    callbackLabel: publicContactFallback.callbackLabel,
     email,
     emailHref: `mailto:${email}`,
     employeePhone: null,

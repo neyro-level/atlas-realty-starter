@@ -83,6 +83,8 @@ Payload работает внутри Next.js. Prisma, отдельного back
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - [docs/DATA_MODEL.md](docs/DATA_MODEL.md)
 - [docs/PAYLOAD_CONTRACT.md](docs/PAYLOAD_CONTRACT.md)
+- [docs/STARTER_CONTRACT.md](docs/STARTER_CONTRACT.md)
+- [starter.manifest.json](starter.manifest.json)
 - [SECURITY.md](SECURITY.md)
 - [docs/MASTER_PLAN.md](docs/MASTER_PLAN.md)
 - [docs/MODULE_CATALOG.md](docs/MODULE_CATALOG.md)

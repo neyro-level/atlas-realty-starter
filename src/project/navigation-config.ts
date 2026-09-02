@@ -1,10 +1,10 @@
-export type HeaderNavChild = { label: string; href: string; external?: boolean; description?: string }
-export type HeaderMegaSection = { title: string; href: string; description?: string; links: HeaderNavChild[] }
-export type HeaderNavItem = { label: string; href?: string; external?: boolean; children?: HeaderNavChild[]; megaSections?: HeaderMegaSection[]; matchPrefixes?: string[]; description?: string; showOverviewLink?: boolean }
-export type FooterColumn = { title: string; links: Array<{ label: string; href: string; external?: boolean }> }
-export type LegalLink = { label: string; href: string; external?: boolean; nofollow?: boolean }
-export type MobileMenuLink = { label: string; href: string; external?: boolean }
-export type MobileMenuAction = MobileMenuLink | { label: string; action: 'open-request-modal'; title: string; subtitle: string; source: string; formType: string }
+import type {
+  FooterColumn,
+  HeaderNavItem,
+  LegalLink,
+  MobileMenuAction,
+  MobileMenuLink,
+} from '@/shared/types/site-shell'
 
 export const headerNav: HeaderNavItem[] = [
   { label: 'Главная', href: '/' },

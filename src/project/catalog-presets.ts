@@ -1,17 +1,4 @@
-export type CatalogMode = 'all' | 'commercial' | 'country' | 'flat' | 'new_building'
-
-export type CatalogPreset = {
-  path: string
-  title: string
-  description: string
-  mode: CatalogMode
-  fixed: {
-    category?: 'commercial' | 'flat' | 'house' | 'land' | 'room'
-    commercialType?: string
-    rooms?: number
-    studio?: boolean
-  }
-}
+import type { CatalogPreset } from '@/shared/types/catalog'
 
 export const catalogPresets: CatalogPreset[] = [
   { path: '/nedvizhimost-rostov', title: 'Недвижимость в Ростове-на-Дону', description: 'Квартиры, дома, участки, новостройки и коммерческая недвижимость.', mode: 'all', fixed: {} },

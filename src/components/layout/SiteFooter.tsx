@@ -1,14 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { BrandMark } from "@/components/layout/BrandMark";
 import { FooterPhoneReveal } from "@/components/layout/FooterPhoneReveal";
-import {
-  FOOTER_COLUMNS,
-  FOOTER_LEGAL_LINKS,
-  FOOTER_META,
-} from "@/lib/site-shell";
 import type { PublicSiteContacts } from "@/shared/types/public-site-contacts";
+import { useSiteShell } from "./SiteShellProvider";
 
 export function SiteFooter({ contacts }: { contacts: PublicSiteContacts }) {
+  const { brand, footer, routes } = useSiteShell();
   const messengers = [
     { label: "Telegram", href: contacts.telegram, icon: <TelegramIcon /> },
     { label: "Max", href: contacts.max, icon: <MaxIcon /> },
@@ -19,13 +18,13 @@ export function SiteFooter({ contacts }: { contacts: PublicSiteContacts }) {
     <footer id="site-footer" className="site-footer" role="contentinfo">
       <div className="site-footer__shell">
         <div className="site-footer__brand">
-          <Link href="/" aria-label="Союз Застройщиков — на главную" className="site-footer__brand-mark">
+          <Link href={routes.home} aria-label={`${brand.name} — на главную`} className="site-footer__brand-mark">
             <BrandMark showSlogan={false} />
           </Link>
         </div>
 
         <div className="site-footer__grid">
-          {FOOTER_COLUMNS.map((column) => (
+          {footer.columns.map((column) => (
             <nav key={column.title} aria-label={column.title}>
               <p className="site-footer__column-title">{column.title}</p>
               <div className="site-footer__nav">
@@ -79,13 +78,13 @@ export function SiteFooter({ contacts }: { contacts: PublicSiteContacts }) {
 
         <div className="site-footer__bottom">
           <div className="site-footer__legal-meta">
-            <p>{FOOTER_META.copyright}</p>
-            <p>{FOOTER_META.registry}</p>
+            <p>{footer.meta.copyright}</p>
+            <p>{footer.meta.registry}</p>
           </div>
 
           <div className="site-footer__bottom-right">
             <div className="site-footer__legal">
-              {FOOTER_LEGAL_LINKS.map((link) =>
+              {footer.legalLinks.map((link) =>
                 link.external ? (
                   <a key={link.label} href={link.href} target="_blank" rel="noreferrer">
                     {link.label}

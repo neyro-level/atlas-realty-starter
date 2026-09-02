@@ -2,24 +2,25 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { CatalogShowcase } from '@/components/catalog/CatalogShowcase'
-import { CommercialPage } from '@/components/public/CommercialPage'
+import { CommercialPageView } from '@/components/public/CommercialPageView'
+import { SITE_SHELL_CONFIG } from '@/lib/site-shell'
 import { parseCatalogFilters, type RawCatalogSearchParams } from '@/modules/catalog/query'
-import { catalogPresets, getCatalogPreset } from '@/modules/catalog/presets'
 import { getPublicContacts, getPublicOffices, getPublicPropertyCatalog, getPublicReviews } from '@/payload/public/queries'
-import { commercialPages, type CommercialPageKey } from '@/project/public-site'
+import { catalogPageContent } from '@/project/catalog-content'
+import { catalogPresets, getCatalogPreset } from '@/project/catalog-presets'
+import { commercialPageKeys, commercialPages, isCommercialPageKey } from '@/project/commercial-pages'
 
 type DynamicRouteProps = {
   params: Promise<{ pageSlug: string }>
   searchParams: Promise<RawCatalogSearchParams>
 }
 
-const commercialKeys = Object.keys(commercialPages) as CommercialPageKey[]
 const dynamicCatalogSlugs = catalogPresets
   .map((preset) => preset.path.slice(1))
   .filter((slug) => !['novostroyki-rostova', 'kvartiry-rostova'].includes(slug))
 
 export function generateStaticParams() {
-  return [...commercialKeys, ...dynamicCatalogSlugs].map((pageSlug) => ({ pageSlug }))
+  return [...commercialPageKeys, ...dynamicCatalogSlugs].map((pageSlug) => ({ pageSlug }))
 }
 
 export async function generateMetadata({ params, searchParams }: DynamicRouteProps): Promise<Metadata> {
@@ -35,7 +36,7 @@ export async function generateMetadata({ params, searchParams }: DynamicRoutePro
       title: preset.title,
     }
   }
-  if (!isCommercialKey(pageSlug)) return {}
+  if (!isCommercialPageKey(pageSlug)) return {}
   const page = commercialPages[pageSlug]
   return { alternates: { canonical: path }, description: page.description, title: page.title }
 }
@@ -48,17 +49,15 @@ export default async function DynamicPublicPage({ params, searchParams }: Dynami
     const filters = parseCatalogFilters(await searchParams, preset)
     const result = await getPublicPropertyCatalog(filters, preset)
     const heroImage = result.docs[0]?.images[0] ?? { alt: 'Каталог недвижимости', src: '/images/ui-home-hero.webp' }
-    return <CatalogShowcase basePath={path} filters={filters} heroImage={heroImage} preset={preset} properties={result.docs} result={result} />
+    return <CatalogShowcase basePath={path} content={catalogPageContent} filters={filters} heroImage={heroImage} preset={preset} properties={result.docs} result={result} />
   }
-  if (!isCommercialKey(pageSlug)) notFound()
-  const [contacts, offices, reviews] = await Promise.all([
-    pageSlug === 'contacts' ? getPublicContacts() : Promise.resolve(undefined),
-    pageSlug === 'contacts' ? getPublicOffices() : Promise.resolve([]),
-    pageSlug === 'reviews' ? getPublicReviews() : Promise.resolve([]),
-  ])
-  return <CommercialPage contacts={contacts} offices={offices} pageKey={pageSlug} reviews={reviews} />
-}
+  if (!isCommercialPageKey(pageSlug)) notFound()
 
-function isCommercialKey(value: string): value is CommercialPageKey {
-  return value in commercialPages
+  const page = commercialPages[pageSlug]
+  const [contacts, offices, reviews] = await Promise.all([
+    page.family === 'contacts' ? getPublicContacts() : Promise.resolve(undefined),
+    page.family === 'contacts' ? getPublicOffices() : Promise.resolve([]),
+    page.family === 'reviews' ? getPublicReviews() : Promise.resolve([]),
+  ])
+  return <CommercialPageView contactHref={SITE_SHELL_CONFIG.routes.offices} data={{ contacts, offices, reviews }} homeHref={SITE_SHELL_CONFIG.routes.home} page={page} />
 }

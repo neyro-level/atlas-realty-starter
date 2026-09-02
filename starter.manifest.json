@@ -1,0 +1,196 @@
+{
+  "$schema": "./scripts/starter/starter-manifest.schema.json",
+  "version": 1,
+  "sourceProject": "soyuz-rostov-next",
+  "targetTemplate": "ams-real-estate-payload-starter",
+  "defaultClassification": "REVIEW_REQUIRED",
+  "classifications": [
+    {
+      "name": "EXCLUDE",
+      "patterns": [
+        ".env",
+        ".env.local",
+        ".env.development",
+        ".env.test",
+        ".env.production",
+        ".env.*.local",
+        ".git/**",
+        ".next/**",
+        "node_modules/**",
+        "graphify-out/**",
+        "outputs/**",
+        "test-results/**",
+        ".release-artifacts/**",
+        "media/**",
+        "uploads/**",
+        "*.log",
+        "*.sqlite",
+        "*.sqlite3",
+        "c-tmp-*/**"
+      ]
+    },
+    {
+      "name": "REFERENCE_ASSET",
+      "patterns": [
+        "public/images/ui-about.webp",
+        "public/images/ui-careers.webp",
+        "public/images/ui-construction.jpg",
+        "public/images/ui-home-hero.webp",
+        "public/images/ui-mortgage.png",
+        "public/images/ui-reviews.webp"
+      ]
+    },
+    {
+      "name": "UNION_ONLY",
+      "patterns": [
+        "WORKLOG.md",
+        "docs/PRODUCTION_FOUNDATION.md",
+        "docs/PRODUCTION_RUNBOOK.md",
+        "docs/UI_PARITY_MATRIX.md",
+        "src/payload/migrations/**",
+        "public/images/**",
+        "deploy/**",
+        "Dockerfile",
+        "docker-compose.yml",
+        "scripts/build-release-artifact.mjs",
+        "scripts/verify-backup-restore.mjs"
+      ]
+    },
+    {
+      "name": "CLIENT",
+      "patterns": [
+        "src/project/**",
+        "docs/PRODUCT.md",
+        "docs/MASTER_PLAN.md",
+        "test.env",
+        "src/app/(frontend)/**",
+        "src/app/robots.ts"
+      ]
+    },
+    {
+      "name": "GENERATED",
+      "patterns": [
+        "src/payload-types.ts",
+        "src/app/(payload)/admin/importMap.js",
+        "next-env.d.ts",
+        "tsconfig.tsbuildinfo"
+      ]
+    },
+    {
+      "name": "OPS_TEMPLATE",
+      "patterns": [
+        "starter/neutral/deploy/**",
+        "starter/neutral/Dockerfile",
+        "starter/neutral/docker-compose.yml"
+      ]
+    },
+    {
+      "name": "ADAPTER",
+      "patterns": [
+        "src/payload/public/**",
+        "src/payload/admin/queries/**",
+        "src/payload/admin/lib/context.ts",
+        "src/lib/site-shell.ts"
+      ]
+    },
+    {
+      "name": "CORE",
+      "patterns": [
+        "src/app/**",
+        "src/components/**",
+        "src/modules/**",
+        "src/lib/**",
+        "src/shared/**",
+        "src/*.ts",
+        "src/payload/**",
+        "styles/**",
+        "public/fonts/**",
+        "docs/**",
+        "starter/**",
+        "tests/**",
+        "scripts/**",
+        "package.json",
+        "pnpm-lock.yaml",
+        "next.config.ts",
+        "postcss.config.mjs",
+        "tsconfig.json",
+        "eslint.config.mjs",
+        "vitest.config.mts",
+        "playwright.config.ts",
+        ".node-version",
+        ".npmrc",
+        ".gitattributes",
+        ".gitignore",
+        ".graphifyignore",
+        "README.md",
+        "AGENTS.md",
+        "SECURITY.md",
+        "docs/ARCHITECTURE.md",
+        "docs/DATA_MODEL.md",
+        "docs/PAYLOAD_CONTRACT.md",
+        "docs/STARTER_CONTRACT.md",
+        "docs/adr/ADR-001-payload-as-core.md",
+        "docs/adr/ADR-002-full-stack-starter-boundary.md",
+        "*.md",
+        "*.json",
+        "*.mjs",
+        "*.js",
+        "*.ts",
+        "*.yml",
+        "*.yaml",
+        ".dockerignore",
+        ".env.example",
+        ".prettierignore",
+        ".prettierrc*",
+        "patches/**",
+        "types/**",
+        "fixtures/**"
+      ]
+    }
+  ],
+  "requiredClientReplacements": [
+    "tenant identity",
+    "city and region scope",
+    "public routes and redirects",
+    "navigation",
+    "theme and logo",
+    "Home and commercial content",
+    "legal facts and documents",
+    "contacts and offices",
+    "social preview",
+    "feed registry",
+    "domain and indexability policy",
+    "server, Doppler and S3 identity"
+  ],
+  "protectedUnionState": [
+    "applied migrations",
+    "production database and backups",
+    "production media and uploads",
+    "Doppler secrets",
+    "SourceCraft release history",
+    "technical and primary domains"
+  ],
+  "audit": {
+    "clientMarkers": [
+      "Союз Застройщиков",
+      "Союз",
+      "Ростов",
+      "Союз Ростов",
+      "Ростов-на-Дону",
+      "souz-home.ru",
+      "soyuz-rostov",
+      "szrostov",
+      "sz-rostov",
+      "szrostov-server"
+    ],
+    "markerAllowedClassifications": ["CLIENT", "UNION_ONLY"],
+    "markerAllowedPaths": [
+      ".starter-source.json",
+      "starter.manifest.json",
+      "docs/STARTER_CONTRACT.md",
+      "docs/adr/ADR-002-full-stack-starter-boundary.md"
+    ],
+    "presentationRoots": ["src/components", "src/modules"],
+    "forbiddenPresentationImports": ["@/payload", "@/project"]
+  }
+}

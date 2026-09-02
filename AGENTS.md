@@ -16,7 +16,7 @@
 1. Глобальный `~/.codex/AGENTS.md` и релевантные AMS skills.
 2. Этот `AGENTS.md`.
 3. `docs/PRODUCT.md`.
-4. Только документ текущего scope: `docs/PAYLOAD_CONTRACT.md`, `ARCHITECTURE`, `DATA_MODEL`, `SECURITY` или `MASTER_PLAN`.
+4. Только документ текущего scope: `docs/PAYLOAD_CONTRACT.md`, `ARCHITECTURE`, `DATA_MODEL`, `SECURITY`, `MASTER_PLAN` или `STARTER_CONTRACT`.
 5. Затем `package.json`, lockfile, Payload config, migrations и фактический код.
 
 Не читать весь проект автоматически для локальной задачи.
@@ -33,6 +33,8 @@
 - Любой Local API вызов от имени пользователя должен явно использовать `overrideAccess: false`.
 - Все `@payloadcms/*` обновляются синхронно и одной версии.
 - Не создавать локальные копии глобальных AMS skills.
+- Starter scope следует `docs/STARTER_CONTRACT.md` и `starter.manifest.json`: Союз остаётся client project, applied migrations и production identity не становятся neutral template history.
+- Reusable public UI получает только serializable DTO/action contracts; прямые imports из `components` в `payload` запрещены.
 
 ## Git workflow
 
@@ -50,6 +52,7 @@
 - Изменились auth, роли, secrets или trust boundaries → `SECURITY.md`.
 - Изменились Payload runtime rules, admin customization или migration workflow → `docs/PAYLOAD_CONTRACT.md`.
 - Завершён этап или изменился порядок работ → `docs/MASTER_PLAN.md` и `WORKLOG.md`.
+- Изменился starter/client/export boundary → `docs/STARTER_CONTRACT.md`, `starter.manifest.json`, `docs/ARCHITECTURE.md` и `docs/MASTER_PLAN.md`.
 
 ## Проверки
 

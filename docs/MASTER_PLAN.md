@@ -35,7 +35,27 @@
 - [ ] validated public lead/anti-spam ingestion; current CTA routes do not imitate delivery;
 - [x] public metadata, sitemap, robots and responsive proof at 1440/1280/768/390.
 
-## Этап 4. Mass catalog
+## Этап 4. Starter-ready full-stack platform
+
+Текущий active program:
+
+- [x] зафиксировать ADR full-stack starter boundary;
+- [x] создать starter contract и ownership manifest;
+- [ ] классифицировать каждый tracked path как `CORE`, `CLIENT`, `ADAPTER`, `OPS_TEMPLATE`, `UNION_ONLY` или `EXCLUDE`;
+- [ ] зафиксировать visual reference baseline всех public/Admin page families;
+- [ ] разделить design tokens/base/public/catalog/admin styles;
+- [ ] убрать прямые `project`/Payload imports из reusable UI;
+- [ ] отделить Home, catalog, property и ЖК page views от Payload loaders;
+- [ ] разделить commercial/content/leadgen page families и action adapters;
+- [ ] довести reusable Payload Admin, SEO, import и infrastructure contracts;
+- [ ] реализовать `starter:audit` и deterministic `starter:export`;
+- [ ] создать neutral migration baseline workflow;
+- [ ] пройти generated-client clone proof без ручного копирования файлов;
+- [ ] создать отдельный SourceCraft template repository только после green clone proof.
+
+Критерий: exported starter не содержит Union identity, applied migrations, runtime data или production infra identifiers и воспроизводимо создаёт новый Next + Payload + PostgreSQL client.
+
+## Этап 5. Mass catalog
 
 Текущий incremental state:
 
@@ -48,7 +68,7 @@
 - [ ] idempotency/deactivate rules;
 - [ ] performance proof для mass feed.
 
-## Этап 5. Client production foundation
+## Этап 6. Client production foundation
 
 Для SZ Rostov:
 
@@ -59,7 +79,7 @@
 - [x] provider backup proof и local restore rehearsal;
 - [x] exact-SHA source release, systemd health и previous-good rollback.
 
-## Этап 6. Migration rehearsal и cutover
+## Этап 7. Migration rehearsal и cutover
 
 - test data/content transfer;
 - URL/SEO/forms validation;

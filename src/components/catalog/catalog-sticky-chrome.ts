@@ -1,11 +1,6 @@
-import { catalogPresetPaths } from "@/modules/catalog/presets";
 
 export const OPEN_CATALOG_FILTERS_EVENT = "sz:open-catalog-filters";
 export const OPEN_CATALOG_FILTERS_STORAGE_KEY = "sz:open-catalog-filters";
-export const ALL_REALTY_CATALOG_PATH = "/nedvizhimost-rostov";
-
-const SHOWCASE_PATHS = new Set(catalogPresetPaths);
-const SESSION_STICKY_PATHS = new Set(["/favorites", "/compare"]);
 
 function normalizePath(pathname: string | null | undefined) {
   if (!pathname) return "";
@@ -13,18 +8,18 @@ function normalizePath(pathname: string | null | undefined) {
 }
 
 /** Catalog SEO pages that mount `CatalogSharpShowcase` + mobile filters. */
-export function isCatalogShowcasePath(pathname: string | null | undefined) {
-  return SHOWCASE_PATHS.has(normalizePath(pathname));
+export function isCatalogShowcasePath(pathname: string | null | undefined, catalogPaths: readonly string[]) {
+  return catalogPaths.includes(normalizePath(pathname));
 }
 
 /** Session pages that reuse catalog-style compact sticky chrome on mobile. */
-export function isSessionCollectionStickyPath(pathname: string | null | undefined) {
-  return SESSION_STICKY_PATHS.has(normalizePath(pathname));
+export function isSessionCollectionStickyPath(pathname: string | null | undefined, sessionPaths: readonly string[]) {
+  return sessionPaths.includes(normalizePath(pathname));
 }
 
 /** Compact floating mobile bar on scroll (catalog or favorites/compare). */
-export function usesCompactMobileStickyChrome(pathname: string | null | undefined) {
-  return isCatalogShowcasePath(pathname) || isSessionCollectionStickyPath(pathname);
+export function usesCompactMobileStickyChrome(pathname: string | null | undefined, catalogPaths: readonly string[], sessionPaths: readonly string[]) {
+  return isCatalogShowcasePath(pathname, catalogPaths) || isSessionCollectionStickyPath(pathname, sessionPaths);
 }
 
 export function markOpenCatalogFiltersIntent() {

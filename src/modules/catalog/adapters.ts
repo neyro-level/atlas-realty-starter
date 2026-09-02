@@ -1,5 +1,5 @@
 import type { ListingCard } from '@/lib/catalog'
-import type { PublicComplex, PublicProperty } from '@/payload/public/queries'
+import type { PublicComplex, PublicProperty } from '@/shared/types/public-content'
 
 const categoryLabels: Record<PublicProperty['category'], string> = {
   commercial: 'Коммерческая недвижимость',

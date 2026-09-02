@@ -63,8 +63,36 @@ Prisma, Better Auth, второй ORM, repository layer и отдельный ad
 - `src/payload/admin/views` — business dashboards, server-filtered tables, metrics and lead kanban;
 - `src/payload/admin/queries` — domain-specific server query modules;
 - `src/payload/admin/lib/context.ts` — authenticated Payload context и capability guard;
-- `src/project/env.ts` — production environment contract;
+- `src/project/**` — единственный client-specific layer: identity, routes, navigation, theme, content, SEO, media и feed declarations;
+- `src/payload/public/**` — public Payload adapters: raw documents → serializable UI DTO;
+- `starter.manifest.json` — machine-readable ownership/classification boundary для deterministic export;
 - `scripts/verify-backup-restore.mjs` — local restore proof.
+
+## Starter-ready boundary
+
+Текущий repository остаётся production client project Союза и первым consumer будущего full-stack starter. Он не копируется напрямую в новый клиентский repository.
+
+```text
+Reusable core
+├── components + presentation modules
+├── shared DTO/action contracts
+├── Payload schema/access/hooks/Admin foundation
+├── generic tests and runtime contracts
+└── infrastructure shape
+
+Client layer
+├── src/project/**
+├── client content, legal facts and routes
+├── approved media/data/feed mapping
+└── domain/server/Doppler/S3 identity
+
+Deterministic export
+└── manifest whitelist → neutral client → new migration baseline → clone proof
+```
+
+Presentation components do not import Payload documents, Local API, secrets or client identity directly. Routes load data through Payload adapters and pass serializable DTO into page views. Applied migrations, production history and runtime identity Союза remain `UNION_ONLY` and never become neutral starter history.
+
+Canonical contract: `docs/STARTER_CONTRACT.md`. Architectural decision: `docs/adr/ADR-002-full-stack-starter-boundary.md`.
 
 ## Query rules
 

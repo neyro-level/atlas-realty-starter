@@ -4,15 +4,10 @@ import Link from "next/link";
 import { ArrowRight, ChevronDown, ChevronRight, MapPin, Phone, X } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { BrandMark } from "@/components/layout/BrandMark";
-import {
-  MOBILE_MENU_PROPERTY_LINKS,
-  MOBILE_MENU_SERVICE_ACTIONS,
-  type MobileMenuAction,
-  type MobileMenuLink,
-} from "@/lib/site-shell";
 import { SessionCollectionNavLink } from "@/modules/session-collections";
-import { citySwitcherConfig } from "@/project/site-config";
 import type { PublicSiteContacts } from "@/shared/types/public-site-contacts";
+import type { CitySwitcherConfig, MobileMenuAction, MobileMenuLink } from "@/shared/types/site-shell";
+import { useSiteShell } from "./SiteShellProvider";
 
 type Props = {
   open: boolean;
@@ -26,6 +21,7 @@ export function MobileMenuOverlay({ open, contacts, onClose }: Props) {
 }
 
 function MobileMenuOverlayOpen({ contacts, onClose }: Omit<Props, "open">) {
+  const shell = useSiteShell();
   const panelRef = useRef<HTMLDivElement | null>(null);
   const [cityOpen, setCityOpen] = useState(false);
   const [phoneVisible, setPhoneVisible] = useState(false);
@@ -48,8 +44,8 @@ function MobileMenuOverlayOpen({ contacts, onClose }: Omit<Props, "open">) {
       <div className="shrink-0 border-b border-[#EFEFEF] bg-white px-4 pb-2.5 pt-[max(0.65rem,env(safe-area-inset-top,0px))]">
         <div className="mx-auto flex h-14 w-full max-w-lg items-center justify-between gap-3">
           <Link
-            href="/"
-            aria-label="Союз Застройщиков — на главную"
+            href={shell.routes.home}
+            aria-label={`${shell.brand.name} — на главную`}
             className="flex shrink-0 items-center"
             onClick={onClose}
           >
@@ -73,7 +69,7 @@ function MobileMenuOverlayOpen({ contacts, onClose }: Omit<Props, "open">) {
       >
         <div className="mx-auto flex w-full max-w-lg flex-col gap-2.5 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
           <div className="grid grid-cols-2 gap-2">
-            <MobileCitySwitcher open={cityOpen} onToggle={() => setCityOpen((prev) => !prev)} />
+            <MobileCitySwitcher config={shell.citySwitcher} open={cityOpen} onToggle={() => setCityOpen((prev) => !prev)} />
             <MobileCallButton
               contacts={contacts}
               visible={phoneVisible}
@@ -84,34 +80,34 @@ function MobileMenuOverlayOpen({ contacts, onClose }: Omit<Props, "open">) {
           <div className="grid grid-cols-2 gap-2">
             <SessionCollectionNavLink
               kind="compare"
-              href="/compare"
+              href={shell.routes.compare}
               label="Сравнение"
               variant="mobileMenu"
               onNavigate={onClose}
             />
             <SessionCollectionNavLink
               kind="favorites"
-              href="/favorites"
+              href={shell.routes.favorites}
               label="Избранное"
               variant="mobileMenu"
               onNavigate={onClose}
             />
           </div>
 
-          <MobileLinkGroup links={MOBILE_MENU_PROPERTY_LINKS} onNavigate={onClose} />
-          <MobileActionGroup actions={MOBILE_MENU_SERVICE_ACTIONS} onNavigate={onClose} />
+          <MobileLinkGroup links={shell.mobileMenu.propertyLinks} onNavigate={onClose} />
+          <MobileActionGroup actions={shell.mobileMenu.serviceActions} onNavigate={onClose} />
         </div>
       </div>
     </div>
   );
 }
 
-function MobileCitySwitcher({ open, onToggle }: { open: boolean; onToggle: () => void }) {
+function MobileCitySwitcher({ config, open, onToggle }: { config: CitySwitcherConfig; open: boolean; onToggle: () => void }) {
   const triggerId = useId();
   const panelId = useId();
   const currentCity =
-    citySwitcherConfig.cities.find((city) => city.slug === citySwitcherConfig.currentSlug) ??
-    citySwitcherConfig.cities[0];
+    config.cities.find((city) => city.slug === config.currentSlug) ??
+    config.cities[0];
 
   return (
     <div className="relative">
@@ -141,7 +137,7 @@ function MobileCitySwitcher({ open, onToggle }: { open: boolean; onToggle: () =>
         aria-labelledby={triggerId}
         className={`${open ? "grid" : "hidden"} absolute left-0 right-0 top-[calc(100%+6px)] z-10 gap-0.5 rounded-[12px] border border-[#E8E8E8] bg-white p-1 shadow-[0_12px_34px_rgba(0,0,0,0.08)]`}
       >
-        {citySwitcherConfig.cities.map((city) => {
+        {config.cities.map((city) => {
           const className = `block rounded-[10px] px-3 py-2 text-left text-[13px] transition ${
             city.current
               ? "bg-[#F3F3F3] text-[#17161A]"

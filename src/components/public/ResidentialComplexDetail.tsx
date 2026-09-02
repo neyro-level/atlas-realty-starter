@@ -1,7 +1,8 @@
 import { Building2, CalendarDays, Home, MapPin, Ruler, type LucideIcon } from 'lucide-react'
 import type { ReactNode } from 'react'
 
-import type { PublicComplex } from '@/payload/public/queries'
+import type { PublicComplex } from '@/shared/types/public-content'
+import type { DetailPageContent } from '@/shared/types/detail-pages'
 
 import { Breadcrumbs } from './Breadcrumbs'
 import { ComplexDecisionSidebar } from './DetailDecisionPanels'
@@ -10,12 +11,12 @@ import { ResidentialComplexCard } from './ResidentialComplexCard'
 
 const FRAME = 'mx-auto w-full max-w-site-frame px-3 sm:px-5 lg:px-10 xl:px-12'
 
-export function ResidentialComplexDetail({ complex, related }: { complex: PublicComplex; related: PublicComplex[] }) {
+export function ResidentialComplexDetail({ complex, content, related }: { complex: PublicComplex; content: DetailPageContent; related: PublicComplex[] }) {
   return (
     <main className="min-h-screen bg-white text-[#17161A]">
       <section className="bg-white">
         <div className={`${FRAME} pb-7 pt-8 md:pb-9 md:pt-10 lg:pb-10 lg:pt-11`}>
-          <Breadcrumbs className="mb-7 md:mb-8" items={[{ href: '/', label: 'Главная' }, { href: '/nedvizhimost-rostov', label: 'Недвижимость' }, { href: '/novostroyki-rostova', label: 'Новостройки' }, { label: complex.title }]} />
+          <Breadcrumbs className="mb-7 md:mb-8" items={[{ href: content.routes.allRealty, label: content.labels.home }, { href: content.routes.allRealty, label: content.labels.realty }, { href: content.routes.newBuildings, label: content.labels.newBuildings }, { label: complex.title }]} />
           <h1 className="max-w-[980px] text-[32px] font-extrabold leading-[1.06] md:text-[42px] lg:text-[48px]">{complex.title}</h1>
         </div>
       </section>
@@ -48,7 +49,7 @@ export function ResidentialComplexDetail({ complex, related }: { complex: Public
               </DetailSection>
               {related.length ? <DetailSection title="Другие жилые комплексы"><div className="grid gap-4 md:grid-cols-2">{related.slice(0, 4).map((item) => <ResidentialComplexCard complex={item} key={item.id} />)}</div></DetailSection> : null}
             </div>
-            <ComplexDecisionSidebar complex={complex} />
+            <ComplexDecisionSidebar complex={complex} content={content} />
           </div>
         </div>
       </section>
