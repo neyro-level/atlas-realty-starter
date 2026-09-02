@@ -70,7 +70,7 @@ Prisma, Better Auth, второй ORM, repository layer и отдельный ad
 
 ## Starter-ready boundary
 
-Текущий repository остаётся production client project Союза и первым consumer будущего full-stack starter. Он не копируется напрямую в новый клиентский repository.
+Текущий repository является canonical full-stack starter-under-development с рабочим Union preset. До отдельной owner-команды он не разделяется на starter/client repositories и не экспортируется как самостоятельный продукт.
 
 ```text
 Reusable core
@@ -86,13 +86,13 @@ Client layer
 ├── approved media/data/feed mapping
 └── domain/server/Doppler/S3 identity
 
-Deterministic export
-└── manifest whitelist → neutral client → new migration baseline → clone proof
+Owner-gated rehearsal
+└── manifest whitelist → neutral client → migration baseline → clone proof
 ```
 
-Presentation components do not import Payload documents, Local API, secrets or client identity directly. Routes load data through Payload adapters and pass serializable DTO into page views. Applied migrations, production history and runtime identity Союза remain `UNION_ONLY` and never become neutral starter history.
+Presentation components do not import Payload documents, Local API, secrets or client identity directly. Routes load data through Payload adapters and pass serializable DTO into page views. Текущие migrations/runtime identity сохраняются как часть starter workbench; их neutral export запрещён до owner-команды.
 
-Canonical contract: `docs/STARTER_CONTRACT.md`. Architectural decision: `docs/adr/ADR-002-full-stack-starter-boundary.md`.
+Canonical contract: `docs/STARTER_CONTRACT.md`. Architectural decision: `docs/adr/ADR-002-full-stack-starter-boundary.md`. Clone proof доказывает переносимость, но не создаёт repository автоматически.
 
 ## Query rules
 

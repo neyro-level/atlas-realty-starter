@@ -41,19 +41,19 @@
 
 - [x] зафиксировать ADR full-stack starter boundary;
 - [x] создать starter contract и ownership manifest;
-- [ ] классифицировать каждый tracked path как `CORE`, `CLIENT`, `ADAPTER`, `OPS_TEMPLATE`, `UNION_ONLY` или `EXCLUDE`;
-- [ ] зафиксировать visual reference baseline всех public/Admin page families;
-- [ ] разделить design tokens/base/public/catalog/admin styles;
-- [ ] убрать прямые `project`/Payload imports из reusable UI;
-- [ ] отделить Home, catalog, property и ЖК page views от Payload loaders;
-- [ ] разделить commercial/content/leadgen page families и action adapters;
-- [ ] довести reusable Payload Admin, SEO, import и infrastructure contracts;
-- [ ] реализовать `starter:audit` и deterministic `starter:export`;
-- [ ] создать neutral migration baseline workflow;
-- [ ] пройти generated-client clone proof без ручного копирования файлов;
-- [ ] создать отдельный SourceCraft template repository только после green clone proof.
+- [x] классифицировать tracked paths;
+- [x] зафиксировать visual reference baseline public/Admin page families;
+- [x] разделить design tokens и base styles;
+- [x] убрать прямые `project`/Payload imports из reusable UI;
+- [x] отделить Home, catalog, property и ЖК page views от Payload loaders;
+- [x] разделить commercial/content/leadgen page families и action contracts;
+- [x] довести reusable Payload Admin, SEO, import и infrastructure contracts;
+- [x] реализовать `starter:audit`; export tooling оставить owner-gated;
+- [x] доказать neutral migration/clone rehearsal локально;
+- [ ] продолжать утрамбовывать текущий repository как starter;
+- [ ] выделять отдельный repository только по новой явной команде владельца.
 
-Критерий: exported starter не содержит Union identity, applied migrations, runtime data или production infra identifiers и воспроизводимо создаёт новый Next + Payload + PostgreSQL client.
+Критерий текущего этапа: текущий repository стабилен как starter workbench, Union preset изолирован в client layer, production/runtime не ломаются, а export остаётся заблокированным без owner approval.
 
 ## Этап 5. Mass catalog
 

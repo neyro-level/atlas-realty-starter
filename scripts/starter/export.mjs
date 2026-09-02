@@ -8,6 +8,7 @@ const value = (name) => {
   return index >= 0 ? args[index + 1] : undefined
 }
 const has = (name) => args.includes(name)
+if (!has('--owner-approved')) throw new Error('Starter export requires explicit owner approval: pass --owner-approved only after a new owner command')
 const root = resolve('.')
 const targetArg = value('--target')
 if (!targetArg) throw new Error('Usage: pnpm starter:export --target <empty-directory>')

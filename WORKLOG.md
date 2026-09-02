@@ -1,8 +1,15 @@
 # Worklog
 
+## 2026-09-02 — owner correction: Union is the current starter
+
+- Владелец уточнил product boundary: текущий `soyuz-rostov-next` является canonical starter-under-development; Union branding/content пока допустимы как рабочий preset.
+- Преждевременно созданный SourceCraft repository `ams-real-estate-payload-starter` и его local checkout полностью удалены.
+- Separate export/publication запрещены до новой явной owner-команды. Existing audit/export/baseline tooling остаётся только owner-gated rehearsal proof.
+- Production и данные Союза не затронуты; дальнейшая работа продолжается в текущем repository.
+
 ## 2026-09-02 — full-stack starter-ready foundation
 
-- Принят ADR-002: Союз остаётся production client project и первым consumer, neutral starter создаётся deterministic export без Git/migration/runtime identity Союза.
+- Принят ADR-002: текущий repository оформлен как starter workbench; neutral audit/export tooling доказывает переносимость, но не разрешает отдельную публикацию без owner-команды.
 - Добавлены `docs/STARTER_CONTRACT.md`, `starter.manifest.json`, source/export audit, deterministic exporter и neutral migration baseline workflow.
 - Public UI отделён от Payload/client imports: shared DTO/contracts, configurable shell, Home/catalog/detail/commercial/content presets и Payload adapters.
 - Design tokens/base styles разделены; Admin brand берётся из project config; feed и SEO получили reusable contracts; neutral Nginx/systemd/Docker templates не содержат client identity.

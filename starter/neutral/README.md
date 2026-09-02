@@ -42,7 +42,7 @@ Replace `src/project/**`, approved content/media, domain and infrastructure iden
 
 ## Starter tooling
 
-- `pnpm starter:export --target <empty-directory>` — deterministic sanitized export;
+- `pnpm starter:export --target <empty-directory> --owner-approved` — deterministic sanitized export, only after an explicit owner command;
 - `pnpm starter:baseline --root <export>` — clean local migration baseline on a safe `*_starter_test` database;
 - `.starter-source.json` — exact source SHA and export provenance.
 

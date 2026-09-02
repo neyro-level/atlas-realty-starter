@@ -33,7 +33,8 @@
 - Любой Local API вызов от имени пользователя должен явно использовать `overrideAccess: false`.
 - Все `@payloadcms/*` обновляются синхронно и одной версии.
 - Не создавать локальные копии глобальных AMS skills.
-- Starter scope следует `docs/STARTER_CONTRACT.md` и `starter.manifest.json`: Союз остаётся client project, applied migrations и production identity не становятся neutral template history.
+- Этот repository является текущим canonical starter-under-development с рабочим Union preset. Создание, export или публикация отдельного template repository запрещены без новой явной owner-команды.
+- Starter scope следует `docs/STARTER_CONTRACT.md` и `starter.manifest.json`; applied migrations и production identity не копируются автоматически.
 - Reusable public UI получает только serializable DTO/action contracts; прямые imports из `components` в `payload` запрещены.
 
 ## Git workflow

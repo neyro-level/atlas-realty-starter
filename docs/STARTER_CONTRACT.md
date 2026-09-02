@@ -2,7 +2,7 @@
 
 ## Назначение
 
-Этот документ задаёт reusable boundary платформы недвижимости на Next.js + Payload CMS + PostgreSQL. Текущий проект «Союз Застройщиков Ростов» — первый consumer и инкубатор. Он не является нейтральным template repository и не экспортируется прямым Git clone.
+Этот документ задаёт reusable boundary платформы недвижимости на Next.js + Payload CMS + PostgreSQL. Текущий repository «Союз Застройщиков Ростов» является canonical starter-under-development. Его бренд, маршруты и client preset пока допустимы: отдельный template repository не создаётся и не публикуется без новой явной команды владельца.
 
 ## Product shape
 
@@ -159,24 +159,25 @@ No default client claim may be fabricated. Missing required facts block producti
 
 ## Content and media policy
 
-Reusable core contains only neutral placeholders and state fixtures. Client content is not a UI dependency.
+Reusable core содержит neutral contracts и state fixtures, но текущий starter workbench может сохранять Union preset до этапа выделения.
 
 - logos, employee portraits, offices and catalog media remain client-owned;
 - generic placeholders/fonts/icons may be included when licenses allow reuse;
 - reference fixtures never become production seed automatically;
-- external media URLs pass explicit allowlists and optimizer policy.
+- external media URLs pass explicit allowlists and optimizer policy;
+- наличие Union content внутри `src/project` не считается дефектом текущего starter workbench.
 
 ## Migration baseline
 
-Current Union migrations remain immutable. Starter export creates a separate clean schema baseline:
+Current migrations remain immutable. Neutral schema baseline создаётся только в rehearsal/export после отдельной owner-команды:
 
-1. export current canonical Payload collections/globals/config;
-2. remove Union-only data/identity;
-3. create a fresh empty PostgreSQL database;
-4. generate one neutral initial migration;
-5. verify clean migrate and repeat migrate;
-6. verify upgrade fixture for future migrations;
-7. store no production credentials or data.
+1. owner явно разрешает export/выделение;
+2. export берёт canonical Payload collections/globals/config;
+3. удаляется client runtime identity;
+4. создаётся fresh empty PostgreSQL database;
+5. генерируется один neutral initial migration;
+6. проверяются clean migrate, repeat migrate и будущий upgrade fixture;
+7. production credentials и data не копируются.
 
 ## Starter audit
 
@@ -193,15 +194,15 @@ Current Union migrations remain immutable. Starter export creates a separate cle
 
 ## Deterministic export
 
-`pnpm starter:export --target <empty-directory>`:
+`pnpm starter:export --target <empty-directory> --owner-approved`:
 
-- requires clean canonical main and records exact source SHA;
+- требует отдельного owner approval, clean canonical main и фиксирует exact source SHA;
+- является rehearsal/export tooling, а не автоматическим созданием repository;
 - copies only manifest-approved paths;
 - injects neutral client example and `.env.example`;
 - regenerates infrastructure identity placeholders;
-- excludes secrets, history, generated runtime data and Union client assets;
-- runs starter audit, install, typecheck, build and clean migration proof;
-- emits a manifest and explicit remaining human prerequisites.
+- excludes secrets, history, generated runtime data and client assets;
+- runs starter audit and emits explicit remaining human prerequisites.
 
 ## Clone acceptance
 
@@ -223,4 +224,4 @@ A generated client is accepted only when, without manual file copying, it can:
 - presentation-only work may use FAST;
 - schema/migrations/auth/access/import/media/infra/export require HEAVY;
 - production remains untouched until explicit release;
-- starter repository is created only after green generated-client clone proof.
+- generated-client proof не разрешает создание repository; separate starter repository создаётся только по новой явной owner-команде.
