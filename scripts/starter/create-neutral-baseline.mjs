@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { spawnSync } from 'node:child_process'
 
@@ -30,6 +30,7 @@ if (existsSync(migrationDir)) {
 run('pnpm', ['generate:types'])
 run('pnpm', ['generate:importmap'])
 run('pnpm', ['payload', 'migrate:create', 'neutral_initial'])
+normalizeInitialMigration()
 run('pnpm', ['payload', 'migrate'])
 run('pnpm', ['payload', 'migrate'])
 
@@ -45,4 +46,17 @@ function run(command, commandArgs) {
     stdio: 'inherit',
   })
   if (result.status !== 0) process.exit(result.status ?? 1)
+}
+
+function normalizeInitialMigration() {
+  const migrationFiles = readdirSync(migrationDir).filter((name) => name.endsWith('.ts') && name !== 'index.ts')
+  if (migrationFiles.length !== 1) throw new Error(`Expected one neutral migration, found ${migrationFiles.length}`)
+  const path = join(migrationDir, migrationFiles[0])
+  const normalized = readFileSync(path, 'utf8')
+    .replace('export async function up({ db, payload, req }: MigrateUpArgs)', 'export async function up({ db }: MigrateUpArgs)')
+    .replace('export async function down({ db, payload, req }: MigrateDownArgs)', 'export async function down({ db }: MigrateDownArgs)')
+    .split(/\r?\n/)
+    .map((line) => line.replace(/\t/g, '  ').trimEnd())
+    .join('\n')
+  writeFileSync(path, `${normalized.trimEnd()}\n`)
 }
