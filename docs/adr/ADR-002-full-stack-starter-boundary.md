@@ -2,14 +2,14 @@
 
 ## Контекст
 
-«Союз Застройщиков Ростов» уже объединяет Next.js, Payload CMS, PostgreSQL, публичный UI, каталог, Admin, access control, migrations, media и production foundation. Владелец хочет использовать эту систему как первый реальный consumer будущего стартового шаблона для новых сайтов недвижимости.
+«Союз Застройщиков Ростов» уже объединяет Next.js, Payload CMS, PostgreSQL, публичный UI, каталог, Admin, access control, migrations, media и production foundation. По решению владельца этот repository является текущим canonical starter-under-development. Бренд и Ростовский client layer пока допустимы как рабочий preset и не означают, что starter уже готов к выделению.
 
-Прямое копирование repository недопустимо: новый клиент унаследует бренд, Ростов, production migrations, Doppler/SSH identity, домены, media и release history. Отдельный UI package сам по себе также недостаточен, потому что целевой результат включает backend, Admin, data model и delivery foundation.
+Прямое копирование repository до отдельной команды владельца запрещено: starter сначала должен быть утрамбован и обкатан здесь. Будущий новый клиент не должен унаследовать production migrations, Doppler/SSH identity, домены, media и release history Союза.
 
 ## Решение
 
-1. Текущий repository остаётся production-проектом Союза и одновременно служит инкубатором starter-ready архитектуры.
-2. Целевой reusable продукт — opinionated full-stack starter на `Next.js + Payload CMS + PostgreSQL`, а не multi-tenant SaaS и не универсальный page builder.
+1. Текущий repository считается canonical full-stack starter workbench. В нём одновременно сохраняется рабочий Union preset, пока владелец отдельно не запустит этап выделения.
+2. Целевой продукт — opinionated full-stack starter на `Next.js + Payload CMS + PostgreSQL`, а не multi-tenant SaaS и не универсальный page builder.
 3. Один deployment starter = один клиент = отдельные PostgreSQL, S3, Payload users, secrets, server и backup lifecycle.
 4. Внутри проекта сохраняются явные слои:
    - `components` и presentation-часть `modules` — чистый UI поверх DTO/contracts;
@@ -18,9 +18,9 @@
    - `app` — thin routes, metadata, data loading и композиция;
    - `shared` — сериализуемые contracts и чистые helpers.
 5. UI не импортирует Payload documents, Local API, secrets или production config напрямую. Payload преобразует документы в public DTO и реализует action adapters.
-6. Starter создаётся не копированием Git history Союза, а deterministic export по `starter.manifest.json` с audit, neutral client preset и новой migration baseline на чистой БД.
-7. Применённые migrations Союза не редактируются и не попадают в neutral starter history.
-8. После успешного generated-client clone test starter публикуется в отдельном SourceCraft repository. Союз продолжает индивидуальную разработку как client fork.
+6. Export tooling остаётся report/rehearsal-механизмом и не создаёт отдельный repository без новой явной команды владельца.
+7. Применённые migrations текущего runtime не редактируются; neutral baseline создаётся только на отдельном утверждённом этапе выделения.
+8. Успешный generated-client clone test доказывает техническую переносимость, но сам по себе не разрешает публикацию или создание template repository.
 
 ## Почему выбрано
 
@@ -50,9 +50,9 @@
 
 ## Последствия
 
-- потребуется последовательная очистка presentation-компонентов от `project` и `payload` imports;
-- client content/assets/routes должны быть централизованы;
-- export и audit станут обязательной частью Definition of Done starter-изменений;
+- продолжается последовательная очистка presentation-компонентов от `project` и `payload` imports;
+- client content/assets/routes централизуются, но рабочий Union preset остаётся внутри starter до отдельной команды;
+- export и audit используются как доказательство переносимости, а не как автоматическая публикация;
 - schema/auth/import/infra изменения требуют HEAVY Merge Gate;
-- текущий production Союза остаётся рабочим и не используется как disposable sandbox;
-- новый template repository появится только после neutral baseline и clone test.
+- текущий runtime остаётся рабочим и не используется как disposable sandbox;
+- отдельный template repository запрещён до новой явной owner-команды.
