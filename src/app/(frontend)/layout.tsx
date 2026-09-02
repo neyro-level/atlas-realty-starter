@@ -7,15 +7,18 @@ import '@fontsource/manrope/800.css'
 import type { ReactNode } from 'react'
 
 import { SiteChrome } from '@/components/layout/SiteChrome'
+import { SITE_SHELL_CONFIG } from '@/lib/site-shell'
 import { getPublicContacts } from '@/payload/public/queries'
 import { publicSite } from '@/project/public-site'
+import { seoSiteConfig } from '@/project/seo-config'
+import { resolveSiteBaseUrl } from '@/shared/types/seo'
 
 import '../../../styles/globals.css'
 import './styles.css'
 
 export const metadata: Metadata = {
   description: publicSite.defaultDescription,
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://souz-home.ru'),
+  metadataBase: new URL(resolveSiteBaseUrl(seoSiteConfig)),
   title: {
     default: publicSite.fullName,
     template: `%s | ${publicSite.name}`,
@@ -28,7 +31,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="ru">
       <body>
-        <SiteChrome contacts={contacts}>{children}</SiteChrome>
+        <SiteChrome contacts={contacts} shell={SITE_SHELL_CONFIG}>{children}</SiteChrome>
       </body>
     </html>
   )

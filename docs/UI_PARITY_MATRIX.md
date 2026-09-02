@@ -81,6 +81,35 @@ Status values: `TODO`, `IN_PROGRESS`, `PARITY`, `BLOCKED_DATA`.
 - Radius: `8px` unless the exact media shell uses a documented exception.
 - Every row becomes `PARITY` only after same-state screenshots and behavioral checks.
 
+## Starter visual baseline
+
+The baseline is client-neutral. Screenshots and fixtures prove composition/state behavior and must not become production content.
+
+| Fixture | Required proof |
+|---|---|
+| `home-empty` | Hero, service strip, truthful empty catalog/ЖК/article states, trust and final CTA |
+| `home-full` | Featured object, 6 ЖК, mixed property rows, articles and responsive carousels |
+| `catalog-empty` | preset H1, tabs, filters, zero total, reset/manual-selection CTA |
+| `catalog-grid` | 24 mixed cards, badges, gallery controls, price/identity and load-more/end states |
+| `catalog-list` | list density, long address/title, session controls and responsive collapse |
+| `property-full` | photo/video/map, lightbox, specs, description, viewing, related and sticky sidebar |
+| `property-no-media` | branded placeholder without layout shift or fake media |
+| `complex-full` | gallery, about, purchase terms, layouts, location, related and sticky sidebar |
+| `employee-full` | portrait, role, contacts, reviews/properties policy and lead CTA |
+| `employees-empty` | published-team empty state without fabricated staff |
+| `journal-hub` | categories, search, article grid and empty category |
+| `article-full` | editorial measure, media, TOC, anchors, actions and related content |
+| `contacts` | offices, phone reveal, map consent/loading/fallback and appointment CTA |
+| `leadgen` | isolated shell, multi-step form, validation, consent, success and delivery error |
+| `legal` | hub, document TOC, readable measure and cookie notice |
+| `status` | 404 and runtime error with hard recovery links |
+| `admin-desktop` | sidebar, command menu, metrics, filters, table, Kanban and denied state |
+| `admin-mobile` | header/drawer, cards, inner table scroll, form controls and denied state |
+
+Every fixture is checked at `1440×1000`, `1280×800`, `768×1024` and `390×844` where the surface is applicable. Required assertions: no page-level horizontal overflow, no broken image, one H1, visible keyboard focus, minimum 44px public touch targets, truthful loading/empty/error copy and no client identity inside reusable fixtures.
+
+Starter export is blocked until all `PARITY` rows have a fixture and every `BLOCKED_DATA` row has either approved client data proof or a neutral full-state fixture in the reference app.
+
 ## Verification status 2026-09-01
 
 - Verified public surfaces: desktop Home `1440×1000`, laptop catalog `1280×800`, tablet catalog `768×1024`, mobile menu and filter sheet `390×844`; no horizontal overflow and no persistent broken images.

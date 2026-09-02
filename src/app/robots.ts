@@ -1,12 +1,14 @@
 import type { MetadataRoute } from 'next'
+import { seoSiteConfig } from '@/project/seo-config'
+import { isPublicIndexingEnabled, resolveSiteBaseUrl } from '@/shared/types/seo'
 
 export default function robots(): MetadataRoute.Robots {
-  const base = process.env.NEXT_PUBLIC_APP_URL || 'https://souz-home.ru'
-  const production = process.env.APP_ENV === 'production' && base.startsWith('https://')
+  const base = resolveSiteBaseUrl(seoSiteConfig)
+  const production = isPublicIndexingEnabled(seoSiteConfig)
 
   return {
     rules: production
-      ? [{ allow: '/', disallow: ['/admin/', '/api/'], userAgent: '*' }]
+      ? [{ allow: '/', disallow: seoSiteConfig.blockedPaths, userAgent: '*' }]
       : [{ disallow: '/', userAgent: '*' }],
     sitemap: new URL('/sitemap.xml', base).toString(),
   }

@@ -19,6 +19,16 @@ export const citySwitcherConfig = {
   ],
 }
 
+export const publicContactFallback = {
+  address: 'Ростов-на-Дону',
+  cityName: publicSite.city,
+  callbackHref: '/contacts',
+  callbackLabel: 'Подобрать объект',
+  email: 'info@souz-home.ru',
+  phone: '+7 (863) 000-00-00',
+  workingHours: 'Ежедневно, 09:00–20:00',
+} as const
+
 export function getPropertyPath(slug: string) {
   return `/kvartiry-rostova/${slug}`
 }

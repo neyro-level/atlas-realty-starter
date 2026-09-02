@@ -4,6 +4,8 @@
 
 Конкретная XML-схема неизвестна. Parser, mapping и сетевой adapter не реализуются до получения реального feed и подтверждённой спецификации.
 
+Reusable TypeScript boundary: `src/shared/types/feed-import.ts`. Он определяет только нормализованный output и adapter interface; конкретный parser/mapping остаётся client-owned и блокируется без утверждённого feed fixture.
+
 ## Уже зафиксированный operational layer
 
 - `import-sources` — зарегистрированный источник и признак готовности adapter;

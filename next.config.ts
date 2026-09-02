@@ -9,6 +9,9 @@ const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ['127.0.0.1', 'localhost'],
+  experimental: {
+    cpus: 4,
+  },
   images: {
     localPatterns: [
       {

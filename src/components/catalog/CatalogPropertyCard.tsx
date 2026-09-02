@@ -13,11 +13,10 @@ import {
   Phone,
 } from "lucide-react";
 import { formatPrice, type CatalogView, type ListingCard } from "@/lib/catalog";
-import { getPropertyPath } from "@/project/site-config";
-import { tenant } from "@/project/tenant";
 import { shouldOptimizeCatalogImage } from "@/modules/media/image-optimization";
 import { isNewBuildingListingId } from "@/modules/new-buildings";
 import { SessionCollectionButton, toSessionListingItem } from "@/modules/session-collections";
+import { useSiteShell } from "@/components/layout/SiteShellProvider";
 import { useSiteContacts } from "@/components/layout/SiteContactsProvider";
 import { splitBlurredAddress, shouldBlurPropertyAddress } from "@/shared/lib/property-address-blur";
 import { buildTelHref } from "@/shared/lib/tel";
@@ -34,7 +33,8 @@ type Props = {
 };
 
 export function CatalogPropertyCard({ listing, variant = "grid", priority = false, href, imageBadge }: Props) {
-  const path = href ?? getPropertyPath(listing.slug);
+  const shell = useSiteShell();
+  const path = href ?? `${shell.routes.propertyBase}/${listing.slug}`;
   const images = useMemo(() => {
     const list = listing.images.length ? listing.images : listing.image ? [listing.image] : [];
     return [...new Set(list)].filter(Boolean);
@@ -72,8 +72,8 @@ export function CatalogPropertyCard({ listing, variant = "grid", priority = fals
     objectCode ?? listing.id,
   );
   const sessionItem = useMemo(
-    () => toSessionListingItem(listing, listTitle, href),
-    [listing, listTitle, href],
+    () => toSessionListingItem(listing, listTitle, path),
+    [listing, listTitle, path],
   );
   const normalizedPropertyId = /^[a-z0-9]{8,64}$/i.test(listing.id) ? listing.id : undefined;
   const normalizedAgentId = listing.agentId && /^[a-z0-9]{8,64}$/i.test(listing.agentId) ? listing.agentId : undefined;
@@ -211,7 +211,7 @@ export function CatalogPropertyCard({ listing, variant = "grid", priority = fals
               {listTitle}
             </h3>
             <div className="mt-2 space-y-1.5 text-sm leading-5 tracking-[0.01em] text-[#827F81]">
-              {listing.district && listing.district !== tenant.cityRu ? (
+              {listing.district && listing.district !== shell.citySwitcher.cities.find((city) => city.current)?.label ? (
                 <p className="font-semibold text-[#8A1515]">{listing.district}</p>
               ) : null}
               <p className="flex min-w-0 items-center gap-1.5 text-[15.4px] leading-[22px] text-[#413F41] lg:text-sm lg:leading-5">
@@ -456,7 +456,7 @@ export function CatalogPropertyCard({ listing, variant = "grid", priority = fals
         {isList && listing.description ? (
           <p className="mt-3 line-clamp-3 text-sm leading-6 tracking-[0.01em] text-[#413F41]">{listing.description}</p>
         ) : null}
-        {isList ? <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#827F81]">{listing.category} · база Союза Застройщиков</p> : null}
+        {isList ? <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#827F81]">{listing.category} · база {shell.brand.name}</p> : null}
       </div>
 
       {isList ? (

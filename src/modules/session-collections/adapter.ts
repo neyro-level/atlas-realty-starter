@@ -1,8 +1,7 @@
 import type { ListingCard, ListingCategoryKey } from '@/lib/catalog'
-import { getPropertyPath } from '@/project/site-config'
 import type { SessionListingItem } from './types'
 
-export function toSessionListingItem(listing: ListingCard, title: string, pathOverride?: string): SessionListingItem {
+export function toSessionListingItem(listing: ListingCard, title: string, path: string): SessionListingItem {
   return {
     address: listing.address,
     area: listing.area,
@@ -16,7 +15,7 @@ export function toSessionListingItem(listing: ListingCard, title: string, pathOv
     },
     floor: listing.floor,
     floorsTotal: listing.floorsTotal,
-    href: pathOverride ?? getPropertyPath(listing.slug),
+    href: path,
     id: listing.id,
     image: listing.image ?? listing.images[0],
     price: listing.price,

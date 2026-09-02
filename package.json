@@ -22,6 +22,9 @@
     "test:e2e:production": "cross-env APP_RUNTIME=production NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
     "verify:payload-upgrade": "pnpm generate:types && pnpm generate:importmap && pnpm lint && pnpm typecheck && pnpm build && pnpm test:int && pnpm test:e2e",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
+    "starter:audit": "node scripts/starter/audit.mjs --mode source",
+    "starter:export": "node scripts/starter/export.mjs",
+    "starter:baseline": "node scripts/starter/create-neutral-baseline.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

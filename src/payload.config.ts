@@ -81,7 +81,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {
-      description: 'Payload-кабинет проекта «Союз Ростов»',
+      description: `Payload-кабинет проекта «${projectConfig.projectName}»`,
       titleSuffix: ` | ${projectConfig.adminTitleSuffix}`,
     },
     user: Users.slug,

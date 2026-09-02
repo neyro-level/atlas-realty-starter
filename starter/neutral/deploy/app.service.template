@@ -1,0 +1,21 @@
+[Unit]
+Description={{APP_SLUG}} Next.js + Payload
+After=network.target
+
+[Service]
+Type=simple
+User={{APP_SLUG}}
+Group={{APP_SLUG}}
+WorkingDirectory=/opt/{{APP_SLUG}}/current
+EnvironmentFile=/etc/{{APP_SLUG}}/runtime.env
+EnvironmentFile=/etc/{{APP_SLUG}}/release.env
+ExecStart=/usr/local/bin/pnpm start
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/opt/{{APP_SLUG}}
+
+[Install]
+WantedBy=multi-user.target

@@ -9,15 +9,15 @@ test.describe.serial('Payload admin foundation', () => {
   })
 
   test('auth routes, cabinet workspaces and health work on Next 16', async ({ page }) => {
-    await page.goto('/admin/create-first-user', { waitUntil: 'domcontentloaded' })
-    await expect(page).not.toHaveURL(/\/admin\/create-first-user/)
-
     await page.goto('/admin/login', { waitUntil: 'domcontentloaded' })
+    await expect(page).toHaveURL(/\/admin\/login/)
     await page.fill('#field-email', foundationUsers.superAdmin.email)
     await page.fill('#field-password', foundationUsers.superAdmin.password)
     await page.click('button[type="submit"]')
-
     await expect(page).toHaveURL(/\/admin\/?$/)
+
+    await page.goto('/admin/create-first-user', { waitUntil: 'domcontentloaded' })
+    await expect(page).not.toHaveURL(/\/admin\/create-first-user/)
     await expect(page.getByRole('heading', { level: 1, name: 'Посетители' })).toBeVisible()
 
     for (const label of ['Посетители', 'Заявки', 'Объекты', 'Новостройки', 'Сотрудники', 'Отзывы', 'Офисы', 'Контакты', 'Антиспам', 'XML-импорт']) {

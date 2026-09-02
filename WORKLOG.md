@@ -1,5 +1,14 @@
 # Worklog
 
+## 2026-09-02 — full-stack starter-ready foundation
+
+- Принят ADR-002: Союз остаётся production client project и первым consumer, neutral starter создаётся deterministic export без Git/migration/runtime identity Союза.
+- Добавлены `docs/STARTER_CONTRACT.md`, `starter.manifest.json`, source/export audit, deterministic exporter и neutral migration baseline workflow.
+- Public UI отделён от Payload/client imports: shared DTO/contracts, configurable shell, Home/catalog/detail/commercial/content presets и Payload adapters.
+- Design tokens/base styles разделены; Admin brand берётся из project config; feed и SEO получили reusable contracts; neutral Nginx/systemd/Docker templates не содержат client identity.
+- Development export прошёл audit без client markers, создал clean PostgreSQL baseline, повторно применил migrations, прошёл typecheck/lint и production build с четырьмя workers.
+- Generated clone открыл neutral Home `Example Realty`, generic routes и neutral Payload first-user route без упоминаний source client. Production Союза не затронут.
+
 ## 2026-09-01 — Public and Payload Admin UI implementation
 
 - UI reference зафиксирован как external evidence; старый Astro implementation не использовался как UI или catalog data source.

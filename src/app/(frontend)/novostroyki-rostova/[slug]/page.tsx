@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { ResidentialComplexDetail } from '@/components/public/ResidentialComplexDetail'
+import { detailPageContent } from '@/project/detail-content'
 import { getPublicComplexBySlug, getPublicComplexes } from '@/payload/public/queries'
 
 type ResidentialComplexPageProps = {
@@ -26,7 +27,5 @@ export default async function ResidentialComplexPage({ params }: ResidentialComp
   if (!complex) notFound()
 
   const related = allComplexes.filter((item) => item.id !== complex.id && item.district === complex.district)
-  const fallbackRelated = related.length > 0 ? related : allComplexes.filter((item) => item.id !== complex.id)
-
-  return <ResidentialComplexDetail complex={complex} related={fallbackRelated} />
+  return <ResidentialComplexDetail complex={complex} content={detailPageContent} related={related} />
 }

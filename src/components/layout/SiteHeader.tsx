@@ -6,7 +6,6 @@ import { ArrowRight, Building2, ChevronDown, Home, MapPin, Menu, Phone, SlidersH
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  ALL_REALTY_CATALOG_PATH,
   isCatalogShowcasePath,
   isSessionCollectionStickyPath,
   markOpenCatalogFiltersIntent,
@@ -15,23 +14,26 @@ import {
 } from "@/components/catalog/catalog-sticky-chrome";
 import { BrandMark } from "@/components/layout/BrandMark";
 import { MobileMenuOverlay } from "@/components/layout/MobileMenuOverlay";
-import { HEADER_NAV, type HeaderNavItem } from "@/lib/site-shell";
 import { SessionCollectionNavLink } from "@/modules/session-collections";
-import { citySwitcherConfig } from "@/project/site-config";
 import type { PublicSiteContacts } from "@/shared/types/public-site-contacts";
+import { isPropertyDetailPath, type CitySwitcherConfig, type HeaderNavItem, type SiteShellConfig } from "@/shared/types/site-shell";
+import { useSiteShell } from "./SiteShellProvider";
 
 export function SiteHeader({ contacts }: { contacts: PublicSiteContacts }) {
   const pathname = usePathname();
+  const shell = useSiteShell();
 
-  return <SiteHeaderInner pathname={pathname} contacts={contacts} />;
+  return <SiteHeaderInner pathname={pathname} contacts={contacts} shell={shell} />;
 }
 
 function SiteHeaderInner({
   pathname,
   contacts,
+  shell,
 }: {
   pathname: string;
   contacts: PublicSiteContacts;
+  shell: SiteShellConfig;
 }) {
   const router = useRouter();
   const headerRef = useRef<HTMLElement | null>(null);
@@ -44,19 +46,19 @@ function SiteHeaderInner({
   const [docked, setDocked] = useState(false);
 
   const desktopNav = useMemo(
-    () => HEADER_NAV.filter((item) => item.label !== "Главная"),
-    [],
+    () => shell.headerNav.filter((item) => item.href !== shell.routes.home),
+    [shell.headerNav, shell.routes.home],
   );
-  const catalogPage = isCatalogShowcasePath(pathname);
-  const sessionCollectionPage = isSessionCollectionStickyPath(pathname);
-  const propertyObjectPage = /^\/(?:kvartiry-rostova|novostroyki-rostova)\/[^/]+$/.test(pathname);
-  const compactSticky = usesCompactMobileStickyChrome(pathname) && docked;
+  const catalogPage = isCatalogShowcasePath(pathname, shell.catalogPaths);
+  const sessionCollectionPage = isSessionCollectionStickyPath(pathname, shell.sessionCollectionPaths);
+  const propertyObjectPage = isPropertyDetailPath(pathname, shell.propertyDetailPrefixes);
+  const compactSticky = usesCompactMobileStickyChrome(pathname, shell.catalogPaths, shell.sessionCollectionPaths) && docked;
 
   useEffect(() => {
     const onScroll = () => {
       const nextDocked = window.scrollY > 72;
       setDocked(nextDocked);
-      if (usesCompactMobileStickyChrome(pathname) && nextDocked) {
+      if (usesCompactMobileStickyChrome(pathname, shell.catalogPaths, shell.sessionCollectionPaths) && nextDocked) {
         setMobileOpen(false);
       }
     };
@@ -64,7 +66,7 @@ function SiteHeaderInner({
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [pathname]);
+  }, [pathname, shell.catalogPaths, shell.sessionCollectionPaths]);
 
   useEffect(() => {
     if (!mobileOpen) {
@@ -138,7 +140,7 @@ function SiteHeaderInner({
     }
 
     markOpenCatalogFiltersIntent();
-    router.push(ALL_REALTY_CATALOG_PATH);
+    router.push(shell.routes.allRealty);
   }
 
   const headerClass = compactSticky
@@ -170,7 +172,7 @@ function SiteHeaderInner({
             <div className="flex h-full items-center gap-3 lg:hidden">
               {sessionCollectionPage ? (
                 <Link
-                  href={ALL_REALTY_CATALOG_PATH}
+                  href={shell.routes.allRealty}
                   className="inline-flex min-h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#EBEBE9] px-3 text-[12px] font-semibold text-[#413F41] transition hover:bg-[#E3E3E1] hover:text-[#8A1515]"
                 >
                   <Building2 className="size-3.5 shrink-0" aria-hidden />
@@ -179,7 +181,7 @@ function SiteHeaderInner({
               ) : (
                 <SessionCollectionNavLink
                   kind="favorites"
-                  href="/favorites"
+                  href={shell.routes.favorites}
                   label="Избранное"
                   variant="catalogSticky"
                 />
@@ -198,8 +200,8 @@ function SiteHeaderInner({
           <div className={compactSticky ? "hidden h-full lg:block" : "h-full"}>
             <div className="flex h-full items-center gap-3 lg:h-[56px] xl:gap-4">
               <Link
-                href="/"
-                aria-label="Союз Застройщиков — на главную"
+                href={shell.routes.home}
+                aria-label={`${shell.brand.name} — на главную`}
                 className="flex shrink-0 items-center"
                 onClick={() => {
                   setMobileOpen(false);
@@ -214,6 +216,7 @@ function SiteHeaderInner({
                   open={citySwitcherOpen}
                   onToggle={() => setCitySwitcherOpen((prev) => !prev)}
                   onClose={() => setCitySwitcherOpen(false)}
+                  config={shell.citySwitcher}
                 />
                 <HeaderPhoneReveal
                   contacts={contacts}
@@ -222,7 +225,7 @@ function SiteHeaderInner({
                   variant="desktop"
                 />
                 <Link
-                  href="/kontakty"
+                  href={shell.routes.offices}
                   className="inline-flex min-h-10 items-center gap-2 rounded-md px-2.5 transition hover:bg-[#F4F4F3] hover:text-[#8A1515]"
                 >
                   <Building2 className="size-[18px] text-[#827F81]" aria-hidden />
@@ -232,10 +235,10 @@ function SiteHeaderInner({
 
               <div className="ml-auto flex shrink-0 items-center justify-end gap-2">
                 <div className="hidden items-center gap-1 lg:flex">
-                  <SessionCollectionNavLink kind="compare" href="/compare" label="Сравнение" compact={docked} />
-                  <SessionCollectionNavLink kind="favorites" href="/favorites" label="Избранное" compact={docked} />
+                  <SessionCollectionNavLink kind="compare" href={shell.routes.compare} label="Сравнение" compact={docked} />
+                  <SessionCollectionNavLink kind="favorites" href={shell.routes.favorites} label="Избранное" compact={docked} />
                   <Link
-                    href="/contacts?request=sell-property"
+                    href={shell.routes.sellProperty}
                     className="ml-2 inline-flex min-h-10 items-center justify-center rounded-md bg-[#8A1515] px-4 text-sm font-semibold text-white transition hover:bg-[#630E0E]"
                   >
                     Продать квартиру
@@ -485,15 +488,17 @@ function CitySwitcher({
   open,
   onToggle,
   onClose,
+  config,
 }: {
+  config: CitySwitcherConfig;
   variant?: "desktop" | "mobile";
   open: boolean;
   onToggle: () => void;
   onClose: () => void;
 }) {
   const currentCity =
-    citySwitcherConfig.cities.find((city) => city.slug === citySwitcherConfig.currentSlug) ??
-    citySwitcherConfig.cities[0];
+    config.cities.find((city) => city.slug === config.currentSlug) ??
+    config.cities[0];
   const triggerId = "city-switcher-desktop";
   const panelId = "city-switcher-panel-desktop";
 
@@ -523,7 +528,7 @@ function CitySwitcher({
           open ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0 pointer-events-none"
         }`}
       >
-        {citySwitcherConfig.cities.map((city) => {
+        {config.cities.map((city) => {
           const content = (
             <>
               <span className="flex items-center justify-between gap-3">

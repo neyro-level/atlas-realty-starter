@@ -17,6 +17,7 @@ export function AdminNav() {
   const { navOpen, navRef, setNavOpen } = useNav()
   const [commandsOpen, setCommandsOpen] = useState(false)
   const [query, setQuery] = useState('')
+  const brandInitials = projectConfig.projectName.split(/\s+/).map((part) => part[0]).join('').slice(0, 2).toUpperCase()
   const filteredLinks = useMemo(() => ADMIN_SECTION_LINKS.filter((item) => item.label.toLowerCase().includes(query.trim().toLowerCase())), [query])
 
   useEffect(() => {
@@ -46,7 +47,7 @@ export function AdminNav() {
       <div className={`nav nav--nav-animate sz-admin-nav ${navOpen ? 'nav--nav-open sz-admin-nav--open' : ''}`} ref={navRef}>
         <div className="sz-admin-nav__inner">
           <Link className="sz-admin-nav__brand" href="/admin" onClick={closeMobileNavigation} prefetch={false}>
-            <span className="sz-admin-nav__brand-mark">СЗ</span>
+            <span className="sz-admin-nav__brand-mark">{brandInitials}</span>
             <span><strong className="sz-admin-nav__title">{projectConfig.projectName}</strong><small className="sz-admin-nav__eyebrow">Управление сайтом</small></span>
           </Link>
           <button className="sz-command-trigger" onClick={() => setCommandsOpen(true)} type="button"><Search aria-hidden /><span>Быстрый переход</span><kbd>Ctrl K</kbd></button>

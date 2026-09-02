@@ -5,15 +5,16 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 import { SessionCollectionButton, type SessionListingItem } from '@/modules/session-collections'
-import type { PublicComplex, PublicProperty } from '@/payload/public/queries'
+import type { PublicComplex, PublicProperty } from '@/shared/types/public-content'
+import { appendObjectQuery, type DetailPageContent } from '@/shared/types/detail-pages'
 
-export function ComplexDecisionSidebar({ complex }: { complex: PublicComplex }) {
+export function ComplexDecisionSidebar({ complex, content }: { complex: PublicComplex; content: DetailPageContent }) {
   const item: SessionListingItem = {
     id: `new-building:${complex.slug}`,
     title: complex.title,
     category: 'Новостройки',
     categoryKey: 'new_building',
-    href: `/novostroyki-rostova/${complex.slug}`,
+    href: `${content.routes.newBuildings}/${complex.slug}`,
     image: complex.gallery[0]?.src,
     price: complex.priceFrom,
     address: complex.address,
@@ -26,9 +27,9 @@ export function ComplexDecisionSidebar({ complex }: { complex: PublicComplex }) 
       item={item}
       price={formatPrice(complex.priceFrom, true)}
       priceCaption="стоимость от"
-      primaryHref={`/contacts?object=${encodeURIComponent(complex.title)}`}
+      primaryHref={appendObjectQuery(content.routes.contacts, complex.title)}
       primaryLabel="Узнать наличие квартир"
-      secondaryHref="/ipoteka"
+      secondaryHref={content.routes.mortgage}
       secondaryLabel="Одобрить ипотеку"
       facts={[
         { icon: CalendarDays, label: 'Сдача', value: complex.completionLabel },
@@ -39,17 +40,17 @@ export function ComplexDecisionSidebar({ complex }: { complex: PublicComplex }) 
   )
 }
 
-export function PropertyDecisionSidebar({ property, className = '' }: { property: PublicProperty; className?: string }) {
-  const item = toPropertySessionItem(property)
+export function PropertyDecisionSidebar({ property, className = '', content }: { property: PublicProperty; className?: string; content: DetailPageContent }) {
+  const item = toPropertySessionItem(property, content)
   return (
     <DecisionPanel
       className={className}
       item={item}
       price={formatPrice(property.price)}
       priceCaption="стоимость"
-      primaryHref={`/contacts?object=${encodeURIComponent(property.title)}`}
+      primaryHref={appendObjectQuery(content.routes.contacts, property.title)}
       primaryLabel="Записаться на просмотр"
-      secondaryHref="/ipoteka"
+      secondaryHref={content.routes.mortgage}
       secondaryLabel="Рассчитать ипотеку"
       facts={[
         { icon: WalletCards, label: 'Цена за м²', value: formatPrice(property.pricePerSquareMeter) },
@@ -60,12 +61,12 @@ export function PropertyDecisionSidebar({ property, className = '' }: { property
   )
 }
 
-export function PropertyMobileTopBar({ property }: { property: PublicProperty }) {
-  const item = toPropertySessionItem(property)
+export function PropertyMobileTopBar({ property, content }: { property: PublicProperty; content: DetailPageContent }) {
+  const item = toPropertySessionItem(property, content)
   return (
     <div className="sticky top-[68px] z-30 border-b border-[#E3E3E1] bg-white/96 px-3 py-2 backdrop-blur lg:hidden">
       <div className="mx-auto flex max-w-site-frame items-center gap-2">
-        <Link className="min-w-0 flex-1" href="/kvartiry-rostova">
+        <Link className="min-w-0 flex-1" href={content.routes.apartments}>
           <span className="block truncate text-xs text-[#827F81]">Назад к каталогу</span>
           <strong className="block truncate text-sm text-[#17161A]">{formatPrice(property.price)}</strong>
         </Link>
@@ -76,7 +77,7 @@ export function PropertyMobileTopBar({ property }: { property: PublicProperty })
   )
 }
 
-export function ViewingRequestSection({ property }: { property: PublicProperty }) {
+export function ViewingRequestSection({ property, content }: { property: PublicProperty; content: DetailPageContent }) {
   return (
     <section className="grid gap-5 rounded-lg bg-[#17161A] p-5 text-white md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:p-6" aria-labelledby="viewing-title">
       <div>
@@ -84,7 +85,7 @@ export function ViewingRequestSection({ property }: { property: PublicProperty }
         <h2 id="viewing-title" className="mt-2 text-[22px] font-semibold leading-tight">Выберите удобное время со специалистом</h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-white/70">Дату, актуальность объекта и условия просмотра подтвердит менеджер. Заявка оформляется на странице контактов.</p>
       </div>
-      <Link className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#8A1515] px-5 text-sm font-bold text-white transition hover:bg-[#741212]" href={`/contacts?object=${encodeURIComponent(property.title)}&request=viewing`}>Записаться на просмотр</Link>
+      <Link className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#8A1515] px-5 text-sm font-bold text-white transition hover:bg-[#741212]" href={appendObjectQuery(content.routes.contacts, property.title, 'viewing')}>Записаться на просмотр</Link>
     </section>
   )
 }
@@ -118,8 +119,8 @@ function DecisionPanel({ className = '', facts, item, price, priceCaption, prima
   )
 }
 
-function toPropertySessionItem(property: PublicProperty): SessionListingItem {
-  return { id: `property:${property.id}`, title: property.title, category: categoryLabel(property.category), categoryKey: property.category, href: `/kvartiry-rostova/${property.slug}`, image: property.images[0]?.src, price: property.price, address: property.address, rooms: property.rooms, area: property.totalArea, floor: property.floor, floorsTotal: property.floorsTotal }
+function toPropertySessionItem(property: PublicProperty, content: DetailPageContent): SessionListingItem {
+  return { id: `property:${property.id}`, title: property.title, category: categoryLabel(property.category), categoryKey: property.category, href: `${content.routes.apartments}/${property.slug}`, image: property.images[0]?.src, price: property.price, address: property.address, rooms: property.rooms, area: property.totalArea, floor: property.floor, floorsTotal: property.floorsTotal }
 }
 function categoryLabel(category: PublicProperty['category']) { return ({ commercial: 'Коммерция', flat: 'Квартира', house: 'Дом', land: 'Участок', room: 'Комната' })[category] }
 function formatPrice(value?: number, from = false) { return value ? `${from ? 'от ' : ''}${new Intl.NumberFormat('ru-RU').format(value)} ₽` : 'Уточняется' }

@@ -1,118 +1,6 @@
 @import "tailwindcss";
-
-/* PT Root UI by Paratype, SIL Open Font License 1.1. License: /fonts/pt-root-ui/OFL.txt */
-@font-face {
-  font-family: "PT Root UI";
-  src: url("/fonts/pt-root-ui/pt-root-ui-regular.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "PT Root UI";
-  src: url("/fonts/pt-root-ui/pt-root-ui-medium.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 500 600;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "PT Root UI";
-  src: url("/fonts/pt-root-ui/pt-root-ui-bold.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 700 800;
-  font-display: swap;
-}
-
-:root {
-  --background: #f4f4f3;
-  --foreground: #17161a;
-  --surface: #ffffff;
-  --surface-muted: #ebebe9;
-  --surface-card: #ffffff;
-  --surface-card-soft: #fafafa;
-  --surface-dark: #18181a;
-  --surface-dark-strong: #101011;
-  --surface-dark-soft: #232324;
-  --text-primary: #17161a;
-  --text-secondary: #413f41;
-  --text-muted: #827f81;
-  --text-dark: #ffffff;
-  --text-dark-secondary: rgba(255, 255, 255, 0.64);
-  --text-dark-muted: rgba(255, 255, 255, 0.42);
-  --border: #e3e3e1;
-  --border-soft: rgba(0, 0, 0, 0.06);
-  --dark-border: rgba(255, 255, 255, 0.1);
-  --accent: #8a1515;
-  --accent-hover: #630e0e;
-  --accent-soft: #f7f2f2;
-  --accent-border: rgba(138, 21, 21, 0.15);
-  --warning: #996000;
-  --error: #9e1c1c;
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.02), 0 8px 24px rgba(0, 0, 0, 0.04);
-  --shadow-card-hover: 0 4px 8px rgba(0, 0, 0, 0.02), 0 20px 48px rgba(0, 0, 0, 0.08);
-  --radius-sm: 8px;
-  --radius-md: 8px;
-  --radius-lg: 8px;
-  --radius-xl: 8px;
-  --site-frame-max: 1380px;
-  --color-bg-page: var(--background);
-  --color-bg-section: var(--surface);
-  --color-bg-soft: var(--surface-muted);
-  --color-bg-dark: var(--surface-dark);
-  --color-bg-dark-deep: var(--surface-dark-strong);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
-  --color-border: var(--border);
-  --color-accent: var(--accent);
-  --color-accent-soft: var(--accent-soft);
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: 0.01em;
-}
-
-.admin-root {
-  font-family: "PT Root UI", "PT Root UI VF", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: 0;
-}
-
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-button.font-bold,
-button.font-extrabold,
-a.inline-flex.font-bold,
-a.inline-flex.font-extrabold {
-  font-weight: 600 !important;
-}
-
-::selection {
-  background: var(--accent);
-  color: #ffffff;
-}
+@import "./tokens.css";
+@import "./base.css";
 
 .catalog-section {
   position: relative;
@@ -3202,7 +3090,7 @@ a.inline-flex.font-extrabold {
   text-decoration: none;
 }
 
-.site-footer__brand-mark > span > span[aria-label="Союз Застройщиков"] {
+.site-footer__brand-mark > span > span[aria-label] {
   width: 113px;
   height: 62px;
 }
@@ -3372,7 +3260,7 @@ a.inline-flex.font-extrabold {
     padding-bottom: 32px;
   }
 
-  .site-footer__brand-mark > span > span[aria-label="Союз Застройщиков"] {
+  .site-footer__brand-mark > span > span[aria-label] {
     width: 113px;
     height: 62px;
   }
@@ -3428,7 +3316,7 @@ a.inline-flex.font-extrabold {
     padding: 0;
   }
 
-  .site-footer__brand-mark > span > span[aria-label="Союз Застройщиков"] {
+  .site-footer__brand-mark > span > span[aria-label] {
     width: 97px;
     height: 54px;
   }
