@@ -29,7 +29,7 @@
 - runtime roles remain `SUPER_ADMIN`, `DIRECTOR`, `CONTENT_MANAGER`; starter bootstrap creates only `SUPER_ADMIN` and `DIRECTOR`;
 - Admin login uses username + password only (`allowEmailLogin: false`, `requireEmail: false`);
 - anonymous user creation and first-user registration are denied server-side;
-- local starter credentials default to `superadmin` / `director` with password `12341234`; production credentials exist only in Doppler;
+- local starter credentials default to `superadmin` / `director` with password `12341234`; production usernames/passwords exist only in Doppler and are synchronized on startup;
 - passwords shorter than 8 characters are rejected;
 - server capability matrix: `src/payload/access/capabilities.ts`;
 - custom views получают authenticated Payload context из `AdminViewServerProps`;
