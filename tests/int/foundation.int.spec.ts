@@ -1,3 +1,5 @@
+import type { PostgresAdapter } from '@payloadcms/db-postgres'
+
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { getTestPayload, resetFoundationState, seedPrivilegedUsers } from '../helpers/payload'
@@ -31,6 +33,15 @@ describe('admin cabinet parity contracts', () => {
       { name: 'Директор', password: '12341234', role: 'DIRECTOR' as const, username: 'director' },
     ]
 
+    await bootstrapAdminUsersWithCredentials(payload, users)
+    const adapter = payload.db as unknown as PostgresAdapter
+    const beforeSync = await adapter.pool.query('SELECT "hash" FROM "users" WHERE "username" = $1', ['director'])
+    await bootstrapAdminUsersWithCredentials(payload, [
+      users[0]!,
+      { ...users[1]!, password: '87654321' },
+    ])
+    const afterSync = await adapter.pool.query('SELECT "hash" FROM "users" WHERE "username" = $1', ['director'])
+    expect(afterSync.rows[0]?.hash).not.toBe(beforeSync.rows[0]?.hash)
     await bootstrapAdminUsersWithCredentials(payload, users)
     await bootstrapAdminUsersWithCredentials(payload, users)
     const stored = await payload.find({ collection: 'users', depth: 0, limit: 3, overrideAccess: true, sort: 'username' })

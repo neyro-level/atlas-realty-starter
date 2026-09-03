@@ -24,7 +24,7 @@
 - Sentry remains installed but frozen/optional: no release blocker, `sendDefaultPii: false`, Replay off;
 - Admin login is username/password only; anonymous registration is denied and email recovery is intentionally unavailable;
 - startup bootstrap creates/adopts only designated SUPER_ADMIN and DIRECTOR accounts;
-- local starter may use documented `12341234`; production passwords are required from Doppler and never committed;
+- local starter may use documented `12341234`; production password source of truth is Doppler and startup synchronizes the designated accounts;
 - physical lead delete is denied; archive metadata is server-owned and retention anonymizes PII instead of deleting audit history;
 - external images require exact HTTPS host allowlist; video embeds accept canonical YouTube/VK URLs only;
 - uploads abort above 10 MiB, remote URL paste is disabled and SVG is excluded by explicit raster MIME types;

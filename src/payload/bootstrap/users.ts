@@ -10,12 +10,17 @@ async function ensureBootstrapUser(payload: Payload, credentials: BootstrapUserC
     overrideAccess: true,
     where: { username: { equals: credentials.username } },
   })
-  if (byUsername.totalDocs > 1) throw new Error(`Duplicate bootstrap username: ${credentials.username}`)
   if (byUsername.docs[0]) {
     if (byUsername.docs[0].role !== credentials.role) {
       throw new Error(`Bootstrap username ${credentials.username} belongs to another role`)
     }
-    return byUsername.docs[0]
+    return payload.update({
+      collection: 'users',
+      id: byUsername.docs[0].id,
+      context: { userBootstrap: true },
+      data: { password: credentials.password },
+      overrideAccess: true,
+    })
   }
 
   const byRole = await payload.find({
