@@ -36,7 +36,7 @@ Production использует `DATABASE_URL` отдельной managed Postgr
 - отдельный migration credential при необходимости;
 - automated provider backups;
 - периодический независимый restore check;
-- `DATABASE_POOL_MAX` defaults to `1` and Next build uses one worker, keeping build and runtime within the small managed-cluster connection budget;
+- `DATABASE_POOL_MAX` defaults to `2` for the web bootstrap transaction; background job processes skip user bootstrap, and Next build uses one worker to stay within the managed-cluster connection budget;
 - production schema только через Payload migrations.
 
 Локальная команда проверки backup/restore:

@@ -33,7 +33,7 @@ describe('production environment contract', () => {
     const result = buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: strongSecret, ...bootstrap, ...s3 })
     expect(result.leadRetentionDays).toBe(365)
     expect('email' in result).toBe(false)
-    expect(result.databasePoolMax).toBe(1)
+    expect(result.databasePoolMax).toBe(2)
   })
 
   it('requires separate production bootstrap credentials', () => {

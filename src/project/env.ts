@@ -78,7 +78,7 @@ function validatePayloadSecret(value: string | undefined, environment: RuntimeEn
 
 
 function readDatabasePoolMax(value: string | undefined, environment: RuntimeEnvironment) {
-  if (!value) return environment === 'production' || environment === 'staging' ? 1 : 10
+  if (!value) return environment === 'production' || environment === 'staging' ? 2 : 10
   const maximum = Number(value)
   if (!Number.isInteger(maximum) || maximum < 1 || maximum > 20) {
     throw new Error('DATABASE_POOL_MAX must be an integer between 1 and 20')
