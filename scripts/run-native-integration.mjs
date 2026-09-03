@@ -35,20 +35,81 @@ try {
 
 const testURL = new URL(appDatabaseURL)
 testURL.pathname = `/${testDatabase}`
-const command = process.argv.includes('--migrate')
+const childEnvironment = {
+  ...process.env,
+  DATABASE_URL: testURL.toString(),
+  NODE_ENV: 'test',
+}
+if (process.argv.includes('--production-migrate')) {
+  Object.assign(childEnvironment, {
+    APP_ENV: 'production',
+    PAYLOAD_DIRECTOR_PASSWORD: 'director-secret',
+    PAYLOAD_DIRECTOR_USERNAME: 'director',
+    PAYLOAD_SECRET: 'production-migration-check-secret-32-characters',
+    PAYLOAD_SUPERADMIN_PASSWORD: 'superadmin-secret',
+    PAYLOAD_SUPERADMIN_USERNAME: 'superadmin',
+    S3_ACCESS_KEY_ID: 'migration-check',
+    S3_BUCKET: 'migration-check',
+    S3_ENDPOINT: 'https://s3.invalid',
+    S3_REGION: 'ru-1',
+    S3_SECRET_ACCESS_KEY: 'migration-check',
+  })
+}
+
+function run(command) {
+  const result = spawnSync('cmd.exe', ['/d', '/s', '/c', command], {
+    env: childEnvironment,
+    stdio: 'inherit',
+  })
+  if (result.error) throw result.error
+  if (result.status !== 0) process.exit(result.status ?? 1)
+}
+
+if (process.argv.includes('--upgrade-auth')) {
+  run('pnpm payload migrate')
+  const fixture = new pg.Client({ connectionString: testURL.toString() })
+  await fixture.connect()
+  try {
+    await fixture.query(
+      `UPDATE "payload_migrations" SET "batch" = 2
+       WHERE "name" = '20260903_050009_username_auth'`,
+    )
+  } finally {
+    await fixture.end()
+  }
+  run('pnpm payload migrate:down')
+  const existingFixture = new pg.Client({ connectionString: testURL.toString() })
+  await existingFixture.connect()
+  try {
+    await existingFixture.query(
+      `INSERT INTO "users" ("name", "email", "role", "updated_at", "created_at")
+       VALUES ('Existing super admin', 'admin@example.test', 'SUPER_ADMIN', now(), now()),
+              ('Existing director', 'director@example.test', 'DIRECTOR', now(), now())`,
+    )
+  } finally {
+    await existingFixture.end()
+  }
+  run('pnpm payload migrate')
+  const verification = new pg.Client({ connectionString: testURL.toString() })
+  await verification.connect()
+  try {
+    const result = await verification.query('SELECT "role", "username" FROM "users" ORDER BY "role"')
+    const usernames = new Map(result.rows.map((row) => [row.role, row.username]))
+    if (usernames.get('SUPER_ADMIN') !== 'superadmin' || usernames.get('DIRECTOR') !== 'director') {
+      throw new Error('Username migration did not preserve and label existing privileged users')
+    }
+  } finally {
+    await verification.end()
+  }
+  console.log(JSON.stringify({ existingUsersPreserved: 2, usernameMigration: 'PASS' }))
+  process.exit(0)
+}
+
+const command = process.argv.includes('--migrate') || process.argv.includes('--production-migrate')
   ? 'pnpm payload migrate'
   : process.argv.includes('--e2e-production')
     ? 'pnpm payload migrate && pnpm test:e2e:production'
     : process.argv.includes('--e2e')
       ? 'pnpm test:e2e'
       : 'pnpm test:int'
-const result = spawnSync('cmd.exe', ['/d', '/s', '/c', command], {
-  env: {
-    ...process.env,
-    DATABASE_URL: testURL.toString(),
-    NODE_ENV: 'test',
-  },
-  stdio: 'inherit',
-})
-if (result.error) throw result.error
-process.exit(result.status ?? 1)
+run(command)

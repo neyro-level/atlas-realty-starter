@@ -1,5 +1,5 @@
 diff --git a/dist/views/CreateFirstUser/index.client.js b/dist/views/CreateFirstUser/index.client.js
-index a89f3bf..a6b690c 100644
+index a89f3bfb407168c6e2f131035f99e7c5e6248a7b..a6b690c249e02e9e4084f709e5f684aee65b9966 100644
 --- a/dist/views/CreateFirstUser/index.client.js
 +++ b/dist/views/CreateFirstUser/index.client.js
 @@ -96,7 +96,7 @@ export const CreateFirstUserClient = ({
@@ -12,7 +12,7 @@ index a89f3bf..a6b690c 100644
        parentIndexPath: "",
        parentPath: "",
 diff --git a/dist/views/Login/LoginForm/index.js b/dist/views/Login/LoginForm/index.js
-index a2375f3..bf1d2a1 100644
+index a2375f346c6248d9aacba04dd1d958e5237a747e..500fb1f50e8837f5a14f68fedb8e3990a0da8e10 100644
 --- a/dist/views/Login/LoginForm/index.js
 +++ b/dist/views/Login/LoginForm/index.js
 @@ -40,10 +40,7 @@ export const LoginForm = t0 => {
@@ -27,8 +27,22 @@ index a2375f3..bf1d2a1 100644
      t4 = getLoginOptions(loginWithUsername);
      $[0] = getEntityConfig;
      $[1] = userSlug;
+@@ -143,13 +140,6 @@ export const LoginForm = t0 => {
+           },
+           path: "password"
+         })]
+-      }), _jsx(Link, {
+-        href: formatAdminURL({
+-          adminRoute,
+-          path: forgotRoute
+-        }),
+-        prefetch: false,
+-        children: t("authentication:forgotPasswordQuestion")
+       }), _jsx(FormSubmit, {
+         size: "large",
+         children: t("authentication:login")
 diff --git a/dist/views/Root/index.js b/dist/views/Root/index.js
-index ddfe9e6..873e017 100644
+index ddfe9e66d2347e8643f35c6255b1ff128da61abc..873e0179c700c5ec1b75e3885eff62280570ab63 100644
 --- a/dist/views/Root/index.js
 +++ b/dist/views/Root/index.js
 @@ -134,7 +134,7 @@ export const RootPage = async ({

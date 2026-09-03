@@ -21,8 +21,10 @@
 - analytics, anti-spam, import history/errors, notes и audit append-only;
 - audit hook использует transaction `req` основной mutation;
 - anti-spam/analytics identifiers хранятся как hashes, не raw IP/cookies;
-- Sentry: `sendDefaultPii: false`, Replay off, raw forms/cookies/auth headers не отправляются;
-- first-user bootstrap is serialized by a PostgreSQL transaction advisory lock; concurrent anonymous attempts cannot create two first admins;
+- Sentry remains installed but frozen/optional: no release blocker, `sendDefaultPii: false`, Replay off;
+- Admin login is username/password only; anonymous registration is denied and email recovery is intentionally unavailable;
+- startup bootstrap creates/adopts only designated SUPER_ADMIN and DIRECTOR accounts;
+- local starter may use documented `12341234`; production passwords are required from Doppler and never committed;
 - physical lead delete is denied; archive metadata is server-owned and retention anonymizes PII instead of deleting audit history;
 - external images require exact HTTPS host allowlist; video embeds accept canonical YouTube/VK URLs only;
 - uploads abort above 10 MiB, remote URL paste is disabled and SVG is excluded by explicit raster MIME types;
@@ -67,10 +69,10 @@ Manual content и media без lead/admin/import/security rights и без prope
 - [x] local restore rehearsal and provider pre-migration backups;
 - [x] exact release health, admin browser smoke and S3 media roundtrip;
 - [x] public admin blocked by Nginx before TLS; SSH tunnel required;
-- [x] production SMTP adapter is fail-closed in code;
-- [x] archived lead retention task, audit and fail-closed `LEAD_RETENTION_DAYS` contract;
-- [ ] add SMTP variables to `szrostov-server/prd` and verify password recovery delivery;
-- [ ] create Sentry project, add `SENTRY_DSN`, run `pnpm sentry:check` and confirm event in Sentry;
+- [x] email adapter and email/password registration dependency removed from current scope;
+- [x] archived lead retention fixed at 365 days with automated maintenance task;
+- [x] username-only two-account bootstrap with server-side anonymous registration denial;
+- [x] supervised `imports`/`maintenance` workers and maintenance scheduler defined in deploy contract;
+- [ ] optional Sentry project may be connected later without blocking releases;
 - [ ] approve retention periods for analytics, anti-spam and audit;
-- [ ] provision supervised `imports`/`maintenance` Jobs Queue workers and maintenance scheduler;
 - [ ] complete domain/DNS/SSL/redirect cutover as a separate RELEASE gate.

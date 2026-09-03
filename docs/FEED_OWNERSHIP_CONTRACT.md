@@ -14,6 +14,8 @@ Reusable TypeScript boundary: `src/shared/types/feed-import.ts`. Он опред
 - `admin-activities` — завершение и значимые действия;
 - статусы: `running`, `success`, `partial_success`, `failed`, `cancelled`.
 
+Jobs Queue workers do not require an XML feed to start. `imports` may remain empty until a client adapter queues normalized batches; `maintenance` and its scheduler operate independently. A test XML is useful only when it represents a real or explicitly approved feed shape—otherwise it would validate an invented parser contract.
+
 ## Ownership
 
 Импортный adapter владеет только source-controlled fields:

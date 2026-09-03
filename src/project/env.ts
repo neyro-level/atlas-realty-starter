@@ -9,14 +9,12 @@ type S3RuntimeConfig = {
   secretAccessKey: string
 }
 
-type EmailRuntimeConfig = {
-  fromAddress: string
-  fromName: string
-  host: string
+
+export type BootstrapUserCredentials = {
+  name: string
   password: string
-  port: number
-  secure: boolean
-  user: string
+  role: 'DIRECTOR' | 'SUPER_ADMIN'
+  username: string
 }
 
 type RuntimeEnvironment = 'development' | 'local' | 'production' | 'staging' | 'test'
@@ -36,11 +34,11 @@ export function buildRuntimeConfig(env: EnvironmentSource) {
   const persistentStorageRequired = !['development', 'local', 'test'].includes(environment)
 
   return {
+    bootstrapUsers: readBootstrapUsers(env, environment),
     databaseURL: requireEnvironmentValue('DATABASE_URL', env.DATABASE_URL, environment),
-    email: readEmailConfig(env, environment),
     externalImageHosts: readHostAllowlist(env.EXTERNAL_IMAGE_HOSTS),
     environment,
-    leadRetentionDays: readRetentionDays(env.LEAD_RETENTION_DAYS, environment),
+    leadRetentionDays: 365,
     payloadSecret: validatePayloadSecret(env.PAYLOAD_SECRET, environment),
     releaseSHA: env.RELEASE_SHA ?? 'local',
     s3: readS3Config(env, persistentStorageRequired),
@@ -77,28 +75,39 @@ function validatePayloadSecret(value: string | undefined, environment: RuntimeEn
   return value
 }
 
-function readEmailConfig(env: EnvironmentSource, environment: RuntimeEnvironment): EmailRuntimeConfig | null {
-  const values = [env.SMTP_HOST, env.SMTP_PORT, env.SMTP_USER, env.SMTP_PASSWORD, env.EMAIL_FROM_ADDRESS, env.EMAIL_FROM_NAME]
-  const configuredCount = values.filter(Boolean).length
-  if (configuredCount === 0) {
-    if (['production', 'staging'].includes(environment)) {
-      throw new Error(`Missing required ${environment} SMTP email configuration`)
-    }
-    return null
-  }
-  if (configuredCount !== values.length) throw new Error('SMTP email configuration is incomplete')
 
-  const port = Number(env.SMTP_PORT)
-  if (!Number.isInteger(port) || port < 1 || port > 65_535) throw new Error('SMTP_PORT must be an integer between 1 and 65535')
-  return {
-    fromAddress: env.EMAIL_FROM_ADDRESS!,
-    fromName: env.EMAIL_FROM_NAME!,
-    host: env.SMTP_HOST!,
-    password: env.SMTP_PASSWORD!,
-    port,
-    secure: env.SMTP_SECURE === 'true',
-    user: env.SMTP_USER!,
+function readBootstrapUsers(
+  env: EnvironmentSource,
+  environment: RuntimeEnvironment,
+): BootstrapUserCredentials[] | null {
+  if (environment === 'test' || env.NEXT_PHASE === 'phase-production-build') return null
+
+  const production = environment === 'production' || environment === 'staging'
+  const users: BootstrapUserCredentials[] = [
+    {
+      name: 'Суперадминистратор',
+      password: env.PAYLOAD_SUPERADMIN_PASSWORD || (production ? '' : '12341234'),
+      role: 'SUPER_ADMIN',
+      username: env.PAYLOAD_SUPERADMIN_USERNAME || (production ? '' : 'superadmin'),
+    },
+    {
+      name: 'Директор',
+      password: env.PAYLOAD_DIRECTOR_PASSWORD || (production ? '' : '12341234'),
+      role: 'DIRECTOR',
+      username: env.PAYLOAD_DIRECTOR_USERNAME || (production ? '' : 'director'),
+    },
+  ]
+
+  for (const user of users) {
+    if (!/^[a-z][a-z0-9._-]{2,63}$/i.test(user.username)) {
+      throw new Error(`Invalid or missing ${user.role} bootstrap username`)
+    }
+    if (user.password.length < 8) {
+      throw new Error(`Missing or short ${user.role} bootstrap password; at least 8 characters are required`)
+    }
   }
+  if (users[0]!.username === users[1]!.username) throw new Error('Bootstrap usernames must be different')
+  return users
 }
 
 function readHostAllowlist(value: string | undefined) {
@@ -112,20 +121,6 @@ function readHostAllowlist(value: string | undefined) {
   return [...new Set(hosts)]
 }
 
-function readRetentionDays(value: string | undefined, environment: RuntimeEnvironment) {
-  if (!value) {
-    if (['production', 'staging'].includes(environment)) {
-      throw new Error(`Missing required ${environment} environment variable: LEAD_RETENTION_DAYS`)
-    }
-    return null
-  }
-
-  const days = Number(value)
-  if (!Number.isInteger(days) || days < 30 || days > 3_650) {
-    throw new Error('LEAD_RETENTION_DAYS must be an integer between 30 and 3650')
-  }
-  return days
-}
 
 function readS3Config(env: EnvironmentSource, required: boolean): S3RuntimeConfig | null {
   const configuredValues = [env.S3_BUCKET, env.S3_ACCESS_KEY_ID, env.S3_SECRET_ACCESS_KEY, env.S3_REGION]

@@ -124,9 +124,11 @@ Canonical contract: `docs/STARTER_CONTRACT.md`. Architectural decision: `docs/ad
 ## Production extension points
 
 - managed PostgreSQL через `DATABASE_URL`;
-- production/staging fail closed without strong `PAYLOAD_SECRET`, complete S3, SMTP and `LEAD_RETENTION_DAYS`;
+- production/staging fail closed without strong `PAYLOAD_SECRET`, complete S3 and two bootstrap credential pairs;
+- lead retention is a fixed starter default of 365 days; SMTP/email recovery is outside current scope;
 - official `@payloadcms/storage-s3` is mandatory outside development/local/test;
-- Payload Jobs Queue uses separate `imports` and `maintenance` workers; scheduler and worker supervision are release prerequisites;
-- Sentry включается при наличии DSN/project credentials; controlled check is `pnpm sentry:check`;
+- Payload Jobs Queue uses supervised `imports`, `maintenance` and maintenance scheduler services;
+- workers safely idle without an XML feed; a real feed is required only for the client parser/mapping adapter;
+- Sentry code remains frozen and optional, not a release blocker;
 - `/api/health` сообщает database status и release SHA без secrets;
 - backup/restore и Payload upgrade profiles имеют отдельные повторяемые команды.

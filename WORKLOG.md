@@ -1,5 +1,14 @@
 # Worklog
 
+## 2026-09-03 — starter username auth and background runtime
+
+- Lead retention fixed at 365 days; SMTP and email recovery removed from the current starter scope.
+- Payload Admin switched to username-only login. Anonymous first-user registration is denied; controlled startup bootstrap adopts/creates SUPER_ADMIN and DIRECTOR.
+- Development starter defaults are `superadmin` / `director` with `12341234`; production credentials remain Doppler-only.
+- Sentry remains installed but frozen and optional, so it does not block release.
+- Added supervised systemd services for imports, maintenance and maintenance scheduling. They start safely without an XML feed; imports stays idle until normalized jobs exist.
+- HEAVY proof passed: strict audit/architecture/lint/typecheck, clean eleven-migration chain, non-empty username upgrade, production-config migration, integration `25/25`, development Admin e2e `3/3`, production-mode Admin e2e `3/3` and production build.
+
 ## 2026-09-02 — universal starter hardening
 
 - Starter audit now fails on client markers in every classification, uses exact Git/inventory inputs and returns `NOT_RUN` instead of scanning an arbitrary non-Git workspace.

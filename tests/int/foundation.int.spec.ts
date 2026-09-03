@@ -1,53 +1,53 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { foundationUsers, getTestPayload, resetFoundationState, seedPrivilegedUsers } from '../helpers/payload'
+import { getTestPayload, resetFoundationState, seedPrivilegedUsers } from '../helpers/payload'
 import { getLeadsWorkspace, getPropertiesWorkspace } from '@/payload/admin/lib/workspaces'
 import { importNormalizedUnitBatch } from '@/payload/import/normalized-unit-import'
+import { bootstrapAdminUsersWithCredentials } from '@/payload/bootstrap/users'
 
 describe('admin cabinet parity contracts', () => {
   beforeEach(async () => {
     await resetFoundationState()
   })
 
-  it('assigns SUPER_ADMIN to the first created user', async () => {
+  it('denies anonymous user registration even when the users table is empty', async () => {
     const payload = await getTestPayload()
-
-    const firstUser = await payload.create({
+    await expect(payload.create({
       collection: 'users',
-      data: {
-        email: foundationUsers.superAdmin.email,
-        name: foundationUsers.superAdmin.name,
-        password: foundationUsers.superAdmin.password,
-        role: 'CONTENT_MANAGER',
-      },
-      draft: false,
-      overrideAccess: true,
-    })
-
-    expect(firstUser.role).toBe('SUPER_ADMIN')
+      data: { name: 'Anonymous', password: '12341234', role: 'DIRECTOR', username: 'anonymous' },
+      overrideAccess: false,
+    })).rejects.toThrow()
+    expect((await payload.count({ collection: 'users', overrideAccess: true })).totalDocs).toBe(0)
+    await expect(payload.forgotPassword({
+      collection: 'users',
+      data: { email: 'disabled@example.test' },
+    })).rejects.toThrow()
   })
-  it('serializes concurrent first-user bootstrap attempts', async () => {
+
+  it('bootstraps exactly two username accounts idempotently', async () => {
     const payload = await getTestPayload()
-    const attempts = await Promise.allSettled([
-      payload.create({
-        collection: 'users',
-        data: { email: 'bootstrap-a@example.com', name: 'Bootstrap A', password: 'BootstrapA123!', role: 'CONTENT_MANAGER' },
-        draft: false,
-        overrideAccess: false,
-      }),
-      payload.create({
-        collection: 'users',
-        data: { email: 'bootstrap-b@example.com', name: 'Bootstrap B', password: 'BootstrapB123!', role: 'CONTENT_MANAGER' },
-        draft: false,
-        overrideAccess: false,
-      }),
+    const users = [
+      { name: 'Суперадминистратор', password: '12341234', role: 'SUPER_ADMIN' as const, username: 'superadmin' },
+      { name: 'Директор', password: '12341234', role: 'DIRECTOR' as const, username: 'director' },
+    ]
+
+    await bootstrapAdminUsersWithCredentials(payload, users)
+    await bootstrapAdminUsersWithCredentials(payload, users)
+    const stored = await payload.find({ collection: 'users', depth: 0, limit: 3, overrideAccess: true, sort: 'username' })
+    expect(stored.totalDocs).toBe(2)
+    expect(stored.docs.map((user) => [user.username, user.role])).toEqual([
+      ['director', 'DIRECTOR'],
+      ['superadmin', 'SUPER_ADMIN'],
     ])
 
-    const fulfilled = attempts.filter((attempt) => attempt.status === 'fulfilled')
-    expect(fulfilled).toHaveLength(1)
-    const users = await payload.find({ collection: 'users', depth: 0, limit: 2, overrideAccess: true })
-    expect(users.totalDocs).toBe(1)
-    expect(users.docs[0]?.role).toBe('SUPER_ADMIN')
+    const director = stored.docs.find((user) => user.role === 'DIRECTOR')
+    if (!director) throw new Error('Director bootstrap account is missing')
+    await expect(payload.update({
+      collection: 'users',
+      id: director.id,
+      data: { password: '1234567' },
+      overrideAccess: true,
+    })).rejects.toThrow(/at least 8/)
   })
 
 

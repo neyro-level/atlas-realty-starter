@@ -8,6 +8,7 @@ import * as migration_20260902_191246_import_source_key from './20260902_191246_
 import * as migration_20260902_191834_durable_unit_import from './20260902_191834_durable_unit_import';
 import * as migration_20260902_202741_chessboard_index from './20260902_202741_chessboard_index';
 import * as migration_20260902_215242_lifecycle_security from './20260902_215242_lifecycle_security';
+import * as migration_20260903_050009_username_auth from './20260903_050009_username_auth';
 
 export const migrations = [
   {
@@ -58,6 +59,11 @@ export const migrations = [
   {
     up: migration_20260902_215242_lifecycle_security.up,
     down: migration_20260902_215242_lifecycle_security.down,
-    name: '20260902_215242_lifecycle_security'
+    name: '20260902_215242_lifecycle_security',
+  },
+  {
+    up: migration_20260903_050009_username_auth.up,
+    down: migration_20260903_050009_username_auth.down,
+    name: '20260903_050009_username_auth'
   },
 ];

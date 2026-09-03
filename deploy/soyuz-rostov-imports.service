@@ -1,0 +1,28 @@
+[Unit]
+Description=SZ Rostov Payload import jobs worker
+After=network-online.target soyuz-rostov.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=soyuz-rostov
+Group=soyuz-rostov
+WorkingDirectory=/opt/soyuz-rostov/current
+Environment=NODE_ENV=production
+Environment=NEXT_TELEMETRY_DISABLED=1
+EnvironmentFile=/etc/soyuz-rostov/runtime.env
+EnvironmentFile=/etc/soyuz-rostov/release.env
+ExecStart=/usr/local/bin/pnpm payload jobs:run --cron "* * * * *" --queue imports
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+KillSignal=SIGTERM
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=full
+ReadWritePaths=/opt/soyuz-rostov
+
+[Install]
+WantedBy=multi-user.target
