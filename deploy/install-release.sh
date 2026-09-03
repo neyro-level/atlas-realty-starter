@@ -75,9 +75,12 @@ systemctl restart soyuz-rostov.service
 
 for attempt in $(seq 1 30); do
   if curl --fail --silent --show-error http://127.0.0.1:3000/api/health >/dev/null; then
-    systemctl reload nginx
-    printf 'release_ok sha=%s previous=%s\n' "${RELEASE_SHA}" "${previous_release:-none}"
-    exit 0
+    systemctl restart soyuz-rostov-imports.service soyuz-rostov-maintenance.service soyuz-rostov-maintenance-scheduler.service
+    if systemctl is-active --quiet soyuz-rostov-imports.service soyuz-rostov-maintenance.service soyuz-rostov-maintenance-scheduler.service; then
+      systemctl reload nginx
+      printf 'release_ok sha=%s previous=%s\n' "${RELEASE_SHA}" "${previous_release:-none}"
+      exit 0
+    fi
   fi
   sleep 2
 done
@@ -88,6 +91,7 @@ if [[ -n "${previous_release}" && -d "${previous_release}" ]]; then
   ln -sfn "${previous_release}" "${APP_ROOT}/current.next"
   mv -Tf "${APP_ROOT}/current.next" "${APP_ROOT}/current"
   systemctl restart soyuz-rostov.service
+  systemctl stop soyuz-rostov-imports.service soyuz-rostov-maintenance.service soyuz-rostov-maintenance-scheduler.service || true
 fi
 
 echo "Release health check failed; previous symlink restored when available." >&2

@@ -10,6 +10,7 @@ import {
 import { USER_ROLES } from '../access/roles'
 import { canAccessAdmin, isSuperAdmin } from '../access/helpers'
 import { assignUserRole } from '../hooks/assignUserRole'
+import { denyEmailAuthOperations } from '../hooks/denyEmailAuth'
 
 export const Users = {
   slug: 'users',
@@ -24,7 +25,7 @@ export const Users = {
     },
   },
   admin: {
-    defaultColumns: ['name', 'email', 'role', 'updatedAt'],
+    defaultColumns: ['name', 'username', 'role', 'updatedAt'],
     group: {
       en: 'Management',
       ru: 'Управление',
@@ -32,6 +33,11 @@ export const Users = {
     useAsTitle: 'name',
   },
   auth: {
+    loginWithUsername: {
+      allowEmailLogin: false,
+      requireEmail: false,
+      requireUsername: true,
+    },
     maxLoginAttempts: 5,
     tokenExpiration: 7200,
   },
@@ -44,6 +50,7 @@ export const Users = {
     update: canUpdateUsers,
   },
   hooks: {
+    beforeOperation: [denyEmailAuthOperations],
     beforeChange: [assignUserRole],
   },
   fields: [

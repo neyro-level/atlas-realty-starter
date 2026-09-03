@@ -4,7 +4,7 @@
 
 | Сущность | Назначение | Ключевые поля | Доступ |
 |---|---|---|---|
-| `users` | административные аккаунты Payload | `name`, `email`, `password`, `role` | полный management только `SUPER_ADMIN` |
+| `users` | административные аккаунты Payload | `name`, `username`, password hash, `role`; email optional and not used for login | anonymous create denied; full management only `SUPER_ADMIN` |
 | `media` | общий media layer | файл, `alt`, `caption`, `isPublic`, focal point | public read только при `isPublic = true` |
 | `pages` | редакционный слой статических страниц | `title`, `slug`, `content`, `seo`, `_status` | public read только published |
 | `site-settings` | пользовательский раздел `Контакты` | `companyName`, `brandName`, `phone`, `email`, `address`, `workingHours`, messenger URLs | public read, update `DIRECTOR | SUPER_ADMIN` |

@@ -50,11 +50,17 @@ if [[ -z "$(swapon --show --noheadings)" && ! -f /swapfile ]]; then
 fi
 
 install -m 0644 "${SCRIPT_DIR}/soyuz-rostov.service" /etc/systemd/system/soyuz-rostov.service
+install -m 0644 "${SCRIPT_DIR}/soyuz-rostov-imports.service" /etc/systemd/system/soyuz-rostov-imports.service
+install -m 0644 "${SCRIPT_DIR}/soyuz-rostov-maintenance.service" /etc/systemd/system/soyuz-rostov-maintenance.service
+install -m 0644 "${SCRIPT_DIR}/soyuz-rostov-maintenance-scheduler.service" /etc/systemd/system/soyuz-rostov-maintenance-scheduler.service
 install -m 0644 "${SCRIPT_DIR}/nginx-internal.conf" /etc/nginx/sites-available/soyuz-rostov.conf
 ln -sfn /etc/nginx/sites-available/soyuz-rostov.conf /etc/nginx/sites-enabled/soyuz-rostov.conf
 rm -f /etc/nginx/sites-enabled/default
 systemctl daemon-reload
 systemctl enable soyuz-rostov.service
+systemctl enable soyuz-rostov-imports.service
+systemctl enable soyuz-rostov-maintenance.service
+systemctl enable soyuz-rostov-maintenance-scheduler.service
 nginx -t
 systemctl enable --now nginx
 

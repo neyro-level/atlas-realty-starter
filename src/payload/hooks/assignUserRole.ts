@@ -1,6 +1,6 @@
 import type { CollectionBeforeChangeHook } from 'payload'
 
-import { DEFAULT_USER_ROLE, isFirstUserBootstrap, isSuperAdmin } from '../access/helpers'
+import { DEFAULT_USER_ROLE, isSuperAdmin } from '../access/helpers'
 
 export const assignUserRole: CollectionBeforeChangeHook = async ({
   data,
@@ -12,10 +12,10 @@ export const assignUserRole: CollectionBeforeChangeHook = async ({
     ...data,
   }
 
-  if (operation === 'create' && (await isFirstUserBootstrap(req))) {
-    nextData.role = 'SUPER_ADMIN'
-    return nextData
+  if (typeof nextData.password === 'string' && nextData.password.length < 8) {
+    throw new Error('Password must contain at least 8 characters')
   }
+  if (req.context.userBootstrap === true) return nextData
 
   if (!isSuperAdmin(req.user)) {
     if (operation === 'update' && originalDoc?.role) {

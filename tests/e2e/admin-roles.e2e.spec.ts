@@ -6,9 +6,9 @@ import { foundationUsers, resetFoundationState, seedPrivilegedUsers } from '../h
 const businessSections = ['Посетители', 'Заявки', 'Объекты', 'Новостройки', 'Сотрудники', 'Отзывы', 'Офисы', 'Контакты', 'Антиспам', 'XML-импорт']
 const contentManagerSections = ['Объекты', 'Новостройки', 'Сотрудники', 'Отзывы', 'Офисы', 'Контакты']
 
-async function login(page: Page, email: string, password: string) {
+async function login(page: Page, username: string, password: string) {
   await page.goto('/admin/login', { waitUntil: 'domcontentloaded' })
-  await page.fill('#field-email', email)
+  await page.fill('#field-username', username)
   await page.fill('#field-password', password)
   await page.click('button[type="submit"]')
   await expect(page).toHaveURL(/\/admin\/?$/)
@@ -21,7 +21,7 @@ test.describe.serial('Payload cabinet role navigation', () => {
   })
 
   test('DIRECTOR sees every business workspace', async ({ page }) => {
-    await login(page, foundationUsers.director.email, foundationUsers.director.password)
+    await login(page, foundationUsers.director.username, foundationUsers.director.password)
 
     for (const label of businessSections) {
       await expect(page.getByRole('link', { name: label })).toBeVisible()
@@ -29,7 +29,7 @@ test.describe.serial('Payload cabinet role navigation', () => {
   })
 
   test('CONTENT_MANAGER keeps navigation but cannot open restricted workspace', async ({ page }) => {
-    await login(page, foundationUsers.contentManager.email, foundationUsers.contentManager.password)
+    await login(page, foundationUsers.contentManager.username, foundationUsers.contentManager.password)
 
     for (const label of contentManagerSections) {
       await expect(page.getByRole('link', { name: label }).first()).toBeVisible()

@@ -1,5 +1,4 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { en } from '@payloadcms/translations/languages/en'
@@ -12,6 +11,7 @@ import sharp from 'sharp'
 import { projectConfig } from './project/config'
 import { runtimeConfig } from './project/env'
 import { AdminActivities } from './payload/collections/AdminActivities'
+import { bootstrapAdminUsers } from './payload/bootstrap/users'
 import { AnalyticsEvents } from './payload/collections/AnalyticsEvents'
 import { Buildings } from './payload/collections/Buildings'
 import { AntiSpamEvents } from './payload/collections/AntiSpamEvents'
@@ -119,21 +119,6 @@ export default buildConfig({
   }),
   editor: lexicalEditor(),
   globals: [SiteSettings],
-  email: runtimeConfig.email
-    ? nodemailerAdapter({
-        defaultFromAddress: runtimeConfig.email.fromAddress,
-        defaultFromName: runtimeConfig.email.fromName,
-        transportOptions: {
-          auth: {
-            pass: runtimeConfig.email.password,
-            user: runtimeConfig.email.user,
-          },
-          host: runtimeConfig.email.host,
-          port: runtimeConfig.email.port,
-          secure: runtimeConfig.email.secure,
-        },
-      })
-    : undefined,
   graphQL: {
     disablePlaygroundInProduction: true,
   },
@@ -151,6 +136,7 @@ export default buildConfig({
     enableConcurrencyControl: true,
     tasks: [applyLeadRetentionTask, importNormalizedUnitsTask],
   },
+  onInit: bootstrapAdminUsers,
   localization: false,
   maxDepth: 2,
   plugins: [

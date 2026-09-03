@@ -11,7 +11,8 @@ test.describe.serial('Payload admin foundation', () => {
   test('auth routes, cabinet workspaces and health work on Next 16', async ({ page }) => {
     await page.goto('/admin/login', { waitUntil: 'domcontentloaded' })
     await expect(page).toHaveURL(/\/admin\/login/)
-    await page.fill('#field-email', foundationUsers.superAdmin.email)
+    await expect(page.locator('a[href$="/forgot"]')).toHaveCount(0)
+    await page.fill('#field-username', foundationUsers.superAdmin.username)
     await page.fill('#field-password', foundationUsers.superAdmin.password)
     await page.click('button[type="submit"]')
     await expect(page).toHaveURL(/\/admin\/?$/)
@@ -26,13 +27,15 @@ test.describe.serial('Payload admin foundation', () => {
 
     await page.goto('/admin/logout', { waitUntil: 'domcontentloaded' })
     await expect(page).toHaveURL(/\/admin\/login/)
-    await expect(page.locator('#field-email')).toBeVisible()
+    await expect(page.locator('#field-username')).toBeVisible()
+    const forgotResponse = await page.request.post('/api/users/forgot-password', {
+      data: { email: 'disabled@example.test' },
+    })
+    expect([400, 403]).toContain(forgotResponse.status())
 
-    await page.goto('/admin/forgot', { waitUntil: 'domcontentloaded' })
-    await expect(page.locator('#field-email')).toBeVisible()
 
     await page.goto('/admin/login', { waitUntil: 'domcontentloaded' })
-    await page.fill('#field-email', foundationUsers.superAdmin.email)
+    await page.fill('#field-username', foundationUsers.superAdmin.username)
     await page.fill('#field-password', foundationUsers.superAdmin.password)
     await page.click('button[type="submit"]')
     await expect(page).toHaveURL(/\/admin\/?$/)

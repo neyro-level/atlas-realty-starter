@@ -75,9 +75,10 @@
 - [x] managed PostgreSQL 18 `1 vCPU / 1 GiB / 8 GiB` в private Timeweb VPC, public DB network disabled;
 - [x] private S3-compatible media bucket;
 - [x] Doppler runtime/admin secrets;
-- [ ] отдельный Sentry project, `SENTRY_DSN` and confirmed controlled event;
-- [ ] SMTP and retention variables in Doppler;
-- [ ] supervised imports/maintenance workers and maintenance scheduler;
+- [x] Sentry frozen as optional monitoring extension, not a release blocker;
+- [x] fixed 365-day lead retention; SMTP/email recovery removed from current scope;
+- [x] username-only SUPER_ADMIN/DIRECTOR bootstrap contract;
+- [x] supervised imports/maintenance workers and maintenance scheduler definitions;
 - [x] provider backup proof and local restore rehearsal;
 - [x] exact-SHA source release, systemd health and previous-good rollback.
 
@@ -91,8 +92,7 @@
 
 ## Текущие внешние prerequisites
 
-- real XML feed/specification отсутствует;
-- Sentry project/DSN отсутствует в `szrostov-server/prd`;
-- SMTP and `LEAD_RETENTION_DAYS` отсутствуют в `szrostov-server/prd`;
-- owner must approve retention periods for analytics, anti-spam and audit;
+- real XML feed/specification отсутствует, но workers запускаются и безопасно ждут jobs;
+- Sentry project/DSN отложен и не блокирует release;
+- retention periods for analytics, anti-spam and audit remain a later owner decision;
 - domain/DNS/SSL/redirect cutover не выполнен; legacy Astro production остаётся действующим.

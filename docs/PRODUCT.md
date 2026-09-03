@@ -13,11 +13,12 @@
 - редакторы и администраторы контента в Payload CMS;
 - владелец проекта и AI-исполнители, развивающие платформу.
 
-Текущие роли CMS:
+Current Payload roles remain available, but the starter creates two operational accounts:
 
-- `SUPER_ADMIN`
-- `DIRECTOR`
-- `CONTENT_MANAGER`
+- `SUPER_ADMIN` — technical owner and user management;
+- `DIRECTOR` — client account with all business workspace capabilities.
+
+Login uses username/password only. Anonymous registration, email login and email recovery are outside the current starter scope.
 
 ## Базовые продуктовые контуры
 
@@ -50,6 +51,8 @@
 - public DTO/query layer с `overrideAccess: false`;
 - catalog/detail families для ЖК и самостоятельных `properties`;
 - metadata, sitemap, robots, responsive states and empty states.
+- mass catalog `ResidentialComplex -> Building -> Unit`, durable normalized import and background jobs;
+- fixed 365-day archived-lead retention.
 
 ## Non-goals текущего этапа
 
@@ -58,5 +61,4 @@
 - выдуманные недостающие 10 ЖК, цены, отзывы или квартиры;
 - реальный XML parser/adapter под неизвестную спецификацию;
 - финальная CRM delivery и public lead ingestion;
-- `Building -> Unit` mass catalog до полного feed;
 - journal, favorites/compare и advertising leadgen migration.

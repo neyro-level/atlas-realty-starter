@@ -4,20 +4,20 @@ import config from '@/payload.config'
 
 export const foundationUsers = {
   contentManager: {
-    email: 'content.manager@example.com',
+    username: 'content-manager',
     name: 'Контент-менеджер',
     password: 'ContentManager123!',
     role: 'CONTENT_MANAGER' as const,
   },
   director: {
-    email: 'director@example.com',
+    username: 'director',
     name: 'Директор',
     password: 'Director123!',
     role: 'DIRECTOR' as const,
   },
   superAdmin: {
-    email: 'superadmin@example.com',
     name: 'Суперадмин',
+    username: 'superadmin',
     password: 'SuperAdmin123!',
     role: 'SUPER_ADMIN' as const,
   },
@@ -91,6 +91,7 @@ export async function seedPrivilegedUsers() {
     collection: 'users',
     data: foundationUsers.superAdmin,
     draft: false,
+    context: { userBootstrap: true },
     overrideAccess: true,
   })
 

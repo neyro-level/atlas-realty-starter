@@ -10,6 +10,8 @@
     "db:down": "docker compose down",
     "db:backup:check": "node scripts/verify-backup-restore.mjs",
     "db:migrate:native:check": "node scripts/run-native-integration.mjs --migrate",
+    "db:migrate:username-upgrade-check": "node scripts/run-native-integration.mjs --upgrade-auth",
+    "db:migrate:production-check": "node scripts/run-native-integration.mjs --production-migrate",
     "db:up": "docker compose up -d postgres",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
@@ -40,7 +42,6 @@
   "dependencies": {
     "@fontsource/manrope": "^5.3.0",
     "@payloadcms/db-postgres": "3.88.0",
-    "@payloadcms/email-nodemailer": "3.88.0",
     "@payloadcms/next": "3.88.0",
     "@payloadcms/richtext-lexical": "3.88.0",
     "@payloadcms/storage-s3": "3.88.0",

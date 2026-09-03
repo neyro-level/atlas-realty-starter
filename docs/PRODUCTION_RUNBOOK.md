@@ -37,7 +37,11 @@ Server public IPv4/IPv6 сохраняется: он нужен для Nginx/web
 - `S3_SECRET_ACCESS_KEY`
 - `S3_ENDPOINT`
 - `S3_FORCE_PATH_STYLE`
-- optional Sentry variables после создания отдельного project.
+- `PAYLOAD_SUPERADMIN_USERNAME`
+- `PAYLOAD_SUPERADMIN_PASSWORD`
+- `PAYLOAD_DIRECTOR_USERNAME`
+- `PAYLOAD_DIRECTOR_PASSWORD`
+- optional Sentry variables only after a later monitoring decision.
 
 Значения не выводятся в Git, документы, логи или чат.
 
@@ -48,7 +52,7 @@ Server public IPv4/IPv6 сохраняется: он нужен для Nginx/web
 1. Передать canonical `deploy/` из merged `main` на сервер.
 2. Запустить `deploy/bootstrap-server.sh` от root.
 3. Записать runtime environment из Doppler в `/etc/soyuz-rostov/runtime.env`, mode `0640`, group `soyuz-rostov`.
-4. Проверить `node --version`, `pnpm --version`, `nginx -t`, `systemctl is-enabled soyuz-rostov`.
+4. Проверить Node, pnpm, Nginx и четыре enabled services: web, imports, maintenance, maintenance scheduler.
 
 Bootstrap не отключает существующий root SSH path. При отсутствии swap создаётся `/swapfile` 4 GiB для воспроизводимой server-side сборки на текущем 2 GiB server.
 
@@ -87,8 +91,8 @@ Installer:
 4. применяет additive/compatible `payload migrate`;
 5. выполняет production build уже против актуальной schema;
 6. атомарно переключает `current`;
-7. перезапускает systemd service;
-8. проверяет `/api/health`;
+7. перезапускает web, imports, maintenance и scheduler services;
+8. проверяет `/api/health` и active state всех workers;
 9. возвращает symlink на previous release при runtime failure.
 
 Payload migrations могут быть forward-only. Symlink rollback не откатывает data schema; для несовместимой migration требуется provider restore/forward-fix решение.
@@ -103,6 +107,9 @@ Payload migrations могут быть forward-only. Symlink rollback не от�
 - public frontend shell отвечает;
 - public `/admin` возвращает `403` до TLS;
 - Admin через SSH tunnel: login, dashboard, collection routes, logout;
+- username login для `SUPER_ADMIN` и `DIRECTOR`, отсутствие anonymous create-first-user;
+- `soyuz-rostov-imports`, `soyuz-rostov-maintenance`, `soyuz-rostov-maintenance-scheduler` active;
+- imports worker без feed остаётся пустым и готовым: это нормальное состояние, не ошибка;
 - S3 write/read через Payload Media после появления первого controlled media fixture.
 
 ## Rollback
