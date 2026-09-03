@@ -35,6 +35,7 @@ export function buildRuntimeConfig(env: EnvironmentSource) {
 
   return {
     bootstrapUsers: readBootstrapUsers(env, environment),
+    databasePoolMax: readDatabasePoolMax(env.DATABASE_POOL_MAX, environment),
     databaseURL: requireEnvironmentValue('DATABASE_URL', env.DATABASE_URL, environment),
     externalImageHosts: readHostAllowlist(env.EXTERNAL_IMAGE_HOSTS),
     environment,
@@ -75,6 +76,15 @@ function validatePayloadSecret(value: string | undefined, environment: RuntimeEn
   return value
 }
 
+
+function readDatabasePoolMax(value: string | undefined, environment: RuntimeEnvironment) {
+  if (!value) return environment === 'production' || environment === 'staging' ? 1 : 10
+  const maximum = Number(value)
+  if (!Number.isInteger(maximum) || maximum < 1 || maximum > 20) {
+    throw new Error('DATABASE_POOL_MAX must be an integer between 1 and 20')
+  }
+  return maximum
+}
 
 function readBootstrapUsers(
   env: EnvironmentSource,
