@@ -1,5 +1,18 @@
 # Worklog
 
+## 2026-09-02 — universal starter hardening
+
+- Starter audit now fails on client markers in every classification, uses exact Git/inventory inputs and returns `NOT_RUN` instead of scanning an arbitrary non-Git workspace.
+- Production/staging startup is fail-closed for strong Payload secret, complete S3, SMTP and bounded lead retention configuration.
+- Dependency Cruiser enforces UI/shared/server/module/test boundaries and cycles; two Payload 3.88 compatibility patches are registered with removal gates.
+- Added Building/Unit mass catalog, compound source identity, migrations, Payload Jobs Queue importer, retry-safe accounting and successful-full-snapshot deactivation.
+- Deterministic 50 000 Unit proof completed: 100 batches, 8.5 MiB peak heap growth, compound-index query plan, latest sampled query 6.468 ms.
+- Added paged sitemaps, persisted dynamic timestamps, capability-scoped audit, non-destructive lead archive/retention, media/video allowlists, 10 MiB raster-only uploads and bounded Zod filters.
+- First-user bootstrap now serializes through a PostgreSQL transaction lock; production SMTP adapter and controlled Sentry check command are wired.
+- HEAVY proof passed: strict starter audit, Dependency Cruiser, generated artifacts, lint/typecheck, production build, clean ten-migration chain, native integration `25/25`, development Admin e2e `3/3` and production-mode Admin e2e `3/3`.
+- External blockers remain explicit: `SENTRY_DSN`, SMTP/retention Doppler values, non-lead retention decisions, supervised workers and approved real XML feed.
+- Production, domain and production data were not changed.
+
 ## 2026-09-02 — owner correction: Union is the current starter
 
 - Владелец уточнил product boundary: текущий `soyuz-rostov-next` является canonical starter-under-development; Union branding/content пока допустимы как рабочий preset.

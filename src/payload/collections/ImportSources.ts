@@ -44,6 +44,17 @@ export const ImportSources = {
       required: true,
     },
     {
+      name: 'key',
+      type: 'text',
+      index: true,
+      label: {
+        en: 'Stable key',
+        ru: 'Стабильный ключ',
+      },
+      required: true,
+      unique: true,
+    },
+    {
       name: 'endpointHint',
       type: 'text',
       label: {

@@ -48,6 +48,16 @@
 
 System writes передают явный `context.systemWrite` там, где hook защищает ownership fields. Audit create передаёт тот же `req`, чтобы сохранить transaction context.
 
+## Jobs and mass import
+
+- registered tasks: `importNormalizedUnits`, `applyLeadRetention`;
+- queue input is normalized data, never guessed XML;
+- Unit batches contain at most 1 000 records and use `(source, externalId)` upsert;
+- per-source concurrency key prevents overlapping imports;
+- batch keys make accounting retry-safe;
+- full-snapshot deactivation runs only when completed batches equal expected batches;
+- dedicated production runners: `imports`, `maintenance`; maintenance schedules are handled separately.
+
 ## Admin customization
 - navigation remains stable for all admin roles; server capability guard determines actual access.
 - fixed business nav через `admin.components.Nav`;
@@ -77,11 +87,11 @@ System writes передают явный `context.systemWrite` там, где h
 
 ## Storage
 
-- local development без S3 использует `media/`;
-- production использует официальный `@payloadcms/storage-s3`;
-- storage plugin всегда вставляет schema fields через `alwaysInsertFields`, даже когда local S3 adapter disabled; environment-dependent schema запрещена;
-- partial S3 configuration блокирует startup;
-- production release без S3 запрещён project release gate.
+- local development без S3 uses `media/`; production/staging startup without complete S3 fails;
+- official `@payloadcms/storage-s3` always inserts schema fields through `alwaysInsertFields`;
+- uploads are capped at 10 MiB, raster MIME types only, SVG and remote URL paste disabled;
+- external image URLs require exact HTTPS hosts from `EXTERNAL_IMAGE_HOSTS`;
+- video fields validate canonical YouTube/VK embed sources.
 
 ## Generated artifacts
 
@@ -96,6 +106,15 @@ System writes передают явный `context.systemWrite` там, где h
 - legacy SiteSettings fields сохраняются hidden до отдельной approved data migration;
 - применённые production migrations не переписываются;
 - production schema changes только `payload migrate`.
+
+## Compatibility patch registry
+
+| Patch | Reason | Upstream | Regression proof | Removal condition |
+|---|---|---|---|---|
+| `patches/payload@3.88.0.patch` | unauthenticated client config lost full Admin/auth collection config and broke auth screens | no exact upstream issue confirmed; related unauthenticated Admin reports are tracked in Payload issues | `/admin/login`, `/admin/logout`, `/admin/forgot`, create-first-user and dashboard smoke | remove only after a synchronized Payload upgrade contains equivalent config preservation and all Admin smoke passes without patch |
+| `patches/payloadcms-next@3.88.0.patch` | auth/Root views dereferenced absent collection config or anonymous user during Admin bootstrap/login | related upstream issue `payloadcms/payload#7330`; exact 3.88 fix not confirmed | same Admin auth/bootstrap smoke plus role integration | remove only after upstream package guards all three call sites and patched/unpatched upgrade comparison passes |
+
+Patch files are version-pinned in `pnpm-workspace.yaml`; every `@payloadcms/*` package remains exactly `3.88.0`.
 
 ## Verification
 

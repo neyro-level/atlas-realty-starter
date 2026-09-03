@@ -35,6 +35,8 @@ export async function resetFoundationState() {
     'anti-spam-events',
     'import-errors',
     'import-runs',
+    'units',
+    'buildings',
     'reviews',
     'lead-notes',
     'leads',

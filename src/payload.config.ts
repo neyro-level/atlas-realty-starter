@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { en } from '@payloadcms/translations/languages/en'
@@ -12,6 +13,7 @@ import { projectConfig } from './project/config'
 import { runtimeConfig } from './project/env'
 import { AdminActivities } from './payload/collections/AdminActivities'
 import { AnalyticsEvents } from './payload/collections/AnalyticsEvents'
+import { Buildings } from './payload/collections/Buildings'
 import { AntiSpamEvents } from './payload/collections/AntiSpamEvents'
 import { Employees } from './payload/collections/Employees'
 import { ImportErrors } from './payload/collections/ImportErrors'
@@ -25,8 +27,11 @@ import { Pages } from './payload/collections/Pages'
 import { Properties } from './payload/collections/Properties'
 import { ResidentialComplexes } from './payload/collections/ResidentialComplexes'
 import { Reviews } from './payload/collections/Reviews'
+import { Units } from './payload/collections/Units'
 import { Users } from './payload/collections/Users'
 import { SiteSettings } from './payload/globals/SiteSettings'
+import { applyLeadRetentionTask } from './payload/jobs/apply-lead-retention'
+import { importNormalizedUnitsTask } from './payload/jobs/import-normalized-units'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -94,6 +99,8 @@ export default buildConfig({
     LeadNotes,
     Properties,
     ResidentialComplexes,
+    Buildings,
+    Units,
     Employees,
     Reviews,
     Offices,
@@ -112,6 +119,21 @@ export default buildConfig({
   }),
   editor: lexicalEditor(),
   globals: [SiteSettings],
+  email: runtimeConfig.email
+    ? nodemailerAdapter({
+        defaultFromAddress: runtimeConfig.email.fromAddress,
+        defaultFromName: runtimeConfig.email.fromName,
+        transportOptions: {
+          auth: {
+            pass: runtimeConfig.email.password,
+            user: runtimeConfig.email.user,
+          },
+          host: runtimeConfig.email.host,
+          port: runtimeConfig.email.port,
+          secure: runtimeConfig.email.secure,
+        },
+      })
+    : undefined,
   graphQL: {
     disablePlaygroundInProduction: true,
   },
@@ -126,6 +148,8 @@ export default buildConfig({
     access: {
       run: () => false,
     },
+    enableConcurrencyControl: true,
+    tasks: [applyLeadRetentionTask, importNormalizedUnitsTask],
   },
   localization: false,
   maxDepth: 2,
@@ -155,6 +179,13 @@ export default buildConfig({
     }),
   ],
   secret: runtimeConfig.payloadSecret,
+  upload: {
+    abortOnLimit: true,
+    limits: {
+      fileSize: 10 * 1024 * 1024,
+    },
+    responseOnLimit: 'Upload exceeds the 10 MB limit.',
+  },
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

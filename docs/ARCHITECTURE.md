@@ -26,7 +26,10 @@ flowchart LR
     queries --> payload
     payload --> db["PostgreSQL 18"]
     payload --> media["Payload Media + S3 adapter"]
-    payload -. later .-> xml["Concrete XML adapter"]
+    payload --> jobs["Payload Jobs Queue workers"]
+    jobs --> db
+    jobs --> normalized["Normalized Unit batches"]
+    payload -. approved specification .-> xml["Client XML adapter"]
     payload -. later .-> crm["Lead delivery"]
     runtime["Next instrumentation"] --> sentry["Sentry"]
 ```
@@ -66,6 +69,8 @@ Prisma, Better Auth, второй ORM, repository layer и отдельный ad
 - `src/project/**` — единственный client-specific layer: identity, routes, navigation, theme, content, SEO, media и feed declarations;
 - `src/payload/public/**` — public Payload adapters: raw documents → serializable UI DTO;
 - `starter.manifest.json` — machine-readable ownership/classification boundary для deterministic export;
+- `src/payload/import`, `src/payload/jobs`, `src/payload/retention` — bounded batch import, durable jobs and controlled lead retention;
+- `src/payload/public/sitemap.ts`, `chessboard.ts` — paged sitemap and indexed mass-catalog read models;
 - `scripts/verify-backup-restore.mjs` — local restore proof.
 
 ## Starter-ready boundary
@@ -109,16 +114,19 @@ Canonical contract: `docs/STARTER_CONTRACT.md`. Architectural decision: `docs/ad
 
 ## Catalog boundary
 
-- `residential-complexes` — самостоятельный public/admin module для первых 30 ЖК;
-- `properties` — самостоятельные объявления, вторичка, дома, участки и коммерция;
-- future mass feed extension — `ResidentialComplex -> Building -> Unit`;
-- committed UI layer contains no foreign client or Astro catalog fixtures; runtime source truth is Payload;
-- feed ownership и idempotency зафиксированы отдельно.
+- `residential-complexes -> buildings -> units` — mass catalog with source ownership and compound `(source, externalId)` identity;
+- `properties` — самостоятельные объявления, вторичка, дома, участки и коммерция; source-owned records use the same identity/last-seen contract;
+- normalized Unit import runs in Payload Jobs Queue, batches at most 1,000 records, serializes per source and accounts every batch;
+- unchanged records only refresh source-seen metadata; missing records deactivate only after every batch of a successful full snapshot;
+- chessboard reads minimal columns through the compound building/availability/active/floor index;
+- external XML parsing remains client-owned until an approved real feed fixture exists.
 
 ## Production extension points
 
 - managed PostgreSQL через `DATABASE_URL`;
-- official `@payloadcms/storage-s3` включается при полном наборе S3 variables;
-- Sentry включается при наличии DSN/project credentials;
+- production/staging fail closed without strong `PAYLOAD_SECRET`, complete S3, SMTP and `LEAD_RETENTION_DAYS`;
+- official `@payloadcms/storage-s3` is mandatory outside development/local/test;
+- Payload Jobs Queue uses separate `imports` and `maintenance` workers; scheduler and worker supervision are release prerequisites;
+- Sentry включается при наличии DSN/project credentials; controlled check is `pnpm sentry:check`;
 - `/api/health` сообщает database status и release SHA без secrets;
 - backup/restore и Payload upgrade profiles имеют отдельные повторяемые команды.

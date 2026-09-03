@@ -11,6 +11,7 @@ import {
   PROPERTY_STATUSES,
 } from '../admin/lib/constants'
 import { protectPropertyMutation, recordPropertyActivity } from '../hooks/business'
+import { validateSafeVideoURL } from '@/shared/security/media-url'
 
 export const Properties = {
   slug: 'properties',
@@ -30,6 +31,7 @@ export const Properties = {
     listSearchableFields: ['title', 'objectCode', 'publicSlug', 'addressLine'],
     useAsTitle: 'title',
   },
+  indexes: [{ fields: ['feedSource', 'externalId'], unique: true }],
   fields: [
     { name: 'title', type: 'text', label: { en: 'Title', ru: 'Название' }, required: true },
     { name: 'objectCode', type: 'text', index: true, admin: { position: 'sidebar' }, label: { en: 'Object code', ru: 'Код объекта' } },
@@ -93,6 +95,34 @@ export const Properties = {
       access: { create: superAdminFieldAccess(), update: superAdminFieldAccess() },
       label: { en: 'Feed source', ru: 'Источник импорта' },
       relationTo: 'import-sources',
+    },
+    {
+      name: 'sourceKey',
+      type: 'text',
+      access: { create: superAdminFieldAccess(), update: superAdminFieldAccess() },
+      index: true,
+      label: { en: 'Source key', ru: 'Ключ источника' },
+    },
+    {
+      name: 'importHash',
+      type: 'text',
+      access: { create: superAdminFieldAccess(), update: superAdminFieldAccess() },
+      label: { en: 'Import hash', ru: 'Хэш записи' },
+    },
+    {
+      name: 'lastSeenAt',
+      type: 'date',
+      access: { create: superAdminFieldAccess(), update: superAdminFieldAccess() },
+      index: true,
+      label: { en: 'Last seen at', ru: 'Последнее появление' },
+    },
+    {
+      name: 'isSourceActive',
+      type: 'checkbox',
+      access: { create: superAdminFieldAccess(), update: superAdminFieldAccess() },
+      defaultValue: true,
+      index: true,
+      label: { en: 'Active in source', ru: 'Активен в источнике' },
     },
     { name: 'price', type: 'number', index: true, label: { en: 'Price', ru: 'Цена' }, min: 0 },
     {
@@ -188,7 +218,7 @@ export const Properties = {
     },
     { name: 'publicSlug', type: 'text', index: true, label: { en: 'Public slug', ru: 'Публичный slug' }, unique: true },
     { name: 'description', type: 'textarea', label: { en: 'Description', ru: 'Описание' } },
-    { name: 'videoUrl', type: 'text', label: { en: 'Video URL', ru: 'Видео' } },
+    { name: 'videoUrl', type: 'text', label: { en: 'Video URL', ru: 'Видео' }, validate: validateSafeVideoURL },
     {
       name: 'gallery',
       type: 'array',

@@ -22,7 +22,25 @@ export const ImportRuns = {
     useAsTitle: 'status',
   },
   fields: [
-    { name: 'source', type: 'relationship', label: { en: 'Source', ru: 'Источник' }, relationTo: 'import-sources' },
+    { name: 'correlationId', type: 'text', index: true, label: { en: 'Correlation ID', ru: 'Correlation ID' }, required: true, unique: true },
+    {
+      name: 'mode',
+      type: 'select',
+      label: { en: 'Mode', ru: 'Режим' },
+      options: [
+        { label: 'Delta', value: 'delta' },
+        { label: 'Full snapshot', value: 'full_snapshot' },
+      ],
+      required: true,
+    },
+    {
+      name: 'target',
+      type: 'select',
+      label: { en: 'Target', ru: 'Целевая сущность' },
+      options: [{ label: 'Units', value: 'units' }],
+      required: true,
+    },
+    { name: 'source', type: 'relationship', index: true, label: { en: 'Source', ru: 'Источник' }, relationTo: 'import-sources', required: true },
     {
       name: 'status',
       type: 'select',
@@ -61,6 +79,20 @@ export const ImportRuns = {
         { name: 'failedCount', type: 'number', defaultValue: 0, label: { en: 'Failed', ru: 'Ошибки' }, min: 0 },
         { name: 'unchangedCount', type: 'number', defaultValue: 0, label: { en: 'Unchanged', ru: 'Без изменений' }, min: 0 },
       ],
+    },
+    {
+      type: 'row',
+      fields: [
+        { name: 'expectedBatchCount', type: 'number', defaultValue: 0, label: { en: 'Expected batches', ru: 'Ожидается пакетов' }, min: 0 },
+        { name: 'completedBatchCount', type: 'number', defaultValue: 0, label: { en: 'Completed batches', ru: 'Завершено пакетов' }, min: 0 },
+        { name: 'deactivatedCount', type: 'number', defaultValue: 0, label: { en: 'Deactivated', ru: 'Деактивировано' }, min: 0 },
+      ],
+    },
+    {
+      name: 'processedBatchKeys',
+      type: 'json',
+      admin: { hidden: true },
+      label: { en: 'Processed batch keys', ru: 'Обработанные пакеты' },
     },
     { name: 'summary', type: 'textarea', label: { en: 'Summary', ru: 'Сводка' } },
     { name: 'diagnostics', type: 'json', label: { en: 'Diagnostics', ru: 'Диагностика' } },

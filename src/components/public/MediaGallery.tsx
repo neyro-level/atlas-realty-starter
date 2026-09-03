@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight, Image as ImageIcon, MapPinned, Play, X } from 'lucide-react'
 import Image from 'next/image'
 import { useMemo, useRef, useState, type TouchEvent } from 'react'
+import { toSafeVideoEmbedURL } from '@/shared/security/media-url'
 
 export type GalleryImage = { alt: string; src: string }
 type Tab = 'photos' | 'video' | 'map'
@@ -18,7 +19,7 @@ export function MediaGallery({ address, images, latitude, longitude, name, video
   const next = () => setIndex((value) => (value + 1) % unique.length)
   const onTouchStart = (event: TouchEvent) => { const point = event.touches[0]; if (point) touch.current = { x: point.clientX, y: point.clientY } }
   const onTouchEnd = (event: TouchEvent) => { const start = touch.current; const point = event.changedTouches[0]; touch.current = null; if (!start || !point) return; const dx = point.clientX - start.x; const dy = point.clientY - start.y; if (Math.abs(dx) < 42 || Math.abs(dx) <= Math.abs(dy)) return; if (dx < 0) next(); else previous() }
-  const videoEmbed = safeVideoEmbed(videoUrl)
+  const videoEmbed = toSafeVideoEmbedURL(videoUrl)
   const mapHref = latitude !== undefined && longitude !== undefined ? `https://yandex.ru/maps/?pt=${longitude},${latitude}&z=16&l=map` : `https://yandex.ru/maps/?text=${encodeURIComponent(`${name}, ${address}`)}`
   const mapEmbed = latitude !== undefined && longitude !== undefined ? `https://yandex.ru/map-widget/v1/?ll=${longitude}%2C${latitude}&z=16&pt=${longitude}%2C${latitude}%2Cpm2rdm` : `https://yandex.ru/map-widget/v1/?text=${encodeURIComponent(`${name}, ${address}`)}&z=16`
 
@@ -41,4 +42,3 @@ export function MediaGallery({ address, images, latitude, longitude, name, video
 
 function TabButton({ active, icon: Icon, label, onClick }: { active: boolean; icon: typeof ImageIcon; label: string; onClick: () => void }) { return <button aria-selected={active} className={`inline-flex min-h-[36px] items-center justify-center gap-1.5 rounded-[12px] border px-2 text-[11px] font-semibold transition md:min-h-[38px] ${active ? 'border-[#8A1515] bg-[#8A1515] text-white' : 'border-[#E3E3E1] bg-[#FAFAFA] text-[#413F41] hover:border-[#8A1515] hover:bg-[#F7F2F2] hover:text-[#8A1515]'}`} onClick={onClick} role="tab" type="button"><Icon className="size-[13px] md:size-[14px]" />{label}</button> }
 function GalleryPlaceholder({ text }: { text: string }) { return <div className="flex h-full flex-col items-center justify-center text-[#827f81]"><ImageIcon className="size-10" /><p className="mt-4 text-sm font-semibold">{text}</p></div> }
-function safeVideoEmbed(value?: string) { if (!value) return null; try { const url = new URL(value); if (url.hostname.endsWith('youtube.com') && url.searchParams.get('v')) return `https://www.youtube.com/embed/${url.searchParams.get('v')}`; if (url.hostname === 'youtu.be') return `https://www.youtube.com/embed/${url.pathname.slice(1)}`; if (url.hostname.endsWith('vk.com') && url.pathname.includes('video_ext.php')) return url.toString(); return null } catch { return null } }

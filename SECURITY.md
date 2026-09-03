@@ -22,6 +22,11 @@
 - audit hook использует transaction `req` основной mutation;
 - anti-spam/analytics identifiers хранятся как hashes, не raw IP/cookies;
 - Sentry: `sendDefaultPii: false`, Replay off, raw forms/cookies/auth headers не отправляются;
+- first-user bootstrap is serialized by a PostgreSQL transaction advisory lock; concurrent anonymous attempts cannot create two first admins;
+- physical lead delete is denied; archive metadata is server-owned and retention anonymizes PII instead of deleting audit history;
+- external images require exact HTTPS host allowlist; video embeds accept canonical YouTube/VK URLs only;
+- uploads abort above 10 MiB, remote URL paste is disabled and SVG is excluded by explicit raster MIME types;
+- public catalog query parameters are bounded and normalized by Zod before database predicates;
 - production migrations требуют backup, restore proof и rollback/forward-fix plan.
 
 ## Роли
@@ -62,7 +67,10 @@ Manual content и media без lead/admin/import/security rights и без prope
 - [x] local restore rehearsal and provider pre-migration backups;
 - [x] exact release health, admin browser smoke and S3 media roundtrip;
 - [x] public admin blocked by Nginx before TLS; SSH tunnel required;
-- [ ] create Sentry project and confirm a controlled test event;
-- [ ] configure production email adapter before public password recovery;
-- [ ] confirm retention for analytics, anti-spam, leads and audit;
+- [x] production SMTP adapter is fail-closed in code;
+- [x] archived lead retention task, audit and fail-closed `LEAD_RETENTION_DAYS` contract;
+- [ ] add SMTP variables to `szrostov-server/prd` and verify password recovery delivery;
+- [ ] create Sentry project, add `SENTRY_DSN`, run `pnpm sentry:check` and confirm event in Sentry;
+- [ ] approve retention periods for analytics, anti-spam and audit;
+- [ ] provision supervised `imports`/`maintenance` Jobs Queue workers and maintenance scheduler;
 - [ ] complete domain/DNS/SSL/redirect cutover as a separate RELEASE gate.

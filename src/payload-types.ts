@@ -74,6 +74,8 @@ export interface Config {
     'lead-notes': LeadNote;
     properties: Property;
     'residential-complexes': ResidentialComplex;
+    buildings: Building;
+    units: Unit;
     employees: Employee;
     reviews: Review;
     offices: Office;
@@ -84,6 +86,7 @@ export interface Config {
     'import-errors': ImportError;
     'admin-activities': AdminActivity;
     'payload-kv': PayloadKv;
+    'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -124,6 +127,8 @@ export interface Config {
     'lead-notes': LeadNotesSelect<false> | LeadNotesSelect<true>;
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
     'residential-complexes': ResidentialComplexesSelect<false> | ResidentialComplexesSelect<true>;
+    buildings: BuildingsSelect<false> | BuildingsSelect<true>;
+    units: UnitsSelect<false> | UnitsSelect<true>;
     employees: EmployeesSelect<false> | EmployeesSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     offices: OfficesSelect<false> | OfficesSelect<true>;
@@ -134,6 +139,7 @@ export interface Config {
     'import-errors': ImportErrorsSelect<false> | ImportErrorsSelect<true>;
     'admin-activities': AdminActivitiesSelect<false> | AdminActivitiesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
+    'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -144,9 +150,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'site-settings': SiteSetting;
+    'payload-jobs-stats': PayloadJobsStat;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'payload-jobs-stats': PayloadJobsStatsSelect<false> | PayloadJobsStatsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -154,7 +162,14 @@ export interface Config {
   };
   user: User;
   jobs: {
-    tasks: unknown;
+    tasks: {
+      applyLeadRetention: TaskApplyLeadRetention;
+      importNormalizedUnits: TaskImportNormalizedUnits;
+      inline: {
+        input: unknown;
+        output: unknown;
+      };
+    };
     workflows: unknown;
   };
 }
@@ -275,6 +290,10 @@ export interface Lead {
     | 'successful'
     | 'unsuccessful'
     | 'spam_duplicate';
+  isArchived?: boolean | null;
+  archivedAt?: string | null;
+  archivedBy?: (number | null) | User;
+  personalDataPurgedAt?: string | null;
   responsibleEmployee?: (number | null) | Employee;
   direction?: ('new_building' | 'construction' | 'flat' | 'house' | 'land' | 'commercial' | 'other') | null;
   formType?: string | null;
@@ -361,6 +380,10 @@ export interface Property {
   category: 'flat' | 'room' | 'house' | 'land' | 'commercial';
   responsibleEmployee?: (number | null) | Employee;
   feedSource?: (number | null) | ImportSource;
+  sourceKey?: string | null;
+  importHash?: string | null;
+  lastSeenAt?: string | null;
+  isSourceActive?: boolean | null;
   price?: number | null;
   dealType?: ('sale' | 'rent') | null;
   commercialType?: ('office' | 'retail' | 'warehouse' | 'business' | 'free_purpose') | null;
@@ -411,6 +434,7 @@ export interface Property {
 export interface ImportSource {
   id: number;
   title: string;
+  key: string;
   endpointHint?: string | null;
   isActive?: boolean | null;
   adapterConfigured?: boolean | null;
@@ -426,6 +450,9 @@ export interface AdminActivity {
   event:
     | 'LEAD_CREATED'
     | 'LEAD_STAGE_CHANGED'
+    | 'LEAD_ARCHIVED'
+    | 'LEAD_RESTORED'
+    | 'LEAD_RETENTION_APPLIED'
     | 'LEAD_NOTE_ADDED'
     | 'PROPERTY_CREATED'
     | 'PROPERTY_UPDATED'
@@ -584,7 +611,10 @@ export interface Office {
  */
 export interface ImportRun {
   id: number;
-  source?: (number | null) | ImportSource;
+  correlationId: string;
+  mode: 'delta' | 'full_snapshot';
+  target: 'units';
+  source: number | ImportSource;
   status: 'running' | 'success' | 'partial_success' | 'failed' | 'cancelled';
   startedAt: string;
   finishedAt?: string | null;
@@ -594,6 +624,18 @@ export interface ImportRun {
   skippedCount?: number | null;
   failedCount?: number | null;
   unchangedCount?: number | null;
+  expectedBatchCount?: number | null;
+  completedBatchCount?: number | null;
+  deactivatedCount?: number | null;
+  processedBatchKeys?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   summary?: string | null;
   diagnostics?:
     | {
@@ -662,6 +704,57 @@ export interface AntiSpamEvent {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "buildings".
+ */
+export interface Building {
+  id: number;
+  title: string;
+  residentialComplex: number | ResidentialComplex;
+  address?: string | null;
+  completionLabel?: string | null;
+  sortOrder?: number | null;
+  isPublished?: boolean | null;
+  source: number | ImportSource;
+  externalId: string;
+  sourceKey: string;
+  importHash: string;
+  lastSeenAt: string;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "units".
+ */
+export interface Unit {
+  id: number;
+  number: string;
+  building: number | Building;
+  residentialComplex: number | ResidentialComplex;
+  section?: string | null;
+  floor: number;
+  rooms: number;
+  isStudio?: boolean | null;
+  totalArea: number;
+  livingArea?: number | null;
+  kitchenArea?: number | null;
+  price: number;
+  pricePerSquareMeter?: number | null;
+  availability: 'available' | 'reserved' | 'sold' | 'hidden';
+  isPublished?: boolean | null;
+  layout?: (number | null) | Media;
+  source: number | ImportSource;
+  externalId: string;
+  sourceKey: string;
+  importHash: string;
+  lastSeenAt: string;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "analytics-events".
  */
 export interface AnalyticsEvent {
@@ -697,6 +790,111 @@ export interface PayloadKv {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs".
+ */
+export interface PayloadJob {
+  id: number;
+  /**
+   * Input data provided to the job
+   */
+  input?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  taskStatus?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  completedAt?: string | null;
+  totalTried?: number | null;
+  /**
+   * If hasError is true this job will not be retried
+   */
+  hasError?: boolean | null;
+  /**
+   * If hasError is true, this is the error that caused it
+   */
+  error?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Task execution log
+   */
+  log?:
+    | {
+        executedAt: string;
+        completedAt: string;
+        taskSlug: 'inline' | 'applyLeadRetention' | 'importNormalizedUnits';
+        taskID: string;
+        input?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        output?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        state: 'failed' | 'succeeded';
+        error?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  taskSlug?: ('inline' | 'applyLeadRetention' | 'importNormalizedUnits') | null;
+  queue?: string | null;
+  waitUntil?: string | null;
+  processing?: boolean | null;
+  /**
+   * Used for concurrency control. Jobs with the same key are subject to exclusive/supersedes rules.
+   */
+  concurrencyKey?: string | null;
+  meta?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -729,6 +927,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'residential-complexes';
         value: number | ResidentialComplex;
+      } | null)
+    | ({
+        relationTo: 'buildings';
+        value: number | Building;
+      } | null)
+    | ({
+        relationTo: 'units';
+        value: number | Unit;
       } | null)
     | ({
         relationTo: 'employees';
@@ -880,6 +1086,10 @@ export interface LeadsSelect<T extends boolean = true> {
   phone?: T;
   email?: T;
   status?: T;
+  isArchived?: T;
+  archivedAt?: T;
+  archivedBy?: T;
+  personalDataPurgedAt?: T;
   responsibleEmployee?: T;
   direction?: T;
   formType?: T;
@@ -929,6 +1139,10 @@ export interface PropertiesSelect<T extends boolean = true> {
   category?: T;
   responsibleEmployee?: T;
   feedSource?: T;
+  sourceKey?: T;
+  importHash?: T;
+  lastSeenAt?: T;
+  isSourceActive?: T;
   price?: T;
   dealType?: T;
   commercialType?: T;
@@ -1033,6 +1247,55 @@ export interface ResidentialComplexesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "buildings_select".
+ */
+export interface BuildingsSelect<T extends boolean = true> {
+  title?: T;
+  residentialComplex?: T;
+  address?: T;
+  completionLabel?: T;
+  sortOrder?: T;
+  isPublished?: T;
+  source?: T;
+  externalId?: T;
+  sourceKey?: T;
+  importHash?: T;
+  lastSeenAt?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "units_select".
+ */
+export interface UnitsSelect<T extends boolean = true> {
+  number?: T;
+  building?: T;
+  residentialComplex?: T;
+  section?: T;
+  floor?: T;
+  rooms?: T;
+  isStudio?: T;
+  totalArea?: T;
+  livingArea?: T;
+  kitchenArea?: T;
+  price?: T;
+  pricePerSquareMeter?: T;
+  availability?: T;
+  isPublished?: T;
+  layout?: T;
+  source?: T;
+  externalId?: T;
+  sourceKey?: T;
+  importHash?: T;
+  lastSeenAt?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "employees_select".
  */
 export interface EmployeesSelect<T extends boolean = true> {
@@ -1126,6 +1389,7 @@ export interface AntiSpamEventsSelect<T extends boolean = true> {
  */
 export interface ImportSourcesSelect<T extends boolean = true> {
   title?: T;
+  key?: T;
   endpointHint?: T;
   isActive?: T;
   adapterConfigured?: T;
@@ -1137,6 +1401,9 @@ export interface ImportSourcesSelect<T extends boolean = true> {
  * via the `definition` "import-runs_select".
  */
 export interface ImportRunsSelect<T extends boolean = true> {
+  correlationId?: T;
+  mode?: T;
+  target?: T;
   source?: T;
   status?: T;
   startedAt?: T;
@@ -1147,6 +1414,10 @@ export interface ImportRunsSelect<T extends boolean = true> {
   skippedCount?: T;
   failedCount?: T;
   unchangedCount?: T;
+  expectedBatchCount?: T;
+  completedBatchCount?: T;
+  deactivatedCount?: T;
+  processedBatchKeys?: T;
   summary?: T;
   diagnostics?: T;
   errors?: T;
@@ -1194,6 +1465,39 @@ export interface AdminActivitiesSelect<T extends boolean = true> {
 export interface PayloadKvSelect<T extends boolean = true> {
   key?: T;
   data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs_select".
+ */
+export interface PayloadJobsSelect<T extends boolean = true> {
+  input?: T;
+  taskStatus?: T;
+  completedAt?: T;
+  totalTried?: T;
+  hasError?: T;
+  error?: T;
+  log?:
+    | T
+    | {
+        executedAt?: T;
+        completedAt?: T;
+        taskSlug?: T;
+        taskID?: T;
+        input?: T;
+        output?: T;
+        state?: T;
+        error?: T;
+        id?: T;
+      };
+  taskSlug?: T;
+  queue?: T;
+  waitUntil?: T;
+  processing?: T;
+  concurrencyKey?: T;
+  meta?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1258,6 +1562,24 @@ export interface SiteSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs-stats".
+ */
+export interface PayloadJobsStat {
+  id: number;
+  stats?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
@@ -1289,6 +1611,16 @@ export interface SiteSettingsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs-stats_select".
+ */
+export interface PayloadJobsStatsSelect<T extends boolean = true> {
+  stats?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -1296,6 +1628,53 @@ export interface CollectionsWidget {
     [k: string]: unknown;
   };
   width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskApplyLeadRetention".
+ */
+export interface TaskApplyLeadRetention {
+  input: {
+    retentionDays?: number | null;
+  };
+  output: {
+    cutoff: string;
+    processed: number;
+    remaining: boolean;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskImportNormalizedUnits".
+ */
+export interface TaskImportNormalizedUnits {
+  input: {
+    batchKey: string;
+    expectedBatchCount: number;
+    importRunId: number;
+    mode: 'delta' | 'full_snapshot';
+    records:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    snapshotStartedAt: string;
+    sourceId: number;
+    sourceKey: string;
+  };
+  output: {
+    alreadyProcessed: boolean;
+    completed: boolean;
+    created: number;
+    deactivated: number;
+    received: number;
+    unchanged: number;
+    updated: number;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

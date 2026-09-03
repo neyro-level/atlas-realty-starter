@@ -7,7 +7,7 @@ import {
   LEAD_STATUS_LABELS,
   LEAD_STATUSES,
 } from '../admin/lib/constants'
-import { recordLeadActivity } from '../hooks/business'
+import { recordLeadActivity, setLeadArchiveMetadata } from '../hooks/business'
 
 
 export const Leads = {
@@ -41,6 +41,35 @@ export const Leads = {
       label: { en: 'Status', ru: 'Этап воронки' },
       options: LEAD_STATUSES.map((status) => ({ label: LEAD_STATUS_LABELS[status], value: status })),
       required: true,
+    },
+    {
+      name: 'isArchived',
+      type: 'checkbox',
+      admin: { position: 'sidebar' },
+      defaultValue: false,
+      index: true,
+      label: { en: 'Archived', ru: 'В архиве' },
+    },
+    {
+      name: 'archivedAt',
+      type: 'date',
+      admin: { position: 'sidebar', readOnly: true },
+      index: true,
+      label: { en: 'Archived at', ru: 'Дата архивации' },
+    },
+    {
+      name: 'archivedBy',
+      type: 'relationship',
+      admin: { position: 'sidebar', readOnly: true },
+      label: { en: 'Archived by', ru: 'Архивировал' },
+      relationTo: 'users',
+    },
+    {
+      name: 'personalDataPurgedAt',
+      type: 'date',
+      admin: { position: 'sidebar', readOnly: true },
+      index: true,
+      label: { en: 'Personal data purged at', ru: 'Персональные данные удалены' },
     },
     {
       name: 'responsibleEmployee',
@@ -142,5 +171,6 @@ export const Leads = {
   ],
   hooks: {
     afterChange: [recordLeadActivity],
+    beforeChange: [setLeadArchiveMetadata],
   },
 } satisfies CollectionConfig

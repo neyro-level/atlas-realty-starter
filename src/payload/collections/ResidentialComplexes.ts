@@ -9,6 +9,16 @@ import {
 import { capabilityFieldAccess } from '../access/capabilities'
 import { formatPageSlug } from '../hooks/formatPageSlug'
 import { protectResidentialComplexMutation, recordResidentialComplexActivity } from '../hooks/business'
+import { runtimeConfig } from '@/project/env'
+import { isAllowedExternalImageURL, validateSafeVideoURL } from '@/shared/security/media-url'
+
+const validateExternalImageURL = (value: unknown) => {
+  if (value == null || value === '') return true
+  return typeof value === 'string' && isAllowedExternalImageURL(value, runtimeConfig.externalImageHosts)
+    ? true
+    : 'URL изображения должен использовать HTTPS и разрешённый hostname.'
+}
+
 
 const COMPLEX_STATUSES = [
   { label: 'Черновик', value: 'draft' },
@@ -110,15 +120,16 @@ export const ResidentialComplexes = {
       name: 'externalCoverUrl',
       type: 'text',
       label: { en: 'External cover URL', ru: 'Внешняя обложка' },
+      validate: validateExternalImageURL,
     },
-    { name: 'videoUrl', type: 'text', label: { en: 'Video URL', ru: 'Видео' } },
+    { name: 'videoUrl', type: 'text', label: { en: 'Video URL', ru: 'Видео' }, validate: validateSafeVideoURL },
     {
       name: 'gallery',
       type: 'array',
       label: { en: 'Gallery', ru: 'Галерея' },
       fields: [
         { name: 'image', type: 'relationship', label: { en: 'Image', ru: 'Медиа' }, relationTo: 'media' },
-        { name: 'externalUrl', type: 'text', label: { en: 'External URL', ru: 'Внешний URL' } },
+        { name: 'externalUrl', type: 'text', label: { en: 'External URL', ru: 'Внешний URL' }, validate: validateExternalImageURL },
         { name: 'alt', type: 'text', label: { en: 'Alt', ru: 'Alt-текст' } },
       ],
     },
