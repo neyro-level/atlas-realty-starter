@@ -21,10 +21,11 @@
 - managed PostgreSQL 18 right-sized to `1 vCPU / 1 GiB RAM / 8 GiB`, attached through private Timeweb VPC; public DB network disabled;
 - automated provider backups enabled and pre-migration backups proven;
 - private S3 media storage passed Payload create/read/delete roundtrip;
-- production admin credentials live only in Doppler;
+- production SUPER_ADMIN/DIRECTOR usernames and password source of truth live only in Doppler;
+- Admin uses username/password; anonymous registration and email recovery are disabled;
 - public admin is blocked by Nginx until domain/TLS cutover and is operated through SSH tunnel;
-- Sentry remains `configured, not connected`;
-- production email adapter remains pending.
+- Sentry is frozen as an optional extension and does not block release;
+- imports, maintenance and maintenance scheduler run as separate supervised services.
 
 ## PostgreSQL
 
@@ -62,16 +63,12 @@ Production media использует официальный `@payloadcms/storag
 
 ## Monitoring
 
-Подключён conditional Sentry SDK:
+Sentry SDK remains installed but frozen:
 
 - `sendDefaultPii: false`;
 - Session Replay отключён;
-- `tracesSampleRate = 0.05`;
-- release = exact `RELEASE_SHA`;
-- DSN/auth token живут в Doppler;
-- source maps загружаются только при наличии `SENTRY_ORG`, `SENTRY_PROJECT`, `SENTRY_AUTH_TOKEN`.
-
-До появления реального Sentry project состояние считается `configured, not connected`. Контролируемое test event выполняется отдельной owner-authorized задачей после выдачи DSN.
+- no DSN or controlled event is required for the current release;
+- future activation remains a separate monitoring task.
 
 ## Health
 
@@ -99,9 +96,9 @@ pnpm verify:payload-upgrade
 2. exact SHA artifact;
 3. backup proof;
 4. Payload migrations;
-5. application start;
+5. application and background workers start;
 6. `/api/health`;
-7. admin login/dashboard/collection smoke;
+7. username login/dashboard/collection smoke;
 8. public smoke;
-9. monitoring confirmation;
+9. worker active-state confirmation;
 10. rollback при blocker.
