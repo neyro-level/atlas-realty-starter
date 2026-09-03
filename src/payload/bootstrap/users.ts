@@ -64,7 +64,13 @@ export async function bootstrapAdminUsersWithCredentials(
 }
 
 export async function bootstrapAdminUsers(payload: Payload) {
-  if (process.argv.some((argument) => argument === 'migrate' || argument.startsWith('migrate:') || argument.startsWith('generate:'))) return
-  if (!runtimeConfig.bootstrapUsers) return
+  const skipBootstrap = process.argv.some((argument) =>
+    argument === 'migrate' ||
+    argument.startsWith('migrate:') ||
+    argument.startsWith('generate:') ||
+    argument === 'jobs:run' ||
+    argument === 'jobs:handle-schedules'
+  )
+  if (skipBootstrap || !runtimeConfig.bootstrapUsers) return
   await bootstrapAdminUsersWithCredentials(payload, runtimeConfig.bootstrapUsers)
 }

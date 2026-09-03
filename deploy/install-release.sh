@@ -74,7 +74,7 @@ mv -Tf "${APP_ROOT}/current.next" "${APP_ROOT}/current"
 systemctl restart soyuz-rostov.service
 
 for attempt in $(seq 1 30); do
-  if curl --fail --silent --show-error http://127.0.0.1:3000/api/health >/dev/null; then
+  if curl --fail --silent --show-error --max-time 5 http://127.0.0.1:3000/api/health >/dev/null; then
     systemctl restart soyuz-rostov-imports.service soyuz-rostov-maintenance.service soyuz-rostov-maintenance-scheduler.service
     if systemctl is-active --quiet soyuz-rostov-imports.service soyuz-rostov-maintenance.service soyuz-rostov-maintenance-scheduler.service; then
       systemctl reload nginx
