@@ -5,7 +5,7 @@ import { spawnSync } from 'node:child_process'
 import dotenv from 'dotenv'
 
 dotenv.config({ path: '.env.local', override: false })
-dotenv.config({ path: '.env', override: true })
+dotenv.config({ path: '.env' })
 
 const databaseURL = process.env.DATABASE_URL
 if (!databaseURL) throw new Error('DATABASE_URL is required')

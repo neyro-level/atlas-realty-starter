@@ -4,7 +4,7 @@
 
 ## Stack
 
-- Next.js `16.3.0`
+- Next.js `16.3.4`
 - React / React DOM `19.2.8`
 - TypeScript `6.0.3`
 - Payload CMS `3.88.0`
@@ -64,9 +64,10 @@ Payload работает внутри Next.js. Prisma, отдельного back
 
 - `pnpm lint`
 - `pnpm typecheck`
+- `pnpm architecture:check`
+- `pnpm security:check`
+- `pnpm test`
 - `pnpm build`
-- `pnpm test:int`
-- `pnpm test:e2e`
 - `pnpm db:backup:check`
 - `pnpm verify:payload-upgrade` после обновления Payload/Next
 
@@ -79,6 +80,10 @@ Payload работает внутри Next.js. Prisma, отдельного back
 ## Документация
 
 - [AGENTS.md](AGENTS.md)
+- [docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.0.md](docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.0.md)
+- [docs/VERSION_MATRIX.md](docs/VERSION_MATRIX.md)
+- [docs/SECURITY_BASELINE.md](docs/SECURITY_BASELINE.md)
+- [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md)
 - [docs/PRODUCT.md](docs/PRODUCT.md)
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - [docs/DATA_MODEL.md](docs/DATA_MODEL.md)

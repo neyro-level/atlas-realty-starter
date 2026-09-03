@@ -1,64 +1,46 @@
 # Product
 
-## Назначение
+## Purpose
 
-Создать новую веб-платформу «Союза застройщиков Ростов» на Next.js + Payload CMS, которая после отдельной миграции сможет заменить действующий Astro-сайт без потери критичного контента, поискового трафика и заявок.
+Build the new public platform for Союз застройщиков Ростов: secondary and newbuild catalog, properties, complexes, developers, agents, content, maps, leads, SEO and a minimal operational Payload Admin. The current public UI is retained while the internal platform is rebuilt to AMS Realty Platform Core Standard 2.0.
 
-Продуктовая модель распространения: единая codebase-версия используется как стартовый шаблон, но каждый клиент получает отдельный server, database, storage и Payload Admin. Shared multi-tenant database не входит в scope.
+## Users
 
-## Пользователи
+- Anonymous visitors browsing property, complex, agent and content pages.
+- Leads requesting callback, viewing, mortgage, question or sale consultation.
+- Client owner, editor and viewer operating Payload Admin.
+- Technical owner operating imports, integrations, fleet and releases.
 
-- покупатели недвижимости и посетители публичного сайта;
-- потенциальные клиенты, отправляющие заявки;
-- редакторы и администраторы контента в Payload CMS;
-- владелец проекта и AI-исполнители, развивающие платформу.
+## Scope
 
-Current Payload roles remain available, but the starter creates two operational accounts:
+- One isolated client deployment, not multi-tenant SaaS.
+- Catalog up to 50,000 active offers.
+- Multiple client-specific feeds through a secure generic ingest engine.
+- Payload as only CMS/backend/schema/auth platform.
+- Separate worker/scheduler using Payload Jobs Queue.
+- Public data only through trusted gateway and DTO contracts.
+- Transactional lead outbox for MAX, email and CRM channels when configured.
+- Optional Yandex Maps and Metrika modules.
+- SEO, redirects, sitemap, structured data and approved SEO landings.
+- Future reusable `@ams/realty-core` package with client repository isolation.
 
-- `SUPER_ADMIN` — technical owner and user management;
-- `DIRECTOR` — client account with all business workspace capabilities.
+## Non-goals until approved prerequisites
 
-Login uses username/password only. Anonymous registration, email login and email recovery are outside the current starter scope.
+- Real feed parser without an approved fixture/specification.
+- Production catalog/content/media seed without data approval.
+- Lead delivery without client legal consent, channels and routing decision.
+- Domain/DNS/legacy Astro cutover.
+- Public machine-to-machine Payload access.
+- Cross-source auto-merge, second ORM, GraphQL, Redis, external broker or microservices.
 
-## Базовые продуктовые контуры
+## Current stage
 
-- публичные страницы и посадочные страницы;
-- каталог недвижимости и карточки объектов;
-- редакционный контент и медиа;
-- формы заявок и рабочий mini-CRM контур;
-- SEO/GEO: metadata, canonical, sitemap, robots, structured data и redirects;
-- административная работа с контентом через Payload CMS;
-- внутренний кабинет: `Посетители`, `Заявки`, `Объекты`, `Сотрудники`, `Отзывы`, `Офисы`, `Контакты`, `Антиспам`, `XML-импорт`.
+Wave 0 is rebuilding runtime/security/schema foundations. The old production preview and legacy Astro remain untouched. V2 uses a fresh UUID managed database because the current business collections are empty.
 
-## Критерии миграции
+## Acceptance before public launch
 
-До переноса домена должны быть подтверждены:
-
-1. карта существующих маршрутов, контента, форм и интеграций;
-2. redirect map без необоснованных потерь URL;
-3. перенос и проверка критичных SEO-данных;
-4. доставка заявок end-to-end;
-5. корректность контента и медиа;
-6. backup, rollback и понятное окно DNS cutover;
-7. live smoke после переключения.
-
-## Текущий scope
-
-- hardened `Next.js + Payload` foundation и production runtime;
-- публичный UI реализован по verified reference UI contract без Prisma/Better Auth/backend code;
-- canonical Ростов routes: Home, новостройки, квартиры, строительство, ипотека, about, reviews, contacts и careers;
-- Payload collection `residential-complexes` для 30 ЖК;
-- public DTO/query layer с `overrideAccess: false`;
-- catalog/detail families для ЖК и самостоятельных `properties`;
-- metadata, sitemap, robots, responsive states and empty states.
-- mass catalog `ResidentialComplex -> Building -> Unit`, durable normalized import and background jobs;
-- fixed 365-day archived-lead retention.
-
-## Non-goals текущего этапа
-
-- изменение действующего Astro-сайта или domain/DNS cutover;
-- production seed жилых комплексов без отдельного data approval;
-- выдуманные недостающие 10 ЖК, цены, отзывы или квартиры;
-- реальный XML parser/adapter под неизвестную спецификацию;
-- финальная CRM delivery и public lead ingestion;
-- journal, favorites/compare и advertising leadgen migration.
+1. Access boundaries, imports, leads, privacy and migration contracts meet the Core Standard.
+2. Existing UI remains visually equivalent except for required functional additions.
+3. Real feeds/import reports, lead delivery, maps and SEO are accepted with client data.
+4. SourceCraft release has exact commit evidence, verified backup/restore, critical E2E and performance results.
+5. DNS/SSL cutover has a separate release and rollback plan.

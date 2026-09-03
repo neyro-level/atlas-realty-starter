@@ -26,7 +26,7 @@ export function combineWhere(clauses: Where[]) {
   return clauses.length === 1 ? clauses[0] : { and: clauses }
 }
 
-export function relationID(value: null | number | { id: number } | undefined) {
+export function relationID(value: null | string | { id: string } | undefined) {
   return typeof value === 'object' && value ? value.id : value
 }
 

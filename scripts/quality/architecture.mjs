@@ -31,6 +31,14 @@ for (const [source, module] of modules) {
     if (sourceModule && targetModule && sourceModule !== targetModule && !/^index\.[cm]?[jt]sx?$/.test(basename(target))) {
       violations.push({ from: source, rule: 'no-cross-module-internals', to: target })
     }
+
+    for (const rootPath of ['src/project/ingest/', 'src/project/leads/channels/']) {
+      const sourceSibling = siblingName(source, rootPath)
+      const targetSibling = siblingName(target, rootPath)
+      if (sourceSibling && targetSibling && sourceSibling !== targetSibling) {
+        violations.push({ from: source, rule: 'no-cross-sibling-internals', to: target })
+      }
+    }
     if (source.startsWith('src/') && isTestPath(target)) {
       violations.push({ from: source, rule: 'no-production-to-tests', to: target })
     }
@@ -93,8 +101,13 @@ function isServerBoundary(path) {
 }
 
 function moduleName(path) {
-  const match = path.match(/^src\/modules\/([^/]+)\//)
+  const match = path.match(/^src\/(?:modules|project\/modules)\/([^/]+)\//)
   return match?.[1] ?? null
+}
+
+function siblingName(path, rootPath) {
+  if (!path.startsWith(rootPath)) return null
+  return path.slice(rootPath.length).split('/')[0] || null
 }
 
 function isTestPath(path) {

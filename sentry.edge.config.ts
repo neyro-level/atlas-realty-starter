@@ -1,12 +1,11 @@
 import * as Sentry from '@sentry/nextjs'
-
-const dsn = process.env.SENTRY_DSN
+import { sentryServerEnvironment } from './src/project/sentry-server-env'
 
 Sentry.init({
-  dsn,
-  enabled: Boolean(dsn),
-  environment: process.env.APP_ENV ?? process.env.NODE_ENV,
-  release: process.env.RELEASE_SHA,
+  dsn: sentryServerEnvironment.dsn,
+  enabled: Boolean(sentryServerEnvironment.dsn),
+  environment: sentryServerEnvironment.environment,
+  release: sentryServerEnvironment.release,
   sendDefaultPii: false,
   tracesSampleRate: 0.05,
 })

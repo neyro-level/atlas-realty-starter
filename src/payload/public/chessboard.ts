@@ -4,7 +4,7 @@ import type { Payload } from 'payload'
 export type ChessboardUnit = {
   availability: 'available' | 'reserved' | 'sold'
   floor: number
-  id: number
+  id: string
   isStudio: boolean
   number: string
   price: number
@@ -13,7 +13,7 @@ export type ChessboardUnit = {
 }
 
 export type BuildingChessboard = {
-  buildingId: number
+  buildingId: string
   floors: Array<{
     floor: number
     units: ChessboardUnit[]
@@ -23,7 +23,7 @@ export type BuildingChessboard = {
 type ChessboardRow = {
   availability: ChessboardUnit['availability']
   floor: string | number
-  id: number
+  id: string
   is_studio: boolean
   number: string
   price: string | number
@@ -31,8 +31,8 @@ type ChessboardRow = {
   total_area: string | number
 }
 
-export async function getBuildingChessboard(payload: Payload, buildingId: number): Promise<BuildingChessboard> {
-  if (!Number.isInteger(buildingId) || buildingId < 1) throw new Error('buildingId must be a positive integer')
+export async function getBuildingChessboard(payload: Payload, buildingId: string): Promise<BuildingChessboard> {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(buildingId)) throw new Error('buildingId must be a UUID')
   const adapter = payload.db as unknown as PostgresAdapter
   const result = await adapter.pool.query<ChessboardRow>(
     `SELECT "id", "number", "floor", "rooms", "is_studio", "total_area", "price", "availability"

@@ -1,5 +1,17 @@
 # Worklog
 
+## 2026-09-03 — AMS Realty Platform Core Standard 2.0, Wave 0
+
+- Принята обязательная конституция `AMS_REALTY_PLATFORM_CORE_STANDARD_2.0`; её неизменённая копия и SHA-256 зафиксированы в project canon.
+- Выполнен read-only pre-flight: legacy production DB содержит два users и ноль business records; V2 переходит на fresh UUID database, без in-place rewrite.
+- Next upgraded `16.3.0 -> 16.3.4`; React/Payload remain exact compatible versions. Direct dependency ranges removed; runtime audit has zero known production advisories.
+- Added Zod runtime/build/public/Sentry env boundaries, Pino redaction/correlation ID, CSP Report-Only and baseline response security headers.
+- Payload V2 config uses UUID, `blocksAsJSON`, disabled GraphQL, `defaultDepth: 0`, `maxDepth: 3`, `push: false` and `src/payload/migrations-v2` baseline. Legacy migrations remain unexecuted historical evidence.
+- Existing application code was migrated to UUID IDs where its current UI/Admin contracts require it. Public UI composition and routes were not redesigned.
+- Added `architecture:check`, Wave-0 `security:check`, SourceCraft CI static contract, migration-aware isolated test commands, mandatory Standard 2.0 docs and V2 backup/restore proof.
+- Local proof: clean V2 migration, repeat migrate, V2 backup/restore, integration `29/29`, development Admin E2E `3/3`, production Admin E2E `3/3`, typecheck/lint, architecture/security checks, build and zero production dependency advisories.
+- Production database, runtime, S3, DNS and domain remain untouched. Managed DB replacement is deferred to explicit release and currently also blocked by empty `TIMEWEB_API_TOKEN` in Doppler.
+
 ## 2026-09-03 — starter username auth and background runtime
 
 - Lead retention fixed at 365 days; SMTP and email recovery removed from the current starter scope.

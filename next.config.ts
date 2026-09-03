@@ -4,6 +4,8 @@ import type { NextConfig } from 'next'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+import { SECURITY_HEADERS } from './src/core/security/headers'
+import { sentryBuildConfig } from './src/project/build-env'
 const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
@@ -11,6 +13,9 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ['127.0.0.1', 'localhost'],
   experimental: {
     cpus: 1,
+  },
+  async headers() {
+    return [{ headers: [...SECURITY_HEADERS], source: '/:path*' }]
   },
   images: {
     localPatterns: [
@@ -25,6 +30,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  poweredByHeader: false,
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
@@ -40,15 +46,9 @@ const nextConfig: NextConfig = {
 }
 
 const payloadNextConfig = withPayload(nextConfig, { devBundleServerPackages: false })
-const sentryBuildConfigured = Boolean(
-  process.env.SENTRY_ORG && process.env.SENTRY_PROJECT && process.env.SENTRY_AUTH_TOKEN,
-)
-
-export default sentryBuildConfigured
+export default sentryBuildConfig
   ? withSentryConfig(payloadNextConfig, {
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-      org: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
+      ...sentryBuildConfig,
       silent: true,
     })
   : payloadNextConfig

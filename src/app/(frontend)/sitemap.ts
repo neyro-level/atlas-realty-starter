@@ -6,6 +6,7 @@ import {
   getSitemapPageCounts,
 } from '@/payload/public/sitemap'
 import { seoSiteConfig } from '@/project/seo-config'
+import { runtimeConfig } from '@/project/env'
 import { resolveSiteBaseUrl } from '@/shared/types/seo'
 
 export async function generateSitemaps() {
@@ -19,7 +20,7 @@ export async function generateSitemaps() {
 
 export default async function sitemap(props: { id: Promise<string> }): Promise<MetadataRoute.Sitemap> {
   const id = await props.id
-  const base = resolveSiteBaseUrl(seoSiteConfig)
+  const base = resolveSiteBaseUrl(seoSiteConfig, runtimeConfig.siteURL)
 
   if (id === 'static') {
     return seoSiteConfig.staticSitemapPaths.map((path) => ({

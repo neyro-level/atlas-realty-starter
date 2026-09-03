@@ -137,7 +137,7 @@ export async function getPublicEmployees() {
   return result.docs.map(toPublicEmployee)
 }
 
-export async function getPublicEmployeeById(id: number) {
+export async function getPublicEmployeeById(id: string) {
   const employees = await getPublicEmployees()
   return employees.find((employee) => employee.id === id) ?? null
 }
@@ -286,7 +286,7 @@ function toPublicOffice(office: Office): PublicOffice {
   return { address: office.address, id: office.id, photo, title: office.title }
 }
 
-function resolveMedia(mediaValue: Media | number | null | undefined, externalUrl: string | null | undefined, alt: string) {
+function resolveMedia(mediaValue: Media | string | null | undefined, externalUrl: string | null | undefined, alt: string) {
   if (typeof mediaValue === 'object' && mediaValue?.url) return { alt: mediaValue.alt || alt, src: mediaValue.url }
   return externalUrl && isAllowedExternalImageURL(externalUrl, runtimeConfig.externalImageHosts)
     ? { alt, src: externalUrl }

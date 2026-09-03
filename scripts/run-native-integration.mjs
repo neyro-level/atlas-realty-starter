@@ -46,10 +46,14 @@ if (process.argv.includes('--production-migrate')) {
     PAYLOAD_DIRECTOR_PASSWORD: 'director-secret',
     PAYLOAD_DIRECTOR_USERNAME: 'director',
     PAYLOAD_SECRET: 'production-migration-check-secret-32-characters',
+    HEALTH_SECRET: 'production-health-check-secret-32-characters',
+    NEXT_PUBLIC_SITE_URL: 'https://example.test',
     PAYLOAD_SUPERADMIN_PASSWORD: 'superadmin-secret',
     PAYLOAD_SUPERADMIN_USERNAME: 'superadmin',
     S3_ACCESS_KEY_ID: 'migration-check',
     S3_BUCKET: 'migration-check',
+    PRIVACY_HMAC_SECRET: 'production-privacy-check-secret-32-characters',
+    REVALIDATE_SECRET: 'production-revalidate-check-secret-32-characters',
     S3_ENDPOINT: 'https://s3.invalid',
     S3_REGION: 'ru-1',
     S3_SECRET_ACCESS_KEY: 'migration-check',
@@ -108,8 +112,8 @@ if (process.argv.includes('--upgrade-auth')) {
 const command = process.argv.includes('--migrate') || process.argv.includes('--production-migrate')
   ? 'pnpm payload migrate'
   : process.argv.includes('--e2e-production')
-    ? 'pnpm payload migrate && pnpm test:e2e:production'
+    ? 'pnpm payload migrate && pnpm test:e2e:production:raw'
     : process.argv.includes('--e2e')
-      ? 'pnpm test:e2e'
-      : 'pnpm test:int'
+      ? 'pnpm payload migrate && pnpm test:e2e:raw'
+      : 'pnpm payload migrate && pnpm test:int:raw'
 run(command)

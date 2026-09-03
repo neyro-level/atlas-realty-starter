@@ -1,98 +1,90 @@
-# Master plan
+# Master Plan — AMS Realty Platform Core Standard 2.0
 
-## Этап 1. Foundation + hardened Admin
+## Authority
 
-- [x] Payload/Next/PostgreSQL foundation.
-- [x] Business IA: `Посетители`, `Заявки`, `Объекты`, `Сотрудники`, `Отзывы`, `Офисы`, `Контакты`, `Антиспам`, `XML-импорт`.
-- [x] Server-side capability guards custom views.
-- [x] Field-level ownership/publish protection.
-- [x] Append-only operational logs и единый audit trail.
-- [x] Server-side filters/count/pagination и business indexes.
-- [x] Domain query modules вместо монолитного in-memory workspace.
-- [x] Safe migration path с сохранением legacy SiteSettings data.
-- [x] Official optional S3 adapter, health endpoint, backup/restore check.
-- [x] Conditional Sentry SDK contract без PII/Replay.
-- [x] Role-specific integration/e2e и Payload upgrade profile.
+`docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.0.md` is the mandatory architecture, security and delivery standard. Work proceeds one wave at a time. Every wave is a HEAVY SourceCraft stream: branch, scope checks, commit, push, Pull Request, review, merge, cleanup, then the next branch.
 
-## Этап 2. Инвентаризация production Astro
+## Product boundary
 
-- URL/redirect map;
-- pages/catalog/articles/media/SEO;
-- forms, lead delivery и external integrations;
-- source ownership;
-- production performance/analytics baseline.
+- Existing public UI, URLs, visual tokens and page composition are preserved.
+- Only required functional UI changes are allowed: consent, phone reveal, maps, real form states and standard-required routes.
+- Payload remains the only application schema, Admin and backend platform.
+- The current repository becomes the SZ Rostov client repository.
+- Wave 11 extracts reusable code into private `@ams/realty-core`; no monorepo or duplicate core source is introduced.
 
-Критерий: утверждён migration scope и отсутствуют неизвестные критичные контуры.
+## Database decision
 
-## Этап 3. Public platform
+The legacy numeric-ID database is empty of business data. V2 uses a fresh PostgreSQL UUID schema. Legacy database removal and new managed database creation occur only in an explicit RELEASE operation after provider backup proof and V2 release readiness.
 
-- [x] public shell, exact design tokens, mega menu, mobile overlay and footer;
-- [x] public DTO/query layer поверх Payload для объектов, ЖК, сотрудников, отзывов, офисов и контактов;
-- [x] Home, catalog presets/filters/cards/session collections, property/ЖК detail templates and shared commercial routes;
-- [x] employees, reviews, contacts, HTML sitemap, legal status and noindex leadgen route shells;
-- [ ] production content/media seed;
-- [ ] canonical Payload article collection and approved legal documents;
-- [ ] validated public lead/anti-spam ingestion; current CTA routes do not imitate delivery;
-- [x] public metadata, sitemap, robots and responsive proof at 1440/1280/768/390.
+## Current status
 
-## Этап 4. Starter-ready full-stack platform
+### Pre-flight
 
-Текущий active program:
+- [x] Completed under §A.4 on 2026-09-03.
+- [x] Confirmed empty business collections and two legacy users.
+- [x] Confirmed Payload-only schema ownership and PostgreSQL 18.6.
+- [x] Confirmed anonymous REST and GraphQL are legacy defects to remove.
+- [x] Confirmed a new V2 UUID database is safe.
 
-- [x] зафиксировать ADR full-stack starter boundary;
-- [x] создать starter contract и ownership manifest;
-- [x] классифицировать tracked paths;
-- [x] зафиксировать visual reference baseline public/Admin page families;
-- [x] разделить design tokens и base styles;
-- [x] убрать прямые `project`/Payload imports из reusable UI;
-- [x] отделить Home, catalog, property и ЖК page views от Payload loaders;
-- [x] разделить commercial/content/leadgen page families и action contracts;
-- [x] довести reusable Payload Admin, SEO, import и infrastructure contracts;
-- [x] реализовать `starter:audit`; export tooling оставить owner-gated;
-- [x] доказать neutral migration/clone rehearsal локально;
-- [ ] продолжать утрамбовывать текущий repository как starter;
-- [ ] выделять отдельный repository только по новой явной команде владельца.
+### Wave 0 — Foundation + Security Baseline
 
-Критерий текущего этапа: текущий repository стабилен как starter workbench, Union preset изолирован в client layer, production/runtime не ломаются, а export остаётся заблокированным без owner approval.
+- [ ] Version matrix and dependency remediation.
+- [ ] Zod environment contract.
+- [ ] UUID Payload configuration and reproducible V2 baseline migration.
+- [ ] Pino redaction, correlation ID and security headers.
+- [ ] Architecture/security checks and SourceCraft CI.
+- [ ] Mandatory security and operational documentation.
+- [ ] HEAVY gate, SourceCraft PR and merge.
 
-## Этап 5. Mass catalog
+### Wave 1 — Access + Data Gateways
 
-Текущий incremental state:
+- [ ] `owner/editor/viewer` roles and bootstrap.
+- [ ] Public/User/System/Ingest gateways.
+- [ ] Raw anonymous REST deny.
+- [ ] Audit events, field access and Admin REST proof.
 
-- [x] `ResidentialComplex`, `Building`, `Unit` schema and migrations;
-- [x] source ownership and compound identity for mass catalog;
-- [x] Payload Jobs Queue normalized Unit importer;
-- [x] retry-safe batch accounting and full-snapshot deactivation;
-- [x] 50 000 Unit fixture: 8.5 MiB peak heap growth, indexed chessboard plan, 6.468 ms latest sampled query;
-- [x] paged sitemap and persisted dynamic `updatedAt`;
-- [ ] получить real XML feed/specification and implement only the approved client adapter;
-- [ ] загрузить утверждённые production data/media.
+### Wave 2 — Catalog Model + Indexes
 
-## Этап 6. Client production foundation
+- [ ] `feed-sources`, unified UUID `properties`, `agents`, complexes, buildings, developers and price history.
+- [ ] DTO/select contracts, trash/drafts and private fields.
+- [ ] 50k dataset, indexes and performance baseline.
 
-Для SZ Rostov:
+### Waves 3–5 — Ingest
 
-- [x] managed PostgreSQL 18 `1 vCPU / 1 GiB / 8 GiB` в private Timeweb VPC, public DB network disabled;
-- [x] private S3-compatible media bucket;
-- [x] Doppler runtime/admin secrets;
-- [x] Sentry frozen as optional monitoring extension, not a release blocker;
-- [x] fixed 365-day lead retention; SMTP/email recovery removed from current scope;
-- [x] username-only SUPER_ADMIN/DIRECTOR bootstrap contract;
-- [x] supervised imports/maintenance workers and maintenance scheduler definitions;
-- [x] provider backup proof and local restore rehearsal;
-- [x] exact-SHA source release, systemd health and previous-good rollback.
+- [ ] Generic secure ingest engine.
+- [ ] Secondary YRL only after approved fixture.
+- [ ] Newbuild YRL only after approved fixture.
 
-## Этап 7. Migration rehearsal и cutover
+### Wave 6 — Public Site Data Cutover
 
-- test data/content transfer;
-- URL/SEO/forms validation;
-- load/security gate;
-- DNS/SSL/deploy/rollback runbook;
-- cutover только из canonical main.
+- [ ] Preserve UI while moving all public reads to Public Gateway, DTOs, indexed filters and cache contracts.
 
-## Текущие внешние prerequisites
+### Wave 7 — Leads
 
-- real XML feed/specification отсутствует, но workers запускаются и безопасно ждут jobs;
-- Sentry project/DSN отложен и не блокирует release;
-- retention periods for analytics, anti-spam and audit remain a later owner decision;
-- domain/DNS/SSL/redirect cutover не выполнен; legacy Astro production остаётся действующим.
+- [ ] Atomic lead intake, transactional outbox, channel adapters, consent, anti-spam and recovery.
+
+### Wave 8 — Maps
+
+- [ ] Lazy Yandex Maps, validated geo endpoint, clustering and URL state.
+
+### Wave 9 — SEO
+
+- [ ] Official SEO/Redirect plugins, canonical/indexability rules, redirects, sitemap and structured data.
+
+### Wave 10 — Metrika + Internal Stats
+
+- [ ] Optional Metrika, typed goals, stat events, aggregation and quality dashboard.
+
+### Wave 11 — Operations + Fleet + Core Package
+
+- [ ] Worker/scheduler, health, revalidation, Nginx rate limits, backups, restore drill and fleet documents.
+- [ ] Private SourceCraft `@ams/realty-core` repository/package and schema compatibility contract.
+- [ ] Client repository consumes an exact core package version.
+
+## Explicit external prerequisites
+
+- Approved secondary/newbuild feed fixtures before Waves 4/5.
+- Doppler-only MAX, SMTP and CRM credentials before Wave 7.
+- Map key and Metrika ID before Waves 8/10.
+- Client-approved legal texts and retention periods before lead release.
+- Working Timeweb API token before managed database replacement and release operations.

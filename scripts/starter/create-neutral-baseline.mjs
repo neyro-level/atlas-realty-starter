@@ -15,9 +15,9 @@ const databaseName = parsed.pathname.replace(/^\//, '')
 if (!['127.0.0.1', 'localhost'].includes(parsed.hostname) || !databaseName.endsWith('_starter_test')) {
   throw new Error(`Refusing baseline database: ${parsed.hostname}/${databaseName}. Expected localhost and *_starter_test`)
 }
-if (!process.env.PAYLOAD_SECRET || process.env.PAYLOAD_SECRET.length < 16) throw new Error('A stable local PAYLOAD_SECRET with at least 16 characters is required')
+if (!process.env.PAYLOAD_SECRET || process.env.PAYLOAD_SECRET.length < 32) throw new Error('A stable local PAYLOAD_SECRET with at least 32 characters is required')
 
-const migrationDir = join(root, 'src', 'payload', 'migrations')
+const migrationDir = join(root, 'src', 'payload', 'migrations-v2')
 if (existsSync(migrationDir)) {
   const existing = readdirSync(migrationDir).filter((name) => name !== 'index.ts')
   if (existing.length) throw new Error(`Neutral baseline requires an empty migration directory, found: ${existing.join(', ')}`)
@@ -29,7 +29,7 @@ if (existsSync(migrationDir)) {
 
 run('pnpm', ['generate:types'])
 run('pnpm', ['generate:importmap'])
-run('pnpm', ['payload', 'migrate:create', 'neutral_initial'])
+run('pnpm', ['payload', 'migrate:create', '--name', 'neutral_initial'])
 normalizeInitialMigration()
 run('pnpm', ['payload', 'migrate'])
 run('pnpm', ['payload', 'migrate'])
