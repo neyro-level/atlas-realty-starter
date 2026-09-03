@@ -1,11 +1,12 @@
 import type { MetadataRoute } from 'next'
 import { getSitemapPageCounts } from '@/payload/public/sitemap'
 import { seoSiteConfig } from '@/project/seo-config'
+import { runtimeConfig } from '@/project/env'
 import { isPublicIndexingEnabled, resolveSiteBaseUrl } from '@/shared/types/seo'
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  const base = resolveSiteBaseUrl(seoSiteConfig)
-  const production = isPublicIndexingEnabled(seoSiteConfig)
+  const base = resolveSiteBaseUrl(seoSiteConfig, runtimeConfig.siteURL)
+  const production = isPublicIndexingEnabled(base, runtimeConfig.environment)
   const sitemapCounts = await getSitemapPageCounts()
   const sitemapIDs = [
     'static',

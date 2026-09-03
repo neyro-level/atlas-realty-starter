@@ -10,7 +10,7 @@ export type ImportWorkspace = {
   sources: ImportSource[]
 }
 
-function isImportErrorRecord(value: ImportError | number): value is ImportError {
+function isImportErrorRecord(value: ImportError | string): value is ImportError {
   return typeof value === 'object' && value !== null
 }
 

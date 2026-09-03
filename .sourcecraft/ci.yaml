@@ -1,0 +1,46 @@
+"on":
+  pull_request:
+    - workflows: [pr-check]
+      filter:
+        source_branches: ["**"]
+        target_branches: ["main"]
+  push:
+    - workflows: [main-static-gate]
+      filter:
+        branches: ["main"]
+
+workflows:
+  pr-check:
+    tasks:
+      - name: static-contract
+        cubes:
+          - name: node-static-contract
+            image: docker.io/library/node:24.20.0-bookworm
+            script:
+              - corepack enable
+              - corepack prepare pnpm@11.24.0 --activate
+              - pnpm install --frozen-lockfile
+              - pnpm generate:types
+              - pnpm generate:importmap
+              - pnpm typecheck
+              - pnpm lint
+              - pnpm architecture:check
+              - pnpm security:check
+              - pnpm build
+  main-static-gate:
+    tasks:
+      - name: static-contract
+        cubes:
+          - name: node-static-contract
+            image: docker.io/library/node:24.20.0-bookworm
+            script:
+              - corepack enable
+              - corepack prepare pnpm@11.24.0 --activate
+              - pnpm install --frozen-lockfile
+              - pnpm generate:types
+              - pnpm generate:importmap
+              - pnpm typecheck
+              - pnpm lint
+              - pnpm architecture:check
+              - pnpm security:check
+              - pnpm build

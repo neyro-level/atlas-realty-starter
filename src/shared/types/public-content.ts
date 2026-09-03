@@ -20,7 +20,7 @@ export type PublicComplex = {
   developer: string
   district: string
   gallery: PublicMediaView[]
-  id: number
+  id: string
   isFeatured: boolean
   latitude?: number
   longitude?: number
@@ -47,7 +47,7 @@ export type PublicProperty = {
   district?: string
   floor?: number
   floorsTotal?: number
-  id: number
+  id: string
   images: Array<PublicMediaView & { kind: 'floor_plan' | 'photo' }>
   isExclusive: boolean
   isStudio: boolean
@@ -78,7 +78,7 @@ export type PublicContacts = PublicSiteContacts & {
 export type PublicEmployee = {
   bio: string
   email?: string
-  id: number
+  id: string
   name: string
   phone?: string
   photo?: PublicMediaView
@@ -90,14 +90,14 @@ export type PublicReview = {
   author: string
   date: string
   employee?: string
-  id: number
+  id: string
   rating: number
   text: string
 }
 
 export type PublicOffice = {
   address: string
-  id: number
+  id: string
   photo?: PublicMediaView
   title: string
 }

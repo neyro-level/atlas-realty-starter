@@ -11,6 +11,7 @@ import { SITE_SHELL_CONFIG } from '@/lib/site-shell'
 import { getPublicContacts } from '@/payload/public/queries'
 import { publicSite } from '@/project/public-site'
 import { seoSiteConfig } from '@/project/seo-config'
+import { runtimeConfig } from '@/project/env'
 import { resolveSiteBaseUrl } from '@/shared/types/seo'
 
 import '../../../styles/globals.css'
@@ -18,7 +19,7 @@ import './styles.css'
 
 export const metadata: Metadata = {
   description: publicSite.defaultDescription,
-  metadataBase: new URL(resolveSiteBaseUrl(seoSiteConfig)),
+  metadataBase: new URL(resolveSiteBaseUrl(seoSiteConfig, runtimeConfig.siteURL)),
   title: {
     default: publicSite.fullName,
     template: `%s | ${publicSite.name}`,

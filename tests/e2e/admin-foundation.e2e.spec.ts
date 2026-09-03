@@ -59,9 +59,17 @@ test.describe.serial('Payload admin foundation', () => {
 
     const healthResponse = await page.request.get('/api/health')
     expect(healthResponse.status()).toBe(200)
+    expect(healthResponse.headers()['content-security-policy-report-only']).toContain("frame-ancestors 'none'")
+    expect(healthResponse.headers()['strict-transport-security']).toContain('max-age=31536000')
+    expect(healthResponse.headers()['x-content-type-options']).toBe('nosniff')
     await expect(healthResponse.json()).resolves.toMatchObject({
       database: 'ready',
       status: 'ok',
     })
+
+    const graphQLResponse = await page.request.post('/api/graphql', {
+      data: { query: '{ __typename }' },
+    })
+    expect(graphQLResponse.status()).toBe(404)
   })
 })

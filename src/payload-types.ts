@@ -145,7 +145,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   fallbackLocale: null;
   globals: {
@@ -194,7 +194,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   name: string;
   role: 'SUPER_ADMIN' | 'DIRECTOR' | 'CONTENT_MANAGER';
   updatedAt: string;
@@ -222,7 +222,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt: string;
   caption?: string | null;
   isPublic?: boolean | null;
@@ -244,7 +244,7 @@ export interface Media {
  * via the `definition` "pages".
  */
 export interface Page {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   content?: {
@@ -275,7 +275,7 @@ export interface Page {
  * via the `definition` "leads".
  */
 export interface Lead {
-  id: number;
+  id: string;
   name?: string | null;
   phone: string;
   email?: string | null;
@@ -291,9 +291,9 @@ export interface Lead {
     | 'spam_duplicate';
   isArchived?: boolean | null;
   archivedAt?: string | null;
-  archivedBy?: (number | null) | User;
+  archivedBy?: (string | null) | User;
   personalDataPurgedAt?: string | null;
-  responsibleEmployee?: (number | null) | Employee;
+  responsibleEmployee?: (string | null) | Employee;
   direction?: ('new_building' | 'construction' | 'flat' | 'house' | 'land' | 'commercial' | 'other') | null;
   formType?: string | null;
   source?: string | null;
@@ -311,17 +311,17 @@ export interface Lead {
   duplicateCount?: number | null;
   lastDuplicateAt?: string | null;
   notes?: {
-    docs?: (number | LeadNote)[];
+    docs?: (string | LeadNote)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
   antiSpamAttempts?: {
-    docs?: (number | AntiSpamEvent)[];
+    docs?: (string | AntiSpamEvent)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
   activity?: {
-    docs?: (number | AdminActivity)[];
+    docs?: (string | AdminActivity)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -333,7 +333,7 @@ export interface Lead {
  * via the `definition` "employees".
  */
 export interface Employee {
-  id: number;
+  id: string;
   fullName: string;
   publicName?: string | null;
   origin: 'MANUAL' | 'XML';
@@ -344,20 +344,20 @@ export interface Employee {
   phone?: string | null;
   email?: string | null;
   sortOrder?: number | null;
-  photo?: (number | null) | Media;
+  photo?: (string | null) | Media;
   publicBio?: string | null;
   properties?: {
-    docs?: (number | Property)[];
+    docs?: (string | Property)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
   reviews?: {
-    docs?: (number | Review)[];
+    docs?: (string | Review)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
   activity?: {
-    docs?: (number | AdminActivity)[];
+    docs?: (string | AdminActivity)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -369,7 +369,7 @@ export interface Employee {
  * via the `definition` "properties".
  */
 export interface Property {
-  id: number;
+  id: string;
   title: string;
   objectCode?: string | null;
   externalId?: string | null;
@@ -377,8 +377,8 @@ export interface Property {
   workflowStatus: 'draft' | 'active' | 'archived' | 'hidden';
   isPublished?: boolean | null;
   category: 'flat' | 'room' | 'house' | 'land' | 'commercial';
-  responsibleEmployee?: (number | null) | Employee;
-  feedSource?: (number | null) | ImportSource;
+  responsibleEmployee?: (string | null) | Employee;
+  feedSource?: (string | null) | ImportSource;
   sourceKey?: string | null;
   importHash?: string | null;
   lastSeenAt?: string | null;
@@ -412,14 +412,14 @@ export interface Property {
   videoUrl?: string | null;
   gallery?:
     | {
-        file: number | Media;
+        file: string | Media;
         kind: 'photo' | 'floor_plan';
         isMain?: boolean | null;
         id?: string | null;
       }[]
     | null;
   activity?: {
-    docs?: (number | AdminActivity)[];
+    docs?: (string | AdminActivity)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -431,7 +431,7 @@ export interface Property {
  * via the `definition` "import-sources".
  */
 export interface ImportSource {
-  id: number;
+  id: string;
   title: string;
   key: string;
   endpointHint?: string | null;
@@ -445,7 +445,7 @@ export interface ImportSource {
  * via the `definition` "admin-activities".
  */
 export interface AdminActivity {
-  id: number;
+  id: string;
   event:
     | 'LEAD_CREATED'
     | 'LEAD_STAGE_CHANGED'
@@ -471,13 +471,13 @@ export interface AdminActivity {
   label: string;
   details?: string | null;
   triggeredBy: string;
-  lead?: (number | null) | Lead;
-  property?: (number | null) | Property;
-  residentialComplex?: (number | null) | ResidentialComplex;
-  employee?: (number | null) | Employee;
-  review?: (number | null) | Review;
-  office?: (number | null) | Office;
-  importRun?: (number | null) | ImportRun;
+  lead?: (string | null) | Lead;
+  property?: (string | null) | Property;
+  residentialComplex?: (string | null) | ResidentialComplex;
+  employee?: (string | null) | Employee;
+  review?: (string | null) | Review;
+  office?: (string | null) | Office;
+  importRun?: (string | null) | ImportRun;
   before?:
     | {
         [k: string]: unknown;
@@ -504,7 +504,7 @@ export interface AdminActivity {
  * via the `definition` "residential-complexes".
  */
 export interface ResidentialComplex {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   status: 'draft' | 'published' | 'hidden';
@@ -520,12 +520,12 @@ export interface ResidentialComplex {
   areaMin?: number | null;
   areaMax?: number | null;
   roomTypes?: ('studio' | '1' | '2' | '3' | '4')[] | null;
-  cover?: (number | null) | Media;
+  cover?: (string | null) | Media;
   externalCoverUrl?: string | null;
   videoUrl?: string | null;
   gallery?:
     | {
-        image?: (number | null) | Media;
+        image?: (string | null) | Media;
         externalUrl?: string | null;
         alt?: string | null;
         id?: string | null;
@@ -554,7 +554,7 @@ export interface ResidentialComplex {
     description?: string | null;
   };
   activity?: {
-    docs?: (number | AdminActivity)[];
+    docs?: (string | AdminActivity)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -566,10 +566,10 @@ export interface ResidentialComplex {
  * via the `definition` "reviews".
  */
 export interface Review {
-  id: number;
+  id: string;
   authorName: string;
   publicName?: string | null;
-  employee: number | Employee;
+  employee: string | Employee;
   rating: number;
   status: 'pending' | 'published' | 'rejected';
   reviewDate: string;
@@ -578,7 +578,7 @@ export interface Review {
   authorPhone?: string | null;
   consentGiven?: boolean | null;
   activity?: {
-    docs?: (number | AdminActivity)[];
+    docs?: (string | AdminActivity)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -590,14 +590,14 @@ export interface Review {
  * via the `definition` "offices".
  */
 export interface Office {
-  id: number;
+  id: string;
   title: string;
   address: string;
-  photo?: (number | null) | Media;
+  photo?: (string | null) | Media;
   sortOrder: number;
   isPublished?: boolean | null;
   activity?: {
-    docs?: (number | AdminActivity)[];
+    docs?: (string | AdminActivity)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -609,11 +609,11 @@ export interface Office {
  * via the `definition` "import-runs".
  */
 export interface ImportRun {
-  id: number;
+  id: string;
   correlationId: string;
   mode: 'delta' | 'full_snapshot';
   target: 'units';
-  source: number | ImportSource;
+  source: string | ImportSource;
   status: 'running' | 'success' | 'partial_success' | 'failed' | 'cancelled';
   startedAt: string;
   finishedAt?: string | null;
@@ -646,12 +646,12 @@ export interface ImportRun {
     | boolean
     | null;
   errors?: {
-    docs?: (number | ImportError)[];
+    docs?: (string | ImportError)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
   activity?: {
-    docs?: (number | AdminActivity)[];
+    docs?: (string | AdminActivity)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -663,8 +663,8 @@ export interface ImportRun {
  * via the `definition` "import-errors".
  */
 export interface ImportError {
-  id: number;
-  run: number | ImportRun;
+  id: string;
+  run: string | ImportRun;
   externalId?: string | null;
   code?: string | null;
   message: string;
@@ -676,8 +676,8 @@ export interface ImportError {
  * via the `definition` "lead-notes".
  */
 export interface LeadNote {
-  id: number;
-  lead: number | Lead;
+  id: string;
+  lead: string | Lead;
   body: string;
   authorName?: string | null;
   notedAt?: string | null;
@@ -689,12 +689,12 @@ export interface LeadNote {
  * via the `definition` "anti-spam-events".
  */
 export interface AntiSpamEvent {
-  id: number;
+  id: string;
   verdict: 'accepted' | 'duplicate_suppressed' | 'rate_limited' | 'honeypot' | 'blocked_too_fast' | 'suspicious_burst';
   reason?: string | null;
   sourcePage?: string | null;
   formType?: string | null;
-  lead?: (number | null) | Lead;
+  lead?: (string | null) | Lead;
   clientIpHash?: string | null;
   visitorKeyHash?: string | null;
   requestFingerprintHash?: string | null;
@@ -706,14 +706,14 @@ export interface AntiSpamEvent {
  * via the `definition` "buildings".
  */
 export interface Building {
-  id: number;
+  id: string;
   title: string;
-  residentialComplex: number | ResidentialComplex;
+  residentialComplex: string | ResidentialComplex;
   address?: string | null;
   completionLabel?: string | null;
   sortOrder?: number | null;
   isPublished?: boolean | null;
-  source: number | ImportSource;
+  source: string | ImportSource;
   externalId: string;
   sourceKey: string;
   importHash: string;
@@ -727,10 +727,10 @@ export interface Building {
  * via the `definition` "units".
  */
 export interface Unit {
-  id: number;
+  id: string;
   number: string;
-  building: number | Building;
-  residentialComplex: number | ResidentialComplex;
+  building: string | Building;
+  residentialComplex: string | ResidentialComplex;
   section?: string | null;
   floor: number;
   rooms: number;
@@ -742,8 +742,8 @@ export interface Unit {
   pricePerSquareMeter?: number | null;
   availability: 'available' | 'reserved' | 'sold' | 'hidden';
   isPublished?: boolean | null;
-  layout?: (number | null) | Media;
-  source: number | ImportSource;
+  layout?: (string | null) | Media;
+  source: string | ImportSource;
   externalId: string;
   sourceKey: string;
   importHash: string;
@@ -757,7 +757,7 @@ export interface Unit {
  * via the `definition` "analytics-events".
  */
 export interface AnalyticsEvent {
-  id: number;
+  id: string;
   eventType: 'visit' | 'lead_conversion';
   occurredAt: string;
   section?: string | null;
@@ -766,7 +766,7 @@ export interface AnalyticsEvent {
   device: 'desktop' | 'mobile' | 'tablet' | 'unknown';
   visitorKeyHash: string;
   sessionKeyHash?: string | null;
-  lead?: (number | null) | Lead;
+  lead?: (string | null) | Lead;
   updatedAt: string;
   createdAt: string;
 }
@@ -775,7 +775,7 @@ export interface AnalyticsEvent {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number;
+  id: string;
   key: string;
   data:
     | {
@@ -792,7 +792,7 @@ export interface PayloadKv {
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
-  id: number;
+  id: string;
   /**
    * Input data provided to the job
    */
@@ -897,84 +897,84 @@ export interface PayloadJob {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: string;
   document?:
     | ({
         relationTo: 'users';
-        value: number | User;
+        value: string | User;
       } | null)
     | ({
         relationTo: 'media';
-        value: number | Media;
+        value: string | Media;
       } | null)
     | ({
         relationTo: 'pages';
-        value: number | Page;
+        value: string | Page;
       } | null)
     | ({
         relationTo: 'leads';
-        value: number | Lead;
+        value: string | Lead;
       } | null)
     | ({
         relationTo: 'lead-notes';
-        value: number | LeadNote;
+        value: string | LeadNote;
       } | null)
     | ({
         relationTo: 'properties';
-        value: number | Property;
+        value: string | Property;
       } | null)
     | ({
         relationTo: 'residential-complexes';
-        value: number | ResidentialComplex;
+        value: string | ResidentialComplex;
       } | null)
     | ({
         relationTo: 'buildings';
-        value: number | Building;
+        value: string | Building;
       } | null)
     | ({
         relationTo: 'units';
-        value: number | Unit;
+        value: string | Unit;
       } | null)
     | ({
         relationTo: 'employees';
-        value: number | Employee;
+        value: string | Employee;
       } | null)
     | ({
         relationTo: 'reviews';
-        value: number | Review;
+        value: string | Review;
       } | null)
     | ({
         relationTo: 'offices';
-        value: number | Office;
+        value: string | Office;
       } | null)
     | ({
         relationTo: 'analytics-events';
-        value: number | AnalyticsEvent;
+        value: string | AnalyticsEvent;
       } | null)
     | ({
         relationTo: 'anti-spam-events';
-        value: number | AntiSpamEvent;
+        value: string | AntiSpamEvent;
       } | null)
     | ({
         relationTo: 'import-sources';
-        value: number | ImportSource;
+        value: string | ImportSource;
       } | null)
     | ({
         relationTo: 'import-runs';
-        value: number | ImportRun;
+        value: string | ImportRun;
       } | null)
     | ({
         relationTo: 'import-errors';
-        value: number | ImportError;
+        value: string | ImportError;
       } | null)
     | ({
         relationTo: 'admin-activities';
-        value: number | AdminActivity;
+        value: string | AdminActivity;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -984,10 +984,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -1007,7 +1007,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -1536,7 +1536,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "site-settings".
  */
 export interface SiteSetting {
-  id: number;
+  id: string;
   companyName: string;
   brandName: string;
   phone?: string | null;
@@ -1565,7 +1565,7 @@ export interface SiteSetting {
  * via the `definition` "payload-jobs-stats".
  */
 export interface PayloadJobsStat {
-  id: number;
+  id: string;
   stats?:
     | {
         [k: string]: unknown;
@@ -1651,7 +1651,7 @@ export interface TaskImportNormalizedUnits {
   input: {
     batchKey: string;
     expectedBatchCount: number;
-    importRunId: number;
+    importRunId: string;
     mode: 'delta' | 'full_snapshot';
     records:
       | {
@@ -1663,7 +1663,7 @@ export interface TaskImportNormalizedUnits {
       | boolean
       | null;
     snapshotStartedAt: string;
-    sourceId: number;
+    sourceId: string;
     sourceKey: string;
   };
   output: {

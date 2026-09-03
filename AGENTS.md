@@ -4,7 +4,7 @@
 
 - Клиент: Союз застройщиков Ростов.
 - Тип: новая публичная веб-платформа с CMS и будущим каталогом.
-- Текущий foundation-стек: Next.js `16.3.0`, React `19.2.8`, TypeScript `6.0.3`, Payload `3.88.0`, PostgreSQL `18`, Node.js `24.20.0`, pnpm `11.24.0`.
+- Текущий foundation-стек: Next.js `16.3.4`, React `19.2.8`, TypeScript `6.0.3`, Payload `3.88.0`, PostgreSQL `18`, Node.js `24.20.x`, pnpm `11.24.0`.
 - Code source of truth: SourceCraft `origin/main`.
 - Repository mode: `SOURCECRAFT_PRIMARY_GITHUB_MIRROR`.
 - Локальный checkout: текущая Windows-папка проекта.
@@ -15,9 +15,10 @@
 
 1. Глобальный `~/.codex/AGENTS.md` и релевантные AMS skills.
 2. Этот `AGENTS.md`.
-3. `docs/PRODUCT.md`.
-4. Только документ текущего scope: `docs/PAYLOAD_CONTRACT.md`, `ARCHITECTURE`, `DATA_MODEL`, `SECURITY`, `MASTER_PLAN` или `STARTER_CONTRACT`.
-5. Затем `package.json`, lockfile, Payload config, migrations и фактический код.
+3. `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.0.md` и `docs/adr/0001-day0.md`.
+4. `docs/PRODUCT.md`.
+5. Только документ текущего scope: `docs/PAYLOAD_CONTRACT.md`, `ARCHITECTURE`, `DATA_MODEL`, `SECURITY`, `MASTER_PLAN`, `VERSION_MATRIX`, `THREAT_MODEL` или `STARTER_CONTRACT`.
+6. Затем `package.json`, lockfile, Payload config, migrations и фактический код.
 
 Не читать весь проект автоматически для локальной задачи.
 
@@ -33,9 +34,9 @@
 - Любой Local API вызов от имени пользователя должен явно использовать `overrideAccess: false`.
 - Все `@payloadcms/*` обновляются синхронно и одной версии.
 - Не создавать локальные копии глобальных AMS skills.
-- Этот repository является текущим canonical starter-under-development с рабочим Union preset. Создание, export или публикация отдельного template repository запрещены без новой явной owner-команды.
-- Starter scope следует `docs/STARTER_CONTRACT.md` и `starter.manifest.json`; applied migrations и production identity не копируются автоматически.
-- Reusable public UI получает только serializable DTO/action contracts; прямые imports из `components` в `payload` запрещены.
+- Текущий repository развивается в client repository. Reusable core выделяется только в Волне 11 в отдельный private package `@ams/realty-core`; до этого запрещены второй ORM, отдельный backend и дублирование core source.
+- Applied legacy migrations не являются V2 schema source. V2 Payload использует `src/payload/migrations-v2`; production cutover requires a new UUID database and separate RELEASE command.
+- Reusable public UI получает только serializable DTO/action contracts; прямые imports из presentation в Payload запрещены.
 
 ## Git workflow
 
@@ -53,12 +54,16 @@
 - Изменились auth, роли, secrets или trust boundaries → `SECURITY.md`.
 - Изменились Payload runtime rules, admin customization или migration workflow → `docs/PAYLOAD_CONTRACT.md`.
 - Завершён этап или изменился порядок работ → `docs/MASTER_PLAN.md` и `WORKLOG.md`.
+- Стандарт, day-0 decisions, security baseline, threat model, incident response, version matrix и schema exceptions изменяются вместе с их owning contract.
 - Изменился starter/client/export boundary → `docs/STARTER_CONTRACT.md`, `starter.manifest.json`, `docs/ARCHITECTURE.md` и `docs/MASTER_PLAN.md`.
 
 ## Проверки
 
 - `pnpm lint`
 - `pnpm typecheck`
+- `pnpm architecture:check`
+- `pnpm security:check`
+- `pnpm test`
 - `pnpm build`
 - `pnpm generate:types`
 - `pnpm generate:importmap`

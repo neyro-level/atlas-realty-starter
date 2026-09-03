@@ -1,75 +1,58 @@
-# Data model
+# Data Model
 
-## Cabinet model
+## Status
 
-| Сущность | Назначение | Ключевые поля | Доступ |
-|---|---|---|---|
-| `users` | административные аккаунты Payload | `name`, `username`, password hash, `role`; email optional and not used for login | anonymous create denied; full management only `SUPER_ADMIN` |
-| `media` | общий media layer | файл, `alt`, `caption`, `isPublic`, focal point | public read только при `isPublic = true` |
-| `pages` | редакционный слой статических страниц | `title`, `slug`, `content`, `seo`, `_status` | public read только published |
-| `site-settings` | пользовательский раздел `Контакты` | `companyName`, `brandName`, `phone`, `email`, `address`, `workingHours`, messenger URLs | public read, update `DIRECTOR | SUPER_ADMIN` |
-| `leads` | mini-CRM контур заявок | клиент, источник, страница, форма, stage, `responsibleEmployee` | read/update `DIRECTOR | SUPER_ADMIN` |
-| `lead-notes` | append-only заметки по заявкам | `lead`, `body`, `authorName`, `notedAt` | create `DIRECTOR | SUPER_ADMIN`, update/delete запрещены |
-| `properties` | самостоятельные объявления недвижимости | manual/presentation fields plus `feedSource`, `sourceKey`, `externalId`, `importHash`, `lastSeenAt`, `isSourceActive` | public read only `isPublished = true`; mutation manual-scope |
-| `residential-complexes` | страницы и каталог ЖК | content, publish status, developer, location, pricing, media and SEO | public read only `published`; create/update role-aware |
-| `buildings` | корпуса массового каталога | ЖК, source identity, completion, publication, last-seen/active | public active+published; writes SUPER_ADMIN/system import |
-| `units` | помещения массового каталога | building/ЖК, floor/rooms/areas/price/availability, source identity | public active+published; writes SUPER_ADMIN/system import |
-| `employees` | карточки сотрудников | `fullName`, `origin`, `status`, `teamSection`, `isPublic`, `photo`, `publicBio` | public read только active+public |
-| `reviews` | отзывы и модерация | `authorName`, `employee`, `rating`, `text`, `publishedText`, `status`, `reviewDate` | public read только published |
-| `offices` | офисы и контактные точки | `title`, `address`, `photo`, `sortOrder`, `isPublished` | public read только `isPublished = true` |
-| `analytics-events` | сырые analytics events | `eventType`, `occurredAt`, `section`, `page`, `utmSource`, `device`, safe hashes, `lead` | append-only system collection |
-| `anti-spam-events` | журнал антиспам-попыток | `verdict`, `reason`, `sourcePage`, safe hashes, `lead` | append-only system collection |
-| `import-sources` | registry XML feeds | `title`, `endpointHint`, `isActive`, `adapterConfigured` | privileged configuration |
-| `import-runs` | история XML запусков | status, counts, timings, diagnostics, `errors` | append-only system lifecycle |
-| `import-errors` | ошибки конкретного запуска | `run`, `externalId`, `code`, `message` | append-only system collection |
-| `admin-activities` | единый audit trail | `event`, `details`, `triggeredBy`, subject relationships, `before`, `after` | append-only system collection |
+Wave 0 changes the physical V2 identity foundation to UUID. The full catalog replacement belongs to Wave 2; legacy numeric business collections remain code-compatibility artifacts until their clean cutover. They are not approved V2 target entities.
 
-## Catalog extension boundary
+## V2 catalog principle
 
-Массовый каталог реализует:
+One real-estate offer is one `properties` document. `market` distinguishes `secondary` and `newbuild`. A separate `units` business collection is not part of V2. Newbuild units are properties related to an optional `residential-complexes` and `buildings` document.
 
-```text
-ResidentialComplex
-└── Building (source + externalId unique)
-    └── Unit (source + externalId unique)
-```
+## V2 entities
 
-`properties` остаётся для самостоятельных объявлений, вторички, домов, участков и коммерции и также поддерживает source ownership. Unit batches ограничены 1 000 records; full snapshot deactivation выполняется только после всех ожидаемых пакетов. Chessboard использует indexed read model без raw Payload documents.
+| Entity | Owner and lifecycle |
+|---|---|
+| `feed-sources` | Owner-managed source configuration; secrets only by non-secret refs; one exact host/parser registry entry per source |
+| `properties` | Manual or feed-owned offer; UUID; unique `(feedSource, externalId)` for feed records; soft delete; source/manual ownership |
+| `residential-complexes` | Newbuild aggregate; matching by Yandex building ID when available |
+| `buildings` | Newbuild building/house aggregate; Yandex house ID when available |
+| `developers` | Published developer directory |
+| `agents` | Manual or feed identity; normalized phone unique; publication manual |
+| `property-price-history` | Append-only price changes only, 24-month raw retention |
+| `leads` | PII-bearing request; atomic companion deliveries; retention from PDN matrix |
+| `lead-deliveries` | Transactional outbox; pending/processing/sent/failed/dead lifecycle |
+| `phone-reveals` | Pseudonymous anti-abuse event, not a lead by default |
+| `import-runs` | `running/success/suspicious/failed`; source-scoped evidence |
+| `import-issues` | Redacted diagnostics, 90-day default retention |
+| `audit-events` | Append-only, redacted safe field changes only |
+| `stat-events` | Pseudonymous append-only raw events, 90-day default retention |
+| `stat-daily` | Non-PII aggregates |
+| `facet-cache` | Optional post-import facets |
+| `seo-landings` | Whitelisted published SEO combinations |
+| `pages`, `posts`, `reviews`, `offices`, `media`, `users`, `redirects` | Editorial/business support collections |
 
-## Инварианты
+## Field invariants
 
-- `users.role` сохраняется в JWT и доступен самому аутентифицированному пользователю;
-- `origin` и import metadata изменяет только controlled system write;
-- `CONTENT_MANAGER` не публикует и не архивирует объекты;
-- XML employee допускает только public-profile изменения, но не ownership/source fields;
-- public read для employees/reviews/properties/offices ограничен server-side access;
-- public read `residential-complexes` ограничен `status=published`; CONTENT_MANAGER не публикует;
-- operational events и audit append-only для пользователей;
-- audit source of truth только `admin-activities`; embedded дубликата истории нет;
-- dashboard filters/count/pagination выполняются PostgreSQL/Payload queries;
-- основные filter/status/date/source fields индексируются;
-- `source + externalId` уникален отдельно для properties, buildings и units;
-- повтор batch key не меняет данные и accounting;
-- `importHash` отличает content update от last-seen refresh;
-- Jobs Queue serializes Unit import per source;
-- конкретный XML adapter обязан соблюдать `docs/FEED_OWNERSHIP_CONTRACT.md`.
+- IDs are UUID strings.
+- Money is integer minor units; areas are integer cm².
+- Published slugs never change automatically.
+- `manualFields` wins over source updates; source A cannot change source B fields or manual documents.
+- Feed documents never store raw XML/JSON fragments containing PII.
+- Private fields such as apartment/cadastral number, owner contact and internal comment have independent field-level read deny and never enter public DTOs.
+- Public reads are only published, non-trashed and non-draft via trusted Public Gateway.
+- Every collection declares explicit create/read/update/delete access.
+- Import and audit history are append-only to ordinary users.
 
-## Lifecycle
+## Index contract
 
-- `leads`: создаются system/manual, меняют stage, архивируются без physical delete; после approved `LEAD_RETENTION_DAYS` PII заменяется controlled retention task;
-- `properties`: `draft -> active -> archived|hidden`, публикация отделена флагом `isPublished`;
-- `buildings`, `units`: source-owned active/inactive lifecycle; deactivate only successful complete full snapshot;
-- `employees`: `active|inactive`, публичность отделена от статуса;
-- `reviews`: `pending -> published|rejected`, возможен возврат на модерацию;
-- `offices`: CRUD с publish/hide;
-- `anti-spam-events`, `analytics-events`, `import-errors`, `admin-activities`: append-only;
-- `import-runs`: durable batch accounting and `running|success|partial_success|failed|cancelled`.
+Wave 2 validates with `EXPLAIN ANALYZE`:
 
-## Отложено сознательно
+- unique `(feedSource, externalId)`;
+- `(market, dealType, category, localityName, priceMinorUnits)`;
+- `(latitude, longitude)`;
+- `(status, lastSeenAt)`;
+- `(complex, status)`;
+- `(agent, status)`;
+- lead status/createdAt, delivery status/nextRetryAt and import source/startedAt.
 
-- конкретная XML feed-спецификация и parser/adapter;
-- production ingestion analytics events;
-- внешняя CRM / lead delivery;
-- production Sentry project/DSN and controlled event;
-- retention periods for analytics, anti-spam and audit.
-- redirect registry и контентная миграция Astro.
+Non-Payload schema objects require an entry in `SCHEMA_EXCEPTIONS.md`.

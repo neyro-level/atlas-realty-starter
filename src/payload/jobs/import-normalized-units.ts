@@ -20,7 +20,7 @@ export const importNormalizedUnitsTask: TaskConfig<TaskContract> = {
   inputSchema: [
     { name: 'batchKey', type: 'text', required: true },
     { name: 'expectedBatchCount', type: 'number', min: 1, required: true },
-    { name: 'importRunId', type: 'number', min: 1, required: true },
+    { name: 'importRunId', type: 'text', required: true },
     {
       name: 'mode',
       type: 'select',
@@ -32,7 +32,7 @@ export const importNormalizedUnitsTask: TaskConfig<TaskContract> = {
     },
     { name: 'records', type: 'json', required: true },
     { name: 'snapshotStartedAt', type: 'date', required: true },
-    { name: 'sourceId', type: 'number', min: 1, required: true },
+    { name: 'sourceId', type: 'text', required: true },
     { name: 'sourceKey', type: 'text', required: true },
   ],
   outputSchema: [
@@ -56,7 +56,7 @@ export const importNormalizedUnitsTask: TaskConfig<TaskContract> = {
   }),
   onFail: async ({ input, req }) => {
     const importRunId = (input as Partial<TaskContract['input']> | undefined)?.importRunId
-    if (typeof importRunId !== 'number') return
+    if (typeof importRunId !== 'string') return
     await req.payload.update({
       collection: 'import-runs',
       id: importRunId,

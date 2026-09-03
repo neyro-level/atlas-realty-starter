@@ -11,13 +11,13 @@ import { hasAdminCapability, isSuperAdmin } from '@/payload/access/capabilities'
 type ReadonlyRecord = Record<string, unknown>
 
 type AuditSubject = {
-  employee?: number
-  importRun?: number
-  lead?: number
-  office?: number
-  property?: number
-  residentialComplex?: number
-  review?: number
+  employee?: string
+  importRun?: string
+  lead?: string
+  office?: string
+  property?: string
+  residentialComplex?: string
+  review?: string
 }
 
 function readRecord(value: unknown): ReadonlyRecord | null {
@@ -33,12 +33,12 @@ function readArray(value: unknown) {
 }
 
 function readRelationID(value: unknown) {
-  if (typeof value === 'number') {
+  if (typeof value === 'string') {
     return value
   }
 
   const record = readRecord(value)
-  return typeof record?.id === 'number' ? record.id : undefined
+  return typeof record?.id === 'string' ? record.id : undefined
 }
 
 function readActorName(req: PayloadRequest) {

@@ -98,6 +98,7 @@
       "patterns": [
         "src/app/**",
         "src/components/**",
+        "src/core/**",
         "src/modules/**",
         "src/lib/**",
         "src/shared/**",
@@ -145,7 +146,8 @@
         ".prettierrc*",
         "patches/**",
         "types/**",
-        "fixtures/**"
+        "fixtures/**",
+        ".sourcecraft/**"
       ]
     }
   ],

@@ -556,8 +556,8 @@ describe('admin cabinet parity contracts', () => {
       },
       overrideAccess: true,
     })
-    if (typeof source.id !== 'number' || typeof building.id !== 'number' || typeof complex.id !== 'number' || typeof run.id !== 'number') {
-      throw new Error('PostgreSQL integration requires numeric IDs')
+    if (typeof source.id !== 'string' || typeof building.id !== 'string' || typeof complex.id !== 'string' || typeof run.id !== 'string') {
+      throw new Error('PostgreSQL integration requires UUID IDs')
     }
     const input = {
       batchKey: 'retry-proof:0',

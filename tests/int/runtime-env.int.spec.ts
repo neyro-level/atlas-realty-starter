@@ -15,29 +15,35 @@ const bootstrap = {
   PAYLOAD_SUPERADMIN_PASSWORD: 'superadmin-secret',
   PAYLOAD_SUPERADMIN_USERNAME: 'superadmin',
 }
+const core = {
+  HEALTH_SECRET: strongSecret,
+  NEXT_PUBLIC_SITE_URL: 'https://example.test',
+  PRIVACY_HMAC_SECRET: strongSecret,
+  REVALIDATE_SECRET: strongSecret,
+}
 
 describe('production environment contract', () => {
   it('rejects known Payload secret placeholders', () => {
-    expect(() => buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: 'change-me-foundation-secret', ...bootstrap, ...s3 })).toThrow(/known placeholder/)
+    expect(() => buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: 'change-me-foundation-secret', ...bootstrap, ...core, ...s3 })).toThrow(/known placeholder/)
   })
 
   it('rejects short Payload secrets', () => {
-    expect(() => buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: 'short-secret', ...bootstrap, ...s3 })).toThrow(/at least 32/)
+    expect(() => buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: 'short-secret', ...bootstrap, ...core, ...s3 })).toThrow(/at least 32/)
   })
 
   it('requires persistent S3 storage in production and staging', () => {
-    expect(() => buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: strongSecret, ...bootstrap })).toThrow(/S3 storage is required/)
-    expect(() => buildRuntimeConfig({ APP_ENV: 'staging', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: strongSecret, ...bootstrap })).toThrow(/S3 storage is required/)
+    expect(() => buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: strongSecret, ...bootstrap, ...core })).toThrow(/S3 storage is required/)
+    expect(() => buildRuntimeConfig({ APP_ENV: 'staging', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: strongSecret, ...bootstrap, ...core })).toThrow(/S3 storage is required/)
   })
   it('defaults lead retention to 365 days without SMTP', () => {
-    const result = buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: strongSecret, ...bootstrap, ...s3 })
+    const result = buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: strongSecret, ...bootstrap, ...core, ...s3 })
     expect(result.leadRetentionDays).toBe(365)
     expect('email' in result).toBe(false)
     expect(result.databasePoolMax).toBe(2)
   })
 
   it('requires separate production bootstrap credentials', () => {
-    expect(() => buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: strongSecret, ...s3 })).toThrow(/bootstrap/)
+    expect(() => buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: strongSecret, ...core, ...s3 })).toThrow(/bootstrap/)
   })
   it('treats NODE_ENV production as production when APP_ENV is absent', () => {
     expect(() => buildRuntimeConfig({ NODE_ENV: 'production' })).toThrow(/bootstrap/)
@@ -64,7 +70,7 @@ describe('production environment contract', () => {
   })
 
   it('accepts a strong production secret with complete S3 config', () => {
-    const result = buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: strongSecret, ...bootstrap, ...s3 })
+    const result = buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: strongSecret, ...bootstrap, ...core, ...s3 })
     expect(result.s3).toMatchObject({ bucket: 'bucket', region: 'ru-1' })
   })
 })

@@ -6,11 +6,10 @@ export type SeoSiteConfig = {
   staticSitemapPaths: string[]
 }
 
-export function resolveSiteBaseUrl(config: SeoSiteConfig) {
-  return process.env.NEXT_PUBLIC_APP_URL || config.fallbackBaseUrl
+export function resolveSiteBaseUrl(config: SeoSiteConfig, siteURL?: string) {
+  return siteURL || config.fallbackBaseUrl
 }
 
-export function isPublicIndexingEnabled(config: SeoSiteConfig) {
-  const baseUrl = resolveSiteBaseUrl(config)
-  return process.env.APP_ENV === 'production' && baseUrl.startsWith('https://')
+export function isPublicIndexingEnabled(baseUrl: string, environment: string) {
+  return environment === 'production' && baseUrl.startsWith('https://')
 }

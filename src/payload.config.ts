@@ -112,16 +112,20 @@ export default buildConfig({
     AdminActivities,
   ],
   db: postgresAdapter({
-    migrationDir: path.resolve(dirname, 'payload/migrations'),
+    blocksAsJSON: true,
+    idType: 'uuid',
+    migrationDir: path.resolve(dirname, 'payload/migrations-v2'),
     pool: {
       connectionString: runtimeConfig.databaseURL,
       max: runtimeConfig.databasePoolMax,
     },
+    push: false,
   }),
   editor: lexicalEditor(),
   globals: [SiteSettings],
+  defaultDepth: 0,
   graphQL: {
-    disablePlaygroundInProduction: true,
+    disable: true,
   },
   i18n: {
     fallbackLanguage: 'ru',
@@ -139,7 +143,7 @@ export default buildConfig({
   },
   onInit: bootstrapAdminUsers,
   localization: false,
-  maxDepth: 2,
+  maxDepth: 3,
   plugins: [
     s3Storage({
       alwaysInsertFields: true,

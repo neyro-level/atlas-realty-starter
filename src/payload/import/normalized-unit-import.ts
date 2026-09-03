@@ -20,7 +20,7 @@ type DatabaseClient = {
 
 type UnitValues = {
   availability: 'available' | 'hidden' | 'reserved' | 'sold'
-  buildingId: number
+  buildingId: string
   floor: number
   isStudio: boolean
   kitchenArea: number | null
@@ -28,7 +28,7 @@ type UnitValues = {
   number: string
   price: number
   pricePerSquareMeter: number | null
-  residentialComplexId: number
+  residentialComplexId: string
   rooms: number
   section: string | null
   totalArea: number
@@ -37,11 +37,11 @@ type UnitValues = {
 export type NormalizedUnitImportInput = {
   batchKey: string
   expectedBatchCount: number
-  importRunId: number
+  importRunId: string
   mode: 'delta' | 'full_snapshot'
   records: NormalizedFeedRecord[]
   snapshotStartedAt: string
-  sourceId: number
+  sourceId: string
   sourceKey: string
 }
 
@@ -58,7 +58,7 @@ export type QueueNormalizedUnitImportInput = {
   batchSize?: number
   mode: 'delta' | 'full_snapshot'
   records: NormalizedFeedRecord[]
-  sourceId: number
+  sourceId: string
   sourceKey: string
 }
 
@@ -94,6 +94,14 @@ function assertNonEmptyString(value: unknown, field: string) {
   return value
 }
 
+function assertUUID(value: unknown, field: string) {
+  const parsed = assertNonEmptyString(value, field)
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(parsed)) {
+    throw new Error(`Invalid normalized unit field: ${field}`)
+  }
+  return parsed
+}
+
 function readUnitValues(record: NormalizedFeedRecord): UnitValues {
   const value = record.payload
   const availability = value.availability
@@ -103,7 +111,7 @@ function readUnitValues(record: NormalizedFeedRecord): UnitValues {
 
   return {
     availability: availability as UnitValues['availability'],
-    buildingId: assertFiniteNumber(value.buildingId, 'buildingId', 1),
+    buildingId: assertUUID(value.buildingId, 'buildingId'),
     floor: assertFiniteNumber(value.floor, 'floor'),
     isStudio: value.isStudio === true,
     kitchenArea: optionalFiniteNumber(value.kitchenArea, 'kitchenArea'),
@@ -111,7 +119,7 @@ function readUnitValues(record: NormalizedFeedRecord): UnitValues {
     number: assertNonEmptyString(value.number, 'number'),
     price: assertFiniteNumber(value.price, 'price'),
     pricePerSquareMeter: optionalFiniteNumber(value.pricePerSquareMeter, 'pricePerSquareMeter'),
-    residentialComplexId: assertFiniteNumber(value.residentialComplexId, 'residentialComplexId', 1),
+    residentialComplexId: assertUUID(value.residentialComplexId, 'residentialComplexId'),
     rooms: assertFiniteNumber(value.rooms, 'rooms'),
     section: value.section == null ? null : assertNonEmptyString(value.section, 'section'),
     totalArea: assertFiniteNumber(value.totalArea, 'totalArea', 0.01),
@@ -121,8 +129,8 @@ function readUnitValues(record: NormalizedFeedRecord): UnitValues {
 function validateInput(input: NormalizedUnitImportInput) {
   assertNonEmptyString(input.batchKey, 'batchKey')
   assertNonEmptyString(input.sourceKey, 'sourceKey')
-  assertFiniteNumber(input.sourceId, 'sourceId', 1)
-  assertFiniteNumber(input.importRunId, 'importRunId', 1)
+  assertUUID(input.sourceId, 'sourceId')
+  assertUUID(input.importRunId, 'importRunId')
   assertFiniteNumber(input.expectedBatchCount, 'expectedBatchCount', 1)
   if (input.records.length === 0 || input.records.length > MAX_BATCH_SIZE) {
     throw new Error(`Normalized unit batch must contain 1-${MAX_BATCH_SIZE} records`)

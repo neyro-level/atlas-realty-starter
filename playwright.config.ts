@@ -13,6 +13,7 @@ const webServerEnv: Record<string, string> = {
   DATABASE_URL:
     process.env.DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:5434/soyuz_rostov_dev',
   NEXT_PUBLIC_APP_URL: baseURL,
+  NEXT_PUBLIC_SITE_URL: baseURL,
   NODE_ENV: isProductionSmoke ? 'production' : 'development',
   PAYLOAD_SECRET: process.env.PAYLOAD_SECRET || 'foundation-test-secret-please-change',
   PORT: testPort,

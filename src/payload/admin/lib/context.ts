@@ -15,7 +15,7 @@ function readUserID(value: unknown) {
     return null
   }
 
-  return typeof value.id === 'number' ? value.id : null
+  return typeof value.id === 'string' ? value.id : null
 }
 
 function normalizeAdminUser(value: unknown): User | null {
