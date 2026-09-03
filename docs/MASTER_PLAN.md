@@ -59,14 +59,14 @@
 
 Текущий incremental state:
 
-- [x] `ResidentialComplex` collection + migration + access/audit;
-- [ ] загрузить утверждённые данные 30 ЖК через Payload;
-- [ ] подтвердить источник, актуальность и media ownership каждого ЖК;
-- [ ] `Building`;
-- [ ] `Unit`;
-- [ ] concrete XML adapter;
-- [ ] idempotency/deactivate rules;
-- [ ] performance proof для mass feed.
+- [x] `ResidentialComplex`, `Building`, `Unit` schema and migrations;
+- [x] source ownership and compound identity for mass catalog;
+- [x] Payload Jobs Queue normalized Unit importer;
+- [x] retry-safe batch accounting and full-snapshot deactivation;
+- [x] 50 000 Unit fixture: 8.5 MiB peak heap growth, indexed chessboard plan, 6.468 ms latest sampled query;
+- [x] paged sitemap and persisted dynamic `updatedAt`;
+- [ ] получить real XML feed/specification and implement only the approved client adapter;
+- [ ] загрузить утверждённые production data/media.
 
 ## Этап 6. Client production foundation
 
@@ -75,9 +75,11 @@
 - [x] managed PostgreSQL 18 `1 vCPU / 1 GiB / 8 GiB` в private Timeweb VPC, public DB network disabled;
 - [x] private S3-compatible media bucket;
 - [x] Doppler runtime/admin secrets;
-- [ ] отдельный Sentry project и test event;
-- [x] provider backup proof и local restore rehearsal;
-- [x] exact-SHA source release, systemd health и previous-good rollback.
+- [ ] отдельный Sentry project, `SENTRY_DSN` and confirmed controlled event;
+- [ ] SMTP and retention variables in Doppler;
+- [ ] supervised imports/maintenance workers and maintenance scheduler;
+- [x] provider backup proof and local restore rehearsal;
+- [x] exact-SHA source release, systemd health and previous-good rollback.
 
 ## Этап 7. Migration rehearsal и cutover
 
@@ -90,7 +92,7 @@
 ## Текущие внешние prerequisites
 
 - real XML feed/specification отсутствует;
-- Sentry project/DSN ещё не создан;
-- production email adapter не подключён;
-- retention для analytics, anti-spam, leads и audit не утверждён;
+- Sentry project/DSN отсутствует в `szrostov-server/prd`;
+- SMTP and `LEAD_RETENTION_DAYS` отсутствуют в `szrostov-server/prd`;
+- owner must approve retention periods for analytics, anti-spam and audit;
 - domain/DNS/SSL/redirect cutover не выполнен; legacy Astro production остаётся действующим.

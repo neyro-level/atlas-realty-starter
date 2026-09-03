@@ -25,10 +25,9 @@
     "protectedUnionState": { "type": "array", "items": { "type": "string" } },
     "audit": {
       "type": "object",
-      "required": ["clientMarkers", "markerAllowedClassifications", "markerAllowedPaths", "presentationRoots", "forbiddenPresentationImports"],
+      "required": ["clientMarkers", "markerAllowedPaths", "presentationRoots", "forbiddenPresentationImports"],
       "properties": {
         "clientMarkers": { "type": "array", "items": { "type": "string", "minLength": 1 } },
-        "markerAllowedClassifications": { "type": "array", "items": { "type": "string" } },
         "markerAllowedPaths": { "type": "array", "items": { "type": "string" } },
         "presentationRoots": { "type": "array", "items": { "type": "string" } },
         "forbiddenPresentationImports": { "type": "array", "items": { "type": "string" } }

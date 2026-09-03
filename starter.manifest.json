@@ -126,6 +126,7 @@
         "AGENTS.md",
         "SECURITY.md",
         "docs/ARCHITECTURE.md",
+        "*.cjs",
         "docs/DATA_MODEL.md",
         "docs/PAYLOAD_CONTRACT.md",
         "docs/STARTER_CONTRACT.md",
@@ -183,9 +184,9 @@
       "sz-rostov",
       "szrostov-server"
     ],
-    "markerAllowedClassifications": ["CLIENT", "UNION_ONLY"],
     "markerAllowedPaths": [
       ".starter-source.json",
+      ".starter-inventory.json",
       "starter.manifest.json",
       "docs/STARTER_CONTRACT.md",
       "docs/adr/ADR-002-full-stack-starter-boundary.md"

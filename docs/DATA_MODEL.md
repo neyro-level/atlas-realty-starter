@@ -10,8 +10,10 @@
 | `site-settings` | пользовательский раздел `Контакты` | `companyName`, `brandName`, `phone`, `email`, `address`, `workingHours`, messenger URLs | public read, update `DIRECTOR | SUPER_ADMIN` |
 | `leads` | mini-CRM контур заявок | клиент, источник, страница, форма, stage, `responsibleEmployee` | read/update `DIRECTOR | SUPER_ADMIN` |
 | `lead-notes` | append-only заметки по заявкам | `lead`, `body`, `authorName`, `notedAt` | create `DIRECTOR | SUPER_ADMIN`, update/delete запрещены |
-| `properties` | самостоятельные объявления недвижимости | identity/workflow, `dealType`, category/commercial type, price and price/m², areas, floor/build year/material/repair, studio/exclusive flags, city/district/address/coordinates, publication date, video and gallery | public read only `isPublished = true`; mutation manual-scope |
-| `residential-complexes` | страницы и каталог ЖК | `title`, `slug`, publish status, developer, district/address/coordinates, price/areas/rooms, cover/gallery/video, advantages, purchase terms, SEO | public read only `published`; create/update role-aware; publish `DIRECTOR | SUPER_ADMIN` |
+| `properties` | самостоятельные объявления недвижимости | manual/presentation fields plus `feedSource`, `sourceKey`, `externalId`, `importHash`, `lastSeenAt`, `isSourceActive` | public read only `isPublished = true`; mutation manual-scope |
+| `residential-complexes` | страницы и каталог ЖК | content, publish status, developer, location, pricing, media and SEO | public read only `published`; create/update role-aware |
+| `buildings` | корпуса массового каталога | ЖК, source identity, completion, publication, last-seen/active | public active+published; writes SUPER_ADMIN/system import |
+| `units` | помещения массового каталога | building/ЖК, floor/rooms/areas/price/availability, source identity | public active+published; writes SUPER_ADMIN/system import |
 | `employees` | карточки сотрудников | `fullName`, `origin`, `status`, `teamSection`, `isPublic`, `photo`, `publicBio` | public read только active+public |
 | `reviews` | отзывы и модерация | `authorName`, `employee`, `rating`, `text`, `publishedText`, `status`, `reviewDate` | public read только published |
 | `offices` | офисы и контактные точки | `title`, `address`, `photo`, `sortOrder`, `isPublished` | public read только `isPublished = true` |
@@ -24,15 +26,15 @@
 
 ## Catalog extension boundary
 
-Первые 30 страниц ЖК используют самостоятельную collection `residential-complexes`. Массовый feed позже расширяет модель:
+Массовый каталог реализует:
 
 ```text
 ResidentialComplex
-└── Building
-    └── Unit
+└── Building (source + externalId unique)
+    └── Unit (source + externalId unique)
 ```
 
-`properties` остаётся для самостоятельных объявлений, вторички, домов, участков и коммерции. Indexed public filters: price, deal/commercial type, total area, floor, build year, material, repair, price per m², studio/exclusive, city, district, rooms and publication date. Catalog content в Git не дублируется: ЖК и объекты заводятся через Payload после утверждения источника данных.
+`properties` остаётся для самостоятельных объявлений, вторички, домов, участков и коммерции и также поддерживает source ownership. Unit batches ограничены 1 000 records; full snapshot deactivation выполняется только после всех ожидаемых пакетов. Chessboard использует indexed read model без raw Payload documents.
 
 ## Инварианты
 
@@ -46,22 +48,28 @@ ResidentialComplex
 - audit source of truth только `admin-activities`; embedded дубликата истории нет;
 - dashboard filters/count/pagination выполняются PostgreSQL/Payload queries;
 - основные filter/status/date/source fields индексируются;
+- `source + externalId` уникален отдельно для properties, buildings и units;
+- повтор batch key не меняет данные и accounting;
+- `importHash` отличает content update от last-seen refresh;
+- Jobs Queue serializes Unit import per source;
 - конкретный XML adapter обязан соблюдать `docs/FEED_OWNERSHIP_CONTRACT.md`.
 
 ## Lifecycle
 
-- `leads`: создаются system/manual, меняют stage, получают отдельные `lead-notes` и anti-spam linkage;
+- `leads`: создаются system/manual, меняют stage, архивируются без physical delete; после approved `LEAD_RETENTION_DAYS` PII заменяется controlled retention task;
 - `properties`: `draft -> active -> archived|hidden`, публикация отделена флагом `isPublished`;
+- `buildings`, `units`: source-owned active/inactive lifecycle; deactivate only successful complete full snapshot;
 - `employees`: `active|inactive`, публичность отделена от статуса;
 - `reviews`: `pending -> published|rejected`, возможен возврат на модерацию;
 - `offices`: CRUD с publish/hide;
 - `anti-spam-events`, `analytics-events`, `import-errors`, `admin-activities`: append-only;
-- `import-runs`: `running|success|partial_success|failed|cancelled`, lifecycle меняет только system adapter.
+- `import-runs`: durable batch accounting and `running|success|partial_success|failed|cancelled`.
 
 ## Отложено сознательно
 
 - конкретная XML feed-спецификация и parser/adapter;
 - production ingestion analytics events;
 - внешняя CRM / lead delivery;
-- production credentials managed PostgreSQL, S3 и Sentry project;
+- production Sentry project/DSN and controlled event;
+- retention periods for analytics, anti-spam and audit.
 - redirect registry и контентная миграция Astro.

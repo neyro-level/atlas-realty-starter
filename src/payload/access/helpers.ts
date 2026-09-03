@@ -1,3 +1,5 @@
+import { sql } from '@payloadcms/db-postgres'
+
 import type { PayloadRequest, Where } from 'payload'
 
 import {
@@ -80,9 +82,16 @@ export function manualOnlyWhere(): Where {
 }
 
 export async function isFirstUserBootstrap(req: PayloadRequest): Promise<boolean> {
+  const transactionID = await req.transactionID
+  const session = transactionID == null ? undefined : req.payload.db.sessions?.[String(transactionID)]
+  if (session) {
+    const transaction = session.db as { execute(query: unknown): Promise<unknown> }
+    await transaction.execute(sql`SELECT pg_advisory_xact_lock(hashtext('ams:first-user-bootstrap'))`)
+  }
   const { totalDocs } = await req.payload.count({
     collection: 'users',
     overrideAccess: true,
+    req,
   })
 
   return totalDocs === 0

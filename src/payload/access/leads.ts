@@ -13,5 +13,4 @@ export const canCreateLeads: NonNullable<CollectionAccess['create']> = ({ req })
 export const canUpdateLeads: NonNullable<CollectionAccess['update']> = ({ req }) =>
   hasAdminCapability(req.user, 'lead.update')
 
-export const canDeleteLeads: NonNullable<CollectionAccess['delete']> = ({ req }) =>
-  hasAdminCapability(req.user, 'lead.update')
+export const canDeleteLeads: NonNullable<CollectionAccess['delete']> = () => false

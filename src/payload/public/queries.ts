@@ -9,6 +9,8 @@ import {
 import type { CatalogFilters, CatalogPreset } from '@/shared/types/catalog'
 import config from '@/payload.config'
 import { publicContactFallback } from '@/project/site-config'
+import { runtimeConfig } from '@/project/env'
+import { isAllowedExternalImageURL, toSafeVideoEmbedURL } from '@/shared/security/media-url'
 import type { Employee, Media, Office, Property, ResidentialComplex, Review, SiteSetting } from '@/payload-types'
 import type {
   PublicComplex,
@@ -198,7 +200,7 @@ function toPublicComplex(complex: ResidentialComplex): PublicComplex {
     seoTitle: complex.seo?.title ?? `${complex.title} в Ростове-на-Дону`,
     shortDescription: complex.shortDescription ?? '',
     slug: complex.slug,
-    videoUrl: complex.videoUrl ?? undefined,
+    videoUrl: toSafeVideoEmbedURL(complex.videoUrl) ?? undefined,
     title: complex.title,
   }
 }
@@ -246,7 +248,7 @@ function toPublicProperty(property: Property): PublicProperty {
     title: property.title,
     totalArea: property.totalArea ?? undefined,
     updatedAt: property.updatedAt,
-    videoUrl: property.videoUrl ?? undefined,
+    videoUrl: toSafeVideoEmbedURL(property.videoUrl) ?? undefined,
   }
 }
 
@@ -286,7 +288,9 @@ function toPublicOffice(office: Office): PublicOffice {
 
 function resolveMedia(mediaValue: Media | number | null | undefined, externalUrl: string | null | undefined, alt: string) {
   if (typeof mediaValue === 'object' && mediaValue?.url) return { alt: mediaValue.alt || alt, src: mediaValue.url }
-  return externalUrl ? { alt, src: externalUrl } : null
+  return externalUrl && isAllowedExternalImageURL(externalUrl, runtimeConfig.externalImageHosts)
+    ? { alt, src: externalUrl }
+    : null
 }
 
 function toPublicContacts(settings: SiteSetting): PublicContacts {

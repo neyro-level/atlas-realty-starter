@@ -168,6 +168,9 @@ export const IMPORT_STATUS_LABELS: Record<ImportStatus, string> = {
 export const ADMIN_ACTIVITY_EVENTS = [
   'LEAD_CREATED',
   'LEAD_STAGE_CHANGED',
+  'LEAD_ARCHIVED',
+  'LEAD_RESTORED',
+  'LEAD_RETENTION_APPLIED',
   'LEAD_NOTE_ADDED',
   'PROPERTY_CREATED',
   'PROPERTY_UPDATED',
@@ -191,6 +194,9 @@ export type AdminActivityEvent = (typeof ADMIN_ACTIVITY_EVENTS)[number]
 export const ADMIN_ACTIVITY_LABELS: Record<AdminActivityEvent, string> = {
   LEAD_CREATED: 'Заявка создана',
   LEAD_STAGE_CHANGED: 'Статус заявки изменён',
+  LEAD_ARCHIVED: 'Заявка архивирована',
+  LEAD_RESTORED: 'Заявка восстановлена из архива',
+  LEAD_RETENTION_APPLIED: 'Персональные данные заявки удалены по сроку хранения',
   LEAD_NOTE_ADDED: 'Заметка по заявке добавлена',
   PROPERTY_CREATED: 'Объект создан',
   PROPERTY_UPDATED: 'Объект изменён',

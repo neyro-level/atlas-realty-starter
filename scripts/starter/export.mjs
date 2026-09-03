@@ -76,6 +76,13 @@ writeFileSync(join(target, '.starter-source.json'), `${JSON.stringify({
   skippedByClassification: Object.fromEntries([...new Set(skipped.map((item) => item.classification))].sort().map((name) => [name, skipped.filter((item) => item.classification === name).length])),
   requiredClientReplacements: manifest.requiredClientReplacements,
 }, null, 2)}\n`)
+const inventoryFiles = [...new Set([...copied.map((item) => item.path), '.starter-source.json', '.starter-inventory.json'])].sort()
+writeFileSync(join(target, '.starter-inventory.json'), `${JSON.stringify({
+  schemaVersion: 1,
+  sourceSha: sha,
+  files: inventoryFiles,
+}, null, 2)}\n`)
+
 
 if (!has('--skip-audit')) {
   const audit = spawnSync(process.execPath, ['scripts/starter/audit.mjs', '--mode', 'export', '--root', target], { cwd: target, encoding: 'utf8', stdio: 'inherit' })

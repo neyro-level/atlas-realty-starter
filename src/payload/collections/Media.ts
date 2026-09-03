@@ -56,8 +56,10 @@ export const Media = {
     },
   ],
   upload: {
+    allowRestrictedFileTypes: false,
     focalPoint: true,
-    mimeTypes: ['image/*'],
+    mimeTypes: ['image/avif', 'image/gif', 'image/jpeg', 'image/png', 'image/webp'],
+    pasteURL: false,
     staticDir: 'media',
   },
 } satisfies CollectionConfig

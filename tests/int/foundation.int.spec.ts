@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { foundationUsers, getTestPayload, resetFoundationState, seedPrivilegedUsers } from '../helpers/payload'
 import { getLeadsWorkspace, getPropertiesWorkspace } from '@/payload/admin/lib/workspaces'
+import { importNormalizedUnitBatch } from '@/payload/import/normalized-unit-import'
 
 describe('admin cabinet parity contracts', () => {
   beforeEach(async () => {
@@ -25,6 +26,30 @@ describe('admin cabinet parity contracts', () => {
 
     expect(firstUser.role).toBe('SUPER_ADMIN')
   })
+  it('serializes concurrent first-user bootstrap attempts', async () => {
+    const payload = await getTestPayload()
+    const attempts = await Promise.allSettled([
+      payload.create({
+        collection: 'users',
+        data: { email: 'bootstrap-a@example.com', name: 'Bootstrap A', password: 'BootstrapA123!', role: 'CONTENT_MANAGER' },
+        draft: false,
+        overrideAccess: false,
+      }),
+      payload.create({
+        collection: 'users',
+        data: { email: 'bootstrap-b@example.com', name: 'Bootstrap B', password: 'BootstrapB123!', role: 'CONTENT_MANAGER' },
+        draft: false,
+        overrideAccess: false,
+      }),
+    ])
+
+    const fulfilled = attempts.filter((attempt) => attempt.status === 'fulfilled')
+    expect(fulfilled).toHaveLength(1)
+    const users = await payload.find({ collection: 'users', depth: 0, limit: 2, overrideAccess: true })
+    expect(users.totalDocs).toBe(1)
+    expect(users.docs[0]?.role).toBe('SUPER_ADMIN')
+  })
+
 
   it('enforces residential complex publication and public read', async () => {
     const payload = await getTestPayload()
@@ -408,6 +433,7 @@ describe('admin cabinet parity contracts', () => {
       collection: 'import-sources',
       data: {
         adapterConfigured: false,
+        key: 'primary-xml',
         endpointHint: 'https://example.com/feed.xml',
         isActive: true,
         title: 'Основной XML',
@@ -421,9 +447,12 @@ describe('admin cabinet parity contracts', () => {
       payload.create({
         collection: 'import-runs',
         data: {
+          correlationId: 'blocked-user-create',
+          mode: 'delta',
           source: source.id,
           startedAt: new Date().toISOString(),
           status: 'running',
+          target: 'units',
         },
         draft: false,
         overrideAccess: false,
@@ -434,6 +463,8 @@ describe('admin cabinet parity contracts', () => {
     const run = await payload.create({
       collection: 'import-runs',
       data: {
+        correlationId: 'system-partial-run',
+        mode: 'delta',
         createdCount: 2,
         failedCount: 1,
         receivedCount: 5,
@@ -442,6 +473,7 @@ describe('admin cabinet parity contracts', () => {
         status: 'partial_success',
         summary: 'Один объект не прошёл валидацию.',
         updatedCount: 1,
+        target: 'units',
       },
       draft: false,
       overrideAccess: true,
@@ -472,4 +504,80 @@ describe('admin cabinet parity contracts', () => {
     expect(runs.docs[0]?.status).toBe('partial_success')
     expect(runs.docs[0]?.errors?.docs?.length).toBe(1)
   })
+  it('restores a committed final import batch without double accounting', async () => {
+    const payload = await getTestPayload()
+    const startedAt = new Date().toISOString()
+    const source = await payload.create({
+      collection: 'import-sources',
+      data: { adapterConfigured: true, isActive: true, key: 'retry-proof', title: 'Retry proof' },
+      overrideAccess: true,
+    })
+    const complex = await payload.create({
+      collection: 'residential-complexes',
+      data: { slug: 'retry-proof', status: 'draft', title: 'Retry proof' },
+      overrideAccess: true,
+    })
+    const building = await payload.create({
+      collection: 'buildings',
+      data: {
+        externalId: 'building-1',
+        importHash: 'building-v1',
+        isActive: true,
+        lastSeenAt: startedAt,
+        residentialComplex: complex.id,
+        source: source.id,
+        sourceKey: source.key,
+        title: 'Building 1',
+      },
+      overrideAccess: true,
+    })
+    const run = await payload.create({
+      collection: 'import-runs',
+      data: {
+        correlationId: 'retry-proof',
+        expectedBatchCount: 1,
+        mode: 'full_snapshot',
+        processedBatchKeys: [],
+        source: source.id,
+        startedAt,
+        status: 'running',
+        target: 'units',
+      },
+      overrideAccess: true,
+    })
+    if (typeof source.id !== 'number' || typeof building.id !== 'number' || typeof complex.id !== 'number' || typeof run.id !== 'number') {
+      throw new Error('PostgreSQL integration requires numeric IDs')
+    }
+    const input = {
+      batchKey: 'retry-proof:0',
+      expectedBatchCount: 1,
+      importRunId: run.id,
+      mode: 'full_snapshot' as const,
+      records: [{
+        contentHash: 'unit-v1',
+        externalId: 'unit-1',
+        sourceKey: source.key,
+        payload: {
+          availability: 'available',
+          buildingId: building.id,
+          floor: 1,
+          number: '1',
+          price: 5_000_000,
+          residentialComplexId: complex.id,
+          rooms: 1,
+          totalArea: 40,
+        },
+      }],
+      snapshotStartedAt: startedAt,
+      sourceId: source.id,
+      sourceKey: source.key,
+    }
+
+    expect(await importNormalizedUnitBatch(payload, input)).toMatchObject({ alreadyProcessed: false, completed: true, created: 1 })
+    expect(await importNormalizedUnitBatch(payload, input)).toMatchObject({ alreadyProcessed: true, completed: true, received: 0 })
+    const finalRun = await payload.findByID({ collection: 'import-runs', id: run.id, overrideAccess: true })
+    expect(finalRun.receivedCount).toBe(1)
+    expect((await payload.count({ collection: 'units', overrideAccess: true })).totalDocs).toBe(1)
+  })
+
 })

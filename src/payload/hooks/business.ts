@@ -134,8 +134,12 @@ export const protectPropertyMutation: CollectionBeforeChangeHook = ({ data, oper
       ...record,
       externalId: undefined,
       feedSource: undefined,
+      importHash: undefined,
       isPublished: false,
+      isSourceActive: true,
+      lastSeenAt: undefined,
       origin: 'MANUAL',
+      sourceKey: undefined,
       updatedFromSourceAt: undefined,
       workflowStatus: 'draft',
     }
@@ -150,7 +154,11 @@ export const protectPropertyMutation: CollectionBeforeChangeHook = ({ data, oper
     ...record,
     externalId: original.externalId,
     feedSource: original.feedSource,
+    importHash: original.importHash,
+    isSourceActive: original.isSourceActive,
+    lastSeenAt: original.lastSeenAt,
     origin: original.origin,
+    sourceKey: original.sourceKey,
     updatedFromSourceAt: original.updatedFromSourceAt,
   }
 
@@ -237,6 +245,28 @@ export const protectEmployeeMutation: CollectionBeforeChangeHook = ({ data, oper
   }
 }
 
+export const setLeadArchiveMetadata: CollectionBeforeChangeHook = ({ data, operation, originalDoc, req }) => {
+  const record = readRecord(data)
+  if (!record) return data
+
+  const archived = record.isArchived === true
+  const original = readRecord(originalDoc)
+  const wasArchived = original?.isArchived === true
+  if (operation === 'update' && archived === wasArchived) {
+    return {
+      ...record,
+      archivedAt: original?.archivedAt,
+      archivedBy: original?.archivedBy,
+    }
+  }
+
+  return {
+    ...record,
+    archivedAt: archived ? new Date().toISOString() : null,
+    archivedBy: archived ? readRelationID(req.user) ?? null : null,
+  }
+}
+
 export const recordLeadActivity: CollectionAfterChangeHook = async ({ doc, operation, previousDoc, req }) => {
   const leadID = readRelationID(doc.id)
   if (!leadID) {
@@ -264,7 +294,23 @@ export const recordLeadActivity: CollectionAfterChangeHook = async ({ doc, opera
     })
   }
 
+  if (doc.isArchived !== previousDoc.isArchived) {
+    await recordAdminActivity({
+      details: doc.isArchived ? 'Заявка перемещена в архив' : 'Заявка восстановлена из архива',
+      event: doc.isArchived ? 'LEAD_ARCHIVED' : 'LEAD_RESTORED',
+      req,
+      subject: { lead: leadID },
+    })
+  }
 
+  if (doc.personalDataPurgedAt && doc.personalDataPurgedAt !== previousDoc.personalDataPurgedAt) {
+    await recordAdminActivity({
+      details: 'Персональные данные удалены по политике хранения',
+      event: 'LEAD_RETENTION_APPLIED',
+      req,
+      subject: { lead: leadID },
+    })
+  }
   return doc
 }
 

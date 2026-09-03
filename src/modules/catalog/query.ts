@@ -1,7 +1,8 @@
+import { z } from 'zod'
+
 import type {
   CatalogFilters,
   CatalogPreset,
-  CatalogSort,
   RawCatalogSearchParams,
 } from '@/shared/types/catalog'
 
@@ -12,30 +13,59 @@ export type {
   RawCatalogSearchParams,
 } from '@/shared/types/catalog'
 
+const firstValue = (value: unknown) => Array.isArray(value) ? value[0] : value
+const optionalText = (max: number) => z.preprocess(firstValue, z.string().trim().min(1).max(max).optional()).catch(undefined)
+const optionalNumber = (minimum: number, maximum: number, integer = false) => {
+  const schema = integer ? z.coerce.number().int().min(minimum).max(maximum) : z.coerce.number().finite().min(minimum).max(maximum)
+  return z.preprocess((value) => firstValue(value) || undefined, schema.optional()).catch(undefined)
+}
+
+const rawCatalogFiltersSchema = z.object({
+  areaFrom: optionalNumber(0, 1_000_000),
+  areaTo: optionalNumber(0, 1_000_000),
+  category: z.preprocess(firstValue, z.enum(['commercial', 'flat', 'house', 'land', 'room']).optional()).catch(undefined),
+  commercialType: z.preprocess(firstValue, z.enum(['business', 'free_purpose', 'office', 'retail', 'warehouse']).optional()).catch(undefined),
+  district: optionalText(100),
+  floorFrom: optionalNumber(-10, 500, true),
+  floorTo: optionalNumber(-10, 500, true),
+  material: optionalText(100),
+  page: optionalNumber(1, 10_000, true).default(1),
+  priceFrom: optionalNumber(0, 1_000_000_000_000),
+  priceTo: optionalNumber(0, 1_000_000_000_000),
+  q: optionalText(100),
+  repair: optionalText(100),
+  rooms: z.preprocess(firstValue, z.union([z.literal('studio'), z.coerce.number().int().min(0).max(100)]).optional()).catch(undefined),
+  sort: z.preprocess(firstValue, z.enum(['area-desc', 'newest', 'price-asc', 'price-desc']).default('newest')).catch('newest'),
+  studio: z.preprocess(firstValue, z.enum(['1', 'true', 'yes']).optional()).catch(undefined),
+  view: z.preprocess(firstValue, z.enum(['grid', 'list']).default('grid')).catch('grid'),
+  yearFrom: optionalNumber(1800, 2100, true),
+  yearTo: optionalNumber(1800, 2100, true),
+})
+
 export function parseCatalogFilters(raw: RawCatalogSearchParams, preset: CatalogPreset): CatalogFilters {
-  const rawRooms = first(raw.rooms)
-  const studio = rawRooms === 'studio' || parseBoolean(raw.studio)
+  const parsed = rawCatalogFiltersSchema.parse(raw)
+  const studio = parsed.rooms === 'studio' || Boolean(parsed.studio)
 
   return {
-    areaFrom: positiveNumber(raw.areaFrom),
-    areaTo: positiveNumber(raw.areaTo),
-    buildingMaterial: first(raw.material),
-    category: preset.fixed.category ?? first(raw.category),
-    commercialType: preset.fixed.commercialType ?? first(raw.commercialType),
-    district: first(raw.district),
-    floorFrom: integer(raw.floorFrom),
-    floorTo: integer(raw.floorTo),
-    page: Math.max(1, integer(raw.page) ?? 1),
-    priceFrom: positiveNumber(raw.priceFrom),
-    priceTo: positiveNumber(raw.priceTo),
-    q: first(raw.q),
-    repair: first(raw.repair),
-    rooms: preset.fixed.rooms ?? (rawRooms === 'studio' ? undefined : integer(rawRooms)),
-    sort: parseSort(first(raw.sort)),
+    areaFrom: parsed.areaFrom,
+    areaTo: parsed.areaTo !== undefined && parsed.areaFrom !== undefined && parsed.areaTo < parsed.areaFrom ? undefined : parsed.areaTo,
+    buildingMaterial: parsed.material,
+    category: preset.fixed.category ?? parsed.category,
+    commercialType: preset.fixed.commercialType ?? parsed.commercialType,
+    district: parsed.district,
+    floorFrom: parsed.floorFrom,
+    floorTo: parsed.floorTo !== undefined && parsed.floorFrom !== undefined && parsed.floorTo < parsed.floorFrom ? undefined : parsed.floorTo,
+    page: parsed.page,
+    priceFrom: parsed.priceFrom,
+    priceTo: parsed.priceTo !== undefined && parsed.priceFrom !== undefined && parsed.priceTo < parsed.priceFrom ? undefined : parsed.priceTo,
+    q: parsed.q,
+    repair: parsed.repair,
+    rooms: preset.fixed.rooms ?? (parsed.rooms === 'studio' ? undefined : parsed.rooms),
+    sort: parsed.sort,
     studio: preset.fixed.studio ?? studio,
-    view: first(raw.view) === 'list' ? 'list' : 'grid',
-    yearFrom: integer(raw.yearFrom),
-    yearTo: integer(raw.yearTo),
+    view: parsed.view,
+    yearFrom: parsed.yearFrom,
+    yearTo: parsed.yearTo !== undefined && parsed.yearFrom !== undefined && parsed.yearTo < parsed.yearFrom ? undefined : parsed.yearTo,
   }
 }
 
@@ -48,23 +78,4 @@ export function catalogQueryString(filters: Partial<CatalogFilters>, omit: strin
   }
   const query = params.toString()
   return query ? `?${query}` : ''
-}
-
-function first(value: string | string[] | undefined) {
-  const result = Array.isArray(value) ? value[0] : value
-  return result?.trim() || undefined
-}
-function positiveNumber(value: string | string[] | undefined) {
-  const parsed = Number(first(value))
-  return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined
-}
-function integer(value: string | string[] | undefined) {
-  const parsed = Number.parseInt(first(value) ?? '', 10)
-  return Number.isFinite(parsed) ? parsed : undefined
-}
-function parseBoolean(value: string | string[] | undefined) {
-  return ['1', 'true', 'yes'].includes(first(value) ?? '')
-}
-function parseSort(value: string | undefined): CatalogSort {
-  return value === 'price-asc' || value === 'price-desc' || value === 'area-desc' ? value : 'newest'
 }
