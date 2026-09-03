@@ -33,6 +33,7 @@ describe('production environment contract', () => {
     const result = buildRuntimeConfig({ APP_ENV: 'production', DATABASE_URL: 'postgres://db', PAYLOAD_SECRET: strongSecret, ...bootstrap, ...s3 })
     expect(result.leadRetentionDays).toBe(365)
     expect('email' in result).toBe(false)
+    expect(result.databasePoolMax).toBe(1)
   })
 
   it('requires separate production bootstrap credentials', () => {
@@ -53,6 +54,8 @@ describe('production environment contract', () => {
     const local = buildRuntimeConfig({ APP_ENV: 'development', PAYLOAD_SECRET: 'change-me-foundation-secret' })
     expect(local.s3).toBeNull()
     expect(local.leadRetentionDays).toBe(365)
+    expect(local.databasePoolMax).toBe(10)
+    expect(() => buildRuntimeConfig({ APP_ENV: 'development', DATABASE_POOL_MAX: '0' })).toThrow(/DATABASE_POOL_MAX/)
     expect(local.bootstrapUsers?.map((user) => [user.username, user.password])).toEqual([
       ['superadmin', '12341234'],
       ['director', '12341234'],

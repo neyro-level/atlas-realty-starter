@@ -115,6 +115,7 @@ export default buildConfig({
     migrationDir: path.resolve(dirname, 'payload/migrations'),
     pool: {
       connectionString: runtimeConfig.databaseURL,
+      max: runtimeConfig.databasePoolMax,
     },
   }),
   editor: lexicalEditor(),
