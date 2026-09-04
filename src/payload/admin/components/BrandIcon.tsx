@@ -1,5 +1,16 @@
 import React from 'react'
 
+import { projectConfig } from '@/project/config'
+
+function initials(value: string) {
+  return value
+    .split(/\s+/)
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+}
+
 export function BrandIcon() {
   return (
     <div
@@ -18,7 +29,7 @@ export function BrandIcon() {
         width: 32,
       }}
     >
-      SZ
+      {initials(projectConfig.projectName)}
     </div>
   )
 }

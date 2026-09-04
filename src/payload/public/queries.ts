@@ -196,8 +196,8 @@ function toPublicComplex(complex: ResidentialComplex): PublicComplex {
     priceFrom: complex.priceFrom ?? undefined,
     purchaseTerms: (complex.purchaseTerms ?? []).map((item) => ({ title: item.title, value: item.value })),
     roomTypes: complex.roomTypes ?? [],
-    seoDescription: complex.seo?.description ?? complex.shortDescription ?? `${complex.title} в Ростове-на-Дону: цены, сроки и планировки.`,
-    seoTitle: complex.seo?.title ?? `${complex.title} в Ростове-на-Дону`,
+    seoDescription: complex.seo?.description ?? complex.shortDescription ?? `${complex.title}: цены, сроки и планировки.`,
+    seoTitle: complex.seo?.title ?? `${complex.title}`,
     shortDescription: complex.shortDescription ?? '',
     slug: complex.slug,
     videoUrl: toSafeVideoEmbedURL(complex.videoUrl) ?? undefined,
@@ -320,3 +320,4 @@ function toPublicContacts(settings: SiteSetting): PublicContacts {
     workingHours,
   }
 }
+

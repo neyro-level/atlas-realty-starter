@@ -13,25 +13,25 @@ afterEach(() => {
 })
 
 describe('starter export audit inventory', () => {
-  it('rejects client markers even in CLIENT-classified files', () => {
+  it('rejects presentation imports from project config', () => {
     const root = fixture()
-    mkdirSync(join(root, 'src', 'project'), { recursive: true })
-    writeFileSync(join(root, 'src', 'project', 'client.ts'), `export const name = 'Союз Застройщиков'\n`)
+    mkdirSync(join(root, 'src', 'components'), { recursive: true })
+    writeFileSync(join(root, 'src', 'components', 'Card.tsx'), `import { value } from '@/project/config'\nexport const Card = value\n`)
     writeFileSync(join(root, 'starter.manifest.json'), JSON.stringify(sourceManifest))
-    writeFileSync(join(root, '.starter-inventory.json'), JSON.stringify({ files: ['.starter-inventory.json', 'starter.manifest.json', 'src/project/client.ts'] }))
+    writeFileSync(join(root, '.starter-inventory.json'), JSON.stringify({ files: ['.starter-inventory.json', 'starter.manifest.json', 'src/components/Card.tsx'] }))
 
     const result = run(root, 'export')
     expect(result.status).toBe(1)
     expect(result.stdout).toContain('"status": "FAIL"')
-    expect(result.stdout).toContain('src/project/client.ts')
-    expect(result.stdout).toContain('Союз')
+    expect(result.stdout).toContain('src/components/Card.tsx')
+    expect(result.stdout).toContain('@/project')
   })
 
   it('returns NOT_RUN without Git or an explicit starter inventory', () => {
     const root = fixture()
     writeFileSync(join(root, 'starter.manifest.json'), JSON.stringify(sourceManifest))
     mkdirSync(join(root, '.pnpm-store', 'nested'), { recursive: true })
-    writeFileSync(join(root, '.pnpm-store', 'nested', 'client.ts'), `export const name = 'Союз'\n`)
+    writeFileSync(join(root, '.pnpm-store', 'nested', 'client.ts'), `export const name = 'ignored'\n`)
 
     const result = run(root, 'export')
     expect(result.status).toBe(2)

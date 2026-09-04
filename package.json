@@ -1,8 +1,8 @@
 {
-  "name": "soyuz-rostov-next",
+  "name": "ams-realty-platform-starter",
   "version": "1.0.0",
   "private": true,
-  "description": "Foundation проекта Союз Ростов на Next.js 16 и Payload CMS 3",
+  "description": "Starter engine for AMS realty platform on Next.js 16 and Payload CMS 3",
   "license": "MIT",
   "packageManager": "pnpm@11.24.0",
   "type": "module",

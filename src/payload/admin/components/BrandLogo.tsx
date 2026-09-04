@@ -1,5 +1,15 @@
 import React from 'react'
+
 import { projectConfig } from '@/project/config'
+
+function initials(value: string) {
+  return value
+    .split(/\s+/)
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+}
 
 export function BrandLogo() {
   return (
@@ -26,11 +36,11 @@ export function BrandLogo() {
           width: 40,
         }}
       >
-        {projectConfig.projectName.split(/\s+/).map((part) => part[0]).join('').slice(0, 2).toUpperCase()}
+        {initials(projectConfig.projectName)}
       </div>
       <div>
         <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.2 }}>{projectConfig.adminTitleSuffix}</div>
-        <div style={{ color: '#55636e', fontSize: 12, lineHeight: 1.2 }}>Payload кабинет</div>
+        <div style={{ color: '#55636e', fontSize: 12, lineHeight: 1.2 }}>Payload Admin</div>
       </div>
     </div>
   )

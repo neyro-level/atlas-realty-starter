@@ -1,34 +1,32 @@
-import { publicSite } from './public-site'
-
 export const siteConfig = {
-  clientName: publicSite.name,
-  clientFullName: publicSite.fullName,
-  defaultDescription: publicSite.defaultDescription,
-  defaultTitle: publicSite.fullName,
-  logo: '/images/ui-brand-mark.svg',
-  tagline: 'Недвижимость в Ростове-на-Дону',
-  copyright: `© ${new Date().getFullYear()} ${publicSite.fullName}`,
+  clientName: 'AMS Realty',
+  clientFullName: 'AMS Realty Platform Starter',
+  defaultDescription: 'Headless starter for a real-estate platform runtime.',
+  defaultTitle: 'AMS Realty Platform Starter',
+  logo: '',
+  tagline: 'Headless real-estate platform starter',
+  copyright: `© ${new Date().getFullYear()} AMS Realty Platform Starter`,
   registry: '',
-  disclaimer: 'Информация не является публичной офертой.',
+  disclaimer: 'Публичный интерфейс будет подключён отдельно.',
 }
 
 export const citySwitcherConfig = {
-  currentSlug: 'rostov',
+  currentSlug: 'starter',
   cities: [
-    { current: true, domainLabel: 'souz-home.ru', href: '/', label: 'Ростов-на-Дону', slug: 'rostov' },
+    { current: true, domainLabel: 'starter.local', href: '/', label: 'Starter', slug: 'starter' },
   ],
 }
 
 export const publicContactFallback = {
-  address: 'Ростов-на-Дону',
-  cityName: publicSite.city,
-  callbackHref: '/contacts',
-  callbackLabel: 'Подобрать объект',
-  email: 'info@souz-home.ru',
-  phone: '+7 (863) 000-00-00',
-  workingHours: 'Ежедневно, 09:00–20:00',
+  address: 'Тестовый адрес стартового шаблона',
+  cityName: 'Starter',
+  callbackHref: '/admin',
+  callbackLabel: 'Открыть админку',
+  email: 'info@example.com',
+  phone: '+7 (900) 000-00-00',
+  workingHours: 'Пн-Пт 09:00–18:00',
 } as const
 
 export function getPropertyPath(slug: string) {
-  return `/kvartiry-rostova/${slug}`
+  return `/properties/${slug}`
 }

@@ -23,9 +23,6 @@ const nextConfig: NextConfig = {
         pathname: '/api/media/file/**',
       },
       {
-        pathname: '/images/**',
-      },
-      {
         pathname: '/og/**',
       },
     ],
@@ -52,3 +49,4 @@ export default sentryBuildConfig
       silent: true,
     })
   : payloadNextConfig
+

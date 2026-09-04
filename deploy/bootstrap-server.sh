@@ -3,8 +3,8 @@ set -euo pipefail
 
 NODE_VERSION="24.20.0"
 PNPM_VERSION="11.24.0"
-APP_USER="soyuz-rostov"
-APP_ROOT="/opt/soyuz-rostov"
+APP_USER="ams-realty-platform-starter"
+APP_ROOT="/opt/ams-realty-platform-starter"
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
 if [[ "${EUID}" -ne 0 ]]; then
@@ -39,7 +39,7 @@ if ! id -u "${APP_USER}" >/dev/null 2>&1; then
   useradd --system --home-dir "${APP_ROOT}" --create-home --shell /usr/sbin/nologin "${APP_USER}"
 fi
 install -d -o "${APP_USER}" -g "${APP_USER}" -m 0750 "${APP_ROOT}/releases" "${APP_ROOT}/shared"
-install -d -o root -g "${APP_USER}" -m 0750 /etc/soyuz-rostov
+install -d -o root -g "${APP_USER}" -m 0750 /etc/ams-realty-platform-starter
 
 if [[ -z "$(swapon --show --noheadings)" && ! -f /swapfile ]]; then
   fallocate -l 4G /swapfile
@@ -49,18 +49,18 @@ if [[ -z "$(swapon --show --noheadings)" && ! -f /swapfile ]]; then
   printf '/swapfile none swap sw 0 0\n' >> /etc/fstab
 fi
 
-install -m 0644 "${SCRIPT_DIR}/soyuz-rostov.service" /etc/systemd/system/soyuz-rostov.service
-install -m 0644 "${SCRIPT_DIR}/soyuz-rostov-imports.service" /etc/systemd/system/soyuz-rostov-imports.service
-install -m 0644 "${SCRIPT_DIR}/soyuz-rostov-maintenance.service" /etc/systemd/system/soyuz-rostov-maintenance.service
-install -m 0644 "${SCRIPT_DIR}/soyuz-rostov-maintenance-scheduler.service" /etc/systemd/system/soyuz-rostov-maintenance-scheduler.service
-install -m 0644 "${SCRIPT_DIR}/nginx-internal.conf" /etc/nginx/sites-available/soyuz-rostov.conf
-ln -sfn /etc/nginx/sites-available/soyuz-rostov.conf /etc/nginx/sites-enabled/soyuz-rostov.conf
+install -m 0644 "${SCRIPT_DIR}/ams-realty-platform-starter.service" /etc/systemd/system/ams-realty-platform-starter.service
+install -m 0644 "${SCRIPT_DIR}/ams-realty-platform-starter-imports.service" /etc/systemd/system/ams-realty-platform-starter-imports.service
+install -m 0644 "${SCRIPT_DIR}/ams-realty-platform-starter-maintenance.service" /etc/systemd/system/ams-realty-platform-starter-maintenance.service
+install -m 0644 "${SCRIPT_DIR}/ams-realty-platform-starter-maintenance-scheduler.service" /etc/systemd/system/ams-realty-platform-starter-maintenance-scheduler.service
+install -m 0644 "${SCRIPT_DIR}/nginx-internal.conf" /etc/nginx/sites-available/ams-realty-platform-starter.conf
+ln -sfn /etc/nginx/sites-available/ams-realty-platform-starter.conf /etc/nginx/sites-enabled/ams-realty-platform-starter.conf
 rm -f /etc/nginx/sites-enabled/default
 systemctl daemon-reload
-systemctl enable soyuz-rostov.service
-systemctl enable soyuz-rostov-imports.service
-systemctl enable soyuz-rostov-maintenance.service
-systemctl enable soyuz-rostov-maintenance-scheduler.service
+systemctl enable ams-realty-platform-starter.service
+systemctl enable ams-realty-platform-starter-imports.service
+systemctl enable ams-realty-platform-starter-maintenance.service
+systemctl enable ams-realty-platform-starter-maintenance-scheduler.service
 nginx -t
 systemctl enable --now nginx
 

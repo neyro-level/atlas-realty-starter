@@ -71,9 +71,9 @@ export async function resetFoundationState() {
   await payload.updateGlobal({
     slug: 'site-settings',
     data: {
-      address: 'Ростов-на-Дону, тестовый адрес',
-      brandName: 'Союз Застройщиков',
-      companyName: 'Союз застройщиков Ростов',
+      address: 'Тестовый адрес стартового шаблона',
+      brandName: 'AMS Realty',
+      companyName: 'AMS Realty Platform Starter',
       email: 'info@example.com',
       phone: '+7 (900) 000-00-00',
       telegramUrl: 'https://t.me/test',
@@ -117,3 +117,5 @@ export async function seedPrivilegedUsers() {
     superAdmin,
   }
 }
+
+

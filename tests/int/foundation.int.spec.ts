@@ -69,7 +69,7 @@ describe('admin cabinet parity contracts', () => {
     const draftComplex = await payload.create({
       collection: 'residential-complexes',
       data: {
-        address: 'Ростов-на-Дону, тестовый адрес',
+        address: 'Тестовый адрес стартового шаблона',
         district: 'Советский район',
         slug: 'test-complex',
         status: 'published',
@@ -335,9 +335,9 @@ describe('admin cabinet parity contracts', () => {
     const updatedSettings = await payload.updateGlobal({
       slug: 'site-settings',
       data: {
-        address: 'Ростов-на-Дону, Пушкинская, 5',
-        brandName: 'Союз Ростов',
-        companyName: 'Союз застройщиков Ростов',
+        address: 'Тестовый адрес стартового шаблона, Пушкинская, 5',
+        brandName: 'AMS Realty',
+        companyName: 'AMS Realty Platform Starter',
         email: 'office@example.com',
         phone: '+7 (900) 111-11-11',
       },
@@ -592,3 +592,4 @@ describe('admin cabinet parity contracts', () => {
   })
 
 })
+

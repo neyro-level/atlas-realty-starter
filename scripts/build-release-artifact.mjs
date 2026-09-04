@@ -23,8 +23,8 @@ if (branch !== 'main' || sha !== originMain || trackedStatus) {
 
 const outputDir = path.resolve('.release-artifacts')
 mkdirSync(outputDir, { recursive: true })
-const archivePath = path.join(outputDir, `soyuz-rostov-${sha}.tar.gz`)
-const manifestPath = path.join(outputDir, `soyuz-rostov-${sha}.json`)
+const archivePath = path.join(outputDir, `ams-realty-platform-starter-${sha}.tar.gz`)
+const manifestPath = path.join(outputDir, `ams-realty-platform-starter-${sha}.json`)
 
 runGit(['archive', '--format=tar.gz', `--output=${archivePath}`, sha])
 const checksum = createHash('sha256').update(readFileSync(archivePath)).digest('hex')
@@ -33,10 +33,11 @@ const manifest = {
   createdAt: new Date().toISOString(),
   node: '24.20.0',
   pnpm: '11.24.0',
-  repository: 'integrator-p/soyuz-rostov-next',
+  repository: 'integrator-p/ams-realty-platform-starter-next',
   sha,
   sha256: checksum,
 }
 
 writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`)
 process.stdout.write(`${manifestPath}\n`)
+

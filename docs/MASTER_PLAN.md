@@ -1,90 +1,58 @@
-# Master Plan — AMS Realty Platform Core Standard 2.0
+# Master Plan
 
-## Authority
+## Objective
 
-`docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.0.md` is the mandatory architecture, security and delivery standard. Work proceeds one wave at a time. Every wave is a HEAVY SourceCraft stream: branch, scope checks, commit, push, Pull Request, review, merge, cleanup, then the next branch.
+Превратить текущий repository в нейтральный `AMS Realty Platform Starter` без клиентского UI и без клиентской идентичности, сохранив Payload Admin, API, health/runtime foundation и дальнейший путь к full Realty Platform Core 2.0.
 
-## Product boundary
+## Stage map
 
-- Existing public UI, URLs, visual tokens and page composition are preserved.
-- Only required functional UI changes are allowed: consent, phone reveal, maps, real form states and standard-required routes.
-- Payload remains the only application schema, Admin and backend platform.
-- The current repository becomes the SZ Rostov client repository.
-- Wave 11 extracts reusable code into private `@ams/realty-core`; no monorepo or duplicate core source is introduced.
+- `00 neutral foundation` — active
+- `01 access + gateways` — recovery saved, перенос в active stream pending
+- `02 schema normalization`
+- `03 ingest core`
+- `04 secondary YRL`
+- `05 newbuild YRL`
+- `06 leads + outbox`
+- `07 headless catalog + maps`
+- `08 SEO + content`
+- `09 analytics`
+- `10 operations`
+- `11 compliance + validation release`
 
-## Database decision
+## 00. Neutral foundation
 
-The legacy numeric-ID database is empty of business data. V2 uses a fresh PostgreSQL UUID schema. Legacy database removal and new managed database creation occur only in an explicit RELEASE operation after provider backup proof and V2 release readiness.
+- archive legacy client docs
+- rewrite active canon
+- rename package/runtime identity to starter
+- remove public routes/components/assets
+- keep `/admin`, API, health, workers
+- add root 404 behavior
+- neutralize admin branding
+- update starter manifest/export baseline
 
-## Current status
+## 01. Access + gateways
 
-### Pre-flight
+- перенести полезную часть recovery WIP
+- закрепить `core/access/*`
+- закрепить `core/data-access/{public,user,system,ingest}`
+- начать поднимать security gate к Wave 1
 
-- [x] Completed under §A.4 on 2026-09-03.
-- [x] Confirmed empty business collections and two legacy users.
-- [x] Confirmed Payload-only schema ownership and PostgreSQL 18.6.
-- [x] Confirmed anonymous REST and GraphQL are legacy defects to remove.
-- [x] Confirmed a new V2 UUID database is safe.
+## 02–11 summary
 
-### Wave 0 — Foundation + Security Baseline
+- schema and UUID business model
+- secure ingest engine
+- secondary/newbuild parsers
+- leads/outbox/recovery
+- headless catalog DTO/API
+- SEO/headless content
+- analytics without browser tracker
+- workers/health/revalidation/release proof
+- clone rehearsal and isolated validation release
 
-- [ ] Version matrix and dependency remediation.
-- [ ] Zod environment contract.
-- [ ] UUID Payload configuration and reproducible V2 baseline migration.
-- [ ] Pino redaction, correlation ID and security headers.
-- [ ] Architecture/security checks and SourceCraft CI.
-- [ ] Mandatory security and operational documentation.
-- [ ] HEAVY gate, SourceCraft PR and merge.
+## External follow-ups
 
-### Wave 1 — Access + Data Gateways
-
-- [ ] `owner/editor/viewer` roles and bootstrap.
-- [ ] Public/User/System/Ingest gateways.
-- [ ] Raw anonymous REST deny.
-- [ ] Audit events, field access and Admin REST proof.
-
-### Wave 2 — Catalog Model + Indexes
-
-- [ ] `feed-sources`, unified UUID `properties`, `agents`, complexes, buildings, developers and price history.
-- [ ] DTO/select contracts, trash/drafts and private fields.
-- [ ] 50k dataset, indexes and performance baseline.
-
-### Waves 3–5 — Ingest
-
-- [ ] Generic secure ingest engine.
-- [ ] Secondary YRL only after approved fixture.
-- [ ] Newbuild YRL only after approved fixture.
-
-### Wave 6 — Public Site Data Cutover
-
-- [ ] Preserve UI while moving all public reads to Public Gateway, DTOs, indexed filters and cache contracts.
-
-### Wave 7 — Leads
-
-- [ ] Atomic lead intake, transactional outbox, channel adapters, consent, anti-spam and recovery.
-
-### Wave 8 — Maps
-
-- [ ] Lazy Yandex Maps, validated geo endpoint, clustering and URL state.
-
-### Wave 9 — SEO
-
-- [ ] Official SEO/Redirect plugins, canonical/indexability rules, redirects, sitemap and structured data.
-
-### Wave 10 — Metrika + Internal Stats
-
-- [ ] Optional Metrika, typed goals, stat events, aggregation and quality dashboard.
-
-### Wave 11 — Operations + Fleet + Core Package
-
-- [ ] Worker/scheduler, health, revalidation, Nginx rate limits, backups, restore drill and fleet documents.
-- [ ] Private SourceCraft `@ams/realty-core` repository/package and schema compatibility contract.
-- [ ] Client repository consumes an exact core package version.
-
-## Explicit external prerequisites
-
-- Approved secondary/newbuild feed fixtures before Waves 4/5.
-- Doppler-only MAX, SMTP and CRM credentials before Wave 7.
-- Map key and Metrika ID before Waves 8/10.
-- Client-approved legal texts and retention periods before lead release.
-- Working Timeweb API token before managed database replacement and release operations.
+- SourceCraft repository rename to `ams-realty-platform-starter`
+- GitHub mirror rename
+- neutral Doppler project/config
+- isolated validation DB/user on retained managed PostgreSQL cluster
+- preview/noindex validation release on retained server

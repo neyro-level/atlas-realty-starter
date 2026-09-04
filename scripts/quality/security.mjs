@@ -113,13 +113,22 @@ function walk(directory) {
 
 function trackedTextFiles() {
   const result = spawnSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'utf8' })
-  if (result.status !== 0) throw new Error(result.stderr || 'git ls-files failed')
-  return result.stdout.split('\0').filter(Boolean).filter((path) => {
-    if (/^(?:pnpm-lock\.yaml|src\/payload-types\.ts|src\/payload\/migrations\/.*\.json)$/.test(normalize(path))) return false
-    return ['.cjs', '.css', '.js', '.json', '.md', '.mjs', '.mts', '.scss', '.ts', '.tsx', '.yaml', '.yml'].includes(extname(path))
-  }).map((path) => resolve(root, path))
-}
+  if (result.status === 0) {
+    return result.stdout.split('\0').filter(Boolean).filter((path) => {
+      if (/^(?:pnpm-lock\.yaml|src\/payload-types\.ts|src\/payload\/migrations\/.*\.json)$/.test(normalize(path))) return false
+      return ['.cjs', '.css', '.js', '.json', '.md', '.mjs', '.mts', '.scss', '.ts', '.tsx', '.yaml', '.yml'].includes(extname(path))
+    }).map((path) => resolve(root, path))
+  }
 
+  const skipDirs = new Set(['.git', '.next', '.pnpm-store', 'node_modules'])
+  return walk(root).filter((file) => {
+    const relativePath = normalize(relative(root, file))
+    const segments = relativePath.split('/')
+    if (segments.some((segment) => skipDirs.has(segment))) return false
+    if (/^(?:pnpm-lock\.yaml|src\/payload-types\.ts|src\/payload\/migrations\/.*\.json)$/.test(relativePath)) return false
+    return ['.cjs', '.css', '.js', '.json', '.md', '.mjs', '.mts', '.scss', '.ts', '.tsx', '.yaml', '.yml'].includes(extname(relativePath))
+  })
+}
 function normalize(path) {
   return String(path).replaceAll('\\', '/')
 }
