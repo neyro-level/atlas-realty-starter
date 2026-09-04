@@ -86,7 +86,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {
-      description: `Payload-кабинет проекта «${projectConfig.projectName}»`,
+      description: `Payload Admin для проекта «${projectConfig.projectName}»`,
       titleSuffix: ` | ${projectConfig.adminTitleSuffix}`,
     },
     user: Users.slug,
@@ -182,3 +182,4 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
 })
+

@@ -80,7 +80,7 @@ export async function DashboardIntro() {
 
   if (canManageSettings(user)) {
     quickLinks.push({
-      description: 'Контакты и SEO по умолчанию',
+      description: 'Базовые глобальные настройки starter',
       href: '/admin/globals/site-settings',
       title: 'Настройки',
     })
@@ -93,8 +93,7 @@ export async function DashboardIntro() {
           <p className="sz-dashboard__eyebrow">{projectConfig.foundationStack}</p>
           <h1 className="sz-dashboard__title">{projectConfig.companyName}</h1>
           <p className="sz-dashboard__lead">
-            Рабочий кабинет подготовлен как foundation-слой: контент, медиа, пользователи и
-            базовые настройки уже разделены по ролям.
+            Payload Admin работает как operational-слой стартового шаблона: здесь живут пользователей, медиа, коллекции и базовые runtime-настройки без клиентского public UI.
           </p>
         </div>
         <div className="sz-dashboard__badge">{user.role}</div>
@@ -111,3 +110,4 @@ export async function DashboardIntro() {
     </section>
   )
 }
+

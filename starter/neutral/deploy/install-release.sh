@@ -68,7 +68,7 @@ mv -Tf "${APP_ROOT}/current.next" "${APP_ROOT}/current"
 systemctl restart "${SERVICE_NAME}"
 
 for attempt in $(seq 1 30); do
-  if curl --fail --silent --show-error http://127.0.0.1:3000/api/health >/dev/null; then
+  if curl --fail --silent --show-error http://127.0.0.1:3010/api/health >/dev/null; then
     systemctl reload nginx
     printf 'release_ok sha=%s previous=%s\n' "${RELEASE_SHA}" "${previous_release:-none}"
     exit 0

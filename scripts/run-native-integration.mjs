@@ -14,7 +14,7 @@ if (!appDatabaseURL || !superuserPassword) {
 
 const appURL = new URL(appDatabaseURL)
 const appUser = decodeURIComponent(appURL.username)
-const testDatabase = 'soyuz_rostov_test'
+const testDatabase = 'ams_realty_platform_starter_test'
 if (!/^[a-z_][a-z0-9_]*$/.test(appUser) || !/^[a-z_][a-z0-9_]*$/.test(testDatabase)) {
   throw new Error('Unsafe native integration database identifier')
 }

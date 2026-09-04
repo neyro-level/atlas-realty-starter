@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { extname, join, resolve, sep } from 'node:path'
 import { spawnSync } from 'node:child_process'
 
@@ -18,6 +18,7 @@ const git = spawnSync('git', ['ls-files', '--cached', '--others', '--exclude-sta
   cwd: root,
   encoding: 'utf8',
 })
+
 let files
 let inventorySource
 if (git.status === 0) {
@@ -25,19 +26,21 @@ if (git.status === 0) {
   inventorySource = 'git'
 } else {
   const inventoryPath = join(root, '.starter-inventory.json')
-  if (!existsSync(inventoryPath)) {
-    console.log(JSON.stringify({ mode, root, status: 'NOT_RUN', reason: 'Git inventory unavailable and .starter-inventory.json is missing' }, null, 2))
-    process.exit(2)
+  if (existsSync(inventoryPath)) {
+    const inventory = JSON.parse(readFileSync(inventoryPath, 'utf8'))
+    files = inventory.files.map(normalize)
+    const missing = files.filter((path) => !existsSync(join(root, path)))
+    if (missing.length) {
+      console.log(JSON.stringify({ mode, root, status: 'NOT_RUN', reason: 'Starter inventory references missing files', missing: missing.slice(0, 100) }, null, 2))
+      process.exit(2)
+    }
+    inventorySource = 'starter-inventory'
+  } else {
+    files = walk(root).map((path) => normalize(path.slice(root.length + 1)))
+    inventorySource = 'filesystem-fallback'
   }
-  const inventory = JSON.parse(readFileSync(inventoryPath, 'utf8'))
-  files = inventory.files.map(normalize)
-  const missing = files.filter((path) => !existsSync(join(root, path)))
-  if (missing.length) {
-    console.log(JSON.stringify({ mode, root, status: 'NOT_RUN', reason: 'Starter inventory references missing files', missing: missing.slice(0, 100) }, null, 2))
-    process.exit(2)
-  }
-  inventorySource = 'starter-inventory'
 }
+
 const compiledRules = manifest.classifications.map((rule) => ({
   ...rule,
   patterns: rule.patterns.map((pattern) => ({ negative: pattern.startsWith('!'), regex: globToRegExp(pattern.replace(/^!/, '')) })),
@@ -113,7 +116,6 @@ console.log(JSON.stringify({
 
 if (failed) process.exit(1)
 
-
 function normalize(path) {
   return path.split(sep).join('/')
 }
@@ -138,4 +140,15 @@ function globToRegExp(pattern) {
     source += character.replace(/[|\\{}()[\]^$+?.]/g, '\\$&')
   }
   return new RegExp(`^${source}$`)
+}
+
+function walk(directory) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(directory, entry.name)
+    if (entry.isDirectory()) {
+      if (['.git', '.next', '.pnpm-patch', '.pnpm-store', 'node_modules'].includes(entry.name)) return []
+      return walk(path)
+    }
+    return [path]
+  })
 }

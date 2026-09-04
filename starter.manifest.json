@@ -1,8 +1,8 @@
 {
   "$schema": "./scripts/starter/starter-manifest.schema.json",
   "version": 1,
-  "sourceProject": "soyuz-rostov-next",
-  "targetTemplate": "ams-real-estate-payload-starter",
+  "sourceProject": "ams-realty-platform-starter",
+  "targetTemplate": "ams-realty-platform-starter",
   "defaultClassification": "REVIEW_REQUIRED",
   "classifications": [
     {
@@ -26,45 +26,20 @@
         "*.log",
         "*.sqlite",
         "*.sqlite3",
-        "c-tmp-*/**"
+        "c-tmp-*/**",
+        ".vscode/**"
       ]
     },
     {
-      "name": "REFERENCE_ASSET",
+      "name": "ARCHIVE",
       "patterns": [
-        "public/images/ui-about.webp",
-        "public/images/ui-careers.webp",
-        "public/images/ui-construction.jpg",
-        "public/images/ui-home-hero.webp",
-        "public/images/ui-mortgage.png",
-        "public/images/ui-reviews.webp"
+        "docs/archive/**"
       ]
     },
     {
-      "name": "UNION_ONLY",
+      "name": "LEGACY_EVIDENCE",
       "patterns": [
-        "WORKLOG.md",
-        "docs/PRODUCTION_FOUNDATION.md",
-        "docs/PRODUCTION_RUNBOOK.md",
-        "docs/UI_PARITY_MATRIX.md",
-        "src/payload/migrations/**",
-        "public/images/**",
-        "deploy/**",
-        "Dockerfile",
-        "docker-compose.yml",
-        "scripts/build-release-artifact.mjs",
-        "scripts/verify-backup-restore.mjs"
-      ]
-    },
-    {
-      "name": "CLIENT",
-      "patterns": [
-        "src/project/**",
-        "docs/PRODUCT.md",
-        "docs/MASTER_PLAN.md",
-        "test.env",
-        "src/app/(frontend)/**",
-        "src/app/robots.ts"
+        "src/payload/migrations/**"
       ]
     },
     {
@@ -127,12 +102,14 @@
         "AGENTS.md",
         "SECURITY.md",
         "docs/ARCHITECTURE.md",
-        "*.cjs",
+        "docs/FRONTEND_INTEGRATION_CONTRACT.md",
+        "docs/RUNBOOK_DEPLOY.md",
+        "docs/SECURITY.md",
         "docs/DATA_MODEL.md",
         "docs/PAYLOAD_CONTRACT.md",
         "docs/STARTER_CONTRACT.md",
-        "docs/adr/ADR-001-payload-as-core.md",
-        "docs/adr/ADR-002-full-stack-starter-boundary.md",
+        "docs/adr/0001-day0.md",
+        "*.cjs",
         "*.md",
         "*.json",
         "*.mjs",
@@ -147,53 +124,41 @@
         "patches/**",
         "types/**",
         "fixtures/**",
-        ".sourcecraft/**"
+        ".sourcecraft/**",
+        "src/project/**",
+        "deploy/**",
+        "Dockerfile",
+        "docker-compose.yml",
+        "test.env"
       ]
     }
   ],
   "requiredClientReplacements": [
-    "tenant identity",
-    "city and region scope",
-    "public routes and redirects",
-    "navigation",
-    "theme and logo",
-    "Home and commercial content",
-    "legal facts and documents",
-    "contacts and offices",
-    "social preview",
-    "feed registry",
-    "domain and indexability policy",
-    "server, Doppler and S3 identity"
+    "future client brand and routes",
+    "future public UI library",
+    "final deployment identity",
+    "feed registry and ownership policy",
+    "legal and consent texts",
+    "public catalog and indexability policy"
   ],
   "protectedUnionState": [
-    "applied migrations",
-    "production database and backups",
-    "production media and uploads",
-    "Doppler secrets",
-    "SourceCraft release history",
+    "legacy archived docs",
+    "retained external runtime evidence",
+    "production databases and backups",
+    "deployment secrets",
+    "release history",
     "technical and primary domains"
   ],
   "audit": {
-    "clientMarkers": [
-      "Союз Застройщиков",
-      "Союз",
-      "Ростов",
-      "Союз Ростов",
-      "Ростов-на-Дону",
-      "souz-home.ru",
-      "soyuz-rostov",
-      "szrostov",
-      "sz-rostov",
-      "szrostov-server"
+    "clientMarkers": [],
+    "markerAllowedPaths": [],
+    "presentationRoots": [
+      "src/components",
+      "src/modules"
     ],
-    "markerAllowedPaths": [
-      ".starter-source.json",
-      ".starter-inventory.json",
-      "starter.manifest.json",
-      "docs/STARTER_CONTRACT.md",
-      "docs/adr/ADR-002-full-stack-starter-boundary.md"
-    ],
-    "presentationRoots": ["src/components", "src/modules"],
-    "forbiddenPresentationImports": ["@/payload", "@/project"]
+    "forbiddenPresentationImports": [
+      "@/payload",
+      "@/project"
+    ]
   }
 }

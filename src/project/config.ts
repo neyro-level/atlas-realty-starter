@@ -1,8 +1,10 @@
 export const projectConfig = {
-  adminTitleSuffix: 'Союз Ростов',
-  appName: 'Союз Ростов',
-  brandName: 'Союз Застройщиков',
-  companyName: 'Союз застройщиков Ростов',
+  adminTitleSuffix: 'Starter',
+  appName: 'AMS Realty Platform Starter',
+  brandName: 'AMS Realty',
+  companyName: 'AMS Realty Platform Starter',
   foundationStack: 'Next.js 16 + Payload CMS 3',
-  projectName: 'Союз Застройщиков',
+  packageName: 'ams-realty-platform-starter',
+  projectName: 'AMS Realty Platform Starter',
+  repositorySlug: 'ams-realty-platform-starter',
 } as const
