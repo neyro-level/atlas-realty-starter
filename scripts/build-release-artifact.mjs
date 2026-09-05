@@ -10,6 +10,7 @@ import {
   realpathSync,
   rmSync,
   statSync,
+  symlinkSync,
   writeFileSync,
 } from 'node:fs'
 import { spawnSync } from 'node:child_process'
@@ -42,23 +43,23 @@ function canonicalRepository() {
   return match[1]
 }
 
-function materializeSymlinks(root) {
+function rebaseTracedModuleLinks(root, bundleNodeModules) {
   if (!existsSync(root)) return
   for (const entry of readdirSync(root)) {
     const entryPath = path.join(root, entry)
     const info = lstatSync(entryPath)
     if (info.isSymbolicLink()) {
       const target = realpathSync(entryPath)
+      const marker = `${path.sep}.pnpm${path.sep}`
+      const markerIndex = target.indexOf(marker)
+      if (markerIndex < 0) throw new Error(`Traced module link is outside pnpm store: ${entryPath}`)
+      const rebasedTarget = path.join(bundleNodeModules, target.slice(markerIndex + 1))
+      if (!existsSync(rebasedTarget)) throw new Error(`Missing deployed target for traced module: ${entryPath}`)
       const targetInfo = statSync(target)
-      rmSync(entryPath, { force: true, recursive: targetInfo.isDirectory() })
-      if (targetInfo.isDirectory()) {
-        cpSync(target, entryPath, { dereference: true, recursive: true })
-        materializeSymlinks(entryPath)
-      } else {
-        copyFileSync(target, entryPath)
-      }
+      rmSync(entryPath, { force: true, recursive: false })
+      symlinkSync(path.relative(path.dirname(entryPath), rebasedTarget), entryPath, targetInfo.isDirectory() ? 'dir' : 'file')
     } else if (info.isDirectory()) {
-      materializeSymlinks(entryPath)
+      rebaseTracedModuleLinks(entryPath, bundleNodeModules)
     }
   }
 }
@@ -115,7 +116,7 @@ try {
     dereference: true,
     recursive: true,
   })
-  materializeSymlinks(path.join(bundleDir, '.next', 'node_modules'))
+  rebaseTracedModuleLinks(path.join(bundleDir, '.next', 'node_modules'), path.join(bundleDir, 'node_modules'))
 
   const staticRoot = path.join(projectRoot, '.next', 'static')
   if (existsSync(staticRoot)) {
