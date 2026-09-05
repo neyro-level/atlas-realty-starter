@@ -55,7 +55,7 @@ export function buildRuntimeConfig(input: EnvironmentSource) {
     payloadSecret: readPayloadSecret(env.PAYLOAD_SECRET, protectedRuntime),
     releaseSHA: env.RELEASE_SHA ?? 'local',
     revalidateSecret: readSecret('REVALIDATE_SECRET', env.REVALIDATE_SECRET, protectedRuntime),
-    s3: readS3Config(env, protectedRuntime),
+    s3: readS3Config(env, environment === 'production'),
     secureCookies: protectedRuntime,
     siteURL,
   }

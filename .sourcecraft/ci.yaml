@@ -38,3 +38,7 @@ workflows:
               - pnpm generate:importmap
               - pnpm verify
               - pnpm build
+              - pnpm release:pack
+            artifacts:
+              paths:
+                - .release-artifacts

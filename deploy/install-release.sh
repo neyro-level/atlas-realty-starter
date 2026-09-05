@@ -33,6 +33,16 @@ if [[ -e "${release_dir}" ]]; then
   exit 1
 fi
 
+keep_release=0
+cleanup_failed_release() {
+  exit_code=$?
+  if [[ "${exit_code}" -ne 0 && "${keep_release}" -eq 0 && -d "${release_dir}" ]]; then
+    rm -rf -- "${release_dir}"
+  fi
+  exit "${exit_code}"
+}
+trap cleanup_failed_release EXIT
+
 previous_release=""
 if [[ -L "${APP_ROOT}/current" ]]; then
   previous_release="$(readlink -f "${APP_ROOT}/current")"
@@ -52,18 +62,20 @@ export NODE_ENV=production
 export RELEASE_SHA="${RELEASE_SHA}"
 export NEXT_PUBLIC_RELEASE_SHA="${RELEASE_SHA}"
 export HOME="${APP_ROOT}"
-export COREPACK_HOME="${APP_ROOT}/.cache/node/corepack"
-export PNPM_HOME="${APP_ROOT}/.local/share/pnpm"
-export PATH="/usr/local/bin:/usr/bin:/bin"
+export COREPACK_HOME="${APP_ROOT}/runtime/corepack"
+export PATH="${APP_ROOT}/runtime/bin:/usr/local/bin:/usr/bin:/bin"
 unset BASH_ENV ENV
 
 run_as_app() {
   /usr/sbin/runuser --preserve-environment -u "${APP_USER}" -- /bin/bash -c 'cd "$1"; shift; exec "$@"' _ "${release_dir}" "$@"
 }
 
-run_as_app /usr/local/bin/pnpm install --frozen-lockfile
-run_as_app /usr/local/bin/pnpm payload migrate
-run_as_app /usr/local/bin/pnpm build
+if [[ ! -f "${release_dir}/server.js" || ! -x "${release_dir}/node_modules/.bin/payload" || ! -d "${release_dir}/src/payload/migrations-v2" ]]; then
+  echo "Release artifact is incomplete." >&2
+  exit 1
+fi
+
+run_as_app "${APP_ROOT}/runtime/bin/pnpm" payload migrate
 
 printf 'RELEASE_SHA=%s\n' "${RELEASE_SHA}" > /etc/ams-realty-platform-starter/release.env
 chmod 0640 /etc/ams-realty-platform-starter/release.env
@@ -75,9 +87,10 @@ systemctl restart ams-realty-platform-starter.service
 
 for attempt in $(seq 1 30); do
   if curl --fail --silent --show-error --max-time 5 http://127.0.0.1:3010/healthz >/dev/null; then
-    systemctl restart ams-realty-platform-starter-imports.service ams-realty-platform-starter-maintenance.service ams-realty-platform-starter-maintenance-scheduler.service
-    if systemctl is-active --quiet ams-realty-platform-starter-imports.service ams-realty-platform-starter-maintenance.service ams-realty-platform-starter-maintenance-scheduler.service; then
+    systemctl restart ams-realty-platform-starter-worker.service
+    if systemctl is-active --quiet ams-realty-platform-starter-worker.service; then
       systemctl reload nginx
+      keep_release=1
       printf 'release_ok sha=%s previous=%s\n' "${RELEASE_SHA}" "${previous_release:-none}"
       exit 0
     fi
@@ -91,7 +104,10 @@ if [[ -n "${previous_release}" && -d "${previous_release}" ]]; then
   ln -sfn "${previous_release}" "${APP_ROOT}/current.next"
   mv -Tf "${APP_ROOT}/current.next" "${APP_ROOT}/current"
   systemctl restart ams-realty-platform-starter.service
-  systemctl stop ams-realty-platform-starter-imports.service ams-realty-platform-starter-maintenance.service ams-realty-platform-starter-maintenance-scheduler.service || true
+  systemctl restart ams-realty-platform-starter-worker.service || true
+else
+  rm -f "${APP_ROOT}/current"
+  systemctl stop ams-realty-platform-starter.service ams-realty-platform-starter-worker.service || true
 fi
 
 echo "Release health check failed; previous symlink restored when available." >&2

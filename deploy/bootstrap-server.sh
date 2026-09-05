@@ -14,10 +14,16 @@ fi
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-apt-get install -y --no-install-recommends ca-certificates curl nginx xz-utils build-essential
+apt-get install -y --no-install-recommends ca-certificates curl nginx openssl xz-utils
+
+if ! id -u "${APP_USER}" >/dev/null 2>&1; then
+  useradd --system --home-dir "${APP_ROOT}" --create-home --shell /usr/sbin/nologin "${APP_USER}"
+fi
+install -d -o "${APP_USER}" -g "${APP_USER}" -m 0750 "${APP_ROOT}"
 
 node_archive="node-v${NODE_VERSION}-linux-x64.tar.xz"
-node_root="/opt/node-v${NODE_VERSION}-linux-x64"
+runtime_root="${APP_ROOT}/runtime"
+node_root="${runtime_root}/node-v${NODE_VERSION}-linux-x64"
 if [[ ! -x "${node_root}/bin/node" ]]; then
   temp_dir="$(mktemp -d)"
   trap 'rm -rf "${temp_dir}"' EXIT
@@ -26,20 +32,32 @@ if [[ ! -x "${node_root}/bin/node" ]]; then
   expected_checksum="$(awk -v archive="${node_archive}" '$2 == archive { print $1 }' "${temp_dir}/SHASUMS256.txt")"
   actual_checksum="$(sha256sum "${temp_dir}/${node_archive}" | cut -d' ' -f1)"
   [[ -n "${expected_checksum}" && "${expected_checksum}" == "${actual_checksum}" ]]
-  tar -xJf "${temp_dir}/${node_archive}" -C /opt
+  install -d -o root -g root -m 0755 "${runtime_root}"
+  tar -xJf "${temp_dir}/${node_archive}" -C "${runtime_root}"
 fi
 
-for binary in node npm npx corepack; do
-  ln -sfn "${node_root}/bin/${binary}" "/usr/local/bin/${binary}"
-done
-corepack enable --install-directory /usr/local/bin
-corepack prepare "pnpm@${PNPM_VERSION}" --activate
+install -d -o root -g root -m 0755 "${runtime_root}/bin" "${runtime_root}/corepack"
+ln -sfn "${node_root}/bin/node" "${runtime_root}/bin/node"
+PATH="${runtime_root}/bin:${node_root}/bin:/usr/local/bin:/usr/bin:/bin" \
+  COREPACK_HOME="${runtime_root}/corepack" \
+  "${node_root}/bin/corepack" enable --install-directory "${runtime_root}/bin"
+PATH="${runtime_root}/bin:${node_root}/bin:/usr/local/bin:/usr/bin:/bin" \
+  COREPACK_HOME="${runtime_root}/corepack" \
+  "${node_root}/bin/corepack" prepare "pnpm@${PNPM_VERSION}" --activate
 
-if ! id -u "${APP_USER}" >/dev/null 2>&1; then
-  useradd --system --home-dir "${APP_ROOT}" --create-home --shell /usr/sbin/nologin "${APP_USER}"
-fi
 install -d -o "${APP_USER}" -g "${APP_USER}" -m 0750 "${APP_ROOT}/releases" "${APP_ROOT}/shared"
 install -d -o root -g "${APP_USER}" -m 0750 /etc/ams-realty-platform-starter
+install -d -o root -g root -m 0755 /etc/ams-realty-platform-starter/tls
+
+if [[ ! -s /etc/ams-realty-platform-starter/tls/fullchain.pem || ! -s /etc/ams-realty-platform-starter/tls/privkey.pem ]]; then
+  openssl req -x509 -newkey rsa:3072 -sha256 -nodes -days 825 \
+    -subj "/CN=ams-realty-platform-starter.local" \
+    -addext "subjectAltName=DNS:ams-realty-platform-starter.local,DNS:localhost,IP:127.0.0.1" \
+    -keyout /etc/ams-realty-platform-starter/tls/privkey.pem \
+    -out /etc/ams-realty-platform-starter/tls/fullchain.pem
+  chmod 0600 /etc/ams-realty-platform-starter/tls/privkey.pem
+  chmod 0644 /etc/ams-realty-platform-starter/tls/fullchain.pem
+fi
 
 if [[ -z "$(swapon --show --noheadings)" && ! -f /swapfile ]]; then
   fallocate -l 4G /swapfile
@@ -50,19 +68,24 @@ if [[ -z "$(swapon --show --noheadings)" && ! -f /swapfile ]]; then
 fi
 
 install -m 0644 "${SCRIPT_DIR}/ams-realty-platform-starter.service" /etc/systemd/system/ams-realty-platform-starter.service
-install -m 0644 "${SCRIPT_DIR}/ams-realty-platform-starter-imports.service" /etc/systemd/system/ams-realty-platform-starter-imports.service
-install -m 0644 "${SCRIPT_DIR}/ams-realty-platform-starter-maintenance.service" /etc/systemd/system/ams-realty-platform-starter-maintenance.service
-install -m 0644 "${SCRIPT_DIR}/ams-realty-platform-starter-maintenance-scheduler.service" /etc/systemd/system/ams-realty-platform-starter-maintenance-scheduler.service
+install -m 0644 "${SCRIPT_DIR}/ams-realty-platform-starter-worker.service" /etc/systemd/system/ams-realty-platform-starter-worker.service
+for obsolete_unit in \
+  ams-realty-platform-starter-imports.service \
+  ams-realty-platform-starter-maintenance.service \
+  ams-realty-platform-starter-maintenance-scheduler.service; do
+  systemctl disable --now "${obsolete_unit}" 2>/dev/null || true
+  rm -f "/etc/systemd/system/${obsolete_unit}"
+done
 install -m 0644 "${SCRIPT_DIR}/nginx-internal.conf" /etc/nginx/sites-available/ams-realty-platform-starter.conf
 ln -sfn /etc/nginx/sites-available/ams-realty-platform-starter.conf /etc/nginx/sites-enabled/ams-realty-platform-starter.conf
-rm -f /etc/nginx/sites-enabled/default
 systemctl daemon-reload
 systemctl enable ams-realty-platform-starter.service
-systemctl enable ams-realty-platform-starter-imports.service
-systemctl enable ams-realty-platform-starter-maintenance.service
-systemctl enable ams-realty-platform-starter-maintenance-scheduler.service
+systemctl enable ams-realty-platform-starter-worker.service
 nginx -t
 systemctl enable --now nginx
+systemctl reload nginx
 
-node --version
-pnpm --version
+"${runtime_root}/bin/node" --version
+PATH="${runtime_root}/bin:${node_root}/bin:/usr/local/bin:/usr/bin:/bin" \
+  COREPACK_HOME="${runtime_root}/corepack" \
+  "${runtime_root}/bin/pnpm" --version

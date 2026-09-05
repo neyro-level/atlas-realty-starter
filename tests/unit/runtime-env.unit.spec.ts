@@ -22,11 +22,12 @@ describe('runtime environment contract', () => {
     expect(() => buildRuntimeConfig({ APP_ENV: 'production', ...core, PAYLOAD_SECRET: 'short', ...s3 })).toThrow(/at least 32/)
   })
 
-  it('requires only the four core runtime values plus active S3 storage', () => {
+  it('requires the four core values in staging and S3 only in production', () => {
     for (const key of ['DATABASE_URL', 'NEXT_PUBLIC_SITE_URL', 'PAYLOAD_SECRET', 'REVALIDATE_SECRET'] as const) {
-      expect(() => buildRuntimeConfig({ APP_ENV: 'staging', ...core, [key]: undefined, ...s3 })).toThrow(key)
+      expect(() => buildRuntimeConfig({ APP_ENV: 'staging', ...core, [key]: undefined })).toThrow(key)
     }
-    expect(() => buildRuntimeConfig({ APP_ENV: 'staging', ...core })).toThrow(/S3/)
+    expect(buildRuntimeConfig({ APP_ENV: 'staging', ...core }).s3).toBeNull()
+    expect(() => buildRuntimeConfig({ APP_ENV: 'production', ...core })).toThrow(/S3/)
   })
 
   it('enforces HTTPS and accepts complete protected runtime configuration', () => {
