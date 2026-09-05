@@ -14,6 +14,8 @@ import {
 } from '@/core/data-access/public/queries'
 import { getSitemapChunk, getSitemapIndex } from '@/core/data-access/public/sitemap'
 import { catalogQuerySchema, redirectQuerySchema, searchParamsRecord, slugSchema } from '@/core/query/public-api'
+import { createPublicLead } from '@/core/data-access/system/leads/create-lead'
+import { idempotencyKeySchema, publicLeadSchema, readBoundedJSON } from '@/shared/types/public-lead'
 
 const sitemapSchema = z.object({ page: z.coerce.number().int().min(0).max(10_000).default(0), type: z.enum(['agents', 'complexes', 'pages', 'posts', 'properties']).optional() })
 
@@ -44,6 +46,33 @@ export async function GET(request: Request, context: { params: Promise<{ segment
   } catch (error) {
     if (error instanceof z.ZodError) return Response.json({ error: 'invalid_request', issues: error.issues.map((issue) => ({ message: issue.message, path: issue.path })) }, { status: 400 })
     throw error
+  }
+}
+
+export async function POST(request: Request, context: { params: Promise<{ segments: string[] }> }) {
+  const { segments } = await context.params
+  if (segments.length !== 1 || segments[0] !== 'leads') return notFound()
+  if (!request.headers.get('content-type')?.toLowerCase().startsWith('application/json')) {
+    return Response.json({ error: 'unsupported_media_type' }, { status: 415 })
+  }
+
+  try {
+    const idempotencyKey = idempotencyKeySchema.parse(request.headers.get('idempotency-key'))
+    const input = publicLeadSchema.parse(await readBoundedJSON(request))
+    const result = await createPublicLead({ ...input, idempotencyKey })
+    return Response.json({ data: result }, {
+      headers: { 'Cache-Control': 'no-store' },
+      status: result.duplicate ? 200 : 201,
+    })
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return Response.json({ error: 'invalid_request', issues: error.issues.map((issue) => ({ message: issue.message, path: issue.path })) }, { status: 400 })
+    }
+    if (error instanceof Error && ['body_too_large', 'form_expired', 'form_too_fast', 'invalid_json', 'invalid_phone'].includes(error.message)) {
+      return Response.json({ error: error.message }, { status: error.message === 'body_too_large' ? 413 : 400 })
+    }
+    if (error instanceof Error && error.message === 'lead_context_not_found') return notFound()
+    return Response.json({ error: 'lead_intake_unavailable' }, { status: 503 })
   }
 }
 

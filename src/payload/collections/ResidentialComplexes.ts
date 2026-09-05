@@ -13,6 +13,7 @@ export const ResidentialComplexes = {
     { name: 'name', type: 'text', required: true },
     { name: 'slug', type: 'text', required: true, unique: true, index: true },
     { name: 'developer', type: 'relationship', relationTo: 'developers', index: true },
+    { name: 'responsibleAgent', type: 'relationship', relationTo: 'agents', index: true },
     { name: 'yandexBuildingId', type: 'text', unique: true, index: true },
     { name: 'region', type: 'text', index: true },
     { name: 'district', type: 'text', index: true },

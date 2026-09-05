@@ -61,6 +61,35 @@ function runExpectFailure(command) {
   if (result.status === 0) throw new Error(`Command unexpectedly succeeded: ${command}`)
 }
 
+if (process.argv.includes('--stage3-migration-check')) {
+  run('pnpm payload migrate')
+  const batches = new pg.Client({ connectionString: testURL.toString() })
+  await batches.connect()
+  try {
+    await batches.query(`UPDATE payload_migrations SET batch = CASE WHEN name = '20260905_103148_standard_21_leads_outbox' THEN 6 ELSE 5 END`)
+  } finally { await batches.end() }
+  run('pnpm payload migrate:down')
+
+  const fixture = new pg.Client({ connectionString: testURL.toString() })
+  await fixture.connect()
+  try {
+    const lead = await fixture.query(`INSERT INTO leads (phone, normalized_phone, status, consent_version, consented_at, idempotency_key, updated_at, created_at) VALUES ('+7 999 111-22-33', '+79991112233', 'new', '152-fz-v1', now(), 'stage3-migration-lead', now(), now()) RETURNING id`)
+    await fixture.query(`INSERT INTO lead_deliveries (lead_id, channel, status, attempts, idempotency_key, updated_at, created_at) VALUES ($1, 'fallback', 'pending', 0, 'stage3-migration-delivery', now(), now())`, [lead.rows[0].id])
+  } finally { await fixture.end() }
+
+  run('pnpm payload migrate')
+  const verification = new pg.Client({ connectionString: testURL.toString() })
+  await verification.connect()
+  try {
+    const delivery = await verification.query(`SELECT route_reason::text route_reason FROM lead_deliveries WHERE idempotency_key='stage3-migration-delivery'`)
+    const tasks = await verification.query(`SELECT enum_range(NULL::enum_payload_jobs_task_slug)::text values`)
+    if (delivery.rows[0]?.route_reason !== 'fallback') throw new Error('Stage 3 delivery routing backfill failed')
+    if (!tasks.rows[0]?.values.includes('deliverLead') || !tasks.rows[0]?.values.includes('recoverLeadDeliveries')) throw new Error('Stage 3 job task enum migration failed')
+  } finally { await verification.end() }
+  console.log(JSON.stringify({ existingDeliveryPreserved: 1, stage3Migration: 'PASS' }))
+  process.exit(0)
+}
+
 if (process.argv.includes('--stage2-migration-check')) {
   run('pnpm payload migrate')
   const batches = new pg.Client({ connectionString: testURL.toString() })
