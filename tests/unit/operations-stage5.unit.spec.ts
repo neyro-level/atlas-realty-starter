@@ -16,6 +16,8 @@ describe('Stage 5 operations contract', () => {
     expect(pack).toContain("standaloneRoot, '.next'")
     expect(pack).toContain("rmSync(path.join(bundleDir, '.next')")
     expect(pack).toContain('dereference: true')
+    expect(pack).toContain("materializeSymlinks(path.join(bundleDir, '.next', 'node_modules'))")
+    expect(pack).toContain('realpathSync(entryPath)')
     expect(pack).not.toContain('cpSync(standaloneRoot, bundleDir')
     expect(pack).toContain('buildBeforeDeploy: true')
     expect(read('scripts/prepare-standalone.mjs')).toContain("'.env.production.local'")
