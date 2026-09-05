@@ -22,8 +22,8 @@ workflows:
               - pnpm install --frozen-lockfile
               - pnpm generate:types
               - pnpm generate:importmap
+              - git diff --exit-code -- src/payload-types.ts 'src/app/(payload)/admin/importMap.js'
               - pnpm verify
-              - pnpm build
   main-static-gate:
     tasks:
       - name: static-contract
@@ -36,7 +36,7 @@ workflows:
               - pnpm install --frozen-lockfile
               - pnpm generate:types
               - pnpm generate:importmap
-              - pnpm verify
+              - git diff --exit-code -- src/payload-types.ts 'src/app/(payload)/admin/importMap.js'
               - pnpm build
               - pnpm release:pack
             artifacts:

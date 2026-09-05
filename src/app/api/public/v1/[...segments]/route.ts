@@ -11,10 +11,10 @@ import {
   getPublicPostBySlug,
   getPublicPropertyBySlug,
   resolvePublicRedirect,
-} from '@/core/data-access/public/queries'
+} from '@/project/public-gateway'
 import { getSitemapChunk, getSitemapIndex } from '@/core/data-access/public/sitemap'
 import { catalogQuerySchema, redirectQuerySchema, searchParamsRecord, slugSchema } from '@/core/query/public-api'
-import { createPublicLead } from '@/core/data-access/system/leads/create-lead'
+import { createPublicLead } from '@/project/leads/create-public-lead'
 import { idempotencyKeySchema, publicLeadSchema, readBoundedJSON } from '@/shared/types/public-lead'
 
 const sitemapSchema = z.object({ page: z.coerce.number().int().min(0).max(10_000).default(0), type: z.enum(['agents', 'complexes', 'pages', 'posts', 'properties']).optional() })

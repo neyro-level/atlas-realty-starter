@@ -1,20 +1,11 @@
 import { runtimeConfig } from '@/project/env'
+import type {
+  DeliveryAttempt,
+  DeliveryResult,
+  LeadChannelAdapter,
+} from '@/core/data-access/system/leads/delivery'
 
-export type DeliveryAttempt = {
-  attempt: number
-  deliveryId: string
-  idempotencyKey: string
-  leadId: string
-}
-
-export type DeliveryResult =
-  | { ok: true }
-  | { code: 'http_429' | 'http_5xx' | 'network_error' | 'timeout'; kind: 'retryable'; ok: false }
-  | { code: 'rejected'; kind: 'permanent'; ok: false }
-
-export interface LeadChannelAdapter {
-  deliver(attempt: DeliveryAttempt): Promise<DeliveryResult>
-}
+export type { DeliveryAttempt, DeliveryResult, LeadChannelAdapter }
 
 const testAdapter: LeadChannelAdapter = {
   async deliver(attempt) {

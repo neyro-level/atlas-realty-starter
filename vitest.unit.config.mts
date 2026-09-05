@@ -10,6 +10,8 @@ export default defineConfig({
   },
   test: {
     environment: 'node',
+    isolate: false,
     include: ['tests/unit/**/*.unit.spec.ts'],
+    maxWorkers: 1,
   },
 })

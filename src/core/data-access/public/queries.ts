@@ -1,15 +1,13 @@
 import 'server-only'
 
 import { unstable_cache } from 'next/cache'
-import { getPayload, type Where } from 'payload'
+import type { Payload, Where } from 'payload'
 
 import { createPublicGatewayContext } from '@/core/access/public-gateway'
 import { PUBLIC_CACHE_TAGS } from '@/core/cache/public-cache'
 import type { PublicCatalogQuery } from '@/core/query/public-api'
 import { publicAgentSelect, publicComplexSelect, publicPageSelect, publicPostSelect, publicPropertyDetailSelect, publicPropertySelect, publicRedirectSelect } from '@/core/query/public-selects'
 import type { Agent, Page, Post, Property, Redirect, ResidentialComplex } from '@/payload-types'
-import config from '@/payload.config'
-import { runtimeConfig } from '@/project/env'
 import type {
   PaginatedPublicResult,
   PublicAgent,
@@ -45,38 +43,38 @@ type ComplexView = Pick<ResidentialComplex, 'address' | 'availablePropertyCount'
 type AgentView = Pick<Agent, 'bio' | 'email' | 'id' | 'meta' | 'name' | 'phone' | 'photo' | 'position' | 'slug'>
 type ContentView = Pick<Page, 'content' | 'id' | 'meta' | 'slug' | 'title' | 'updatedAt'> & { excerpt?: Post['excerpt']; publishedAt?: Post['publishedAt'] }
 type RedirectView = Pick<Redirect, 'from' | 'id' | 'to' | 'type'>
+export type PublicQueryOptions = { siteURL: string }
 
-export function getPublicCatalog(query: PublicCatalogQuery) {
-  return cacheFor(['catalog', JSON.stringify(query)], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicCatalog(query))
+export function getPublicCatalog(payload: Payload, query: PublicCatalogQuery, options: PublicQueryOptions) {
+  return cacheFor(['catalog', options.siteURL, JSON.stringify(query)], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicCatalog(payload, query, options))
 }
 
-export function getPublicPropertyBySlug(slug: string) {
-  return cacheFor(['property', slug], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicPropertyBySlug(slug))
+export function getPublicPropertyBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
+  return cacheFor(['property', options.siteURL, slug], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicPropertyBySlug(payload, slug, options))
 }
 
-export function getPublicComplexes(query: Pick<PublicCatalogQuery, 'district' | 'limit' | 'page' | 'q'>) {
-  return cacheFor(['complexes', JSON.stringify(query)], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicComplexes(query))
+export function getPublicComplexes(payload: Payload, query: Pick<PublicCatalogQuery, 'district' | 'limit' | 'page' | 'q'>, options: PublicQueryOptions) {
+  return cacheFor(['complexes', options.siteURL, JSON.stringify(query)], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicComplexes(payload, query, options))
 }
 
-export function getPublicComplexBySlug(slug: string) {
-  return cacheFor(['complex', slug], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicComplexBySlug(slug))
+export function getPublicComplexBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
+  return cacheFor(['complex', options.siteURL, slug], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicComplexBySlug(payload, slug, options))
 }
 
-export function getPublicAgentBySlug(slug: string) {
-  return cacheFor(['agent', slug], [PUBLIC_CACHE_TAGS.agents], () => queryPublicAgentBySlug(slug))
+export function getPublicAgentBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
+  return cacheFor(['agent', options.siteURL, slug], [PUBLIC_CACHE_TAGS.agents], () => queryPublicAgentBySlug(payload, slug, options))
 }
 
-export function getPublicPageBySlug(slug: string) {
-  return cacheFor(['page', slug], [PUBLIC_CACHE_TAGS.content], () => queryPublicPageBySlug(slug))
+export function getPublicPageBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
+  return cacheFor(['page', options.siteURL, slug], [PUBLIC_CACHE_TAGS.content], () => queryPublicPageBySlug(payload, slug, options))
 }
 
-export function getPublicPostBySlug(slug: string) {
-  return cacheFor(['post', slug], [PUBLIC_CACHE_TAGS.content], () => queryPublicPostBySlug(slug))
+export function getPublicPostBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
+  return cacheFor(['post', options.siteURL, slug], [PUBLIC_CACHE_TAGS.content], () => queryPublicPostBySlug(payload, slug, options))
 }
 
-export function getPublicConfig(): Promise<PublicConfig> {
+export function getPublicConfig(payload: Payload): Promise<PublicConfig> {
   return cacheFor(['config'], [PUBLIC_CACHE_TAGS.config], async () => {
-    const payload = await getPayload({ config })
     const settings = await payload.findGlobal({
       context: context(),
       overrideAccess: false,
@@ -93,16 +91,15 @@ export function getPublicConfig(): Promise<PublicConfig> {
   })
 }
 
-export function getPublicFacets() {
-  return cacheFor(['facets'], [PUBLIC_CACHE_TAGS.catalog], queryPublicFacets)
+export function getPublicFacets(payload: Payload) {
+  return cacheFor(['facets'], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicFacets(payload))
 }
 
-export function resolvePublicRedirect(from: string) {
-  return cacheFor(['redirect', from], [PUBLIC_CACHE_TAGS.redirects], () => queryPublicRedirect(from))
+export function resolvePublicRedirect(payload: Payload, from: string) {
+  return cacheFor(['redirect', from], [PUBLIC_CACHE_TAGS.redirects], () => queryPublicRedirect(payload, from))
 }
 
-async function queryPublicCatalog(query: PublicCatalogQuery): Promise<PaginatedPublicResult<PublicProperty>> {
-  const payload = await getPayload({ config })
+async function queryPublicCatalog(payload: Payload, query: PublicCatalogQuery, options: PublicQueryOptions): Promise<PaginatedPublicResult<PublicProperty>> {
   const result = await payload.find({
     collection: 'properties',
     context: context(),
@@ -115,11 +112,10 @@ async function queryPublicCatalog(query: PublicCatalogQuery): Promise<PaginatedP
     sort: catalogSort(query.sort),
     where: propertyWhere(query, true),
   })
-  return { docs: result.docs.map(toPublicProperty), limit: result.limit, page: result.page ?? query.page, totalDocs: result.totalDocs, totalPages: result.totalPages }
+  return { docs: result.docs.map((property) => toPublicProperty(property, options)), limit: result.limit, page: result.page ?? query.page, totalDocs: result.totalDocs, totalPages: result.totalPages }
 }
 
-async function queryPublicPropertyBySlug(slug: string): Promise<PublicPropertyDetails | null> {
-  const payload = await getPayload({ config })
+async function queryPublicPropertyBySlug(payload: Payload, slug: string, options: PublicQueryOptions): Promise<PublicPropertyDetails | null> {
   const result = await payload.find({ collection: 'properties', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicPropertyDetailSelect, where: { slug: { equals: slug } } })
   const property = result.docs[0]
   if (!property) return null
@@ -135,53 +131,47 @@ async function queryPublicPropertyBySlug(slug: string): Promise<PublicPropertyDe
     where: { and: [{ id: { not_equals: property.id } }, { market: { equals: property.market } }, { category: { equals: property.category } }, { status: { in: ['active', 'reserved'] } }] },
   })
   return {
-    ...toPublicProperty(property),
-    alternatives: alternatives.docs.map(toPublicProperty),
+    ...toPublicProperty(property, options),
+    alternatives: alternatives.docs.map((alternative) => toPublicProperty(alternative, options)),
     buildingId: relationId(property.building),
     complexId: relationId(property.complex),
     latitude: property.latitude ?? undefined,
     longitude: property.longitude ?? undefined,
     mortgageAvailable: property.mortgageAvailable === true,
-    structuredData: propertyStructuredData(property),
+    structuredData: propertyStructuredData(property, options),
     videoUrl: property.videoUrl ?? undefined,
   }
 }
 
-async function queryPublicComplexes(query: Pick<PublicCatalogQuery, 'district' | 'limit' | 'page' | 'q'>): Promise<PaginatedPublicResult<PublicComplex>> {
+async function queryPublicComplexes(payload: Payload, query: Pick<PublicCatalogQuery, 'district' | 'limit' | 'page' | 'q'>, options: PublicQueryOptions): Promise<PaginatedPublicResult<PublicComplex>> {
   const and: Where[] = []
   if (query.district) and.push({ district: { equals: query.district } })
   if (query.q) and.push({ or: [{ address: { like: query.q } }, { name: { like: query.q } }] })
-  const payload = await getPayload({ config })
   const result = await payload.find({ collection: 'residential-complexes', context: context(), depth: 1, limit: query.limit, overrideAccess: false, page: query.page, pagination: true, select: publicComplexSelect, sort: 'name', where: and.length ? { and } : {} })
-  return { docs: result.docs.map(toPublicComplex), limit: result.limit, page: result.page ?? query.page, totalDocs: result.totalDocs, totalPages: result.totalPages }
+  return { docs: result.docs.map((complex) => toPublicComplex(complex, options)), limit: result.limit, page: result.page ?? query.page, totalDocs: result.totalDocs, totalPages: result.totalPages }
 }
 
-async function queryPublicComplexBySlug(slug: string) {
-  const payload = await getPayload({ config })
+async function queryPublicComplexBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
   const result = await payload.find({ collection: 'residential-complexes', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicComplexSelect, where: { slug: { equals: slug } } })
-  return result.docs[0] ? toPublicComplex(result.docs[0]) : null
+  return result.docs[0] ? toPublicComplex(result.docs[0], options) : null
 }
 
-async function queryPublicAgentBySlug(slug: string) {
-  const payload = await getPayload({ config })
+async function queryPublicAgentBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
   const result = await payload.find({ collection: 'agents', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicAgentSelect, where: { slug: { equals: slug } } })
-  return result.docs[0] ? toPublicAgent(result.docs[0]) : null
+  return result.docs[0] ? toPublicAgent(result.docs[0], options) : null
 }
 
-async function queryPublicPageBySlug(slug: string) {
-  const payload = await getPayload({ config })
+async function queryPublicPageBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
   const result = await payload.find({ collection: 'pages', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicPageSelect, where: { slug: { equals: slug } } })
-  return result.docs[0] ? toPublicContent(result.docs[0], 'pages') : null
+  return result.docs[0] ? toPublicContent(result.docs[0], 'pages', options) : null
 }
 
-async function queryPublicPostBySlug(slug: string) {
-  const payload = await getPayload({ config })
+async function queryPublicPostBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
   const result = await payload.find({ collection: 'posts', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicPostSelect, where: { slug: { equals: slug } } })
-  return result.docs[0] ? toPublicContent(result.docs[0], 'posts') : null
+  return result.docs[0] ? toPublicContent(result.docs[0], 'posts', options) : null
 }
 
-async function queryPublicFacets(): Promise<PublicFacets> {
-  const payload = await getPayload({ config })
+async function queryPublicFacets(payload: Payload): Promise<PublicFacets> {
   const categories = new Map<string, number>()
   const districts = new Map<string, number>()
   const markets = new Map<string, number>()
@@ -204,8 +194,7 @@ async function queryPublicFacets(): Promise<PublicFacets> {
   }
 }
 
-async function queryPublicRedirect(from: string): Promise<PublicRedirect | null> {
-  const payload = await getPayload({ config })
+async function queryPublicRedirect(payload: Payload, from: string): Promise<PublicRedirect | null> {
   const result = await payload.find({ collection: 'redirects', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicRedirectSelect, where: { from: { equals: from } } })
   const redirect = result.docs[0]
   if (!redirect) return null
@@ -238,50 +227,50 @@ function catalogSort(sort: PublicCatalogQuery['sort']) {
   return '-publishedAt'
 }
 
-function toPublicProperty(property: PropertyView): PublicProperty {
+function toPublicProperty(property: PropertyView, options: PublicQueryOptions): PublicProperty {
   return {
     address: property.addressPublic ?? '', agentId: relationId(property.agent), category: property.category,
     dealStatus: property.dealStatus ?? undefined, dealType: property.dealType, description: property.description ?? '',
     district: property.district ?? undefined, floor: property.floor ?? undefined, floorsTotal: property.floorsTotal ?? undefined,
     id: property.id, images: arrayMedia(property.photos, property.title), market: property.market,
     priceMinorUnits: property.priceMinorUnits, pricePerMeterMinorUnits: property.pricePerMeterMinorUnits ?? undefined,
-    rooms: property.rooms ?? undefined, seo: toPublicSEO(property.meta, `properties/${property.slug}`, property.title, property.status === 'sold'),
+    rooms: property.rooms ?? undefined, seo: toPublicSEO(property.meta, `properties/${property.slug}`, property.title, options, property.status === 'sold'),
     slug: property.slug, status: property.status as PublicProperty['status'], title: property.title,
     totalAreaCm2: property.totalAreaCm2, updatedAt: property.updatedAt,
   }
 }
 
-function toPublicComplex(complex: ComplexView): PublicComplex {
+function toPublicComplex(complex: ComplexView, options: PublicQueryOptions): PublicComplex {
   return {
     address: complex.address ?? undefined, availablePropertyCount: complex.availablePropertyCount ?? 0,
     description: complex.description ?? '', developer: complex.developer && typeof complex.developer === 'object' ? complex.developer.name : undefined,
     district: complex.district ?? undefined, id: complex.id, images: arrayMedia(complex.photos, complex.name), name: complex.name,
-    readiness: complex.readiness ?? undefined, seo: toPublicSEO(complex.meta, `complexes/${complex.slug}`, complex.name), slug: complex.slug,
+    readiness: complex.readiness ?? undefined, seo: toPublicSEO(complex.meta, `complexes/${complex.slug}`, complex.name, options), slug: complex.slug,
   }
 }
 
-function toPublicAgent(agent: AgentView): PublicAgent {
+function toPublicAgent(agent: AgentView, options: PublicQueryOptions): PublicAgent {
   return {
     bio: agent.bio ?? '', email: agent.email ?? undefined, id: agent.id, image: singleMedia(agent.photo, agent.name), name: agent.name,
-    phone: agent.phone ?? undefined, position: agent.position ?? undefined, seo: toPublicSEO(agent.meta, `agents/${agent.slug}`, agent.name), slug: agent.slug,
+    phone: agent.phone ?? undefined, position: agent.position ?? undefined, seo: toPublicSEO(agent.meta, `agents/${agent.slug}`, agent.name, options), slug: agent.slug,
   }
 }
 
-function toPublicContent(document: ContentView, collection: 'pages' | 'posts'): PublicContentDocument {
+function toPublicContent(document: ContentView, collection: 'pages' | 'posts', options: PublicQueryOptions): PublicContentDocument {
   return {
     content: document.content ?? null,
     excerpt: 'excerpt' in document ? document.excerpt ?? undefined : undefined,
     id: document.id,
     publishedAt: 'publishedAt' in document ? document.publishedAt ?? undefined : undefined,
-    seo: toPublicSEO(document.meta, `${collection}/${document.slug}`, document.title),
+    seo: toPublicSEO(document.meta, `${collection}/${document.slug}`, document.title, options),
     slug: document.slug,
     title: document.title,
     updatedAt: document.updatedAt,
   }
 }
 
-function toPublicSEO(meta: Property['meta'], path: string, fallbackTitle: string, forceNoindex = false): PublicSEO {
-  const canonical = meta?.canonical || `${runtimeConfig.siteURL.replace(/\/$/, '')}/${path}`
+function toPublicSEO(meta: Property['meta'], path: string, fallbackTitle: string, options: PublicQueryOptions, forceNoindex = false): PublicSEO {
+  const canonical = meta?.canonical || `${options.siteURL.replace(/\/$/, '')}/${path}`
   return {
     canonical,
     description: meta?.description ?? undefined,
@@ -291,7 +280,7 @@ function toPublicSEO(meta: Property['meta'], path: string, fallbackTitle: string
   }
 }
 
-function propertyStructuredData(property: PropertyDetailView): Record<string, unknown> {
+function propertyStructuredData(property: PropertyDetailView, options: PublicQueryOptions): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -302,7 +291,7 @@ function propertyStructuredData(property: PropertyDetailView): Record<string, un
       availability: property.status === 'sold' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
       price: property.priceMinorUnits / 100,
       priceCurrency: 'RUB',
-      url: `${runtimeConfig.siteURL.replace(/\/$/, '')}/properties/${property.slug}`,
+      url: `${options.siteURL.replace(/\/$/, '')}/properties/${property.slug}`,
     },
   }
 }

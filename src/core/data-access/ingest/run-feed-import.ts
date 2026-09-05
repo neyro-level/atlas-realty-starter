@@ -1,20 +1,25 @@
 import type { PostgresAdapter } from '@payloadcms/db-postgres'
 import type { Payload } from 'payload'
 
+import type { PublicCacheTag } from '@/core/cache/public-cache'
 import { safeHTTPSStream } from '@/core/security/outbound-http/client'
-import { requestPublicRevalidation } from '@/project/cache/request-revalidation'
-import { getFeedParser } from '@/project/ingest/registry'
-import { resolveRuntimeReference, runtimeConfig } from '@/project/env'
 import { isAllowedExternalImageURL } from '@/shared/security/media-url'
-import type { AddressFormat, FeedRunMode, NormalizedOffer } from '@/shared/types/feed-import'
+import type { AddressFormat, FeedParser, FeedRunMode, NormalizedOffer } from '@/shared/types/feed-import'
 
 import { evaluateDeactivation } from './import-policy'
 import { deactivateMissingProperties, upsertPropertyBatch } from './property-import'
 
 type Client = { query<T extends Record<string, unknown> = Record<string, unknown>>(sql: string, values?: unknown[]): Promise<{ rows: T[] }>; release(): void }
 type Source = { code: string; feed_url_ref: string; is_enabled: boolean; last_offer_count: number | null; market: 'secondary' | 'newbuild'; max_offers_limit: number; min_offers_threshold_percent: number; parser: string }
+export type FeedImportDependencies = {
+  externalImageHosts: readonly string[]
+  feedOutboundHosts: readonly string[]
+  getFeedParser(name: string): FeedParser
+  requestPublicRevalidation(tags: readonly PublicCacheTag[]): Promise<void>
+  resolveRuntimeReference(name: string): string | undefined
+}
 
-export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode; sourceId: string; signal?: AbortSignal }) {
+export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode; sourceId: string; signal?: AbortSignal }, dependencies: FeedImportDependencies) {
   const client = await (payload.db as unknown as PostgresAdapter).pool.connect() as unknown as Client
   let source: Source
   let runId: string
@@ -31,7 +36,7 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
   const formats = new Set<AddressFormat>()
   const issues: Array<{ code: string; message: string }> = []
   const totals = { created: 0, unchanged: 0, updated: 0, total: 0 }
-  const feedURL = resolveRuntimeReference(source.feed_url_ref)
+  const feedURL = dependencies.resolveRuntimeReference(source.feed_url_ref)
   if (!feedURL) {
     issues.push({ code: 'feed-reference-missing', message: 'Feed URL reference is not configured' })
     await finishRun(payload, runId, totals, issues, 'failed', false, formats, startedAt)
@@ -40,31 +45,31 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
   const abort = input.signal ?? new AbortController().signal
   let response
   try {
-    response = await safeHTTPSStream(feedURL, { allowHosts: runtimeConfig.feedOutboundHosts, maxBytes: 256 * 1024 * 1024, signal: abort, timeoutMs: 60_000 })
+    response = await safeHTTPSStream(feedURL, { allowHosts: dependencies.feedOutboundHosts, maxBytes: 256 * 1024 * 1024, signal: abort, timeoutMs: 60_000 })
   } catch (error) {
     issues.push({ code: 'fetch-failed', message: 'Feed download was rejected or failed' })
     await finishRun(payload, runId, totals, issues, 'failed', false, formats, startedAt)
     throw error
   }
-  const parser = getFeedParser(source.parser)
+  const parser = dependencies.getFeedParser(source.parser)
   let batch: NormalizedOffer[] = []
   let streamCompleted = false
   try {
     for await (const parsedOffer of parser.parse(response.body, { maxBytes: 256 * 1024 * 1024, maxOfferBytes: 2 * 1024 * 1024, onIssue: (issue) => issues.push(issue), signal: abort })) {
-      const rejectedPhotoCount = parsedOffer.photos.filter((url) => !isAllowedExternalImageURL(url, runtimeConfig.externalImageHosts)).length
+      const rejectedPhotoCount = parsedOffer.photos.filter((url) => !isAllowedExternalImageURL(url, dependencies.externalImageHosts)).length
       if (rejectedPhotoCount) issues.push({ code: 'image-host-denied', message: `${rejectedPhotoCount} external image URL(s) were rejected` })
-      const offer = { ...parsedOffer, photos: parsedOffer.photos.filter((url) => isAllowedExternalImageURL(url, runtimeConfig.externalImageHosts)) }
+      const offer = { ...parsedOffer, photos: parsedOffer.photos.filter((url) => isAllowedExternalImageURL(url, dependencies.externalImageHosts)) }
       formats.add(offer.address.format)
       totals.total++
       if (totals.total > source.max_offers_limit) throw new Error('Feed exceeds configured offer limit')
       batch.push(offer)
       if (batch.length === 500) {
-        const result = await upsertPropertyBatch(payload, { allowedImageHosts: runtimeConfig.externalImageHosts, feedSourceId: input.sourceId, importRunId: runId, offers: batch, seenAt: startedAt })
+        const result = await upsertPropertyBatch(payload, { allowedImageHosts: dependencies.externalImageHosts, feedSourceId: input.sourceId, importRunId: runId, offers: batch, seenAt: startedAt })
         totals.created += result.created; totals.updated += result.updated; totals.unchanged += result.unchanged; batch = []
       }
     }
     if (batch.length) {
-      const result = await upsertPropertyBatch(payload, { allowedImageHosts: runtimeConfig.externalImageHosts, feedSourceId: input.sourceId, importRunId: runId, offers: batch, seenAt: startedAt })
+      const result = await upsertPropertyBatch(payload, { allowedImageHosts: dependencies.externalImageHosts, feedSourceId: input.sourceId, importRunId: runId, offers: batch, seenAt: startedAt })
       totals.created += result.created; totals.updated += result.updated; totals.unchanged += result.unchanged
     }
     streamCompleted = true
@@ -79,7 +84,7 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
   const status: 'success' | 'suspicious' = safety.allowed ? 'success' : 'suspicious'
   await finishRun(payload, runId, { ...totals, deactivated }, [...issues, ...safety.reasons.map((reason) => ({ code: reason, message: 'Safety condition prevented deactivation' }))], status, safety.allowed, formats, startedAt)
   try {
-    await requestPublicRevalidation(['public:catalog', 'public:sitemap'])
+    await dependencies.requestPublicRevalidation(['public:catalog', 'public:sitemap'])
   } catch {
     payload.logger.warn('public cache revalidation request failed; TTL fallback remains active')
   }

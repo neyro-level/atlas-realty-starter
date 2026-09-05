@@ -8,10 +8,10 @@ import { fileURLToPath } from 'node:url'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
-import { applyLeadRetentionTask } from './core/data-access/system/jobs/apply-lead-retention'
-import { deliverLeadTask } from './core/data-access/system/jobs/deliver-lead'
+import { createApplyLeadRetentionTask } from './core/data-access/system/jobs/apply-lead-retention'
+import { createDeliverLeadTask } from './core/data-access/system/jobs/deliver-lead'
 import { recoverLeadDeliveriesTask } from './core/data-access/system/jobs/recover-lead-deliveries'
-import { importFeedTask } from './core/data-access/ingest/import-feed-task'
+import { createImportFeedTask } from './core/data-access/ingest/import-feed-task'
 import { Agents } from './payload/collections/Agents'
 import { Buildings } from './payload/collections/Buildings'
 import { Developers } from './payload/collections/Developers'
@@ -29,11 +29,23 @@ import { Users } from './payload/collections/Users'
 import { SiteSettings } from './payload/globals/SiteSettings'
 import { publicRedirectsPlugin, publicSEOPlugin } from './payload/plugins/public-seo'
 import { projectConfig } from './project/config'
-import { runtimeConfig } from './project/env'
+import { resolveRuntimeReference, runtimeConfig } from './project/env'
+import { requestPublicRevalidation } from './project/cache/request-revalidation'
+import { getFeedParser } from './project/ingest/registry'
+import { getLeadChannelAdapter } from './project/leads/channels'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 const allowedOrigin = runtimeConfig.siteURL
+const applyLeadRetentionTask = createApplyLeadRetentionTask(runtimeConfig.leadRetentionDays)
+const deliverLeadTask = createDeliverLeadTask(getLeadChannelAdapter)
+const importFeedTask = createImportFeedTask({
+  externalImageHosts: runtimeConfig.externalImageHosts,
+  feedOutboundHosts: runtimeConfig.feedOutboundHosts,
+  getFeedParser,
+  requestPublicRevalidation,
+  resolveRuntimeReference,
+})
 
 export default buildConfig({
   admin: {

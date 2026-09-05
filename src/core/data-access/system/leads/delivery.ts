@@ -1,15 +1,19 @@
 import type { Payload, PayloadRequest } from 'payload'
 
-import { getLeadChannelAdapter } from '@/project/leads/channels'
-
 import { systemContext } from '../operations'
 
 const MAX_ATTEMPTS = 5
 const BASE_BACKOFF_MS = 30_000
 
 export type DeliveryProcessResult = { status: 'dead' | 'delivered' | 'failed' | 'skipped' }
+export type DeliveryAttempt = { attempt: number; deliveryId: string; idempotencyKey: string; leadId: string }
+export type DeliveryResult =
+  | { ok: true }
+  | { code: string; kind: 'permanent' | 'retryable'; ok: false }
+export type LeadChannelAdapter = { deliver(attempt: DeliveryAttempt): Promise<DeliveryResult> }
+export type ResolveLeadChannelAdapter = (channel: string) => LeadChannelAdapter | undefined
 
-export async function processLeadDelivery(payload: Payload, deliveryId: string, req?: PayloadRequest): Promise<DeliveryProcessResult> {
+export async function processLeadDelivery(payload: Payload, deliveryId: string, resolveAdapter: ResolveLeadChannelAdapter, req?: PayloadRequest): Promise<DeliveryProcessResult> {
   const delivery = await payload.findByID({
     collection: 'lead-deliveries', depth: 0, id: deliveryId, overrideAccess: true, req,
   })
@@ -29,7 +33,7 @@ export async function processLeadDelivery(payload: Payload, deliveryId: string, 
     status: 'processing',
   }, req)
 
-  const adapter = getLeadChannelAdapter(delivery.channel)
+  const adapter = resolveAdapter(delivery.channel)
   const result = adapter
     ? await safeDeliver(adapter, { attempt, deliveryId, idempotencyKey: delivery.idempotencyKey, leadId: relationID(delivery.lead) })
     : { code: 'channel_unavailable', kind: 'permanent' as const, ok: false as const }
@@ -63,7 +67,7 @@ export function redactDeliveryError(value: string) {
   return value.replace(/https?:\/\/\S+|[\w.+-]+@[\w.-]+|\+?\d[\d\s()-]{7,}\d/g, '[redacted]').slice(0, 200)
 }
 
-async function safeDeliver(adapter: NonNullable<ReturnType<typeof getLeadChannelAdapter>>, input: Parameters<NonNullable<ReturnType<typeof getLeadChannelAdapter>>['deliver']>[0]) {
+async function safeDeliver(adapter: LeadChannelAdapter, input: DeliveryAttempt) {
   try {
     return await adapter.deliver(input)
   } catch {

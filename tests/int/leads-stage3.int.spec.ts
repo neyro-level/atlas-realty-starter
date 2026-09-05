@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { createPublicLead } from '@/core/data-access/system/leads/create-lead'
 import { processLeadDelivery } from '@/core/data-access/system/leads/delivery'
 import { recoverLeadDeliveries } from '@/core/data-access/system/leads/recovery'
 import { recoverOrphanedPayloadJobs } from '@/core/data-access/system/jobs/recover-orphaned-payload-jobs'
 import { applyLeadRetentionPolicy } from '@/core/data-access/system/retention/leads'
+import { createPublicLead } from '@/project/leads/create-public-lead'
+import { getLeadChannelAdapter } from '@/project/leads/channels'
 import { getTestPayload, resetFoundationState } from '../helpers/payload'
 
 const command = (key: string) => ({
@@ -29,7 +30,7 @@ describe('Stage 3 transactional lead outbox', () => {
     const payload = await getTestPayload()
     const created = await createPublicLead(command('lead:unavailable:12345678'), { testDeliveryMode: 'unavailable' })
     const delivery = (await payload.find({ collection: 'lead-deliveries', limit: 1, overrideAccess: true })).docs[0]!
-    await expect(processLeadDelivery(payload, String(delivery.id))).resolves.toEqual({ status: 'dead' })
+    await expect(processLeadDelivery(payload, String(delivery.id), getLeadChannelAdapter)).resolves.toEqual({ status: 'dead' })
     const failed = await payload.findByID({ collection: 'lead-deliveries', id: delivery.id, overrideAccess: true })
     expect(failed.status).toBe('dead')
     expect(failed.lastError).toBe('channel_unavailable')
@@ -40,13 +41,13 @@ describe('Stage 3 transactional lead outbox', () => {
     const payload = await getTestPayload()
     await createPublicLead(command('lead:retryable:12345678'), { testDeliveryMode: 'retryable' })
     const retryable = (await payload.find({ collection: 'lead-deliveries', limit: 1, overrideAccess: true })).docs[0]!
-    expect(await processLeadDelivery(payload, String(retryable.id))).toEqual({ status: 'failed' })
+    expect(await processLeadDelivery(payload, String(retryable.id), getLeadChannelAdapter)).toEqual({ status: 'failed' })
     await payload.update({ collection: 'lead-deliveries', data: { nextAttemptAt: new Date(Date.now() - 1_000).toISOString() }, id: retryable.id, overrideAccess: true })
-    expect(await processLeadDelivery(payload, String(retryable.id))).toEqual({ status: 'delivered' })
+    expect(await processLeadDelivery(payload, String(retryable.id), getLeadChannelAdapter)).toEqual({ status: 'delivered' })
 
     await createPublicLead(command('lead:permanent:12345678'), { testDeliveryMode: 'permanent' })
     const permanent = (await payload.find({ collection: 'lead-deliveries', limit: 1, overrideAccess: true, sort: '-createdAt' })).docs[0]!
-    expect(await processLeadDelivery(payload, String(permanent.id))).toEqual({ status: 'dead' })
+    expect(await processLeadDelivery(payload, String(permanent.id), getLeadChannelAdapter)).toEqual({ status: 'dead' })
   })
 
   it('delivers through the real Payload Jobs worker', async () => {
