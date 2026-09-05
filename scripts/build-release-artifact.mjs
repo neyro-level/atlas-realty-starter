@@ -43,10 +43,14 @@ if (process.platform !== 'linux') {
 
 const branch = git(['branch', '--show-current'])
 const sha = git(['rev-parse', 'HEAD'])
-const status = git(['status', '--short', '--untracked-files=all'])
+const trackedDiff = spawnSync('git', ['diff', '--quiet', 'HEAD', '--'], {
+  cwd: projectRoot,
+  stdio: 'ignore',
+})
+const untracked = git(['ls-files', '--others', '--exclude-standard'])
 const isCI = process.env.CI === 'true' || process.env.CI === '1'
 
-if (status || (branch && branch !== 'main')) {
+if (trackedDiff.error || trackedDiff.status !== 0 || untracked || (branch && branch !== 'main')) {
   throw new Error('Release artifact requires clean exact origin/main.')
 }
 
