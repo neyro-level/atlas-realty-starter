@@ -43,11 +43,18 @@ if (process.platform !== 'linux') {
 
 const branch = git(['branch', '--show-current'])
 const sha = git(['rev-parse', 'HEAD'])
-const originMain = git(['rev-parse', 'origin/main'])
 const status = git(['status', '--short', '--untracked-files=all'])
+const isCI = process.env.CI === 'true' || process.env.CI === '1'
 
-if (sha !== originMain || status || (!process.env.CI && branch !== 'main')) {
+if (status || (branch && branch !== 'main')) {
   throw new Error('Release artifact requires clean exact origin/main.')
+}
+
+if (!isCI) {
+  const originMain = git(['rev-parse', '--verify', 'refs/remotes/origin/main'])
+  if (sha !== originMain || branch !== 'main') {
+    throw new Error('Release artifact requires clean exact origin/main.')
+  }
 }
 
 const standaloneRoot = path.join(projectRoot, '.next', 'standalone')
