@@ -69,8 +69,8 @@ if (!existsSync(path.join(standaloneRoot, 'server.js'))) {
 
 const outputDir = path.join(projectRoot, '.release-artifacts')
 const bundleDir = path.join(outputDir, `.bundle-${sha}`)
-const archivePath = path.join(outputDir, `ams-realty-platform-starter-${sha}.tar.gz`)
-const manifestPath = path.join(outputDir, `ams-realty-platform-starter-${sha}.json`)
+const archivePath = path.join(outputDir, 'release.tar.gz')
+const manifestPath = path.join(outputDir, 'release.json')
 const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm'
 
 mkdirSync(outputDir, { recursive: true })
