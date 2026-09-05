@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { createPublicLead } from '@/core/data-access/system/leads/create-lead'
 import { processLeadDelivery } from '@/core/data-access/system/leads/delivery'
 import { recoverLeadDeliveries } from '@/core/data-access/system/leads/recovery'
+import { recoverOrphanedPayloadJobs } from '@/core/data-access/system/jobs/recover-orphaned-payload-jobs'
 import { applyLeadRetentionPolicy } from '@/core/data-access/system/retention/leads'
 import { getTestPayload, resetFoundationState } from '../helpers/payload'
 
@@ -55,6 +56,16 @@ describe('Stage 3 transactional lead outbox', () => {
     const delivery = (await payload.find({ collection: 'lead-deliveries', limit: 1, overrideAccess: true })).docs[0]!
     expect(delivery.status).toBe('delivered')
     expect(delivery.deliveredAt).toBeTruthy()
+  })
+
+  it('returns process-orphaned Payload jobs to the single worker queue', async () => {
+    const payload = await getTestPayload()
+    await createPublicLead(command('lead:orphaned-job:12345678'))
+    const job = (await payload.find({ collection: 'payload-jobs', limit: 1, overrideAccess: true })).docs[0]!
+    await payload.update({ collection: 'payload-jobs', data: { processing: true }, id: job.id, overrideAccess: true })
+
+    await expect(recoverOrphanedPayloadJobs(payload)).resolves.toEqual({ recovered: 1 })
+    await expect(payload.findByID({ collection: 'payload-jobs', id: job.id, overrideAccess: true })).resolves.toMatchObject({ processing: false })
   })
 
   it('returns stuck processing deliveries to the worker queue', async () => {

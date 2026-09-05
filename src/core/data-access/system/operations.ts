@@ -7,6 +7,7 @@ export const SYSTEM_OPERATIONS = [
   'lead-outbox',
   'lead-recovery',
   'lead-retention',
+  'recover-orphaned-payload-jobs',
 ] as const
 
 export type SystemOperation = (typeof SYSTEM_OPERATIONS)[number]
