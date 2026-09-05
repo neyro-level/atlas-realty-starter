@@ -85,6 +85,7 @@ for (let index = 0; index < maxParts; index += 1) {
 try {
   run(pnpm, ['--filter', '.', 'deploy', '--prod', '--legacy', bundleDir])
   copyFileSync(path.join(standaloneRoot, 'server.js'), path.join(bundleDir, 'server.js'))
+  rmSync(path.join(bundleDir, '.next'), { force: true, recursive: true })
   cpSync(path.join(standaloneRoot, '.next'), path.join(bundleDir, '.next'), {
     dereference: true,
     recursive: true,
