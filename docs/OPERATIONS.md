@@ -20,7 +20,7 @@ Create the first owner once with `BOOTSTRAP_OWNER_USERNAME`, `BOOTSTRAP_OWNER_PA
 
 ## Immutable release
 
-Release input is a clean exact merged SourceCraft `main` SHA. The Linux main pipeline installs the frozen lockfile, generates Payload artifacts, runs `pnpm verify`, builds Next.js and packages `.next/standalone` plus exact production dependencies. The archive and SHA-256 manifest are SourceCraft artifacts. The server never runs `pnpm install` or `pnpm build`.
+Release input is a clean exact merged SourceCraft `main` SHA. The Linux main pipeline installs the frozen lockfile, generates Payload artifacts, runs `pnpm verify`, builds Next.js and packages `.next/standalone` plus exact production dependencies. SourceCraft stores the archive as bounded parts; the manifest records their order, sizes, per-part SHA-256 values and the reconstructed archive SHA-256. The server never runs `pnpm install` or `pnpm build`.
 
 `deploy/install-release.sh <archive> <full-sha> <sha256>` verifies the archive, extracts a new immutable release directory, applies reviewed append-only Payload migrations, switches the `current` symlink, starts the web service and one all-queue worker, then checks `/healthz`. A failed smoke restores the previous symlink and services. Build/artifact completion therefore precedes runtime database impact.
 

@@ -71,11 +71,16 @@ const outputDir = path.join(projectRoot, '.release-artifacts')
 const bundleDir = path.join(outputDir, `.bundle-${sha}`)
 const archivePath = path.join(outputDir, 'release.tar.gz')
 const manifestPath = path.join(outputDir, 'release.json')
+const partBytes = 40 * 1024 * 1024
+const maxParts = 10
 const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm'
 
 mkdirSync(outputDir, { recursive: true })
 rmSync(bundleDir, { force: true, recursive: true })
 rmSync(archivePath, { force: true })
+for (let index = 0; index < maxParts; index += 1) {
+  rmSync(path.join(outputDir, `release.part${String(index).padStart(2, '0')}`), { force: true })
+}
 
 try {
   run(pnpm, ['--filter', '.', 'deploy', '--prod', '--legacy', bundleDir])
@@ -108,9 +113,21 @@ try {
   rmSync(bundleDir, { force: true, recursive: true })
 }
 
-const checksum = createHash('sha256').update(readFileSync(archivePath)).digest('hex')
+const archive = readFileSync(archivePath)
+const checksum = createHash('sha256').update(archive).digest('hex')
+const partCount = Math.ceil(archive.length / partBytes)
+if (partCount > maxParts) throw new Error(`Release archive requires ${partCount} parts; maximum is ${maxParts}.`)
+const parts = []
+for (let index = 0; index < maxParts; index += 1) {
+  const name = `release.part${String(index).padStart(2, '0')}`
+  const content = index < partCount ? archive.subarray(index * partBytes, (index + 1) * partBytes) : Buffer.alloc(0)
+  writeFileSync(path.join(outputDir, name), content)
+  if (content.length) parts.push({ name, sha256: createHash('sha256').update(content).digest('hex'), size: content.length })
+}
+rmSync(archivePath, { force: true })
 const manifest = {
   archive: path.basename(archivePath),
+  archiveBytes: archive.length,
   buildBeforeDeploy: true,
   createdAt: new Date().toISOString(),
   node: '24.20.0',
@@ -118,6 +135,7 @@ const manifest = {
   repository: canonicalRepository(),
   sha,
   sha256: checksum,
+  parts,
 }
 
 writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`)

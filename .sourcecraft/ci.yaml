@@ -41,5 +41,14 @@ workflows:
               - pnpm release:pack
             artifacts:
               paths:
-                - .release-artifacts/release.tar.gz
+                - .release-artifacts/release.part00
+                - .release-artifacts/release.part01
+                - .release-artifacts/release.part02
+                - .release-artifacts/release.part03
+                - .release-artifacts/release.part04
+                - .release-artifacts/release.part05
+                - .release-artifacts/release.part06
+                - .release-artifacts/release.part07
+                - .release-artifacts/release.part08
+                - .release-artifacts/release.part09
                 - .release-artifacts/release.json
