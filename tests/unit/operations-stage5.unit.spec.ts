@@ -14,6 +14,7 @@ describe('Stage 5 operations contract', () => {
     expect(pack).toContain("['diff', '--quiet', 'HEAD', '--']")
     expect(pack).toContain("['ls-files', '--others', '--exclude-standard']")
     expect(pack).toContain("standaloneRoot, '.next'")
+    expect(pack).toContain('dereference: true')
     expect(pack).not.toContain('cpSync(standaloneRoot, bundleDir')
     expect(pack).toContain('buildBeforeDeploy: true')
     expect(read('scripts/prepare-standalone.mjs')).toContain("'.env.production.local'")

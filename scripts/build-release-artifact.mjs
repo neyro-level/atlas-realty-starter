@@ -86,6 +86,7 @@ try {
   run(pnpm, ['--filter', '.', 'deploy', '--prod', '--legacy', bundleDir])
   copyFileSync(path.join(standaloneRoot, 'server.js'), path.join(bundleDir, 'server.js'))
   cpSync(path.join(standaloneRoot, '.next'), path.join(bundleDir, '.next'), {
+    dereference: true,
     recursive: true,
   })
 
