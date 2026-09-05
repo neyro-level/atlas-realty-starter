@@ -8,6 +8,8 @@
 4. Run pnpm verify.
 5. Start with pnpm dev.
 
+Import workers run with `pnpm jobs:run:imports`. A feed source stores only environment-variable references; its HTTPS hostname must be present in `FEED_OUTBOUND_HOSTS`, and external image hosts in `EXTERNAL_IMAGE_HOSTS`.
+
 Create the first owner once with BOOTSTRAP_OWNER_USERNAME, BOOTSTRAP_OWNER_PASSWORD and BOOTSTRAP_OWNER_NAME set only for the command pnpm owner:bootstrap. The command refuses to run when any user already exists and never resets a password.
 
 ## Health
@@ -17,6 +19,8 @@ GET /healthz returns only status ok or unavailable with HTTP 200 or 503. It expo
 ## Release boundary
 
 Release input is a clean exact merged SourceCraft main SHA. CI installs from the frozen lockfile, runs pnpm verify, targeted sensitive checks and pnpm build before runtime database impact. Schema changes use reviewed append-only Payload migrations with push disabled.
+
+Stage 1 migration evidence uses `pnpm db:migrate:stage1-check`; the isolated 50,000-property performance baseline uses `pnpm benchmark:import:50k`. Both reset only the dedicated local test database.
 
 ## Validation contour
 

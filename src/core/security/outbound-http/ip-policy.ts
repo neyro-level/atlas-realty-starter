@@ -1,30 +1,21 @@
-import { isIP } from 'node:net'
+import { BlockList, isIP } from 'node:net'
+
+const forbiddenIPv4 = new BlockList()
+for (const [network, prefix] of [
+  ['0.0.0.0', 8], ['10.0.0.0', 8], ['100.64.0.0', 10], ['127.0.0.0', 8], ['169.254.0.0', 16],
+  ['172.16.0.0', 12], ['192.0.0.0', 24], ['192.0.2.0', 24], ['192.168.0.0', 16], ['198.18.0.0', 15],
+  ['198.51.100.0', 24], ['203.0.113.0', 24], ['224.0.0.0', 4], ['240.0.0.0', 4],
+] as const) forbiddenIPv4.addSubnet(network, prefix, 'ipv4')
+
+const forbiddenIPv6 = new BlockList()
+for (const [network, prefix] of [
+  ['::', 128], ['::1', 128], ['::ffff:0:0', 96], ['100::', 64], ['2001:db8::', 32],
+  ['fc00::', 7], ['fe80::', 10], ['ff00::', 8],
+] as const) forbiddenIPv6.addSubnet(network, prefix, 'ipv6')
 
 export function isPublicAddress(value: string) {
   const family = isIP(value)
-  if (family === 4) return isPublicIPv4(value)
-  if (family === 6) return isPublicIPv6(value)
+  if (family === 4) return !forbiddenIPv4.check(value, 'ipv4')
+  if (family === 6) return !forbiddenIPv6.check(value, 'ipv6')
   return false
-}
-
-function isPublicIPv4(value: string) {
-  const [a, b] = value.split('.').map(Number)
-  if (a === 0 || a === 10 || a === 127) return false
-  if (a === 169 && b === 254) return false
-  if (a === 172 && b! >= 16 && b! <= 31) return false
-  if (a === 192 && b === 168) return false
-  if (a === 100 && b! >= 64 && b! <= 127) return false
-  if (a === 198 && (b === 18 || b === 19)) return false
-  if (a! >= 224) return false
-  return true
-}
-
-function isPublicIPv6(value: string) {
-  const normalized = value.toLowerCase()
-  if (normalized === '::' || normalized === '::1') return false
-  if (normalized.startsWith('fc') || normalized.startsWith('fd')) return false
-  if (/^fe[89ab]/.test(normalized)) return false
-  if (normalized.startsWith('ff')) return false
-  const mapped = normalized.match(/::ffff:(\d+\.\d+\.\d+\.\d+)$/)
-  return mapped ? isPublicIPv4(mapped[1]!) : true
 }

@@ -1,7 +1,6 @@
-import 'server-only'
-
 import { lookup } from 'node:dns/promises'
 import { request } from 'node:https'
+import type { IncomingHttpHeaders, IncomingMessage } from 'node:http'
 import { isPublicAddress } from './ip-policy'
 
 export type SafeHTTPOptions = {
@@ -19,12 +18,60 @@ export type SafeHTTPResponse = {
   url: string
 }
 
+export type SafeHTTPStreamResponse = {
+  body: AsyncIterable<Uint8Array>
+  headers: IncomingHttpHeaders
+  status: number
+  url: string
+}
+
 const DEFAULT_MAX_BYTES = 5 * 1024 * 1024
 const DEFAULT_TIMEOUT_MS = 15_000
 
 export async function safeHTTPSGet(url: string | URL, options: SafeHTTPOptions): Promise<SafeHTTPResponse> {
   const allowHosts = new Set(options.allowHosts.map((host) => host.trim().toLowerCase()))
   return requestURL(new URL(url), options, allowHosts, 0)
+}
+
+export async function safeHTTPSStream(url: string | URL, options: SafeHTTPOptions): Promise<SafeHTTPStreamResponse> {
+  const allowHosts = new Set(options.allowHosts.map((host) => host.trim().toLowerCase()))
+  return requestStream(new URL(url), options, allowHosts, 0)
+}
+
+async function requestStream(url: URL, options: SafeHTTPOptions, allowHosts: ReadonlySet<string>, redirectCount: number): Promise<SafeHTTPStreamResponse> {
+  if (url.protocol !== 'https:') throw new Error('Outbound HTTP allows HTTPS only')
+  if (url.username || url.password) throw new Error('Credentials in outbound URLs are forbidden')
+  const hostname = url.hostname.toLowerCase()
+  if (!allowHosts.has(hostname)) throw new Error('Outbound hostname is not allowlisted')
+  if (redirectCount > (options.maxRedirects ?? 3)) throw new Error('Outbound redirect limit exceeded')
+  const addresses = await lookup(hostname, { all: true, verbatim: true })
+  if (!addresses.length || addresses.some((item) => !isPublicAddress(item.address))) throw new Error('Outbound hostname resolved to a forbidden IP range')
+  const pinned = addresses[0]!
+  const response = await new Promise<IncomingMessage>((resolve, reject) => {
+    const req = request(url, { headers: { accept: 'application/xml,text/xml', host: url.host, 'user-agent': 'AMS-Realty-Platform/2.1' }, lookup: (_hostname, _options, callback) => callback(null, pinned.address, pinned.family), servername: hostname, signal: options.signal }, resolve)
+    req.setTimeout(options.timeoutMs ?? DEFAULT_TIMEOUT_MS, () => req.destroy(new Error('Outbound request timed out')))
+    req.on('error', reject)
+    req.end()
+  })
+  const status = response.statusCode ?? 0
+  if (status >= 300 && status < 400 && response.headers.location) {
+    response.resume()
+    return requestStream(new URL(response.headers.location, url), options, allowHosts, redirectCount + 1)
+  }
+  if (status < 200 || status >= 300) { response.resume(); throw new Error(`Outbound request failed with status ${status}`) }
+  const maxBytes = options.maxBytes ?? DEFAULT_MAX_BYTES
+  const length = Number(response.headers['content-length'] ?? 0)
+  if (Number.isFinite(length) && length > maxBytes) { response.destroy(); throw new Error('Outbound response exceeds configured size limit') }
+  async function* limitedBody() {
+    let received = 0
+    for await (const chunk of response) {
+      const bytes = chunk instanceof Uint8Array ? chunk : Buffer.from(chunk)
+      received += bytes.byteLength
+      if (received > maxBytes) { response.destroy(); throw new Error('Outbound response exceeds configured size limit') }
+      yield bytes
+    }
+  }
+  return { body: limitedBody(), headers: response.headers, status, url: url.toString() }
 }
 
 async function requestURL(
@@ -58,6 +105,11 @@ async function requestURL(
       if (status >= 300 && status < 400 && location) {
         res.resume()
         requestURL(new URL(location, url), options, allowHosts, redirectCount + 1).then(resolve, reject)
+        return
+      }
+      if (status < 200 || status >= 300) {
+        res.resume()
+        reject(new Error(`Outbound request failed with status ${status}`))
         return
       }
 

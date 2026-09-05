@@ -107,7 +107,9 @@ function moduleName(path) {
 
 function siblingName(path, rootPath) {
   if (!path.startsWith(rootPath)) return null
-  return path.slice(rootPath.length).split('/')[0] || null
+  const remainder = path.slice(rootPath.length)
+  if (!remainder.includes('/')) return null
+  return remainder.split('/')[0] || null
 }
 
 function isTestPath(path) {

@@ -32,7 +32,19 @@ describe('Stage 0 foundation contracts', () => {
     const { superAdmin } = await seedPrivilegedUsers()
     const property = await payload.create({
       collection: 'properties',
-      data: { category: 'flat', origin: 'MANUAL', title: 'Published property', isPublished: true, workflowStatus: 'active' },
+      data: {
+        category: 'apartment',
+        origin: 'manual',
+        title: 'Published property',
+        slug: 'published-property',
+        isPublished: true,
+        status: 'active',
+        market: 'secondary',
+        dealType: 'sale',
+        currency: 'RUB',
+        priceMinorUnits: 10_000_000,
+        totalAreaCm2: 500_000,
+      },
       draft: false,
       overrideAccess: false,
       user: superAdmin,

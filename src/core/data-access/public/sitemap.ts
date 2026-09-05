@@ -52,11 +52,11 @@ export async function getPropertySitemapPage(pageIndex: number): Promise<Sitemap
     overrideAccess: false,
     page: pageIndex + 1,
     pagination: true,
-    select: { publicSlug: true, updatedAt: true },
+    select: { slug: true, updatedAt: true },
     sort: 'id',
   })
   return result.docs.map((document) => ({
     lastModified: document.updatedAt,
-    slug: document.publicSlug || String(document.id),
+    slug: document.slug,
   }))
 }

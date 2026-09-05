@@ -2,10 +2,12 @@ import { describe, expect, it } from 'vitest'
 
 import { createPublicGatewayContext, isPublicGatewayRequest } from '@/core/access/public-gateway'
 import { isPublicAddress } from '@/core/security/outbound-http/ip-policy'
-import { canReadProperties } from '@/payload/access/properties'
+import { Properties } from '@/payload/collections/Properties'
+import { Users } from '@/payload/collections/Users'
 import { buildRuntimeConfig } from '@/project/env'
 
 describe('foundation security contracts', () => {
+  const canReadProperties = Properties.access.read
   it('keeps the public gateway marker private to created server context', () => {
     expect(isPublicGatewayRequest({ context: {} } as never)).toBe(false)
     expect(isPublicGatewayRequest({ context: createPublicGatewayContext() } as never)).toBe(true)
@@ -14,8 +16,14 @@ describe('foundation security contracts', () => {
   it('denies raw anonymous business reads and allows only trusted public scope', () => {
     expect(canReadProperties({ req: { context: {}, user: null } } as never)).toBe(false)
     expect(canReadProperties({ req: { context: createPublicGatewayContext(), user: null } } as never)).toEqual({
-      isPublished: { equals: true },
+      and: [{ isPublished: { equals: true } }, { status: { equals: 'active' } }],
     })
+  })
+
+  it('allows account unlock only to owner', () => {
+    const canUnlock = Users.access.unlock!
+    expect(canUnlock({ req: { user: { id: 'owner', name: 'Owner', role: 'owner' } } } as never)).toBe(true)
+    expect(canUnlock({ req: { user: { id: 'editor', name: 'Editor', role: 'editor' } } } as never)).toBe(false)
   })
 
   it('rejects private, loopback, link-local and invalid outbound addresses', () => {

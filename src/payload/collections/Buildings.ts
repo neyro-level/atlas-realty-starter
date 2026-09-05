@@ -1,62 +1,26 @@
 import type { CollectionConfig } from 'payload'
 
-import { canDeleteMassCatalog, canMutateMassCatalog, canReadMassCatalog } from '../access/mass-catalog'
-import { superAdminFieldAccess } from '../access/capabilities'
-
-const sourceFieldAccess = {
-  create: superAdminFieldAccess(),
-  update: superAdminFieldAccess(),
-}
+import { adminWrite, ownerOnly, publicOrAdmin } from '../access/standard'
 
 export const Buildings = {
   slug: 'buildings',
-  labels: {
-    plural: 'Корпуса',
-    singular: 'Корпус',
-  },
-  access: {
-    create: canMutateMassCatalog,
-    delete: canDeleteMassCatalog,
-    read: canReadMassCatalog,
-    update: canMutateMassCatalog,
-  },
-  admin: {
-    defaultColumns: ['title', 'residentialComplex', 'completionLabel', 'isActive', 'updatedAt'],
-    group: 'Каталог',
-    listSearchableFields: ['title', 'externalId', 'address'],
-    useAsTitle: 'title',
-  },
-  indexes: [
-    { fields: ['source', 'externalId'], unique: true },
-    { fields: ['residentialComplex', 'isActive'] },
-  ],
+  labels: { plural: 'Корпуса', singular: 'Корпус' },
+  access: { create: adminWrite, delete: ownerOnly, read: publicOrAdmin({ isPublished: { equals: true } }), update: adminWrite },
+  admin: { defaultColumns: ['name', 'complex', 'yandexHouseId', 'readiness', 'isPublished'], group: 'Каталог', useAsTitle: 'name' },
+  indexes: [{ fields: ['complex', 'yandexHouseId'], unique: true }],
   fields: [
-    { name: 'title', type: 'text', label: 'Название', required: true },
-    {
-      name: 'residentialComplex',
-      type: 'relationship',
-      index: true,
-      label: 'Жилой комплекс',
-      relationTo: 'residential-complexes',
-      required: true,
-    },
-    { name: 'address', type: 'text', label: 'Адрес' },
-    { name: 'completionLabel', type: 'text', label: 'Срок сдачи' },
-    { name: 'sortOrder', type: 'number', defaultValue: 0, index: true, label: 'Порядок' },
-    { name: 'isPublished', type: 'checkbox', defaultValue: false, index: true, label: 'На сайте' },
-    {
-      name: 'source',
-      type: 'relationship',
-      access: sourceFieldAccess,
-      index: true,
-      label: 'Источник импорта',
-      relationTo: 'import-sources',
-      required: true,
-    },
-    { name: 'externalId', type: 'text', access: sourceFieldAccess, index: true, label: 'Внешний ID', required: true },
-    { name: 'sourceKey', type: 'text', access: sourceFieldAccess, index: true, label: 'Ключ источника', required: true },
-    { name: 'importHash', type: 'text', access: sourceFieldAccess, label: 'Хэш записи', required: true },
-    { name: 'lastSeenAt', type: 'date', access: sourceFieldAccess, index: true, label: 'Последнее появление', required: true },
-    { name: 'isActive', type: 'checkbox', access: sourceFieldAccess, defaultValue: true, index: true, label: 'Активен' },
+    { name: 'complex', type: 'relationship', relationTo: 'residential-complexes', required: true, index: true },
+    { name: 'name', type: 'text', required: true },
+    { name: 'yandexHouseId', type: 'text', required: true, index: true },
+    { name: 'section', type: 'text' },
+    { name: 'phase', type: 'text' },
+    { name: 'address', type: 'text' },
+    { name: 'latitude', type: 'number', min: -90, max: 90 },
+    { name: 'longitude', type: 'number', min: -180, max: 180 },
+    { name: 'floors', type: 'number', min: 0 },
+    { name: 'readiness', type: 'select', index: true, options: ['planned', 'construction', 'commissioned'] },
+    { name: 'handoverAt', type: 'date' },
+    { name: 'isPublished', type: 'checkbox', defaultValue: false, index: true },
   ],
+  trash: true,
 } satisfies CollectionConfig

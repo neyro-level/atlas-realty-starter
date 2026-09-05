@@ -8,6 +8,7 @@ const sourceFiles = walk(resolve(root, 'src')).filter((file) => ['.ts', '.tsx', 
 const packageJSON = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'))
 const payloadConfig = readFileSync(resolve(root, 'src/payload.config.ts'), 'utf8')
 const securityHeaders = readFileSync(resolve(root, 'src/core/security/headers.ts'), 'utf8')
+const usersCollection = readFileSync(resolve(root, 'src/payload/collections/Users.ts'), 'utf8')
 
 for (const [group, dependencies] of Object.entries({
   dependencies: packageJSON.dependencies ?? {},
@@ -42,6 +43,7 @@ for (const [needle, rule] of [
   if (!payloadConfig.includes(needle)) violations.push({ file: 'src/payload.config.ts', rule })
 }
 if (payloadConfig.includes('onInit:')) violations.push({ file: 'src/payload.config.ts', rule: 'no-automatic-user-bootstrap' })
+if (!usersCollection.includes('unlock: canDeleteUsers')) violations.push({ file: 'src/payload/collections/Users.ts', rule: 'owner-only-user-unlock' })
 
 for (const header of [
   'Content-Security-Policy',
@@ -134,7 +136,7 @@ function trackedTextFiles() {
     const normalized = normalize(path)
     if (/^(?:pnpm-lock\.yaml|src\/payload-types\.ts|src\/payload\/migrations.*\/.*\.json)$/.test(normalized)) return false
     return ['.cjs', '.css', '.js', '.json', '.md', '.mjs', '.mts', '.scss', '.ts', '.tsx', '.yaml', '.yml'].includes(extname(path))
-  }).map((path) => resolve(root, path))
+  }).map((path) => resolve(root, path)).filter(existsSync)
 }
 
 function normalize(path) {

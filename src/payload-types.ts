@@ -70,74 +70,41 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
+    posts: Post;
+    redirects: Redirect;
     leads: Lead;
-    'lead-notes': LeadNote;
+    'lead-deliveries': LeadDelivery;
     properties: Property;
     'residential-complexes': ResidentialComplex;
     buildings: Building;
-    units: Unit;
-    employees: Employee;
-    reviews: Review;
-    offices: Office;
-    'analytics-events': AnalyticsEvent;
-    'anti-spam-events': AntiSpamEvent;
-    'import-sources': ImportSource;
+    developers: Developer;
+    agents: Agent;
+    'feed-sources': FeedSource;
     'import-runs': ImportRun;
-    'import-errors': ImportError;
-    'admin-activities': AdminActivity;
+    'import-issues': ImportIssue;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {
-    leads: {
-      notes: 'lead-notes';
-      antiSpamAttempts: 'anti-spam-events';
-      activity: 'admin-activities';
-    };
-    properties: {
-      activity: 'admin-activities';
-    };
-    'residential-complexes': {
-      activity: 'admin-activities';
-    };
-    employees: {
-      properties: 'properties';
-      reviews: 'reviews';
-      activity: 'admin-activities';
-    };
-    reviews: {
-      activity: 'admin-activities';
-    };
-    offices: {
-      activity: 'admin-activities';
-    };
-    'import-runs': {
-      errors: 'import-errors';
-      activity: 'admin-activities';
-    };
-  };
+  collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
-    'lead-notes': LeadNotesSelect<false> | LeadNotesSelect<true>;
+    'lead-deliveries': LeadDeliveriesSelect<false> | LeadDeliveriesSelect<true>;
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
     'residential-complexes': ResidentialComplexesSelect<false> | ResidentialComplexesSelect<true>;
     buildings: BuildingsSelect<false> | BuildingsSelect<true>;
-    units: UnitsSelect<false> | UnitsSelect<true>;
-    employees: EmployeesSelect<false> | EmployeesSelect<true>;
-    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
-    offices: OfficesSelect<false> | OfficesSelect<true>;
-    'analytics-events': AnalyticsEventsSelect<false> | AnalyticsEventsSelect<true>;
-    'anti-spam-events': AntiSpamEventsSelect<false> | AntiSpamEventsSelect<true>;
-    'import-sources': ImportSourcesSelect<false> | ImportSourcesSelect<true>;
+    developers: DevelopersSelect<false> | DevelopersSelect<true>;
+    agents: AgentsSelect<false> | AgentsSelect<true>;
+    'feed-sources': FeedSourcesSelect<false> | FeedSourcesSelect<true>;
     'import-runs': ImportRunsSelect<false> | ImportRunsSelect<true>;
-    'import-errors': ImportErrorsSelect<false> | ImportErrorsSelect<true>;
-    'admin-activities': AdminActivitiesSelect<false> | AdminActivitiesSelect<true>;
+    'import-issues': ImportIssuesSelect<false> | ImportIssuesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -164,7 +131,7 @@ export interface Config {
   jobs: {
     tasks: {
       applyLeadRetention: TaskApplyLeadRetention;
-      importNormalizedUnits: TaskImportNormalizedUnits;
+      importFeed: TaskImportFeed;
       inline: {
         input: unknown;
         output: unknown;
@@ -272,97 +239,74 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  cover?: (string | null) | Media;
+  publishedAt?: string | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: string;
+  from: string;
+  to: string;
+  statusCode: '301' | '302' | '307' | '308';
+  isEnabled?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "leads".
  */
 export interface Lead {
   id: string;
   name?: string | null;
   phone: string;
+  normalizedPhone: string;
   email?: string | null;
-  status:
-    | 'new'
-    | 'in_work'
-    | 'deferred'
-    | 'interest_confirmed'
-    | 'selecting_options'
-    | 'deposit_booking'
-    | 'successful'
-    | 'unsuccessful'
-    | 'spam_duplicate';
-  isArchived?: boolean | null;
-  archivedAt?: string | null;
-  archivedBy?: (string | null) | User;
-  personalDataPurgedAt?: string | null;
-  responsibleEmployee?: (string | null) | Employee;
-  direction?: ('new_building' | 'construction' | 'flat' | 'house' | 'land' | 'commercial' | 'other') | null;
-  formType?: string | null;
-  source?: string | null;
-  sourcePage?: string | null;
-  visitorKeyHash?: string | null;
-  interestType?: string | null;
-  budget?: number | null;
-  preferredDistrict?: string | null;
-  desiredRooms?: number | null;
-  paymentMethod?: string | null;
-  purchaseTimeline?: string | null;
-  nextContactAt?: string | null;
   message?: string | null;
-  normalizedPhone?: string | null;
-  duplicateCount?: number | null;
-  lastDuplicateAt?: string | null;
-  notes?: {
-    docs?: (string | LeadNote)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  antiSpamAttempts?: {
-    docs?: (string | AntiSpamEvent)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  activity?: {
-    docs?: (string | AdminActivity)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
+  status: 'new' | 'in_progress' | 'closed' | 'rejected';
+  property?: (string | null) | Property;
+  complex?: (string | null) | ResidentialComplex;
+  agent?: (string | null) | Agent;
+  sourcePage?: string | null;
+  consentVersion: string;
+  consentedAt: string;
+  idempotencyKey: string;
+  personalDataPurgedAt?: string | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "employees".
- */
-export interface Employee {
-  id: string;
-  fullName: string;
-  publicName?: string | null;
-  origin: 'MANUAL' | 'XML';
-  status: 'active' | 'inactive';
-  isPublic?: boolean | null;
-  teamSection: 'sales' | 'support' | 'office' | 'management' | 'other';
-  position?: string | null;
-  phone?: string | null;
-  email?: string | null;
-  sortOrder?: number | null;
-  photo?: (string | null) | Media;
-  publicBio?: string | null;
-  properties?: {
-    docs?: (string | Property)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  reviews?: {
-    docs?: (string | Review)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  activity?: {
-    docs?: (string | AdminActivity)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  updatedAt: string;
-  createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -370,237 +314,126 @@ export interface Employee {
  */
 export interface Property {
   id: string;
-  title: string;
-  objectCode?: string | null;
+  feedSource?: (string | null) | FeedSource;
   externalId?: string | null;
-  origin: 'MANUAL' | 'XML';
-  workflowStatus: 'draft' | 'active' | 'archived' | 'hidden';
-  isPublished?: boolean | null;
-  category: 'flat' | 'room' | 'house' | 'land' | 'commercial';
-  responsibleEmployee?: (string | null) | Employee;
-  feedSource?: (string | null) | ImportSource;
-  sourceKey?: string | null;
+  origin: 'manual' | 'feed';
   importHash?: string | null;
+  firstSeenAt?: string | null;
   lastSeenAt?: string | null;
-  isSourceActive?: boolean | null;
-  price?: number | null;
-  dealType?: ('sale' | 'rent') | null;
-  commercialType?: ('office' | 'retail' | 'warehouse' | 'business' | 'free_purpose') | null;
-  totalArea?: number | null;
-  livingArea?: number | null;
-  kitchenArea?: number | null;
+  lastImportRun?: (string | null) | ImportRun;
+  manualFields?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  needsReview?: boolean | null;
+  duplicateOf?: (string | null) | Property;
+  duplicateCandidates?: (string | Property)[] | null;
+  status: 'active' | 'reserved' | 'sold' | 'removed';
+  isPublished?: boolean | null;
+  publishedAt?: string | null;
+  slug: string;
+  isFeatured?: boolean | null;
+  market: 'secondary' | 'newbuild';
+  dealType: 'sale' | 'rent';
+  category: 'apartment' | 'house' | 'townhouse' | 'land' | 'commercial' | 'parking';
+  dealStatus?: ('available' | 'reserved' | 'sold') | null;
+  isApartments?: boolean | null;
+  priceMinorUnits: number;
+  currency: 'RUB';
+  pricePerMeterMinorUnits?: number | null;
+  isPriceNegotiable?: boolean | null;
+  mortgageAvailable?: boolean | null;
+  totalAreaCm2: number;
+  livingAreaCm2?: number | null;
+  kitchenAreaCm2?: number | null;
+  rooms?: number | null;
   floor?: number | null;
   floorsTotal?: number | null;
-  buildYear?: number | null;
-  buildingMaterial?: string | null;
-  repair?: string | null;
-  pricePerSquareMeter?: number | null;
-  isStudio?: boolean | null;
-  isExclusive?: boolean | null;
-  city?: string | null;
+  ceilingHeightCm?: number | null;
+  layoutImage?: (string | null) | Media;
+  complex?: (string | null) | ResidentialComplex;
+  building?: (string | null) | Building;
+  buildingType?: string | null;
+  builtYear?: number | null;
+  readyQuarter?: string | null;
+  buildingState?: string | null;
+  developerName?: string | null;
+  region?: string | null;
   district?: string | null;
-  addressLine?: string | null;
-  coordinates?: {
-    latitude?: number | null;
-    longitude?: number | null;
-  };
-  rooms?: number | null;
-  updatedFromSourceAt?: string | null;
-  publishedAt?: string | null;
-  publicSlug?: string | null;
+  localityName?: string | null;
+  subLocalityName?: string | null;
+  street?: string | null;
+  houseNumber?: string | null;
+  addressPublic?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  geoPrecision?: ('exact' | 'house' | 'street' | 'locality' | 'unknown') | null;
+  apartmentNumber?: string | null;
+  cadastralNumber?: string | null;
+  internalComment?: string | null;
+  ownerContact?: string | null;
+  title: string;
   description?: string | null;
-  videoUrl?: string | null;
-  gallery?:
+  photos?:
     | {
-        file: string | Media;
-        kind: 'photo' | 'floor_plan';
+        media?: (string | null) | Media;
+        externalUrl?: string | null;
+        alt?: string | null;
         isMain?: boolean | null;
         id?: string | null;
       }[]
     | null;
-  activity?: {
-    docs?: (string | AdminActivity)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "import-sources".
- */
-export interface ImportSource {
-  id: string;
-  title: string;
-  key: string;
-  endpointHint?: string | null;
-  isActive?: boolean | null;
-  adapterConfigured?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "admin-activities".
- */
-export interface AdminActivity {
-  id: string;
-  event:
-    | 'LEAD_CREATED'
-    | 'LEAD_STAGE_CHANGED'
-    | 'LEAD_ARCHIVED'
-    | 'LEAD_RESTORED'
-    | 'LEAD_RETENTION_APPLIED'
-    | 'LEAD_NOTE_ADDED'
-    | 'PROPERTY_CREATED'
-    | 'PROPERTY_UPDATED'
-    | 'PROPERTY_PUBLISHED'
-    | 'PROPERTY_ARCHIVED'
-    | 'PROPERTY_MEDIA_UPDATED'
-    | 'COMPLEX_CREATED'
-    | 'COMPLEX_UPDATED'
-    | 'COMPLEX_PUBLISHED'
-    | 'EMPLOYEE_UPDATED'
-    | 'OFFICE_UPDATED'
-    | 'REVIEW_PUBLISHED'
-    | 'REVIEW_RETURNED_TO_MODERATION'
-    | 'REVIEW_REJECTED'
-    | 'CONTACTS_UPDATED'
-    | 'IMPORT_FINISHED';
-  label: string;
-  details?: string | null;
-  triggeredBy: string;
-  lead?: (string | null) | Lead;
-  property?: (string | null) | Property;
-  residentialComplex?: (string | null) | ResidentialComplex;
-  employee?: (string | null) | Employee;
-  review?: (string | null) | Review;
-  office?: (string | null) | Office;
-  importRun?: (string | null) | ImportRun;
-  before?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  after?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "residential-complexes".
- */
-export interface ResidentialComplex {
-  id: string;
-  title: string;
-  slug: string;
-  status: 'draft' | 'published' | 'hidden';
-  isFeatured?: boolean | null;
-  sortOrder?: number | null;
-  shortDescription?: string | null;
-  description?: string | null;
-  developer?: string | null;
-  completionLabel?: string | null;
-  district?: string | null;
-  address?: string | null;
-  priceFrom?: number | null;
-  areaMin?: number | null;
-  areaMax?: number | null;
-  roomTypes?: ('studio' | '1' | '2' | '3' | '4')[] | null;
-  cover?: (string | null) | Media;
-  externalCoverUrl?: string | null;
   videoUrl?: string | null;
-  gallery?:
-    | {
-        image?: (string | null) | Media;
-        externalUrl?: string | null;
-        alt?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  advantages?:
-    | {
-        title: string;
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  purchaseTerms?:
-    | {
-        title: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
-  location?: {
-    latitude?: number | null;
-    longitude?: number | null;
-  };
+  agent?: (string | null) | Agent;
   seo?: {
     title?: string | null;
     description?: string | null;
-  };
-  activity?: {
-    docs?: (string | AdminActivity)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
+    canonical?: string | null;
+    noindex?: boolean | null;
   };
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reviews".
+ * via the `definition` "feed-sources".
  */
-export interface Review {
+export interface FeedSource {
   id: string;
-  authorName: string;
-  publicName?: string | null;
-  employee: string | Employee;
-  rating: number;
-  status: 'pending' | 'published' | 'rejected';
-  reviewDate: string;
-  text: string;
-  publishedText?: string | null;
-  authorPhone?: string | null;
-  consentGiven?: boolean | null;
-  activity?: {
-    docs?: (string | AdminActivity)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "offices".
- */
-export interface Office {
-  id: string;
+  code: string;
   title: string;
-  address: string;
-  photo?: (string | null) | Media;
-  sortOrder: number;
-  isPublished?: boolean | null;
-  activity?: {
-    docs?: (string | AdminActivity)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
+  market: 'secondary' | 'newbuild';
+  parser: 'yrl-secondary' | 'yrl-newbuild';
+  /**
+   * Имя переменной окружения; URL в БД не хранится.
+   */
+  feedUrlRef: string;
+  /**
+   * Имя переменной окружения; секрет в БД не хранится.
+   */
+  credentialRef?: string | null;
+  isEnabled?: boolean | null;
+  priority: number;
+  fieldOwnership?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  minOffersThresholdPercent: number;
+  maxOffersLimit: number;
+  schedule?: string | null;
+  lastSuccessfulRunAt?: string | null;
+  lastOfferCount?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -611,95 +444,72 @@ export interface Office {
 export interface ImportRun {
   id: string;
   correlationId: string;
+  source: string | FeedSource;
   mode: 'delta' | 'full_snapshot';
-  target: 'units';
-  source: string | ImportSource;
-  status: 'running' | 'success' | 'partial_success' | 'failed' | 'cancelled';
+  status: 'running' | 'success' | 'suspicious' | 'partial_success' | 'failed' | 'cancelled';
   startedAt: string;
   finishedAt?: string | null;
-  receivedCount?: number | null;
-  createdCount?: number | null;
-  updatedCount?: number | null;
-  skippedCount?: number | null;
-  failedCount?: number | null;
-  unchangedCount?: number | null;
-  expectedBatchCount?: number | null;
-  completedBatchCount?: number | null;
-  deactivatedCount?: number | null;
-  processedBatchKeys?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  total?: number | null;
+  created?: number | null;
+  updated?: number | null;
+  unchanged?: number | null;
+  skipped?: number | null;
+  failed?: number | null;
+  deactivated?: number | null;
+  durationMs?: number | null;
   summary?: string | null;
-  diagnostics?:
+  streamCompleted?: boolean | null;
+  addressFormat?: ('structured' | 'freeform') | null;
+  deactivationAllowed?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "residential-complexes".
+ */
+export interface ResidentialComplex {
+  id: string;
+  name: string;
+  slug: string;
+  developer?: (string | null) | Developer;
+  yandexBuildingId?: string | null;
+  region?: string | null;
+  district?: string | null;
+  address?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  description?: string | null;
+  photos?:
     | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
+        media?: (string | null) | Media;
+        externalUrl?: string | null;
+        alt?: string | null;
+        id?: string | null;
+      }[]
     | null;
-  errors?: {
-    docs?: (string | ImportError)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  activity?: {
-    docs?: (string | AdminActivity)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
+  readiness?: ('planned' | 'construction' | 'commissioned') | null;
+  propertyCount?: number | null;
+  availablePropertyCount?: number | null;
+  status: 'draft' | 'published' | 'hidden';
   updatedAt: string;
   createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "import-errors".
+ * via the `definition` "developers".
  */
-export interface ImportError {
+export interface Developer {
   id: string;
-  run: string | ImportRun;
-  externalId?: string | null;
-  code?: string | null;
-  message: string;
+  name: string;
+  slug: string;
+  description?: string | null;
+  logo?: (string | null) | Media;
+  isPublished?: boolean | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "lead-notes".
- */
-export interface LeadNote {
-  id: string;
-  lead: string | Lead;
-  body: string;
-  authorName?: string | null;
-  notedAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "anti-spam-events".
- */
-export interface AntiSpamEvent {
-  id: string;
-  verdict: 'accepted' | 'duplicate_suppressed' | 'rate_limited' | 'honeypot' | 'blocked_too_fast' | 'suspicious_burst';
-  reason?: string | null;
-  sourcePage?: string | null;
-  formType?: string | null;
-  lead?: (string | null) | Lead;
-  clientIpHash?: string | null;
-  visitorKeyHash?: string | null;
-  requestFingerprintHash?: string | null;
-  updatedAt: string;
-  createdAt: string;
+  deletedAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -707,66 +517,77 @@ export interface AntiSpamEvent {
  */
 export interface Building {
   id: string;
-  title: string;
-  residentialComplex: string | ResidentialComplex;
+  complex: string | ResidentialComplex;
+  name: string;
+  yandexHouseId: string;
+  section?: string | null;
+  phase?: string | null;
   address?: string | null;
-  completionLabel?: string | null;
-  sortOrder?: number | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  floors?: number | null;
+  readiness?: ('planned' | 'construction' | 'commissioned') | null;
+  handoverAt?: string | null;
   isPublished?: boolean | null;
-  source: string | ImportSource;
-  externalId: string;
-  sourceKey: string;
-  importHash: string;
-  lastSeenAt: string;
-  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  deletedAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agents".
+ */
+export interface Agent {
+  id: string;
+  name: string;
+  slug: string;
+  origin: 'manual' | 'feed';
+  feedSource?: (string | null) | FeedSource;
+  externalId?: string | null;
+  normalizedPhone?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  position?: string | null;
+  bio?: string | null;
+  photo?: (string | null) | Media;
+  status: 'active' | 'inactive';
+  isPublished?: boolean | null;
+  importHash?: string | null;
+  lastSeenAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  deletedAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-deliveries".
+ */
+export interface LeadDelivery {
+  id: string;
+  lead: string | Lead;
+  channel: string;
+  status: 'pending' | 'processing' | 'delivered' | 'failed' | 'dead';
+  attempts: number;
+  nextAttemptAt?: string | null;
+  lockedAt?: string | null;
+  deliveredAt?: string | null;
+  idempotencyKey: string;
+  lastError?: string | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "units".
+ * via the `definition` "import-issues".
  */
-export interface Unit {
+export interface ImportIssue {
   id: string;
-  number: string;
-  building: string | Building;
-  residentialComplex: string | ResidentialComplex;
-  section?: string | null;
-  floor: number;
-  rooms: number;
-  isStudio?: boolean | null;
-  totalArea: number;
-  livingArea?: number | null;
-  kitchenArea?: number | null;
-  price: number;
-  pricePerSquareMeter?: number | null;
-  availability: 'available' | 'reserved' | 'sold' | 'hidden';
-  isPublished?: boolean | null;
-  layout?: (string | null) | Media;
-  source: string | ImportSource;
-  externalId: string;
-  sourceKey: string;
-  importHash: string;
-  lastSeenAt: string;
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "analytics-events".
- */
-export interface AnalyticsEvent {
-  id: string;
-  eventType: 'visit' | 'lead_conversion';
-  occurredAt: string;
-  section?: string | null;
-  page: string;
-  utmSource?: string | null;
-  device: 'desktop' | 'mobile' | 'tablet' | 'unknown';
-  visitorKeyHash: string;
-  sessionKeyHash?: string | null;
-  lead?: (string | null) | Lead;
+  run: string | ImportRun;
+  severity: 'warning' | 'error' | 'critical';
+  externalId?: string | null;
+  code: string;
+  message: string;
+  recordIndex?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -839,7 +660,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'applyLeadRetention' | 'importNormalizedUnits';
+        taskSlug: 'inline' | 'applyLeadRetention' | 'importFeed';
         taskID: string;
         input?:
           | {
@@ -872,7 +693,7 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'applyLeadRetention' | 'importNormalizedUnits') | null;
+  taskSlug?: ('inline' | 'applyLeadRetention' | 'importFeed') | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -912,12 +733,20 @@ export interface PayloadLockedDocument {
         value: string | Page;
       } | null)
     | ({
+        relationTo: 'posts';
+        value: string | Post;
+      } | null)
+    | ({
+        relationTo: 'redirects';
+        value: string | Redirect;
+      } | null)
+    | ({
         relationTo: 'leads';
         value: string | Lead;
       } | null)
     | ({
-        relationTo: 'lead-notes';
-        value: string | LeadNote;
+        relationTo: 'lead-deliveries';
+        value: string | LeadDelivery;
       } | null)
     | ({
         relationTo: 'properties';
@@ -932,44 +761,24 @@ export interface PayloadLockedDocument {
         value: string | Building;
       } | null)
     | ({
-        relationTo: 'units';
-        value: string | Unit;
+        relationTo: 'developers';
+        value: string | Developer;
       } | null)
     | ({
-        relationTo: 'employees';
-        value: string | Employee;
+        relationTo: 'agents';
+        value: string | Agent;
       } | null)
     | ({
-        relationTo: 'reviews';
-        value: string | Review;
-      } | null)
-    | ({
-        relationTo: 'offices';
-        value: string | Office;
-      } | null)
-    | ({
-        relationTo: 'analytics-events';
-        value: string | AnalyticsEvent;
-      } | null)
-    | ({
-        relationTo: 'anti-spam-events';
-        value: string | AntiSpamEvent;
-      } | null)
-    | ({
-        relationTo: 'import-sources';
-        value: string | ImportSource;
+        relationTo: 'feed-sources';
+        value: string | FeedSource;
       } | null)
     | ({
         relationTo: 'import-runs';
         value: string | ImportRun;
       } | null)
     | ({
-        relationTo: 'import-errors';
-        value: string | ImportError;
-      } | null)
-    | ({
-        relationTo: 'admin-activities';
-        value: string | AdminActivity;
+        relationTo: 'import-issues';
+        value: string | ImportIssue;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1079,49 +888,74 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "leads_select".
+ * via the `definition` "posts_select".
  */
-export interface LeadsSelect<T extends boolean = true> {
-  name?: T;
-  phone?: T;
-  email?: T;
-  status?: T;
-  isArchived?: T;
-  archivedAt?: T;
-  archivedBy?: T;
-  personalDataPurgedAt?: T;
-  responsibleEmployee?: T;
-  direction?: T;
-  formType?: T;
-  source?: T;
-  sourcePage?: T;
-  visitorKeyHash?: T;
-  interestType?: T;
-  budget?: T;
-  preferredDistrict?: T;
-  desiredRooms?: T;
-  paymentMethod?: T;
-  purchaseTimeline?: T;
-  nextContactAt?: T;
-  message?: T;
-  normalizedPhone?: T;
-  duplicateCount?: T;
-  lastDuplicateAt?: T;
-  notes?: T;
-  antiSpamAttempts?: T;
-  activity?: T;
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  content?: T;
+  cover?: T;
+  publishedAt?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects_select".
+ */
+export interface RedirectsSelect<T extends boolean = true> {
+  from?: T;
+  to?: T;
+  statusCode?: T;
+  isEnabled?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "lead-notes_select".
+ * via the `definition` "leads_select".
  */
-export interface LeadNotesSelect<T extends boolean = true> {
+export interface LeadsSelect<T extends boolean = true> {
+  name?: T;
+  phone?: T;
+  normalizedPhone?: T;
+  email?: T;
+  message?: T;
+  status?: T;
+  property?: T;
+  complex?: T;
+  agent?: T;
+  sourcePage?: T;
+  consentVersion?: T;
+  consentedAt?: T;
+  idempotencyKey?: T;
+  personalDataPurgedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  deletedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lead-deliveries_select".
+ */
+export interface LeadDeliveriesSelect<T extends boolean = true> {
   lead?: T;
-  body?: T;
-  authorName?: T;
-  notedAt?: T;
+  channel?: T;
+  status?: T;
+  attempts?: T;
+  nextAttemptAt?: T;
+  lockedAt?: T;
+  deliveredAt?: T;
+  idempotencyKey?: T;
+  lastError?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1130,269 +964,195 @@ export interface LeadNotesSelect<T extends boolean = true> {
  * via the `definition` "properties_select".
  */
 export interface PropertiesSelect<T extends boolean = true> {
-  title?: T;
-  objectCode?: T;
+  feedSource?: T;
   externalId?: T;
   origin?: T;
-  workflowStatus?: T;
-  isPublished?: T;
-  category?: T;
-  responsibleEmployee?: T;
-  feedSource?: T;
-  sourceKey?: T;
   importHash?: T;
+  firstSeenAt?: T;
   lastSeenAt?: T;
-  isSourceActive?: T;
-  price?: T;
+  lastImportRun?: T;
+  manualFields?: T;
+  needsReview?: T;
+  duplicateOf?: T;
+  duplicateCandidates?: T;
+  status?: T;
+  isPublished?: T;
+  publishedAt?: T;
+  slug?: T;
+  isFeatured?: T;
+  market?: T;
   dealType?: T;
-  commercialType?: T;
-  totalArea?: T;
-  livingArea?: T;
-  kitchenArea?: T;
+  category?: T;
+  dealStatus?: T;
+  isApartments?: T;
+  priceMinorUnits?: T;
+  currency?: T;
+  pricePerMeterMinorUnits?: T;
+  isPriceNegotiable?: T;
+  mortgageAvailable?: T;
+  totalAreaCm2?: T;
+  livingAreaCm2?: T;
+  kitchenAreaCm2?: T;
+  rooms?: T;
   floor?: T;
   floorsTotal?: T;
-  buildYear?: T;
-  buildingMaterial?: T;
-  repair?: T;
-  pricePerSquareMeter?: T;
-  isStudio?: T;
-  isExclusive?: T;
-  city?: T;
+  ceilingHeightCm?: T;
+  layoutImage?: T;
+  complex?: T;
+  building?: T;
+  buildingType?: T;
+  builtYear?: T;
+  readyQuarter?: T;
+  buildingState?: T;
+  developerName?: T;
+  region?: T;
   district?: T;
-  addressLine?: T;
-  coordinates?:
-    | T
-    | {
-        latitude?: T;
-        longitude?: T;
-      };
-  rooms?: T;
-  updatedFromSourceAt?: T;
-  publishedAt?: T;
-  publicSlug?: T;
+  localityName?: T;
+  subLocalityName?: T;
+  street?: T;
+  houseNumber?: T;
+  addressPublic?: T;
+  latitude?: T;
+  longitude?: T;
+  geoPrecision?: T;
+  apartmentNumber?: T;
+  cadastralNumber?: T;
+  internalComment?: T;
+  ownerContact?: T;
+  title?: T;
   description?: T;
-  videoUrl?: T;
-  gallery?:
+  photos?:
     | T
     | {
-        file?: T;
-        kind?: T;
+        media?: T;
+        externalUrl?: T;
+        alt?: T;
         isMain?: T;
         id?: T;
       };
-  activity?: T;
+  videoUrl?: T;
+  agent?: T;
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        canonical?: T;
+        noindex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "residential-complexes_select".
  */
 export interface ResidentialComplexesSelect<T extends boolean = true> {
-  title?: T;
+  name?: T;
   slug?: T;
-  status?: T;
-  isFeatured?: T;
-  sortOrder?: T;
-  shortDescription?: T;
-  description?: T;
   developer?: T;
-  completionLabel?: T;
+  yandexBuildingId?: T;
+  region?: T;
   district?: T;
   address?: T;
-  priceFrom?: T;
-  areaMin?: T;
-  areaMax?: T;
-  roomTypes?: T;
-  cover?: T;
-  externalCoverUrl?: T;
-  videoUrl?: T;
-  gallery?:
+  latitude?: T;
+  longitude?: T;
+  description?: T;
+  photos?:
     | T
     | {
-        image?: T;
+        media?: T;
         externalUrl?: T;
         alt?: T;
         id?: T;
       };
-  advantages?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        id?: T;
-      };
-  purchaseTerms?:
-    | T
-    | {
-        title?: T;
-        value?: T;
-        id?: T;
-      };
-  location?:
-    | T
-    | {
-        latitude?: T;
-        longitude?: T;
-      };
-  seo?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-      };
-  activity?: T;
+  readiness?: T;
+  propertyCount?: T;
+  availablePropertyCount?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "buildings_select".
  */
 export interface BuildingsSelect<T extends boolean = true> {
-  title?: T;
-  residentialComplex?: T;
-  address?: T;
-  completionLabel?: T;
-  sortOrder?: T;
-  isPublished?: T;
-  source?: T;
-  externalId?: T;
-  sourceKey?: T;
-  importHash?: T;
-  lastSeenAt?: T;
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "units_select".
- */
-export interface UnitsSelect<T extends boolean = true> {
-  number?: T;
-  building?: T;
-  residentialComplex?: T;
+  complex?: T;
+  name?: T;
+  yandexHouseId?: T;
   section?: T;
-  floor?: T;
-  rooms?: T;
-  isStudio?: T;
-  totalArea?: T;
-  livingArea?: T;
-  kitchenArea?: T;
-  price?: T;
-  pricePerSquareMeter?: T;
-  availability?: T;
+  phase?: T;
+  address?: T;
+  latitude?: T;
+  longitude?: T;
+  floors?: T;
+  readiness?: T;
+  handoverAt?: T;
   isPublished?: T;
-  layout?: T;
-  source?: T;
-  externalId?: T;
-  sourceKey?: T;
-  importHash?: T;
-  lastSeenAt?: T;
-  isActive?: T;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "employees_select".
+ * via the `definition` "developers_select".
  */
-export interface EmployeesSelect<T extends boolean = true> {
-  fullName?: T;
-  publicName?: T;
+export interface DevelopersSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  logo?: T;
+  isPublished?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  deletedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "agents_select".
+ */
+export interface AgentsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
   origin?: T;
-  status?: T;
-  isPublic?: T;
-  teamSection?: T;
-  position?: T;
+  feedSource?: T;
+  externalId?: T;
+  normalizedPhone?: T;
   phone?: T;
   email?: T;
-  sortOrder?: T;
+  position?: T;
+  bio?: T;
   photo?: T;
-  publicBio?: T;
-  properties?: T;
-  reviews?: T;
-  activity?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reviews_select".
- */
-export interface ReviewsSelect<T extends boolean = true> {
-  authorName?: T;
-  publicName?: T;
-  employee?: T;
-  rating?: T;
   status?: T;
-  reviewDate?: T;
-  text?: T;
-  publishedText?: T;
-  authorPhone?: T;
-  consentGiven?: T;
-  activity?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "offices_select".
- */
-export interface OfficesSelect<T extends boolean = true> {
-  title?: T;
-  address?: T;
-  photo?: T;
-  sortOrder?: T;
   isPublished?: T;
-  activity?: T;
+  importHash?: T;
+  lastSeenAt?: T;
   updatedAt?: T;
   createdAt?: T;
+  deletedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "analytics-events_select".
+ * via the `definition` "feed-sources_select".
  */
-export interface AnalyticsEventsSelect<T extends boolean = true> {
-  eventType?: T;
-  occurredAt?: T;
-  section?: T;
-  page?: T;
-  utmSource?: T;
-  device?: T;
-  visitorKeyHash?: T;
-  sessionKeyHash?: T;
-  lead?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "anti-spam-events_select".
- */
-export interface AntiSpamEventsSelect<T extends boolean = true> {
-  verdict?: T;
-  reason?: T;
-  sourcePage?: T;
-  formType?: T;
-  lead?: T;
-  clientIpHash?: T;
-  visitorKeyHash?: T;
-  requestFingerprintHash?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "import-sources_select".
- */
-export interface ImportSourcesSelect<T extends boolean = true> {
+export interface FeedSourcesSelect<T extends boolean = true> {
+  code?: T;
   title?: T;
-  key?: T;
-  endpointHint?: T;
-  isActive?: T;
-  adapterConfigured?: T;
+  market?: T;
+  parser?: T;
+  feedUrlRef?: T;
+  credentialRef?: T;
+  isEnabled?: T;
+  priority?: T;
+  fieldOwnership?: T;
+  minOffersThresholdPercent?: T;
+  maxOffersLimit?: T;
+  schedule?: T;
+  lastSuccessfulRunAt?: T;
+  lastOfferCount?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1402,59 +1162,37 @@ export interface ImportSourcesSelect<T extends boolean = true> {
  */
 export interface ImportRunsSelect<T extends boolean = true> {
   correlationId?: T;
-  mode?: T;
-  target?: T;
   source?: T;
+  mode?: T;
   status?: T;
   startedAt?: T;
   finishedAt?: T;
-  receivedCount?: T;
-  createdCount?: T;
-  updatedCount?: T;
-  skippedCount?: T;
-  failedCount?: T;
-  unchangedCount?: T;
-  expectedBatchCount?: T;
-  completedBatchCount?: T;
-  deactivatedCount?: T;
-  processedBatchKeys?: T;
+  total?: T;
+  created?: T;
+  updated?: T;
+  unchanged?: T;
+  skipped?: T;
+  failed?: T;
+  deactivated?: T;
+  durationMs?: T;
   summary?: T;
-  diagnostics?: T;
-  errors?: T;
-  activity?: T;
+  streamCompleted?: T;
+  addressFormat?: T;
+  deactivationAllowed?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "import-errors_select".
+ * via the `definition` "import-issues_select".
  */
-export interface ImportErrorsSelect<T extends boolean = true> {
+export interface ImportIssuesSelect<T extends boolean = true> {
   run?: T;
+  severity?: T;
   externalId?: T;
   code?: T;
   message?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "admin-activities_select".
- */
-export interface AdminActivitiesSelect<T extends boolean = true> {
-  event?: T;
-  label?: T;
-  details?: T;
-  triggeredBy?: T;
-  lead?: T;
-  property?: T;
-  residentialComplex?: T;
-  employee?: T;
-  review?: T;
-  office?: T;
-  importRun?: T;
-  before?: T;
-  after?: T;
+  recordIndex?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1537,26 +1275,9 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface SiteSetting {
   id: string;
-  companyName: string;
-  brandName: string;
-  phone?: string | null;
-  email?: string | null;
-  address?: string | null;
-  workingHours?: string | null;
-  telegramUrl?: string | null;
-  vkUrl?: string | null;
-  projectName?: string | null;
-  socialLinks?:
-    | {
-        label: string;
-        url: string;
-        id?: string | null;
-      }[]
-    | null;
-  defaultSEO?: {
-    title?: string | null;
-    description?: string | null;
-  };
+  siteName: string;
+  defaultTitle?: string | null;
+  defaultDescription?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1583,28 +1304,9 @@ export interface PayloadJobsStat {
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
-  companyName?: T;
-  brandName?: T;
-  phone?: T;
-  email?: T;
-  address?: T;
-  workingHours?: T;
-  telegramUrl?: T;
-  vkUrl?: T;
-  projectName?: T;
-  socialLinks?:
-    | T
-    | {
-        label?: T;
-        url?: T;
-        id?: T;
-      };
-  defaultSEO?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-      };
+  siteName?: T;
+  defaultTitle?: T;
+  defaultDescription?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1645,35 +1347,21 @@ export interface TaskApplyLeadRetention {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TaskImportNormalizedUnits".
+ * via the `definition` "TaskImportFeed".
  */
-export interface TaskImportNormalizedUnits {
+export interface TaskImportFeed {
   input: {
-    batchKey: string;
-    expectedBatchCount: number;
-    importRunId: string;
-    mode: 'delta' | 'full_snapshot';
-    records:
-      | {
-          [k: string]: unknown;
-        }
-      | unknown[]
-      | string
-      | number
-      | boolean
-      | null;
-    snapshotStartedAt: string;
     sourceId: string;
-    sourceKey: string;
+    mode: 'delta' | 'full_snapshot';
   };
   output: {
-    alreadyProcessed: boolean;
-    completed: boolean;
+    runId: string;
+    status: 'success' | 'suspicious';
+    total: number;
     created: number;
-    deactivated: number;
-    received: number;
-    unchanged: number;
     updated: number;
+    unchanged: number;
+    deactivated: number;
   };
 }
 /**
