@@ -67,10 +67,10 @@ function findDeployedPackageTarget(originalTarget, bundleNodeModules) {
       const value = JSON.parse(readFileSync(candidateJSON, 'utf8'))
       return value.name === identity.name && value.version === identity.version
     })
-  if (candidates.length !== 1) {
-    throw new Error(`Expected one deployed target for ${identity.name}@${identity.version}; found ${candidates.length}.`)
+  if (!candidates.length) {
+    throw new Error(`Missing deployed target for ${identity.name}@${identity.version}.`)
   }
-  return candidates[0]
+  return candidates.sort((left, right) => left.localeCompare(right))[0]
 }
 
 function rebaseTracedModuleLinks(root, bundleNodeModules) {
