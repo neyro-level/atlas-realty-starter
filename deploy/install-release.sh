@@ -54,7 +54,7 @@ if tar -tzf "${ARCHIVE}" | grep -Eq '(^|/)(\.\.|\.release-sha|\.release-sha256|\
   echo "Release archive contains a reserved or unsafe path." >&2
   exit 1
 fi
-/usr/sbin/runuser -u "${APP_RELEASE_USER}" -- tar --no-same-owner --no-same-permissions -xzf "${ARCHIVE}" -C "${release_dir}"
+/usr/sbin/runuser -u "${APP_RELEASE_USER}" -- tar --no-same-owner --no-same-permissions -xzf - -C "${release_dir}" < "${ARCHIVE}"
 
 "${APP_ROOT}/runtime/bin/node" - "${release_dir}" "${RELEASE_SHA}" <<'NODE'
 const fs = require('node:fs')
