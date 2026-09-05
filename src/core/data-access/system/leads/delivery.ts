@@ -74,7 +74,7 @@ async function safeDeliver(adapter: NonNullable<ReturnType<typeof getLeadChannel
 async function setDelivery(payload: Payload, id: string, data: Record<string, unknown>, req?: PayloadRequest) {
   return payload.update({
     collection: 'lead-deliveries', context: systemContext('lead-delivery'), data, depth: 0, id,
-    overrideAccess: true, overrideLock: false, req,
+    overrideAccess: true, overrideLock: true, req,
   })
 }
 

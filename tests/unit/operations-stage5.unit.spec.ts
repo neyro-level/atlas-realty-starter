@@ -47,6 +47,18 @@ describe('Stage 5 operations contract', () => {
     expect(worker).toContain('ProtectSystem=full')
   })
 
+  it('keeps system outbox updates outside interactive document locks', () => {
+    expect(read('src/core/data-access/system/leads/delivery.ts')).toContain('overrideLock: true')
+    expect(read('src/core/data-access/system/leads/recovery.ts')).toContain('overrideLock: true')
+  })
+
+  it('ships an executable production owner bootstrap', () => {
+    const packageJSON = JSON.parse(read('package.json'))
+    expect(packageJSON.scripts['owner:bootstrap']).toContain('--conditions=react-server')
+    expect(packageJSON.dependencies.tsx).toBe('4.22.4')
+    expect(packageJSON.devDependencies.tsx).toBeUndefined()
+  })
+
   it('enforces TLS and separate login and lead limits', () => {
     const nginx = read('deploy/nginx-internal.conf')
     expect(nginx).toContain('listen 127.0.0.1:8443 ssl')
