@@ -91,7 +91,7 @@ function isClientModule(path) {
 
 function isServerBoundary(path) {
   if (path === 'src/payload.config.ts') return true
-  if (/^src\/payload\/(access|collections|globals|hooks|public|admin\/queries)\//.test(path) || path === 'src/payload/admin/lib/context.ts') return true
+  if (/^src\/payload\/(access|collections|globals|hooks)\//.test(path)) return true
   if (path === 'src/project/env.ts') return true
   try {
     return /(?:import|require)\s*\(?['"]server-only['"]\)?/.test(readFileSync(resolve(root, path), 'utf8'))

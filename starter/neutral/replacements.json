@@ -1,8 +1,0 @@
-{
-  "pathReplacements": [],
-  "contentReplacements": [
-    ["AMS Realty Platform Starter", "Example Realty Platform"],
-    ["ams-realty-platform-starter", "example-realty-platform"],
-    ["AMS Realty", "Example Realty"]
-  ]
-}

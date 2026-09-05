@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { canCreateLeadNotes, canReadLeadNotes, denyLeadNoteMutation } from '../access/lead-notes'
-import { prepareLeadNote, recordLeadNoteActivity } from '../hooks/business'
+import { prepareLeadNote, recordLeadNoteActivity } from '@/core/data-access/system/business-hooks'
 
 export const LeadNotes = {
   slug: 'lead-notes',

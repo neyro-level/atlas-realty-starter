@@ -22,10 +22,7 @@ workflows:
               - pnpm install --frozen-lockfile
               - pnpm generate:types
               - pnpm generate:importmap
-              - pnpm typecheck
-              - pnpm lint
-              - pnpm architecture:check
-              - pnpm security:check
+              - pnpm verify
               - pnpm build
   main-static-gate:
     tasks:
@@ -39,8 +36,5 @@ workflows:
               - pnpm install --frozen-lockfile
               - pnpm generate:types
               - pnpm generate:importmap
-              - pnpm typecheck
-              - pnpm lint
-              - pnpm architecture:check
-              - pnpm security:check
+              - pnpm verify
               - pnpm build

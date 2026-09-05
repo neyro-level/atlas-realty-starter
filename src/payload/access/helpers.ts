@@ -16,14 +16,14 @@ import {
 export { canManageContacts, canUseAdminPanel, hasAdminCapability, hasRole, isKnownRole, isSuperAdmin }
 export type { AppUser, UserRole }
 
-export const DEFAULT_USER_ROLE: UserRole = 'DIRECTOR'
+export const DEFAULT_USER_ROLE: UserRole = 'editor'
 
 export function canAccessAdmin(user: AppUser) {
   return canUseAdminPanel(user)
 }
 
 export function canManageContent(user: AppUser) {
-  return hasRole(user, ['SUPER_ADMIN', 'DIRECTOR', 'CONTENT_MANAGER'])
+  return hasRole(user, ['owner', 'editor'])
 }
 
 export function canManageSettings(user: AppUser) {
@@ -31,7 +31,7 @@ export function canManageSettings(user: AppUser) {
 }
 
 export function canDeleteContent(user: AppUser) {
-  return hasRole(user, ['SUPER_ADMIN', 'DIRECTOR'])
+  return hasRole(user, ['owner'])
 }
 
 export function publicPageWhere(): Where {

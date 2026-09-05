@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { canCreateOffices, canDeleteOffices, canReadOffices, canUpdateOffices } from '../access/offices'
-import { recordOfficeActivity } from '../hooks/business'
+import { recordOfficeActivity } from '@/core/data-access/system/business-hooks'
 
 export const Offices = {
   slug: 'offices',

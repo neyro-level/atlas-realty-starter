@@ -74,7 +74,7 @@ mv -Tf "${APP_ROOT}/current.next" "${APP_ROOT}/current"
 systemctl restart ams-realty-platform-starter.service
 
 for attempt in $(seq 1 30); do
-  if curl --fail --silent --show-error --max-time 5 http://127.0.0.1:3010/api/health >/dev/null; then
+  if curl --fail --silent --show-error --max-time 5 http://127.0.0.1:3010/healthz >/dev/null; then
     systemctl restart ams-realty-platform-starter-imports.service ams-realty-platform-starter-maintenance.service ams-realty-platform-starter-maintenance-scheduler.service
     if systemctl is-active --quiet ams-realty-platform-starter-imports.service ams-realty-platform-starter-maintenance.service ams-realty-platform-starter-maintenance-scheduler.service; then
       systemctl reload nginx

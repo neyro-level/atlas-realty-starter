@@ -4,7 +4,7 @@ import type { PostgresAdapter } from '@payloadcms/db-postgres'
 import dotenv from 'dotenv'
 import { getPayload } from 'payload'
 
-import { importNormalizedUnitBatch } from '../../src/payload/import/normalized-unit-import'
+import { importNormalizedUnitBatch } from '../../src/core/data-access/ingest/normalized-unit-import'
 import { createNormalizedUnitFixtureBatch } from '../../src/payload/import/unit-fixture'
 
 dotenv.config({ path: '.env' })

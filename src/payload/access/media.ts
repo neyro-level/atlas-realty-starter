@@ -1,11 +1,13 @@
 import type { CollectionConfig } from 'payload'
 
+import { isPublicGatewayRequest } from '@/core/access/public-gateway'
+
 import { canDeleteContent, canManageContent, publicMediaWhere } from './helpers'
 
 type CollectionAccess = NonNullable<CollectionConfig['access']>
 
 export const canReadMedia: NonNullable<CollectionAccess['read']> = ({ req }) =>
-  canManageContent(req.user) ? true : publicMediaWhere()
+  isPublicGatewayRequest(req) ? publicMediaWhere() : canManageContent(req.user)
 
 export const canCreateMedia: NonNullable<CollectionAccess['create']> = ({ req }) =>
   canManageContent(req.user)

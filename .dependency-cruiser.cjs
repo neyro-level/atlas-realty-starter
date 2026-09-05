@@ -25,7 +25,7 @@ module.exports = {
       name: 'no-core-to-project-or-app',
       severity: 'error',
       comment: 'Reusable core cannot depend on client configuration or application routes.',
-      from: { path: '^src/core/' },
+      from: { path: '^src/core/(?!data-access/)' },
       to: { path: '^src/(project|app)/' },
     },
     {

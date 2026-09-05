@@ -1,20 +1,19 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { s3Storage } from '@payloadcms/storage-s3'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { en } from '@payloadcms/translations/languages/en'
 import { ru } from '@payloadcms/translations/languages/ru'
-import path from 'path'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { buildConfig } from 'payload'
-import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
-import { projectConfig } from './project/config'
-import { runtimeConfig } from './project/env'
+import { applyLeadRetentionTask } from './core/data-access/system/jobs/apply-lead-retention'
+import { importNormalizedUnitsTask } from './core/data-access/system/jobs/import-normalized-units'
 import { AdminActivities } from './payload/collections/AdminActivities'
-import { bootstrapAdminUsers } from './payload/bootstrap/users'
 import { AnalyticsEvents } from './payload/collections/AnalyticsEvents'
-import { Buildings } from './payload/collections/Buildings'
 import { AntiSpamEvents } from './payload/collections/AntiSpamEvents'
+import { Buildings } from './payload/collections/Buildings'
 import { Employees } from './payload/collections/Employees'
 import { ImportErrors } from './payload/collections/ImportErrors'
 import { ImportRuns } from './payload/collections/ImportRuns'
@@ -30,64 +29,19 @@ import { Reviews } from './payload/collections/Reviews'
 import { Units } from './payload/collections/Units'
 import { Users } from './payload/collections/Users'
 import { SiteSettings } from './payload/globals/SiteSettings'
-import { applyLeadRetentionTask } from './payload/jobs/apply-lead-retention'
-import { importNormalizedUnitsTask } from './payload/jobs/import-normalized-units'
+import { projectConfig } from './project/config'
+import { runtimeConfig } from './project/env'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const allowedOrigin = runtimeConfig.siteURL
 
 export default buildConfig({
   admin: {
-    components: {
-      Nav: './payload/admin/components/AdminNav.tsx#AdminNav',
-      graphics: {
-        Icon: './payload/admin/components/BrandIcon.tsx#BrandIcon',
-        Logo: './payload/admin/components/BrandLogo.tsx#BrandLogo',
-      },
-      views: {
-        antispam: {
-          Component: './payload/admin/views/AntiSpamView.tsx#AntiSpamView',
-          path: '/antispam',
-        },
-        dashboard: {
-          Component: './payload/admin/views/VisitorsView.tsx#VisitorsView',
-        },
-        employees: {
-          Component: './payload/admin/views/EmployeesView.tsx#EmployeesView',
-          path: '/sotrudniki',
-        },
-        importRun: {
-          Component: './payload/admin/views/ImportViews.tsx#ImportRunView',
-          path: '/import/:id',
-        },
-        imports: {
-          Component: './payload/admin/views/ImportViews.tsx#ImportRunsView',
-          path: '/import',
-        },
-        leads: {
-          Component: './payload/admin/views/LeadsView.tsx#LeadsView',
-          path: '/zayavki',
-        },
-        offices: {
-          Component: './payload/admin/views/OfficesView.tsx#OfficesView',
-          path: '/ofisy',
-        },
-        properties: {
-          Component: './payload/admin/views/PropertiesView.tsx#PropertiesView',
-          path: '/obekty',
-        },
-        reviews: {
-          Component: './payload/admin/views/ReviewsView.tsx#ReviewsView',
-          path: '/otzyvy',
-        },
-      },
-    },
-    importMap: {
-      baseDir: path.resolve(dirname),
-    },
+    importMap: { baseDir: path.resolve(dirname) },
     meta: {
-      description: `Payload Admin для проекта «${projectConfig.projectName}»`,
-      titleSuffix: ` | ${projectConfig.adminTitleSuffix}`,
+      description: 'Payload Admin for the headless AMS Realty Platform Starter',
+      titleSuffix: ' | ' + projectConfig.adminTitleSuffix,
     },
     user: Users.slug,
   },
@@ -111,6 +65,8 @@ export default buildConfig({
     ImportErrors,
     AdminActivities,
   ],
+  cors: [allowedOrigin],
+  csrf: [allowedOrigin],
   db: postgresAdapter({
     blocksAsJSON: true,
     idType: 'uuid',
@@ -121,38 +77,26 @@ export default buildConfig({
     },
     push: false,
   }),
+  defaultDepth: 0,
   editor: lexicalEditor(),
   globals: [SiteSettings],
-  defaultDepth: 0,
-  graphQL: {
-    disable: true,
-  },
+  graphQL: { disable: true },
   i18n: {
     fallbackLanguage: 'ru',
-    supportedLanguages: {
-      en,
-      ru,
-    },
+    supportedLanguages: { en, ru },
   },
   jobs: {
-    access: {
-      run: () => false,
-    },
+    access: { run: () => false },
     enableConcurrencyControl: true,
     tasks: [applyLeadRetentionTask, importNormalizedUnitsTask],
   },
-  onInit: bootstrapAdminUsers,
   localization: false,
   maxDepth: 3,
   plugins: [
     s3Storage({
       alwaysInsertFields: true,
       bucket: runtimeConfig.s3?.bucket ?? 'local-disabled',
-      collections: {
-        media: {
-          prefix: 'media',
-        },
-      },
+      collections: { media: { prefix: 'media' } },
       config: runtimeConfig.s3
         ? {
             credentials: {
@@ -163,23 +107,18 @@ export default buildConfig({
             forcePathStyle: runtimeConfig.s3.forcePathStyle,
             region: runtimeConfig.s3.region,
           }
-        : {
-            region: 'ru-1',
-          },
+        : { region: 'ru-1' },
       enabled: Boolean(runtimeConfig.s3),
     }),
   ],
   secret: runtimeConfig.payloadSecret,
+  serverURL: allowedOrigin,
+  sharp,
+  typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
   upload: {
     abortOnLimit: true,
-    limits: {
-      fileSize: 10 * 1024 * 1024,
-    },
+    limits: { fileSize: 10 * 1024 * 1024 },
     responseOnLimit: 'Upload exceeds the 10 MB limit.',
-  },
-  sharp,
-  typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
 })
 

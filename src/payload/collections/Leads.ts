@@ -6,8 +6,8 @@ import {
   LEAD_DIRECTIONS,
   LEAD_STATUS_LABELS,
   LEAD_STATUSES,
-} from '../admin/lib/constants'
-import { recordLeadActivity, setLeadArchiveMetadata } from '../hooks/business'
+} from '../constants'
+import { recordLeadActivity, setLeadArchiveMetadata } from '@/core/data-access/system/business-hooks'
 
 
 export const Leads = {

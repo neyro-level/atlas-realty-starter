@@ -15,7 +15,7 @@ export const assignUserRole: CollectionBeforeChangeHook = async ({
   if (typeof nextData.password === 'string' && nextData.password.length < 8) {
     throw new Error('Password must contain at least 8 characters')
   }
-  if (req.context.userBootstrap === true) return nextData
+  if (req.context.systemOperation === 'bootstrap-first-owner') return nextData
 
   if (!isSuperAdmin(req.user)) {
     if (operation === 'update' && originalDoc?.role) {

@@ -6,7 +6,7 @@ dotenv.config({ path: 'test.env' })
 const testPort = process.env.PORT || '3010'
 const baseURL = process.env.PLAYWRIGHT_BASE_URL || `http://127.0.0.1:${testPort}`
 const isProductionSmoke = process.env.APP_RUNTIME === 'production'
-const readinessURL = `${baseURL}/api/health`
+const readinessURL = `${baseURL}/healthz`
 
 const webServerEnv: Record<string, string> = {
   APP_ENV: 'test',

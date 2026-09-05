@@ -9,8 +9,8 @@ import {
   PROPERTY_CATEGORIES,
   PROPERTY_STATUS_LABELS,
   PROPERTY_STATUSES,
-} from '../admin/lib/constants'
-import { protectPropertyMutation, recordPropertyActivity } from '../hooks/business'
+} from '../constants'
+import { protectPropertyMutation, recordPropertyActivity } from '@/core/data-access/system/business-hooks'
 import { validateSafeVideoURL } from '@/shared/security/media-url'
 
 export const Properties = {

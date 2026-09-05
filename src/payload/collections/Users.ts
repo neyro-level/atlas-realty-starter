@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
+import { runtimeConfig } from '@/project/env'
+
 import {
   canCreateUsers,
   canDeleteUsers,
@@ -33,12 +35,14 @@ export const Users = {
     useAsTitle: 'name',
   },
   auth: {
+    cookies: { sameSite: 'Lax', secure: runtimeConfig.secureCookies },
     loginWithUsername: {
       allowEmailLogin: false,
       requireEmail: false,
       requireUsername: true,
     },
     maxLoginAttempts: 5,
+    lockTime: 10 * 60 * 1000,
     tokenExpiration: 7200,
   },
   access: {
@@ -74,7 +78,7 @@ export const Users = {
       admin: {
         position: 'sidebar',
       },
-      defaultValue: 'CONTENT_MANAGER',
+      defaultValue: 'editor',
       label: {
         en: 'Role',
         ru: 'Роль',

@@ -1,12 +1,14 @@
 import type { CollectionConfig } from 'payload'
 
+import { isPublicGatewayRequest } from '@/core/access/public-gateway'
+
 import { hasAdminCapability, manualScopedUpdateAccess } from './capabilities'
 import { publicEmployeeWhere } from './helpers'
 
 type CollectionAccess = NonNullable<CollectionConfig['access']>
 
 export const canReadEmployees: NonNullable<CollectionAccess['read']> = ({ req }) =>
-  hasAdminCapability(req.user, 'employee.read') ? true : publicEmployeeWhere()
+  isPublicGatewayRequest(req) ? publicEmployeeWhere() : hasAdminCapability(req.user, 'employee.read')
 
 export const canCreateEmployees: NonNullable<CollectionAccess['create']> = ({ req }) =>
   hasAdminCapability(req.user, 'employee.manual.create')

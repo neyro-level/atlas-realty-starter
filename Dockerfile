@@ -1,4 +1,4 @@
-# Optional container reference only. Canonical production uses docs/PRODUCTION_RUNBOOK.md.
+# Optional container reference only. Canonical production uses docs/OPERATIONS.md.
 # Container use still requires `output: 'standalone'` in next.config.ts.
 
 FROM node:24.20.0-alpine AS base

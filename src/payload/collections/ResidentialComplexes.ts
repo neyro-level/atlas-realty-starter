@@ -8,7 +8,7 @@ import {
 } from '../access/residential-complexes'
 import { capabilityFieldAccess } from '../access/capabilities'
 import { formatPageSlug } from '../hooks/formatPageSlug'
-import { protectResidentialComplexMutation, recordResidentialComplexActivity } from '../hooks/business'
+import { protectResidentialComplexMutation, recordResidentialComplexActivity } from '@/core/data-access/system/business-hooks'
 import { runtimeConfig } from '@/project/env'
 import { isAllowedExternalImageURL, validateSafeVideoURL } from '@/shared/security/media-url'
 
