@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { adminRead, adminWrite, ownerOnly, systemManaged } from '../access/standard'
+import { createLeadOutbox } from '@/core/data-access/system/leads/outbox-hook'
 
 export const Leads = {
   slug: 'leads',
@@ -23,5 +24,6 @@ export const Leads = {
     { name: 'idempotencyKey', type: 'text', required: true, unique: true, index: true },
     { name: 'personalDataPurgedAt', type: 'date', index: true, admin: { readOnly: true } },
   ],
+  hooks: { afterChange: [createLeadOutbox] },
   trash: true,
 } satisfies CollectionConfig

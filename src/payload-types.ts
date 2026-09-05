@@ -131,7 +131,9 @@ export interface Config {
   jobs: {
     tasks: {
       applyLeadRetention: TaskApplyLeadRetention;
+      deliverLead: TaskDeliverLead;
       importFeed: TaskImportFeed;
+      recoverLeadDeliveries: TaskRecoverLeadDeliveries;
       inline: {
         input: unknown;
         output: unknown;
@@ -476,6 +478,7 @@ export interface ResidentialComplex {
   name: string;
   slug: string;
   developer?: (string | null) | Developer;
+  responsibleAgent?: (string | null) | Agent;
   yandexBuildingId?: string | null;
   region?: string | null;
   district?: string | null;
@@ -526,28 +529,6 @@ export interface Developer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "buildings".
- */
-export interface Building {
-  id: string;
-  complex: string | ResidentialComplex;
-  name: string;
-  yandexHouseId: string;
-  section?: string | null;
-  phase?: string | null;
-  address?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
-  floors?: number | null;
-  readiness?: ('planned' | 'construction' | 'commissioned') | null;
-  handoverAt?: string | null;
-  isPublished?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-  deletedAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "agents".
  */
 export interface Agent {
@@ -583,16 +564,41 @@ export interface Agent {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "buildings".
+ */
+export interface Building {
+  id: string;
+  complex: string | ResidentialComplex;
+  name: string;
+  yandexHouseId: string;
+  section?: string | null;
+  phase?: string | null;
+  address?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  floors?: number | null;
+  readiness?: ('planned' | 'construction' | 'commissioned') | null;
+  handoverAt?: string | null;
+  isPublished?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  deletedAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "lead-deliveries".
  */
 export interface LeadDelivery {
   id: string;
   lead: string | Lead;
   channel: string;
+  routeReason: 'property-agent' | 'complex-agent' | 'type-mapping' | 'fallback';
+  recipientAgent?: (string | null) | Agent;
   status: 'pending' | 'processing' | 'delivered' | 'failed' | 'dead';
   attempts: number;
   nextAttemptAt?: string | null;
   lockedAt?: string | null;
+  lastAttemptAt?: string | null;
   deliveredAt?: string | null;
   idempotencyKey: string;
   lastError?: string | null;
@@ -720,7 +726,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'applyLeadRetention' | 'importFeed';
+        taskSlug: 'inline' | 'applyLeadRetention' | 'deliverLead' | 'importFeed' | 'recoverLeadDeliveries';
         taskID: string;
         input?:
           | {
@@ -753,7 +759,7 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'applyLeadRetention' | 'importFeed') | null;
+  taskSlug?: ('inline' | 'applyLeadRetention' | 'deliverLead' | 'importFeed' | 'recoverLeadDeliveries') | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -1003,10 +1009,13 @@ export interface LeadsSelect<T extends boolean = true> {
 export interface LeadDeliveriesSelect<T extends boolean = true> {
   lead?: T;
   channel?: T;
+  routeReason?: T;
+  recipientAgent?: T;
   status?: T;
   attempts?: T;
   nextAttemptAt?: T;
   lockedAt?: T;
+  lastAttemptAt?: T;
   deliveredAt?: T;
   idempotencyKey?: T;
   lastError?: T;
@@ -1107,6 +1116,7 @@ export interface ResidentialComplexesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   developer?: T;
+  responsibleAgent?: T;
   yandexBuildingId?: T;
   region?: T;
   district?: T;
@@ -1438,6 +1448,18 @@ export interface TaskApplyLeadRetention {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskDeliverLead".
+ */
+export interface TaskDeliverLead {
+  input: {
+    deliveryId: string;
+  };
+  output: {
+    status: string;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskImportFeed".
  */
 export interface TaskImportFeed {
@@ -1453,6 +1475,16 @@ export interface TaskImportFeed {
     updated: number;
     unchanged: number;
     deactivated: number;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskRecoverLeadDeliveries".
+ */
+export interface TaskRecoverLeadDeliveries {
+  input?: unknown;
+  output: {
+    queued: number;
   };
 }
 /**

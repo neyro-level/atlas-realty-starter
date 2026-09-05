@@ -12,9 +12,11 @@
 
 ## Active baseline
 
-Payload Admin, PostgreSQL adapter, Payload Jobs, manual media with optional S3 storage, strict TypeScript, security headers, structured logging, append-only migrations-v2, the canonical property schema, allowlisted streaming YRL import, the headless public catalog API, tagged cache invalidation and official Payload SEO/Redirects plugins.
+Payload Admin, PostgreSQL adapter, Payload Jobs, manual media with optional S3 storage, strict TypeScript, security headers, structured logging, append-only migrations-v2, the canonical property schema, allowlisted streaming YRL import, the headless public catalog API, tagged cache invalidation, official Payload SEO/Redirects plugins and transactional lead intake/outbox.
 
 Public API v1 exposes catalog, property, complex, agent, page, post, facets, config, redirect resolution and paged sitemap DTOs. Filters, pagination and sort are server-bounded; raw Payload documents and private property fields are never returned.
+
+Lead intake validates a bounded JSON body, honeypot, minimum fill time, normalized contact data, explicit consent and idempotency. Routing order is property agent, responsible complex agent, server-side type mapping, then mandatory fallback. Lead and pending deliveries commit atomically; Payload Jobs handles delivery and recovery. The starter production channel registry is intentionally empty. A deterministic adapter exists only in the test runtime.
 
 Legacy units, employees, import sources and import errors are migration input only. The Stage 1 migration backfills them into properties, agents, feed sources and import issues; optional legacy data stops the contract migration until a client export is completed.
 
@@ -28,7 +30,7 @@ Maps, Metrika, internal statistics, reviews, price history, advanced SEO landing
 
 ## Privacy and retention
 
-Lead PII retention default is 365 days. A concrete clone must confirm its legal basis, consent text version, owner and retention before production. Secrets live only in deployment secret storage and PII must not enter logs.
+Lead PII retention default is 365 days and the baseline consent text version is `152-fz-v1`. A concrete clone must confirm its legal basis, consent text, owner and retention before production. The scheduled retention task removes contact PII after the period. Secrets live only in deployment secret storage and PII must not enter logs.
 
 ## Lifecycle
 

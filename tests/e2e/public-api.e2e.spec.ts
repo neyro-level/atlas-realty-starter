@@ -2,7 +2,9 @@ import { expect, test } from '@playwright/test'
 
 import { getTestPayload, resetFoundationState, seedPrivilegedUsers } from '../helpers/payload'
 
-test.describe.serial('Stage 2 headless public API', () => {
+test.describe.serial('Headless public API', () => {
+  let propertyId: string
+
   test.beforeAll(async () => {
     await resetFoundationState()
     const payload = await getTestPayload()
@@ -19,7 +21,7 @@ test.describe.serial('Stage 2 headless public API', () => {
       overrideAccess: false,
       user: superAdmin,
     })
-    await payload.create({
+    const property = await payload.create({
       collection: 'properties',
       data: {
         addressPublic: 'Public street, 1', agent: agent.id, apartmentNumber: 'secret-apartment', cadastralNumber: 'secret-cadastral',
@@ -30,6 +32,7 @@ test.describe.serial('Stage 2 headless public API', () => {
       overrideAccess: false,
       user: superAdmin,
     })
+    propertyId = String(property.id)
     await payload.create({
       collection: 'properties',
       data: { category: 'apartment', currency: 'RUB', dealType: 'sale', isPublished: true, market: 'secondary', origin: 'manual', priceMinorUnits: 11_000_000, slug: 'sold-property', status: 'sold', title: 'Sold Property', totalAreaCm2: 500_000 },
@@ -84,5 +87,27 @@ test.describe.serial('Stage 2 headless public API', () => {
     expect((await request.get('/api/properties')).status()).toBe(403)
     expect((await request.post('/api/internal/revalidate', { data: { tags: ['public:catalog'] } })).status()).toBe(401)
     expect((await request.post('/api/internal/revalidate', { data: { tags: ['public:catalog'] }, headers: { 'x-revalidate-secret': 'e2e-revalidate-secret-value-32chars' } })).status()).toBe(200)
+  })
+
+  test('accepts an idempotent property lead without exposing PII', async ({ request }) => {
+    const idempotencyKey = 'e2e:public-lead:12345678'
+    const body = {
+      company: '', consent: true, formStartedAt: new Date(Date.now() - 3_000).toISOString(), formType: 'property',
+      message: 'Please call', name: 'Public lead', phone: '8 (999) 123-45-67', propertyId, sourcePage: '/properties/public-property',
+    }
+    const created = await request.post('/api/public/v1/leads', { data: body, headers: { 'Idempotency-Key': idempotencyKey } })
+    expect(created.status()).toBe(201)
+    const createdBody = await created.json()
+    expect(createdBody.data.duplicate).toBe(false)
+    expect(JSON.stringify(createdBody)).not.toContain('999')
+
+    const duplicate = await request.post('/api/public/v1/leads', { data: body, headers: { 'Idempotency-Key': idempotencyKey } })
+    expect(duplicate.status()).toBe(200)
+    await expect(duplicate.json()).resolves.toMatchObject({ data: { duplicate: true, leadId: createdBody.data.leadId } })
+
+    const payload = await getTestPayload()
+    const deliveries = await payload.find({ collection: 'lead-deliveries', overrideAccess: true, where: { lead: { equals: createdBody.data.leadId } } })
+    expect(deliveries.docs).toHaveLength(1)
+    expect(deliveries.docs[0]).toMatchObject({ routeReason: 'property-agent', status: 'pending' })
   })
 })

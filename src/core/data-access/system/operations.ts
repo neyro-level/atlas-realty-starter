@@ -2,6 +2,10 @@ export const SYSTEM_OPERATIONS = [
   'bootstrap-first-owner',
   'business-audit',
   'import-job-failure',
+  'lead-delivery',
+  'lead-intake',
+  'lead-outbox',
+  'lead-recovery',
   'lead-retention',
 ] as const
 

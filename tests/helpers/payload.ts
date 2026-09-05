@@ -30,6 +30,7 @@ export async function getTestPayload() {
 export async function resetFoundationState() {
   const payload = await getTestPayload()
   const collections = [
+    'payload-jobs',
     'import-issues',
     'import-runs',
     'buildings',

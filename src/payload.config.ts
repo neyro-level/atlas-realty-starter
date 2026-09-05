@@ -9,6 +9,8 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
 import { applyLeadRetentionTask } from './core/data-access/system/jobs/apply-lead-retention'
+import { deliverLeadTask } from './core/data-access/system/jobs/deliver-lead'
+import { recoverLeadDeliveriesTask } from './core/data-access/system/jobs/recover-lead-deliveries'
 import { importFeedTask } from './core/data-access/ingest/import-feed-task'
 import { Agents } from './payload/collections/Agents'
 import { Buildings } from './payload/collections/Buildings'
@@ -81,7 +83,7 @@ export default buildConfig({
   jobs: {
     access: { run: () => false },
     enableConcurrencyControl: true,
-    tasks: [applyLeadRetentionTask, importFeedTask],
+    tasks: [applyLeadRetentionTask, deliverLeadTask, importFeedTask, recoverLeadDeliveriesTask],
   },
   localization: false,
   maxDepth: 3,

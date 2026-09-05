@@ -2,7 +2,7 @@
 
 Headless starter engine based on Next.js, Payload CMS and PostgreSQL. It has no public UI: the root route and former client routes must return 404. Public product scenarios are exposed only through versioned DTO APIs under /api/public/v1.
 
-Available v1 reads: `/catalog`, `/properties/:slug`, `/complexes`, `/complexes/:slug`, `/agents/:slug`, `/pages/:slug`, `/posts/:slug`, `/facets`, `/config`, `/redirects?from=...` and `/sitemap`.
+Available v1 reads: `/catalog`, `/properties/:slug`, `/complexes`, `/complexes/:slug`, `/agents/:slug`, `/pages/:slug`, `/posts/:slug`, `/facets`, `/config`, `/redirects?from=...` and `/sitemap`. Lead intake is `POST /api/public/v1/leads` with explicit consent and an `Idempotency-Key` header.
 
 ## Source of truth
 
@@ -19,6 +19,7 @@ Available v1 reads: `/catalog`, `/properties/:slug`, `/complexes`, `/complexes/:
 - pnpm verify
 - pnpm build for sensitive changes and release
 - pnpm owner:bootstrap for one-time first-owner creation
+- pnpm jobs:run:leads and pnpm jobs:schedule:leads for the lead delivery worker
 
 Production release is not performed from a feature branch. See docs/OPERATIONS.md.
 
