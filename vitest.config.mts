@@ -13,6 +13,7 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    fileParallelism: false,
     setupFiles: ['./vitest.setup.ts'],
     include: ['tests/int/**/*.int.spec.ts'],
   },

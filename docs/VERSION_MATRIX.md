@@ -11,6 +11,8 @@
 | PostgreSQL | 18 |
 | Zod | 4.5.4 |
 | pino | 9.14.0 |
+| saxes | 6.0.0 |
+| server-only | 0.0.1 |
 
 All direct dependencies are pinned exactly in package.json and pnpm-lock.yaml. Payload packages must stay on one exact version. Major upgrades are separate HEAVY tasks.
 

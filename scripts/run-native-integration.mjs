@@ -55,6 +55,74 @@ function run(command) {
   if (result.status !== 0) process.exit(result.status ?? 1)
 }
 
+function runExpectFailure(command) {
+  const result = spawnSync('cmd.exe', ['/d', '/s', '/c', command], { env: childEnvironment, stdio: 'inherit' })
+  if (result.error) throw result.error
+  if (result.status === 0) throw new Error(`Command unexpectedly succeeded: ${command}`)
+}
+
+if (process.argv.includes('--stage1-migration-check')) {
+  run('pnpm payload migrate')
+  const batches = new pg.Client({ connectionString: testURL.toString() })
+  await batches.connect()
+  try {
+    await batches.query(`UPDATE payload_migrations SET batch = CASE WHEN name = '20260903_130533' THEN 1 WHEN name = '20260904_090000_standard_21_roles' THEN 2 WHEN name IN ('20260905_075723_standard_21_expand_backfill_contract', '20260905_082941_standard_21_import_job') THEN 3 ELSE batch END`)
+  } finally { await batches.end() }
+  run('pnpm payload migrate:down')
+  const guardFixture = new pg.Client({ connectionString: testURL.toString() })
+  await guardFixture.connect()
+  try { await guardFixture.query(`INSERT INTO offices (title, address, updated_at, created_at) VALUES ('Must export', 'Legacy address', now(), now())`) }
+  finally { await guardFixture.end() }
+  runExpectFailure('pnpm payload migrate')
+  const guardVerification = new pg.Client({ connectionString: testURL.toString() })
+  await guardVerification.connect()
+  try {
+    const retained = await guardVerification.query(`SELECT count(*)::int count FROM offices`)
+    if (retained.rows[0]?.count !== 1) throw new Error('Optional legacy guard did not preserve data')
+    await guardVerification.query('DELETE FROM offices')
+  } finally { await guardVerification.end() }
+  const fixture = new pg.Client({ connectionString: testURL.toString() })
+  await fixture.connect()
+  try {
+    await fixture.query('BEGIN')
+    const source = await fixture.query(`INSERT INTO import_sources (title, key, is_active, adapter_configured, updated_at, created_at) VALUES ('Legacy source', 'legacy-source', true, true, now(), now()) RETURNING id`)
+    const employee = await fixture.query(`INSERT INTO employees (full_name, origin, status, is_public, team_section, sort_order, updated_at, created_at) VALUES ('Legacy agent', 'MANUAL', 'active', true, 'sales', 0, now(), now()) RETURNING id`)
+    const complex = await fixture.query(`INSERT INTO residential_complexes (title, slug, status, is_featured, sort_order, updated_at, created_at) VALUES ('Legacy complex', 'legacy-complex', 'published', false, 0, now(), now()) RETURNING id`)
+    const building = await fixture.query(`INSERT INTO buildings (title, residential_complex_id, is_published, source_id, external_id, source_key, import_hash, last_seen_at, is_active, updated_at, created_at) VALUES ('Legacy building', $1, true, $2, 'house-1', 'legacy-source', 'building-hash', now(), true, now(), now()) RETURNING id`, [complex.rows[0].id, source.rows[0].id])
+    await fixture.query(`INSERT INTO properties (title, origin, workflow_status, is_published, category, responsible_employee_id, feed_source_id, external_id, source_key, import_hash, price, total_area, public_slug, updated_at, created_at) VALUES ('Legacy secondary', 'XML', 'active', true, 'flat', $1, $2, 'secondary-1', 'legacy-source', 'secondary-hash', 7500000, 52.35, 'legacy-secondary', now(), now())`, [employee.rows[0].id, source.rows[0].id])
+    await fixture.query(`INSERT INTO leads (name, phone, status, updated_at, created_at) VALUES ('Legacy lead', '+7 (999) 111-22-33', 'in_work', now(), now())`)
+    await fixture.query(`INSERT INTO units (number, building_id, residential_complex_id, floor, rooms, is_studio, total_area, price, availability, is_published, source_id, external_id, source_key, import_hash, last_seen_at, is_active, updated_at, created_at) VALUES ('42', $1, $2, 7, 2, false, 60, 9000000, 'available', true, $3, 'unit-1', 'legacy-source', 'unit-hash', now(), true, now(), now())`, [building.rows[0].id, complex.rows[0].id, source.rows[0].id])
+    const importRun = await fixture.query(`INSERT INTO import_runs (correlation_id, mode, target, source_id, status, started_at, updated_at, created_at) VALUES ('legacy-run', 'full_snapshot', 'units', $1, 'success', now(), now(), now()) RETURNING id`, [source.rows[0].id])
+    await fixture.query(`INSERT INTO import_errors (run_id, external_id, code, message, updated_at, created_at) VALUES ($1, 'unit-1', 'legacy-error', 'Redacted legacy issue', now(), now())`, [importRun.rows[0].id])
+    await fixture.query('COMMIT')
+  } catch (error) {
+    await fixture.query('ROLLBACK')
+    throw error
+  } finally { await fixture.end() }
+
+  run('pnpm payload migrate')
+  const verification = new pg.Client({ connectionString: testURL.toString() })
+  await verification.connect()
+  try {
+    const counts = await verification.query(`SELECT (SELECT count(*)::int FROM properties) properties, (SELECT count(*)::int FROM agents) agents, (SELECT count(*)::int FROM feed_sources) sources, (SELECT count(*)::int FROM import_issues) issues`)
+    const values = await verification.query(`SELECT price_minor_units::bigint price, total_area_cm2::bigint area, market::text market FROM properties ORDER BY market`)
+    const legacy = await verification.query(`SELECT to_regclass('public.units') units, to_regclass('public.employees') employees, to_regclass('public.import_sources') sources`)
+    const lead = await verification.query(`SELECT status::text status, normalized_phone, consent_version, idempotency_key FROM leads`)
+    if (counts.rows[0].properties !== 2 || counts.rows[0].agents !== 1 || counts.rows[0].sources !== 1 || counts.rows[0].issues !== 1) throw new Error('Stage 1 backfill counts do not match')
+    if (!values.rows.some((row) => row.price === '750000000' && row.area === '523500') || !values.rows.some((row) => row.price === '900000000' && row.area === '600000')) throw new Error('Stage 1 integer unit conversion failed')
+    if (Object.values(legacy.rows[0]).some(Boolean)) throw new Error('Legacy tables remain after contract migration')
+    if (lead.rows[0]?.status !== 'in_progress' || lead.rows[0]?.normalized_phone !== '+79991112233' || lead.rows[0]?.consent_version !== 'legacy-unverified' || !lead.rows[0]?.idempotency_key) throw new Error('Legacy lead backfill failed')
+  } finally { await verification.end() }
+  console.log(JSON.stringify({ stage1Migration: 'PASS', legacyProperties: 1, legacyUnits: 1 }))
+  process.exit(0)
+}
+
+if (process.argv.includes('--stage1-performance')) {
+  run('pnpm payload migrate')
+  run('node --no-deprecation --import=tsx/esm scripts/fixtures/benchmark-property-import.mts')
+  process.exit(0)
+}
+
 if (process.argv.includes('--roles-check')) {
   run('pnpm payload migrate')
 

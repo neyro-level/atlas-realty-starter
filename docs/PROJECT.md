@@ -12,9 +12,9 @@
 
 ## Active baseline
 
-Payload Admin, PostgreSQL adapter, Payload Jobs, manual media with optional S3 storage, strict TypeScript, security headers, structured logging, and append-only migrations-v2.
+Payload Admin, PostgreSQL adapter, Payload Jobs, manual media with optional S3 storage, strict TypeScript, security headers, structured logging, append-only migrations-v2, the canonical property schema and allowlisted streaming YRL import.
 
-During BUILD MODE the legacy collections still present in the current schema are migration input, not the target contract. Stage 1 replaces them with the canonical 2.1 schema.
+Legacy units, employees, import sources and import errors are migration input only. The Stage 1 migration backfills them into properties, agents, feed sources and import issues; optional legacy data stops the contract migration until a client export is completed.
 
 ## Client-specific state
 

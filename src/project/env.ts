@@ -17,6 +17,7 @@ const environmentSchema = z.object({
   DATABASE_POOL_MAX: z.string().optional(),
   DATABASE_URL: z.string().optional(),
   EXTERNAL_IMAGE_HOSTS: z.string().optional(),
+  FEED_OUTBOUND_HOSTS: z.string().optional(),
   NEXT_PHASE: z.string().optional(),
   NEXT_PUBLIC_SITE_URL: z.string().optional(),
   NODE_ENV: z.string().optional(),
@@ -49,6 +50,7 @@ export function buildRuntimeConfig(input: EnvironmentSource) {
     databaseURL: requireRuntimeValue('DATABASE_URL', env.DATABASE_URL, protectedRuntime),
     environment,
     externalImageHosts: readHostAllowlist(env.EXTERNAL_IMAGE_HOSTS),
+    feedOutboundHosts: readHostAllowlist(env.FEED_OUTBOUND_HOSTS),
     leadRetentionDays: 365,
     payloadSecret: readPayloadSecret(env.PAYLOAD_SECRET, protectedRuntime),
     releaseSHA: env.RELEASE_SHA ?? 'local',
@@ -60,6 +62,11 @@ export function buildRuntimeConfig(input: EnvironmentSource) {
 }
 
 export const runtimeConfig = buildRuntimeConfig(process.env)
+
+export function resolveRuntimeReference(name: string) {
+  if (!/^[A-Z][A-Z0-9_]{1,127}$/.test(name)) throw new Error('Invalid runtime environment reference')
+  return process.env[name]
+}
 
 function resolveEnvironment(env: z.infer<typeof environmentSchema>): RuntimeEnvironment {
   if (env.NEXT_PHASE === 'phase-production-build') return 'development'

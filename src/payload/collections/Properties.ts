@@ -1,256 +1,119 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionBeforeChangeHook, CollectionConfig } from 'payload'
 
-import { canCreateProperties, canDeleteProperties, canReadProperties, canUpdateProperties } from '../access/properties'
-import { capabilityFieldAccess, superAdminFieldAccess } from '../access/capabilities'
-import {
-  ENTITY_ORIGIN_LABELS,
-  ENTITY_ORIGINS,
-  PROPERTY_CATEGORY_LABELS,
-  PROPERTY_CATEGORIES,
-  PROPERTY_STATUS_LABELS,
-  PROPERTY_STATUSES,
-} from '../constants'
-import { protectPropertyMutation, recordPropertyActivity } from '@/core/data-access/system/business-hooks'
+import { adminWrite, ownerFieldOnly, ownerOnly, publicOrAdmin } from '../access/standard'
+import { formatPageSlug } from '../hooks/formatPageSlug'
 import { validateSafeVideoURL } from '@/shared/security/media-url'
+
+const sourceManagedAccess = { create: ownerFieldOnly, update: ownerFieldOnly }
+const privateAccess = { create: ownerFieldOnly, read: ownerFieldOnly, update: ownerFieldOnly }
+
+const trackManualFields: CollectionBeforeChangeHook = ({ data, operation, originalDoc, req }) => {
+  if (operation !== 'update' || req.context?.ingest === true || !req.user) return data
+  const manual = new Set<string>(Array.isArray(originalDoc?.manualFields) ? originalDoc.manualFields : [])
+  for (const key of Object.keys(data)) {
+    if (!['manualFields', 'updatedAt', 'createdAt'].includes(key)) manual.add(key)
+  }
+  return { ...data, manualFields: [...manual].sort() }
+}
 
 export const Properties = {
   slug: 'properties',
-  labels: {
-    plural: { en: 'Properties', ru: 'Объекты' },
-    singular: { en: 'Property', ru: 'Объект' },
-  },
+  labels: { plural: 'Объекты', singular: 'Объект' },
   access: {
-    create: canCreateProperties,
-    delete: canDeleteProperties,
-    read: canReadProperties,
-    update: canUpdateProperties,
+    create: adminWrite,
+    delete: ownerOnly,
+    read: publicOrAdmin({ and: [{ isPublished: { equals: true } }, { status: { equals: 'active' } }] }),
+    update: adminWrite,
   },
   admin: {
-    defaultColumns: ['title', 'category', 'workflowStatus', 'origin', 'responsibleEmployee', 'updatedAt'],
-    group: { en: 'Cabinet', ru: 'Кабинет' },
-    listSearchableFields: ['title', 'objectCode', 'publicSlug', 'addressLine'],
+    defaultColumns: ['title', 'market', 'category', 'priceMinorUnits', 'status', 'origin'],
+    group: 'Каталог',
+    listSearchableFields: ['title', 'slug', 'externalId', 'addressPublic'],
     useAsTitle: 'title',
   },
-  indexes: [{ fields: ['feedSource', 'externalId'], unique: true }],
-  fields: [
-    { name: 'title', type: 'text', label: { en: 'Title', ru: 'Название' }, required: true },
-    { name: 'objectCode', type: 'text', index: true, admin: { position: 'sidebar' }, label: { en: 'Object code', ru: 'Код объекта' } },
-    {
-      name: 'externalId',
-      type: 'text',
-      access: { create: superAdminFieldAccess(), update: superAdminFieldAccess() },
-      admin: { position: 'sidebar' },
-      index: true,
-      label: { en: 'External ID', ru: 'Внешний ID' },
-    },
-    {
-      name: 'origin',
-      type: 'select',
-      access: { update: superAdminFieldAccess() },
-      index: true,
-      admin: { position: 'sidebar' },
-      defaultValue: 'MANUAL',
-      label: { en: 'Origin', ru: 'Источник записи' },
-      options: ENTITY_ORIGINS.map((origin) => ({ label: ENTITY_ORIGIN_LABELS[origin], value: origin })),
-      required: true,
-    },
-    {
-      name: 'workflowStatus',
-      type: 'select',
-      access: { update: capabilityFieldAccess('property.manual.publish') },
-      index: true,
-      admin: { position: 'sidebar' },
-      defaultValue: 'draft',
-      label: { en: 'Workflow status', ru: 'Статус' },
-      options: PROPERTY_STATUSES.map((status) => ({ label: PROPERTY_STATUS_LABELS[status], value: status })),
-      required: true,
-    },
-    {
-      name: 'isPublished',
-      type: 'checkbox',
-      access: { update: capabilityFieldAccess('property.manual.publish') },
-      admin: { position: 'sidebar' },
-      defaultValue: false,
-      index: true,
-      label: { en: 'Published on site', ru: 'На сайте' },
-    },
-    {
-      name: 'category',
-      type: 'select',
-      index: true,
-      label: { en: 'Category', ru: 'Категория' },
-      options: PROPERTY_CATEGORIES.map((category) => ({ label: PROPERTY_CATEGORY_LABELS[category], value: category })),
-      required: true,
-    },
-    {
-      name: 'responsibleEmployee',
-      type: 'relationship',
-      index: true,
-      label: { en: 'Responsible employee', ru: 'Ответственный' },
-      relationTo: 'employees',
-    },
-    {
-      name: 'feedSource',
-      type: 'relationship',
-      access: { create: superAdminFieldAccess(), update: superAdminFieldAccess() },
-      label: { en: 'Feed source', ru: 'Источник импорта' },
-      relationTo: 'import-sources',
-    },
-    {
-      name: 'sourceKey',
-      type: 'text',
-      access: { create: superAdminFieldAccess(), update: superAdminFieldAccess() },
-      index: true,
-      label: { en: 'Source key', ru: 'Ключ источника' },
-    },
-    {
-      name: 'importHash',
-      type: 'text',
-      access: { create: superAdminFieldAccess(), update: superAdminFieldAccess() },
-      label: { en: 'Import hash', ru: 'Хэш записи' },
-    },
-    {
-      name: 'lastSeenAt',
-      type: 'date',
-      access: { create: superAdminFieldAccess(), update: superAdminFieldAccess() },
-      index: true,
-      label: { en: 'Last seen at', ru: 'Последнее появление' },
-    },
-    {
-      name: 'isSourceActive',
-      type: 'checkbox',
-      access: { create: superAdminFieldAccess(), update: superAdminFieldAccess() },
-      defaultValue: true,
-      index: true,
-      label: { en: 'Active in source', ru: 'Активен в источнике' },
-    },
-    { name: 'price', type: 'number', index: true, label: { en: 'Price', ru: 'Цена' }, min: 0 },
-    {
-      type: 'row',
-      fields: [
-        {
-          name: 'dealType',
-          type: 'select',
-          defaultValue: 'sale',
-          index: true,
-          label: { en: 'Deal type', ru: 'Тип сделки' },
-          options: [
-            { label: 'Продажа', value: 'sale' },
-            { label: 'Аренда', value: 'rent' },
-          ],
-        },
-        {
-          name: 'commercialType',
-          type: 'select',
-          index: true,
-          label: { en: 'Commercial type', ru: 'Тип коммерции' },
-          options: [
-            { label: 'Офис', value: 'office' },
-            { label: 'Торговое помещение', value: 'retail' },
-            { label: 'Склад', value: 'warehouse' },
-            { label: 'Готовый бизнес', value: 'business' },
-            { label: 'Свободное назначение', value: 'free_purpose' },
-          ],
-        },
-      ],
-    },
-    {
-      type: 'row',
-      fields: [
-        { name: 'totalArea', type: 'number', index: true, label: { en: 'Total area', ru: 'Общая площадь' }, min: 0 },
-        { name: 'livingArea', type: 'number', label: { en: 'Living area', ru: 'Жилая площадь' }, min: 0 },
-        { name: 'kitchenArea', type: 'number', label: { en: 'Kitchen area', ru: 'Площадь кухни' }, min: 0 },
-      ],
-    },
-    {
-      type: 'row',
-      fields: [
-        { name: 'floor', type: 'number', index: true, label: { en: 'Floor', ru: 'Этаж' }, min: 0 },
-        { name: 'floorsTotal', type: 'number', label: { en: 'Floors total', ru: 'Этажей в доме' }, min: 0 },
-        { name: 'buildYear', type: 'number', index: true, label: { en: 'Build year', ru: 'Год постройки' }, min: 1800 },
-      ],
-    },
-    {
-      type: 'row',
-      fields: [
-        { name: 'buildingMaterial', type: 'text', index: true, label: { en: 'Building material', ru: 'Материал дома' } },
-        { name: 'repair', type: 'text', index: true, label: { en: 'Repair', ru: 'Ремонт' } },
-      ],
-    },
-    {
-      type: 'row',
-      fields: [
-        { name: 'pricePerSquareMeter', type: 'number', index: true, label: { en: 'Price per square meter', ru: 'Цена за м²' }, min: 0 },
-        { name: 'isStudio', type: 'checkbox', defaultValue: false, index: true, label: { en: 'Studio', ru: 'Студия' } },
-        { name: 'isExclusive', type: 'checkbox', defaultValue: false, index: true, label: { en: 'Exclusive', ru: 'Эксклюзив' } },
-      ],
-    },
-    {
-      type: 'row',
-      fields: [
-        { name: 'city', type: 'text', index: true, label: { en: 'City', ru: 'Город' } },
-        { name: 'district', type: 'text', index: true, label: { en: 'District', ru: 'Район' } },
-      ],
-    },
-    { name: 'addressLine', type: 'text', label: { en: 'Address', ru: 'Адрес' } },
-    {
-      name: 'coordinates',
-      type: 'group',
-      label: { en: 'Coordinates', ru: 'Координаты' },
-      fields: [
-        { name: 'latitude', type: 'number', label: { en: 'Latitude', ru: 'Широта' } },
-        { name: 'longitude', type: 'number', label: { en: 'Longitude', ru: 'Долгота' } },
-      ],
-    },
-    {
-      type: 'row',
-      fields: [
-        { name: 'rooms', type: 'number', index: true, label: { en: 'Rooms', ru: 'Комнат' }, min: 0 },
-        {
-          name: 'updatedFromSourceAt',
-          type: 'date',
-          access: { create: superAdminFieldAccess(), update: superAdminFieldAccess() },
-          index: true,
-          label: { en: 'Updated from source at', ru: 'Дата обновления' },
-        },
-        { name: 'publishedAt', type: 'date', index: true, label: { en: 'Published at', ru: 'Дата публикации' } },
-      ],
-    },
-    { name: 'publicSlug', type: 'text', index: true, label: { en: 'Public slug', ru: 'Публичный slug' }, unique: true },
-    { name: 'description', type: 'textarea', label: { en: 'Description', ru: 'Описание' } },
-    { name: 'videoUrl', type: 'text', label: { en: 'Video URL', ru: 'Видео' }, validate: validateSafeVideoURL },
-    {
-      name: 'gallery',
-      type: 'array',
-      access: { update: capabilityFieldAccess('property.media.update') },
-      label: { en: 'Gallery', ru: 'Медиа' },
-      fields: [
-        { name: 'file', type: 'relationship', label: { en: 'File', ru: 'Файл' }, relationTo: 'media', required: true },
-        {
-          name: 'kind',
-          type: 'select',
-          defaultValue: 'photo',
-          label: { en: 'Kind', ru: 'Тип' },
-          options: [
-            { label: 'Фотография', value: 'photo' },
-            { label: 'Планировка', value: 'floor_plan' },
-          ],
-          required: true,
-        },
-        { name: 'isMain', type: 'checkbox', defaultValue: false, label: { en: 'Main image', ru: 'Главное изображение' } },
-      ],
-    },
-    {
-      name: 'activity',
-      type: 'join',
-      admin: { allowCreate: false, defaultColumns: ['label', 'details', 'triggeredBy', 'createdAt'] },
-      collection: 'admin-activities',
-      label: { en: 'Activity', ru: 'История изменений' },
-      on: 'property',
-    },
+  indexes: [
+    { fields: ['feedSource', 'externalId'], unique: true },
+    { fields: ['market', 'status', 'isPublished', 'priceMinorUnits'] },
+    { fields: ['complex', 'building', 'status'] },
   ],
-  hooks: {
-    afterChange: [recordPropertyActivity],
-    beforeChange: [protectPropertyMutation],
-  },
+  fields: [
+    { name: 'feedSource', type: 'relationship', relationTo: 'feed-sources', index: true, access: sourceManagedAccess },
+    { name: 'externalId', type: 'text', index: true, access: sourceManagedAccess },
+    { name: 'origin', type: 'select', defaultValue: 'manual', required: true, index: true, options: ['manual', 'feed'], access: sourceManagedAccess },
+    { name: 'importHash', type: 'text', access: sourceManagedAccess },
+    { name: 'firstSeenAt', type: 'date', index: true, access: sourceManagedAccess },
+    { name: 'lastSeenAt', type: 'date', index: true, access: sourceManagedAccess },
+    { name: 'lastImportRun', type: 'relationship', relationTo: 'import-runs', access: sourceManagedAccess },
+    { name: 'manualFields', type: 'json', defaultValue: [], admin: { readOnly: true }, access: sourceManagedAccess },
+    { name: 'needsReview', type: 'checkbox', defaultValue: false, index: true },
+    { name: 'duplicateOf', type: 'relationship', relationTo: 'properties' },
+    { name: 'duplicateCandidates', type: 'relationship', relationTo: 'properties', hasMany: true },
+
+    { name: 'status', type: 'select', defaultValue: 'active', required: true, index: true, options: ['active', 'reserved', 'sold', 'removed'] },
+    { name: 'isPublished', type: 'checkbox', defaultValue: false, index: true },
+    { name: 'publishedAt', type: 'date', index: true },
+    { name: 'slug', type: 'text', required: true, unique: true, index: true },
+    { name: 'isFeatured', type: 'checkbox', defaultValue: false, index: true },
+
+    { name: 'market', type: 'select', required: true, index: true, options: ['secondary', 'newbuild'] },
+    { name: 'dealType', type: 'select', defaultValue: 'sale', required: true, index: true, options: ['sale', 'rent'] },
+    { name: 'category', type: 'select', required: true, index: true, options: ['apartment', 'house', 'townhouse', 'land', 'commercial', 'parking'] },
+    { name: 'dealStatus', type: 'select', index: true, options: ['available', 'reserved', 'sold'] },
+    { name: 'isApartments', type: 'checkbox', defaultValue: false, index: true },
+
+    { name: 'priceMinorUnits', type: 'number', required: true, min: 0, index: true },
+    { name: 'currency', type: 'select', defaultValue: 'RUB', required: true, options: ['RUB'] },
+    { name: 'pricePerMeterMinorUnits', type: 'number', min: 0, index: true },
+    { name: 'isPriceNegotiable', type: 'checkbox', defaultValue: false },
+    { name: 'mortgageAvailable', type: 'checkbox', defaultValue: false },
+
+    { name: 'totalAreaCm2', type: 'number', required: true, min: 1, index: true },
+    { name: 'livingAreaCm2', type: 'number', min: 0 },
+    { name: 'kitchenAreaCm2', type: 'number', min: 0 },
+    { name: 'rooms', type: 'number', min: 0, index: true },
+    { name: 'floor', type: 'number', min: 0, index: true },
+    { name: 'floorsTotal', type: 'number', min: 0 },
+    { name: 'ceilingHeightCm', type: 'number', min: 0 },
+    { name: 'layoutImage', type: 'relationship', relationTo: 'media' },
+
+    { name: 'complex', type: 'relationship', relationTo: 'residential-complexes', index: true },
+    { name: 'building', type: 'relationship', relationTo: 'buildings', index: true },
+    { name: 'buildingType', type: 'text', index: true },
+    { name: 'builtYear', type: 'number', min: 1700, index: true },
+    { name: 'readyQuarter', type: 'text' },
+    { name: 'buildingState', type: 'text', index: true },
+    { name: 'developerName', type: 'text', index: true },
+
+    { name: 'region', type: 'text', index: true },
+    { name: 'district', type: 'text', index: true },
+    { name: 'localityName', type: 'text', index: true },
+    { name: 'subLocalityName', type: 'text' },
+    { name: 'street', type: 'text' },
+    { name: 'houseNumber', type: 'text' },
+    { name: 'addressPublic', type: 'text', index: true },
+    { name: 'latitude', type: 'number', min: -90, max: 90 },
+    { name: 'longitude', type: 'number', min: -180, max: 180 },
+    { name: 'geoPrecision', type: 'select', options: ['exact', 'house', 'street', 'locality', 'unknown'] },
+
+    { name: 'apartmentNumber', type: 'text', access: privateAccess },
+    { name: 'cadastralNumber', type: 'text', access: privateAccess },
+    { name: 'internalComment', type: 'textarea', access: privateAccess },
+    { name: 'ownerContact', type: 'text', access: privateAccess },
+
+    { name: 'title', type: 'text', required: true },
+    { name: 'description', type: 'textarea' },
+    {
+      name: 'photos', type: 'array', fields: [
+        { name: 'media', type: 'relationship', relationTo: 'media' },
+        { name: 'externalUrl', type: 'text' },
+        { name: 'alt', type: 'text' },
+        { name: 'isMain', type: 'checkbox', defaultValue: false },
+      ],
+    },
+    { name: 'videoUrl', type: 'text', validate: validateSafeVideoURL },
+    { name: 'agent', type: 'relationship', relationTo: 'agents', index: true },
+    { name: 'seo', type: 'group', fields: [{ name: 'title', type: 'text' }, { name: 'description', type: 'textarea', maxLength: 160 }, { name: 'canonical', type: 'text' }, { name: 'noindex', type: 'checkbox', defaultValue: false }] },
+  ],
+  hooks: { beforeChange: [trackManualFields], beforeValidate: [formatPageSlug] },
+  trash: true,
 } satisfies CollectionConfig

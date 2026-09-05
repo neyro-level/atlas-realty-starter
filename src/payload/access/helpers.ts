@@ -1,19 +1,8 @@
 import type { Where } from 'payload'
 
-import {
-  canManageContacts,
-  canUseAdminPanel,
-  hasAdminCapability,
-  hasRole,
-  isKnownRole,
-  isSuperAdmin,
-  manualOriginWhere,
-  publicPublishedWhere,
-  type AppUser,
-  type UserRole,
-} from './capabilities'
+import { canUseAdminPanel, hasRole, isKnownRole, isSuperAdmin, type AppUser, type UserRole } from './capabilities'
 
-export { canManageContacts, canUseAdminPanel, hasAdminCapability, hasRole, isKnownRole, isSuperAdmin }
+export { canUseAdminPanel, hasRole, isKnownRole, isSuperAdmin }
 export type { AppUser, UserRole }
 
 export const DEFAULT_USER_ROLE: UserRole = 'editor'
@@ -26,55 +15,14 @@ export function canManageContent(user: AppUser) {
   return hasRole(user, ['owner', 'editor'])
 }
 
-export function canManageSettings(user: AppUser) {
-  return canManageContacts(user)
-}
-
 export function canDeleteContent(user: AppUser) {
   return hasRole(user, ['owner'])
 }
 
 export function publicPageWhere(): Where {
-  return {
-    _status: {
-      equals: 'published',
-    },
-  }
+  return { _status: { equals: 'published' } }
 }
 
 export function publicMediaWhere(): Where {
-  return publicPublishedWhere('isPublic')
-}
-
-export function publicDocumentWhere(): Where {
-  return publicPublishedWhere('isPublished')
-}
-
-export function publicEmployeeWhere(): Where {
-  return {
-    and: [
-      {
-        isPublic: {
-          equals: true,
-        },
-      },
-      {
-        status: {
-          equals: 'active',
-        },
-      },
-    ],
-  }
-}
-
-export function publicReviewWhere(): Where {
-  return {
-    status: {
-      equals: 'published',
-    },
-  }
-}
-
-export function manualOnlyWhere(): Where {
-  return manualOriginWhere()
+  return { isPublic: { equals: true } }
 }

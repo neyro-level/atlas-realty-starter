@@ -17,3 +17,7 @@ Report vulnerabilities privately to the repository owner. Do not put secrets, cr
 Exact CORS/CSRF origins come from NEXT_PUBLIC_SITE_URL. Auth cookies are HttpOnly by Payload, SameSite=Lax and Secure in staging/production. Login attempts are limited and locked. CSP is enforced. Nginx rate limits login and, when enabled, lead intake.
 
 Required protected-runtime secrets are DATABASE_URL, PAYLOAD_SECRET, NEXT_PUBLIC_SITE_URL and REVALIDATE_SECRET. Optional module secrets are required only when that module is active.
+
+## Dependency advisory
+
+Payload 3.88.0 is reported by GHSA-jg8r-5jh2-v2xj for permissive default account-unlock access. This project does not use that default: `users.access.unlock` is owner-only and the security guard blocks removal of that rule. As of 2026-09-05 the Payload stable tag remains 3.88.0 and the upstream fixed build is internal-only, so a prerelease upgrade is not accepted into the baseline. Recheck the advisory before Stage 5.

@@ -9,24 +9,21 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 
 import { applyLeadRetentionTask } from './core/data-access/system/jobs/apply-lead-retention'
-import { importNormalizedUnitsTask } from './core/data-access/system/jobs/import-normalized-units'
-import { AdminActivities } from './payload/collections/AdminActivities'
-import { AnalyticsEvents } from './payload/collections/AnalyticsEvents'
-import { AntiSpamEvents } from './payload/collections/AntiSpamEvents'
+import { importFeedTask } from './core/data-access/ingest/import-feed-task'
+import { Agents } from './payload/collections/Agents'
 import { Buildings } from './payload/collections/Buildings'
-import { Employees } from './payload/collections/Employees'
-import { ImportErrors } from './payload/collections/ImportErrors'
+import { Developers } from './payload/collections/Developers'
+import { FeedSources } from './payload/collections/FeedSources'
+import { ImportIssues } from './payload/collections/ImportIssues'
 import { ImportRuns } from './payload/collections/ImportRuns'
-import { ImportSources } from './payload/collections/ImportSources'
-import { LeadNotes } from './payload/collections/LeadNotes'
+import { LeadDeliveries } from './payload/collections/LeadDeliveries'
 import { Leads } from './payload/collections/Leads'
 import { Media } from './payload/collections/Media'
-import { Offices } from './payload/collections/Offices'
 import { Pages } from './payload/collections/Pages'
+import { Posts } from './payload/collections/Posts'
 import { Properties } from './payload/collections/Properties'
+import { Redirects } from './payload/collections/Redirects'
 import { ResidentialComplexes } from './payload/collections/ResidentialComplexes'
-import { Reviews } from './payload/collections/Reviews'
-import { Units } from './payload/collections/Units'
 import { Users } from './payload/collections/Users'
 import { SiteSettings } from './payload/globals/SiteSettings'
 import { projectConfig } from './project/config'
@@ -49,21 +46,18 @@ export default buildConfig({
     Users,
     Media,
     Pages,
+    Posts,
+    Redirects,
     Leads,
-    LeadNotes,
+    LeadDeliveries,
     Properties,
     ResidentialComplexes,
     Buildings,
-    Units,
-    Employees,
-    Reviews,
-    Offices,
-    AnalyticsEvents,
-    AntiSpamEvents,
-    ImportSources,
+    Developers,
+    Agents,
+    FeedSources,
     ImportRuns,
-    ImportErrors,
-    AdminActivities,
+    ImportIssues,
   ],
   cors: [allowedOrigin],
   csrf: [allowedOrigin],
@@ -88,7 +82,7 @@ export default buildConfig({
   jobs: {
     access: { run: () => false },
     enableConcurrencyControl: true,
-    tasks: [applyLeadRetentionTask, importNormalizedUnitsTask],
+    tasks: [applyLeadRetentionTask, importFeedTask],
   },
   localization: false,
   maxDepth: 3,
