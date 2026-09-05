@@ -42,11 +42,14 @@ describe('Stage 5 operations contract', () => {
 
   it('uses one private worker for all queues and schedules', () => {
     const worker = read('deploy/ams-realty-platform-starter-worker.service')
+    const recovery = read('scripts/recover-orphaned-payload-jobs.mts')
     expect(worker).toContain('--all-queues --handle-schedules')
     expect(worker).toContain('current/node_modules/.bin/payload jobs:run')
     expect(worker).toContain('current/node_modules/.bin/tsx scripts/recover-orphaned-payload-jobs.mts')
     expect(worker).toContain('NODE_OPTIONS=--conditions=react-server')
     expect(worker).toContain('ProtectSystem=full')
+    expect(recovery).toContain('await payload.destroy()')
+    expect(recovery).toContain('process.exit(0)')
   })
 
   it('keeps system outbox updates outside interactive document locks', () => {
