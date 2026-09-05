@@ -11,6 +11,8 @@ describe('Stage 5 operations contract', () => {
     const pack = read('scripts/build-release-artifact.mjs')
     expect(pack).toContain(".next', 'standalone")
     expect(pack).toContain('clean exact origin/main')
+    expect(pack).toContain("['diff', '--quiet', 'HEAD', '--']")
+    expect(pack).toContain("['ls-files', '--others', '--exclude-standard']")
     expect(pack).toContain('buildBeforeDeploy: true')
   })
 
