@@ -88,7 +88,7 @@ export async function* parseYrl(stream: AsyncIterable<Uint8Array>, context: Feed
         else current[key] = clean
       }
     }
-    if (node.name === 'offer' && current) { completed.push(current); current = null }
+    if (node.name === 'offer' && current) { context.onRecordSeen?.(); completed.push(current); current = null }
     path.pop()
     text = ''
   })

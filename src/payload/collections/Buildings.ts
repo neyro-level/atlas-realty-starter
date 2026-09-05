@@ -1,6 +1,9 @@
 import type { CollectionConfig } from 'payload'
 
-import { adminWrite, ownerOnly, publicOrAdmin } from '../access/standard'
+import { adminWrite, ownerFieldOnly, ownerOnly, publicOrAdmin } from '../access/standard'
+import { trackSharedEntityManualFields } from '../hooks/trackSharedEntityManualFields'
+
+const importManagedFields = ['name', 'address', 'latitude', 'longitude', 'floors', 'readiness', 'handoverAt'] as const
 
 export const Buildings = {
   slug: 'buildings',
@@ -12,6 +15,7 @@ export const Buildings = {
     { name: 'complex', type: 'relationship', relationTo: 'residential-complexes', required: true, index: true },
     { name: 'name', type: 'text', required: true },
     { name: 'yandexHouseId', type: 'text', required: true, index: true },
+    { name: 'importOwnership', type: 'json', defaultValue: { fields: {}, manualFields: [] }, admin: { description: 'Системное владение импортируемыми полями. Очищать manualFields может только владелец осознанно.' }, access: { create: ownerFieldOnly, update: ownerFieldOnly } },
     { name: 'section', type: 'text' },
     { name: 'phase', type: 'text' },
     { name: 'address', type: 'text' },
@@ -22,5 +26,6 @@ export const Buildings = {
     { name: 'handoverAt', type: 'date' },
     { name: 'isPublished', type: 'checkbox', defaultValue: false, index: true },
   ],
+  hooks: { beforeChange: [trackSharedEntityManualFields(importManagedFields)] },
   trash: true,
 } satisfies CollectionConfig

@@ -11,6 +11,24 @@ import { deactivateMissingProperties, upsertPropertyBatch } from './property-imp
 
 type Client = { query<T extends Record<string, unknown> = Record<string, unknown>>(sql: string, values?: unknown[]): Promise<{ rows: T[] }>; release(): void }
 type Source = { code: string; feed_url_ref: string; is_enabled: boolean; last_offer_count: number | null; market: 'secondary' | 'newbuild'; max_offers_limit: number; min_offers_threshold_percent: number; parser: string }
+type ImportIssue = { code: string; message: string }
+const MAX_STORED_ISSUES = 1000
+
+export function createIssueCollector(limit = MAX_STORED_ISSUES) {
+  const samples: ImportIssue[] = []
+  let total = 0
+  let critical = 0
+  return {
+    add(issue: ImportIssue) {
+      total++
+      if (isCriticalIssue(issue.code)) critical++
+      if (samples.length < limit) samples.push(issue)
+    },
+    get criticalCount() { return critical },
+    get samples() { return samples },
+    get totalCount() { return total },
+  }
+}
 export type FeedImportDependencies = {
   externalImageHosts: readonly string[]
   feedOutboundHosts: readonly string[]
@@ -34,12 +52,12 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
 
   const startedAt = new Date().toISOString()
   const formats = new Set<AddressFormat>()
-  const issues: Array<{ code: string; message: string }> = []
+  const issues = createIssueCollector()
   const totals = { created: 0, unchanged: 0, updated: 0, total: 0 }
   const feedURL = dependencies.resolveRuntimeReference(source.feed_url_ref)
   if (!feedURL) {
-    issues.push({ code: 'feed-reference-missing', message: 'Feed URL reference is not configured' })
-    await finishRun(payload, runId, totals, issues, 'failed', false, formats, startedAt)
+    issues.add({ code: 'feed-reference-missing', message: 'Feed URL reference is not configured' })
+    await finishRun(payload, runId, totals, issues.samples, issues.totalCount, 'failed', false, formats, startedAt)
     throw new Error(`Feed URL reference is not configured: ${source.feed_url_ref}`)
   }
   const abort = input.signal ?? new AbortController().signal
@@ -47,21 +65,30 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
   try {
     response = await safeHTTPSStream(feedURL, { allowHosts: dependencies.feedOutboundHosts, maxBytes: 256 * 1024 * 1024, signal: abort, timeoutMs: 60_000 })
   } catch (error) {
-    issues.push({ code: 'fetch-failed', message: 'Feed download was rejected or failed' })
-    await finishRun(payload, runId, totals, issues, 'failed', false, formats, startedAt)
+    issues.add({ code: 'fetch-failed', message: 'Feed download was rejected or failed' })
+    await finishRun(payload, runId, totals, issues.samples, issues.totalCount, 'failed', false, formats, startedAt)
     throw error
   }
   const parser = dependencies.getFeedParser(source.parser)
   let batch: NormalizedOffer[] = []
   let streamCompleted = false
+  let recordsSeen = 0
   try {
-    for await (const parsedOffer of parser.parse(response.body, { maxBytes: 256 * 1024 * 1024, maxOfferBytes: 2 * 1024 * 1024, onIssue: (issue) => issues.push(issue), signal: abort })) {
+    for await (const parsedOffer of parser.parse(response.body, {
+      maxBytes: 256 * 1024 * 1024,
+      maxOfferBytes: 2 * 1024 * 1024,
+      onIssue: (issue) => issues.add(issue),
+      onRecordSeen: () => {
+        recordsSeen++
+        if (recordsSeen > source.max_offers_limit) throw new Error('Feed exceeds configured offer limit')
+      },
+      signal: abort,
+    })) {
       const rejectedPhotoCount = parsedOffer.photos.filter((url) => !isAllowedExternalImageURL(url, dependencies.externalImageHosts)).length
-      if (rejectedPhotoCount) issues.push({ code: 'image-host-denied', message: `${rejectedPhotoCount} external image URL(s) were rejected` })
+      if (rejectedPhotoCount) issues.add({ code: 'image-host-denied', message: `${rejectedPhotoCount} external image URL(s) were rejected` })
       const offer = { ...parsedOffer, photos: parsedOffer.photos.filter((url) => isAllowedExternalImageURL(url, dependencies.externalImageHosts)) }
       formats.add(offer.address.format)
       totals.total++
-      if (totals.total > source.max_offers_limit) throw new Error('Feed exceeds configured offer limit')
       batch.push(offer)
       if (batch.length === 500) {
         const result = await upsertPropertyBatch(payload, { allowedImageHosts: dependencies.externalImageHosts, feedSourceId: input.sourceId, importRunId: runId, offers: batch, seenAt: startedAt })
@@ -74,15 +101,16 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
     }
     streamCompleted = true
   } catch (error) {
-    issues.push({ code: 'stream-failed', message: 'Feed stream did not complete' })
-    await finishRun(payload, runId, totals, issues, 'failed', false, formats, startedAt)
+    issues.add({ code: 'stream-failed', message: 'Feed stream did not complete' })
+    await finishRun(payload, runId, totals, issues.samples, issues.totalCount, 'failed', false, formats, startedAt)
     throw error
   }
 
-  const safety = evaluateDeactivation({ enabled: source.is_enabled, lastOfferCount: source.last_offer_count == null ? null : Number(source.last_offer_count), maxOffersLimit: Number(source.max_offers_limit), minOffersThresholdPercent: Number(source.min_offers_threshold_percent), offerCount: totals.total, streamCompleted, criticalIssueCount: issues.filter((issue) => isCriticalIssue(issue.code)).length, addressFormats: formats })
+  const safety = evaluateDeactivation({ enabled: source.is_enabled, lastOfferCount: source.last_offer_count == null ? null : Number(source.last_offer_count), maxOffersLimit: Number(source.max_offers_limit), minOffersThresholdPercent: Number(source.min_offers_threshold_percent), offerCount: totals.total, streamCompleted, criticalIssueCount: issues.criticalCount, addressFormats: formats })
   const deactivated = input.mode === 'full_snapshot' && safety.allowed ? await deactivateMissingProperties(payload, { feedSourceId: input.sourceId, snapshotStartedAt: startedAt }) : 0
   const status: 'success' | 'suspicious' = safety.allowed ? 'success' : 'suspicious'
-  await finishRun(payload, runId, { ...totals, deactivated }, [...issues, ...safety.reasons.map((reason) => ({ code: reason, message: 'Safety condition prevented deactivation' }))], status, safety.allowed, formats, startedAt)
+  for (const reason of safety.reasons) issues.add({ code: reason, message: 'Safety condition prevented deactivation' })
+  await finishRun(payload, runId, { ...totals, deactivated }, issues.samples, issues.totalCount, status, safety.allowed, formats, startedAt)
   try {
     await dependencies.requestPublicRevalidation(['public:catalog', 'public:sitemap'])
   } catch {
@@ -91,12 +119,12 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
   return { ...totals, deactivated, runId, status }
 }
 
-async function finishRun(payload: Payload, runId: string, totals: { created: number; unchanged: number; updated: number; total: number; deactivated?: number }, issues: Array<{ code: string; message: string }>, status: 'failed' | 'success' | 'suspicious', deactivationAllowed: boolean, formats: Set<AddressFormat>, startedAt: string) {
+async function finishRun(payload: Payload, runId: string, totals: { created: number; unchanged: number; updated: number; total: number; deactivated?: number }, issues: ImportIssue[], issueCount: number, status: 'failed' | 'success' | 'suspicious', deactivationAllowed: boolean, formats: Set<AddressFormat>, startedAt: string) {
   const client = await (payload.db as unknown as PostgresAdapter).pool.connect() as unknown as Client
   try {
     await client.query('BEGIN')
-    for (const issue of issues.slice(0, 1000)) await client.query("INSERT INTO import_issues (run_id, severity, code, message, updated_at, created_at) VALUES ($1, $2, $3, $4, now(), now())", [runId, isCriticalIssue(issue.code) ? 'critical' : 'warning', issue.code, issue.message])
-    await client.query('UPDATE import_runs SET status=$2, finished_at=now(), total=$3, created=$4, updated=$5, unchanged=$6, failed=$7, deactivated=$8, duration_ms=extract(epoch from (now() - $9::timestamptz))*1000, summary=$10, stream_completed=$11, address_format=$12, deactivation_allowed=$13, updated_at=now() WHERE id=$1', [runId, status, totals.total, totals.created, totals.updated, totals.unchanged, issues.length, totals.deactivated ?? 0, startedAt, `${status}: ${totals.total} offers`, status !== 'failed', formats.size === 1 ? [...formats][0] : null, deactivationAllowed])
+    for (const issue of issues) await client.query("INSERT INTO import_issues (run_id, severity, code, message, updated_at, created_at) VALUES ($1, $2, $3, $4, now(), now())", [runId, isCriticalIssue(issue.code) ? 'critical' : 'warning', issue.code, issue.message])
+    await client.query('UPDATE import_runs SET status=$2, finished_at=now(), total=$3, created=$4, updated=$5, unchanged=$6, failed=$7, deactivated=$8, duration_ms=extract(epoch from (now() - $9::timestamptz))*1000, summary=$10, stream_completed=$11, address_format=$12, deactivation_allowed=$13, updated_at=now() WHERE id=$1', [runId, status, totals.total, totals.created, totals.updated, totals.unchanged, issueCount, totals.deactivated ?? 0, startedAt, `${status}: ${totals.total} offers; ${issueCount} issues`, status !== 'failed', formats.size === 1 ? [...formats][0] : null, deactivationAllowed])
     if (status === 'success') await client.query('UPDATE feed_sources SET last_successful_run_at=now(), last_offer_count=$2, updated_at=now() WHERE id=(SELECT source_id FROM import_runs WHERE id=$1)', [runId, totals.total])
     await client.query('COMMIT')
   } catch (error) { await client.query('ROLLBACK'); throw error } finally { client.release() }

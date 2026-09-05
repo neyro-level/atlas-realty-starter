@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { adminRead, ownerOnly } from '../access/standard'
+import { validateFeedFieldOwnership } from '@/core/data-access/ingest/import-policy'
 
 export const FeedSources = {
   slug: 'feed-sources',
@@ -16,7 +17,7 @@ export const FeedSources = {
     { name: 'credentialRef', type: 'text', admin: { description: 'Имя переменной окружения; секрет в БД не хранится.' } },
     { name: 'isEnabled', type: 'checkbox', defaultValue: false, index: true },
     { name: 'priority', type: 'number', defaultValue: 100, min: 0, required: true },
-    { name: 'fieldOwnership', type: 'json', defaultValue: {} },
+    { name: 'fieldOwnership', type: 'json', defaultValue: {}, validate: validateFeedFieldOwnership, admin: { description: 'Явный владелец импортируемого поля: ключ вида complex.name или building.address, значение — code источника.' } },
     { name: 'minOffersThresholdPercent', type: 'number', defaultValue: 70, min: 0, max: 100, required: true },
     { name: 'maxOffersLimit', type: 'number', defaultValue: 50000, min: 1, required: true },
     { name: 'schedule', type: 'text' },

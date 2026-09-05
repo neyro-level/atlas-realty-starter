@@ -52,6 +52,15 @@ describe('Stage 5 operations contract', () => {
     expect(installer).toContain('node_modules/.bin/payload" migrate')
     expect(installer).toContain('src/payload/migrations-v2')
     expect(installer.indexOf('payload migrate')).toBeLessThan(installer.indexOf('current.next'))
+    expect(installer).toContain('Embedded release SHA does not match requested SHA')
+    expect(installer).toContain('Escaping release symlink')
+    expect(installer).toContain('.release-verified')
+    expect(installer).toContain('previous_verified_sha')
+    expect(installer).toContain('chown -R root:"${APP_USER}" "${release_dir}"')
+    expect(installer).toContain('find "${release_dir}" -type d -exec chmod 0750')
+    expect(installer).toContain('runuser -u "${APP_RELEASE_USER}"')
+    expect(installer).not.toContain('chown -R "${APP_USER}:${APP_USER}" "${release_dir}"')
+    expect(read('deploy/bootstrap-server.sh')).toContain('-mindepth 1 -xdev ! -type l -exec chown root:"${APP_USER}"')
   })
 
   it('uses one private worker for all queues and schedules', () => {
@@ -61,7 +70,8 @@ describe('Stage 5 operations contract', () => {
     expect(worker).toContain('current/node_modules/.bin/payload jobs:run')
     expect(worker).toContain('current/node_modules/.bin/tsx scripts/recover-orphaned-payload-jobs.mts')
     expect(worker).toContain('NODE_OPTIONS=--conditions=react-server')
-    expect(worker).toContain('ProtectSystem=full')
+    expect(worker).toContain('ProtectSystem=strict')
+    expect(worker).toContain('ReadWritePaths=/opt/ams-realty-platform-starter/shared')
     expect(recovery).toContain('await payload.destroy()')
     expect(recovery).toContain('process.exit(0)')
   })
@@ -78,11 +88,12 @@ describe('Stage 5 operations contract', () => {
     expect(packageJSON.devDependencies.tsx).toBeUndefined()
   })
 
-  it('enforces TLS and separate login and lead limits', () => {
+  it('enforces TLS and separate login, lead and public-read limits', () => {
     const nginx = read('deploy/nginx-internal.conf')
     expect(nginx).toContain('listen 127.0.0.1:8443 ssl')
     expect(nginx).toContain('zone=payload_login')
     expect(nginx).toContain('zone=public_leads')
+    expect(nginx).toContain('zone=public_reads')
     expect(nginx).toContain('location ^~ /api/public/v1/')
     expect(nginx).toMatch(/location \^~ \/api\/ \{\s+return 403;/)
   })

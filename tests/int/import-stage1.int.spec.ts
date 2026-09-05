@@ -72,4 +72,31 @@ describe('Stage 1 database import', () => {
     expect((await payload.count({ collection: 'residential-complexes', overrideAccess: true })).totalDocs).toBe(1)
     expect((await payload.count({ collection: 'buildings', overrideAccess: true })).totalDocs).toBe(1)
   })
+
+  it('preserves shared newbuild entities by manual and source priority rules', async () => {
+    const payload = await getTestPayload()
+    const { superAdmin } = await seedPrivilegedUsers()
+    const primary = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'primary', title: 'Primary', market: 'newbuild', parser: 'yrl-newbuild', feedUrlRef: 'PRIMARY_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const secondary = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'secondary', title: 'Secondary', market: 'newbuild', parser: 'yrl-newbuild', feedUrlRef: 'SECONDARY_URL', isEnabled: true, priority: 20, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const primaryRun = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'primary-run', source: primary.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
+    const secondaryRun = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'secondary-run', source: secondary.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
+    const base: NormalizedOffer = { ...offer('Primary property'), externalId: 'primary-property', market: 'newbuild', newbuild: { yandexBuildingId: 'shared-complex', yandexHouseId: 'shared-house', complexName: 'Primary complex', buildingName: 'Primary building', readiness: 'construction' } }
+    const competing: NormalizedOffer = { ...base, externalId: 'secondary-property', title: 'Secondary property', newbuild: { ...base.newbuild!, complexName: 'Secondary complex', buildingName: 'Secondary building' } }
+
+    await upsertPropertyBatch(payload, { feedSourceId: primary.id, importRunId: primaryRun.id, offers: [base], seenAt: new Date().toISOString() })
+    await upsertPropertyBatch(payload, { feedSourceId: secondary.id, importRunId: secondaryRun.id, offers: [competing], seenAt: new Date().toISOString() })
+    const complexes = await payload.find({ collection: 'residential-complexes', overrideAccess: true, limit: 10 })
+    const buildings = await payload.find({ collection: 'buildings', overrideAccess: true, limit: 10 })
+    expect(complexes).toMatchObject({ totalDocs: 1 })
+    expect(buildings).toMatchObject({ totalDocs: 1 })
+    expect(complexes.docs[0]?.name).toBe('Primary complex')
+    expect(buildings.docs[0]?.name).toBe('Primary building')
+
+    const manualCreated = await payload.create({ collection: 'residential-complexes', overrideAccess: false, user: superAdmin, data: { name: 'Manual created', slug: 'manual-created', status: 'draft' } })
+    expect(manualCreated.importOwnership).toMatchObject({ manualFields: expect.arrayContaining(['name']) })
+
+    await payload.update({ collection: 'residential-complexes', id: complexes.docs[0]!.id, overrideAccess: false, user: superAdmin, data: { name: 'Manual complex' } })
+    await upsertPropertyBatch(payload, { feedSourceId: primary.id, importRunId: primaryRun.id, offers: [{ ...base, newbuild: { ...base.newbuild!, complexName: 'Changed primary complex' } }], seenAt: new Date().toISOString() })
+    expect((await payload.findByID({ collection: 'residential-complexes', id: complexes.docs[0]!.id, overrideAccess: true })).name).toBe('Manual complex')
+  })
 })

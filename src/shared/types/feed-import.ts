@@ -56,6 +56,7 @@ export type FeedRunMode = 'delta' | 'full_snapshot'
 export type FeedParserContext = {
   maxBytes: number
   maxOfferBytes: number
+  onRecordSeen?: () => void
   onIssue?: (issue: { code: string; message: string }) => void
   signal: AbortSignal
 }
