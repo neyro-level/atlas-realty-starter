@@ -23,7 +23,7 @@ export async function recoverLeadDeliveries(payload: Payload, req?: PayloadReque
       await payload.update({
         collection: 'lead-deliveries', context: systemContext('lead-recovery'),
         data: { lastError: 'processing_timeout', lockedAt: null, status: 'failed' }, depth: 0,
-        id: delivery.id, overrideAccess: true, overrideLock: false, req,
+        id: delivery.id, overrideAccess: true, overrideLock: true, req,
       })
     }
     await payload.jobs.queue({
