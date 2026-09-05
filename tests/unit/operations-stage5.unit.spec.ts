@@ -18,8 +18,11 @@ describe('Stage 5 operations contract', () => {
     expect(pack).toContain('buildBeforeDeploy: true')
     expect(read('scripts/prepare-standalone.mjs')).toContain("'.env.production.local'")
     const ci = read('.sourcecraft/ci.yaml')
-    expect(ci).toContain('.release-artifacts/release.tar.gz')
+    expect(ci).toContain('.release-artifacts/release.part00')
+    expect(ci).toContain('.release-artifacts/release.part09')
     expect(ci).toContain('.release-artifacts/release.json')
+    expect(pack).toContain('const partBytes = 40 * 1024 * 1024')
+    expect(pack).toContain('sha256: createHash')
   })
 
   it('installs without dependencies or a server-side build', () => {
