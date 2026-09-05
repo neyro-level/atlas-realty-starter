@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { adminWrite, ownerOnly, publicOrAdmin } from '../access/standard'
 import { formatPageSlug } from '../hooks/formatPageSlug'
+import { collectionCacheHooks } from '@/core/cache/public-cache'
 
 export const Posts = {
   slug: 'posts',
@@ -15,8 +16,7 @@ export const Posts = {
     { name: 'content', type: 'richText' },
     { name: 'cover', type: 'relationship', relationTo: 'media' },
     { name: 'publishedAt', type: 'date', index: true },
-    { name: 'seo', type: 'group', fields: [{ name: 'title', type: 'text' }, { name: 'description', type: 'textarea', maxLength: 160 }] },
   ],
-  hooks: { beforeValidate: [formatPageSlug] },
+  hooks: { ...collectionCacheHooks(['public:content', 'public:sitemap']), beforeValidate: [formatPageSlug] },
   versions: { drafts: true, maxPerDoc: 20 },
 } satisfies CollectionConfig

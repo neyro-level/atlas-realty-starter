@@ -16,7 +16,7 @@ describe('foundation security contracts', () => {
   it('denies raw anonymous business reads and allows only trusted public scope', () => {
     expect(canReadProperties({ req: { context: {}, user: null } } as never)).toBe(false)
     expect(canReadProperties({ req: { context: createPublicGatewayContext(), user: null } } as never)).toEqual({
-      and: [{ isPublished: { equals: true } }, { status: { equals: 'active' } }],
+      and: [{ isPublished: { equals: true } }, { status: { in: ['active', 'reserved', 'sold'] } }],
     })
   })
 

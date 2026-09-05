@@ -22,10 +22,10 @@ import { Media } from './payload/collections/Media'
 import { Pages } from './payload/collections/Pages'
 import { Posts } from './payload/collections/Posts'
 import { Properties } from './payload/collections/Properties'
-import { Redirects } from './payload/collections/Redirects'
 import { ResidentialComplexes } from './payload/collections/ResidentialComplexes'
 import { Users } from './payload/collections/Users'
 import { SiteSettings } from './payload/globals/SiteSettings'
+import { publicRedirectsPlugin, publicSEOPlugin } from './payload/plugins/public-seo'
 import { projectConfig } from './project/config'
 import { runtimeConfig } from './project/env'
 
@@ -47,7 +47,6 @@ export default buildConfig({
     Media,
     Pages,
     Posts,
-    Redirects,
     Leads,
     LeadDeliveries,
     Properties,
@@ -87,6 +86,8 @@ export default buildConfig({
   localization: false,
   maxDepth: 3,
   plugins: [
+    publicSEOPlugin,
+    publicRedirectsPlugin,
     s3Storage({
       alwaysInsertFields: true,
       bucket: runtimeConfig.s3?.bucket ?? 'local-disabled',

@@ -11,6 +11,12 @@ export type SafeHTTPOptions = {
   timeoutMs?: number
 }
 
+export type SafeHTTPSRequestOptions = SafeHTTPOptions & {
+  body?: Buffer | string
+  headers?: Readonly<Record<string, string>>
+  method?: 'GET' | 'POST'
+}
+
 export type SafeHTTPResponse = {
   body: Buffer
   headers: Readonly<Record<string, string | string[] | undefined>>
@@ -29,6 +35,11 @@ const DEFAULT_MAX_BYTES = 5 * 1024 * 1024
 const DEFAULT_TIMEOUT_MS = 15_000
 
 export async function safeHTTPSGet(url: string | URL, options: SafeHTTPOptions): Promise<SafeHTTPResponse> {
+  const allowHosts = new Set(options.allowHosts.map((host) => host.trim().toLowerCase()))
+  return requestURL(new URL(url), { ...options, method: 'GET' }, allowHosts, 0)
+}
+
+export async function safeHTTPSRequest(url: string | URL, options: SafeHTTPSRequestOptions): Promise<SafeHTTPResponse> {
   const allowHosts = new Set(options.allowHosts.map((host) => host.trim().toLowerCase()))
   return requestURL(new URL(url), options, allowHosts, 0)
 }
@@ -76,7 +87,7 @@ async function requestStream(url: URL, options: SafeHTTPOptions, allowHosts: Rea
 
 async function requestURL(
   url: URL,
-  options: SafeHTTPOptions,
+  options: SafeHTTPSRequestOptions,
   allowHosts: ReadonlySet<string>,
   redirectCount: number,
 ): Promise<SafeHTTPResponse> {
@@ -95,8 +106,9 @@ async function requestURL(
 
   const response = await new Promise<SafeHTTPResponse>((resolve, reject) => {
     const req = request(url, {
-      headers: { accept: '*/*', host: url.host, 'user-agent': 'AMS-Realty-Platform/2.1' },
+      headers: { accept: '*/*', ...options.headers, host: url.host, 'user-agent': 'AMS-Realty-Platform/2.1' },
       lookup: (_hostname, _options, callback) => callback(null, pinned.address, pinned.family),
+      method: options.method ?? 'GET',
       servername: hostname,
       signal: options.signal,
     }, (res) => {
@@ -142,7 +154,7 @@ async function requestURL(
       req.destroy(new Error('Outbound request timed out'))
     })
     req.on('error', reject)
-    req.end()
+    req.end(options.body)
   })
 
   return response

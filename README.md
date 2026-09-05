@@ -2,6 +2,8 @@
 
 Headless starter engine based on Next.js, Payload CMS and PostgreSQL. It has no public UI: the root route and former client routes must return 404. Public product scenarios are exposed only through versioned DTO APIs under /api/public/v1.
 
+Available v1 reads: `/catalog`, `/properties/:slug`, `/complexes`, `/complexes/:slug`, `/agents/:slug`, `/pages/:slug`, `/posts/:slug`, `/facets`, `/config`, `/redirects?from=...` and `/sitemap`.
+
 ## Source of truth
 
 1. AGENTS.md

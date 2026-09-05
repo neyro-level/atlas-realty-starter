@@ -13,4 +13,7 @@ export function publicOrAdmin(where: Where): Access {
   return ({ req }) => (isPublicGatewayRequest(req) ? where : hasRole(req.user, ['owner', 'editor']))
 }
 
+export const publicGlobalOrAdmin: Access = ({ req }) =>
+  isPublicGatewayRequest(req) || hasRole(req.user, ['owner', 'editor'])
+
 export const systemManaged: Access = () => false

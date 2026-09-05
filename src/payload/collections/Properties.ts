@@ -3,6 +3,7 @@ import type { CollectionBeforeChangeHook, CollectionConfig } from 'payload'
 import { adminWrite, ownerFieldOnly, ownerOnly, publicOrAdmin } from '../access/standard'
 import { formatPageSlug } from '../hooks/formatPageSlug'
 import { validateSafeVideoURL } from '@/shared/security/media-url'
+import { collectionCacheHooks } from '@/core/cache/public-cache'
 
 const sourceManagedAccess = { create: ownerFieldOnly, update: ownerFieldOnly }
 const privateAccess = { create: ownerFieldOnly, read: ownerFieldOnly, update: ownerFieldOnly }
@@ -22,7 +23,7 @@ export const Properties = {
   access: {
     create: adminWrite,
     delete: ownerOnly,
-    read: publicOrAdmin({ and: [{ isPublished: { equals: true } }, { status: { equals: 'active' } }] }),
+    read: publicOrAdmin({ and: [{ isPublished: { equals: true } }, { status: { in: ['active', 'reserved', 'sold'] } }] }),
     update: adminWrite,
   },
   admin: {
@@ -112,8 +113,7 @@ export const Properties = {
     },
     { name: 'videoUrl', type: 'text', validate: validateSafeVideoURL },
     { name: 'agent', type: 'relationship', relationTo: 'agents', index: true },
-    { name: 'seo', type: 'group', fields: [{ name: 'title', type: 'text' }, { name: 'description', type: 'textarea', maxLength: 160 }, { name: 'canonical', type: 'text' }, { name: 'noindex', type: 'checkbox', defaultValue: false }] },
   ],
-  hooks: { beforeChange: [trackManualFields], beforeValidate: [formatPageSlug] },
+  hooks: { ...collectionCacheHooks(['public:catalog', 'public:sitemap']), beforeChange: [trackManualFields], beforeValidate: [formatPageSlug] },
   trash: true,
 } satisfies CollectionConfig
