@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto'
 import {
+  copyFileSync,
   cpSync,
   existsSync,
   mkdirSync,
@@ -78,7 +79,10 @@ rmSync(archivePath, { force: true })
 
 try {
   run(pnpm, ['--filter', '.', 'deploy', '--prod', '--legacy', bundleDir])
-  cpSync(standaloneRoot, bundleDir, { dereference: false, recursive: true })
+  copyFileSync(path.join(standaloneRoot, 'server.js'), path.join(bundleDir, 'server.js'))
+  cpSync(path.join(standaloneRoot, '.next'), path.join(bundleDir, '.next'), {
+    recursive: true,
+  })
 
   const staticRoot = path.join(projectRoot, '.next', 'static')
   if (existsSync(staticRoot)) {
