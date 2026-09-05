@@ -3,7 +3,8 @@ import { fileURLToPath } from 'node:url'
 
 import { describe, expect, it } from 'vitest'
 
-import { applyFieldOwnership, evaluateDeactivation } from '@/core/data-access/ingest/import-policy'
+import { applyFieldOwnership, evaluateDeactivation, mergeSharedEntityFields, validateFeedFieldOwnership } from '@/core/data-access/ingest/import-policy'
+import { createIssueCollector } from '@/core/data-access/ingest/run-feed-import'
 import { getFeedParser } from '@/project/ingest/registry'
 import type { NormalizedOffer } from '@/shared/types/feed-import'
 
@@ -52,5 +53,37 @@ describe('Stage 1 import contracts', () => {
     const result = applyFieldOwnership({ title: 'Manual title', priceMinorUnits: 200, manualFields: ['title'], sourcePriority: 10 }, incoming, 20, { priceMinorUnits: 'primary' }, 'secondary')
     expect(result.title).toBe('Manual title')
     expect(result.priceMinorUnits).toBe(200)
+  })
+
+  it('bounds issue samples while retaining exact totals', () => {
+    const collector = createIssueCollector(2)
+    collector.add({ code: 'invalid-offer', message: 'one' })
+    collector.add({ code: 'invalid-offer', message: 'two' })
+    collector.add({ code: 'image-host-denied', message: 'three' })
+    expect(collector.samples).toHaveLength(2)
+    expect(collector.totalCount).toBe(3)
+    expect(collector.criticalCount).toBe(2)
+  })
+
+  it('counts malformed offers before normalization', async () => {
+    let recordsSeen = 0
+    const issues: string[] = []
+    const xml = '<realty-feed><offer internal-id="bad"><name>Bad</name></offer></realty-feed>'
+    for await (const _record of getFeedParser('yrl-secondary').parse(chunks(xml), { ...context(), onIssue: (issue) => issues.push(issue.code), onRecordSeen: () => { recordsSeen++ } })) { /* no valid records */ }
+    expect(recordsSeen).toBe(1)
+    expect(issues).toEqual(['invalid-offer'])
+  })
+
+  it('applies shared-entity precedence and validates explicit owners', () => {
+    expect(validateFeedFieldOwnership({ 'complex.name': 'primary' })).toBe(true)
+    expect(validateFeedFieldOwnership({ 'unknown.field': 'primary' })).toMatch(/Неизвестное/)
+    const lowerPriority = mergeSharedEntityFields({ current: { address: '', name: 'Primary name' }, explicitOwners: {}, incoming: { address: 'Filled address', name: 'Secondary name' }, ownership: { fields: { name: { priority: 10, sourceCode: 'primary' } }, manualFields: [] }, prefix: 'complex', sourceCode: 'secondary', sourcePriority: 20 })
+    expect(lowerPriority.fields).toMatchObject({ address: 'Filled address', name: 'Primary name' })
+    const manual = mergeSharedEntityFields({ current: { name: 'Manual name' }, explicitOwners: { 'complex.name': 'primary' }, incoming: { name: 'Feed name' }, ownership: { fields: {}, manualFields: ['name'] }, prefix: 'complex', sourceCode: 'primary', sourcePriority: 1 })
+    expect(manual.fields.name).toBe('Manual name')
+    const reserved = mergeSharedEntityFields({ current: { name: '' }, explicitOwners: { 'complex.name': 'primary' }, incoming: { name: 'Secondary name' }, ownership: { fields: {}, manualFields: [] }, prefix: 'complex', sourceCode: 'secondary', sourcePriority: 1 })
+    expect(reserved.fields.name).toBe('')
+    const explicit = mergeSharedEntityFields({ current: { name: 'Secondary name' }, explicitOwners: { 'complex.name': 'primary' }, incoming: { name: 'Owner name' }, ownership: { fields: { name: { priority: 1, sourceCode: 'secondary' } }, manualFields: [] }, prefix: 'complex', sourceCode: 'primary', sourcePriority: 20 })
+    expect(explicit.fields.name).toBe('Owner name')
   })
 })

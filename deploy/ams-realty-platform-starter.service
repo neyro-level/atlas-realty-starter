@@ -15,6 +15,8 @@ EnvironmentFile=/etc/ams-realty-platform-starter/runtime.env
 EnvironmentFile=/etc/ams-realty-platform-starter/release.env
 Environment=HOSTNAME=127.0.0.1
 Environment=PORT=3010
+Environment=HOME=/opt/ams-realty-platform-starter/shared/home
+Environment=TMPDIR=/opt/ams-realty-platform-starter/shared/tmp
 ExecStart=/opt/ams-realty-platform-starter/runtime/bin/node server.js
 Restart=on-failure
 RestartSec=5
@@ -25,8 +27,8 @@ UMask=0027
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true
-ProtectSystem=full
-ReadWritePaths=/opt/ams-realty-platform-starter
+ProtectSystem=strict
+ReadWritePaths=/opt/ams-realty-platform-starter/shared
 
 [Install]
 WantedBy=multi-user.target

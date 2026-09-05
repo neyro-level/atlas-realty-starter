@@ -4,6 +4,7 @@ import * as migration_20260905_075723_standard_21_expand_backfill_contract from 
 import * as migration_20260905_082941_standard_21_import_job from './20260905_082941_standard_21_import_job';
 import * as migration_20260905_093617_standard_21_public_catalog from './20260905_093617_standard_21_public_catalog';
 import * as migration_20260905_103148_standard_21_leads_outbox from './20260905_103148_standard_21_leads_outbox';
+import * as migration_20260905_213045_security_shared_entity_ownership from './20260905_213045_security_shared_entity_ownership';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20260905_103148_standard_21_leads_outbox.up,
     down: migration_20260905_103148_standard_21_leads_outbox.down,
-    name: '20260905_103148_standard_21_leads_outbox'
+    name: '20260905_103148_standard_21_leads_outbox',
+  },
+  {
+    up: migration_20260905_213045_security_shared_entity_ownership.up,
+    down: migration_20260905_213045_security_shared_entity_ownership.down,
+    name: '20260905_213045_security_shared_entity_ownership'
   },
 ];

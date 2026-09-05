@@ -46,31 +46,31 @@ type RedirectView = Pick<Redirect, 'from' | 'id' | 'to' | 'type'>
 export type PublicQueryOptions = { siteURL: string }
 
 export function getPublicCatalog(payload: Payload, query: PublicCatalogQuery, options: PublicQueryOptions) {
-  return cacheFor(['catalog', options.siteURL, JSON.stringify(query)], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicCatalog(payload, query, options))
+  return queryPublicCatalog(payload, query, options)
 }
 
 export function getPublicPropertyBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
-  return cacheFor(['property', options.siteURL, slug], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicPropertyBySlug(payload, slug, options))
+  return queryPublicPropertyBySlug(payload, slug, options)
 }
 
 export function getPublicComplexes(payload: Payload, query: Pick<PublicCatalogQuery, 'district' | 'limit' | 'page' | 'q'>, options: PublicQueryOptions) {
-  return cacheFor(['complexes', options.siteURL, JSON.stringify(query)], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicComplexes(payload, query, options))
+  return queryPublicComplexes(payload, query, options)
 }
 
 export function getPublicComplexBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
-  return cacheFor(['complex', options.siteURL, slug], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicComplexBySlug(payload, slug, options))
+  return queryPublicComplexBySlug(payload, slug, options)
 }
 
 export function getPublicAgentBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
-  return cacheFor(['agent', options.siteURL, slug], [PUBLIC_CACHE_TAGS.agents], () => queryPublicAgentBySlug(payload, slug, options))
+  return queryPublicAgentBySlug(payload, slug, options)
 }
 
 export function getPublicPageBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
-  return cacheFor(['page', options.siteURL, slug], [PUBLIC_CACHE_TAGS.content], () => queryPublicPageBySlug(payload, slug, options))
+  return queryPublicPageBySlug(payload, slug, options)
 }
 
 export function getPublicPostBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
-  return cacheFor(['post', options.siteURL, slug], [PUBLIC_CACHE_TAGS.content], () => queryPublicPostBySlug(payload, slug, options))
+  return queryPublicPostBySlug(payload, slug, options)
 }
 
 export function getPublicConfig(payload: Payload): Promise<PublicConfig> {
@@ -96,7 +96,7 @@ export function getPublicFacets(payload: Payload) {
 }
 
 export function resolvePublicRedirect(payload: Payload, from: string) {
-  return cacheFor(['redirect', from], [PUBLIC_CACHE_TAGS.redirects], () => queryPublicRedirect(payload, from))
+  return queryPublicRedirect(payload, from)
 }
 
 async function queryPublicCatalog(payload: Payload, query: PublicCatalogQuery, options: PublicQueryOptions): Promise<PaginatedPublicResult<PublicProperty>> {

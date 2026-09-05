@@ -4,12 +4,16 @@ set -euo pipefail
 NODE_VERSION="24.20.0"
 PNPM_VERSION="11.24.0"
 APP_USER="ams-realty-platform-starter"
+APP_RELEASE_USER="ams-realty-platform-release"
 APP_ROOT="/opt/ams-realty-platform-starter"
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
 if [[ "${EUID}" -ne 0 ]]; then
   echo "Run as root." >&2
   exit 1
+fi
+if ! id -u "${APP_RELEASE_USER}" >/dev/null 2>&1; then
+  useradd --system --home-dir /nonexistent --no-create-home --shell /usr/sbin/nologin "${APP_RELEASE_USER}"
 fi
 
 export DEBIAN_FRONTEND=noninteractive
@@ -19,7 +23,7 @@ apt-get install -y --no-install-recommends ca-certificates curl nginx openssl xz
 if ! id -u "${APP_USER}" >/dev/null 2>&1; then
   useradd --system --home-dir "${APP_ROOT}" --create-home --shell /usr/sbin/nologin "${APP_USER}"
 fi
-install -d -o "${APP_USER}" -g "${APP_USER}" -m 0750 "${APP_ROOT}"
+install -d -o root -g root -m 0755 "${APP_ROOT}"
 
 node_archive="node-v${NODE_VERSION}-linux-x64.tar.xz"
 runtime_root="${APP_ROOT}/runtime"
@@ -45,7 +49,13 @@ PATH="${runtime_root}/bin:${node_root}/bin:/usr/local/bin:/usr/bin:/bin" \
   COREPACK_HOME="${runtime_root}/corepack" \
   "${node_root}/bin/corepack" prepare "pnpm@${PNPM_VERSION}" --activate
 
-install -d -o "${APP_USER}" -g "${APP_USER}" -m 0750 "${APP_ROOT}/releases" "${APP_ROOT}/shared"
+install -d -o root -g root -m 0755 "${APP_ROOT}/releases"
+find "${APP_ROOT}/releases" -mindepth 1 -xdev ! -type l -exec chown root:"${APP_USER}" {} +
+find "${APP_ROOT}/releases" -mindepth 1 -xdev -type l -exec chown -h root:"${APP_USER}" {} +
+find "${APP_ROOT}/releases" -mindepth 1 -type d -exec chmod 0750 {} +
+find "${APP_ROOT}/releases" -type f ! -perm /111 -exec chmod 0640 {} +
+find "${APP_ROOT}/releases" -type f -perm /111 -exec chmod 0750 {} +
+install -d -o "${APP_USER}" -g "${APP_USER}" -m 0750 "${APP_ROOT}/shared" "${APP_ROOT}/shared/cache" "${APP_ROOT}/shared/home" "${APP_ROOT}/shared/media" "${APP_ROOT}/shared/tmp"
 install -d -o root -g "${APP_USER}" -m 0750 /etc/ams-realty-platform-starter
 install -d -o root -g root -m 0755 /etc/ams-realty-platform-starter/tls
 

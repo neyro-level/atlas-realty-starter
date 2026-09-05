@@ -425,6 +425,9 @@ export interface FeedSource {
   credentialRef?: string | null;
   isEnabled?: boolean | null;
   priority: number;
+  /**
+   * Явный владелец импортируемого поля: ключ вида complex.name или building.address, значение — code источника.
+   */
   fieldOwnership?:
     | {
         [k: string]: unknown;
@@ -480,6 +483,18 @@ export interface ResidentialComplex {
   developer?: (string | null) | Developer;
   responsibleAgent?: (string | null) | Agent;
   yandexBuildingId?: string | null;
+  /**
+   * Системное владение импортируемыми полями. Очищать manualFields может только владелец осознанно.
+   */
+  importOwnership?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   region?: string | null;
   district?: string | null;
   address?: string | null;
@@ -571,6 +586,18 @@ export interface Building {
   complex: string | ResidentialComplex;
   name: string;
   yandexHouseId: string;
+  /**
+   * Системное владение импортируемыми полями. Очищать manualFields может только владелец осознанно.
+   */
+  importOwnership?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   section?: string | null;
   phase?: string | null;
   address?: string | null;
@@ -1118,6 +1145,7 @@ export interface ResidentialComplexesSelect<T extends boolean = true> {
   developer?: T;
   responsibleAgent?: T;
   yandexBuildingId?: T;
+  importOwnership?: T;
   region?: T;
   district?: T;
   address?: T;
@@ -1157,6 +1185,7 @@ export interface BuildingsSelect<T extends boolean = true> {
   complex?: T;
   name?: T;
   yandexHouseId?: T;
+  importOwnership?: T;
   section?: T;
   phase?: T;
   address?: T;

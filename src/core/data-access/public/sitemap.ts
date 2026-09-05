@@ -20,7 +20,7 @@ export function getSitemapIndex() {
 }
 
 export function getSitemapChunk(type: SitemapType, page: number) {
-  return unstable_cache(() => querySitemapChunk(type, page), ['sitemap', type, String(page)], { revalidate: 300, tags: [PUBLIC_CACHE_TAGS.sitemap] })()
+  return querySitemapChunk(type, page)
 }
 
 async function querySitemapIndex() {

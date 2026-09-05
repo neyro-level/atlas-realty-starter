@@ -2,6 +2,7 @@
 set -euo pipefail
 
 APP_USER="ams-realty-platform-starter"
+APP_RELEASE_USER="ams-realty-platform-release"
 APP_ROOT="/opt/ams-realty-platform-starter"
 ENV_FILE="/etc/ams-realty-platform-starter/runtime.env"
 ARCHIVE="${1:-}"
@@ -28,7 +29,7 @@ if [[ "${actual_sha256}" != "${EXPECTED_SHA256}" ]]; then
 fi
 
 release_dir="${APP_ROOT}/releases/${RELEASE_SHA}"
-if [[ -e "${release_dir}" ]]; then
+if [[ -e "${release_dir}" || -L "${release_dir}" ]]; then
   echo "Immutable release already exists: ${release_dir}" >&2
   exit 1
 fi
@@ -48,11 +49,49 @@ if [[ -L "${APP_ROOT}/current" ]]; then
   previous_release="$(readlink -f "${APP_ROOT}/current")"
 fi
 
-install -d -o "${APP_USER}" -g "${APP_USER}" -m 0750 "${release_dir}"
-tar -xzf "${ARCHIVE}" -C "${release_dir}"
+install -d -o "${APP_RELEASE_USER}" -g "${APP_RELEASE_USER}" -m 0750 "${release_dir}"
+if tar -tzf "${ARCHIVE}" | grep -Eq '(^|/)(\.\.|\.release-sha|\.release-sha256|\.release-verified)(/|$)|^/'; then
+  echo "Release archive contains a reserved or unsafe path." >&2
+  exit 1
+fi
+/usr/sbin/runuser -u "${APP_RELEASE_USER}" -- tar --no-same-owner --no-same-permissions -xzf "${ARCHIVE}" -C "${release_dir}"
+
+"${APP_ROOT}/runtime/bin/node" - "${release_dir}" "${RELEASE_SHA}" <<'NODE'
+const fs = require('node:fs')
+const path = require('node:path')
+const [root, expectedSha] = process.argv.slice(2)
+const rootWithSeparator = `${path.resolve(root)}${path.sep}`
+const manifestPath = path.join(root, '.release.json')
+const manifestStat = fs.lstatSync(manifestPath)
+if (!manifestStat.isFile() || manifestStat.isSymbolicLink()) throw new Error('Embedded release manifest must be a regular file')
+const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
+if (manifest.sha !== expectedSha) throw new Error('Embedded release SHA does not match requested SHA')
+function walk(directory) {
+  for (const entry of fs.readdirSync(directory)) {
+    const full = path.join(directory, entry)
+    const stat = fs.lstatSync(full)
+    if (stat.isSymbolicLink()) {
+      const resolved = path.resolve(path.dirname(full), fs.readlinkSync(full))
+      if (resolved !== path.resolve(root) && !resolved.startsWith(rootWithSeparator)) throw new Error(`Escaping release symlink: ${full}`)
+    } else if (stat.isDirectory()) walk(full)
+    else if (!stat.isFile()) throw new Error(`Unsupported release entry type: ${full}`)
+  }
+}
+walk(root)
+NODE
+
+rm -rf -- "${release_dir}/.next/cache" "${release_dir}/media"
+chown -R root:"${APP_USER}" "${release_dir}"
+find "${release_dir}" -type d -exec chmod 0750 {} +
+find "${release_dir}" -type f ! -perm /111 -exec chmod 0640 {} +
+find "${release_dir}" -type f -perm /111 -exec chmod 0750 {} +
+ln -s "${APP_ROOT}/shared/cache" "${release_dir}/.next/cache"
+ln -s "${APP_ROOT}/shared/media" "${release_dir}/media"
 printf '%s\n' "${RELEASE_SHA}" > "${release_dir}/.release-sha"
 printf '%s\n' "${EXPECTED_SHA256}" > "${release_dir}/.release-sha256"
-chown -R "${APP_USER}:${APP_USER}" "${release_dir}"
+printf '%s\n' "${RELEASE_SHA}" > "${release_dir}/.release-verified"
+chown root:"${APP_USER}" "${release_dir}/.release-sha" "${release_dir}/.release-sha256" "${release_dir}/.release-verified"
+chmod 0440 "${release_dir}/.release-sha" "${release_dir}/.release-sha256" "${release_dir}/.release-verified"
 
 set -a
 # shellcheck disable=SC1090
@@ -61,7 +100,8 @@ set +a
 export NODE_ENV=production
 export RELEASE_SHA="${RELEASE_SHA}"
 export NEXT_PUBLIC_RELEASE_SHA="${RELEASE_SHA}"
-export HOME="${APP_ROOT}"
+export HOME="${APP_ROOT}/shared/home"
+export TMPDIR="${APP_ROOT}/shared/tmp"
 export COREPACK_HOME="${APP_ROOT}/runtime/corepack"
 export PATH="${APP_ROOT}/runtime/bin:/usr/local/bin:/usr/bin:/bin"
 unset BASH_ENV ENV
@@ -98,8 +138,13 @@ for attempt in $(seq 1 30); do
   sleep 2
 done
 
-if [[ -n "${previous_release}" && -d "${previous_release}" ]]; then
+if [[ -n "${previous_release}" && "${previous_release}" == "${APP_ROOT}/releases/"* && -d "${previous_release}" && -f "${previous_release}/.release-sha" && ! -L "${previous_release}/.release-sha" && -f "${previous_release}/.release-verified" && ! -L "${previous_release}/.release-verified" ]]; then
   previous_sha="$(cat "${previous_release}/.release-sha")"
+  previous_verified_sha="$(cat "${previous_release}/.release-verified")"
+  if [[ ! "${previous_sha}" =~ ^[0-9a-f]{40}$ || "${previous_verified_sha}" != "${previous_sha}" ]]; then
+    echo "Previous release marker is invalid; rollback refused." >&2
+    exit 1
+  fi
   printf 'RELEASE_SHA=%s\n' "${previous_sha}" > /etc/ams-realty-platform-starter/release.env
   ln -sfn "${previous_release}" "${APP_ROOT}/current.next"
   mv -Tf "${APP_ROOT}/current.next" "${APP_ROOT}/current"

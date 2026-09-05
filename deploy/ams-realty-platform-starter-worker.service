@@ -11,6 +11,8 @@ WorkingDirectory=/opt/ams-realty-platform-starter/current
 Environment=NODE_ENV=production
 Environment=NEXT_TELEMETRY_DISABLED=1
 Environment=NODE_OPTIONS=--conditions=react-server
+Environment=HOME=/opt/ams-realty-platform-starter/shared/home
+Environment=TMPDIR=/opt/ams-realty-platform-starter/shared/tmp
 Environment=PATH=/opt/ams-realty-platform-starter/runtime/bin:/usr/local/bin:/usr/bin:/bin
 EnvironmentFile=/etc/ams-realty-platform-starter/runtime.env
 EnvironmentFile=/etc/ams-realty-platform-starter/release.env
@@ -24,8 +26,8 @@ UMask=0027
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectHome=true
-ProtectSystem=full
-ReadWritePaths=/opt/ams-realty-platform-starter
+ProtectSystem=strict
+ReadWritePaths=/opt/ams-realty-platform-starter/shared
 
 [Install]
 WantedBy=multi-user.target

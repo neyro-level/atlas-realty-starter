@@ -5,10 +5,12 @@ import type { Payload } from 'payload'
 
 import { isAllowedExternalImageURL } from '@/shared/security/media-url'
 import { normalizedOfferHash, normalizedOfferSchema, type NormalizedOffer } from '@/shared/types/feed-import'
+import { mergeSharedEntityFields } from './import-policy'
 
 const MAX_BATCH = 1000
 type Client = { query<T extends Record<string, unknown> = Record<string, unknown>>(sql: string, values?: unknown[]): Promise<{ rowCount: number | null; rows: T[] }>; release(): void }
 type OfferRelations = { agentId: string | null; buildingId: string | null; complexId: string | null }
+type SourcePolicy = { code: string; explicitOwners: Record<string, string>; priority: number }
 
 export type ImportBatchResult = { created: number; unchanged: number; updated: number }
 
@@ -19,15 +21,24 @@ export async function upsertPropertyBatch(payload: Payload, input: { allowedImag
   const client = await (payload.db as unknown as PostgresAdapter).pool.connect() as unknown as Client
   try {
     await client.query('BEGIN')
-    const source = await client.query<{ is_enabled: boolean }>('SELECT is_enabled FROM feed_sources WHERE id = $1 FOR SHARE', [input.feedSourceId])
+    const source = await client.query<{ code: string; field_ownership: Record<string, string> | null; is_enabled: boolean; priority: number }>('SELECT code, field_ownership, is_enabled, priority FROM feed_sources WHERE id = $1 FOR SHARE', [input.feedSourceId])
     if (!source.rows[0]?.is_enabled) throw new Error('Feed source is disabled or missing')
+    const ownerRows = await client.query<{ code: string; field_ownership: Record<string, string> | null }>('SELECT code, field_ownership FROM feed_sources WHERE is_enabled = true')
+    const explicitOwners: Record<string, string> = {}
+    for (const row of ownerRows.rows) {
+      for (const [field, owner] of Object.entries(row.field_ownership ?? {})) {
+        if (explicitOwners[field] && explicitOwners[field] !== owner) throw new Error(`Conflicting explicit owner for ${field}`)
+        explicitOwners[field] = owner
+      }
+    }
+    const sourcePolicy = { code: source.rows[0].code, explicitOwners, priority: Number(source.rows[0].priority) }
     const ids = offers.map((offer) => offer.externalId)
     const existing = await client.query<{ external_id: string; import_hash: string; manual_fields: string[] }>('SELECT external_id, import_hash, manual_fields FROM properties WHERE feed_source_id = $1 AND external_id = ANY($2::varchar[])', [input.feedSourceId, ids])
     const previous = new Map(existing.rows.map((row) => [row.external_id, row.import_hash]))
     const manualFields = new Map(existing.rows.map((row) => [row.external_id, new Set(row.manual_fields)]))
     let created = 0; let updated = 0; let unchanged = 0
     for (const offer of offers) { const hash = normalizedOfferHash(offer); if (!previous.has(offer.externalId)) created++; else if (previous.get(offer.externalId) === hash) unchanged++; else updated++ }
-    const relations = await resolveOfferRelations(client, input.feedSourceId, offers, input.seenAt)
+    const relations = await resolveOfferRelations(client, input.feedSourceId, offers, input.seenAt, sourcePolicy)
     const values: unknown[] = []
     const rows = offers.map((offer) => {
       const relation = relations.get(offer.externalId) ?? { agentId: null, buildingId: null, complexId: null }
@@ -120,7 +131,7 @@ export async function upsertPropertyBatch(payload: Payload, input: { allowedImag
   } catch (error) { await client.query('ROLLBACK'); throw error } finally { client.release() }
 }
 
-async function resolveOfferRelations(client: Client, feedSourceId: string, offers: NormalizedOffer[], seenAt: string) {
+async function resolveOfferRelations(client: Client, feedSourceId: string, offers: NormalizedOffer[], seenAt: string, sourcePolicy: SourcePolicy) {
   const result = new Map<string, OfferRelations>()
   const agentCache = new Map<string, string>()
   const complexCache = new Map<string, string>()
@@ -151,19 +162,41 @@ async function resolveOfferRelations(client: Client, feedSourceId: string, offer
       }
       complexId = complexCache.get(newbuild.yandexBuildingId) ?? null
       if (!complexId) {
+        await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [`complex:${newbuild.yandexBuildingId}`])
+        const existingComplex = await client.query<{ address: string | null; developer_id: string | null; id: string; import_ownership: unknown; latitude: number | null; longitude: number | null; name: string; readiness: string | null }>('SELECT id, name, developer_id, address, latitude, longitude, readiness, import_ownership FROM residential_complexes WHERE yandex_building_id = $1 FOR UPDATE', [newbuild.yandexBuildingId])
+        const currentComplex = existingComplex.rows[0]
+        const mergedComplex = mergeSharedEntityFields({
+          current: currentComplex ? { address: currentComplex.address, developer: currentComplex.developer_id, latitude: currentComplex.latitude, longitude: currentComplex.longitude, name: currentComplex.name, readiness: currentComplex.readiness } : null,
+          explicitOwners: sourcePolicy.explicitOwners,
+          incoming: { address: offer.address.addressPublic, developer: developerId, latitude: offer.address.latitude, longitude: offer.address.longitude, name: newbuild.complexName, readiness: newbuild.readiness },
+          ownership: currentComplex?.import_ownership,
+          prefix: 'complex', sourceCode: sourcePolicy.code, sourcePriority: sourcePolicy.priority,
+        })
         const complex = await client.query<{ id: string }>(`INSERT INTO residential_complexes (name, slug, developer_id, yandex_building_id, address, latitude, longitude, readiness, status, updated_at, created_at)
-          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'draft',now(),now()) ON CONFLICT (yandex_building_id) DO UPDATE SET name=EXCLUDED.name, developer_id=COALESCE(residential_complexes.developer_id, EXCLUDED.developer_id), address=EXCLUDED.address, latitude=EXCLUDED.latitude, longitude=EXCLUDED.longitude, readiness=EXCLUDED.readiness, updated_at=now() RETURNING id`,
-          [newbuild.complexName, stableSlug('complex', newbuild.yandexBuildingId), developerId, newbuild.yandexBuildingId, offer.address.addressPublic, offer.address.latitude ?? null, offer.address.longitude ?? null, newbuild.readiness ?? null])
+          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'draft',now(),now()) ON CONFLICT (yandex_building_id) DO UPDATE SET name=EXCLUDED.name, developer_id=EXCLUDED.developer_id, address=EXCLUDED.address, latitude=EXCLUDED.latitude, longitude=EXCLUDED.longitude, readiness=EXCLUDED.readiness, import_ownership=$9::jsonb, updated_at=now() RETURNING id`,
+          [mergedComplex.fields.name, stableSlug('complex', newbuild.yandexBuildingId), mergedComplex.fields.developer ?? null, newbuild.yandexBuildingId, mergedComplex.fields.address ?? null, mergedComplex.fields.latitude ?? null, mergedComplex.fields.longitude ?? null, mergedComplex.fields.readiness ?? null, JSON.stringify(mergedComplex.ownership)])
         complexId = complex.rows[0]!.id
+        if (!currentComplex) await client.query('UPDATE residential_complexes SET import_ownership=$2::jsonb WHERE id=$1', [complexId, JSON.stringify(mergedComplex.ownership)])
         complexCache.set(newbuild.yandexBuildingId, complexId)
       }
       const buildingKey = `${newbuild.yandexBuildingId}:${newbuild.yandexHouseId}`
       buildingId = buildingCache.get(buildingKey) ?? null
       if (!buildingId) {
+        await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [`building:${buildingKey}`])
+        const existingBuilding = await client.query<{ address: string | null; floors: number | null; handover_at: string | null; id: string; import_ownership: unknown; latitude: number | null; longitude: number | null; name: string; readiness: string | null }>('SELECT id, name, address, latitude, longitude, floors, readiness, handover_at, import_ownership FROM buildings WHERE complex_id = $1 AND yandex_house_id = $2 FOR UPDATE', [complexId, newbuild.yandexHouseId])
+        const currentBuilding = existingBuilding.rows[0]
+        const mergedBuilding = mergeSharedEntityFields({
+          current: currentBuilding ? { address: currentBuilding.address, floors: currentBuilding.floors, handoverAt: currentBuilding.handover_at, latitude: currentBuilding.latitude, longitude: currentBuilding.longitude, name: currentBuilding.name, readiness: currentBuilding.readiness } : null,
+          explicitOwners: sourcePolicy.explicitOwners,
+          incoming: { address: offer.address.addressPublic, floors: offer.floorsTotal, handoverAt: newbuild.handoverAt, latitude: offer.address.latitude, longitude: offer.address.longitude, name: newbuild.buildingName, readiness: newbuild.readiness },
+          ownership: currentBuilding?.import_ownership,
+          prefix: 'building', sourceCode: sourcePolicy.code, sourcePriority: sourcePolicy.priority,
+        })
         const building = await client.query<{ id: string }>(`INSERT INTO buildings (complex_id, name, yandex_house_id, address, latitude, longitude, floors, readiness, handover_at, is_published, updated_at, created_at)
-          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,false,now(),now()) ON CONFLICT (complex_id, yandex_house_id) DO UPDATE SET name=EXCLUDED.name, address=EXCLUDED.address, latitude=EXCLUDED.latitude, longitude=EXCLUDED.longitude, floors=EXCLUDED.floors, readiness=EXCLUDED.readiness, handover_at=EXCLUDED.handover_at, updated_at=now() RETURNING id`,
-          [complexId, newbuild.buildingName, newbuild.yandexHouseId, offer.address.addressPublic, offer.address.latitude ?? null, offer.address.longitude ?? null, offer.floorsTotal ?? null, newbuild.readiness ?? null, newbuild.handoverAt ?? null])
+          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,false,now(),now()) ON CONFLICT (complex_id, yandex_house_id) DO UPDATE SET name=EXCLUDED.name, address=EXCLUDED.address, latitude=EXCLUDED.latitude, longitude=EXCLUDED.longitude, floors=EXCLUDED.floors, readiness=EXCLUDED.readiness, handover_at=EXCLUDED.handover_at, import_ownership=$10::jsonb, updated_at=now() RETURNING id`,
+          [complexId, mergedBuilding.fields.name, newbuild.yandexHouseId, mergedBuilding.fields.address ?? null, mergedBuilding.fields.latitude ?? null, mergedBuilding.fields.longitude ?? null, mergedBuilding.fields.floors ?? null, mergedBuilding.fields.readiness ?? null, mergedBuilding.fields.handoverAt ?? null, JSON.stringify(mergedBuilding.ownership)])
         buildingId = building.rows[0]!.id
+        if (!currentBuilding) await client.query('UPDATE buildings SET import_ownership=$2::jsonb WHERE id=$1', [buildingId, JSON.stringify(mergedBuilding.ownership)])
         buildingCache.set(buildingKey, buildingId)
       }
     }

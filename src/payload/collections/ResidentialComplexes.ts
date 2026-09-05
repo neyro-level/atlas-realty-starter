@@ -1,8 +1,11 @@
 import type { CollectionConfig } from 'payload'
 
-import { adminWrite, ownerOnly, publicOrAdmin } from '../access/standard'
+import { adminWrite, ownerFieldOnly, ownerOnly, publicOrAdmin } from '../access/standard'
 import { formatPageSlug } from '../hooks/formatPageSlug'
 import { collectionCacheHooks } from '@/core/cache/public-cache'
+import { trackSharedEntityManualFields } from '../hooks/trackSharedEntityManualFields'
+
+const importManagedFields = ['name', 'developer', 'address', 'latitude', 'longitude', 'readiness'] as const
 
 export const ResidentialComplexes = {
   slug: 'residential-complexes',
@@ -15,6 +18,7 @@ export const ResidentialComplexes = {
     { name: 'developer', type: 'relationship', relationTo: 'developers', index: true },
     { name: 'responsibleAgent', type: 'relationship', relationTo: 'agents', index: true },
     { name: 'yandexBuildingId', type: 'text', unique: true, index: true },
+    { name: 'importOwnership', type: 'json', defaultValue: { fields: {}, manualFields: [] }, admin: { description: 'Системное владение импортируемыми полями. Очищать manualFields может только владелец осознанно.' }, access: { create: ownerFieldOnly, update: ownerFieldOnly } },
     { name: 'region', type: 'text', index: true },
     { name: 'district', type: 'text', index: true },
     { name: 'address', type: 'text' },
@@ -27,6 +31,6 @@ export const ResidentialComplexes = {
     { name: 'availablePropertyCount', type: 'number', defaultValue: 0, min: 0, admin: { readOnly: true } },
     { name: 'status', type: 'select', defaultValue: 'draft', required: true, index: true, options: ['draft', 'published', 'hidden'] },
   ],
-  hooks: { ...collectionCacheHooks(['public:catalog', 'public:sitemap']), beforeValidate: [formatPageSlug] },
+  hooks: { ...collectionCacheHooks(['public:catalog', 'public:sitemap']), beforeChange: [trackSharedEntityManualFields(importManagedFields)], beforeValidate: [formatPageSlug] },
   trash: true,
 } satisfies CollectionConfig
