@@ -3,9 +3,13 @@ import {
   copyFileSync,
   cpSync,
   existsSync,
+  lstatSync,
   mkdirSync,
   readFileSync,
+  readdirSync,
+  realpathSync,
   rmSync,
+  statSync,
   writeFileSync,
 } from 'node:fs'
 import { spawnSync } from 'node:child_process'
@@ -36,6 +40,27 @@ function canonicalRepository() {
   const match = remote.match(/(?:sourcecraft\.dev[/:])([^/]+\/[^/.]+)(?:\.git)?$/u)
   if (!match) throw new Error('origin must be a SourceCraft repository.')
   return match[1]
+}
+
+function materializeSymlinks(root) {
+  if (!existsSync(root)) return
+  for (const entry of readdirSync(root)) {
+    const entryPath = path.join(root, entry)
+    const info = lstatSync(entryPath)
+    if (info.isSymbolicLink()) {
+      const target = realpathSync(entryPath)
+      const targetInfo = statSync(target)
+      rmSync(entryPath, { force: true, recursive: targetInfo.isDirectory() })
+      if (targetInfo.isDirectory()) {
+        cpSync(target, entryPath, { dereference: true, recursive: true })
+        materializeSymlinks(entryPath)
+      } else {
+        copyFileSync(target, entryPath)
+      }
+    } else if (info.isDirectory()) {
+      materializeSymlinks(entryPath)
+    }
+  }
 }
 
 if (process.platform !== 'linux') {
@@ -90,6 +115,7 @@ try {
     dereference: true,
     recursive: true,
   })
+  materializeSymlinks(path.join(bundleDir, '.next', 'node_modules'))
 
   const staticRoot = path.join(projectRoot, '.next', 'static')
   if (existsSync(staticRoot)) {
