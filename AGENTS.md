@@ -3,7 +3,7 @@
 ## Project
 
 - Type: self-contained headless starter engine for real-estate platforms.
-- Mode: BUILD MODE until the final 2.1 Solo compliance gate.
+- Mode: CONFORMANT STARTER / RELEASE-READY under the 2.1 Solo compliance contract.
 - Stack: Next.js 16.3.4, React 19.2.8, TypeScript 6.0.3, Payload 3.88.0, PostgreSQL 18, Node.js 24.20.x, pnpm 11.24.0.
 - Repository mode: SOURCECRAFT_PRIMARY_GITHUB_MIRROR; origin/main is canonical.
 - Platform contract: docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md.

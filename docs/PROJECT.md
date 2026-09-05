@@ -3,7 +3,7 @@
 ## Identity
 
 - Product: AMS Realty Platform Starter
-- Mode: BUILD MODE
+- Mode: CONFORMANT STARTER / RELEASE-READY
 - Profile: headless starter for a real-estate catalog up to about 50,000 active properties
 - Backend, schema, auth, Admin and migrations owner: Payload CMS
 - Public UI: absent by design; / returns 404
@@ -36,4 +36,27 @@ Lead PII retention default is 365 days and the baseline consent text version is 
 
 ## Lifecycle
 
-This repository remains in BUILD MODE until the final compliance checklist passes on an exact SourceCraft SHA. Only a concrete client clone moves to MAINTENANCE MODE after its first production release.
+The starter completed BUILD MODE validation on the exact SourceCraft release `f7835daf1327741f6391627518cc4db31239c156`. Only a concrete client clone moves to MAINTENANCE MODE after its first production release.
+
+## AMS Realty Platform Core Standard 2.1 Solo compliance
+
+Validation result: all 18 final-contract criteria pass. Runtime, backup and restore items were verified in the isolated staging contour rather than inferred from code.
+
+1. PASS — Payload is the sole application-schema owner; no second ORM/backend exists.
+2. PASS — public data uses the Public Gateway, explicit selects/limits and DTOs.
+3. PASS — anonymous raw REST for business collections and globals is denied.
+4. PASS — `overrideAccess: true` is confined to typed System Gateway operations.
+5. PASS — private property fields have owner-only field access and never enter public DTOs.
+6. PASS — suspicious, truncated and mixed-address feeds cannot trigger deactivation.
+7. PASS — source ownership, priority and manual-field protection are enforced and tested.
+8. PASS — configurable outbound HTTP uses the allowlisted HTTPS-only safe client.
+9. PASS — leads and pending deliveries commit atomically; retry, recovery and dead-letter states are durable.
+10. PASS — secrets stay in deployment secret storage; guards and redaction keep them out of DB, Git and logs.
+11. PASS — production schema uses reviewed append-only Payload migrations with `push: false`.
+12. PASS — the retained managed PostgreSQL contour has daily automatic backups and seven retained copies.
+13. PASS — the daily owner command is `pnpm verify`.
+14. PASS — CI builds and checksums the immutable artifact before deployment or migration impact.
+15. PASS — integration, E2E and 50,000-property performance checks are risk-routed.
+16. PASS — disabled optional modules create no collections, jobs, environment requirements or client JavaScript.
+17. PASS — lifecycle policy moves a concrete clone to MAINTENANCE MODE after its first production release.
+18. PASS — SourceCraft CI, migrations, worker recovery, backup scheduling and verification automate routine checks.

@@ -40,6 +40,8 @@ Stage migration evidence commands are `pnpm db:migrate:stage1-check`, `pnpm db:m
 
 The isolated directory, user, Node 24.20.0 runtime, systemd templates, internal TLS listener and runtime secret file were provisioned on 2026-09-05. The old client services remained active and its port `127.0.0.1:3000` remained unchanged.
 
+The final runtime validation release was exact SourceCraft `main` SHA `f7835daf1327741f6391627518cc4db31239c156`, produced by successful main run 45. Its five manifest-listed parts and reconstructed archive passed byte-size and SHA-256 verification before installation. Live evidence passed for `/healthz`, enforced TLS origin, root 404, anonymous raw REST 403, catalog and property DTOs, private-field exclusion, invalid-filter 400, unknown-property 404, owner login and edit, idempotent lead intake, durable delivery processing and zero test-PII matches in service logs. A deliberately orphaned Payload job was recovered by the worker startup preflight (`recovered: 1`) before the worker became active. The persisted feed fixture remained publicly queryable, proving the import-to-catalog path. The old client service remained active throughout validation.
+
 ## Backup and restore evidence
 
 The retained Timeweb Managed PostgreSQL cluster reports automatic backups enabled daily with seven retained copies. This policy covers the isolated database.
