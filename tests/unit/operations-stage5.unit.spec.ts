@@ -17,6 +17,9 @@ describe('Stage 5 operations contract', () => {
     expect(pack).not.toContain('cpSync(standaloneRoot, bundleDir')
     expect(pack).toContain('buildBeforeDeploy: true')
     expect(read('scripts/prepare-standalone.mjs')).toContain("'.env.production.local'")
+    const ci = read('.sourcecraft/ci.yaml')
+    expect(ci).toContain('.release-artifacts/release.tar.gz')
+    expect(ci).toContain('.release-artifacts/release.json')
   })
 
   it('installs without dependencies or a server-side build', () => {
