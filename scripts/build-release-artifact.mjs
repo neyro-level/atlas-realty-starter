@@ -43,6 +43,36 @@ function canonicalRepository() {
   return match[1]
 }
 
+function findDeployedPackageTarget(originalTarget, bundleNodeModules) {
+  const marker = `${path.sep}.pnpm${path.sep}`
+  const markerIndex = originalTarget.indexOf(marker)
+  if (markerIndex >= 0) {
+    const exactTarget = path.join(bundleNodeModules, originalTarget.slice(markerIndex + 1))
+    if (existsSync(exactTarget)) return exactTarget
+  }
+
+  const packageJSONPath = path.join(originalTarget, 'package.json')
+  if (!existsSync(packageJSONPath)) throw new Error(`Traced module has no package identity: ${originalTarget}`)
+  const identity = JSON.parse(readFileSync(packageJSONPath, 'utf8'))
+  if (typeof identity.name !== 'string' || typeof identity.version !== 'string') {
+    throw new Error(`Invalid traced package identity: ${originalTarget}`)
+  }
+
+  const pnpmRoot = path.join(bundleNodeModules, '.pnpm')
+  const candidates = readdirSync(pnpmRoot)
+    .map((entry) => path.join(pnpmRoot, entry, 'node_modules', ...identity.name.split('/')))
+    .filter((candidate) => {
+      const candidateJSON = path.join(candidate, 'package.json')
+      if (!existsSync(candidateJSON)) return false
+      const value = JSON.parse(readFileSync(candidateJSON, 'utf8'))
+      return value.name === identity.name && value.version === identity.version
+    })
+  if (candidates.length !== 1) {
+    throw new Error(`Expected one deployed target for ${identity.name}@${identity.version}; found ${candidates.length}.`)
+  }
+  return candidates[0]
+}
+
 function rebaseTracedModuleLinks(root, bundleNodeModules) {
   if (!existsSync(root)) return
   for (const entry of readdirSync(root)) {
@@ -50,11 +80,7 @@ function rebaseTracedModuleLinks(root, bundleNodeModules) {
     const info = lstatSync(entryPath)
     if (info.isSymbolicLink()) {
       const target = realpathSync(entryPath)
-      const marker = `${path.sep}.pnpm${path.sep}`
-      const markerIndex = target.indexOf(marker)
-      if (markerIndex < 0) throw new Error(`Traced module link is outside pnpm store: ${entryPath}`)
-      const rebasedTarget = path.join(bundleNodeModules, target.slice(markerIndex + 1))
-      if (!existsSync(rebasedTarget)) throw new Error(`Missing deployed target for traced module: ${entryPath}`)
+      const rebasedTarget = findDeployedPackageTarget(target, bundleNodeModules)
       const targetInfo = statSync(target)
       rmSync(entryPath, { force: true, recursive: false })
       symlinkSync(path.relative(path.dirname(entryPath), rebasedTarget), entryPath, targetInfo.isDirectory() ? 'dir' : 'file')

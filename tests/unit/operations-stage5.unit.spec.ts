@@ -18,6 +18,7 @@ describe('Stage 5 operations contract', () => {
     expect(pack).toContain('dereference: true')
     expect(pack).toContain("rebaseTracedModuleLinks(path.join(bundleDir, '.next', 'node_modules')")
     expect(pack).toContain('path.relative(path.dirname(entryPath), rebasedTarget)')
+    expect(pack).toContain('value.name === identity.name && value.version === identity.version')
     expect(pack).not.toContain('cpSync(standaloneRoot, bundleDir')
     expect(pack).toContain('buildBeforeDeploy: true')
     expect(read('scripts/prepare-standalone.mjs')).toContain("'.env.production.local'")
