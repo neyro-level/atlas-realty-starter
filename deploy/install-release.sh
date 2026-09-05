@@ -75,7 +75,7 @@ if [[ ! -f "${release_dir}/server.js" || ! -x "${release_dir}/node_modules/.bin/
   exit 1
 fi
 
-run_as_app "${APP_ROOT}/runtime/bin/pnpm" payload migrate
+run_as_app "${release_dir}/node_modules/.bin/payload" migrate
 
 printf 'RELEASE_SHA=%s\n' "${RELEASE_SHA}" > /etc/ams-realty-platform-starter/release.env
 chmod 0640 /etc/ams-realty-platform-starter/release.env
