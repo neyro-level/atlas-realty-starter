@@ -1,71 +1,46 @@
 # AGENTS — AMS Realty Platform Starter
 
-## Проект
+## Project
 
-- Название: `AMS Realty Platform Starter`
-- Тип: self-contained starter engine для real-estate платформы
-- Стек: Next.js `16.3.4`, React `19.2.8`, TypeScript `6.0.3`, Payload `3.88.0`, PostgreSQL `18`, Node.js `24.20.x`, pnpm `11.24.0`
-- Code source of truth: SourceCraft `origin/main`
-- Repository mode: `SOURCECRAFT_PRIMARY_GITHUB_MIRROR`
-- Локальный checkout: текущая Windows-папка проекта
-- Текущий внешний testing contour: прежний сервер и managed PostgreSQL cluster клиента, но только как изолированная validation-среда starter
+- Type: self-contained headless starter engine for real-estate platforms.
+- Mode: BUILD MODE until the final 2.1 Solo compliance gate.
+- Stack: Next.js 16.3.4, React 19.2.8, TypeScript 6.0.3, Payload 3.88.0, PostgreSQL 18, Node.js 24.20.x, pnpm 11.24.0.
+- Repository mode: SOURCECRAFT_PRIMARY_GITHUB_MIRROR; origin/main is canonical.
+- Platform contract: docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md.
 
-## Порядок чтения
+## Reading order
 
-1. Глобальный `~/.codex/AGENTS.md` и релевантные AMS skills
-2. Этот `AGENTS.md`
-3. `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.0.md`
-4. `docs/PRODUCT.md`
-5. Документ текущего scope: `ARCHITECTURE`, `DATA_MODEL`, `PAYLOAD_CONTRACT`, `SECURITY`, `MASTER_PLAN`, `STARTER_CONTRACT`, `FRONTEND_INTEGRATION_CONTRACT`, `RUNBOOK_DEPLOY`
-6. Затем `package.json`, `payload.config.ts`, `src/payload/migrations-v2`, tests и фактический код
+1. Global AMS instructions and the minimal relevant skills.
+2. This file.
+3. docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md for foundation/compliance scope.
+4. docs/PROJECT.md and one relevant document: VERSION_MATRIX, SECURITY or OPERATIONS.
+5. package.json, src/payload.config.ts, migrations-v2, tests and actual code.
 
-## Инварианты
+## Invariants
 
-- Starter не содержит публичный UI. До подключения новой библиотеки страниц `/` и старые клиентские public routes должны отдавать `404`.
-- Payload остаётся единственным backend/auth/schema/migration owner. Prisma, второй ORM, второй backend и второй admin запрещены.
-- Payload Admin, API, health endpoints, workers, migrations и operational views должны оставаться рабочими.
-- Активный source of truth по schema — `src/payload/migrations-v2`. Legacy `src/payload/migrations` сохраняется только как historical evidence до отдельной cleanup-волны.
-- В репозитории не должно оставаться клиентской идентичности, production aliases, доменов, Doppler scopes, абсолютных путей и секретов.
-- Текущий внешний сервер/кластер можно использовать только как staging/validation contour; старые runtime и данные нельзя переписывать или мигрировать без отдельной release-команды.
-- Любой user Local API call использует `overrideAccess: false`; `overrideAccess: true` разрешён только в approved system/maintenance path.
+- There is no public UI. / and former client public routes return 404.
+- Public product traffic uses /api/public/v1, Public Gateway, explicit query limits/select and DTOs.
+- Payload is the sole backend, auth, Admin, schema and migration owner. Prisma and a second backend/Admin/auth are forbidden.
+- Data access zones are only core/data-access/public, system and ingest. There is no user zone until an authenticated product UI exists.
+- Raw anonymous Payload REST for business collections and globals is denied.
+- User-context Local API sets overrideAccess: false and update/delete sets overrideLock: false.
+- overrideAccess: true is allowed only in the typed System Gateway. Raw DB/SQL is allowed only in Ingest Gateway, migrations and documented maintenance.
+- Production schema uses append-only migrations-v2; push stays false.
+- No client identity, domain, feed/channel configuration, absolute workstation path or secret is tracked.
+- External legacy runtime/database are validation inputs only and are never changed without a separate release command.
 
-## Git workflow
+## Git and checks
 
-- `origin` всегда указывает на SourceCraft.
-- Реальный remote branch policy здесь принимает новые ветки только в форматах `work/**`, `feature/**`, `hotfix/**`, `chore/**`.
-- Один независимый поток = одна ветка = один PR.
-- Recovery-потоки не смешиваются с основной нейтрализацией starter.
-- Merge в `main` только после review и risk-based gate.
+One independent stream equals one work/** branch and one PR. Merge to main requires review plus a risk-based exact-head SourceCraft gate. Schema, auth/access, imports, leads, dependencies and runtime are HEAVY.
 
-## Синхронизация документов
+Daily command: pnpm verify. Sensitive changes additionally run targeted integration tests and pnpm build. Production is a separate lifecycle from clean exact merged main.
 
-- product boundary → `docs/PRODUCT.md`
-- module/runtime boundaries → `docs/ARCHITECTURE.md`
-- collections/globals/lifecycle → `docs/DATA_MODEL.md`
-- auth/trust/PII → `docs/SECURITY.md`
-- Payload runtime/admin/migrations → `docs/PAYLOAD_CONTRACT.md`
-- frontend DTO/API boundary → `docs/FRONTEND_INTEGRATION_CONTRACT.md`
-- deployment/testing contour → `docs/RUNBOOK_DEPLOY.md`
-- порядок программы и статус волн → `docs/MASTER_PLAN.md` и `WORKLOG.md`
+<!-- BEGIN:nextjs-agent-rules -->
 
-## Проверки
+# This is NOT the Next.js you know
 
-- `pnpm generate:types`
-- `pnpm generate:importmap`
-- `pnpm lint`
-- `pnpm typecheck`
-- `pnpm architecture:check`
-- `pnpm security:check`
-- `pnpm test`
-- `pnpm build`
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-## Done для текущей программы
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
-Starter считается приведённым к целевому состоянию только когда:
-
-- public UI удалён
-- active docs canon нейтрален
-- client markers вычищены из активного кода и документации
-- Payload Admin и jobs живы
-- recovery WIP сохранён и полезная часть перенесена осознанно
-- финальный engine готов к подключению отдельной Next UI-библиотеки без переделки backend
+<!-- END:nextjs-agent-rules -->

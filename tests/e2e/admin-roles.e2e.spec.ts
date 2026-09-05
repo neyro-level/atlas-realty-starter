@@ -3,9 +3,6 @@ import type { Page } from '@playwright/test'
 
 import { foundationUsers, resetFoundationState, seedPrivilegedUsers } from '../helpers/payload'
 
-const businessSections = ['Посетители', 'Заявки', 'Объекты', 'Новостройки', 'Сотрудники', 'Отзывы', 'Офисы', 'Контакты', 'Антиспам', 'XML-импорт']
-const contentManagerSections = ['Объекты', 'Новостройки', 'Сотрудники', 'Отзывы', 'Офисы', 'Контакты']
-
 async function login(page: Page, username: string, password: string) {
   await page.goto('/admin/login', { waitUntil: 'domcontentloaded' })
   await page.fill('#field-username', username)
@@ -14,28 +11,21 @@ async function login(page: Page, username: string, password: string) {
   await expect(page).toHaveURL(/\/admin\/?$/)
 }
 
-test.describe.serial('Payload cabinet role navigation', () => {
+test.describe.serial('Payload native Admin role access', () => {
   test.beforeAll(async () => {
     await resetFoundationState()
     await seedPrivilegedUsers()
   })
 
-  test('DIRECTOR sees every business workspace', async ({ page }) => {
-    await login(page, foundationUsers.director.username, foundationUsers.director.password)
-
-    for (const label of businessSections) {
-      await expect(page.getByRole('link', { name: label })).toBeVisible()
-    }
+  test('owner can open native user management', async ({ page }) => {
+    await login(page, foundationUsers.superAdmin.username, foundationUsers.superAdmin.password)
+    await page.goto('/admin/collections/users', { waitUntil: 'domcontentloaded' })
+    await expect(page).toHaveURL(/\/admin\/collections\/users/)
   })
 
-  test('CONTENT_MANAGER keeps navigation but cannot open restricted workspace', async ({ page }) => {
-    await login(page, foundationUsers.contentManager.username, foundationUsers.contentManager.password)
-
-    for (const label of contentManagerSections) {
-      await expect(page.getByRole('link', { name: label }).first()).toBeVisible()
-    }
-
-    await page.goto('/admin/zayavki', { waitUntil: 'domcontentloaded' })
-    await expect(page.getByRole('heading', { level: 1, name: 'Заявки' })).toHaveCount(0)
+  test('editor cannot manage users', async ({ page }) => {
+    await login(page, foundationUsers.director.username, foundationUsers.director.password)
+    await page.goto('/admin/collections/users', { waitUntil: 'domcontentloaded' })
+    await expect(page.getByRole('heading', { name: /nothing found/i })).toBeVisible()
   })
 })

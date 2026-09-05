@@ -1,7 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
 import { canReadSiteSettings, canUpdateSiteSettings } from '../access/site-settings'
-import { recordContactsActivity } from '../hooks/business'
+import { recordContactsActivity } from '@/core/data-access/system/business-hooks'
 
 export const SiteSettings = {
   slug: 'site-settings',

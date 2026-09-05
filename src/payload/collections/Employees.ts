@@ -9,8 +9,8 @@ import {
   EMPLOYEE_STATUSES,
   ENTITY_ORIGIN_LABELS,
   ENTITY_ORIGINS,
-} from '../admin/lib/constants'
-import { protectEmployeeMutation, recordEmployeeActivity } from '../hooks/business'
+} from '../constants'
+import { protectEmployeeMutation, recordEmployeeActivity } from '@/core/data-access/system/business-hooks'
 
 export const Employees = {
   slug: 'employees',

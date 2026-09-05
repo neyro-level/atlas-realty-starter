@@ -1,8 +1,8 @@
 import type { CollectionConfig } from 'payload'
 
 import { canCreateReviews, canDeleteReviews, canReadReviews, canUpdateReviews } from '../access/reviews'
-import { REVIEW_STATUS_LABELS, REVIEW_STATUSES } from '../admin/lib/constants'
-import { recordReviewActivity } from '../hooks/business'
+import { REVIEW_STATUS_LABELS, REVIEW_STATUSES } from '../constants'
+import { recordReviewActivity } from '@/core/data-access/system/business-hooks'
 
 export const Reviews = {
   slug: 'reviews',

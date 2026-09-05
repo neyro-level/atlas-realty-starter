@@ -1,8 +1,8 @@
 import type { CollectionConfig } from 'payload'
 
 import { canReadImportRuns, denyImportRunMutation } from '../access/import-runs'
-import { IMPORT_STATUS_LABELS, IMPORT_STATUSES } from '../admin/lib/constants'
-import { recordImportRunActivity } from '../hooks/business'
+import { IMPORT_STATUS_LABELS, IMPORT_STATUSES } from '../constants'
+import { recordImportRunActivity } from '@/core/data-access/system/business-hooks'
 
 export const ImportRuns = {
   slug: 'import-runs',

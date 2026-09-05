@@ -2,7 +2,7 @@ import type { Access, FieldAccess, Where } from 'payload'
 
 import type { User } from '@/payload-types'
 
-export const USER_ROLES = ['SUPER_ADMIN', 'DIRECTOR', 'CONTENT_MANAGER'] as const
+export const USER_ROLES = ['owner', 'editor'] as const
 
 export type UserRole = (typeof USER_ROLES)[number]
 export type AppUser = Pick<User, 'id' | 'role' | 'name'> | null | undefined
@@ -40,15 +40,14 @@ export const ADMIN_CAPABILITIES = [
 export type AdminCapability = (typeof ADMIN_CAPABILITIES)[number]
 
 const ROLE_SET: Record<UserRole, true> = {
-  CONTENT_MANAGER: true,
-  DIRECTOR: true,
-  SUPER_ADMIN: true,
+  editor: true,
+  owner: true,
 }
 
-const DIRECTOR_CAPABILITIES: Record<AdminCapability, boolean> = {
-  'analytics.export': true,
+const EDITOR_CAPABILITIES: Record<AdminCapability, boolean> = {
+  'analytics.export': false,
   'analytics.read': true,
-  'antispam.read': true,
+  'antispam.read': false,
   'complex.create': true,
   'complex.publish': true,
   'complex.read': true,
@@ -59,8 +58,8 @@ const DIRECTOR_CAPABILITIES: Record<AdminCapability, boolean> = {
   'employee.read': true,
   'employee.updatePublicProfile': true,
   'import.read': true,
-  'import.run': true,
-  'lead.export': true,
+  'import.run': false,
+  'lead.export': false,
   'lead.read': true,
   'lead.update': true,
   'office.read': true,
@@ -75,36 +74,6 @@ const DIRECTOR_CAPABILITIES: Record<AdminCapability, boolean> = {
   'settings.update': true,
 }
 
-const CONTENT_MANAGER_CAPABILITIES: Record<AdminCapability, boolean> = {
-  'analytics.export': false,
-  'analytics.read': false,
-  'antispam.read': false,
-  'complex.create': true,
-  'complex.publish': false,
-  'complex.read': true,
-  'complex.update': true,
-  'employee.manual.create': true,
-  'employee.manual.update': true,
-  'employee.media.update': true,
-  'employee.read': true,
-  'employee.updatePublicProfile': true,
-  'import.read': false,
-  'import.run': false,
-  'lead.export': false,
-  'lead.read': false,
-  'lead.update': false,
-  'office.read': true,
-  'office.update': true,
-  'property.manual.create': true,
-  'property.manual.publish': false,
-  'property.manual.update': true,
-  'property.media.update': true,
-  'property.read': true,
-  'review.moderate': true,
-  'settings.read': true,
-  'settings.update': false,
-}
-
 export function isKnownRole(value: unknown): value is UserRole {
   return typeof value === 'string' && value in ROLE_SET
 }
@@ -114,15 +83,15 @@ export function hasRole(user: AppUser, roles: readonly UserRole[]) {
 }
 
 export function isSuperAdmin(user: AppUser) {
-  return hasRole(user, ['SUPER_ADMIN'])
+  return hasRole(user, ['owner'])
 }
 
 export function canUseAdminPanel(user: AppUser) {
-  return hasRole(user, ['SUPER_ADMIN', 'DIRECTOR', 'CONTENT_MANAGER'])
+  return hasRole(user, ['owner', 'editor'])
 }
 
 export function canManageContacts(user: AppUser) {
-  return hasRole(user, ['SUPER_ADMIN', 'DIRECTOR'])
+  return hasRole(user, ['owner'])
 }
 
 export function hasAdminCapability(user: AppUser, capability: AdminCapability) {
@@ -130,12 +99,8 @@ export function hasAdminCapability(user: AppUser, capability: AdminCapability) {
     return true
   }
 
-  if (user?.role === 'DIRECTOR') {
-    return DIRECTOR_CAPABILITIES[capability]
-  }
-
-  if (user?.role === 'CONTENT_MANAGER') {
-    return CONTENT_MANAGER_CAPABILITIES[capability]
+  if (user?.role === 'editor') {
+    return EDITOR_CAPABILITIES[capability]
   }
 
   return false

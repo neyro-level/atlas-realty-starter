@@ -196,7 +196,7 @@ export interface UserAuthOperations {
 export interface User {
   id: string;
   name: string;
-  role: 'SUPER_ADMIN' | 'DIRECTOR' | 'CONTENT_MANAGER';
+  role: 'owner' | 'editor';
   updatedAt: string;
   createdAt: string;
   email?: string | null;

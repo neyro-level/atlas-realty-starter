@@ -1,29 +1,17 @@
-# Version Matrix
+# Version matrix
 
-| Component | Version |
-|---|---:|
-| Node.js | `24.20.x` |
-| pnpm | `11.24.0` |
-| Next.js | `16.3.4` |
-| React | `19.2.8` |
-| React DOM | `19.2.8` |
-| TypeScript | `6.0.3` |
-| Payload CMS | `3.88.0` |
-| `@payloadcms/db-postgres` | `3.88.0` |
-| `@payloadcms/next` | `3.88.0` |
-| `@payloadcms/richtext-lexical` | `3.88.0` |
-| `@payloadcms/storage-s3` | `3.88.0` |
-| `@payloadcms/translations` | `3.88.0` |
-| `@payloadcms/ui` | `3.88.0` |
-| PostgreSQL | `18` |
-| Pino | `9.14.0` |
-| Zod | `4.5.4` |
-| Vitest | `4.0.18` |
-| Playwright | `1.58.2` |
-| Dependency Cruiser | `18.2.0` |
+| Component | Exact baseline |
+| --- | --- |
+| Node.js | 24.20.x |
+| pnpm | 11.24.0 |
+| Next.js | 16.3.4 |
+| React / React DOM | 19.2.8 |
+| TypeScript | 6.0.3 |
+| Payload and all @payloadcms packages | 3.88.0 |
+| PostgreSQL | 18 |
+| Zod | 4.5.4 |
+| pino | 9.14.0 |
 
-## Notes
+All direct dependencies are pinned exactly in package.json and pnpm-lock.yaml. Payload packages must stay on one exact version. Major upgrades are separate HEAVY tasks.
 
-- Payload direct packages остаются одной exact version.
-- Public UI packages intentionally removed from active runtime shape.
-- Любой version-sensitive upgrade требует отдельной compatibility review.
+Verified on 2026-09-04 against official Payload installation requirements: Node 20.9+ and the supported Next.js 16.2.6+ line cover this baseline. Installed package types were also checked for Local API access flags, auth cookies and lockTime.

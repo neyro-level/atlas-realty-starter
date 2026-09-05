@@ -1,17 +1,14 @@
 import type { CollectionConfig } from 'payload'
 
+import { isPublicGatewayRequest } from '@/core/access/public-gateway'
+
 import { hasAdminCapability, isSuperAdmin } from './capabilities'
 
-const publishedComplexWhere = {
-  status: {
-    equals: 'published',
-  },
-} as const
-
+const publishedComplexWhere = { status: { equals: 'published' } } as const
 type CollectionAccess = NonNullable<CollectionConfig['access']>
 
 export const canReadResidentialComplexes: NonNullable<CollectionAccess['read']> = ({ req }) =>
-  hasAdminCapability(req.user, 'complex.read') ? true : publishedComplexWhere
+  isPublicGatewayRequest(req) ? publishedComplexWhere : hasAdminCapability(req.user, 'complex.read')
 
 export const canCreateResidentialComplexes: NonNullable<CollectionAccess['create']> = ({ req }) =>
   hasAdminCapability(req.user, 'complex.create')

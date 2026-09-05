@@ -1,20 +1,21 @@
-export const CONTENT_SECURITY_POLICY_REPORT_ONLY = [
+export const CONTENT_SECURITY_POLICY = [
   "default-src 'self'",
   "base-uri 'self'",
   "connect-src 'self'",
   "font-src 'self' data:",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  "frame-src 'self' https://yandex.ru https://www.youtube.com https://youtube.com https://vk.com https://vkvideo.ru",
+  "frame-src 'self'",
   "img-src 'self' blob: data:",
   "media-src 'self'",
   "object-src 'none'",
-  "script-src 'self'",
-  "style-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "upgrade-insecure-requests",
 ].join('; ')
 
 export const SECURITY_HEADERS = [
-  { key: 'Content-Security-Policy-Report-Only', value: CONTENT_SECURITY_POLICY_REPORT_ONLY },
+  { key: 'Content-Security-Policy', value: CONTENT_SECURITY_POLICY },
   { key: 'Permissions-Policy', value: 'camera=(), geolocation=(), microphone=()' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },

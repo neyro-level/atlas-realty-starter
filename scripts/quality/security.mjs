@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { extname, join, relative, resolve } from 'node:path'
 import { spawnSync } from 'node:child_process'
 
@@ -16,32 +16,35 @@ for (const [group, dependencies] of Object.entries({
   for (const [name, version] of Object.entries(dependencies)) {
     if (typeof version !== 'string' || version.startsWith('workspace:')) continue
     if (/^[~^*]|\s-\s|\|\||[<>]/.test(version)) {
-      violations.push({ file: 'package.json', rule: 'exact-direct-dependency-version', value: `${group}.${name}=${version}` })
+      violations.push({ file: 'package.json', rule: 'exact-direct-dependency-version', value: group + '.' + name + '=' + version })
     }
   }
 }
 
-for (const forbidden of ['@prisma/client', 'prisma', 'drizzle-orm', 'typeorm', 'sequelize']) {
+for (const forbidden of ['@prisma/client', 'prisma', 'drizzle-orm', 'typeorm', 'sequelize', '@sentry/nextjs', 'graphql']) {
   if (packageJSON.dependencies?.[forbidden] || packageJSON.devDependencies?.[forbidden]) {
     violations.push({ file: 'package.json', rule: 'single-schema-owner', value: forbidden })
   }
 }
 
-const requiredPayloadConfig = [
-  ["blocksAsJSON: true", 'postgres-blocks-as-json'],
+for (const [needle, rule] of [
+  ['blocksAsJSON: true', 'postgres-blocks-as-json'],
   ["idType: 'uuid'", 'postgres-uuid'],
   ['push: false', 'no-schema-push'],
   ['defaultDepth: 0', 'default-depth-zero'],
   ['disable: true', 'graphql-disabled'],
   ['localization: false', 'localization-disabled'],
   ['maxDepth: 3', 'max-depth-three'],
-]
-for (const [needle, rule] of requiredPayloadConfig) {
+  ['serverURL: allowedOrigin', 'exact-server-url'],
+  ['cors: [allowedOrigin]', 'exact-cors-origin'],
+  ['csrf: [allowedOrigin]', 'exact-csrf-origin'],
+]) {
   if (!payloadConfig.includes(needle)) violations.push({ file: 'src/payload.config.ts', rule })
 }
+if (payloadConfig.includes('onInit:')) violations.push({ file: 'src/payload.config.ts', rule: 'no-automatic-user-bootstrap' })
 
 for (const header of [
-  'Content-Security-Policy-Report-Only',
+  'Content-Security-Policy',
   'Permissions-Policy',
   'Referrer-Policy',
   'Strict-Transport-Security',
@@ -49,17 +52,15 @@ for (const header of [
 ]) {
   if (!securityHeaders.includes(header)) violations.push({ file: 'src/core/security/headers.ts', rule: 'security-header', value: header })
 }
+if (securityHeaders.includes('Content-Security-Policy-Report-Only')) {
+  violations.push({ file: 'src/core/security/headers.ts', rule: 'csp-must-be-enforced' })
+}
 
 const allowedProcessEnvFiles = new Set([
   'next.config.ts',
-  'sentry.edge.config.ts',
-  'sentry.server.config.ts',
-  'src/instrumentation-client.ts',
-  'src/instrumentation.ts',
-  'src/project/build-env.ts',
+  'src/project/bootstrap-owner-env.ts',
   'src/project/env.ts',
   'src/project/public-env.ts',
-  'src/project/sentry-server-env.ts',
 ])
 for (const file of sourceFiles) {
   const path = normalize(relative(root, file))
@@ -72,6 +73,20 @@ for (const file of sourceFiles) {
   }
   if (/\bcors\s*:\s*['"]\*['"]|\bcsrf\s*:\s*['"]\*['"]/.test(source)) {
     violations.push({ file: path, rule: 'no-wildcard-origin' })
+  }
+
+  const hasPayloadOperation = /\b(?:payload|req\.payload|context\.payload)\.(?:find|findByID|findGlobal|create|update|delete|count|auth|jobs)\b/.test(source)
+  if (hasPayloadOperation && !path.startsWith('src/core/data-access/')) {
+    violations.push({ file: path, rule: 'payload-operation-outside-gateway' })
+  }
+  if (/overrideAccess\s*:\s*true/.test(source) &&
+      !path.startsWith('src/core/data-access/system/')) {
+    violations.push({ file: path, rule: 'privileged-operation-outside-system-gateway' })
+  }
+  if (/(?:payload|context\.payload)\.db\b|adapter\.pool\b/.test(source) &&
+      !path.startsWith('src/core/data-access/ingest/') &&
+      !path.startsWith('src/payload/migrations') ) {
+    violations.push({ file: path, rule: 'raw-database-outside-ingest-gateway' })
   }
 }
 
@@ -86,49 +101,42 @@ for (const file of trackedTextFiles()) {
   }
 }
 
-const deferred = {
-  directPayloadOperations: sourceFiles.filter((file) => {
-    const path = normalize(relative(root, file))
-    return !path.startsWith('src/core/data-access/') && /\b(?:payload|req\.payload|context\.payload)\.(?:find|findByID|findGlobal|create|update|delete|count|auth|jobs)\b/.test(readFileSync(file, 'utf8'))
-  }).map((file) => normalize(relative(root, file))),
-  privilegedPayloadOperations: sourceFiles.filter((file) => /overrideAccess\s*:\s*true/.test(readFileSync(file, 'utf8'))).map((file) => normalize(relative(root, file))),
-  rawDatabaseAccess: sourceFiles.filter((file) => /(?:payload|context\.payload)\.db\b|adapter\.pool\b/.test(readFileSync(file, 'utf8'))).map((file) => normalize(relative(root, file))),
+for (const forbiddenPath of [
+  'src/app/(payload)/api/health/route.ts',
+  'src/payload/admin',
+  'src/instrumentation-client.ts',
+  'src/instrumentation.ts',
+  'sentry.edge.config.ts',
+  'sentry.server.config.ts',
+]) {
+  if (existsSync(resolve(root, forbiddenPath))) violations.push({ file: forbiddenPath, rule: 'inactive-baseline-component' })
 }
 
 console.log(JSON.stringify({
   status: violations.length ? 'FAIL' : 'PASS',
-  enforcedWave: 0,
-  deferredUntilOwningWave: deferred,
+  enforcedStandard: 'AMS Realty Platform Core 2.1 Solo',
   violations,
 }, null, 2))
 if (violations.length) process.exit(1)
 
 function walk(directory) {
+  if (!existsSync(directory)) return []
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const path = join(directory, entry.name)
-    if (entry.isDirectory()) return walk(path)
-    return [path]
+    return entry.isDirectory() ? walk(path) : [path]
   })
 }
 
 function trackedTextFiles() {
   const result = spawnSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'utf8' })
-  if (result.status === 0) {
-    return result.stdout.split('\0').filter(Boolean).filter((path) => {
-      if (/^(?:pnpm-lock\.yaml|src\/payload-types\.ts|src\/payload\/migrations\/.*\.json)$/.test(normalize(path))) return false
-      return ['.cjs', '.css', '.js', '.json', '.md', '.mjs', '.mts', '.scss', '.ts', '.tsx', '.yaml', '.yml'].includes(extname(path))
-    }).map((path) => resolve(root, path))
-  }
-
-  const skipDirs = new Set(['.git', '.next', '.pnpm-store', 'node_modules'])
-  return walk(root).filter((file) => {
-    const relativePath = normalize(relative(root, file))
-    const segments = relativePath.split('/')
-    if (segments.some((segment) => skipDirs.has(segment))) return false
-    if (/^(?:pnpm-lock\.yaml|src\/payload-types\.ts|src\/payload\/migrations\/.*\.json)$/.test(relativePath)) return false
-    return ['.cjs', '.css', '.js', '.json', '.md', '.mjs', '.mts', '.scss', '.ts', '.tsx', '.yaml', '.yml'].includes(extname(relativePath))
-  })
+  if (result.status !== 0) return []
+  return result.stdout.split('\0').filter(Boolean).filter((path) => {
+    const normalized = normalize(path)
+    if (/^(?:pnpm-lock\.yaml|src\/payload-types\.ts|src\/payload\/migrations.*\/.*\.json)$/.test(normalized)) return false
+    return ['.cjs', '.css', '.js', '.json', '.md', '.mjs', '.mts', '.scss', '.ts', '.tsx', '.yaml', '.yml'].includes(extname(path))
+  }).map((path) => resolve(root, path))
 }
+
 function normalize(path) {
   return String(path).replaceAll('\\', '/')
 }

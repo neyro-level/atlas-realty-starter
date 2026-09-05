@@ -1,11 +1,13 @@
 import type { CollectionConfig } from 'payload'
 
+import { isPublicGatewayRequest } from '@/core/access/public-gateway'
+
 import { canDeleteContent, canManageContent, publicPageWhere } from './helpers'
 
 type CollectionAccess = NonNullable<CollectionConfig['access']>
 
 export const canReadPages: NonNullable<CollectionAccess['read']> = ({ req }) =>
-  canManageContent(req.user) ? true : publicPageWhere()
+  isPublicGatewayRequest(req) ? publicPageWhere() : canManageContent(req.user)
 
 export const canCreatePages: NonNullable<CollectionAccess['create']> = ({ req }) =>
   canManageContent(req.user)

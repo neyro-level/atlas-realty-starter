@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { canReadAdminActivities, denyAdminActivityMutation } from '../access/admin-activities'
-import { ADMIN_ACTIVITY_EVENTS, ADMIN_ACTIVITY_LABELS } from '../admin/lib/constants'
+import { ADMIN_ACTIVITY_EVENTS, ADMIN_ACTIVITY_LABELS } from '../constants'
 
 export const AdminActivities = {
   slug: 'admin-activities',

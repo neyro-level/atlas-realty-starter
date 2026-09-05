@@ -7,19 +7,19 @@ export const foundationUsers = {
     username: 'content-manager',
     name: 'Контент-менеджер',
     password: 'ContentManager123!',
-    role: 'CONTENT_MANAGER' as const,
+    role: 'editor' as const,
   },
   director: {
     username: 'director',
     name: 'Директор',
     password: 'Director123!',
-    role: 'DIRECTOR' as const,
+    role: 'editor' as const,
   },
   superAdmin: {
     name: 'Суперадмин',
     username: 'superadmin',
     password: 'SuperAdmin123!',
-    role: 'SUPER_ADMIN' as const,
+    role: 'owner' as const,
   },
 }
 
@@ -91,7 +91,7 @@ export async function seedPrivilegedUsers() {
     collection: 'users',
     data: foundationUsers.superAdmin,
     draft: false,
-    context: { userBootstrap: true },
+    context: { systemOperation: 'bootstrap-first-owner' },
     overrideAccess: true,
   })
 

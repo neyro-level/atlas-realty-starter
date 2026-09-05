@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
 import { canReadAntiSpamEvents, denyAntiSpamEventMutation } from '../access/anti-spam-events'
-import { ANTI_SPAM_VERDICT_LABELS, ANTI_SPAM_VERDICTS } from '../admin/lib/constants'
+import { ANTI_SPAM_VERDICT_LABELS, ANTI_SPAM_VERDICTS } from '../constants'
 
 export const AntiSpamEvents = {
   slug: 'anti-spam-events',
