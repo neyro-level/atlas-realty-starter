@@ -1,9 +1,7 @@
 import 'server-only'
 
-import { getPayload } from 'payload'
+import type { Payload } from 'payload'
 
-import config from '@/payload.config'
-import { runtimeConfig } from '@/project/env'
 import { LEAD_CONSENT_VERSION, assertMinimumFillTime, normalizeLeadPhone, type PublicLeadCommand } from '@/shared/types/public-lead'
 
 import { systemContext } from '../operations'
@@ -11,15 +9,13 @@ import { resolveLeadRoute, type TestDeliveryMode } from './routing'
 
 export type CreateLeadResult = { duplicate: boolean; leadId: string }
 
-export async function createPublicLead(command: PublicLeadCommand, options: { testDeliveryMode?: TestDeliveryMode } = {}): Promise<CreateLeadResult> {
+export async function createPublicLead(payload: Payload, command: PublicLeadCommand, options: { testDeliveryMode?: TestDeliveryMode } = {}): Promise<CreateLeadResult> {
   assertMinimumFillTime(command.formStartedAt)
   const normalizedPhone = normalizeLeadPhone(command.phone)
-  const payload = await getPayload({ config })
   const existing = await findExisting(payload, command.idempotencyKey)
   if (existing) return { duplicate: true, leadId: existing }
 
-  const testMode = runtimeConfig.environment === 'test' ? options.testDeliveryMode ?? 'success' : undefined
-  const route = await resolveLeadRoute(payload, command, testMode)
+  const route = await resolveLeadRoute(payload, command, options.testDeliveryMode)
   const context = {
     ...systemContext('lead-intake'),
     leadDeliveryPlan: route.deliveries,
@@ -56,7 +52,7 @@ export async function createPublicLead(command: PublicLeadCommand, options: { te
   }
 }
 
-async function findExisting(payload: Awaited<ReturnType<typeof getPayload>>, idempotencyKey: string) {
+async function findExisting(payload: Payload, idempotencyKey: string) {
   const result = await payload.find({
     collection: 'leads', depth: 0, limit: 1, overrideAccess: true, pagination: false,
     where: { idempotencyKey: { equals: idempotencyKey } },

@@ -5,6 +5,12 @@ import { describe, expect, it } from 'vitest'
 const read = (path: string) => readFileSync(resolve(path), 'utf8')
 
 describe('Stage 5 operations contract', () => {
+  it('keeps every reusable core area independent from project composition', () => {
+    const cruiser = read('.dependency-cruiser.cjs')
+    expect(cruiser).toContain("from: { path: '^src/core/' }")
+    expect(cruiser).not.toContain("^src/core/(?!data-access/)")
+  })
+
   it('builds a standalone artifact before deployment', () => {
     expect(read('next.config.ts')).toContain("output: 'standalone'")
     expect(read('package.json')).toContain('node .next/standalone/server.js')
@@ -24,6 +30,14 @@ describe('Stage 5 operations contract', () => {
     expect(pack).toContain('buildBeforeDeploy: true')
     expect(read('scripts/prepare-standalone.mjs')).toContain("'.env.production.local'")
     const ci = read('.sourcecraft/ci.yaml')
+    const prCheck = ci.slice(ci.indexOf('  pr-check:'), ci.indexOf('  main-static-gate:'))
+    const mainGate = ci.slice(ci.indexOf('  main-static-gate:'))
+    expect(prCheck).toContain('pnpm verify')
+    expect(prCheck).not.toContain('pnpm build')
+    expect(mainGate).not.toContain('pnpm verify')
+    expect(mainGate).toContain('pnpm build')
+    expect(prCheck).toContain('git diff --exit-code -- src/payload-types.ts')
+    expect(mainGate).toContain('git diff --exit-code -- src/payload-types.ts')
     expect(ci).toContain('.release-artifacts/release.part00')
     expect(ci).toContain('.release-artifacts/release.part09')
     expect(ci).toContain('.release-artifacts/release.json')
