@@ -59,6 +59,7 @@ describe('Stage 5 operations contract', () => {
     expect(installer).toContain('chown -R root:"${APP_USER}" "${release_dir}"')
     expect(installer).toContain('find "${release_dir}" -type d -exec chmod 0750')
     expect(installer).toContain('runuser -u "${APP_RELEASE_USER}"')
+    expect(installer).toContain('-xzf - -C "${release_dir}" < "${ARCHIVE}"')
     expect(installer).not.toContain('chown -R "${APP_USER}:${APP_USER}" "${release_dir}"')
     expect(read('deploy/bootstrap-server.sh')).toContain('-mindepth 1 -xdev ! -type l -exec chown root:"${APP_USER}"')
   })
