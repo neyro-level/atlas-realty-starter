@@ -14,6 +14,8 @@
 
 Payload Admin, PostgreSQL adapter, Payload Jobs, manual media with optional S3 storage, strict TypeScript, security headers, structured logging, append-only migrations-v2, the canonical property schema, allowlisted streaming YRL import, the headless public catalog API, tagged cache invalidation, official Payload SEO/Redirects plugins and transactional lead intake/outbox.
 
+Production operations use a CI-built immutable Next.js standalone artifact, an isolated application identity, internal TLS validation origin and one private Payload worker for every queue and schedule. A concrete production clone must configure trusted-domain TLS and persistent S3 before release.
+
 Public API v1 exposes catalog, property, complex, agent, page, post, facets, config, redirect resolution and paged sitemap DTOs. Filters, pagination and sort are server-bounded; raw Payload documents and private property fields are never returned.
 
 Lead intake validates a bounded JSON body, honeypot, minimum fill time, normalized contact data, explicit consent and idempotency. Routing order is property agent, responsible complex agent, server-side type mapping, then mandatory fallback. Lead and pending deliveries commit atomically; Payload Jobs handles delivery and recovery. The starter production channel registry is intentionally empty. A deterministic adapter exists only in the test runtime.

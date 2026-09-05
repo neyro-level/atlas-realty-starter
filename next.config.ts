@@ -11,6 +11,7 @@ const dirname = path.dirname(filename)
 const nextConfig: NextConfig = {
   allowedDevOrigins: ['127.0.0.1', 'localhost'],
   experimental: { cpus: 1 },
+  output: 'standalone',
   async headers() {
     return [{ headers: [...SECURITY_HEADERS], source: '/:path*' }]
   },
