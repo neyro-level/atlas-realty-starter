@@ -483,6 +483,9 @@ export interface ResidentialComplex {
   developer?: (string | null) | Developer;
   responsibleAgent?: (string | null) | Agent;
   yandexBuildingId?: string | null;
+  /**
+   * Системное владение импортируемыми полями. Очищать manualFields может только владелец осознанно.
+   */
   importOwnership?:
     | {
         [k: string]: unknown;
@@ -583,6 +586,9 @@ export interface Building {
   complex: string | ResidentialComplex;
   name: string;
   yandexHouseId: string;
+  /**
+   * Системное владение импортируемыми полями. Очищать manualFields может только владелец осознанно.
+   */
   importOwnership?:
     | {
         [k: string]: unknown;
