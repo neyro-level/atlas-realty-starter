@@ -29,6 +29,7 @@ describe('Stage 5 operations contract', () => {
     const installer = read('deploy/install-release.sh')
     expect(installer).not.toMatch(/pnpm install/)
     expect(installer).not.toMatch(/pnpm build/)
+    expect(installer).toContain('node_modules/.bin/payload" migrate')
     expect(installer).toContain('src/payload/migrations-v2')
     expect(installer.indexOf('payload migrate')).toBeLessThan(installer.indexOf('current.next'))
   })
@@ -36,6 +37,7 @@ describe('Stage 5 operations contract', () => {
   it('uses one private worker for all queues and schedules', () => {
     const worker = read('deploy/ams-realty-platform-starter-worker.service')
     expect(worker).toContain('--all-queues --handle-schedules')
+    expect(worker).toContain('current/node_modules/.bin/payload jobs:run')
     expect(worker).toContain('ProtectSystem=full')
   })
 

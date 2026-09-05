@@ -13,7 +13,7 @@ Environment=NEXT_TELEMETRY_DISABLED=1
 Environment=PATH=/opt/ams-realty-platform-starter/runtime/bin:/usr/local/bin:/usr/bin:/bin
 EnvironmentFile=/etc/ams-realty-platform-starter/runtime.env
 EnvironmentFile=/etc/ams-realty-platform-starter/release.env
-ExecStart=/opt/ams-realty-platform-starter/runtime/bin/pnpm payload jobs:run --cron "* * * * *" --all-queues --handle-schedules
+ExecStart=/opt/ams-realty-platform-starter/current/node_modules/.bin/payload jobs:run --cron "* * * * *" --all-queues --handle-schedules
 Restart=on-failure
 RestartSec=5
 TimeoutStopSec=30
