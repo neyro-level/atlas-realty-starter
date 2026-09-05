@@ -48,16 +48,10 @@ export async function resetFoundationState() {
   ] as const
 
   for (const collection of collections) {
-    const { docs } = await payload.find({
-      collection,
-      depth: 0,
-      limit: 500,
-      overrideAccess: true,
-      pagination: false,
-    })
-
-    for (const doc of docs) {
-      await payload.delete({
+    for (;;) {
+      const { docs } = await payload.find({ collection, depth: 0, limit: 500, overrideAccess: true, pagination: false })
+      if (!docs.length) break
+      for (const doc of docs) await payload.delete({
         collection,
         id: doc.id,
         overrideAccess: true,

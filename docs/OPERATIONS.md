@@ -8,6 +8,8 @@
 4. Run pnpm verify.
 5. Start with pnpm dev.
 
+Public cache can be invalidated with `POST /api/internal/revalidate`, an `x-revalidate-secret` header and a bounded list of known cache tags. This route is operational-only and never returns secret or internal diagnostic data.
+
 Import workers run with `pnpm jobs:run:imports`. A feed source stores only environment-variable references; its HTTPS hostname must be present in `FEED_OUTBOUND_HOSTS`, and external image hosts in `EXTERNAL_IMAGE_HOSTS`.
 
 Create the first owner once with BOOTSTRAP_OWNER_USERNAME, BOOTSTRAP_OWNER_PASSWORD and BOOTSTRAP_OWNER_NAME set only for the command pnpm owner:bootstrap. The command refuses to run when any user already exists and never resets a password.
@@ -20,7 +22,7 @@ GET /healthz returns only status ok or unavailable with HTTP 200 or 503. It expo
 
 Release input is a clean exact merged SourceCraft main SHA. CI installs from the frozen lockfile, runs pnpm verify, targeted sensitive checks and pnpm build before runtime database impact. Schema changes use reviewed append-only Payload migrations with push disabled.
 
-Stage 1 migration evidence uses `pnpm db:migrate:stage1-check`; the isolated 50,000-property performance baseline uses `pnpm benchmark:import:50k`. Both reset only the dedicated local test database.
+Stage 1 migration evidence uses `pnpm db:migrate:stage1-check`; Stage 2 SEO/Redirects backfill evidence uses `pnpm db:migrate:stage2-check`. The isolated performance commands are `pnpm benchmark:import:50k` and `pnpm benchmark:public:50k`. They reset only the dedicated local test database.
 
 ## Validation contour
 

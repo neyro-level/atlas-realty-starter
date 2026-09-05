@@ -1,62 +1,56 @@
+import 'server-only'
+
+import { unstable_cache } from 'next/cache'
 import { getPayload } from 'payload'
 
 import { createPublicGatewayContext } from '@/core/access/public-gateway'
-
+import { PUBLIC_CACHE_TAGS } from '@/core/cache/public-cache'
 import config from '@/payload.config'
 
 export const SITEMAP_PAGE_SIZE = 10_000
+export type SitemapType = 'agents' | 'complexes' | 'pages' | 'posts' | 'properties'
+export type SitemapDocument = { lastModified: string; url: string }
 
-export type SitemapDocument = {
-  lastModified: string
-  slug: string
+const collectionFor: Record<SitemapType, 'agents' | 'pages' | 'posts' | 'properties' | 'residential-complexes'> = {
+  agents: 'agents', complexes: 'residential-complexes', pages: 'pages', posts: 'posts', properties: 'properties',
 }
 
-export async function getSitemapPageCounts() {
-  const payload = await getPayload({ config })
-  const [complexes, properties] = await Promise.all([
-    payload.count({
-    context: createPublicGatewayContext(), collection: 'residential-complexes', overrideAccess: false }),
-    payload.count({
-    context: createPublicGatewayContext(), collection: 'properties', overrideAccess: false }),
-  ])
-
-  return {
-    complexes: Math.ceil(complexes.totalDocs / SITEMAP_PAGE_SIZE),
-    properties: Math.ceil(properties.totalDocs / SITEMAP_PAGE_SIZE),
-  }
+export function getSitemapIndex() {
+  return unstable_cache(querySitemapIndex, ['sitemap-index'], { revalidate: 300, tags: [PUBLIC_CACHE_TAGS.sitemap] })()
 }
 
-export async function getComplexSitemapPage(pageIndex: number): Promise<SitemapDocument[]> {
-  const payload = await getPayload({ config })
-  const result = await payload.find({
-    context: createPublicGatewayContext(),
-    collection: 'residential-complexes',
-    depth: 0,
-    limit: SITEMAP_PAGE_SIZE,
-    overrideAccess: false,
-    page: pageIndex + 1,
-    pagination: true,
-    select: { slug: true, updatedAt: true },
-    sort: 'id',
-  })
-  return result.docs.map((document) => ({ lastModified: document.updatedAt, slug: document.slug }))
+export function getSitemapChunk(type: SitemapType, page: number) {
+  return unstable_cache(() => querySitemapChunk(type, page), ['sitemap', type, String(page)], { revalidate: 300, tags: [PUBLIC_CACHE_TAGS.sitemap] })()
 }
 
-export async function getPropertySitemapPage(pageIndex: number): Promise<SitemapDocument[]> {
+async function querySitemapIndex() {
   const payload = await getPayload({ config })
-  const result = await payload.find({
-    context: createPublicGatewayContext(),
-    collection: 'properties',
-    depth: 0,
-    limit: SITEMAP_PAGE_SIZE,
-    overrideAccess: false,
-    page: pageIndex + 1,
-    pagination: true,
-    select: { slug: true, updatedAt: true },
-    sort: 'id',
-  })
-  return result.docs.map((document) => ({
-    lastModified: document.updatedAt,
-    slug: document.slug,
+  const entries = await Promise.all((Object.keys(collectionFor) as SitemapType[]).map(async (type) => {
+    const count = await payload.count({ collection: collectionFor[type], context: createPublicGatewayContext(), overrideAccess: false })
+    return { chunks: Math.ceil(count.totalDocs / SITEMAP_PAGE_SIZE), type }
   }))
+  return { entries, pageSize: SITEMAP_PAGE_SIZE }
+}
+
+async function querySitemapChunk(type: SitemapType, page: number): Promise<SitemapDocument[]> {
+  const payload = await getPayload({ config })
+  const common = { context: createPublicGatewayContext(), depth: 0, limit: SITEMAP_PAGE_SIZE, overrideAccess: false as const, page: page + 1, pagination: true as const, select: { slug: true, updatedAt: true } as const, sort: 'id' }
+  if (type === 'complexes') {
+    const result = await payload.find({ ...common, collection: 'residential-complexes' })
+    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: `/complexes/${doc.slug}` }))
+  }
+  if (type === 'properties') {
+    const result = await payload.find({ ...common, collection: 'properties', where: { status: { in: ['active', 'reserved'] } } })
+    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: `/properties/${doc.slug}` }))
+  }
+  if (type === 'agents') {
+    const result = await payload.find({ ...common, collection: 'agents' })
+    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: `/agents/${doc.slug}` }))
+  }
+  if (type === 'pages') {
+    const result = await payload.find({ ...common, collection: 'pages' })
+    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: `/pages/${doc.slug}` }))
+  }
+  const result = await payload.find({ ...common, collection: 'posts' })
+  return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: `/posts/${doc.slug}` }))
 }

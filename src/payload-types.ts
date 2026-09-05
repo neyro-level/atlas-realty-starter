@@ -71,7 +71,6 @@ export interface Config {
     media: Media;
     pages: Page;
     posts: Post;
-    redirects: Redirect;
     leads: Lead;
     'lead-deliveries': LeadDelivery;
     properties: Property;
@@ -82,6 +81,7 @@ export interface Config {
     'feed-sources': FeedSource;
     'import-runs': ImportRun;
     'import-issues': ImportIssue;
+    redirects: Redirect;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -94,7 +94,6 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
-    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
     'lead-deliveries': LeadDeliveriesSelect<false> | LeadDeliveriesSelect<true>;
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
@@ -105,6 +104,7 @@ export interface Config {
     'feed-sources': FeedSourcesSelect<false> | FeedSourcesSelect<true>;
     'import-runs': ImportRunsSelect<false> | ImportRunsSelect<true>;
     'import-issues': ImportIssuesSelect<false> | ImportIssuesSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -229,9 +229,15 @@ export interface Page {
     };
     [k: string]: unknown;
   } | null;
-  seo?: {
+  meta?: {
     title?: string | null;
     description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    canonical?: string | null;
+    noindex?: boolean | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -263,26 +269,19 @@ export interface Post {
   } | null;
   cover?: (string | null) | Media;
   publishedAt?: string | null;
-  seo?: {
+  meta?: {
     title?: string | null;
     description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    canonical?: string | null;
+    noindex?: boolean | null;
   };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "redirects".
- */
-export interface Redirect {
-  id: string;
-  from: string;
-  to: string;
-  statusCode: '301' | '302' | '307' | '308';
-  isEnabled?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -390,9 +389,13 @@ export interface Property {
     | null;
   videoUrl?: string | null;
   agent?: (string | null) | Agent;
-  seo?: {
+  meta?: {
     title?: string | null;
     description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
     canonical?: string | null;
     noindex?: boolean | null;
   };
@@ -492,6 +495,16 @@ export interface ResidentialComplex {
   propertyCount?: number | null;
   availablePropertyCount?: number | null;
   status: 'draft' | 'published' | 'hidden';
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    canonical?: string | null;
+    noindex?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;
@@ -554,6 +567,16 @@ export interface Agent {
   isPublished?: boolean | null;
   importHash?: string | null;
   lastSeenAt?: string | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    canonical?: string | null;
+    noindex?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
   deletedAt?: string | null;
@@ -588,6 +611,43 @@ export interface ImportIssue {
   code: string;
   message: string;
   recordIndex?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: string;
+  from: string;
+  to?: {
+    type?: ('reference' | 'custom') | null;
+    reference?:
+      | ({
+          relationTo: 'properties';
+          value: string | Property;
+        } | null)
+      | ({
+          relationTo: 'residential-complexes';
+          value: string | ResidentialComplex;
+        } | null)
+      | ({
+          relationTo: 'agents';
+          value: string | Agent;
+        } | null)
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+  };
+  type: '301' | '302' | '307' | '308';
+  isEnabled?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -737,10 +797,6 @@ export interface PayloadLockedDocument {
         value: string | Post;
       } | null)
     | ({
-        relationTo: 'redirects';
-        value: string | Redirect;
-      } | null)
-    | ({
         relationTo: 'leads';
         value: string | Lead;
       } | null)
@@ -779,6 +835,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'import-issues';
         value: string | ImportIssue;
+      } | null)
+    | ({
+        relationTo: 'redirects';
+        value: string | Redirect;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -876,11 +936,14 @@ export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   content?: T;
-  seo?:
+  meta?:
     | T
     | {
         title?: T;
         description?: T;
+        image?: T;
+        canonical?: T;
+        noindex?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -897,27 +960,18 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   cover?: T;
   publishedAt?: T;
-  seo?:
+  meta?:
     | T
     | {
         title?: T;
         description?: T;
+        image?: T;
+        canonical?: T;
+        noindex?: T;
       };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "redirects_select".
- */
-export interface RedirectsSelect<T extends boolean = true> {
-  from?: T;
-  to?: T;
-  statusCode?: T;
-  isEnabled?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1032,11 +1086,12 @@ export interface PropertiesSelect<T extends boolean = true> {
       };
   videoUrl?: T;
   agent?: T;
-  seo?:
+  meta?:
     | T
     | {
         title?: T;
         description?: T;
+        image?: T;
         canonical?: T;
         noindex?: T;
       };
@@ -1071,6 +1126,15 @@ export interface ResidentialComplexesSelect<T extends boolean = true> {
   propertyCount?: T;
   availablePropertyCount?: T;
   status?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        canonical?: T;
+        noindex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   deletedAt?: T;
@@ -1130,6 +1194,15 @@ export interface AgentsSelect<T extends boolean = true> {
   isPublished?: T;
   importHash?: T;
   lastSeenAt?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        canonical?: T;
+        noindex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   deletedAt?: T;
@@ -1193,6 +1266,24 @@ export interface ImportIssuesSelect<T extends boolean = true> {
   code?: T;
   message?: T;
   recordIndex?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects_select".
+ */
+export interface RedirectsSelect<T extends boolean = true> {
+  from?: T;
+  to?:
+    | T
+    | {
+        type?: T;
+        reference?: T;
+        url?: T;
+      };
+  type?: T;
+  isEnabled?: T;
   updatedAt?: T;
   createdAt?: T;
 }

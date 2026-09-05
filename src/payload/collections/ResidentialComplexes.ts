@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { adminWrite, ownerOnly, publicOrAdmin } from '../access/standard'
 import { formatPageSlug } from '../hooks/formatPageSlug'
+import { collectionCacheHooks } from '@/core/cache/public-cache'
 
 export const ResidentialComplexes = {
   slug: 'residential-complexes',
@@ -25,6 +26,6 @@ export const ResidentialComplexes = {
     { name: 'availablePropertyCount', type: 'number', defaultValue: 0, min: 0, admin: { readOnly: true } },
     { name: 'status', type: 'select', defaultValue: 'draft', required: true, index: true, options: ['draft', 'published', 'hidden'] },
   ],
-  hooks: { beforeValidate: [formatPageSlug] },
+  hooks: { ...collectionCacheHooks(['public:catalog', 'public:sitemap']), beforeValidate: [formatPageSlug] },
   trash: true,
 } satisfies CollectionConfig

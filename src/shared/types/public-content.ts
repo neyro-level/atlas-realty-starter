@@ -1,10 +1,20 @@
 export type PublicMediaView = { alt: string; src: string }
-export type PropertyCategory = PublicProperty['category']
+export type PropertyCategory = 'apartment' | 'commercial' | 'house' | 'land' | 'parking' | 'townhouse'
+
+export type PublicSEO = {
+  canonical: string
+  description?: string
+  image?: PublicMediaView
+  noindex: boolean
+  title: string
+}
 
 export type PublicProperty = {
   address: string
   agentId?: string
-  category: 'apartment' | 'commercial' | 'house' | 'land' | 'parking' | 'townhouse'
+  category: PropertyCategory
+  dealStatus?: 'available' | 'reserved' | 'sold'
+  dealType: 'rent' | 'sale'
   description: string
   district?: string
   floor?: number
@@ -13,21 +23,38 @@ export type PublicProperty = {
   images: PublicMediaView[]
   market: 'newbuild' | 'secondary'
   priceMinorUnits: number
+  pricePerMeterMinorUnits?: number
   rooms?: number
+  seo: PublicSEO
   slug: string
+  status: 'active' | 'reserved' | 'sold'
   title: string
   totalAreaCm2: number
   updatedAt: string
 }
 
+export type PublicPropertyDetails = PublicProperty & {
+  alternatives: PublicProperty[]
+  buildingId?: string
+  complexId?: string
+  latitude?: number
+  longitude?: number
+  mortgageAvailable: boolean
+  structuredData: Record<string, unknown>
+  videoUrl?: string
+}
+
 export type PublicComplex = {
   address?: string
+  availablePropertyCount: number
   description: string
   developer?: string
   district?: string
   id: string
+  images: PublicMediaView[]
   name: string
   readiness?: 'commissioned' | 'construction' | 'planned'
+  seo: PublicSEO
   slug: string
 }
 
@@ -35,11 +62,34 @@ export type PublicAgent = {
   bio: string
   email?: string
   id: string
+  image?: PublicMediaView
   name: string
   phone?: string
   position?: string
+  seo: PublicSEO
   slug: string
 }
 
-export type PublicContacts = { siteName: string; defaultTitle?: string; defaultDescription?: string }
-export type PaginatedPublicResult<T> = { docs: T[]; page: number; totalDocs: number; totalPages: number }
+export type PublicContentDocument = {
+  content: unknown
+  excerpt?: string
+  id: string
+  publishedAt?: string
+  seo: PublicSEO
+  slug: string
+  title: string
+  updatedAt: string
+}
+
+export type PublicContacts = { defaultDescription?: string; defaultTitle?: string; siteName: string }
+export type PublicConfig = PublicContacts & { apiVersion: 'v1'; headless: true }
+export type PaginatedPublicResult<T> = { docs: T[]; limit: number; page: number; totalDocs: number; totalPages: number }
+
+export type PublicFacets = {
+  categories: Array<{ count: number; value: PropertyCategory }>
+  districts: Array<{ count: number; value: string }>
+  markets: Array<{ count: number; value: 'newbuild' | 'secondary' }>
+  rooms: Array<{ count: number; value: number }>
+}
+
+export type PublicRedirect = { destination: string; permanent: boolean; statusCode: 301 | 302 | 307 | 308 }

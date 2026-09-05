@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { adminWrite, ownerOnly, publicOrAdmin } from '../access/standard'
 import { formatPageSlug } from '../hooks/formatPageSlug'
+import { collectionCacheHooks } from '@/core/cache/public-cache'
 
 export const Agents = {
   slug: 'agents',
@@ -31,6 +32,6 @@ export const Agents = {
     { name: 'importHash', type: 'text' },
     { name: 'lastSeenAt', type: 'date', index: true },
   ],
-  hooks: { beforeValidate: [formatPageSlug] },
+  hooks: { ...collectionCacheHooks(['public:agents', 'public:sitemap']), beforeValidate: [formatPageSlug] },
   trash: true,
 } satisfies CollectionConfig

@@ -61,6 +61,38 @@ function runExpectFailure(command) {
   if (result.status === 0) throw new Error(`Command unexpectedly succeeded: ${command}`)
 }
 
+if (process.argv.includes('--stage2-migration-check')) {
+  run('pnpm payload migrate')
+  const batches = new pg.Client({ connectionString: testURL.toString() })
+  await batches.connect()
+  try {
+    await batches.query(`UPDATE payload_migrations SET batch = CASE WHEN name = '20260905_093617_standard_21_public_catalog' THEN 4 ELSE 3 END`)
+  } finally { await batches.end() }
+  run('pnpm payload migrate:down')
+
+  const fixture = new pg.Client({ connectionString: testURL.toString() })
+  await fixture.connect()
+  try {
+    await fixture.query(`INSERT INTO pages (title, slug, seo_title, seo_description, updated_at, created_at, _status) VALUES ('Legacy SEO page', 'legacy-seo-page', 'Legacy title', 'Legacy description', now(), now(), 'published')`)
+    await fixture.query(`INSERT INTO properties (origin, status, is_published, slug, market, deal_type, category, price_minor_units, currency, total_area_cm2, title, seo_title, seo_description, seo_canonical, seo_noindex, updated_at, created_at) VALUES ('manual', 'active', true, 'legacy-seo-property', 'secondary', 'sale', 'apartment', 10000, 'RUB', 10000, 'Legacy property', 'Property title', 'Property description', 'https://example.test/legacy', true, now(), now())`)
+    await fixture.query(`INSERT INTO redirects ("from", "to", status_code, is_enabled, updated_at, created_at) VALUES ('/legacy-from', '/legacy-to', '308', true, now(), now())`)
+  } finally { await fixture.end() }
+
+  run('pnpm payload migrate')
+  const verification = new pg.Client({ connectionString: testURL.toString() })
+  await verification.connect()
+  try {
+    const page = await verification.query(`SELECT meta_title, meta_description FROM pages WHERE slug='legacy-seo-page'`)
+    const property = await verification.query(`SELECT meta_title, meta_description, meta_canonical, meta_noindex FROM properties WHERE slug='legacy-seo-property'`)
+    const redirect = await verification.query(`SELECT to_type, to_url, type::text type FROM redirects WHERE "from"='/legacy-from'`)
+    if (page.rows[0]?.meta_title !== 'Legacy title' || page.rows[0]?.meta_description !== 'Legacy description') throw new Error('Page SEO backfill failed')
+    if (property.rows[0]?.meta_title !== 'Property title' || property.rows[0]?.meta_canonical !== 'https://example.test/legacy' || property.rows[0]?.meta_noindex !== true) throw new Error('Property SEO backfill failed')
+    if (redirect.rows[0]?.to_type !== 'custom' || redirect.rows[0]?.to_url !== '/legacy-to' || redirect.rows[0]?.type !== '308') throw new Error('Redirect backfill failed')
+  } finally { await verification.end() }
+  console.log(JSON.stringify({ redirects: 'PASS', seoBackfill: 'PASS', stage2Migration: 'PASS' }))
+  process.exit(0)
+}
+
 if (process.argv.includes('--stage1-migration-check')) {
   run('pnpm payload migrate')
   const batches = new pg.Client({ connectionString: testURL.toString() })
@@ -120,6 +152,13 @@ if (process.argv.includes('--stage1-migration-check')) {
 if (process.argv.includes('--stage1-performance')) {
   run('pnpm payload migrate')
   run('node --no-deprecation --import=tsx/esm scripts/fixtures/benchmark-property-import.mts')
+  process.exit(0)
+}
+
+if (process.argv.includes('--stage2-performance')) {
+  run('pnpm payload migrate')
+  run('node --no-deprecation --import=tsx/esm scripts/fixtures/benchmark-property-import.mts')
+  run('node --no-deprecation --import=tsx/esm scripts/fixtures/benchmark-public-catalog.mts')
   process.exit(0)
 }
 

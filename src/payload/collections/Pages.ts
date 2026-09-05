@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { canCreatePages, canDeletePages, canReadPages, canUpdatePages } from '../access/pages'
 import { formatPageSlug } from '../hooks/formatPageSlug'
+import { collectionCacheHooks } from '@/core/cache/public-cache'
 
 export const Pages = {
   slug: 'pages',
@@ -62,35 +63,9 @@ export const Pages = {
         ru: 'Содержимое',
       },
     },
-    {
-      fields: [
-        {
-          name: 'title',
-          type: 'text',
-          label: {
-            en: 'SEO title',
-            ru: 'SEO-заголовок',
-          },
-        },
-        {
-          name: 'description',
-          type: 'textarea',
-          label: {
-            en: 'SEO description',
-            ru: 'SEO-описание',
-          },
-          maxLength: 160,
-        },
-      ],
-      label: {
-        en: 'SEO',
-        ru: 'SEO',
-      },
-      name: 'seo',
-      type: 'group',
-    },
   ],
   hooks: {
+    ...collectionCacheHooks(['public:content', 'public:sitemap']),
     beforeValidate: [formatPageSlug],
   },
   versions: {

@@ -2,6 +2,7 @@ import type { PostgresAdapter } from '@payloadcms/db-postgres'
 import type { Payload } from 'payload'
 
 import { safeHTTPSStream } from '@/core/security/outbound-http/client'
+import { requestPublicRevalidation } from '@/project/cache/request-revalidation'
 import { getFeedParser } from '@/project/ingest/registry'
 import { resolveRuntimeReference, runtimeConfig } from '@/project/env'
 import { isAllowedExternalImageURL } from '@/shared/security/media-url'
@@ -77,6 +78,11 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
   const deactivated = input.mode === 'full_snapshot' && safety.allowed ? await deactivateMissingProperties(payload, { feedSourceId: input.sourceId, snapshotStartedAt: startedAt }) : 0
   const status: 'success' | 'suspicious' = safety.allowed ? 'success' : 'suspicious'
   await finishRun(payload, runId, { ...totals, deactivated }, [...issues, ...safety.reasons.map((reason) => ({ code: reason, message: 'Safety condition prevented deactivation' }))], status, safety.allowed, formats, startedAt)
+  try {
+    await requestPublicRevalidation(['public:catalog', 'public:sitemap'])
+  } catch {
+    payload.logger.warn('public cache revalidation request failed; TTL fallback remains active')
+  }
   return { ...totals, deactivated, runId, status }
 }
 

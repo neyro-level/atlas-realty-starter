@@ -17,6 +17,7 @@ const webServerEnv: Record<string, string> = {
   NODE_ENV: isProductionSmoke ? 'production' : 'development',
   PAYLOAD_SECRET: process.env.PAYLOAD_SECRET || 'foundation-test-secret-please-change',
   PORT: testPort,
+  REVALIDATE_SECRET: process.env.REVALIDATE_SECRET || 'e2e-revalidate-secret-value-32chars',
 }
 
 export default defineConfig({
