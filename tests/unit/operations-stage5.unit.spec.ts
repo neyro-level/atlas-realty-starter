@@ -44,6 +44,8 @@ describe('Stage 5 operations contract', () => {
     const worker = read('deploy/ams-realty-platform-starter-worker.service')
     expect(worker).toContain('--all-queues --handle-schedules')
     expect(worker).toContain('current/node_modules/.bin/payload jobs:run')
+    expect(worker).toContain('current/node_modules/.bin/tsx scripts/recover-orphaned-payload-jobs.mts')
+    expect(worker).toContain('NODE_OPTIONS=--conditions=react-server')
     expect(worker).toContain('ProtectSystem=full')
   })
 

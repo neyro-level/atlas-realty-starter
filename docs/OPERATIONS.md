@@ -24,6 +24,8 @@ Release input is a clean exact merged SourceCraft `main` SHA. The Linux main pip
 
 `deploy/install-release.sh <archive> <full-sha> <sha256>` verifies the archive, extracts a new immutable release directory, applies reviewed append-only Payload migrations, switches the `current` symlink, starts the web service and one all-queue worker, then checks `/healthz`. A failed smoke restores the previous symlink and services. Build/artifact completion therefore precedes runtime database impact.
 
+Before the single worker starts, a typed System Gateway operation returns incomplete Payload jobs left with `processing=true` by a terminated prior worker to the queue. This startup recovery is safe only with the canonical single-worker service; adding parallel worker services requires a separate architecture decision.
+
 Stage migration evidence commands are `pnpm db:migrate:stage1-check`, `pnpm db:migrate:stage2-check` and `pnpm db:migrate:stage3-check`. Critical behavior uses `pnpm test:int` and `pnpm test:e2e`; production-shaped E2E uses `pnpm test:e2e:production`. The isolated performance commands are `pnpm benchmark:import:50k` and `pnpm benchmark:public:50k` and reset only the dedicated local test database.
 
 ## Isolated validation contour
