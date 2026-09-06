@@ -1,6 +1,6 @@
 import type { PayloadRequest, Where } from 'payload'
 
-const PUBLIC_GATEWAY_MARKER = Object.freeze({ boundary: 'public-gateway' })
+const PUBLIC_GATEWAY_MARKER = 'ams-public-gateway-v1'
 
 export function createPublicGatewayContext() {
   return { publicGateway: PUBLIC_GATEWAY_MARKER }

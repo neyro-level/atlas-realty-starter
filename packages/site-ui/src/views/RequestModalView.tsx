@@ -1,0 +1,170 @@
+import type { RequestAvatarDto } from "@starter/site-contracts";
+import { X } from "lucide-react";
+import type { FormEvent, ReactNode, RefObject } from "react";
+import type { SiteImageRenderer } from "../lib/adapters";
+
+type RequestModalViewProps = {
+  avatars: readonly RequestAvatarDto[];
+  imageRenderer: SiteImageRenderer;
+  title: string;
+  titleLines: readonly string[] | null;
+  subtitle: string;
+  submitLabel: string;
+  formType: string;
+  name: string;
+  phone: string;
+  consent: boolean;
+  website: string;
+  isPending: boolean;
+  errors: {
+    name?: string;
+    phone?: string;
+    consent?: string;
+  };
+  resultMessage?: string | null;
+  panelRef?: RefObject<HTMLDivElement | null>;
+  phoneRef?: RefObject<HTMLInputElement | null>;
+  phonePlaceholder?: string;
+  consentContent: ReactNode;
+  onClose: () => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onNameChange: (value: string) => void;
+  onPhoneChange: (value: string) => void;
+  onConsentChange: (checked: boolean) => void;
+  onWebsiteChange: (value: string) => void;
+};
+
+export function RequestModalView({
+  avatars,
+  imageRenderer: ImageRenderer,
+  title,
+  titleLines,
+  subtitle,
+  submitLabel,
+  formType,
+  name,
+  phone,
+  consent,
+  website,
+  isPending,
+  errors,
+  resultMessage,
+  panelRef,
+  phoneRef,
+  phonePlaceholder = "+7 (___) ___-__-__",
+  consentContent,
+  onClose,
+  onSubmit,
+  onNameChange,
+  onPhoneChange,
+  onConsentChange,
+  onWebsiteChange,
+}: RequestModalViewProps) {
+  return (
+    <div
+      className="request-modal__overlay"
+      role="presentation"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <div className="request-modal__panel" role="dialog" aria-modal="true" aria-labelledby="request-modal-title" ref={panelRef}>
+        <button className="request-modal__close" type="button" aria-label="Закрыть форму" onClick={onClose}>
+          <X className="size-5" aria-hidden />
+        </button>
+
+        <div className="request-modal__header">
+          <div className="request-modal__visual" aria-hidden>
+            <div className="request-modal__avatar-stack">
+              {avatars.map((avatar, index) => (
+                <span
+                  key={avatar.src}
+                  className="request-modal__avatar"
+                  style={{ left: `${index * 70}px`, zIndex: index === 1 ? 3 : 2 }}
+                >
+                  <ImageRenderer src={avatar.src} alt="" fill unoptimized sizes="116px" className="object-cover object-[center_18%]" />
+                </span>
+              ))}
+            </div>
+          </div>
+          <h2 className={`request-modal__title ${formType === "legal_consultation" ? "request-modal__title--compact" : ""}`} id="request-modal-title">
+            {titleLines
+              ? titleLines.map((line, index) => (
+                  <span key={line}>
+                    {index > 0 ? <br /> : null}
+                    {line}
+                  </span>
+                ))
+              : title}
+          </h2>
+          {subtitle ? <p className="request-modal__subtitle" id="request-modal-subtitle">{subtitle}</p> : null}
+        </div>
+
+        <form className="request-modal__form" onSubmit={onSubmit} data-analytics-form-type={formType} noValidate>
+          <label className="request-modal__honeypot">
+            Сайт
+            <input tabIndex={-1} autoComplete="off" value={website} onChange={(event) => onWebsiteChange(event.target.value)} />
+          </label>
+
+          <div className="request-modal__field">
+            <label className="request-modal__label" htmlFor="request-modal-name">
+              Ваше имя
+            </label>
+            <input
+              id="request-modal-name"
+              className="request-modal__input"
+              autoComplete="name"
+              value={name}
+              required
+              aria-invalid={Boolean(errors.name)}
+              aria-describedby={errors.name ? "request-modal-name-error" : undefined}
+              onChange={(event) => onNameChange(event.target.value)}
+              placeholder="Как к вам обращаться"
+            />
+            {errors.name ? <p className="request-modal__error" id="request-modal-name-error">{errors.name}</p> : null}
+          </div>
+
+          <div className="request-modal__field">
+            <label className="request-modal__label" htmlFor="request-modal-phone">
+              Номер телефона
+            </label>
+            <input
+              id="request-modal-phone"
+              ref={phoneRef}
+              className="request-modal__input"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              value={phone}
+              aria-invalid={Boolean(errors.phone)}
+              aria-describedby={errors.phone ? "request-modal-phone-error" : undefined}
+              onChange={(event) => onPhoneChange(event.target.value)}
+              placeholder={phonePlaceholder}
+            />
+            {errors.phone ? <p className="request-modal__error" id="request-modal-phone-error">{errors.phone}</p> : null}
+          </div>
+
+          <label className="request-modal__consent">
+            <input
+              className="request-modal__checkbox"
+              type="checkbox"
+              checked={consent}
+              aria-invalid={Boolean(errors.consent)}
+              aria-describedby={errors.consent ? "request-modal-consent-error" : undefined}
+              onChange={(event) => onConsentChange(event.target.checked)}
+            />
+            <span>{consentContent}</span>
+          </label>
+          {errors.consent ? <p className="request-modal__error" id="request-modal-consent-error">{errors.consent}</p> : null}
+
+          {resultMessage ? <p className="request-modal__submit-error" role="alert">{resultMessage}</p> : null}
+
+          <button className="home-btn-primary request-modal__submit" type="submit" disabled={isPending}>
+            {isPending ? "Отправляем..." : submitLabel}
+          </button>
+          <p className="request-modal__note">Без спама. Только чтобы связаться по вашей задаче.</p>
+        </form>
+      </div>
+    </div>
+  );
+}

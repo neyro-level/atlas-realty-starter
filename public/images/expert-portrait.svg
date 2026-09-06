@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Геометрический портрет эксперта</title>
+  <desc id="desc">Премиальная абстрактная иллюстрация в графитовом, молочном и бордовом цветах</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F7F3ED"/>
+      <stop offset="1" stop-color="#E8DED3"/>
+    </linearGradient>
+    <linearGradient id="coat" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#303034"/>
+      <stop offset="1" stop-color="#17171A"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="1000" rx="48" fill="url(#bg)"/>
+  <path d="M0 760 800 430v570H0Z" fill="#8A1515" opacity=".92"/>
+  <circle cx="650" cy="170" r="88" fill="#630E0E"/>
+  <path d="M170 945c20-230 96-356 230-356s210 126 230 356Z" fill="url(#coat)"/>
+  <path d="M292 370c0-92 47-160 108-160s108 68 108 160v82c0 102-48 174-108 174s-108-72-108-174Z" fill="#D4B8A0"/>
+  <path d="M284 356c8-112 65-176 139-160 62 13 97 70 92 157-35-39-77-59-126-59-39 0-74 20-105 62Z" fill="#252525"/>
+  <path d="m318 608 82 80 82-80 64 337H254Z" fill="#F7F3ED"/>
+  <path d="m400 688 40 84-40 130-40-130Z" fill="#630E0E"/>
+  <path d="M80 98h250v14H80zm0 34h180v14H80z" fill="#252525" opacity=".88"/>
+  <rect x="78" y="886" width="136" height="12" rx="6" fill="#F7F3ED" opacity=".8"/>
+</svg>

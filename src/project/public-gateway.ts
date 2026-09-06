@@ -4,6 +4,7 @@ import { getPayload } from 'payload'
 
 import {
   getPublicAgentBySlug as queryPublicAgentBySlug,
+  getPublicAgents as queryPublicAgents,
   getPublicCatalog as queryPublicCatalog,
   getPublicComplexBySlug as queryPublicComplexBySlug,
   getPublicComplexes as queryPublicComplexes,
@@ -11,6 +12,7 @@ import {
   getPublicFacets as queryPublicFacets,
   getPublicPageBySlug as queryPublicPageBySlug,
   getPublicPostBySlug as queryPublicPostBySlug,
+  getPublicPosts as queryPublicPosts,
   getPublicPropertyBySlug as queryPublicPropertyBySlug,
   resolvePublicRedirect as queryPublicRedirect,
 } from '@/core/data-access/public/queries'
@@ -42,12 +44,20 @@ export async function getPublicAgentBySlug(slug: string) {
   return queryPublicAgentBySlug(await payload(), slug, options)
 }
 
+export async function getPublicAgents() {
+  return queryPublicAgents(await payload(), options)
+}
+
 export async function getPublicPageBySlug(slug: string) {
   return queryPublicPageBySlug(await payload(), slug, options)
 }
 
 export async function getPublicPostBySlug(slug: string) {
   return queryPublicPostBySlug(await payload(), slug, options)
+}
+
+export async function getPublicPosts() {
+  return queryPublicPosts(await payload(), options)
 }
 
 export async function getPublicConfig() {

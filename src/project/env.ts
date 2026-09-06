@@ -18,6 +18,7 @@ const environmentSchema = z.object({
   DATABASE_URL: z.string().optional(),
   EXTERNAL_IMAGE_HOSTS: z.string().optional(),
   FEED_OUTBOUND_HOSTS: z.string().optional(),
+  LOCAL_FULL_CATALOG: z.enum(['true', 'false']).optional(),
   NEXT_PHASE: z.string().optional(),
   NEXT_PUBLIC_SITE_URL: z.string().optional(),
   NODE_ENV: z.string().optional(),
@@ -30,6 +31,7 @@ const environmentSchema = z.object({
   S3_FORCE_PATH_STYLE: z.enum(['true', 'false']).optional(),
   S3_REGION: z.string().optional(),
   S3_SECRET_ACCESS_KEY: z.string().optional(),
+  SITE_ENGINE: z.enum(['fixture', 'payload']).optional(),
 })
 
 const hostnameSchema = z.string().regex(
@@ -52,11 +54,13 @@ export function buildRuntimeConfig(input: EnvironmentSource) {
     externalImageHosts: readHostAllowlist(env.EXTERNAL_IMAGE_HOSTS),
     feedOutboundHosts: readHostAllowlist(env.FEED_OUTBOUND_HOSTS),
     leadRetentionDays: 365,
+    localFullCatalog: env.LOCAL_FULL_CATALOG === 'true',
     payloadSecret: readPayloadSecret(env.PAYLOAD_SECRET, protectedRuntime),
     releaseSHA: env.RELEASE_SHA ?? 'local',
     revalidateSecret: readSecret('REVALIDATE_SECRET', env.REVALIDATE_SECRET, protectedRuntime),
     s3: readS3Config(env, environment === 'production'),
     secureCookies: protectedRuntime,
+    siteEngine: env.SITE_ENGINE ?? 'payload',
     siteURL,
   }
 }

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">АТЛАС</title><desc id="desc">Архитектурная монограмма А с мотивом компаса</desc>
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="#F6F2EC"/>
+  <path d="M12 48 29.2 13.5c1.1-2.2 4.3-2.2 5.4 0L52 48h-9.6l-3.6-7.6H25.3L21.6 48H12Zm17-15.3h6.2L32 25.8l-3 6.9Z" fill="#8A1515"/>
+  <path d="m32 7.5 3.1 7.2L32 21.9l-3.1-7.2L32 7.5Z" fill="#17161A"/>
+  <path d="M32 22v26" stroke="#17161A" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M18.8 51.5h26.4" stroke="#17161A" stroke-width="3" stroke-linecap="round"/>
+</svg>

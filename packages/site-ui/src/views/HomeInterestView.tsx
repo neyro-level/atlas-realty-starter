@@ -1,0 +1,74 @@
+"use client";
+
+import { ArrowRight } from "lucide-react";
+import { useMemo, useState, type ReactNode } from "react";
+import type { SiteLinkRenderer } from "../lib/adapters";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
+
+type InterestMode = "flat" | "country";
+type CardSlot = { id: string; content: ReactNode };
+
+type HomeInterestViewProps = {
+  flatCards: CardSlot[];
+  countryCards: CardSlot[];
+  modeHrefs: Record<InterestMode, string>;
+  chips: Array<{ label: string; href: string }>;
+  linkRenderer: SiteLinkRenderer;
+  scrollHint?: ReactNode;
+};
+
+const MODE_LABELS: Record<InterestMode, string> = { flat: "Вторичная", country: "Загородная" };
+
+export function HomeInterestView({ flatCards, countryCards, modeHrefs, chips, linkRenderer: LinkRenderer, scrollHint }: HomeInterestViewProps) {
+  const [mode, setMode] = useState<InterestMode>("flat");
+  const visibleCards = useMemo(() => (mode === "flat" ? flatCards : countryCards).slice(0, 10), [countryCards, flatCards, mode]);
+  const desktopPrimary = visibleCards.slice(0, 4);
+  const desktopSecondary = visibleCards.slice(4, 7);
+  return (
+    <section id="section-home-interest" className="home-interest" aria-labelledby="home-interest-title">
+      <div className="home-shell">
+        <div className="home-interest__head">
+          <LinkRenderer href={modeHrefs[mode]} className="home-interest__title-link">
+            <h2 id="home-interest-title">Вас может заинтересовать</h2><ArrowRight className="size-5" aria-hidden />
+          </LinkRenderer>
+          <div className="home-interest__tabs" role="tablist" aria-label="Подборки объектов">
+            {(Object.keys(MODE_LABELS) as InterestMode[]).map((item) => (
+              <Button key={item} type="button" variant="ghost" role="tab" aria-selected={mode === item} className="home-interest__tab" onClick={() => setMode(item)}>{MODE_LABELS[item]}</Button>
+            ))}
+          </div>
+        </div>
+        <div className="home-interest__chips" aria-label="Быстрые подборки">
+          {chips.map((chip) => <Badge key={chip.label} asChild variant="secondary" className="home-interest__chip"><LinkRenderer href={chip.href}>{chip.label}</LinkRenderer></Badge>)}
+        </div>
+        {visibleCards.length ? (
+          <>
+            <div className="home-carousel-shell">
+              <div id="home-interest-track" className="home-interest__track home-interest__track--mobile">
+                <div className="home-interest__grid home-interest__grid--carousel">{visibleCards.map((card) => <div key={card.id} className="home-snap-card">{card.content}</div>)}</div>
+              </div>
+              {scrollHint}
+            </div>
+            <div className="home-interest__grid home-interest__grid--desktop">
+              {desktopPrimary.map((card) => <div key={card.id}>{card.content}</div>)}
+              <HomeInterestSelectionCard mode={mode} />
+              {desktopSecondary.map((card) => <div key={card.id}>{card.content}</div>)}
+            </div>
+          </>
+        ) : <div className="home-interest__empty">Сейчас подходящие объекты подбираются вручную. Оставьте заявку, и специалист агентства недвижимости соберет варианты под ваш запрос и бюджет.</div>}
+      </div>
+    </section>
+  );
+}
+
+function HomeInterestSelectionCard({ mode }: { mode: InterestMode }) {
+  const title = mode === "flat" ? <>Эксперт поможет <br />в подборе</> : "Подберём загородный вариант";
+  const subtitle = mode === "flat" ? "Подберёт лучшие варианты под ваш запрос и бюджет. Быстро и без лишних просмотров." : "Сравнит дома и участки, отсеет слабые варианты и подберёт объекты под ваш бюджет.";
+  return (
+    <Card className="home-interest__selection-card">
+      <h3>{title}</h3><p>{subtitle}</p>
+      <Button type="button" data-request-modal data-request-modal-title="Получить подборку объектов" data-request-modal-subtitle="Оставьте контакты. Специалист агентства недвижимости уточнит задачу и подберет лучшие варианты под ваш запрос и бюджет." data-request-modal-source={`home-interest:${mode}:selection-card`} data-request-modal-form-type={`home_interest_${mode}_selection`}>Получить подборку бесплатно</Button>
+    </Card>
+  );
+}

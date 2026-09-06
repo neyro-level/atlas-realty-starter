@@ -1,0 +1,41 @@
+"use client";
+
+import Link from "next/link";
+import { HomeCarouselScrollHintView, HomeInterestView, type SiteLinkRendererProps } from "@starter/site-ui";
+import { buildSearchParams, type CatalogQuery, type ListingCard } from "@/lib/catalog";
+import { tenant } from "@/project/tenant";
+import { CatalogPropertyCard } from "@/components/catalog/CatalogPropertyCard";
+
+const MODE_HREFS = {
+  flat: catalogHref({ city: tenant.cityEn, dealType: "sale", category: "flat" }),
+  country: catalogHref({ city: tenant.cityEn, dealType: "sale", category: "house" }),
+};
+
+const INTEREST_CHIPS = [
+  { label: "С хорошим ремонтом", href: catalogHref({ city: tenant.cityEn, dealType: "sale", category: "flat", renovation: "евроремонт" }) },
+  { label: "С большой кухней", href: catalogHref({ city: tenant.cityEn, dealType: "sale", category: "flat", kitchenFrom: 12 }) },
+  { label: "Дом рядом с городом", href: "/doma" },
+  { label: "Новостройки с отделкой", href: "/novostroyki" },
+  { label: "Цена снижена", href: "/nedvizhimost" },
+  { label: "Участки под строительство", href: "/zagorodnaya" },
+];
+
+function HomeLink({ href, children, ariaLabel, ...props }: SiteLinkRendererProps) { return <Link href={href} aria-label={ariaLabel} {...props}>{children}</Link>; }
+
+export function HomeLatestFlats({ flatListings, countryListings }: { flatListings: ListingCard[]; countryListings: ListingCard[] }) {
+  return (
+    <HomeInterestView
+      flatCards={flatListings.map((listing) => ({ id: listing.id, content: <CatalogPropertyCard listing={listing} /> }))}
+      countryCards={countryListings.map((listing) => ({ id: listing.id, content: <CatalogPropertyCard listing={listing} /> }))}
+      modeHrefs={MODE_HREFS}
+      chips={INTEREST_CHIPS}
+      linkRenderer={HomeLink}
+      scrollHint={<HomeCarouselScrollHintView trackId="home-interest-track" />}
+    />
+  );
+}
+
+function catalogHref(query: CatalogQuery) {
+  const params = buildSearchParams(query).toString();
+  return params ? `/nedvizhimost?${params}` : "/nedvizhimost";
+}

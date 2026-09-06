@@ -1,0 +1,53 @@
+/* PT Root UI by Paratype, SIL Open Font License 1.1. License: /fonts/pt-root-ui/OFL.txt */
+@font-face {
+  font-family: "PT Root UI";
+  src: url("/fonts/pt-root-ui/pt-root-ui-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PT Root UI";
+  src: url("/fonts/pt-root-ui/pt-root-ui-medium.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PT Root UI";
+  src: url("/fonts/pt-root-ui/pt-root-ui-bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700 800;
+  font-display: swap;
+}
+
+:root {
+  --color-bg-page: var(--background);
+  --color-bg-section: var(--surface);
+  --color-bg-soft: var(--surface-muted);
+  --color-bg-dark: var(--surface-dark);
+  --color-bg-dark-deep: var(--surface-dark-strong);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.01em;
+}
