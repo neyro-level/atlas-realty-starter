@@ -5,7 +5,6 @@ const staticRoot = path.join(process.cwd(), '.next', 'static', 'chunks')
 const required = {
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NEXT_PUBLIC_INDEXABLE: process.env.NEXT_PUBLIC_INDEXABLE,
-  NEXT_PUBLIC_YANDEX_MAPS_API_KEY: process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY,
 }
 
 if (!existsSync(staticRoot)) throw new Error('Missing .next/static/chunks. Run pnpm build first.')
@@ -29,8 +28,9 @@ if (!chunks.includes(required.NEXT_PUBLIC_SITE_URL)) {
   throw new Error('NEXT_PUBLIC_SITE_URL was not inlined into browser chunks.')
 }
 
-if (!chunks.includes(required.NEXT_PUBLIC_YANDEX_MAPS_API_KEY)) {
-  throw new Error('NEXT_PUBLIC_YANDEX_MAPS_API_KEY was not inlined into browser chunks.')
+const yandexMapsApiKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY
+if (yandexMapsApiKey && !chunks.includes(yandexMapsApiKey)) {
+  throw new Error('Configured NEXT_PUBLIC_YANDEX_MAPS_API_KEY was not inlined into browser chunks.')
 }
 
 if (chunks.includes('process.env.NEXT_PUBLIC_SITE_URL')) {
