@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import { CONTENT_SECURITY_POLICY, SECURITY_HEADERS } from '@/core/security/headers'
 import { createLogger, normalizeCorrelationID } from '@/core/observability/logger'
 import { isPublicAddress } from '@/core/security/outbound-http/ip-policy'
+import { isSameOriginRequest } from '@/core/security/request-origin-policy'
 import { isPublicMediaFileRequest } from '@/payload/access/media'
 
 describe('foundation security', () => {
@@ -58,5 +59,31 @@ describe('foundation security', () => {
     expect(isPublicMediaFileRequest({ url: '/api/media?limit=10' })).toBe(false)
     expect(isPublicMediaFileRequest({ url: '/api/media/atlas-demo.webp' })).toBe(false)
     expect(isPublicMediaFileRequest({ url: '/api/media/file/nested/atlas-demo.webp' })).toBe(false)
+  })
+
+  it('accepts the browser origin reconstructed from trusted reverse-proxy headers', () => {
+    const request = new Request('http://127.0.0.1:3010/api/analytics/pageview', {
+      method: 'POST',
+      headers: {
+        origin: 'https://atlas.ams24.ru',
+        'x-forwarded-host': 'atlas.ams24.ru',
+        'x-forwarded-proto': 'https',
+      },
+    })
+
+    expect(isSameOriginRequest(request)).toBe(true)
+  })
+
+  it('rejects a foreign browser origin behind the reverse proxy', () => {
+    const request = new Request('http://127.0.0.1:3010/api/analytics/pageview', {
+      method: 'POST',
+      headers: {
+        origin: 'https://attacker.example',
+        'x-forwarded-host': 'atlas.ams24.ru',
+        'x-forwarded-proto': 'https',
+      },
+    })
+
+    expect(isSameOriginRequest(request)).toBe(false)
   })
 })
