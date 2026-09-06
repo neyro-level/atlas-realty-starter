@@ -2,38 +2,54 @@
 
 ## Project
 
-- Type: self-contained headless starter engine for real-estate platforms.
-- Mode: CONFORMANT STARTER / RELEASE-READY under the 2.1 Solo compliance contract.
-- Stack: Next.js 16.3.4, React 19.2.8, TypeScript 6.0.3, Payload 3.88.0, PostgreSQL 18, Node.js 24.20.x, pnpm 11.24.0.
-- Repository mode: SOURCECRAFT_PRIMARY_GITHUB_MIRROR; origin/main is canonical.
-- Platform contract: docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md.
+- Type: self-contained full-stack starter engine for real-estate websites and catalogs.
+- Mode: CONFORMANT STARTER / BUILD MODE; a concrete client clone enters MAINTENANCE MODE only after its own production release.
+- Profile: public real-estate site and catalog up to about 50,000 active properties.
+- Stack: Next.js 16.3.4, React 19.2.8, TypeScript 6.0.3, Payload 3.88.0, PostgreSQL 18, Node.js 24.20.0, pnpm 11.24.0.
+- Repository mode: SOURCECRAFT_PRIMARY_GITHUB_MIRROR; `origin/main` is canonical.
+- Platform contract: `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md`.
 
 ## Reading order
 
 1. Global AMS instructions and the minimal relevant skills.
 2. This file.
-3. docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md for foundation/compliance scope.
-4. docs/PROJECT.md and one relevant document: VERSION_MATRIX, SECURITY or OPERATIONS.
-5. package.json, src/payload.config.ts, migrations-v2, tests and actual code.
+3. `docs/PROJECT.md` and one relevant document: `VERSION_MATRIX`, `SECURITY` or `OPERATIONS`.
+4. The relevant part of `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md` for architecture, data, security or compliance scope.
+5. `package.json`, `src/payload.config.ts`, `src/site-engine`, `src/core`, `src/payload/migrations-v2`, tests and actual code.
+6. Graphify only as a navigation aid after checking that its reported commit matches `HEAD`.
 
 ## Invariants
 
-- There is no public UI. / and former client public routes return 404.
-- Public product traffic uses /api/public/v1, Public Gateway, explicit query limits/select and DTOs.
+- The public UI is part of the starter. `/` is a real page and must not be forced back to 404.
+- Public UI reads Payload data only through `SiteEngine` and the Public Gateway with explicit query bounds, selects and DTOs. It never receives raw Payload documents.
+- `/api/public/v1` remains the versioned headless integration contract.
+- `packages/site-contracts` owns presentation DTOs and the `SiteEngine` interface; `packages/site-ui` is presentation-only and must not import Payload or database code; `packages/site-fixtures` is the deterministic fixture adapter.
 - Payload is the sole backend, auth, Admin, schema and migration owner. Prisma and a second backend/Admin/auth are forbidden.
-- Data access zones are only core/data-access/public, system and ingest. There is no user zone until an authenticated product UI exists.
+- Data access zones are `core/data-access/public`, `system` and `ingest`. A user zone is added only for a real authenticated product UI outside Payload Admin.
 - Raw anonymous Payload REST for business collections and globals is denied.
-- User-context Local API sets overrideAccess: false and update/delete sets overrideLock: false.
-- overrideAccess: true is allowed only in the typed System Gateway. Raw DB/SQL is allowed only in Ingest Gateway, migrations and documented maintenance.
-- Production schema uses append-only migrations-v2; push stays false.
-- No client identity, domain, feed/channel configuration, absolute workstation path or secret is tracked.
+- User-context Local API sets `overrideAccess: false`; update/delete also set `overrideLock: false`.
+- `overrideAccess: true` is allowed only in the typed System Gateway. Raw DB/SQL is allowed only in the Ingest Gateway, migrations and documented maintenance.
+- Production schema uses append-only `migrations-v2`; `push` stays false.
+- The committed identity is a neutral `АТЛАС / Ваш город` starter placeholder. A real domain, legal identity, contacts, feeds, delivery channels, indexing policy and secrets belong only to a concrete clone.
+- A clone must not be made indexable or released while placeholder identity or legal data remains.
 - External legacy runtime/database are validation inputs only and are never changed without a separate release command.
+
+## Documentation map
+
+- Architecture and canonical data rules: `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md`.
+- Product profile, active modules, client-replacement boundary and current state: `docs/PROJECT.md`.
+- Security and PII boundaries: `SECURITY.md`.
+- Local runtime, CI, deploy, rollback, backup and incident response: `docs/OPERATIONS.md`.
+- Exact human-readable stack baseline: `docs/VERSION_MATRIX.md`.
+- Long-lived deviations and boundary changes: `docs/adr/`.
+
+Do not create parallel `PRODUCT`, `ARCHITECTURE`, `DATA_MODEL`, `MASTER_PLAN` or deploy documents while the map above covers their role. Extend the mapped source of truth instead.
 
 ## Git and checks
 
-One independent stream equals one work/** branch and one PR. Merge to main requires review plus a risk-based exact-head SourceCraft gate. Schema, auth/access, imports, leads, dependencies and runtime are HEAVY.
+One independent stream equals one `work/**` branch and one PR. Merge to `main` requires review plus a risk-based exact-head SourceCraft gate. Schema, auth/access, imports, leads, dependencies and runtime are HEAVY.
 
-Daily command: pnpm verify. Sensitive changes additionally run targeted integration tests and pnpm build. Production is a separate lifecycle from clean exact merged main.
+Daily command: `pnpm verify`. Sensitive changes additionally run targeted integration tests and `pnpm build`. Production is a separate lifecycle from clean exact merged `main`.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

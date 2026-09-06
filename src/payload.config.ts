@@ -51,7 +51,7 @@ export default buildConfig({
   admin: {
     importMap: { baseDir: path.resolve(dirname) },
     meta: {
-      description: 'Payload Admin for the headless AMS Realty Platform Starter',
+      description: 'Payload Admin for the full-stack AMS Realty Platform Starter',
       titleSuffix: ' | ' + projectConfig.adminTitleSuffix,
     },
     user: Users.slug,
@@ -130,4 +130,3 @@ export default buildConfig({
     responseOnLimit: 'Upload exceeds the 10 MB limit.',
   },
 })
-

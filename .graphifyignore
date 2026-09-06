@@ -39,3 +39,4 @@ public/images/
 src/payload-types.ts
 src/app/(payload)/admin/importMap.js
 src/payload/migrations/*.json
+src/payload/migrations-v2/*.json

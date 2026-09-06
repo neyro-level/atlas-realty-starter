@@ -1,62 +1,104 @@
 # Project
 
-## Identity
+Last reconciled with SourceCraft `main` commit `ab6e87e186db34d2907538210a117ef97c8b93a0` on 2026-09-06.
 
-- Product: AMS Realty Platform Starter
-- Mode: CONFORMANT STARTER / RELEASE-READY
-- Profile: headless starter for a real-estate catalog up to about 50,000 active properties
-- Backend, schema, auth, Admin and migrations owner: Payload CMS
-- Public UI: absent by design; / returns 404
-- Public contract: /api/public/v1 through Public Gateway and DTOs
-- Repository: SourceCraft is primary; GitHub is an exact-SHA mirror only
+## Identity and lifecycle
 
-## Active baseline
+- Product: AMS Realty Platform Starter.
+- Mode: CONFORMANT STARTER / BUILD MODE.
+- Profile: full-stack real-estate website and catalog up to about 50,000 active properties.
+- Data, auth, Admin, schema and migrations owner: Payload CMS.
+- Public UI: included and served by Next.js App Router; `/` is the home page.
+- Public API: `/api/public/v1` through the Public Gateway and DTOs.
+- Repository: SourceCraft is primary; GitHub is an exact-SHA mirror only.
 
-Payload Admin, PostgreSQL adapter, Payload Jobs, manual media with optional S3 storage, strict TypeScript, security headers, structured logging, append-only migrations-v2, the canonical property schema, allowlisted streaming YRL import, the headless public catalog API, tagged cache invalidation, official Payload SEO/Redirects plugins and transactional lead intake/outbox.
+The starter itself does not become a client production system. A concrete clone enters MAINTENANCE MODE only after client configuration, review, release and live verification.
 
-Production operations use a CI-built immutable Next.js standalone artifact, an isolated application identity, internal TLS validation origin and one private Payload worker for every queue and schedule. A concrete production clone must configure trusted-domain TLS and persistent S3 before release.
+## Canonical document mapping
 
-Public API v1 exposes catalog, property, complex, agent, page, post, facets, config, redirect resolution and paged sitemap DTOs. Filters, pagination and sort are server-bounded; raw Payload documents and private property fields are never returned.
+This project uses the compact document set required by Standard 2.1 and does not duplicate it with parallel files.
 
-Lead intake validates a bounded JSON body, honeypot, minimum fill time, normalized contact data, explicit consent and idempotency. Routing order is property agent, responsible complex agent, server-side type mapping, then mandatory fallback. Lead and pending deliveries commit atomically; Payload Jobs handles delivery and recovery. The starter production channel registry is intentionally empty. A deterministic adapter exists only in the test runtime.
+| Canonical role                                   | Source of truth                                                                                      |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| Product, profile, modules and current state      | this file                                                                                            |
+| Architecture and data model                      | `AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md` plus actual `src/core`, `src/payload` and migrations |
+| Security, roles and PII                          | `../SECURITY.md`                                                                                     |
+| Local runtime, CI, deploy, rollback and recovery | `OPERATIONS.md`                                                                                      |
+| Versions and compatibility check                 | `VERSION_MATRIX.md`                                                                                  |
+| Difficult boundary decisions                     | `adr/`                                                                                               |
 
-Legacy units, employees, import sources and import errors are migration input only. The Stage 1 migration backfills them into properties, agents, feed sources and import issues; optional legacy data stops the contract migration until a client export is completed.
+## Full-stack boundary
 
-## Client-specific state
+The public layer is no longer absent. It is isolated from Payload through these contracts:
 
-No client identity, production domain, feed source, delivery channel or production secret belongs to this starter. The former client server and database may be used only as an isolated validation contour after separate provisioning. Existing client runtime and data must not be changed.
+```text
+Next.js route
+  -> SiteEngine interface
+  -> payload or fixture adapter
+  -> Public Gateway
+  -> Payload Local API with access/select/limit
+  -> public DTO
+  -> presentation-only UI
+```
 
-## Optional modules
+- `packages/site-contracts` owns public presentation DTOs and the `SiteEngine` interface.
+- `packages/site-ui` owns reusable presentation components and views; it cannot import Payload, PostgreSQL or project secrets.
+- `packages/site-fixtures` provides deterministic, database-free fixture data.
+- `src/site-engine` adapts the public UI to either Payload (`SITE_ENGINE=payload`, default) or fixtures (`SITE_ENGINE=fixture`).
+- `src/core/data-access/public` and `src/project/public-gateway.ts` remain the only public Payload read boundary.
 
-Maps, Metrika, internal statistics, reviews, price history, advanced SEO landings, phone reveals, CRM/MAX/email adapters, fleet automation and @ams/realty-core are disabled and not installed.
+The versioned headless API remains supported for external consumers; “headless API” does not mean “no public site”.
+
+## Active platform capabilities
+
+- Payload Admin with `owner` and `editor` roles.
+- PostgreSQL adapter, strict environment parsing and append-only `src/payload/migrations-v2`.
+- Collections: users, media, pages, posts, properties, residential complexes, buildings, developers, agents, feed sources, import runs/issues, leads and lead deliveries.
+- Global: site settings.
+- Streaming allowlisted YRL parsers for secondary and new-build feeds, source isolation, manual-field protection and suspicious-feed deactivation guard.
+- Public catalog/property/complex/agent/content DTOs, bounded filters, SEO/Redirects plugins, sitemap and cache revalidation.
+- Public website: home, catalog/detail, new buildings, employees, journal, corporate/service/legal pages, reviews, favorites/comparison, leadgen and thank-you flows.
+- Lead intake with bounded validation, consent, anti-spam checks, idempotency and transactional delivery records.
+- Payload Jobs for import, delivery, recovery and PII retention.
+- Optional persistent S3 storage; required by the protected production runtime.
+
+## Client replacement boundary
+
+The committed values `АТЛАС`, `Ваш город` and `starter-site` are deliberate placeholders. Before a concrete clone can be indexed or released, it must define and verify:
+
+- client/legal identity, INN/registration data and current legal texts;
+- production domain, city/region scope, contacts, office data and indexability;
+- approved navigation, content, media and social links;
+- real feed sources, parser choice, allowlisted outbound hosts and source ownership;
+- lead routing fallback and enabled MAX/email/CRM adapters;
+- S3 bucket and deployment secrets;
+- legal basis, consent version and PII retention owner;
+- production database, region, backups, TLS and release identity.
+
+No client identity, production domain, feed URL, delivery credential or secret belongs in this starter repository. The production delivery-channel registry is intentionally empty; only deterministic test adapters exist.
+
+## Optional or configuration-gated features
+
+- Yandex Metrika loads only when a counter ID is configured and consent permits it.
+- Yandex Maps JavaScript API key is reserved; current map presentation uses deferred map-widget links/iframes.
+- External media bases and feed/image host allowlists are empty until configured.
+- Fixture `SiteEngine` is for deterministic preview/testing, not production data ownership.
+- Fleet automation and a shared `@ams/realty-core` package are deferred until a second production clone makes them useful.
 
 ## Privacy and retention
 
-Lead PII retention default is 365 days and the baseline consent text version is `152-fz-v1`. A concrete clone must confirm its legal basis, consent text, owner and retention before production. The scheduled retention task removes contact PII after the period. Secrets live only in deployment secret storage and PII must not enter logs.
+Lead PII retention default is 365 days and the baseline consent text version is `152-fz-v1`. A concrete clone must confirm its legal basis, consent text, owner and retention before production. The scheduled retention task removes contact PII after the period. Secrets live only in deployment secret storage and PII must not enter logs or analytics.
 
-## Lifecycle
+## Current evidence and open gates
 
-The starter completed BUILD MODE validation on the exact SourceCraft release `f7835daf1327741f6391627518cc4db31239c156`. Only a concrete client clone moves to MAINTENANCE MODE after its first production release.
+- Backend Standard 2.1 staging validation was completed for historical release `f7835daf1327741f6391627518cc4db31239c156` before the public UI boundary changed.
+- Public UI was later integrated through SourceCraft PR `!51`; the current exact-head live production proof is not recorded in this repository.
+- On 2026-09-06, local PostgreSQL 18.6 accepted all seven committed migrations and the current home page returned HTTP 200 through the Payload-backed `SiteEngine`.
+- The starter remains non-indexable by default and not client-publishable while neutral identity/legal/contact/integration placeholders remain.
+- Before claiming current full-stack production readiness, run the exact-head Merge Gate, package/release flow and live smoke from `OPERATIONS.md` against an isolated client or validation contour.
 
-## AMS Realty Platform Core Standard 2.1 Solo compliance
+## Standard 2.1 status
 
-Validation result: all 18 final-contract criteria pass. Runtime, backup and restore items were verified in the isolated staging contour rather than inferred from code.
+The core backend safeguards remain the intended contract: sole Payload schema ownership, bounded Public Gateway DTOs, denied anonymous raw business REST, typed System Gateway, isolated Ingest Gateway, protected private fields, safe import/deactivation, centralized outbound HTTP, transactional leads/outbox, append-only migrations and risk-routed checks.
 
-1. PASS — Payload is the sole application-schema owner; no second ORM/backend exists.
-2. PASS — public data uses the Public Gateway, explicit selects/limits and DTOs.
-3. PASS — anonymous raw REST for business collections and globals is denied.
-4. PASS — `overrideAccess: true` is confined to typed System Gateway operations.
-5. PASS — private property fields have owner-only field access and never enter public DTOs.
-6. PASS — suspicious, truncated and mixed-address feeds cannot trigger deactivation.
-7. PASS — source ownership, priority and manual-field protection are enforced and tested.
-8. PASS — configurable outbound HTTP uses the allowlisted HTTPS-only safe client.
-9. PASS — leads and pending deliveries commit atomically; retry, recovery and dead-letter states are durable.
-10. PASS — secrets stay in deployment secret storage; guards and redaction keep them out of DB, Git and logs.
-11. PASS — production schema uses reviewed append-only Payload migrations with `push: false`.
-12. PASS — the retained managed PostgreSQL contour has daily automatic backups and seven retained copies.
-13. PASS — the daily owner command is `pnpm verify`.
-14. PASS — CI builds and checksums the immutable artifact before deployment or migration impact.
-15. PASS — integration, E2E and 50,000-property performance checks are risk-routed.
-16. PASS — disabled optional modules create no collections, jobs, environment requirements or client JavaScript.
-17. PASS — lifecycle policy moves a concrete clone to MAINTENANCE MODE after its first production release.
-18. PASS — SourceCraft CI, migrations, worker recovery, backup scheduling and verification automate routine checks.
+This document does not repeat the former 18-item `PASS` claim for the current full-stack HEAD. That claim belonged to the historical headless release and must be re-attested for the exact release SHA after the presentation-boundary change.
