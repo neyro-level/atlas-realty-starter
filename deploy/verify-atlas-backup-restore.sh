@@ -29,8 +29,10 @@ export AWS_ACCESS_KEY_ID="${S3_ACCESS_KEY_ID}"
 export AWS_SECRET_ACCESS_KEY="${S3_SECRET_ACCESS_KEY}"
 export AWS_DEFAULT_REGION="${S3_REGION}"
 
-install -d -o root -g root -m 0700 "${RESTORE_ROOT}"
+install -d -o root -g postgres -m 0710 "${RESTORE_ROOT}"
 temporary_dir="$(mktemp -d "${RESTORE_ROOT}/run.XXXXXX")"
+chown root:postgres "${temporary_dir}"
+chmod 0710 "${temporary_dir}"
 trap 'sudo -u postgres dropdb --if-exists "${RESTORE_DB}" >/dev/null 2>&1 || true; rm -rf -- "${temporary_dir}"' EXIT
 
 key="$(aws --endpoint-url "${S3_ENDPOINT}" s3api list-objects-v2 --bucket "${BACKUP_S3_BUCKET}" --prefix atlas_realty_prod/ --query 'reverse(sort_by(Contents,&LastModified))[?ends_with(Key, `.dump.age`)].Key | [0]' --output text)"
@@ -46,6 +48,8 @@ printf '%s' "${BACKUP_AGE_IDENTITY_B64}" | base64 --decode > "${identity_path}"
 chmod 0600 "${identity_path}"
 aws --endpoint-url "${S3_ENDPOINT}" s3 cp "s3://${BACKUP_S3_BUCKET}/${key}" "${encrypted_path}" --only-show-errors
 age --decrypt --identity "${identity_path}" --output "${dump_path}" "${encrypted_path}"
+chown postgres:postgres "${dump_path}"
+chmod 0600 "${dump_path}"
 
 sudo -u postgres dropdb --if-exists "${RESTORE_DB}"
 sudo -u postgres createdb "${RESTORE_DB}"

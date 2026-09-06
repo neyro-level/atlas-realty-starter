@@ -33,7 +33,7 @@ export AWS_ACCESS_KEY_ID="${S3_ACCESS_KEY_ID}"
 export AWS_SECRET_ACCESS_KEY="${S3_SECRET_ACCESS_KEY}"
 export AWS_DEFAULT_REGION="${S3_REGION}"
 
-install -d -o root -g root -m 0700 "${BACKUP_ROOT}"
+install -d -o root -g postgres -m 0710 "${BACKUP_ROOT}"
 temporary_dir="$(mktemp -d "${BACKUP_ROOT}/run.XXXXXX")"
 trap 'rm -rf -- "${temporary_dir}"' EXIT
 
