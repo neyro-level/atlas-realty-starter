@@ -1,12 +1,17 @@
 # ADR 0001: Headless starter boundary
 
-Status: accepted
+Status: superseded by ADR 0002
 Date: 2026-09-04
+Superseded: 2026-09-06
 
 ## Decision
 
-The repository is a self-contained headless realty engine. It contains Payload Admin, APIs, jobs, migrations and operational endpoints, but no public presentation library. The root route and former client public routes return 404. Public consumers integrate through versioned DTO endpoints under /api/public/v1.
+The repository was initially accepted as a self-contained headless realty engine with Payload Admin, APIs, jobs, migrations and operational endpoints, but no public presentation library. The root route returned 404 and public consumers integrated through `/api/public/v1`.
 
-## Consequences
+## Reason for supersession
 
-Payload remains the sole backend/schema/auth/Admin owner. A future UI library may be connected without changing backend trust boundaries. Client identity, domains, feeds and delivery channels are configured only in a concrete clone. Adding public UI to this starter requires a new owner decision and ADR.
+SourceCraft PR `!51` integrated the reusable public realty UI and connected it to the existing Public Gateway through a `SiteEngine` boundary. The historical decision remains recorded, but its “no public UI” consequence is no longer an active invariant.
+
+## Preserved consequences
+
+Payload remains the sole backend/schema/auth/Admin owner. Public consumers still receive bounded DTOs rather than raw Payload documents, and `/api/public/v1` remains supported.
