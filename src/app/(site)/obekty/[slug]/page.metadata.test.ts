@@ -35,7 +35,7 @@ function makeListing(overrides: Record<string, unknown> = {}) {
     rooms: 3,
     isStudio: false,
     area: 74,
-    city: "Ваш город",
+    city: "Краснодар",
     district: null,
     address: "квартал Гагарина, 1",
     price: 5_000_000,
@@ -65,12 +65,12 @@ describe("property metadata title", () => {
   });
 
   it.each([
-    ["flat", { categoryKey: "flat", rooms: 3, area: 74 }, "Продаётся трёхкомнатная квартира, 74 м² в вашем городе — квартал Гагарина, 1 | АТЛАС"],
-    ["house", { categoryKey: "house", category: "Дом", rooms: null, area: 115 }, "Продаётся дом, 115 м² в вашем городе — квартал Гагарина, 1 | АТЛАС"],
-    ["land", { categoryKey: "land", category: "Участок", rooms: null, area: null }, "Продаётся земельный участок в вашем городе — квартал Гагарина, 1 | АТЛАС"],
-    ["commercial", { categoryKey: "commercial", category: "Коммерция", rooms: null, area: 120 }, "Продаётся коммерческий объект, 120 м² в вашем городе — квартал Гагарина, 1 | АТЛАС"],
-    ["construction", { categoryKey: "construction", category: "Строительство", rooms: null, area: 90 }, "Продаётся проект строительства, 90 м² в вашем городе — квартал Гагарина, 1 | АТЛАС"],
-    ["reserve", { status: "inactive", isPublished: false, unpublishedAt: "2026-08-20T09:00:00.000Z" }, "Продаётся трёхкомнатная квартира, 74 м² в вашем городе — квартал Гагарина, 1 | АТЛАС"],
+    ["flat", { categoryKey: "flat", rooms: 3, area: 74 }, "Продаётся трёхкомнатная квартира, 74 м² в Краснодаре — квартал Гагарина, 1 | АТЛАС"],
+    ["house", { categoryKey: "house", category: "Дом", rooms: null, area: 115 }, "Продаётся дом, 115 м² в Краснодаре — квартал Гагарина, 1 | АТЛАС"],
+    ["land", { categoryKey: "land", category: "Участок", rooms: null, area: null }, "Продаётся земельный участок в Краснодаре — квартал Гагарина, 1 | АТЛАС"],
+    ["commercial", { categoryKey: "commercial", category: "Коммерция", rooms: null, area: 120 }, "Продаётся коммерческий объект, 120 м² в Краснодаре — квартал Гагарина, 1 | АТЛАС"],
+    ["construction", { categoryKey: "construction", category: "Строительство", rooms: null, area: 90 }, "Продаётся проект строительства, 90 м² в Краснодаре — квартал Гагарина, 1 | АТЛАС"],
+    ["reserve", { status: "inactive", isPublished: false, unpublishedAt: "2026-08-20T09:00:00.000Z" }, "Продаётся трёхкомнатная квартира, 74 м² в Краснодаре — квартал Гагарина, 1 | АТЛАС"],
   ])("uses one absolute brand for %s", async (_kind, overrides, expectedTitle) => {
     getListingMock.mockResolvedValue(makeListing(overrides));
 
@@ -87,7 +87,7 @@ describe("property metadata title", () => {
     ["manual without brand", "Квартира у парка", "Квартира у парка | АТЛАС"],
     ["manual with brand", "Квартира у парка | АТЛАС", "Квартира у парка | АТЛАС"],
     ["manual duplicate brand", "Квартира у парка | АТЛАС | АТЛАС", "Квартира у парка | АТЛАС"],
-    ["empty manual title", "   ", "Продаётся трёхкомнатная квартира, 74 м² в вашем городе — квартал Гагарина, 1 | АТЛАС"],
+    ["empty manual title", "   ", "Продаётся трёхкомнатная квартира, 74 м² в Краснодаре — квартал Гагарина, 1 | АТЛАС"],
   ])("normalizes %s", async (_case, seoTitle, expectedTitle) => {
     getListingMock.mockResolvedValue(makeListing({ seoTitle }));
 
@@ -123,7 +123,7 @@ describe("property metadata title", () => {
     getListingMock.mockResolvedValue(makeListing({
       origin: "XML",
       categoryKey: "flat",
-      address: "Ваш город, улица Советская, 11",
+      address: "Краснодар, улица Советская, 11",
     }));
 
     const metadata = await generateMetadata({ params: Promise.resolve({ slug: "property-1" }) });
@@ -136,7 +136,7 @@ describe("property metadata title", () => {
   });
 
   it("replaces hidden exact-address custom metadata with a safe address variant", async () => {
-    const rawAddress = "Ваш город, улица Советская, 11";
+    const rawAddress = "Краснодар, улица Советская, 11";
     getContactsMock.mockResolvedValue({ hidePropertyHouseNumbers: true });
     getListingMock.mockResolvedValue(makeListing({
       origin: "XML",
@@ -165,7 +165,7 @@ describe("property metadata title", () => {
       origin: "XML",
       categoryKey: "flat",
       district: "Центр",
-      address: "Ваш город, улица Советская, 11",
+      address: "Краснодар, улица Советская, 11",
       seoTitle: "Квартира на Советской, 11",
       seoDescription: "Срочная продажа на Советской, 11. Ипотека возможна.",
     }));
@@ -187,7 +187,7 @@ describe("property metadata title", () => {
     getListingMock.mockResolvedValue(makeListing({
       origin: "XML",
       categoryKey: "flat",
-      address: "Ваш город, ул. Советская, 10, кв. 5",
+      address: "Краснодар, ул. Советская, 10, кв. 5",
       seoTitle: "Квартира на Советской, 10",
       seoDescription: "Срочная продажа на Советской, 10, квартира 5.",
     }));
@@ -205,7 +205,7 @@ describe("property metadata title", () => {
   });
 
   it("keeps custom exact-address overrides when the hide policy is disabled", async () => {
-    const rawAddress = "Ваш город, улица Советская, 11";
+    const rawAddress = "Краснодар, улица Советская, 11";
     const seoTitle = `Квартира по адресу ${rawAddress}`;
     const seoDescription = `Срочная продажа: ${rawAddress}. Ипотека возможна.`;
     getContactsMock.mockResolvedValue({ hidePropertyHouseNumbers: false });
@@ -228,7 +228,7 @@ describe("property metadata title", () => {
 
   it("limits a long generated title and description without losing the brand or benefit", async () => {
     getListingMock.mockResolvedValue(makeListing({
-      address: "Ваш город, очень длинная улица имени важного исторического события, дом 123, корпус 45, строение 6",
+      address: "Краснодар, очень длинная улица имени важного исторического события, дом 123, корпус 45, строение 6",
     }));
 
     const metadata = await generateMetadata({ params: Promise.resolve({ slug: "property-1" }) });

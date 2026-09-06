@@ -1,10 +1,10 @@
 export const projectConfig = {
-  adminTitleSuffix: 'Starter',
-  appName: 'AMS Realty Platform Starter',
-  brandName: 'AMS Realty',
-  companyName: 'AMS Realty Platform Starter',
+  adminTitleSuffix: 'АТЛАС',
+  appName: 'АТЛАС',
+  brandName: 'АТЛАС',
+  companyName: 'ИП Скрицкая Юлия Викторовна',
   foundationStack: 'Next.js 16 + Payload CMS 3',
-  packageName: 'ams-realty-platform-starter',
-  projectName: 'AMS Realty Platform Starter',
-  repositorySlug: 'ams-realty-platform-starter',
+  packageName: 'atlas-realty-starter',
+  projectName: 'АТЛАС — недвижимость в Краснодаре',
+  repositorySlug: 'atlas-realty-starter',
 } as const

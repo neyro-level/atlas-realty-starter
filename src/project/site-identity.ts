@@ -7,23 +7,23 @@ const configuredIndexable = clientEnv.indexable;
 
 export const siteIdentity: SiteIdentity = {
   brand: "АТЛАС",
-  legalName: null,
-  projectName: "АТЛАС — стартовый сайт агентства недвижимости",
+  legalName: "ИП Скрицкая Юлия Викторовна",
+  projectName: "АТЛАС — агентство недвижимости в Краснодаре",
   tagline: "Навигация в мире недвижимости",
   city: {
-    nominative: "Ваш город",
-    genitive: "вашего города",
-    prepositional: "вашем городе",
-    slug: "city",
+    nominative: "Краснодар",
+    genitive: "Краснодара",
+    prepositional: "Краснодаре",
+    slug: "krasnodar",
   },
   domain: configuredUrl || "http://localhost:3000",
   indexable: configuredIndexable,
   expert: siteExpert,
   contacts: {
-    phone: null,
-    email: null,
-    address: null,
-    hours: null,
+    phone: "+7 (918) 320-99-96",
+    email: "integrator-p@yandex.ru",
+    address: "г. Краснодар, ул. Игнатова, 4/3, офис 10",
+    hours: "Ежедневно, 9:00–20:00 (МСК)",
   },
   social: {
     telegram: null,
@@ -31,8 +31,10 @@ export const siteIdentity: SiteIdentity = {
     vk: null,
   },
   legal: {
-    name: null,
-    inn: null,
-    registrationNumber: null,
+    name: "ИП Скрицкая Юлия Викторовна",
+    inn: "231295699557",
+    registrationNumber: "323237500365055",
   },
 };
+
+export const legalOperatorAddress = "г. Краснодар, улица им. Игнатова, дом 4/3, корп. 2";

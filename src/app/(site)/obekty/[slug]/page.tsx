@@ -59,12 +59,12 @@ export async function generateMetadata({ params }: Props) {
   if (houseProject) {
     return {
       title: `Проект строительства дома ${String(houseProject.number).padStart(2, "0")} - ${houseProject.area} м²`,
-      description: `Preview проекта строительства дома ${houseProject.area} м² в вашем городе. Стоимость, материалы и сроки уточняются после разбора участка и задачи.`,
+      description: `Preview проекта строительства дома ${houseProject.area} м² в Краснодаре. Стоимость, материалы и сроки уточняются после разбора участка и задачи.`,
       alternates: { canonical: getPropertyPath(houseProject.slug) },
       robots: { index: false, follow: true },
       openGraph: {
         title: `Проект строительства дома ${String(houseProject.number).padStart(2, "0")} - ${houseProject.area} м²`,
-        description: `Preview проекта строительства дома ${houseProject.area} м² в вашем городе. Стоимость, материалы и сроки уточняются после разбора участка и задачи.`,
+        description: `Preview проекта строительства дома ${houseProject.area} м² в Краснодаре. Стоимость, материалы и сроки уточняются после разбора участка и задачи.`,
         url: getPropertyPath(houseProject.slug),
         siteName: siteConfig.clientFullName,
         type: "website",
@@ -73,7 +73,7 @@ export async function generateMetadata({ params }: Props) {
       twitter: {
         card: "summary_large_image",
         title: `Проект строительства дома ${String(houseProject.number).padStart(2, "0")} - ${houseProject.area} м²`,
-        description: `Preview проекта строительства дома ${houseProject.area} м² в вашем городе. Стоимость, материалы и сроки уточняются после разбора участка и задачи.`,
+        description: `Preview проекта строительства дома ${houseProject.area} м² в Краснодаре. Стоимость, материалы и сроки уточняются после разбора участка и задачи.`,
         images: [defaultSocialPreviewPath],
       },
     };
@@ -270,8 +270,8 @@ function buildObjectSeoTitle(
   { hideHouseNumber = false }: { hideHouseNumber?: boolean } = {},
 ) {
   const action = listing.dealType === "rent" ? "Сдаётся" : "Продаётся";
-  const city = listing.city ?? "вашем городе";
-  const cityPhrase = city.toLowerCase().includes("город") ? "в вашем городе" : `в ${city}`;
+  const city = listing.city ?? "Краснодаре";
+  const cityPhrase = city.toLowerCase().includes("город") ? "в Краснодаре" : `в ${city}`;
   const category = buildSeoCategoryLabel(listing);
   const area = listing.area ? `, ${formatNumber(listing.area)} м²` : "";
   const address = buildSeoAddressLabel(listing, hideHouseNumber);
@@ -391,9 +391,9 @@ function compactAddress(value?: string | null) {
     .replace(/^Россия,\s*/i, "")
     .replace(/^Российская Федерация,\s*/i, "")
     .replace(/^региона,\s*/i, "")
-    .replace(/^г\.?\s*Ваш город,\s*/i, "")
-    .replace(/^город\s+Ваш город,\s*/i, "")
-    .replace(/^Ваш город,\s*/i, "")
+    .replace(/^г\.?\s*Краснодар,\s*/i, "")
+    .replace(/^город\s+Краснодар,\s*/i, "")
+    .replace(/^Краснодар,\s*/i, "")
     .trim();
 
   address = address.replace(/,\s*$/, "").trim();
@@ -728,7 +728,7 @@ function formatPropertyUpdatedAt(value?: string | null) {
 }
 
 function buildYandexMapUrl(address: string) {
-  return `https://yandex.ru/maps/?text=${encodeURIComponent(`Ваш город, ${address}`)}`;
+  return `https://yandex.ru/maps/?text=${encodeURIComponent(`Краснодар, ${address}`)}`;
 }
 
 function buildBuildingDescription(listing: PropertyListing) {

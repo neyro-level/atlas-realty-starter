@@ -7,7 +7,7 @@ import { getTestPayload, resetFoundationState, seedPrivilegedUsers } from '../he
 const offer = (title: string): NormalizedOffer => ({
   externalId: 'shared-external-id', market: 'secondary', category: 'apartment', dealType: 'sale', dealStatus: 'available', title,
   priceMinorUnits: 750_000_000, currency: 'RUB', totalAreaCm2: 523_500,
-  address: { format: 'structured', addressPublic: 'Ростов-на-Дону, Пушкинская, 10', localityName: 'Ростов-на-Дону', street: 'Пушкинская', houseNumber: '10' }, photos: [],
+  address: { format: 'structured', addressPublic: 'Краснодар, Красная, 10', localityName: 'Краснодар', street: 'Красная', houseNumber: '10' }, photos: [],
 })
 
 describe('Stage 1 database import', () => {

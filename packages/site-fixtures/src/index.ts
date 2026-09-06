@@ -15,14 +15,14 @@ const updatedAt = "2026-09-03T12:00:00.000Z";
 
 export const fixtureIdentity: SiteIdentity = {
   brand: "АТЛАС",
-  legalName: null,
-  projectName: "АТЛАС — стартовый сайт агентства недвижимости",
+  legalName: "ИП Скрицкая Юлия Викторовна",
+  projectName: "АТЛАС — агентство недвижимости в Краснодаре",
   tagline: "Навигация в мире недвижимости",
   city: {
-    nominative: "Ваш город",
-    genitive: "Вашего города",
-    prepositional: "Вашем городе",
-    slug: "city",
+    nominative: "Краснодар",
+    genitive: "Краснодара",
+    prepositional: "Краснодаре",
+    slug: "krasnodar",
   },
   domain: "http://localhost:3000",
   indexable: false,
@@ -31,9 +31,18 @@ export const fixtureIdentity: SiteIdentity = {
     role: "Основатель и директор агентства недвижимости",
     portrait: "/images/people/andrey-chirkov-director.webp",
   },
-  contacts: { phone: null, email: null, address: null, hours: null },
+  contacts: {
+    phone: "+7 (918) 320-99-96",
+    email: "integrator-p@yandex.ru",
+    address: "г. Краснодар, ул. Игнатова, 4/3, офис 10",
+    hours: "Ежедневно, 9:00–20:00 (МСК)",
+  },
   social: { telegram: null, max: null, vk: null },
-  legal: { name: null, inn: null, registrationNumber: null },
+  legal: {
+    name: "ИП Скрицкая Юлия Викторовна",
+    inn: "231295699557",
+    registrationNumber: "323237500365055",
+  },
 };
 
 const baseProperty = {
@@ -284,7 +293,7 @@ export const fixtureNewBuildings: NewBuildingDto[] = [
     id: "new-building-3",
     slug: "rechnye-sady",
     title: "Речные сады",
-    address: "Набережная вашего города",
+    address: "Набережная Краснодара",
     priceFrom: 9_100_000,
     completion: "Срок уточняется",
     image: null,
@@ -302,7 +311,7 @@ export const fixtureNewBuildings: NewBuildingDto[] = [
     id: "new-building-5",
     slug: "family-place",
     title: "Семейный квартал",
-    address: "Новый район вашего города",
+    address: "Новый район Краснодара",
     priceFrom: 7_900_000,
     completion: "Срок уточняется",
     image: null,
@@ -332,8 +341,8 @@ export const fixtureOffices: PublicOfficeDto[] = [
   {
     id: "office-1",
     title: "Главный офис",
-    address: "Адрес настраивается перед публикацией",
-    mapUrl: "",
+    address: fixtureIdentity.contacts.address!,
+    mapUrl: "https://yandex.ru/map-widget/v1/?text=%D0%B3.%20%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%B4%D0%B0%D1%80%2C%20%D1%83%D0%BB.%20%D0%98%D0%B3%D0%BD%D0%B0%D1%82%D0%BE%D0%B2%D0%B0%2C%204%2F3%2C%20%D0%BE%D1%84%D0%B8%D1%81%2010",
     photoUrl: null,
   },
 ];

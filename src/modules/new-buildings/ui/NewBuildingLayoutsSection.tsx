@@ -16,7 +16,7 @@ export function NewBuildingLayoutsSection({ complex, contained = false }: { comp
           complexName={complex.name}
           slug={complex.slug}
           variant="primary"
-          modalTitle="Получить подборку новостроек в вашем городе"
+          modalTitle="Получить подборку новостроек в Краснодаре"
           showIcon={false}
           className="mt-8 w-full bg-[#8A1515] text-white shadow-[0_8px_18px_rgba(138,21,21,0.18)] hover:bg-[#630E0E] md:w-auto"
         />

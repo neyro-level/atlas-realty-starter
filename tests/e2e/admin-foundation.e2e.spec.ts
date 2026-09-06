@@ -17,7 +17,7 @@ test.describe.serial('Payload native Admin and public site foundation', () => {
     await expect(page).toHaveURL(/\/admin\/?$/)
 
     await page.goto('/', { waitUntil: 'domcontentloaded' })
-    await expect(page.getByRole('heading', { level: 1, name: 'Проверенная недвижимость в вашем городе' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Проверенная недвижимость в Краснодаре' })).toBeVisible()
   })
 
   test('exposes only the safe health endpoint and no GraphQL route', async ({ page }) => {

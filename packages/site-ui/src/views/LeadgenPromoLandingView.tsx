@@ -46,7 +46,7 @@ export function LeadgenPromoLandingView({
     formTitle: "Получить подборку бесплатно",
     submitLabel: "Смотреть базу бесплатно",
     message:
-      "Клиент просит открыть закрытую базу квартир в вашем городе.",
+      "Клиент просит открыть закрытую базу квартир в Краснодаре.",
   };
 
   return (
@@ -530,7 +530,7 @@ function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestBut
                       {hasConstructionPreview ? "Расчет строительства" : "Подборка новостроек"}
                     </p>
                     <p className="mt-1 text-[10px] font-medium leading-4 text-[var(--text-muted)]">
-                      {hasConstructionPreview ? "Ваш город · каталог проектов" : "Ваш город · расчет ипотеки"}
+                      {hasConstructionPreview ? "Краснодар · каталог проектов" : "Краснодар · расчет ипотеки"}
                     </p>
                   </div>
                   <span className="rounded-[5px] bg-[var(--accent-soft)] px-2 py-1 text-[10px] font-semibold leading-none text-[var(--accent)]">
@@ -687,7 +687,7 @@ function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestBut
             <RequestButton
               className={`${primaryButtonClass} sm:w-[330px]`}
               mode="quiz"
-              title="Бесплатный подбор проверенных квартир в вашем городе"
+              title="Бесплатный подбор проверенных квартир в Краснодаре"
               submitLabel="Получить подборку"
               formType={`${content.formPrefix}_final_quiz`}
             >

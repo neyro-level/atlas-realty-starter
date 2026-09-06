@@ -74,8 +74,8 @@ export function trackInternalPageView(url?: string) {
   });
 }
 
-export function trackEvent(name: AnalyticsEventName, params: AnalyticsEventParams = {}) {
-  if (typeof window !== "undefined" && name === "lead_submit_success") {
+export function trackEvent(name: AnalyticsEventName, params: AnalyticsEventParams = {}, options: { announceLeadSuccess?: boolean } = {}) {
+  if (typeof window !== "undefined" && name === "lead_submit_success" && options.announceLeadSuccess !== false) {
     window.dispatchEvent(new CustomEvent(PUBLIC_LEAD_SUCCESS_EVENT));
   }
   const safeParams = Object.fromEntries(

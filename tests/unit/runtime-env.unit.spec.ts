@@ -4,6 +4,9 @@ import { buildRuntimeConfig } from '@/project/env'
 
 const strongSecret = 'b2076f81a29d4cfcb8875d98c94589d2bbf1f13ee4d2417f'
 const core = {
+  AMS_LEADS_API_URL: 'https://leads.example.test/v1/leads',
+  AMS_LEADS_PROJECT_ID: 'atlas',
+  AMS_LEADS_SITE_KEY: 'atlas-test-site-key',
   DATABASE_URL: 'postgres://db',
   NEXT_PUBLIC_SITE_URL: 'https://example.test',
   PAYLOAD_SECRET: strongSecret,

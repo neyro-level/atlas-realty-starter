@@ -32,7 +32,7 @@ function CatalogNewBuildingSelectionGridCard({ source, formType, onRequest }: { 
           <Building2 className="size-5" aria-hidden />
         </div>
         <h3 className="mt-5 text-[1.18rem] font-extrabold leading-[1.25] text-[var(--text-primary)]">
-          Объективный подбор новостроек в вашем городе. Бесплатно.
+          Объективный подбор новостроек в Краснодаре. Бесплатно.
         </h3>
         <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
           Застройщик продаёт свой объект. Мы найдём для вас лучшие условия на всём рынке.
@@ -58,7 +58,7 @@ function CatalogNewBuildingSelectionListCard({ source, formType, onRequest }: { 
         <div className="max-w-2xl">
           <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--accent)]">Бесплатный подбор</p>
           <h3 className="mt-3 text-[1.45rem] font-extrabold leading-[1.16] text-[var(--text-primary)]">
-            Объективный подбор новостроек в вашем городе. Бесплатно.
+            Объективный подбор новостроек в Краснодаре. Бесплатно.
           </h3>
           <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
             Застройщик продаёт свой объект. Мы найдём для вас лучшие условия на всём рынке.

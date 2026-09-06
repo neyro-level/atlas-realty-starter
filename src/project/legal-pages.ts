@@ -1,4 +1,4 @@
-import { siteIdentity } from "@/project/site-identity";
+import { legalOperatorAddress, siteIdentity } from "@/project/site-identity";
 import type { LegalDocumentDto } from "@starter/site-contracts";
 
 export type LegalDocumentId =
@@ -48,13 +48,13 @@ export const legalEntityConfig: LegalEntityConfig = {
   brandName: siteIdentity.brand,
   inn: siteIdentity.legal.inn ?? "Требует настройки",
   ogrnip: siteIdentity.legal.registrationNumber ?? "Требует настройки",
-  address: siteIdentity.contacts.address ?? "Требует настройки перед публикацией",
+  address: legalOperatorAddress,
   phone: siteIdentity.contacts.phone ?? "Не настроен",
   email: siteIdentity.contacts.email ?? "Не настроен",
   website: new URL(siteIdentity.domain).host,
 };
 
-export const PERSONAL_DATA_CONSENT_VERSION = "2026-07-26";
+export const PERSONAL_DATA_CONSENT_VERSION = "2026-09-06";
 
 const operatorDetails = [
   `Оператор: ${legalEntityConfig.legalName}.`,

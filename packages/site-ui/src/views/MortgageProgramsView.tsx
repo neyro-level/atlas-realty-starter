@@ -51,7 +51,7 @@ export function MortgageProgramsView() {
             id="mortgage-programs-title"
             className="text-[24px] font-semibold leading-[1.1] tracking-[-0.03em] text-[var(--text-primary)] sm:text-[clamp(24px,1.8vw,30px)] sm:whitespace-nowrap"
           >
-            Ипотечные программы в вашем городе
+            Ипотечные программы в Краснодаре
           </h2>
         </div>
 

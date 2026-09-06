@@ -14,7 +14,7 @@
 
 The root page depends on the catalog schema. A code/DB mismatch can surface as HTTP 500 even when PostgreSQL is reachable; migration status is therefore part of local startup proof.
 
-Create the first owner once with `BOOTSTRAP_OWNER_USERNAME`, `BOOTSTRAP_OWNER_PASSWORD` and `BOOTSTRAP_OWNER_NAME` set only for `pnpm owner:bootstrap`. The command refuses to run when any user already exists and never resets a password.
+Create the first owner once with `BOOTSTRAP_OWNER_USERNAME`, `BOOTSTRAP_OWNER_PASSWORD` and `BOOTSTRAP_OWNER_NAME` set only for `pnpm owner:bootstrap`. On the Atlas server these values live in the root-only `bootstrap.env`, never in the web/worker `runtime.env`; remove the server copy after successful owner creation. The command refuses to run when any user already exists and never resets a password.
 
 For local queue isolation, imports, lead delivery and schedules may be run with the queue-specific package scripts. Production uses one private Payload worker command, `pnpm jobs:run:all`, for all queues and schedules. No public jobs endpoint exists.
 
@@ -64,15 +64,18 @@ Database rollback is not automatic. Every migration must be reviewed for backwar
 - Scale evidence: `pnpm benchmark:import:50k`, `pnpm benchmark:public:50k` against the dedicated resettable test database only.
 - Backup/restore: `pnpm db:backup:check` against an explicitly isolated validation database.
 
-## Isolated validation contour
+## Atlas production contour
 
-- App identity: `ams-realty-platform-starter`.
-- App root: `/opt/ams-realty-platform-starter`; web port `127.0.0.1:3010`.
-- Nginx validation origin: TLS-only `127.0.0.1:8443`, intended for an SSH tunnel. A client clone requires an automatically renewed trusted certificate for its real domain.
-- Public Nginx exposure is limited to `/healthz`, rate-limited Payload login and approved public routes. Admin and raw Payload API exposure must remain explicitly controlled.
-- Secret scope: Doppler project `ams-realty-platform-starter`, config `stg`; no persistent Doppler token is stored on the server.
-- Database: isolated `ams_realty_starter_stg` in Timeweb Managed PostgreSQL 18 through the private network.
-- Media: validation may use local storage; persistent S3 is mandatory for a concrete production clone.
+- Domain: `https://atlas.ams24.ru`; app root: `/opt/ams-platform/atlas-realty`; web port: `127.0.0.1:3010`.
+- Services: `atlas-realty.service` and `atlas-realty-worker.service` on AMS Main Server.
+- Secret scope: Doppler project `atlas-realty`, config `prd`; a config-scoped service token is used only during provisioning and is not stored on the server.
+- Database: isolated local PostgreSQL 18 database `atlas_realty_prod` with separate owner, migrator and runtime roles. Existing `seo_monitor_*` databases and roles are out of scope.
+- Runtime uses `atlas_runtime`; release migrations use `atlas_migrator` through a root-only migration environment file.
+- Media uses a private Timeweb S3 bucket. Public product reads go through the Public Gateway; anonymous raw Payload business APIs remain denied by collection access rules.
+- Leads use the transactional outbox and `ams-leads` adapter to the local AMS Leads API. Delivery credentials never enter Git or application logs.
+- Indexing stays disabled until the demonstration catalog is replaced or independently verified.
+
+Initial content is loaded with `pnpm atlas:bootstrap`. The command is idempotent for its own 30 `atlas-demo-*` records and refuses a non-empty foreign catalog unless `ATLAS_BOOTSTRAP_ALLOW_EXISTING=true` is explicitly supplied after review.
 
 ### Historical evidence boundary
 

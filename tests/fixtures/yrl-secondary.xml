@@ -11,7 +11,7 @@
     <living-space><value>31.2</value></living-space>
     <kitchen-space><value>9.5</value></kitchen-space>
     <rooms>2</rooms><floor>7</floor><floors-total>12</floors-total>
-    <location><region>Ростовская область</region><locality-name>Ростов-на-Дону</locality-name><street>Пушкинская</street><house>10</house></location>
+    <location><region>Краснодарский край</region><locality-name>Краснодар</locality-name><street>Красная</street><house>10</house></location>
     <sales-agent><name>Тестовый агент</name><phone>+7 (999) 100-20-30</phone></sales-agent>
     <picture>https://img.example.test/secondary-1.jpg</picture>
   </offer>

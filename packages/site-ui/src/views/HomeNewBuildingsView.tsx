@@ -17,7 +17,7 @@ export function HomeNewBuildingsView({ titleHref, cards, desktopSelection, mobil
       <div className="home-shell">
         <div className="home-new-buildings__head">
           <LinkRenderer href={titleHref} className="home-new-buildings__title-link">
-            <h2 id="home-new-buildings-title">Новостройки вашего города</h2>
+            <h2 id="home-new-buildings-title">Новостройки Краснодара</h2>
             <ArrowRight className="size-5" aria-hidden />
           </LinkRenderer>
         </div>

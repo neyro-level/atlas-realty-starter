@@ -3,9 +3,9 @@ set -euo pipefail
 
 NODE_VERSION="24.20.0"
 PNPM_VERSION="11.24.0"
-APP_USER="ams-realty-platform-starter"
-APP_RELEASE_USER="ams-realty-platform-release"
-APP_ROOT="/opt/ams-realty-platform-starter"
+APP_USER="atlas-realty"
+APP_RELEASE_USER="atlas-realty-release"
+APP_ROOT="/opt/ams-platform/atlas-realty"
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
 if [[ "${EUID}" -ne 0 ]]; then
@@ -18,7 +18,7 @@ fi
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-apt-get install -y --no-install-recommends ca-certificates curl nginx openssl xz-utils
+apt-get install -y --no-install-recommends ca-certificates certbot curl nginx openssl xz-utils
 
 if ! id -u "${APP_USER}" >/dev/null 2>&1; then
   useradd --system --home-dir "${APP_ROOT}" --create-home --shell /usr/sbin/nologin "${APP_USER}"
@@ -56,17 +56,17 @@ find "${APP_ROOT}/releases" -mindepth 1 -type d -exec chmod 0750 {} +
 find "${APP_ROOT}/releases" -type f ! -perm /111 -exec chmod 0640 {} +
 find "${APP_ROOT}/releases" -type f -perm /111 -exec chmod 0750 {} +
 install -d -o "${APP_USER}" -g "${APP_USER}" -m 0750 "${APP_ROOT}/shared" "${APP_ROOT}/shared/cache" "${APP_ROOT}/shared/home" "${APP_ROOT}/shared/media" "${APP_ROOT}/shared/tmp"
-install -d -o root -g "${APP_USER}" -m 0750 /etc/ams-realty-platform-starter
-install -d -o root -g root -m 0755 /etc/ams-realty-platform-starter/tls
+install -d -o root -g "${APP_USER}" -m 0750 /etc/ams-platform/atlas-realty
+install -d -o root -g root -m 0755 /etc/ams-platform/atlas-realty/tls
 
-if [[ ! -s /etc/ams-realty-platform-starter/tls/fullchain.pem || ! -s /etc/ams-realty-platform-starter/tls/privkey.pem ]]; then
+if [[ ! -s /etc/ams-platform/atlas-realty/tls/fullchain.pem || ! -s /etc/ams-platform/atlas-realty/tls/privkey.pem ]]; then
   openssl req -x509 -newkey rsa:3072 -sha256 -nodes -days 825 \
-    -subj "/CN=ams-realty-platform-starter.local" \
-    -addext "subjectAltName=DNS:ams-realty-platform-starter.local,DNS:localhost,IP:127.0.0.1" \
-    -keyout /etc/ams-realty-platform-starter/tls/privkey.pem \
-    -out /etc/ams-realty-platform-starter/tls/fullchain.pem
-  chmod 0600 /etc/ams-realty-platform-starter/tls/privkey.pem
-  chmod 0644 /etc/ams-realty-platform-starter/tls/fullchain.pem
+    -subj "/CN=atlas.ams24.ru" \
+    -addext "subjectAltName=DNS:atlas.ams24.ru,DNS:localhost,IP:127.0.0.1" \
+    -keyout /etc/ams-platform/atlas-realty/tls/privkey.pem \
+    -out /etc/ams-platform/atlas-realty/tls/fullchain.pem
+  chmod 0600 /etc/ams-platform/atlas-realty/tls/privkey.pem
+  chmod 0644 /etc/ams-platform/atlas-realty/tls/fullchain.pem
 fi
 
 if [[ -z "$(swapon --show --noheadings)" && ! -f /swapfile ]]; then
@@ -77,20 +77,13 @@ if [[ -z "$(swapon --show --noheadings)" && ! -f /swapfile ]]; then
   printf '/swapfile none swap sw 0 0\n' >> /etc/fstab
 fi
 
-install -m 0644 "${SCRIPT_DIR}/ams-realty-platform-starter.service" /etc/systemd/system/ams-realty-platform-starter.service
-install -m 0644 "${SCRIPT_DIR}/ams-realty-platform-starter-worker.service" /etc/systemd/system/ams-realty-platform-starter-worker.service
-for obsolete_unit in \
-  ams-realty-platform-starter-imports.service \
-  ams-realty-platform-starter-maintenance.service \
-  ams-realty-platform-starter-maintenance-scheduler.service; do
-  systemctl disable --now "${obsolete_unit}" 2>/dev/null || true
-  rm -f "/etc/systemd/system/${obsolete_unit}"
-done
-install -m 0644 "${SCRIPT_DIR}/nginx-internal.conf" /etc/nginx/sites-available/ams-realty-platform-starter.conf
-ln -sfn /etc/nginx/sites-available/ams-realty-platform-starter.conf /etc/nginx/sites-enabled/ams-realty-platform-starter.conf
+install -m 0644 "${SCRIPT_DIR}/atlas-realty.service" /etc/systemd/system/atlas-realty.service
+install -m 0644 "${SCRIPT_DIR}/atlas-realty-worker.service" /etc/systemd/system/atlas-realty-worker.service
+install -m 0644 "${SCRIPT_DIR}/nginx-internal.conf" /etc/nginx/sites-available/atlas-realty.conf
+ln -sfn /etc/nginx/sites-available/atlas-realty.conf /etc/nginx/sites-enabled/atlas-realty.conf
 systemctl daemon-reload
-systemctl enable ams-realty-platform-starter.service
-systemctl enable ams-realty-platform-starter-worker.service
+systemctl enable atlas-realty.service
+systemctl enable atlas-realty-worker.service
 nginx -t
 systemctl enable --now nginx
 systemctl reload nginx

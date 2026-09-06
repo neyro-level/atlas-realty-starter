@@ -1,9 +1,30 @@
 import { describe, expect, it } from 'vitest'
 
 import { redactDeliveryError, retryDelay } from '@/core/data-access/system/leads/delivery'
+import { deliverToAmsLeads } from '@/project/leads/channels'
 import { LEAD_BODY_LIMIT_BYTES, assertMinimumFillTime, idempotencyKeySchema, normalizeLeadPhone, publicLeadSchema, readBoundedJSON } from '@/shared/types/public-lead'
 
 describe('Stage 3 public lead contract', () => {
+  it('delivers a bounded Atlas lead with an idempotency key and classifies failures', async () => {
+    const attempt = {
+      attempt: 1, deliveryId: 'delivery-1', idempotencyKey: 'lead:atlas:12345678', leadId: 'lead-1',
+      lead: { name: 'Анна', phone: '+79991234567', sourcePage: '/nedvizhimost' },
+    }
+    const config = { apiURL: 'https://leads.example.test/v1/leads', projectId: 'atlas', siteKey: 'atlas-site-key' }
+    let request: Request | undefined
+    const okFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+      request = new Request(input, init)
+      return new Response(null, { status: 202 })
+    }
+    await expect(deliverToAmsLeads(attempt, config, 'https://atlas.ams24.ru', okFetch)).resolves.toEqual({ ok: true })
+    expect(request?.headers.get('idempotency-key')).toBe(attempt.idempotencyKey)
+    const body = await request?.json()
+    expect(body).toMatchObject({ project: 'atlas', siteLeadId: 'lead-1', phone: '+79991234567', source: 'https://atlas.ams24.ru/nedvizhimost' })
+    expect(body).not.toHaveProperty('deliveryId')
+    await expect(deliverToAmsLeads(attempt, config, 'https://atlas.ams24.ru', async () => new Response(null, { status: 503 }))).resolves.toMatchObject({ kind: 'retryable' })
+    await expect(deliverToAmsLeads(attempt, config, 'https://atlas.ams24.ru', async () => new Response(null, { status: 401 }))).resolves.toMatchObject({ kind: 'permanent' })
+  })
+
   it('normalizes phone, email and requires explicit consent', () => {
     expect(normalizeLeadPhone('8 (999) 123-45-67')).toBe('+79991234567')
     expect(publicLeadSchema.parse({ consent: true, email: 'TEST@EXAMPLE.COM', formStartedAt: new Date().toISOString(), formType: 'general', phone: '+7 999 123-45-67', sourcePage: '/catalog' }).email).toBe('test@example.com')

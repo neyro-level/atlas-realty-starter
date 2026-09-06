@@ -44,7 +44,7 @@ export const headerNav: HeaderNavItem[] = [
   {
     label: "Недвижимость",
     href: "/nedvizhimost",
-    description: "Покупка квартир, домов, участков и новостроек в вашем городе",
+    description: "Покупка квартир, домов, участков и новостроек в Краснодаре",
     showOverviewLink: true,
     megaSections: [
       {
@@ -54,7 +54,7 @@ export const headerNav: HeaderNavItem[] = [
           { label: "ЖК «Сибирская симфония»", href: "/sibirskayasimfoniya" },
           { label: "ЖК «Северный квартал»", href: "/severny-kvartal" },
           { label: "ЖК «Возрождение»", href: "/vozrohdenie" },
-          { label: "ЖК «Ваш город»", href: "/zkcity" },
+          { label: "ЖК «Краснодар»", href: "/zkcity" },
           { label: "ЖК «Реновация»", href: "/renovacia" },
           { label: "ЖК «Центральный квартал»", href: "/centralniy" },
           { label: "ЖК «Трилистник»", href: "/trilistnik" },

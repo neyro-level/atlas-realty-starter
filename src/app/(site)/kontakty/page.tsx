@@ -12,12 +12,12 @@ import { OfficePhoneReveal } from "./OfficePhoneReveal";
 const officeService = "Покупка, продажа и консультации по сделкам";
 
 export const metadata: Metadata = {
-  title: "Офисы в вашем городе",
-  description: "Офисы агентства недвижимости в вашем городе: адреса, телефон, график работы и запись на встречу.",
+  title: "Офисы в Краснодаре",
+  description: "Офисы агентства недвижимости в Краснодаре: адреса, телефон, график работы и запись на встречу.",
   alternates: { canonical: "/kontakty" },
   openGraph: {
-    title: "Офисы в вашем городе",
-    description: "Офисы агентства недвижимости в вашем городе: адреса, телефон, график работы и запись на встречу.",
+    title: "Офисы в Краснодаре",
+    description: "Офисы агентства недвижимости в Краснодаре: адреса, телефон, график работы и запись на встречу.",
     url: "/kontakty",
     siteName: siteConfig.clientFullName,
     type: "website",
@@ -30,7 +30,7 @@ export default async function ContactsPage() {
   const publicContacts = shell.contacts;
   const mapSrc = offices.find((office) => office.mapUrl)?.mapUrl ?? null;
   const page: ContactsPageDto = {
-    title: "Офисы в вашем городе",
+    title: "Офисы в Краснодаре",
     serviceLabel: officeService,
     contacts: publicContacts,
     offices,

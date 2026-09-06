@@ -1,8 +1,8 @@
-# AMS Realty Platform Starter
+# АТЛАС — недвижимость в Краснодаре
 
-Full-stack starter for real-estate websites and catalogs on Next.js, Payload CMS and PostgreSQL. It includes a public website, Payload Admin, a versioned public DTO API, feed import, SEO/redirects, leads with a transactional delivery outbox, jobs and an immutable release contour.
+Самостоятельный демонстрационный продукт для рынка недвижимости Краснодара на Next.js, Payload CMS и PostgreSQL.
 
-The committed public identity is intentionally neutral: `АТЛАС`, `Ваш город`, no legal entity, contacts, production domain, feed or delivery channel. It is a clone-ready baseline, not a publishable client site.
+Production-домен: `https://atlas.ams24.ru`. Оператор: ИП Скрицкая Юлия Викторовна. До проверки реальных источников каталог содержит только явно обозначенные демонстрационные объекты и закрыт от индексации.
 
 ## Runtime map
 
@@ -39,4 +39,4 @@ See `docs/OPERATIONS.md` for local safety, Graphify, CI, release, rollback and i
 - `pnpm owner:bootstrap` — one-time first-owner creation.
 - `pnpm jobs:run:all` — private all-queue worker command used by production service.
 
-Production release is never performed from a feature branch and a neutral starter must be client-configured before publication.
+Production release is never performed from a feature branch.

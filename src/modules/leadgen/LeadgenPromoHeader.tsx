@@ -68,7 +68,7 @@ export function LeadgenPromoHeader({ content = kvartiryPromoContent }: LeadgenPr
 
         <div className="hidden min-h-10 items-center gap-2 text-sm font-medium text-[#5f5b5d] sm:inline-flex">
           <MapPin className="size-4 text-[#8A1515]" aria-hidden />
-          <span>Ваш город</span>
+          <span>Краснодар</span>
         </div>
 
         <div className="hidden min-h-9 items-center justify-center gap-1.5 rounded-[9px] bg-[#F4F4F2] px-3.5 text-center text-[#4f4a4d] min-[1120px]:inline-flex">

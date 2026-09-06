@@ -57,7 +57,7 @@ export async function resolveLeadRoute(payload: Payload, command: PublicLeadComm
     agentId: recipientAgentId,
     complexId: resolvedComplexId,
     deliveries: [{
-      channel: testMode && testMode !== 'unavailable' ? `test-${testMode}` : 'fallback',
+      channel: testMode ? (testMode !== 'unavailable' ? `test-${testMode}` : 'fallback') : 'ams-leads',
       recipientAgentId,
       routeReason,
     }] satisfies LeadDeliveryPlan[],

@@ -35,7 +35,7 @@ export default function ThanksPage() {
         </div>
 
         <div className="mx-auto mt-8 flex max-w-5xl flex-col gap-3 px-5 sm:flex-row sm:flex-wrap">
-          <Button asChild size="lg"><Link href="/nedvizhimost">Открыть недвижимость вашего города</Link></Button>
+          <Button asChild size="lg"><Link href="/nedvizhimost">Открыть недвижимость Краснодара</Link></Button>
           <Button asChild size="lg" variant="outline"><Link href="/kvartiry">Открыть маршрут квартир</Link></Button>
           <Button asChild size="lg" variant="outline"><Link href="/kontakty">Контакты агентства</Link></Button>
         </div>

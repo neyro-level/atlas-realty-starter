@@ -6,8 +6,8 @@ import { DeferredSimilarPropertyImage, PropertyObjectGallery } from "./PropertyO
 function renderGallery(image: string) {
   return renderToStaticMarkup(createElement(PropertyObjectGallery, {
     images: [image],
-    imageAlt: "Дом в вашем городе",
-    address: "Ваш город",
+    imageAlt: "Дом в Краснодаре",
+    address: "Краснодар",
     mapUrl: "https://yandex.ru/maps/",
   }));
 }
