@@ -42,7 +42,7 @@ Secrets, env files, generated output, media and migrations JSON snapshots are ex
 Release input is a clean exact merged SourceCraft `main` SHA.
 
 - Pull requests install the frozen lockfile, regenerate Payload artifacts, reject generated-file drift and run `pnpm verify`.
-- `main` regenerates the artifacts, runs `pnpm build` and packages the immutable standalone release with `pnpm release:pack`.
+- `main` regenerates the artifacts, builds with the canonical public Atlas URL and `NEXT_PUBLIC_INDEXABLE=false`, verifies that these values were embedded into the browser chunks, and packages the immutable standalone release with `pnpm release:pack`.
 - SourceCraft stores bounded archive parts plus a manifest containing order, sizes, per-part SHA-256 and reconstructed archive SHA-256.
 - The server never runs `pnpm install` or `pnpm build`.
 

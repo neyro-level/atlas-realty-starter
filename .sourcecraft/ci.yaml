@@ -37,7 +37,8 @@ workflows:
               - pnpm generate:types
               - pnpm generate:importmap
               - git diff --exit-code -- src/payload-types.ts 'src/app/(payload)/admin/importMap.js'
-              - pnpm build
+              - NEXT_PUBLIC_SITE_URL=https://atlas.ams24.ru NEXT_PUBLIC_INDEXABLE=false pnpm build
+              - NEXT_PUBLIC_SITE_URL=https://atlas.ams24.ru NEXT_PUBLIC_INDEXABLE=false pnpm build:public-env:check
               - pnpm release:pack
             artifacts:
               paths:
