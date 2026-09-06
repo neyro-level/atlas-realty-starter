@@ -16,6 +16,10 @@ import { JsonLd } from "@/shared/ui/JsonLd";
 import { getSiteEngine } from "@/site-engine";
 import "./globals.css";
 
+// Public pages read their shell and catalog data from the runtime SiteEngine.
+// Keep that boundary request-time so CI builds never need production Payload secrets.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
