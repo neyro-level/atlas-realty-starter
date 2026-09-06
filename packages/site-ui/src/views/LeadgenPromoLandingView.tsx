@@ -54,7 +54,7 @@ export function LeadgenPromoLandingView({
       <PromoHeader content={content} />
       <section
         id="leadgen-hero"
-        className="relative isolate overflow-hidden bg-[#111] text-white"
+        className="relative isolate overflow-hidden bg-[var(--palette-111)] text-white"
         style={{
           backgroundImage: `linear-gradient(90deg, rgba(14,14,15,0.78) 0%, rgba(14,14,15,0.66) 44%, rgba(14,14,15,0.38) 100%), linear-gradient(180deg, rgba(14,14,15,0.22) 0%, rgba(14,14,15,0.72) 100%), url("${heroBackgroundImage}")`,
           backgroundPosition: "center",
@@ -117,19 +117,19 @@ export function LeadgenPromoLandingView({
             {content.trustItems.map((item, index) => (
               <article
                 key={item.title}
-                className="group relative overflow-hidden rounded-[8px] border border-[#eadede] bg-white p-4 shadow-[0_18px_46px_rgba(23,22,26,0.14)] transition hover:-translate-y-1 hover:border-[#d6c2c2] hover:shadow-[0_28px_72px_rgba(23,22,26,0.2)] sm:min-h-[214px] sm:p-6 sm:shadow-[0_22px_60px_rgba(23,22,26,0.16)]"
+                className="group relative overflow-hidden rounded-[8px] border border-[var(--palette-eadede)] bg-white p-4 shadow-[0_18px_46px_rgba(23,22,26,0.14)] transition hover:-translate-y-1 hover:border-[var(--palette-d6c2c2)] hover:shadow-[0_28px_72px_rgba(23,22,26,0.2)] sm:min-h-[214px] sm:p-6 sm:shadow-[0_22px_60px_rgba(23,22,26,0.16)]"
               >
                 <div className="absolute inset-x-0 top-0 h-[3px] bg-[var(--accent)]" aria-hidden />
-                <div className="absolute right-4 top-4 text-[11px] font-bold tracking-[0.18em] text-[#d6c7c7]" aria-hidden>
+                <div className="absolute right-4 top-4 text-[11px] font-bold tracking-[0.18em] text-[var(--palette-d6c7c7)]" aria-hidden>
                   {String(index + 1).padStart(2, "0")}
                 </div>
                 <div className="flex items-start justify-between gap-4 pr-10">
-                  <span className="grid size-10 shrink-0 place-items-center rounded-[7px] border border-[#eadede] bg-[#fbf7f7] text-[var(--accent)] shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] sm:size-12">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-[7px] border border-[var(--palette-eadede)] bg-[var(--palette-fbf7f7)] text-[var(--accent)] shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] sm:size-12">
                     {renderTrustIcon(item.icon, index)}
                   </span>
                 </div>
                 <h3 className="mt-4 max-w-none pr-7 text-base font-semibold leading-tight text-[var(--text-primary)] [text-wrap:balance] sm:mt-6 sm:text-[17px]">{item.title}</h3>
-                <p className="mt-2 text-[13px] font-medium leading-5 text-[#5e5a5b] sm:mt-3 sm:text-sm sm:leading-6">{item.text}</p>
+                <p className="mt-2 text-[13px] font-medium leading-5 text-[var(--palette-5e5a5b)] sm:mt-3 sm:text-sm sm:leading-6">{item.text}</p>
               </article>
             ))}
           </div>
@@ -149,7 +149,7 @@ export function LeadgenPromoLandingView({
                 <span className="block text-[var(--accent)]">{content.baseSection.accentTitle}</span>
               ) : null}
             </h2>
-            <p className={`${content.baseSection.preview ? "mt-8 font-semibold text-[var(--text-primary)]" : "mt-5 text-[#666164]"} text-[17px] leading-7`}>
+            <p className={`${content.baseSection.preview ? "mt-8 font-semibold text-[var(--text-primary)]" : "mt-5 text-[var(--palette-666164)]"} text-[17px] leading-7`}>
               {content.baseSection.subtitle}
             </p>
             {content.baseSection.badge ? (
@@ -168,18 +168,18 @@ export function LeadgenPromoLandingView({
                   return (
                     <div
                       key={`${item.title ?? "point"}-${item.text}`}
-                      className="group relative overflow-hidden rounded-[8px] border border-[#e9e1df] bg-white p-4 shadow-[0_12px_34px_rgba(23,22,26,0.05)]"
+                      className="group relative overflow-hidden rounded-[8px] border border-[var(--palette-e9e1df)] bg-white p-4 shadow-[0_12px_34px_rgba(23,22,26,0.05)]"
                     >
                       <div className="mb-4 flex items-center justify-between gap-3">
                         <span className="grid size-8 place-items-center rounded-[6px] bg-[var(--accent-soft)] text-[var(--accent)]">
                           <Check className="size-4" aria-hidden />
                         </span>
-                        <span className="text-[11px] font-bold text-[#c8b9b9]">
+                        <span className="text-[11px] font-bold text-[var(--palette-c8b9b9)]">
                           {String(index + 1).padStart(2, "0")}
                         </span>
                       </div>
                       {item.title ? <h3 className="text-sm font-semibold leading-5 text-[var(--text-primary)]">{item.title}</h3> : null}
-                      <p className={`${item.title ? "mt-2" : ""} text-[13px] font-medium leading-6 text-[#333]`}>{item.text}</p>
+                      <p className={`${item.title ? "mt-2" : ""} text-[13px] font-medium leading-6 text-[var(--palette-333)]`}>{item.text}</p>
                       <div className="absolute inset-x-0 bottom-0 h-[2px] bg-[var(--accent)] opacity-0 transition group-hover:opacity-100" aria-hidden />
                     </div>
                   );
@@ -191,26 +191,26 @@ export function LeadgenPromoLandingView({
           {content.baseSection.preview ? (
             <BaseSectionPreview content={content} imageRenderer={ImageRenderer} />
           ) : (
-            <div className="overflow-hidden rounded-[8px] border border-[#e7ddda] bg-[#f7f4f2] px-5 sm:px-7 lg:px-8">
+            <div className="overflow-hidden rounded-[8px] border border-[var(--palette-e7ddda)] bg-[var(--palette-f7f4f2)] px-5 sm:px-7 lg:px-8">
               {content.baseSection.points.map((point, index) => {
                 const item = normalizeBaseSectionPoint(point);
 
                 return (
                   <article
                     key={`${item.title ?? "point"}-${item.text}`}
-                    className="grid grid-cols-[40px_minmax(0,1fr)] gap-x-4 border-b border-[#ded3d0] py-6 last:border-b-0 sm:grid-cols-[42px_44px_minmax(0,1fr)] sm:items-center sm:gap-x-5 sm:py-7"
+                    className="grid grid-cols-[40px_minmax(0,1fr)] gap-x-4 border-b border-[var(--palette-ded3d0)] py-6 last:border-b-0 sm:grid-cols-[42px_44px_minmax(0,1fr)] sm:items-center sm:gap-x-5 sm:py-7"
                   >
                     <span className="pt-1 text-[12px] font-bold tracking-[0.14em] text-[var(--accent)] sm:pt-0">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <span className="hidden size-11 place-items-center rounded-[7px] border border-[#e2d7d4] bg-white text-[var(--accent)] sm:grid">
+                    <span className="hidden size-11 place-items-center rounded-[7px] border border-[var(--palette-e2d7d4)] bg-white text-[var(--accent)] sm:grid">
                       {index === 0 ? <Home className="size-5" aria-hidden /> : null}
                       {index === 1 ? <Landmark className="size-5" aria-hidden /> : null}
                       {index === 2 ? <ShieldCheck className="size-5" aria-hidden /> : null}
                     </span>
                     <div>
-                      {item.title ? <h3 className="text-[15px] font-semibold leading-6 text-[#2f2c2d] sm:text-base">{item.title}</h3> : null}
-                      <p className={`${item.title ? "mt-1.5" : "font-semibold"} text-[14px] leading-6 text-[#625d5f] sm:text-[15px]`}>{item.text}</p>
+                      {item.title ? <h3 className="text-[15px] font-semibold leading-6 text-[var(--palette-2f2c2d)] sm:text-base">{item.title}</h3> : null}
+                      <p className={`${item.title ? "mt-1.5" : "font-semibold"} text-[14px] leading-6 text-[var(--palette-625d5f)] sm:text-[15px]`}>{item.text}</p>
                     </div>
                   </article>
                 );
@@ -240,7 +240,7 @@ export function LeadgenPromoLandingView({
 
       {compact || content.hideBonusSection ? null : (
         <section className="mx-auto w-full max-w-[1160px] px-5 pb-14 sm:px-8 sm:pb-16">
-          <div className="relative overflow-hidden rounded-[8px] border border-[#eadede] bg-[#f5f3f1] p-4 shadow-[0_18px_64px_rgba(23,22,26,0.08)] sm:p-6 lg:p-7">
+          <div className="relative overflow-hidden rounded-[8px] border border-[var(--palette-eadede)] bg-[var(--palette-f5f3f1)] p-4 shadow-[0_18px_64px_rgba(23,22,26,0.08)] sm:p-6 lg:p-7">
             <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_330px] lg:items-center">
               <div>
                 <p className="max-w-[620px] text-[19px] font-semibold leading-tight text-[var(--text-secondary)] sm:text-[21px]">
@@ -253,12 +253,12 @@ export function LeadgenPromoLandingView({
                     return (
                       <div
                         key={item}
-                        className="grid min-h-[132px] grid-cols-[38px_minmax(0,1fr)] gap-4 rounded-[8px] border border-[#e7ddda] bg-white p-4 shadow-[0_10px_28px_rgba(23,22,26,0.045)]"
+                        className="grid min-h-[132px] grid-cols-[38px_minmax(0,1fr)] gap-4 rounded-[8px] border border-[var(--palette-e7ddda)] bg-white p-4 shadow-[0_10px_28px_rgba(23,22,26,0.045)]"
                       >
                         <span className="grid size-9 place-items-center rounded-[6px] bg-[var(--accent-soft)] text-[var(--accent)]">
                           <Icon className="size-[18px]" aria-hidden />
                         </span>
-                        <p className="text-[13px] font-medium leading-6 text-[#4f4b4c]">{item}</p>
+                        <p className="text-[13px] font-medium leading-6 text-[var(--palette-4f4b4c)]">{item}</p>
                       </div>
                     );
                   })}
@@ -300,9 +300,9 @@ export function LeadgenPromoLandingView({
 function CompactBenefitsSection({ content }: { content: LeadgenPromoContentDto }) {
   return (
     <section className="relative z-20 mx-auto w-full max-w-[1220px] px-5 py-12 sm:px-8 sm:py-16 lg:-mt-20 lg:pb-20 lg:pt-0">
-      <div className="overflow-hidden rounded-[8px] border border-[#e6dddd] bg-white shadow-[0_24px_70px_rgba(23,22,26,0.13)]">
-        <div className="grid bg-[#f7f3f3] px-6 py-7 sm:px-8 lg:grid-cols-[270px_minmax(0,1fr)] lg:gap-8 lg:px-10 lg:py-9">
-          <div className="border-b border-[#dfd2d2] pb-6 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-8">
+      <div className="overflow-hidden rounded-[8px] border border-[var(--palette-e6dddd)] bg-white shadow-[0_24px_70px_rgba(23,22,26,0.13)]">
+        <div className="grid bg-[var(--palette-f7f3f3)] px-6 py-7 sm:px-8 lg:grid-cols-[270px_minmax(0,1fr)] lg:gap-8 lg:px-10 lg:py-9">
+          <div className="border-b border-[var(--palette-dfd2d2)] pb-6 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-8">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--accent)]">Результат опроса</p>
             <h2 className="mt-3 text-[25px] font-semibold leading-[1.12] text-[var(--text-primary)] sm:text-[30px]">
               {content.afterRequestTitle}
@@ -312,16 +312,16 @@ function CompactBenefitsSection({ content }: { content: LeadgenPromoContentDto }
             {content.trustItems.map((item, index) => (
               <article
                 key={item.title}
-                className="border-b border-[#dfd2d2] py-6 last:border-b-0 lg:border-b-0 lg:border-r lg:px-7 lg:py-0 lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0"
+                className="border-b border-[var(--palette-dfd2d2)] py-6 last:border-b-0 lg:border-b-0 lg:border-r lg:px-7 lg:py-0 lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0"
               >
                 <div className="flex items-center justify-between gap-4">
                   <span className="grid size-10 place-items-center rounded-[8px] bg-white text-[var(--accent)] shadow-[0_8px_24px_rgba(138,21,21,0.08)]">
                     {renderTrustIcon(item.icon, index)}
                   </span>
-                  <span className="text-[11px] font-bold tracking-[0.16em] text-[#b9a7a7]">0{index + 1}</span>
+                  <span className="text-[11px] font-bold tracking-[0.16em] text-[var(--palette-b9a7a7)]">0{index + 1}</span>
                 </div>
                 <h3 className="mt-5 text-[17px] font-semibold leading-tight text-[var(--text-primary)]">{item.title}</h3>
-                <p className="mt-3 text-[13px] font-medium leading-6 text-[#615b5d]">{item.text}</p>
+                <p className="mt-3 text-[13px] font-medium leading-6 text-[var(--palette-615b5d)]">{item.text}</p>
               </article>
             ))}
           </div>
@@ -340,7 +340,7 @@ function renderHeroTitle(title: string, accent?: string) {
   return (
     <>
       {before}
-      <span className="text-[#f2c4c4]">{accent}</span>
+      <span className="text-[var(--palette-f2c4c4)]">{accent}</span>
       {rest.join(accent)}
     </>
   );
@@ -378,7 +378,7 @@ function renderExpertPreviewCount(label: string) {
     <span className="shrink-0 rounded-[7px] bg-[var(--accent-soft)] px-3 py-2 text-right text-[var(--accent)]">
       <span className="block text-[18px] font-semibold leading-none">{value}</span>
       {description ? (
-        <span className="mt-1 block max-w-[132px] text-[10.5px] font-medium leading-[1.25] text-[#7a4b4b]">
+        <span className="mt-1 block max-w-[132px] text-[10.5px] font-medium leading-[1.25] text-[var(--palette-7a4b4b)]">
           {description}
         </span>
       ) : null}
@@ -397,22 +397,22 @@ function BaseSectionPreview({ content, imageRenderer: ImageRenderer }: { content
     return (
       <div className="relative">
         <div className="absolute inset-0 translate-y-6 rounded-[8px] bg-[var(--text-primary)]/10 blur-2xl" aria-hidden />
-        <div className="relative overflow-hidden rounded-[8px] border border-[#eadede] bg-[var(--text-primary)] p-3 shadow-[0_26px_76px_rgba(23,22,26,0.18)]">
+        <div className="relative overflow-hidden rounded-[8px] border border-[var(--palette-eadede)] bg-[var(--text-primary)] p-3 shadow-[0_26px_76px_rgba(23,22,26,0.18)]">
           <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(138,21,21,0.24),rgba(23,22,26,0)_48%,rgba(255,255,255,0.08))]" aria-hidden />
           <div className="relative overflow-hidden rounded-[7px] border border-white/10 bg-white">
-            <div className="flex items-start justify-between gap-4 border-b border-[#eee7e5] p-4">
+            <div className="flex items-start justify-between gap-4 border-b border-[var(--palette-eee7e5)] p-4">
               <div className="min-w-0">
                 <p className="text-[18px] font-semibold leading-tight text-[var(--text-primary)] sm:text-[20px]">
                   {content.baseSection.preview.label}
                 </p>
-                <p className="mt-2 inline-flex items-center gap-1.5 rounded-[6px] bg-[#fbf8f8] px-2.5 py-1.5 text-[12px] font-medium leading-none text-[var(--accent)]">
+                <p className="mt-2 inline-flex items-center gap-1.5 rounded-[6px] bg-[var(--palette-fbf8f8)] px-2.5 py-1.5 text-[12px] font-medium leading-none text-[var(--accent)]">
                   <MapPin className="size-3.5" aria-hidden />
                   {content.baseSection.preview.city}
                 </p>
               </div>
               {renderExpertPreviewCount(content.baseSection.preview.countLabel)}
             </div>
-            <div className="relative min-h-[410px] overflow-hidden bg-[#f5f3f1] sm:min-h-[520px] lg:min-h-[560px]">
+            <div className="relative min-h-[410px] overflow-hidden bg-[var(--palette-f5f3f1)] sm:min-h-[520px] lg:min-h-[560px]">
               <ImageRenderer
                 src={image}
                 alt={`${content.manager.name}, ${content.manager.role}`}
@@ -434,10 +434,10 @@ function BaseSectionPreview({ content, imageRenderer: ImageRenderer }: { content
   return (
     <div className="relative">
       <div className="absolute inset-0 translate-y-6 rounded-[8px] bg-[var(--text-primary)]/10 blur-2xl" aria-hidden />
-      <div className="relative overflow-hidden rounded-[8px] border border-[#eadede] bg-[var(--text-primary)] p-3 shadow-[0_26px_76px_rgba(23,22,26,0.18)]">
+      <div className="relative overflow-hidden rounded-[8px] border border-[var(--palette-eadede)] bg-[var(--text-primary)] p-3 shadow-[0_26px_76px_rgba(23,22,26,0.18)]">
         <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(138,21,21,0.24),rgba(23,22,26,0)_48%,rgba(255,255,255,0.08))]" aria-hidden />
         <div className="relative rounded-[7px] border border-white/10 bg-white p-3">
-          <div className="flex items-center justify-between gap-3 border-b border-[#eee7e5] pb-3">
+          <div className="flex items-center justify-between gap-3 border-b border-[var(--palette-eee7e5)] pb-3">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--accent)]">{content.baseSection.preview.label}</p>
               <p className="mt-1 text-sm font-semibold text-[var(--text-primary)]">{content.baseSection.preview.city}</p>
@@ -455,7 +455,7 @@ function BaseSectionPreview({ content, imageRenderer: ImageRenderer }: { content
               return (
                 <article
                   key={apartment.id}
-                  className="grid grid-cols-[82px_minmax(0,1fr)] gap-3 rounded-[7px] border border-[#eee7e5] bg-[#fbfbfa] p-2"
+                  className="grid grid-cols-[82px_minmax(0,1fr)] gap-3 rounded-[7px] border border-[var(--palette-eee7e5)] bg-[var(--palette-fbfbfa)] p-2"
                 >
                   <ImageRenderer
                     src={apartment.image}
@@ -467,16 +467,16 @@ function BaseSectionPreview({ content, imageRenderer: ImageRenderer }: { content
                     className="h-[76px] w-[82px] rounded-[6px] object-cover"
                   />
                   <div className="min-w-0 py-1">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#8f8b8c]">ID {apartment.id}</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--palette-8f8b8c)]">ID {apartment.id}</p>
                     <p className="mt-1 truncate text-sm font-bold text-[var(--text-primary)]">{apartment.price}</p>
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {rooms ? (
-                        <span className="rounded-[5px] bg-white px-2 py-1 text-[11px] font-medium text-[#555] shadow-[inset_0_0_0_1px_#e8e0de]">
+                        <span className="rounded-[5px] bg-white px-2 py-1 text-[11px] font-medium text-[var(--palette-555)] shadow-[inset_0_0_0_1px_var(--palette-e8e0de)]">
                           {rooms}
                         </span>
                       ) : null}
                       {area ? (
-                        <span className="rounded-[5px] bg-white px-2 py-1 text-[11px] font-medium text-[#555] shadow-[inset_0_0_0_1px_#e8e0de]">
+                        <span className="rounded-[5px] bg-white px-2 py-1 text-[11px] font-medium text-[var(--palette-555)] shadow-[inset_0_0_0_1px_var(--palette-e8e0de)]">
                           {area} м²
                         </span>
                       ) : null}
@@ -504,9 +504,9 @@ function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestBut
     const showsExpertPortrait = content.finalCta.image === content.manager.photo;
 
     return (
-      <section id="final-cta" className="scroll-mt-28 bg-[#fbf8f8] px-5 py-12 sm:px-8 sm:py-20 lg:py-24">
-        <div className={`mx-auto grid w-full max-w-[1160px] overflow-hidden rounded-[8px] border border-[#eadede] bg-[#f4f1f1] shadow-[0_24px_70px_rgba(23,22,26,0.08)] ${showsExpertPortrait ? "lg:grid-cols-[minmax(360px,0.82fr)_minmax(500px,1.18fr)]" : "lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.86fr)]"}`}>
-          <div className={`relative overflow-hidden ${showsExpertPortrait ? "aspect-[4/5] min-h-0 bg-[radial-gradient(circle_at_50%_28%,#f7eeee_0%,#e5dcda_72%,#d8cfcc_100%)] sm:aspect-auto sm:min-h-[380px] lg:min-h-[480px]" : "min-h-[280px] bg-[#e8e6e3] sm:min-h-[380px] lg:min-h-[480px]"}`}>
+      <section id="final-cta" className="scroll-mt-28 bg-[var(--palette-fbf8f8)] px-5 py-12 sm:px-8 sm:py-20 lg:py-24">
+        <div className={`mx-auto grid w-full max-w-[1160px] overflow-hidden rounded-[8px] border border-[var(--palette-eadede)] bg-[var(--palette-f4f1f1)] shadow-[0_24px_70px_rgba(23,22,26,0.08)] ${showsExpertPortrait ? "lg:grid-cols-[minmax(360px,0.82fr)_minmax(500px,1.18fr)]" : "lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.86fr)]"}`}>
+          <div className={`relative overflow-hidden ${showsExpertPortrait ? "aspect-[4/5] min-h-0 bg-[radial-gradient(circle_at_50%_28%,var(--palette-f7eeee)_0%,var(--palette-e5dcda)_72%,var(--palette-d8cfcc)_100%)] sm:aspect-auto sm:min-h-[380px] lg:min-h-[480px]" : "min-h-[280px] bg-[var(--palette-e8e6e3)] sm:min-h-[380px] lg:min-h-[480px]"}`}>
             <ImageRenderer
               src={content.finalCta.image}
               alt={content.finalCta.imageAlt}
@@ -518,7 +518,7 @@ function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestBut
             {showsExpertPortrait ? (
               <div className="absolute bottom-4 left-4 rounded-[8px] border border-white/70 bg-white/90 px-4 py-3 shadow-[0_14px_38px_rgba(23,22,26,0.14)] backdrop-blur-sm sm:bottom-6 sm:left-6">
                 <p className="text-[13px] font-semibold leading-tight text-[var(--text-primary)]">{content.manager.name}</p>
-                <p className="mt-1 text-[11px] font-medium text-[#746f70]">{content.manager.role}</p>
+                <p className="mt-1 text-[11px] font-medium text-[var(--palette-746f70)]">{content.manager.role}</p>
               </div>
             ) : null}
             {hasPreviewRows ? (
@@ -541,7 +541,7 @@ function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestBut
                   {constructionPreview.map((project) => (
                         <div
                           key={project.id}
-                          className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[7px] border border-[#eee7e5] bg-[#fbfbfa] px-2.5 py-2"
+                          className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[7px] border border-[var(--palette-eee7e5)] bg-[var(--palette-fbfbfa)] px-2.5 py-2"
                         >
                           <div className="min-w-0">
                             <p className="truncate text-[11px] font-semibold leading-4 text-[var(--text-primary)]">{project.material}</p>
@@ -609,8 +609,8 @@ function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestBut
 
   return (
     <section id="final-cta" className="mx-auto w-full max-w-[1160px] scroll-mt-28 px-5 py-14 sm:px-8 sm:py-20">
-      <div className="overflow-hidden rounded-[8px] border border-[var(--border)] bg-[#f3f4f4] shadow-[0_24px_70px_rgba(23,22,26,0.08)] lg:grid lg:min-h-[430px] lg:grid-cols-[minmax(0,1fr)_minmax(420px,1fr)]">
-        <div className="relative min-h-[260px] overflow-hidden bg-[#e8e6e3] sm:min-h-[330px] lg:min-h-[430px]">
+      <div className="overflow-hidden rounded-[8px] border border-[var(--border)] bg-[var(--palette-f3f4f4)] shadow-[0_24px_70px_rgba(23,22,26,0.08)] lg:grid lg:min-h-[430px] lg:grid-cols-[minmax(0,1fr)_minmax(420px,1fr)]">
+        <div className="relative min-h-[260px] overflow-hidden bg-[var(--palette-e8e6e3)] sm:min-h-[330px] lg:min-h-[430px]">
           <ImageRenderer
             src={leadgenHeroImage}
             alt="Квартира из закрытой базы агентства недвижимости"
@@ -619,7 +619,7 @@ function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestBut
             className="object-cover"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.18),rgba(0,0,0,0.03)_46%,rgba(255,255,255,0.2))]" aria-hidden />
-          <div className="absolute bottom-[-34px] right-[-6px] h-[218px] w-[118px] rotate-[-8deg] rounded-b-[28px] rounded-t-full bg-[#efc29f] shadow-[0_20px_48px_rgba(96,54,28,0.22)] sm:right-[-16px]" aria-hidden />
+          <div className="absolute bottom-[-34px] right-[-6px] h-[218px] w-[118px] rotate-[-8deg] rounded-b-[28px] rounded-t-full bg-[var(--palette-efc29f)] shadow-[0_20px_48px_rgba(96,54,28,0.22)] sm:right-[-16px]" aria-hidden />
           <div className="absolute bottom-7 right-5 w-[174px] rotate-[-3deg] rounded-[28px] border-[6px] border-[var(--text-primary)] bg-[var(--text-primary)] shadow-[0_24px_55px_rgba(0,0,0,0.28)] min-[420px]:right-8 min-[420px]:w-[194px] sm:right-12 lg:right-10 lg:w-[210px]">
             <div className="relative overflow-hidden rounded-[22px] bg-white p-2">
               <div className="mx-auto mb-2 h-1 w-10 rounded-full bg-[var(--text-primary)]/15" aria-hidden />
@@ -634,9 +634,9 @@ function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestBut
                   return (
                     <article
                       key={apartment.id}
-                      className="grid grid-cols-[46px_minmax(0,1fr)] gap-2 rounded-[6px] border border-[#ecebea] bg-[var(--surface-card-soft)] p-1.5"
+                      className="grid grid-cols-[46px_minmax(0,1fr)] gap-2 rounded-[6px] border border-[var(--palette-ecebea)] bg-[var(--surface-card-soft)] p-1.5"
                     >
-                      <div className="relative aspect-square overflow-hidden rounded-[5px] bg-[#ebe9e6]">
+                      <div className="relative aspect-square overflow-hidden rounded-[5px] bg-[var(--palette-ebe9e6)]">
                         <ImageRenderer
                           src={apartment.image}
                           alt="Квартира из подборки"
@@ -665,11 +665,11 @@ function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestBut
         </div>
 
         <div className="grid content-center px-6 py-9 sm:px-10 lg:px-14 lg:py-12">
-          <h2 className="text-[24px] font-semibold leading-[1.16] text-[#111] min-[420px]:text-[27px] sm:text-[32px] lg:text-[34px]">
+          <h2 className="text-[24px] font-semibold leading-[1.16] text-[var(--palette-111)] min-[420px]:text-[27px] sm:text-[32px] lg:text-[34px]">
             Пройдите тест за одну минуту и получите подборку квартир из{" "}
             <span className="text-[var(--accent)]">закрытой базы</span> по Вашим параметрам
           </h2>
-          <ul className="mt-8 grid gap-5 text-sm font-medium leading-6 text-[#333] sm:text-[15px]">
+          <ul className="mt-8 grid gap-5 text-sm font-medium leading-6 text-[var(--palette-333)] sm:text-[15px]">
             <li className="grid grid-cols-[22px_minmax(0,1fr)] gap-3">
               <span className="mt-0.5 grid size-[18px] place-items-center rounded-[4px] bg-[var(--accent)] text-white">
                 <Check className="size-3.5" aria-hidden />
@@ -702,7 +702,7 @@ function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestBut
 
 function LeadgenPromoFooter({ copyright, registry, privacyModal: PrivacyModal }: { copyright: string; registry: string; privacyModal: ElementType }) {
   return (
-    <footer id="leadgen-footer" className="bg-[#111111] text-white">
+    <footer id="leadgen-footer" className="bg-[var(--palette-111111)] text-white">
       <div className="mx-auto w-full max-w-[1160px] px-5 py-8 sm:px-8 sm:py-9">
         <div className="flex flex-col gap-4 border-t border-white/12 pt-5 text-xs font-medium leading-5 text-white/58 sm:flex-row sm:items-center sm:justify-between">
           <p className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">

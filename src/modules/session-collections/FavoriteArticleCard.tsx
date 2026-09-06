@@ -19,14 +19,14 @@ export function FavoriteArticleCard({ item, priority = false, showFavoriteContro
           <SessionCollectionButton
             kind="favorites"
             item={item}
-            className="inline-flex size-9 items-center justify-center rounded-lg border bg-white/92 text-[#17161A] shadow-sm backdrop-blur-sm"
-            activeClassName="border-[#8A1515] bg-white text-[#8A1515]"
-            inactiveClassName="border-[#E3E3E1] text-[#17161A] hover:border-[#8A1515] hover:text-[#8A1515]"
+            className="inline-flex size-9 items-center justify-center rounded-lg border bg-white/92 text-[var(--text-primary)] shadow-sm backdrop-blur-sm"
+            activeClassName="border-[var(--accent)] bg-white text-[var(--accent)]"
+            inactiveClassName="border-[var(--border)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
           />
         </div>
       ) : null}
       <Link href={item.path} className="block min-w-0">
-        <span className="relative block aspect-[16/10] overflow-hidden rounded-lg bg-[#EBEBE9]">
+        <span className="relative block aspect-[16/10] overflow-hidden rounded-lg bg-[var(--surface-muted)]">
           {item.image ? (
             <Image
               src={item.image}
@@ -39,12 +39,12 @@ export function FavoriteArticleCard({ item, priority = false, showFavoriteContro
             />
           ) : null}
         </span>
-        <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-[#8A1515]">Статья</p>
-        <h3 className="mt-1.5 line-clamp-2 text-[16px] font-semibold leading-5 text-[#17161A] transition group-hover:text-[#8A1515]">
+        <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--accent)]">Статья</p>
+        <h3 className="mt-1.5 line-clamp-2 text-[16px] font-semibold leading-5 text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">
           {item.title}
         </h3>
         {item.address && item.address !== "Журнал «АТЛАС»" ? (
-          <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[#413F41]">{item.address}</p>
+          <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[var(--text-secondary)]">{item.address}</p>
         ) : null}
       </Link>
     </article>

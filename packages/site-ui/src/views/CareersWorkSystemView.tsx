@@ -33,14 +33,14 @@ export function CareersWorkSystemView({ content: careersWorkSystem }: { content:
         </h2>
 
         <div className="mt-9 grid gap-5 lg:mt-12 lg:grid-cols-[minmax(0,1.08fr)_minmax(420px,0.92fr)] lg:gap-8">
-          <div className="rounded-2xl bg-[#F6F6F4] p-5 sm:p-7 lg:p-9">
+          <div className="rounded-2xl bg-[var(--palette-f6f6f4)] p-5 sm:p-7 lg:p-9">
             <div className="max-w-[700px] space-y-5 text-[16px] leading-7 text-[var(--text-secondary)] sm:text-[17px] sm:leading-8">
               {careersWorkSystem.intro.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
 
-            <div className="mt-8 border-t border-[#DEDDD9] pt-7 sm:mt-10 sm:pt-9">
+            <div className="mt-8 border-t border-[var(--palette-deddd9)] pt-7 sm:mt-10 sm:pt-9">
               <h3 className="max-w-[700px] text-[19px] font-semibold leading-7 text-[var(--text-primary)] sm:text-[21px] sm:leading-8">
                 {careersWorkSystem.principles.title}
               </h3>
@@ -71,7 +71,7 @@ export function CareersWorkSystemView({ content: careersWorkSystem }: { content:
                   <li
                     key={step.title}
                     className={`grid grid-cols-[44px_minmax(0,1fr)_28px] items-center gap-4 py-4 ${
-                      index > 0 ? "border-t border-[#E9E8E6]" : ""
+                      index > 0 ? "border-t border-[var(--palette-e9e8e6)]" : ""
                     }`}
                   >
                     <span className="flex size-11 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-[var(--accent)]">
@@ -81,12 +81,12 @@ export function CareersWorkSystemView({ content: careersWorkSystem }: { content:
                       <p className="text-[16px] font-semibold leading-6 text-[var(--text-primary)]">
                         {step.title}
                       </p>
-                      <p className="mt-1 text-[14px] leading-5 text-[#686467]">
+                      <p className="mt-1 text-[14px] leading-5 text-[var(--palette-686467)]">
                         {step.description}
                       </p>
                     </div>
                     <span
-                      className="text-right text-[11px] font-semibold tabular-nums text-[#AAA6A7]"
+                      className="text-right text-[11px] font-semibold tabular-nums text-[var(--palette-aaa6a7)]"
                       aria-hidden
                     >
                       {String(index + 1).padStart(2, "0")}

@@ -138,16 +138,16 @@ export function LeadgenInlinePhoneForm({
 
   return (
     <form
-      className="relative flex h-full flex-col overflow-hidden rounded-[8px] border border-[#eadede] bg-[linear-gradient(180deg,#ffffff_0%,#fbf8f7_100%)] p-4 shadow-[0_18px_46px_rgba(23,22,26,0.07)] sm:p-5"
+      className="relative flex h-full flex-col overflow-hidden rounded-[8px] border border-[var(--palette-eadede)] bg-[linear-gradient(180deg,var(--surface)_0%,var(--palette-fbf8f7)_100%)] p-4 shadow-[0_18px_46px_rgba(23,22,26,0.07)] sm:p-5"
       onSubmit={onSubmit}
       data-analytics-form-type={formType}
       noValidate
     >
-      <div className="absolute inset-x-4 top-0 h-[2px] rounded-b-full bg-[#8A1515]/80" aria-hidden />
+      <div className="absolute inset-x-4 top-0 h-[2px] rounded-b-full bg-[var(--accent)]/80" aria-hidden />
       <div className="mb-4">
-        <p className="text-[17px] font-semibold leading-tight text-[#17161a]">{title}</p>
+        <p className="text-[17px] font-semibold leading-tight text-[var(--text-primary)]">{title}</p>
         {description ? (
-          <p className="mt-2 text-[12px] font-medium leading-5 text-[#6a6465]">{description}</p>
+          <p className="mt-2 text-[12px] font-medium leading-5 text-[var(--palette-6a6465)]">{description}</p>
         ) : null}
       </div>
       <label className="sr-only" htmlFor={`${formType}-website`}>
@@ -179,19 +179,19 @@ export function LeadgenInlinePhoneForm({
           onFocus={onPhoneFocus}
           aria-invalid={Boolean(errorMessage)}
           aria-describedby={errorMessage ? errorId : undefined}
-          className="min-h-[50px] w-full rounded-[6px] border border-[#ddd5d3] bg-white/88 px-4 text-base font-medium text-[#17161a] outline-none transition placeholder:text-[#9b9697] focus:border-[#8A1515] focus:bg-white sm:text-[14px]"
+          className="min-h-[50px] w-full rounded-[6px] border border-[var(--palette-ddd5d3)] bg-white/88 px-4 text-base font-medium text-[var(--text-primary)] outline-none transition placeholder:text-[var(--palette-9b9697)] focus:border-[var(--accent)] focus:bg-white sm:text-[14px]"
         />
       </div>
 
       <button
         type="submit"
         disabled={isPending}
-        className="mt-3 min-h-[52px] w-full rounded-[6px] bg-[#8A1515] px-4 text-[15px] font-semibold text-white shadow-[0_12px_26px_rgba(138,21,21,0.2)] transition hover:bg-[#630E0E] disabled:cursor-wait disabled:opacity-70 sm:min-h-[50px] sm:text-[14px]"
+        className="mt-3 min-h-[52px] w-full rounded-[6px] bg-[var(--accent)] px-4 text-[15px] font-semibold text-white shadow-[0_12px_26px_rgba(138,21,21,0.2)] transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70 sm:min-h-[50px] sm:text-[14px]"
       >
         {isPending ? "Отправляем..." : submitLabel}
       </button>
 
-      <label className="mx-auto mt-3 flex w-full items-center justify-center gap-1 whitespace-nowrap text-center text-[9px] font-medium leading-none text-[#8a8586] sm:text-[9px]">
+      <label className="mx-auto mt-3 flex w-full items-center justify-center gap-1 whitespace-nowrap text-center text-[9px] font-medium leading-none text-[var(--palette-8a8586)] sm:text-[9px]">
         <input
           type="checkbox"
           checked={consent}
@@ -199,14 +199,14 @@ export function LeadgenInlinePhoneForm({
             setConsent(event.target.checked);
             setClientError(null);
           }}
-          className="size-3.5 shrink-0 accent-[#8A1515] sm:size-3.5"
+          className="size-3.5 shrink-0 accent-[var(--accent)] sm:size-3.5"
           aria-invalid={errorMessage === "Необходимо согласие на обработку персональных данных."}
         />
         <span className="min-w-0 whitespace-nowrap"><PrivacyConsentText /></span>
       </label>
 
       {errorMessage ? (
-        <p id={errorId} className="mt-3 text-center text-xs font-medium text-[#8A1515]" role="alert">
+        <p id={errorId} className="mt-3 text-center text-xs font-medium text-[var(--accent)]" role="alert">
           {errorMessage}
         </p>
       ) : null}

@@ -18,22 +18,22 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
   return (
     <section id={id} className="bg-white" aria-labelledby={titleId}>
       <div className="mx-auto max-w-site-frame px-5 py-[72px] md:py-[88px] lg:py-[104px]">
-        <div className="rounded-lg border border-[#E3E3E1] bg-[#FAFAFA] p-5 md:p-8 lg:p-10">
+        <div className="rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] p-5 md:p-8 lg:p-10">
           <div className="mx-auto mb-10 grid max-w-[820px] gap-5 text-center md:mb-12 lg:mb-14">
             <h2
               id={titleId}
-              className="text-[30px] font-extrabold leading-[1.14] text-[#17161A] md:text-[38px] lg:text-[42px]"
+              className="text-[30px] font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-[38px] lg:text-[42px]"
             >
               {title}
             </h2>
             {lead ? (
-              <p className="mx-auto max-w-[640px] text-[16px] leading-7 text-[#4C494A] md:text-[18px]">
+              <p className="mx-auto max-w-[640px] text-[16px] leading-7 text-[var(--palette-4c494a)] md:text-[18px]">
                 {lead}
               </p>
             ) : null}
           </div>
 
-          <div className="grid overflow-hidden rounded-lg border border-[#E3E3E1] bg-white lg:grid-cols-3">
+          <div className="grid overflow-hidden rounded-lg border border-[var(--border)] bg-white lg:grid-cols-3">
             {steps.map((step, index) => {
               const number = step.number ?? String(index + 1).padStart(2, "0");
               const isLast = index === steps.length - 1;
@@ -41,17 +41,17 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
               return (
                 <article
                   key={`${number}-${step.title}`}
-                  className={`relative flex flex-col border-[#E3E3E1] p-6 md:p-8 lg:min-h-[300px] lg:p-8 xl:p-10 ${
+                  className={`relative flex flex-col border-[var(--border)] p-6 md:p-8 lg:min-h-[300px] lg:p-8 xl:p-10 ${
                     isLast ? "" : "border-b lg:border-b-0 lg:border-r"
                   }`}
                 >
                   <span
-                    className="mb-6 block select-none text-[72px] font-black leading-none tracking-normal text-[#8A1515]/14 md:text-[88px] lg:text-[104px]"
+                    className="mb-6 block select-none text-[72px] font-black leading-none tracking-normal text-[var(--accent)]/14 md:text-[88px] lg:text-[104px]"
                     aria-hidden
                   >
                     {number}
                   </span>
-                  <h3 className="flex min-h-[49px] max-w-[400px] flex-col justify-start text-[20px] font-bold leading-[1.22] text-[#17161A] md:min-h-[54px] md:text-[22px]">
+                  <h3 className="flex min-h-[49px] max-w-[400px] flex-col justify-start text-[20px] font-bold leading-[1.22] text-[var(--text-primary)] md:min-h-[54px] md:text-[22px]">
                     {step.titleLines?.length
                       ? step.titleLines.map((line) => (
                           <span key={line} className="block">
@@ -60,7 +60,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
                         ))
                       : step.title}
                   </h3>
-                  <p className="mt-4 max-w-[420px] text-[15px] leading-7 text-[#5A5658] md:text-[16px]">
+                  <p className="mt-4 max-w-[420px] text-[15px] leading-7 text-[var(--palette-5a5658)] md:text-[16px]">
                     {step.text}
                   </p>
                 </article>

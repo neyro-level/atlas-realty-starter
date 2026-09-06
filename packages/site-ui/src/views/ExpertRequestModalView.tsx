@@ -153,14 +153,14 @@ export function ExpertRequestModalView({
               type="checkbox"
               checked={consent}
               onChange={(event) => onConsentChange(event.target.checked)}
-              className="mt-0.5 size-4 shrink-0 rounded border-[#D0D0CD] accent-[var(--accent)]"
+              className="mt-0.5 size-4 shrink-0 rounded border-[var(--input)] accent-[var(--accent)]"
             />
             <span>{consentContent}</span>
           </label>
           {errors.consent ? <span className="text-xs font-semibold text-[var(--error)]">{errors.consent}</span> : null}
 
           {resultMessage ? (
-            <div className="rounded-lg border border-[#F2C6C6] bg-[#FFF7F7] px-3 py-2 text-sm font-semibold text-[var(--error)]">
+            <div className="rounded-lg border border-[var(--palette-f2c6c6)] bg-[var(--palette-fff7f7)] px-3 py-2 text-sm font-semibold text-[var(--error)]">
               {resultMessage}
             </div>
           ) : null}
@@ -168,7 +168,7 @@ export function ExpertRequestModalView({
           <button
             type="submit"
             disabled={isPending}
-            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--text-primary)] px-5 text-sm font-extrabold text-white transition hover:bg-[#2A292C] disabled:cursor-wait disabled:opacity-70"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--text-primary)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--palette-2a292c)] disabled:cursor-wait disabled:opacity-70"
           >
             {isPending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
             {isPending ? "Отправляем" : "Позвоните мне"}

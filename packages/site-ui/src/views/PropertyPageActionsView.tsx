@@ -43,11 +43,11 @@ export function PropertyPageActionsView({
       </div>
 
       {phoneVisible ? (
-        <a href={phoneHref} data-analytics-context="property_page_actions" className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold tabular-nums text-white transition hover:bg-[#2A292C]">
+        <a href={phoneHref} data-analytics-context="property_page_actions" className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold tabular-nums text-white transition hover:bg-[var(--palette-2a292c)]">
           <Phone className="size-4" aria-hidden />{phone}
         </a>
       ) : (
-        <button type="button" data-analytics-event="phone_reveal" data-analytics-context="property_page_actions" onClick={onRevealPhone} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold text-white transition hover:bg-[#2A292C]">
+        <button type="button" data-analytics-event="phone_reveal" data-analytics-context="property_page_actions" onClick={onRevealPhone} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold text-white transition hover:bg-[var(--palette-2a292c)]">
           <Phone className="size-4" aria-hidden />Показать телефон
         </button>
       )}

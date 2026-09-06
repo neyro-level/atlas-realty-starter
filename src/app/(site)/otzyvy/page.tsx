@@ -88,7 +88,7 @@ export default async function ReviewsPage({ searchParams }: Props) {
                 data-request-modal-show-subtitle="true"
                 data-request-modal-source="corporate:reviews:hero"
                 data-request-modal-form-type="corporate_reviews"
-                className="inline-flex min-h-12 w-full max-w-full shrink-0 items-center justify-center rounded-lg bg-[#8A1515] px-4 text-sm font-semibold whitespace-nowrap text-white transition hover:bg-[#630E0E] sm:w-auto sm:min-w-[252px] sm:px-6"
+                className="inline-flex min-h-12 w-full max-w-full shrink-0 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-sm font-semibold whitespace-nowrap text-white transition hover:bg-[var(--accent-hover)] sm:w-auto sm:min-w-[252px] sm:px-6"
               >
                 Получить консультацию
               </button>

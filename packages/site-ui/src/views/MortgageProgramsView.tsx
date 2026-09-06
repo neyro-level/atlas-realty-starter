@@ -59,7 +59,7 @@ export function MortgageProgramsView() {
           {MORTGAGE_PROGRAMS.map((program) => (
             <article
               key={program.title}
-              className="group flex min-h-[184px] flex-col rounded-2xl bg-[#F6F6F4] p-5 transition duration-300 ease-out hover:-translate-y-0.5 hover:bg-[var(--accent-soft)] hover:shadow-[0_16px_34px_rgba(0,0,0,0.06)] sm:p-6"
+              className="group flex min-h-[184px] flex-col rounded-2xl bg-[var(--palette-f6f6f4)] p-5 transition duration-300 ease-out hover:-translate-y-0.5 hover:bg-[var(--accent-soft)] hover:shadow-[0_16px_34px_rgba(0,0,0,0.06)] sm:p-6"
             >
               <span className="flex size-10 items-center justify-center rounded-xl bg-white text-[var(--text-secondary)] transition duration-300 group-hover:text-[var(--accent)]">
                 <program.Icon className="size-[18px]" strokeWidth={1.6} aria-hidden />
@@ -71,13 +71,13 @@ export function MortgageProgramsView() {
           ))}
         </div>
 
-        <div className="mt-10 border-t border-[#E9E8E6] pt-7 sm:mt-12 sm:pt-8">
+        <div className="mt-10 border-t border-[var(--palette-e9e8e6)] pt-7 sm:mt-12 sm:pt-8">
           <h3 className="text-[15px] font-medium leading-none text-[var(--text-secondary)]">Сертификаты</h3>
           <ul className="mt-4 grid gap-3 sm:grid-cols-3">
             {SUPPORT_OPTIONS.map((option) => (
-              <li key={option.title} className="flex min-h-14 items-center gap-3 rounded-xl bg-[#FAFAF9] px-4 py-3.5">
+              <li key={option.title} className="flex min-h-14 items-center gap-3 rounded-xl bg-[var(--palette-fafaf9)] px-4 py-3.5">
                 <option.Icon className="size-[17px] shrink-0 text-[var(--text-muted)]" strokeWidth={1.6} aria-hidden />
-                <p className="text-[14px] font-medium leading-5 text-[#3B3736]">{option.title}</p>
+                <p className="text-[14px] font-medium leading-5 text-[var(--palette-3b3736)]">{option.title}</p>
               </li>
             ))}
           </ul>

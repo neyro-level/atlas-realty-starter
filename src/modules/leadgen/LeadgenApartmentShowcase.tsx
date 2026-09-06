@@ -30,9 +30,9 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             min-width: 0;
             flex-direction: column;
             overflow: hidden;
-            border: 1px solid #E3E3E1;
+            border: 1px solid var(--border);
             border-radius: 8px;
-            background: #F5F5F4;
+            background: var(--palette-f5f5f4);
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 18px 42px rgba(23,22,26,0.04);
             transition:
               transform 0.25s ease,
@@ -48,7 +48,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             left: 0;
             z-index: 3;
             height: 3px;
-            background: #8A1515;
+            background: var(--accent);
             opacity: 0.82;
           }
 
@@ -62,7 +62,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             position: relative;
             aspect-ratio: 1 / 1.05;
             overflow: hidden;
-            background: #EBEBE9;
+            background: var(--surface-muted);
           }
 
           .leadgen-catalog-card__image {
@@ -91,7 +91,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             min-width: 0;
             align-items: center;
             gap: 8px;
-            color: #4f4b4c;
+            color: var(--palette-4f4b4c);
             font-size: 12px;
             font-weight: 500;
             line-height: 1.35;
@@ -101,7 +101,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             width: 15px;
             height: 15px;
             flex: 0 0 auto;
-            color: #8A1515;
+            color: var(--accent);
             stroke-width: 1.8;
           }
 
@@ -113,8 +113,8 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             width: 100%;
             border: 0;
             border-radius: 6px;
-            background: #8A1515;
-            color: #ffffff;
+            background: var(--accent);
+            color: var(--surface);
             cursor: pointer;
             font-size: 13px;
             font-weight: 600;
@@ -131,8 +131,8 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
 
           .leadgen-catalog-card__quick-cta:hover,
           .leadgen-catalog-card__quick-cta:focus-visible {
-            background: #630E0E;
-            color: #ffffff;
+            background: var(--accent-hover);
+            color: var(--surface);
             box-shadow: 0 14px 30px rgba(138,21,21,0.22);
             transform: translateY(-1px);
           }
@@ -153,7 +153,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             height: 10px;
             border: 0;
             border-radius: 999px;
-            background: #FFFFFF;
+            background: var(--surface);
             cursor: pointer;
             opacity: 0.92;
             padding: 0;
@@ -164,7 +164,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
           }
 
           .leadgen-catalog-card__dot.is-active {
-            background: #8A1515;
+            background: var(--accent);
             opacity: 1;
             transform: scale(1.04);
           }
@@ -282,8 +282,8 @@ function LeadgenApartmentCard({ apartment, formPrefix }: { apartment: PromoApart
 
       <div className="leadgen-catalog-card__body">
         <div className="grid gap-3">
-          <p className="text-[18px] font-bold leading-tight tabular-nums text-[#17161A]">{apartment.price}</p>
-          <p className="text-[13px] font-semibold leading-tight text-[#413F41]">{roomsLabel}</p>
+          <p className="text-[18px] font-bold leading-tight tabular-nums text-[var(--text-primary)]">{apartment.price}</p>
+          <p className="text-[13px] font-semibold leading-tight text-[var(--text-secondary)]">{roomsLabel}</p>
         </div>
 
         <div className="grid gap-3">

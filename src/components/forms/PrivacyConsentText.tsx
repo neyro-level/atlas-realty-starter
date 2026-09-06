@@ -30,7 +30,7 @@ export function PrivacyConsentText({ className, buttonAgreement = false }: Priva
         href={contactsConfig.privacyUrl}
         target="_blank"
         rel="noreferrer"
-        className={`text-[#8A1515] underline underline-offset-2 ${className ?? ""}`}
+        className={`text-[var(--accent)] underline underline-offset-2 ${className ?? ""}`}
       >
         персональных данных
       </Link>

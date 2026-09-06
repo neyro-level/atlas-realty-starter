@@ -129,11 +129,11 @@ export function PropertySidebarView({
               onChange={(event) => onMessageChange(event.target.value)}
               autoFocus={!desktopVariant}
               placeholder="Здесь можно написать сообщение"
-              className="min-w-[170px] flex-1 bg-transparent text-xs font-medium leading-5 text-[var(--text-primary)] outline-none placeholder:text-[#B2B1B5]"
+              className="min-w-[170px] flex-1 bg-transparent text-xs font-medium leading-5 text-[var(--text-primary)] outline-none placeholder:text-[var(--palette-b2b1b5)]"
             />
           </label>
           {formattedOfferValue ? (
-            <p className="mt-2 border-t border-[#F0F0EE] pt-2 text-xs font-medium leading-5 text-[var(--text-primary)]">{`Предлагаю ${formattedOfferValue} за этот объект.`}</p>
+            <p className="mt-2 border-t border-[var(--palette-f0f0ee)] pt-2 text-xs font-medium leading-5 text-[var(--text-primary)]">{`Предлагаю ${formattedOfferValue} за этот объект.`}</p>
           ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
@@ -145,7 +145,7 @@ export function PropertySidebarView({
                 onQuickQuestion(item);
                 focusQuestionArea();
               }}
-              className="inline-flex min-h-7 items-center rounded-lg bg-[var(--background)] px-2.5 text-[11px] font-bold text-[var(--text-primary)] transition hover:bg-[#E8E8E6] hover:text-[var(--accent)]"
+              className="inline-flex min-h-7 items-center rounded-lg bg-[var(--background)] px-2.5 text-[11px] font-bold text-[var(--text-primary)] transition hover:bg-[var(--palette-e8e8e6)] hover:text-[var(--accent)]"
             >
               {item}
             </button>
@@ -184,12 +184,12 @@ export function PropertySidebarView({
         <span>{consentContent}</span>
       </label>
 
-      {result ? <p className={`text-sm font-semibold ${result.ok ? "text-[#159947]" : "text-[var(--accent)]"}`}>{result.message}</p> : null}
+      {result ? <p className={`text-sm font-semibold ${result.ok ? "text-[var(--palette-159947)]" : "text-[var(--accent)]"}`}>{result.message}</p> : null}
 
       <button
         type="submit"
         disabled={pending}
-        className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--surface-dark)] px-4 text-sm font-semibold text-white transition hover:bg-[#2A292C] disabled:cursor-wait disabled:opacity-70"
+        className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--surface-dark)] px-4 text-sm font-semibold text-white transition hover:bg-[var(--palette-2a292c)] disabled:cursor-wait disabled:opacity-70"
       >
         {pending ? "Отправляем..." : "Отправить сообщение"}
       </button>
@@ -210,7 +210,7 @@ export function PropertySidebarView({
             aria-label="Скопировать ссылку на объект"
             title={copied ? "Ссылка скопирована" : "Скопировать ссылку"}
           >
-            {copied ? <Check className="size-4 text-[#159947]" aria-hidden /> : <Share2 className="size-4" aria-hidden />}
+            {copied ? <Check className="size-4 text-[var(--palette-159947)]" aria-hidden /> : <Share2 className="size-4" aria-hidden />}
           </button>
         </div>
       ) : null}
@@ -226,7 +226,7 @@ export function PropertySidebarView({
             <a
               href={phoneHref}
               data-analytics-context="property_sidebar"
-              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold tabular-nums text-white transition hover:bg-[#2A292C]"
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold tabular-nums text-white transition hover:bg-[var(--palette-2a292c)]"
             >
               <Phone className="size-4" aria-hidden />
               {phoneLabel}
@@ -237,7 +237,7 @@ export function PropertySidebarView({
               data-analytics-event="phone_reveal"
               data-analytics-context="property_sidebar"
               onClick={onRevealPhone}
-              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold text-white transition hover:bg-[#2A292C]"
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold text-white transition hover:bg-[var(--palette-2a292c)]"
             >
               <Phone className="size-4" aria-hidden />
               Показать телефон

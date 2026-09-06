@@ -18,7 +18,7 @@ export function CareersTrainingView({ content: careersTraining, imageRenderer: I
         </h2>
 
         <div className="mt-9 grid gap-6 lg:mt-12 lg:grid-cols-[minmax(360px,0.92fr)_minmax(0,1.08fr)] lg:items-stretch lg:gap-8">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[#F3F3F1] lg:aspect-auto lg:min-h-[470px]">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[var(--palette-f3f3f1)] lg:aspect-auto lg:min-h-[470px]">
             <ImageRenderer
               src={careersTraining.image}
               alt={careersTraining.imageAlt}
@@ -28,14 +28,14 @@ export function CareersTrainingView({ content: careersTraining, imageRenderer: I
             />
           </div>
 
-          <div className="flex flex-col rounded-2xl bg-[#F6F6F4] p-5 sm:p-7 lg:p-9">
+          <div className="flex flex-col rounded-2xl bg-[var(--palette-f6f6f4)] p-5 sm:p-7 lg:p-9">
             <div className="space-y-1 text-[17px] leading-7 text-[var(--text-secondary)] sm:text-[18px]">
               {careersTraining.intro.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
 
-            <div className="mt-8 border-t border-[#DEDDD9] pt-7">
+            <div className="mt-8 border-t border-[var(--palette-deddd9)] pt-7">
               <h3 className="text-[18px] font-semibold leading-7 text-[var(--text-primary)]">
                 {careersTraining.skillsTitle}
               </h3>
@@ -55,7 +55,7 @@ export function CareersTrainingView({ content: careersTraining, imageRenderer: I
             </div>
 
             <div className="mt-auto pt-8">
-              <div className="rounded-xl bg-[#24354B] px-5 py-5 text-white sm:px-6">
+              <div className="rounded-xl bg-[var(--palette-24354b)] px-5 py-5 text-white sm:px-6">
                 {careersTraining.support.map((line, index) => (
                   <p
                     key={line}
@@ -77,7 +77,7 @@ export function CareersTrainingView({ content: careersTraining, imageRenderer: I
             {careersTraining.steps.map((step, index) => (
               <li
                 key={step.title}
-                className="flex min-h-[190px] flex-col rounded-xl bg-[#FAFAF9] p-5"
+                className="flex min-h-[190px] flex-col rounded-xl bg-[var(--palette-fafaf9)] p-5"
               >
                 <span className="text-[12px] font-semibold tabular-nums text-[var(--accent)]">
                   {String(index + 1).padStart(2, "0")}

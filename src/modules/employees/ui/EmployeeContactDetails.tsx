@@ -12,7 +12,7 @@ export function EmployeeContactDetails({ phone, email, employeeSlug }: { phone: 
     <dl className="grid gap-1">
       <div className="flex min-h-9 items-center gap-3">
         <dt className="sr-only">Телефон</dt>
-        <Phone className="size-[18px] shrink-0 text-[#17161A]" aria-hidden />
+        <Phone className="size-[18px] shrink-0 text-[var(--text-primary)]" aria-hidden />
         <dd className="flex min-h-9 min-w-0 items-center">
           {formattedPhone ? (
             phoneVisible ? (
@@ -20,7 +20,7 @@ export function EmployeeContactDetails({ phone, email, employeeSlug }: { phone: 
                 href={buildTelHref(phone!)}
                 data-analytics-context="employee_profile"
                 data-analytics-item={employeeSlug}
-                className="inline-flex min-h-9 items-center text-sm font-medium leading-none tabular-nums text-[#17161A] transition hover:opacity-70"
+                className="inline-flex min-h-9 items-center text-sm font-medium leading-none tabular-nums text-[var(--text-primary)] transition hover:opacity-70"
               >
                 {formattedPhone}
               </a>
@@ -31,23 +31,23 @@ export function EmployeeContactDetails({ phone, email, employeeSlug }: { phone: 
                 data-analytics-context="employee_profile"
                 data-analytics-item={employeeSlug}
                 onClick={() => setPhoneVisible(true)}
-                className="inline-flex min-h-9 items-center text-sm font-medium leading-none tabular-nums text-[#17161A] transition hover:opacity-70"
+                className="inline-flex min-h-9 items-center text-sm font-medium leading-none tabular-nums text-[var(--text-primary)] transition hover:opacity-70"
                 aria-label="Показать полный номер телефона"
               >
                 +7...Показать
               </button>
             )
           ) : (
-            <span className="text-sm text-[#827F81]">По запросу</span>
+            <span className="text-sm text-[var(--text-muted)]">По запросу</span>
           )}
         </dd>
       </div>
 
       <div className="flex min-h-9 items-center gap-3">
         <dt className="sr-only">Email</dt>
-        <Mail className="size-[18px] shrink-0 text-[#17161A]" aria-hidden />
+        <Mail className="size-[18px] shrink-0 text-[var(--text-primary)]" aria-hidden />
         <dd className="flex min-h-9 min-w-0 items-center overflow-hidden">
-          <a href={`mailto:${email}`} className="inline-flex min-h-9 max-w-full items-center truncate text-sm font-medium leading-none text-[#17161A] transition hover:opacity-70">
+          <a href={`mailto:${email}`} className="inline-flex min-h-9 max-w-full items-center truncate text-sm font-medium leading-none text-[var(--text-primary)] transition hover:opacity-70">
             {email}
           </a>
         </dd>

@@ -149,7 +149,7 @@ export function MortgageCalculatorView() {
             </div>
           </div>
 
-          <aside className="flex flex-col rounded-2xl bg-[#18181A] p-5 text-white sm:p-6">
+          <aside className="flex flex-col rounded-2xl bg-[var(--surface-dark)] p-5 text-white sm:p-6">
             <p className="text-[13px] font-medium text-white/65">Ежемесячный платёж</p>
             <p className="mt-3 text-[clamp(1.9rem,3.4vw,2.35rem)] font-semibold leading-none tabular-nums">от {formatCurrency(payment)} ₽</p>
             <div className="mt-5 border-t border-white/15 pt-4 text-[13px] leading-5 text-white/65">

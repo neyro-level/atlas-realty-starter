@@ -35,11 +35,11 @@ export function HouseProjectPreviewView({
           <Card className="overflow-hidden rounded-lg border-[var(--border)] bg-[var(--surface-muted)]">
             <svg viewBox="0 0 640 420" role="img" aria-label={`Проект дома ${project.areaLabel}`} className="h-full w-full">
               <rect width="640" height="420" fill="var(--surface-muted)" />
-              <path d="M82 326H558" stroke="#D0D0CD" strokeWidth="3" />
+              <path d="M82 326H558" stroke="var(--input)" strokeWidth="3" />
               <path d="M136 242L320 92L504 242" fill="none" stroke="var(--accent)" strokeWidth="12" strokeLinejoin="round" />
-              <path d="M190 238H450V330H190z" fill="var(--surface)" stroke="#C8C8C6" strokeWidth="4" />
+              <path d="M190 238H450V330H190z" fill="var(--surface)" stroke="var(--palette-c8c8c6)" strokeWidth="4" />
               <path d="M238 330V262H298V330" fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth="4" />
-              <path d="M338 262H412V306H338z" fill="var(--surface-card-soft)" stroke="#C8C8C6" strokeWidth="4" />
+              <path d="M338 262H412V306H338z" fill="var(--surface-card-soft)" stroke="var(--palette-c8c8c6)" strokeWidth="4" />
               <text x="320" y="62" textAnchor="middle" fill="var(--text-primary)" fontSize="30" fontWeight="800">
                 {project.numberLabel} / {project.areaLabel}
               </text>

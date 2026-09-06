@@ -16,7 +16,7 @@ type Props = {
 type ShareState = "idle" | "loading" | "success" | "error";
 
 const textButtonClass =
-  "inline-flex items-baseline gap-1.5 text-[15px] font-semibold leading-none text-[#827F81] transition hover:text-[#8A1515] disabled:cursor-not-allowed disabled:opacity-55 md:text-[16px]";
+  "inline-flex items-baseline gap-1.5 text-[15px] font-semibold leading-none text-[var(--text-muted)] transition hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-55 md:text-[16px]";
 
 export function ShareFavoritesButton({ items }: Props) {
   const [state, setState] = useState<ShareState>("idle");
@@ -116,7 +116,7 @@ export function ShareFavoritesButton({ items }: Props) {
         {state === "loading" ? "…" : "Поделиться"}
       </button>
       {messageToRender ? (
-        <span className={`max-w-[260px] text-right text-[11px] font-medium leading-4 ${state === "error" ? "text-[#8A1515]" : "text-[#827F81]"}`}>
+        <span className={`max-w-[260px] text-right text-[11px] font-medium leading-4 ${state === "error" ? "text-[var(--accent)]" : "text-[var(--text-muted)]"}`}>
           {messageToRender}
         </span>
       ) : null}

@@ -214,7 +214,7 @@ function PhotosPanel({
             type="button"
             aria-label="Предыдущее фото"
             onClick={onPrev}
-            className="absolute left-5 top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-lg bg-white text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.16)] transition hover:bg-[#F5F5F5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] lg:grid"
+            className="absolute left-5 top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-lg bg-white text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.16)] transition hover:bg-[var(--palette-f5f5f5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] lg:grid"
           >
             <ChevronLeft className="size-5" aria-hidden />
           </button>
@@ -222,7 +222,7 @@ function PhotosPanel({
             type="button"
             aria-label="Следующее фото"
             onClick={onNext}
-            className="absolute right-5 top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-lg bg-white text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.16)] transition hover:bg-[#F5F5F5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] lg:grid"
+            className="absolute right-5 top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-lg bg-white text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.16)] transition hover:bg-[var(--palette-f5f5f5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] lg:grid"
           >
             <ChevronRight className="size-5" aria-hidden />
           </button>
@@ -234,13 +234,13 @@ function PhotosPanel({
 
 function VideoPlaceholder() {
   return (
-    <div className="relative grid h-full place-items-center overflow-hidden bg-[radial-gradient(circle_at_18%_18%,var(--surface)_0%,var(--accent-soft)_30%,transparent_58%),linear-gradient(135deg,#F1EEEE_0%,var(--surface-card-soft)_48%,var(--surface)_100%)] p-6 text-center">
+    <div className="relative grid h-full place-items-center overflow-hidden bg-[radial-gradient(circle_at_18%_18%,var(--surface)_0%,var(--accent-soft)_30%,transparent_58%),linear-gradient(135deg,var(--palette-f1eeee)_0%,var(--surface-card-soft)_48%,var(--surface)_100%)] p-6 text-center">
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 720 420" aria-hidden>
         <defs>
           <linearGradient id="new-building-video-room-gradient" x1="158" x2="562" y1="122" y2="298" gradientUnits="userSpaceOnUse">
             <stop stopColor="var(--surface)" />
             <stop offset="0.55" stopColor="var(--accent-soft)" />
-            <stop offset="1" stopColor="#F1EEEE" />
+            <stop offset="1" stopColor="var(--palette-f1eeee)" />
           </linearGradient>
           <filter id="new-building-video-placeholder-shadow" x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow dx="0" dy="18" stdDeviation="20" floodColor="var(--text-primary)" floodOpacity="0.12" />
@@ -249,13 +249,13 @@ function VideoPlaceholder() {
         <path d="M74 328C128 220 170 115 295 106c82-6 124 36 193 11 54-20 92-58 139-27 54 35 37 121 8 179-42 84-121 116-243 121-145 6-256-9-318-62Z" fill="var(--accent)" opacity="0.055" />
         <g filter="url(#new-building-video-placeholder-shadow)">
           <path d="M122 82H598V338H122z" fill="var(--surface)" stroke="var(--surface)" strokeWidth="12" />
-          <path d="M150 112H570V306H150z" fill="url(#new-building-video-room-gradient)" stroke="#D8D6D3" strokeWidth="2" />
+          <path d="M150 112H570V306H150z" fill="url(#new-building-video-room-gradient)" stroke="var(--palette-d8d6d3)" strokeWidth="2" />
           <path d="M150 112h420v194H150z" fill="var(--surface)" opacity="0.22" />
           <path d="M183 155h124v86H183z" fill="var(--surface)" fillOpacity="0.58" stroke="var(--border)" strokeWidth="2" />
           <path d="M404 147h108v106H404z" fill="var(--background)" stroke="var(--border)" strokeWidth="2" />
-          <path d="M176 269h368" stroke="#D0D0CD" strokeWidth="3" />
+          <path d="M176 269h368" stroke="var(--input)" strokeWidth="3" />
           <path d="M222 269c18-33 59-33 78 0M421 269c22-37 68-37 91 0" fill="none" stroke="var(--accent)" strokeOpacity="0.16" strokeWidth="12" strokeLinecap="round" />
-          <path d="M208 180h74M208 205h44M429 176h58M429 199h44M330 167h60M318 234h84" stroke="#D0D0CD" strokeWidth="4" strokeLinecap="round" />
+          <path d="M208 180h74M208 205h44M429 176h58M429 199h44M330 167h60M318 234h84" stroke="var(--input)" strokeWidth="4" strokeLinecap="round" />
           <path d="M330 174l48 27-48 27v-54Z" fill="var(--accent)" fillOpacity="0.78" />
         </g>
       </svg>
@@ -270,9 +270,9 @@ function VideoPlaceholder() {
 
 function NewBuildingMediaPlaceholder({ className = "" }: { className?: string }) {
   return (
-    <div className={`absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-[#29292d] px-6 text-center text-white ${className}`}>
+    <div className={`absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-[var(--palette-29292d)] px-6 text-center text-white ${className}`}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(158,7,7,0.34),transparent_35%),linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.045)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px]" />
-      <span className="relative flex size-16 items-center justify-center rounded-lg border border-white/14 bg-white/8"><Building2 className="size-8 text-[#efb5b5]" aria-hidden /></span>
+      <span className="relative flex size-16 items-center justify-center rounded-lg border border-white/14 bg-white/8"><Building2 className="size-8 text-[var(--palette-efb5b5)]" aria-hidden /></span>
       <p className="relative mt-5 text-sm font-extrabold">Изображение ЖК готовится к публикации</p>
       <p className="relative mt-2 max-w-xs text-xs leading-5 text-white/58">Покажем только проверенные материалы проекта</p>
     </div>

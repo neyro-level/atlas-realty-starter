@@ -59,7 +59,7 @@ export function PropertyViewingRequestView({
               {dates.map((date) => {
                 const selected = date.value === selectedDate;
                 return (
-                  <button key={date.value} type="button" onClick={() => onSelectDate(date.value)} className={`grid min-h-[76px] min-w-[102px] snap-start content-start rounded-lg border px-3 py-2.5 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] sm:min-w-0 md:min-h-[80px] ${selected ? "border-[var(--text-primary)] bg-[var(--text-primary)] text-white" : "border-transparent bg-[var(--background)] text-[var(--text-primary)] hover:border-[#D0D0CD] hover:bg-[#EDEDEB]"}`} aria-pressed={selected}>
+                  <button key={date.value} type="button" onClick={() => onSelectDate(date.value)} className={`grid min-h-[76px] min-w-[102px] snap-start content-start rounded-lg border px-3 py-2.5 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] sm:min-w-0 md:min-h-[80px] ${selected ? "border-[var(--text-primary)] bg-[var(--text-primary)] text-white" : "border-transparent bg-[var(--background)] text-[var(--text-primary)] hover:border-[var(--input)] hover:bg-[var(--palette-ededeb)]"}`} aria-pressed={selected}>
                     <span className="truncate text-[13px] font-semibold leading-5 md:text-sm">{date.label}</span>
                     <span className={`mt-1 text-xs leading-5 ${selected ? "text-white/82" : "text-[var(--text-secondary)]"}`}>{date.dateLabel}</span>
                   </button>
@@ -78,7 +78,7 @@ export function PropertyViewingRequestView({
             <input type="checkbox" checked={consent} onChange={(event) => onConsentChange(event.target.checked)} className="mt-1 size-4 shrink-0 accent-[var(--accent)]" />
             <span>{consentContent}</span>
           </label>
-          {result ? <p className={`text-sm font-semibold ${result.ok ? "text-[#159947]" : "text-[var(--accent)]"}`}>{result.message}</p> : null}
+          {result ? <p className={`text-sm font-semibold ${result.ok ? "text-[var(--palette-159947)]" : "text-[var(--accent)]"}`}>{result.message}</p> : null}
         </form>
       </div>
     </section>

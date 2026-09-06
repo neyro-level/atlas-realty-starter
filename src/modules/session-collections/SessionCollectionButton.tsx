@@ -22,8 +22,8 @@ export function SessionCollectionButton({
   kind,
   item,
   className,
-  activeClassName = "border-[#8A1515] bg-[#F7F2F2] text-[#8A1515]",
-  inactiveClassName = "border-[#E3E3E1] bg-[#FAFAFA] text-[#17161A] hover:border-[#8A1515] hover:text-[#8A1515]",
+  activeClassName = "border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]",
+  inactiveClassName = "border-[var(--border)] bg-[var(--surface-card-soft)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent)]",
 }: Props) {
   const [active, setActive] = useState(false);
   const Icon = kind === "favorites" ? Heart : ListPlus;

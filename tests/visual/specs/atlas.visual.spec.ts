@@ -1,5 +1,11 @@
 import { expect, test, type Page } from '@playwright/test'
 
+test.beforeEach(async ({ context }) => {
+  await context.addInitScript(() => {
+    window.localStorage.setItem('agency.cookie.notice.dismissed', '1')
+  })
+})
+
 const routes = [
   ['home', '/'],
   ['catalog', '/nedvizhimost'],
@@ -25,6 +31,7 @@ async function settlePage(page: Page) {
       }),
     )
   })
+  await page.waitForTimeout(500)
 }
 
 for (const [name, route] of routes) {

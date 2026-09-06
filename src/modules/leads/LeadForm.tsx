@@ -111,7 +111,7 @@ export function LeadForm({
     <form
       onSubmit={handleSubmit(onSubmit)}
       data-analytics-form-type={formType}
-      className={`border border-[#dcdcdc] bg-[#f7f7f9] p-5 shadow-[0_12px_36px_rgba(0,0,0,0.05)] ${className}`}
+      className={`border border-[var(--palette-dcdcdc)] bg-[var(--palette-f7f7f9)] p-5 shadow-[0_12px_36px_rgba(0,0,0,0.05)] ${className}`}
     >
       <input type="hidden" {...register("sourcePage")} />
       <input type="hidden" {...register("source")} />
@@ -124,31 +124,31 @@ export function LeadForm({
         <input tabIndex={-1} autoComplete="off" {...register("website")} />
       </label>
 
-      <div className={premiumCompact ? "mb-6" : "mb-5 border-b border-[#e0e0e0] pb-4"}>
-        <p className={premiumCompact ? "text-xl font-semibold leading-tight text-[#17161A]" : "text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#9e0707]"}>
+      <div className={premiumCompact ? "mb-6" : "mb-5 border-b border-[var(--palette-e0e0e0)] pb-4"}>
+        <p className={premiumCompact ? "text-xl font-semibold leading-tight text-[var(--text-primary)]" : "text-[11px] font-extrabold uppercase tracking-[0.08em] text-[var(--palette-9e0707)]"}>
           {title}
         </p>
-        <p className={`mt-2 text-sm text-[#5F5B5D] ${premiumCompact ? "leading-5" : "leading-6"}`}>{description}</p>
+        <p className={`mt-2 text-sm text-[var(--palette-5f5b5d)] ${premiumCompact ? "leading-5" : "leading-6"}`}>{description}</p>
       </div>
 
       <div className="grid gap-3">
-        <label className="grid gap-2 text-sm font-semibold text-[#1f1f1f]">
+        <label className="grid gap-2 text-sm font-semibold text-[var(--palette-1f1f1f)]">
           Ваше имя
           <input
             autoComplete="name"
-            className="min-h-11 rounded-lg border border-[#dedede] bg-white px-3 text-base outline-none transition focus:border-[#9e0707]"
+            className="min-h-11 rounded-lg border border-[var(--palette-dedede)] bg-white px-3 text-base outline-none transition focus:border-[var(--palette-9e0707)]"
             {...register("name")}
           />
         </label>
 
-        <label className="grid gap-2 text-sm font-semibold text-[#1f1f1f]">
+        <label className="grid gap-2 text-sm font-semibold text-[var(--palette-1f1f1f)]">
           Телефон
           <input
             type="tel"
             autoComplete="tel"
             inputMode="tel"
             placeholder="+7 (9__) ___-__-__"
-            className="min-h-11 rounded-lg border border-[#dedede] bg-white px-3 text-base font-medium tabular-nums outline-none transition placeholder:text-[#9A9798] focus:border-[#9e0707]"
+            className="min-h-11 rounded-lg border border-[var(--palette-dedede)] bg-white px-3 text-base font-medium tabular-nums outline-none transition placeholder:text-[var(--palette-9a9798)] focus:border-[var(--palette-9e0707)]"
             {...register("phone")}
             value={phone}
             onFocus={() => {
@@ -161,26 +161,26 @@ export function LeadForm({
             }}
           />
           {errors.phone ? (
-            <span className="text-xs font-semibold text-[#9e0707]">{errors.phone.message}</span>
+            <span className="text-xs font-semibold text-[var(--palette-9e0707)]">{errors.phone.message}</span>
           ) : null}
         </label>
       </div>
 
-      <label className={`mt-4 flex text-xs leading-5 text-[#666666] ${premiumCompact ? "items-center gap-2.5" : "gap-3"}`}>
+      <label className={`mt-4 flex text-xs leading-5 text-[var(--palette-666666)] ${premiumCompact ? "items-center gap-2.5" : "gap-3"}`}>
         <input
           type="checkbox"
-          className={`${premiumCompact ? "" : "mt-1"} size-4 shrink-0 accent-[#9e0707]`}
+          className={`${premiumCompact ? "" : "mt-1"} size-4 shrink-0 accent-[var(--palette-9e0707)]`}
           {...register("consent")}
         />
         <span><PrivacyConsentText className="font-semibold" /></span>
       </label>
       {errors.consent ? (
-        <p className="mt-2 text-xs font-semibold text-[#9e0707]">{errors.consent.message}</p>
+        <p className="mt-2 text-xs font-semibold text-[var(--palette-9e0707)]">{errors.consent.message}</p>
       ) : null}
 
       {premiumCompact ? (
-        <p className="mt-4 flex items-center gap-2 text-[11px] leading-4 text-[#777375]">
-          <ShieldCheck className="size-4 shrink-0 text-[#8A1515]" aria-hidden />
+        <p className="mt-4 flex items-center gap-2 text-[11px] leading-4 text-[var(--palette-777375)]">
+          <ShieldCheck className="size-4 shrink-0 text-[var(--accent)]" aria-hidden />
           Невидимая защита от спама включена
         </p>
       ) : null}
@@ -188,7 +188,7 @@ export function LeadForm({
       <button
         type="submit"
         disabled={isPending}
-        className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-[#9e0707] px-5 text-sm font-bold text-white transition hover:bg-[#7a0505] disabled:cursor-wait disabled:opacity-70"
+        className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-[var(--palette-9e0707)] px-5 text-sm font-bold text-white transition hover:bg-[var(--palette-7a0505)] disabled:cursor-wait disabled:opacity-70"
       >
         {isPending ? "Отправляем..." : submitLabel}
         {!premiumCompact ? <ArrowRight className="size-4" aria-hidden /> : null}
@@ -197,7 +197,7 @@ export function LeadForm({
       {result ? (
         <p
           className={`mt-3 text-sm font-semibold ${
-            result.ok ? "text-[#1f7a3a]" : "text-[#9e0707]"
+            result.ok ? "text-[var(--palette-1f7a3a)]" : "text-[var(--palette-9e0707)]"
           }`}
         >
           {result.message}

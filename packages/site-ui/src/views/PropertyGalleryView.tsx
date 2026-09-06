@@ -339,13 +339,13 @@ function MediaPlaceholder({
   title: string;
 }) {
   return (
-    <div className="relative grid h-full place-items-center overflow-hidden bg-[radial-gradient(circle_at_18%_18%,var(--surface)_0%,var(--accent-soft)_30%,transparent_58%),linear-gradient(135deg,#F1EEEE_0%,var(--surface-card-soft)_48%,var(--surface)_100%)] p-6 text-center">
+    <div className="relative grid h-full place-items-center overflow-hidden bg-[radial-gradient(circle_at_18%_18%,var(--surface)_0%,var(--accent-soft)_30%,transparent_58%),linear-gradient(135deg,var(--palette-f1eeee)_0%,var(--surface-card-soft)_48%,var(--surface)_100%)] p-6 text-center">
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 720 420" aria-hidden>
         <defs>
           <linearGradient id="object-video-room-gradient" x1="158" x2="562" y1="122" y2="298" gradientUnits="userSpaceOnUse">
             <stop stopColor="var(--surface)" />
             <stop offset="0.55" stopColor="var(--accent-soft)" />
-            <stop offset="1" stopColor="#F1EEEE" />
+            <stop offset="1" stopColor="var(--palette-f1eeee)" />
           </linearGradient>
           <filter id="object-video-placeholder-shadow" x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow dx="0" dy="18" stdDeviation="20" floodColor="var(--text-primary)" floodOpacity="0.12" />
@@ -354,13 +354,13 @@ function MediaPlaceholder({
         <path d="M74 328C128 220 170 115 295 106c82-6 124 36 193 11 54-20 92-58 139-27 54 35 37 121 8 179-42 84-121 116-243 121-145 6-256-9-318-62Z" fill="var(--accent)" opacity="0.055" />
         <g filter="url(#object-video-placeholder-shadow)">
           <path d="M122 82H598V338H122z" fill="var(--surface)" stroke="var(--surface)" strokeWidth="12" />
-          <path d="M150 112H570V306H150z" fill="url(#object-video-room-gradient)" stroke="#D8D6D3" strokeWidth="2" />
+          <path d="M150 112H570V306H150z" fill="url(#object-video-room-gradient)" stroke="var(--palette-d8d6d3)" strokeWidth="2" />
           <path d="M150 112h420v194H150z" fill="var(--surface)" opacity="0.22" />
           <path d="M183 155h124v86H183z" fill="var(--surface)" fillOpacity="0.58" stroke="var(--border)" strokeWidth="2" />
           <path d="M404 147h108v106H404z" fill="var(--background)" stroke="var(--border)" strokeWidth="2" />
-          <path d="M176 269h368" stroke="#D0D0CD" strokeWidth="3" />
+          <path d="M176 269h368" stroke="var(--input)" strokeWidth="3" />
           <path d="M222 269c18-33 59-33 78 0M421 269c22-37 68-37 91 0" fill="none" stroke="var(--accent)" strokeOpacity="0.16" strokeWidth="12" strokeLinecap="round" />
-          <path d="M208 180h74M208 205h44M429 176h58M429 199h44M330 167h60M318 234h84" stroke="#D0D0CD" strokeWidth="4" strokeLinecap="round" />
+          <path d="M208 180h74M208 205h44M429 176h58M429 199h44M330 167h60M318 234h84" stroke="var(--input)" strokeWidth="4" strokeLinecap="round" />
           <path d="M330 174l48 27-48 27v-54Z" fill="var(--accent)" fillOpacity="0.78" />
         </g>
       </svg>

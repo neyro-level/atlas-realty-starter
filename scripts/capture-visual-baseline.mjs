@@ -34,6 +34,9 @@ try {
       reducedMotion: 'reduce',
       viewport: { width: viewport.width, height: viewport.height },
     })
+    await context.addInitScript(() => {
+      window.localStorage.setItem('agency.cookie.notice.dismissed', '1')
+    })
     const page = await context.newPage()
 
     for (const [name, route] of routes) {
@@ -57,6 +60,7 @@ try {
           }),
         )
       })
+      await page.waitForTimeout(500)
       await page.screenshot({
         animations: 'disabled',
         fullPage: true,

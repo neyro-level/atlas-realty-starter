@@ -215,7 +215,7 @@ export function CatalogSharpShowcase({
   const tabs = TYPE_TABS.map(([id, label]) => ({ id, label, href: categoryTabHref(basePath, applied, id), active: activeFilter === id }));
   const mobileControls = <>
     <CatalogMobileFilter basePath={basePath} query={applied} catalog={catalog} sectionFilter={sectionFilter} />
-    {isComplexMode ? <div className="mt-3 lg:hidden"><Link href={catalogHref(basePath, applied, { view: isMapView ? "grid" : "map" })} scroll={false} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#18181A] bg-white px-4 text-sm font-bold text-[#17161A]"><Map className="size-4" aria-hidden />{isMapView ? "Вернуться к плитке" : "Посмотреть на карте"}</Link></div> : null}
+    {isComplexMode ? <div className="mt-3 lg:hidden"><Link href={catalogHref(basePath, applied, { view: isMapView ? "grid" : "map" })} scroll={false} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-white px-4 text-sm font-bold text-[var(--text-primary)]"><Map className="size-4" aria-hidden />{isMapView ? "Вернуться к плитке" : "Посмотреть на карте"}</Link></div> : null}
   </>;
   const desktopFilter = isComplexMode
     ? <ResidentialComplexFilterForm key={filterFormKey} basePath={basePath} query={applied} />
@@ -249,7 +249,7 @@ export function CatalogSharpShowcase({
           isMapView ? (
             <NewBuildingCatalogMap complexes={complexes} />
           ) : complexes.length ? (
-            <div className={isListView ? "mt-4 divide-y divide-[#E9E9E6] border-y border-[#E9E9E6] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
+            <div className={isListView ? "mt-4 divide-y divide-[var(--palette-e9e9e6)] border-y border-[var(--palette-e9e9e6)] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
               {complexes.map((complex, index) => (
                 <FragmentWithNewBuildingSelectionCard
                   key={complex.slug}
@@ -264,7 +264,7 @@ export function CatalogSharpShowcase({
             <CatalogEmptyStateView message="По выбранному запросу жилые комплексы не найдены. Оставьте заявку, и специалист агентства недвижимости уточнит подходящие варианты вручную." linkRenderer={CatalogLinkAdapter} />
           )
         ) : catalog.listings.length ? (
-          <div className={isListView ? "mt-4 divide-y divide-[#E9E9E6] border-y border-[#E9E9E6] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
+          <div className={isListView ? "mt-4 divide-y divide-[var(--palette-e9e9e6)] border-y border-[var(--palette-e9e9e6)] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
             <CatalogLoadMore
               key={buildSearchParams(applied).toString()}
               basePath={basePath}
@@ -352,9 +352,9 @@ function CatalogFilterForm({
       <div className="grid gap-2 lg:grid-cols-[minmax(260px,1.4fr)_minmax(150px,0.7fr)_minmax(120px,0.55fr)_minmax(150px,0.7fr)]">
         <CatalogSearchFieldView defaultValue={query.q} placeholder="Район, улица, ЖК или код" />
         <CatalogRangePairView from="price_from" to="price_to" label="Цена" fromValue={query.priceFrom} toValue={query.priceTo} />
-        <label className="min-h-12 rounded-lg border border-[#E3E3E1] bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] text-[#827F81]">
+        <label className="min-h-12 rounded-lg border border-[var(--border)] bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--text-muted)]">
           Комнаты
-          <select name="rooms" defaultValue={formatRoomsValue(query.rooms)} className="block w-full bg-transparent pt-0.5 text-sm font-semibold normal-case tracking-[0] text-[#17161A] outline-none">
+          <select name="rooms" defaultValue={formatRoomsValue(query.rooms)} className="block w-full bg-transparent pt-0.5 text-sm font-semibold normal-case tracking-[0] text-[var(--text-primary)] outline-none">
             <option value="">Любые</option>
             {catalog.facets.rooms.map((room) => (
               <option key={room.value} value={room.value}>{room.value}</option>
@@ -362,8 +362,8 @@ function CatalogFilterForm({
           </select>
         </label>
         {activeFilter === "flat" ? (
-          <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[#E3E3E1] bg-white px-3 text-sm font-semibold text-[#413F41]">
-            <input name="studio" type="checkbox" value="1" defaultChecked={query.studio === true} className="size-4 accent-[#8A1515]" />
+          <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[var(--border)] bg-white px-3 text-sm font-semibold text-[var(--text-secondary)]">
+            <input name="studio" type="checkbox" value="1" defaultChecked={query.studio === true} className="size-4 accent-[var(--accent)]" />
             Студия
           </label>
         ) : null}
@@ -374,13 +374,13 @@ function CatalogFilterForm({
           {select("district", query.district, catalog.facets.districts, "Район / квартал")}
           {!isLand ? <CatalogRangePairView from="floor_from" to="floor_to" label={isHouse ? "Этажность" : "Этаж"} fromValue={query.floorFrom} toValue={query.floorTo} /> : null}
           {activeFilter === "all" ? select("category", query.category, [...TYPE_FILTER_OPTIONS], "Тип объекта") : null}
-          <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[#E3E3E1] bg-white px-3 text-sm font-semibold text-[#413F41]">
+          <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[var(--border)] bg-white px-3 text-sm font-semibold text-[var(--text-secondary)]">
             <input
               name="exclusive"
               type="checkbox"
               value="1"
               defaultChecked={query.exclusive === true}
-              className="size-4 accent-[#8A1515]"
+              className="size-4 accent-[var(--accent)]"
             />
             Только эксклюзивы
           </label>
@@ -414,7 +414,7 @@ function CatalogFilterForm({
               <Link
                 href={basePath}
                 scroll={false}
-                className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-bold text-[#8A1515]"
+                className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-bold text-[var(--accent)]"
               >
                 Очистить
               </Link>
@@ -427,10 +427,10 @@ function CatalogFilterForm({
 
 function CheckboxGroup({ items }: { items: Array<[string, string, boolean | undefined]> }) {
   return (
-    <div className="grid gap-2 rounded-lg border border-[#E3E3E1] bg-white p-3 text-sm font-semibold text-[#413F41]">
+    <div className="grid gap-2 rounded-lg border border-[var(--border)] bg-white p-3 text-sm font-semibold text-[var(--text-secondary)]">
       {items.map(([name, label, checked]) => (
         <label key={name} className="flex items-center gap-2">
-          <input name={name} type="checkbox" value="1" defaultChecked={checked} className="size-4 accent-[#8A1515]" />
+          <input name={name} type="checkbox" value="1" defaultChecked={checked} className="size-4 accent-[var(--accent)]" />
           {label}
         </label>
       ))}

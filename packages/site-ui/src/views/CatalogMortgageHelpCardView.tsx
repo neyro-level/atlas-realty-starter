@@ -43,7 +43,7 @@ type CardProps = {
 
 function CatalogMortgageInlineGridCard({ source, formType, imageRenderer: ImageRenderer, onRequest }: CardProps) {
   return (
-    <article className="group col-span-full overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] transition duration-300 hover:border-[#D8D2CD] hover:shadow-[0_4px_8px_rgba(0,0,0,0.02),0_22px_52px_rgba(0,0,0,0.09)]">
+    <article className="group col-span-full overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] transition duration-300 hover:border-[var(--palette-d8d2cd)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.02),0_22px_52px_rgba(0,0,0,0.09)]">
       <div className="grid md:grid-cols-[minmax(300px,0.9fr)_minmax(0,1.1fr)]">
         <div className="relative h-[220px] overflow-hidden bg-[var(--surface-muted)] md:h-auto md:min-h-[252px]">
           <ImageRenderer
@@ -86,8 +86,8 @@ function CatalogMortgageInlineGridCard({ source, formType, imageRenderer: ImageR
 
 function CatalogMortgageGridCard({ source, formType, imageRenderer: ImageRenderer, onRequest }: CardProps) {
   return (
-    <article className="group flex h-[470px] min-w-0 flex-col overflow-hidden rounded-lg border border-[var(--border)] bg-white transition duration-300 hover:border-[#D8D2CD] hover:shadow-[0_1px_2px_rgba(0,0,0,0.03),0_18px_42px_rgba(0,0,0,0.08)]">
-      <div className="relative h-[214px] overflow-hidden bg-[#F4F1EC]">
+    <article className="group flex h-[470px] min-w-0 flex-col overflow-hidden rounded-lg border border-[var(--border)] bg-white transition duration-300 hover:border-[var(--palette-d8d2cd)] hover:shadow-[0_1px_2px_rgba(0,0,0,0.03),0_18px_42px_rgba(0,0,0,0.08)]">
+      <div className="relative h-[214px] overflow-hidden bg-[var(--palette-f4f1ec)]">
         <ImageRenderer
           src={MORTGAGE_SERVICE_IMAGE}
           alt="Планировка, документы, ключи и калькулятор для ипотечного сервиса"
@@ -125,7 +125,7 @@ function CatalogMortgageGridCard({ source, formType, imageRenderer: ImageRendere
 function CatalogMortgageEditorialListCard({ source, formType, imageRenderer: ImageRenderer, onRequest }: CardProps) {
   return (
     <article className="group bg-transparent py-6">
-      <div className="overflow-hidden rounded-lg border border-[var(--border)] bg-[#F7F5F2] transition duration-300 group-hover:border-[#D8D2CD] group-hover:shadow-[0_4px_8px_rgba(0,0,0,0.02),0_22px_52px_rgba(0,0,0,0.10)]">
+      <div className="overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--palette-f7f5f2)] transition duration-300 group-hover:border-[var(--palette-d8d2cd)] group-hover:shadow-[0_4px_8px_rgba(0,0,0,0.02),0_22px_52px_rgba(0,0,0,0.10)]">
         <div className="grid md:grid-cols-[minmax(0,1fr)_390px] xl:grid-cols-[minmax(0,1fr)_440px]">
           <div className="flex min-h-[266px] flex-col justify-between gap-8 p-6 sm:p-8 lg:p-10">
             <div className="min-w-0">
@@ -145,7 +145,7 @@ function CatalogMortgageEditorialListCard({ source, formType, imageRenderer: Ima
             <MortgageHelpButton source={source} formType={formType} onRequest={onRequest} />
           </div>
 
-          <div className="relative h-[220px] overflow-hidden bg-[#F4F1EC] md:h-auto">
+          <div className="relative h-[220px] overflow-hidden bg-[var(--palette-f4f1ec)] md:h-auto">
             <ImageRenderer
               src={MORTGAGE_SERVICE_IMAGE}
               alt="Планировка, документы, ключи и калькулятор для ипотечного сервиса"
@@ -153,7 +153,7 @@ function CatalogMortgageEditorialListCard({ source, formType, imageRenderer: Ima
               sizes="(min-width: 1280px) 440px, (min-width: 768px) 390px, 100vw"
               className="object-cover object-center transition duration-700 group-hover:scale-[1.018]"
             />
-            <div className="absolute inset-y-0 left-0 hidden w-24 bg-gradient-to-r from-[#F7F5F2] to-transparent md:block" aria-hidden />
+            <div className="absolute inset-y-0 left-0 hidden w-24 bg-gradient-to-r from-[var(--palette-f7f5f2)] to-transparent md:block" aria-hidden />
           </div>
         </div>
       </div>
@@ -192,7 +192,7 @@ function MortgageHelpButton({ source, formType, onRequest }: Pick<CardProps, "so
       data-request-modal-source={source}
       data-request-modal-form-type={formType}
       onClick={() => onRequest?.(source, formType)}
-      className="inline-flex min-h-11 w-fit items-center justify-center rounded-lg bg-[var(--surface-dark)] px-5 text-center text-sm font-semibold text-white transition hover:bg-[#2A292C]"
+      className="inline-flex min-h-11 w-fit items-center justify-center rounded-lg bg-[var(--surface-dark)] px-5 text-center text-sm font-semibold text-white transition hover:bg-[var(--palette-2a292c)]"
     >
       Помощь с ипотекой
     </Button>

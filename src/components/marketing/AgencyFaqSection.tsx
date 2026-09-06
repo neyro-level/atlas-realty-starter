@@ -27,18 +27,18 @@ export function AgencyFaqSection({
       <div className="mx-auto max-w-site-frame px-5 py-20 md:py-24 lg:py-[104px]">
         <div className="mb-12 max-w-[920px] text-left md:mb-14">
           {eyebrow ? (
-            <p className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#8A1515]">
+            <p className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[var(--accent)]">
               {eyebrow}
             </p>
           ) : null}
           <h2
             id={titleId}
-            className={`max-w-[920px] text-[30px] font-extrabold leading-[1.14] text-[#17161A] md:text-[38px] lg:text-[42px] ${titleClassName}`}
+            className={`max-w-[920px] text-[30px] font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-[38px] lg:text-[42px] ${titleClassName}`}
           >
             {title}
           </h2>
           {lead ? (
-            <p className={`mt-5 max-w-[660px] text-[16px] leading-7 text-[#4C494A] md:text-[18px] ${leadClassName}`}>
+            <p className={`mt-5 max-w-[660px] text-[16px] leading-7 text-[var(--palette-4c494a)] md:text-[18px] ${leadClassName}`}>
               {lead}
             </p>
           ) : null}

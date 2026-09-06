@@ -40,7 +40,7 @@ export function EmployeeReviewDialogView({
 }: EmployeeReviewDialogViewProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[calc(100vh-32px)] overflow-y-auto rounded-lg border border-[#E0DFDC] bg-white p-6 shadow-[0_28px_80px_rgba(24,22,24,0.18)] md:p-8">
+      <DialogContent className="max-h-[calc(100vh-32px)] overflow-y-auto rounded-lg border border-[var(--palette-e0dfdc)] bg-white p-6 shadow-[0_28px_80px_rgba(24,22,24,0.18)] md:p-8">
         <div className="flex items-start justify-between gap-5">
           <div>
             <p className="text-xs font-medium text-[var(--accent)]">Отзыв о специалисте</p>
@@ -48,11 +48,11 @@ export function EmployeeReviewDialogView({
           </div>
         </div>
         {result?.ok ? (
-          <div className="mt-7 rounded-lg bg-[#F1F7F2] p-5 text-[#256437]" role="status" aria-live="polite">
+          <div className="mt-7 rounded-lg bg-[var(--palette-f1f7f2)] p-5 text-[var(--palette-256437)]" role="status" aria-live="polite">
             <Check className="size-6" aria-hidden />
             <h3 className="mt-3 text-lg font-semibold">Спасибо за ваш отзыв</h3>
             <p className="mt-2 text-sm leading-6">{result.message}</p>
-            <Button type="button" onClick={() => onOpenChange(false)} className="mt-5 inline-flex min-h-11 rounded-lg bg-[#256437] px-4 text-sm font-semibold text-white hover:bg-[#1F5930]">
+            <Button type="button" onClick={() => onOpenChange(false)} className="mt-5 inline-flex min-h-11 rounded-lg bg-[var(--palette-256437)] px-4 text-sm font-semibold text-white hover:bg-[var(--palette-1f5930)]">
               Понятно
             </Button>
           </div>
@@ -64,7 +64,7 @@ export function EmployeeReviewDialogView({
               <div className="mt-2 flex gap-1" aria-label={`Оценка ${rating} из 5`}>
                 {Array.from({ length: 5 }, (_, index) => index + 1).map((value) => (
                   <button key={value} type="button" onClick={() => onRatingChange(value)} className="p-1" aria-label={`${value} из 5`}>
-                    <Star className={`size-7 ${value <= rating ? "fill-[var(--accent)] text-[var(--accent)]" : "text-[#CBC9C6]"}`} aria-hidden />
+                    <Star className={`size-7 ${value <= rating ? "fill-[var(--accent)] text-[var(--accent)]" : "text-[var(--palette-cbc9c6)]"}`} aria-hidden />
                   </button>
                 ))}
               </div>
@@ -81,26 +81,26 @@ export function EmployeeReviewDialogView({
                 value={phone}
                 onFocus={onPhoneFocus}
                 onChange={(event) => onPhoneChange(event.currentTarget.value)}
-                className="min-h-12 rounded-lg border border-[#DCDCD8] px-4 text-base font-medium tabular-nums outline-none transition placeholder:text-[#9A9798] focus:border-[var(--accent)]"
+                className="min-h-12 rounded-lg border border-[var(--palette-dcdcd8)] px-4 text-base font-medium tabular-nums outline-none transition placeholder:text-[var(--palette-9a9798)] focus:border-[var(--accent)]"
               />
               {result?.fieldErrors?.authorPhone ? <span className="text-xs text-[var(--accent)]">{result.fieldErrors.authorPhone}</span> : null}
-              <span className="flex items-center gap-2 text-[11px] font-normal leading-4 text-[#777375]">
+              <span className="flex items-center gap-2 text-[11px] font-normal leading-4 text-[var(--palette-777375)]">
                 <ShieldCheck className="size-4 shrink-0 text-[var(--accent)]" aria-hidden />
                 Невидимая защита от спама включена
               </span>
             </label>
             <label className="grid gap-2 text-sm font-medium text-[var(--text-primary)]">
               Отзыв
-              <textarea name="text" rows={5} className="resize-none rounded-lg border border-[#DCDCD8] px-4 py-3 text-base font-normal outline-none transition focus:border-[var(--accent)]" />
+              <textarea name="text" rows={5} className="resize-none rounded-lg border border-[var(--palette-dcdcd8)] px-4 py-3 text-base font-normal outline-none transition focus:border-[var(--accent)]" />
               {result?.fieldErrors?.text ? <span className="text-xs text-[var(--accent)]">{result.fieldErrors.text}</span> : null}
             </label>
-            <label className="flex gap-3 text-xs leading-5 text-[#686467]">
+            <label className="flex gap-3 text-xs leading-5 text-[var(--palette-686467)]">
               <input name="consent" type="checkbox" className="mt-1 size-4 shrink-0 accent-[var(--accent)]" />
               <span>{consentContent}</span>
             </label>
             {result?.fieldErrors?.consent ? <span className="text-xs text-[var(--accent)]">{result.fieldErrors.consent}</span> : null}
             {result && !result.ok && !result.fieldErrors ? <p className="text-sm text-[var(--accent)]">{result.message}</p> : null}
-            <Button type="submit" disabled={pending} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-sm font-semibold text-white hover:bg-[#2A292C] disabled:opacity-60">
+            <Button type="submit" disabled={pending} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-sm font-semibold text-white hover:bg-[var(--palette-2a292c)] disabled:opacity-60">
               {pending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
               {pending ? "Отправляем..." : "Отправить отзыв"}
             </Button>
@@ -115,7 +115,7 @@ function Field({ label, name, type = "text", autoComplete, error }: { label: str
   return (
     <label className="grid gap-2 text-sm font-medium text-[var(--text-primary)]">
       {label}
-      <input name={name} type={type} autoComplete={autoComplete} className="min-h-12 rounded-lg border border-[#DCDCD8] px-4 text-base font-normal outline-none transition focus:border-[var(--accent)]" />
+      <input name={name} type={type} autoComplete={autoComplete} className="min-h-12 rounded-lg border border-[var(--palette-dcdcd8)] px-4 text-base font-normal outline-none transition focus:border-[var(--accent)]" />
       {error ? <span className="text-xs text-[var(--accent)]">{error}</span> : null}
     </label>
   );

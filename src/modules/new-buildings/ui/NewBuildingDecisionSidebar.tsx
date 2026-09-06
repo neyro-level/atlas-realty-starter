@@ -61,10 +61,10 @@ export function NewBuildingDecisionSidebar({ complex }: { complex: NewBuilding }
       onQuestionChange={setQuestion}
       onOpenChat={openNewBuildingChat}
       onCopyLink={copyLink}
-      favoriteAction={<SessionCollectionButton kind="favorites" item={sessionItem} className={collectionClassName} inactiveClassName="border-transparent bg-white text-[#17161A] hover:bg-[#F4F4F3]" activeClassName="border-[#8A1515] bg-[#F7F2F2] text-[#8A1515]" />}
-      compareAction={<SessionCollectionButton kind="compare" item={sessionItem} className={collectionClassName} inactiveClassName="border-transparent bg-white text-[#17161A] hover:bg-[#F4F4F3]" activeClassName="border-[#8A1515] bg-[#F7F2F2] text-[#8A1515]" />}
-      mortgageAction={<RequestCta label="Одобрить ипотеку" complexName={complex.name} slug={complex.slug} modalTitle={`Одобрить ипотеку в ${complex.name}`} showIcon={false} className="min-h-10 w-full bg-[#18181A] text-xs text-white hover:bg-[#2A292C]" />}
-      availabilityAction={<RequestCta label="Узнать наличие квартир" complexName={complex.name} slug={complex.slug} variant="secondary" modalTitle={`Узнать наличие квартир в ${complex.name}`} showIcon={false} className="min-h-10 w-full border-[#E3E3E1] bg-[#F4F4F3] text-xs text-[#17161A] hover:border-[#8A1515] hover:bg-[#F7F2F2] hover:text-[#8A1515]" />}
+      favoriteAction={<SessionCollectionButton kind="favorites" item={sessionItem} className={collectionClassName} inactiveClassName="border-transparent bg-white text-[var(--text-primary)] hover:bg-[var(--background)]" activeClassName="border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]" />}
+      compareAction={<SessionCollectionButton kind="compare" item={sessionItem} className={collectionClassName} inactiveClassName="border-transparent bg-white text-[var(--text-primary)] hover:bg-[var(--background)]" activeClassName="border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]" />}
+      mortgageAction={<RequestCta label="Одобрить ипотеку" complexName={complex.name} slug={complex.slug} modalTitle={`Одобрить ипотеку в ${complex.name}`} showIcon={false} className="min-h-10 w-full bg-[var(--surface-dark)] text-xs text-white hover:bg-[var(--palette-2a292c)]" />}
+      availabilityAction={<RequestCta label="Узнать наличие квартир" complexName={complex.name} slug={complex.slug} variant="secondary" modalTitle={`Узнать наличие квартир в ${complex.name}`} showIcon={false} className="min-h-10 w-full border-[var(--border)] bg-[var(--background)] text-xs text-[var(--text-primary)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]" />}
     />
   );
 }
