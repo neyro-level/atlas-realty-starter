@@ -177,7 +177,7 @@ function parseProperty(snapshot, product, rooms) {
   const floorMatch = snapshot.title.match(/(\d+)\s*этаж из\s*(\d+)/);
   const price = Number(product.offers?.price ?? 0) || extractFirstPrice(snapshot.text);
   const address = extractAddress(product.description, snapshot.text) ?? "Краснодар, адрес уточняется";
-  const description = section(snapshot.text, "Описание", "20 МЛН") || snapshot.metaDescription;
+  const description = extractListingDescription(snapshot.text) || snapshot.metaDescription;
   return {
     title: area ? `${rooms}-комнатная квартира, ${formatArea(area)} м²` : `${rooms}-комнатная квартира`,
     address,
@@ -265,6 +265,11 @@ function section(text, start, end) {
   return text.slice(contentStart, to < 0 ? contentStart + 1_800 : to).trim().slice(0, 1_800);
 }
 
+function extractListingDescription(text) {
+  const matches = [...text.matchAll(/(?:^|\n)Описание\s*\n+([\s\S]*?)(?=\n+\s*Подробнее|\n+20\s*МЛН|$)/giu)];
+  return matches.map((match) => match[1]?.trim() ?? "").find((value) => value.length >= 40)?.slice(0, 1_800) ?? "";
+}
+
 function cleanDescription(value = "", name = "") {
   return value.replace(/^✅\s*/u, "").replace(new RegExp(`^${escapeRegex(name)}\\s*[—-]\\s*`, "i"), "");
 }
@@ -274,7 +279,7 @@ function sanitizePublicText(value = "") {
     .replace(/https?:\/\/\S+/gu, "")
     .replace(/(?:на\s+)?Яндекс(?:\.Недвижимости|\s+Недвижимости|\.Картах|\s+Картах)?/giu, "")
     .replace(/(?:источник|актуальн(?:о|ость)|обновлено|получено)\s*:?[^.\n]*/giu, "")
-    .replace(/(?:id|ID|номер объекта)\s*:?\s*\d+/gu, "")
+    .replace(/(?:id|номер объекта)\s*:?\s*\d+/giu, "")
     .replace(/\+7[\d\s()×xX-]{7,}/gu, "")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
