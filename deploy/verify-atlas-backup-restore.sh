@@ -55,7 +55,9 @@ sudo -u postgres dropdb --if-exists "${RESTORE_DB}"
 sudo -u postgres createdb "${RESTORE_DB}"
 sudo -u postgres pg_restore --dbname="${RESTORE_DB}" --no-owner --no-privileges "${dump_path}"
 migrations="$(sudo -u postgres psql --dbname="${RESTORE_DB}" --tuples-only --no-align --command='select count(*) from payload_migrations;')"
-properties="$(sudo -u postgres psql --dbname="${RESTORE_DB}" --tuples-only --no-align --command='select count(*) from properties;')"
-[[ "${migrations}" -ge 7 && "${properties}" -eq 30 ]]
+expected_migrations="$(find /opt/ams-platform/atlas-realty/current/src/payload/migrations-v2 -maxdepth 1 -type f -name '20*.ts' | wc -l)"
+properties="$(sudo -u postgres psql --dbname="${RESTORE_DB}" --tuples-only --no-align --command='select count(*) from properties where is_published is true;')"
+complexes="$(sudo -u postgres psql --dbname="${RESTORE_DB}" --tuples-only --no-align --command="select count(*) from residential_complexes where status::text = 'published';")"
+[[ "${migrations}" -eq "${expected_migrations}" && "${properties}" -eq 30 && "${complexes}" -eq 20 ]]
 
-printf 'restore_ok migrations=%s properties=%s object=%s\n' "${migrations}" "${properties}" "${key}"
+printf 'restore_ok migrations=%s public_properties=%s published_complexes=%s object=%s\n' "${migrations}" "${properties}" "${complexes}" "${key}"
