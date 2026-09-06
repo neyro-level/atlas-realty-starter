@@ -58,7 +58,7 @@ export async function bootstrapComplexes(
         data: {
           name: record.developer,
           slug: record.developerSlug,
-          description: `Застройщик объекта по сведениям ${source.title}, проверено ${source.verifiedAt}.`,
+          description: `Застройщик жилого комплекса «${record.name}» в Краснодаре.`,
           isPublished: true,
         },
       })
@@ -95,7 +95,7 @@ export async function bootstrapComplexes(
         data: {
           ...incoming,
           slug,
-          description: `Проверенная карточка объекта строительства в Краснодаре. Источник: ${record.sourceUrl}. Данные не являются объявлением или публичной офертой.`,
+          description: 'Жилой комплекс в Краснодаре. Условия, цены и доступность квартир уточняйте у специалиста.',
           importOwnership: { ...ownership, provenance },
           region: 'Краснодарский край',
           status: 'published',
