@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import { CONTENT_SECURITY_POLICY, SECURITY_HEADERS } from '@/core/security/headers'
 import { createLogger, normalizeCorrelationID } from '@/core/observability/logger'
 import { isPublicAddress } from '@/core/security/outbound-http/ip-policy'
+import { isPublicMediaFileRequest } from '@/payload/access/media'
 
 describe('foundation security', () => {
   it('redacts PII and secrets from structured logs', () => {
@@ -50,5 +51,12 @@ describe('foundation security', () => {
     }
     expect(isPublicAddress('1.1.1.1')).toBe(true)
     expect(isPublicAddress('2606:4700:4700::1111')).toBe(true)
+  })
+
+  it('opens only the public media file route, not anonymous raw media REST', () => {
+    expect(isPublicMediaFileRequest({ url: '/api/media/file/atlas-demo.webp?prefix=media' })).toBe(true)
+    expect(isPublicMediaFileRequest({ url: '/api/media?limit=10' })).toBe(false)
+    expect(isPublicMediaFileRequest({ url: '/api/media/atlas-demo.webp' })).toBe(false)
+    expect(isPublicMediaFileRequest({ url: '/api/media/file/nested/atlas-demo.webp' })).toBe(false)
   })
 })

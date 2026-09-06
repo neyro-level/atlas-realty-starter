@@ -18,7 +18,7 @@ fi
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-apt-get install -y --no-install-recommends ca-certificates certbot curl nginx openssl xz-utils
+apt-get install -y --no-install-recommends age awscli ca-certificates certbot curl nginx openssl postgresql-client-18 xz-utils
 
 if ! id -u "${APP_USER}" >/dev/null 2>&1; then
   useradd --system --home-dir "${APP_ROOT}" --create-home --shell /usr/sbin/nologin "${APP_USER}"
@@ -79,11 +79,16 @@ fi
 
 install -m 0644 "${SCRIPT_DIR}/atlas-realty.service" /etc/systemd/system/atlas-realty.service
 install -m 0644 "${SCRIPT_DIR}/atlas-realty-worker.service" /etc/systemd/system/atlas-realty-worker.service
+install -m 0750 "${SCRIPT_DIR}/atlas-realty-backup.sh" /usr/local/sbin/atlas-realty-backup
+install -m 0750 "${SCRIPT_DIR}/verify-atlas-backup-restore.sh" /usr/local/sbin/verify-atlas-backup-restore
+install -m 0644 "${SCRIPT_DIR}/atlas-realty-backup.service" /etc/systemd/system/atlas-realty-backup.service
+install -m 0644 "${SCRIPT_DIR}/atlas-realty-backup.timer" /etc/systemd/system/atlas-realty-backup.timer
 install -m 0644 "${SCRIPT_DIR}/nginx-internal.conf" /etc/nginx/sites-available/atlas-realty.conf
 ln -sfn /etc/nginx/sites-available/atlas-realty.conf /etc/nginx/sites-enabled/atlas-realty.conf
 systemctl daemon-reload
 systemctl enable atlas-realty.service
 systemctl enable atlas-realty-worker.service
+systemctl enable --now atlas-realty-backup.timer
 nginx -t
 systemctl enable --now nginx
 systemctl reload nginx

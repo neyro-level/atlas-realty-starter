@@ -1,0 +1,16 @@
+[Unit]
+Description=Atlas Realty encrypted PostgreSQL backup
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/local/sbin/atlas-realty-backup
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/backups/atlas-realty
+NoNewPrivileges=true
+
