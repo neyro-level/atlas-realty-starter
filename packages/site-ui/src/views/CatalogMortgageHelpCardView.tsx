@@ -2,7 +2,7 @@ import { Button } from "../components/ui/button";
 import type { SiteImageRenderer } from "../lib/adapters";
 import type { CatalogView } from "./PropertyCardView";
 
-const MORTGAGE_SERVICE_IMAGE = "/images/catalog-mortgage-service.png";
+const MORTGAGE_SERVICE_IMAGE = "/images/catalog-mortgage-service.webp";
 
 export const CATALOG_MORTGAGE_HELP_CARD_INDEX = 8;
 

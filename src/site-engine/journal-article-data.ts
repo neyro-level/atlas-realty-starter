@@ -16,12 +16,12 @@ const fallbackSections: Partial<Record<string, FallbackSection[]>> = {
 };
 
 const sectionMedia: Partial<Record<string, Partial<Record<string, JournalArticleMediaDto>>>> = {
-  "kak-proverit-kvartiru-pered-pokupkoy": { "Шаг 4. Осмотр квартиры: что смотреть физически": { src: "/images/journal/kak-proverit-kvartiru-pered-pokupkoy-inspection.png", alt: "Осмотр квартиры перед покупкой: проверка состояния стен, окон и возможных дефектов" } },
-  "dokumenty-pri-pokupke-kvartiry": { "Документы продавца: кто на самом деле продаёт": { src: "/images/journal/dokumenty-pri-pokupke-kvartiry-seller-check.png", alt: "Проверка документов продавца квартиры: паспорт, доверенность и согласие супруга" } },
-  "etapy-stroitelstva-doma": { "Этап 5. Строительство: что контролировать по ходу": { src: "/images/journal/etapy-stroitelstva-doma-construction-control.png", alt: "Контроль этапов строительства дома: проверка фундамента, стен и качества работ на площадке" } },
-  "smeta-na-stroitelstvo-doma": { "Что обычно не входит в смету — и должно быть добавлено": { src: "/images/journal/smeta-na-stroitelstvo-doma-missing-costs.png", alt: "Проверка сметы на строительство дома: скрытые расходы, пропущенные позиции и дополнительные работы" } },
-  "kak-vybrat-ipoteku": { "Шаг 5. На что смотреть в условиях программы": { src: "/images/journal/kak-vybrat-ipoteku-program-terms.png", alt: "Сравнение условий ипотечной программы: ставка, страховка, комиссии, срок и досрочное погашение" } },
-  "kak-vybrat-kvartiru-v-ipoteku": { "Критерий 3. Документы объекта: что проверит банк": { src: "/images/journal/kak-vybrat-kvartiru-v-ipoteku-documents-check.png", alt: "Проверка документов квартиры для ипотечной сделки: выписка, правоустанавливающие документы, техпаспорт и планировка" } },
+  "kak-proverit-kvartiru-pered-pokupkoy": { "Шаг 4. Осмотр квартиры: что смотреть физически": { src: "/images/journal/kak-proverit-kvartiru-pered-pokupkoy-inspection.webp", alt: "Осмотр квартиры перед покупкой: проверка состояния стен, окон и возможных дефектов" } },
+  "dokumenty-pri-pokupke-kvartiry": { "Документы продавца: кто на самом деле продаёт": { src: "/images/journal/dokumenty-pri-pokupke-kvartiry-seller-check.webp", alt: "Проверка документов продавца квартиры: паспорт, доверенность и согласие супруга" } },
+  "etapy-stroitelstva-doma": { "Этап 5. Строительство: что контролировать по ходу": { src: "/images/journal/etapy-stroitelstva-doma-construction-control.webp", alt: "Контроль этапов строительства дома: проверка фундамента, стен и качества работ на площадке" } },
+  "smeta-na-stroitelstvo-doma": { "Что обычно не входит в смету — и должно быть добавлено": { src: "/images/journal/smeta-na-stroitelstvo-doma-missing-costs.webp", alt: "Проверка сметы на строительство дома: скрытые расходы, пропущенные позиции и дополнительные работы" } },
+  "kak-vybrat-ipoteku": { "Шаг 5. На что смотреть в условиях программы": { src: "/images/journal/kak-vybrat-ipoteku-program-terms.webp", alt: "Сравнение условий ипотечной программы: ставка, страховка, комиссии, срок и досрочное погашение" } },
+  "kak-vybrat-kvartiru-v-ipoteku": { "Критерий 3. Документы объекта: что проверит банк": { src: "/images/journal/kak-vybrat-kvartiru-v-ipoteku-documents-check.webp", alt: "Проверка документов квартиры для ипотечной сделки: выписка, правоустанавливающие документы, техпаспорт и планировка" } },
   "kak-my-pomogaem-kupit-kvartiru": { "Слово директора": { src: "/images/expert-portrait.svg", alt: "Чирков Андрей Александрович, эксперт агентства недвижимости", frameClassName: "aspect-[4/5] sm:aspect-[5/4] md:aspect-[16/11]", objectClassName: "object-cover object-[center_22%]" } },
 };
 
@@ -44,7 +44,7 @@ export async function getJournalArticlePage(slug: string): Promise<JournalArticl
     topicLabel: meta?.topicLabel ?? "Материал",
     dateLabel: formatArticleDate(article.publishedAt),
     readingTimeLabel: `${getReadingTime(article)} мин`,
-    author: { name: "Анна Сергеевна", role: "Автор", image: "/images/authors/anna-sergeevna.png" },
+    author: { name: "Анна Сергеевна", role: "Автор", image: "/images/authors/anna-sergeevna.webp" },
     cover: { src: article.coverImage || journalArticlePlaceholderImage, alt: article.coverImage ? article.title : "" },
     lead: article.document?.lead ?? "",
     contents: sections.filter((item) => item.title).map((item) => ({ id: item.id, title: item.title })),

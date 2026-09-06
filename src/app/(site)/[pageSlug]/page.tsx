@@ -11,6 +11,7 @@ import { NewBuildingPage } from "@/modules/new-buildings/ui";
 import { getSiteUrl, isIndexable, siteConfig } from "@/project/site-config";
 import { defaultSocialPreview, defaultSocialPreviewPath, socialImage } from "@/project/social-preview";
 import { loadCorporatePageData } from "@/site-engine/corporate-page-data";
+import { getSiteEngineMode } from "@/site-engine";
 
 type Props = {
   params: Promise<{ pageSlug: string }>;
@@ -27,7 +28,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const { pageSlug } = await params;
   const resolvedSearchParams = await searchParams;
   const page = getCorporatePage(pageSlug);
-  const residentialComplex = getNewBuilding(pageSlug);
+  const residentialComplex = page ? null : await resolveNewBuilding(pageSlug);
   const catalogPreset = getCatalogPreset(pageSlug);
   const pagination = resolveCatalogPageParam(resolvedSearchParams.page);
   const hasQueryFilters = hasCatalogQueryFilters(resolvedSearchParams);
@@ -104,7 +105,7 @@ export default async function CorporatePage({ params, searchParams }: Props) {
   const { pageSlug } = await params;
   const resolvedSearchParams = await searchParams;
   const page = getCorporatePage(pageSlug);
-  const residentialComplex = getNewBuilding(pageSlug);
+  const residentialComplex = page ? null : await resolveNewBuilding(pageSlug);
   const catalogPreset = getCatalogPreset(pageSlug);
 
   if (!page && !residentialComplex) notFound();
@@ -114,4 +115,11 @@ export default async function CorporatePage({ params, searchParams }: Props) {
   const data = await loadCorporatePageData(page, resolvedSearchParams);
   if (data.invalidPage) notFound();
   return <CorporateLandingPage page={page} {...data} />;
+}
+
+async function resolveNewBuilding(slug: string) {
+  if (getSiteEngineMode() === "payload") {
+    return (await import("@/site-engine/payload-new-building")).getPayloadNewBuilding(slug);
+  }
+  return getNewBuilding(slug);
 }

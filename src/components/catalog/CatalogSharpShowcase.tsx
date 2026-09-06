@@ -18,7 +18,7 @@ import {
   type CatalogSnapshot,
   type CatalogView,
 } from "@/lib/catalog";
-import { publishedNewBuildings, type NewBuilding } from "@/modules/new-buildings";
+import type { NewBuilding } from "@/modules/new-buildings";
 import { tenant } from "@/project/tenant";
 import { hasClearableCatalogFilters, listClearableFilterEntries } from "./catalog-filter-clear";
 import { CatalogAutoSubmitForm } from "./CatalogAutoSubmitForm";
@@ -162,6 +162,7 @@ const FILTER_FIELD_BY_FORM_NAME: Record<string, string> = {
 type FilterId = "all" | "flat" | "house" | "land" | "commercial" | "new_building" | "construction";
 type Props = {
   catalog: CatalogSnapshot;
+  complexes?: readonly NewBuilding[];
   query?: CatalogQuery;
   paginationQuery?: CatalogQuery;
   initialFilter?: FilterId;
@@ -180,6 +181,7 @@ function CatalogLinkAdapter({ href, children, ariaLabel, ariaCurrent, scroll, ..
 
 export function CatalogSharpShowcase({
   catalog,
+  complexes: availableComplexes = [],
   query = {},
   paginationQuery = query,
   initialFilter = "all",
@@ -196,7 +198,7 @@ export function CatalogSharpShowcase({
   const activeView: CatalogView = isComplexMode ? applied.view ?? "grid" : applied.view === "list" ? "list" : "grid";
   const isListView = activeView === "list";
   const isMapView = activeView === "map";
-  const complexes = isComplexMode ? filterResidentialComplexes(publishedNewBuildings, applied.q) : [];
+  const complexes = isComplexMode ? filterResidentialComplexes(availableComplexes, applied.q) : [];
   const activeSort = applied.sort === "price_asc" || applied.sort === "price_desc" ? applied.sort : "newest";
   const sectionFilter = initialFilter;
   const active = isComplexMode
@@ -214,7 +216,7 @@ export function CatalogSharpShowcase({
 
   const tabs = TYPE_TABS.map(([id, label]) => ({ id, label, href: categoryTabHref(basePath, applied, id), active: activeFilter === id }));
   const mobileControls = <>
-    <CatalogMobileFilter basePath={basePath} query={applied} catalog={catalog} sectionFilter={sectionFilter} />
+    <CatalogMobileFilter basePath={basePath} query={applied} catalog={catalog} sectionFilter={sectionFilter} complexSearchIndex={availableComplexes.map((complex) => [complex.name, complex.shortName, complex.location.district, complex.location.address, complex.developer.name].filter(Boolean).join(" "))} />
     {isComplexMode ? <div className="mt-3 lg:hidden"><Link href={catalogHref(basePath, applied, { view: isMapView ? "grid" : "map" })} scroll={false} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-white px-4 text-sm font-bold text-[var(--text-primary)]"><Map className="size-4" aria-hidden />{isMapView ? "Вернуться к плитке" : "Посмотреть на карте"}</Link></div> : null}
   </>;
   const desktopFilter = isComplexMode
@@ -510,9 +512,9 @@ function pluralizeComplexes(value: number) {
   return "жилых комплексов";
 }
 
-function filterResidentialComplexes(complexes: NewBuilding[], query?: string) {
+function filterResidentialComplexes(complexes: readonly NewBuilding[], query?: string) {
   const needle = query?.trim().toLowerCase();
-  if (!needle) return complexes;
+  if (!needle) return [...complexes];
 
   return complexes.filter((complex) => {
     const haystack = [

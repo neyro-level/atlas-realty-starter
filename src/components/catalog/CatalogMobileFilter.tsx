@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { sameOriginFetch } from "@/core/security/outbound-http/browser";
 import { CatalogMobileFilterView, type MobileRoomId, type MobileTypeId } from "@starter/site-ui";
 import type { CatalogQuery, CatalogSnapshot } from "@/lib/catalog";
-import { publishedNewBuildings } from "@/modules/new-buildings";
 import { consumeOpenCatalogFiltersIntent, OPEN_CATALOG_FILTERS_EVENT } from "./catalog-sticky-chrome";
 import {
   createMobileFilterDraft,
@@ -21,9 +20,9 @@ const SORT_OPTIONS = [
   { value: "price_desc", label: "Сначала дороже" },
 ] as const;
 
-type Props = { basePath: string; query: CatalogQuery; catalog: CatalogSnapshot; sectionFilter: string };
+type Props = { basePath: string; query: CatalogQuery; catalog: CatalogSnapshot; sectionFilter: string; complexSearchIndex?: readonly string[] };
 
-export function CatalogMobileFilter({ basePath, query, catalog, sectionFilter }: Props) {
+export function CatalogMobileFilter({ basePath, query, catalog, sectionFilter, complexSearchIndex = [] }: Props) {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [draft, setDraft] = useState<MobileFilterDraft>(() => createMobileFilterDraft(query, sectionFilter));
@@ -62,7 +61,7 @@ export function CatalogMobileFilter({ basePath, query, catalog, sectionFilter }:
     let cancelled = false;
     if (path === "/novostroyki") {
       const needle = draft.q.trim().toLowerCase();
-      const total = needle ? publishedNewBuildings.filter((complex) => [complex.name, complex.shortName, complex.location.district, complex.location.address, complex.developer.name].filter(Boolean).join(" ").toLowerCase().includes(needle)).length : publishedNewBuildings.length;
+      const total = needle ? complexSearchIndex.filter((value) => value.toLowerCase().includes(needle)).length : complexSearchIndex.length;
       queueMicrotask(() => { if (!cancelled) setPreviewTotal(total); });
       return () => { cancelled = true; };
     }
@@ -78,7 +77,7 @@ export function CatalogMobileFilter({ basePath, query, catalog, sectionFilter }:
       finally { if (!cancelled) setCounting(false); }
     }, 350);
     return () => { cancelled = true; window.clearTimeout(timer); };
-  }, [draft]);
+  }, [complexSearchIndex, draft]);
 
   function toggleType(id: MobileTypeId) {
     setDraft((current) => { const selected = new Set(current.types); if (selected.has(id)) selected.delete(id); else selected.add(id); return { ...current, types: Array.from(selected) as MobileTypeId[] }; });

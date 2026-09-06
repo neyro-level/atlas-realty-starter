@@ -42,6 +42,8 @@ for (const item of catalog.complexes) {
   const photos = await uploadCatalogMedia(payload, item.name, [...item.photos, ...item.layouts])
   const data = {
     address: item.address,
+    classLabel: item.classLabel ?? undefined,
+    completionLabel: item.completion ?? undefined,
     description: item.description,
     developer: developerIds.get(item.developer),
     district: item.district ?? undefined,
@@ -54,8 +56,12 @@ for (const item of catalog.complexes) {
         verifiedAt: item.provenance.collectedAt,
       },
     },
+    latitude: item.latitude ?? undefined,
+    longitude: item.longitude ?? undefined,
     name: item.name,
+    floorsLabel: item.floorsLabel ?? undefined,
     photos,
+    priceFromMinorUnits: item.priceFrom ? Math.round(item.priceFrom * 100) : undefined,
     readiness: item.readiness,
     region: 'Краснодарский край',
     slug: atlasPublicSlug(item.name),

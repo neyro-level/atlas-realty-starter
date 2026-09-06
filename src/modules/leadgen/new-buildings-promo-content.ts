@@ -43,7 +43,7 @@ export const newBuildingsPromoContent = {
   manager: {
     name: "Роман Александрович",
     role: "Эксперт по новостройкам",
-    photo: "/images/leadgen/roman-aleksandrovich-new-buildings.png",
+    photo: "/images/leadgen/roman-aleksandrovich-new-buildings.webp",
   },
   headerTrust: {
     value: "Экспертно",
@@ -136,7 +136,7 @@ export const newBuildingsPromoContent = {
   ],
   finalCta: {
     title: "Пройдите тест за 1 минуту — получите подборку новостроек с ипотекой по актуальным условиям",
-    image: "/images/leadgen/roman-aleksandrovich-new-buildings.png",
+    image: "/images/leadgen/roman-aleksandrovich-new-buildings.webp",
     imageAlt: "Роман Александрович, эксперт агентства недвижимости по новостройкам",
     bullets: [
       {

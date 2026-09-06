@@ -47,15 +47,22 @@ export type PublicPropertyDetails = PublicProperty & {
 export type PublicComplex = {
   address?: string
   availablePropertyCount: number
+  classLabel?: string
+  completionLabel?: string
   description: string
   developer?: string
   district?: string
+  floorsLabel?: string
   id: string
   images: PublicMediaView[]
+  latitude?: number
+  longitude?: number
   name: string
+  priceFromMinorUnits?: number
   readiness?: 'commissioned' | 'construction' | 'planned'
   seo: PublicSEO
   slug: string
+  updatedAt: string
 }
 
 export type PublicAgent = {

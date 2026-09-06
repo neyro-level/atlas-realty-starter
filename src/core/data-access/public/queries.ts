@@ -39,7 +39,7 @@ const cacheFor = <T>(key: string[], tags: string[], loader: () => Promise<T>) =>
 
 type PropertyView = Pick<Property, 'addressPublic' | 'agent' | 'category' | 'dealStatus' | 'dealType' | 'description' | 'district' | 'floor' | 'floorsTotal' | 'id' | 'market' | 'meta' | 'photos' | 'priceMinorUnits' | 'pricePerMeterMinorUnits' | 'rooms' | 'slug' | 'status' | 'title' | 'totalAreaCm2' | 'updatedAt'>
 type PropertyDetailView = PropertyView & Pick<Property, 'building' | 'complex' | 'latitude' | 'longitude' | 'mortgageAvailable' | 'videoUrl'>
-type ComplexView = Pick<ResidentialComplex, 'address' | 'availablePropertyCount' | 'description' | 'developer' | 'district' | 'id' | 'meta' | 'name' | 'photos' | 'readiness' | 'slug'>
+type ComplexView = Pick<ResidentialComplex, 'address' | 'availablePropertyCount' | 'classLabel' | 'completionLabel' | 'description' | 'developer' | 'district' | 'floorsLabel' | 'id' | 'latitude' | 'longitude' | 'meta' | 'name' | 'photos' | 'priceFromMinorUnits' | 'readiness' | 'slug' | 'updatedAt'>
 type AgentView = Pick<Agent, 'bio' | 'email' | 'id' | 'meta' | 'name' | 'phone' | 'photo' | 'position' | 'slug'>
 type ContentView = Pick<Page, 'content' | 'id' | 'meta' | 'slug' | 'title' | 'updatedAt'> & { excerpt?: Post['excerpt']; publishedAt?: Post['publishedAt'] }
 type RedirectView = Pick<Redirect, 'from' | 'id' | 'to' | 'type'>
@@ -250,7 +250,7 @@ function toPublicProperty(property: PropertyView, options: PublicQueryOptions): 
     address: property.addressPublic ?? '', agentId: relationId(property.agent), category: property.category,
     dealStatus: property.dealStatus ?? undefined, dealType: property.dealType, description: property.description ?? '',
     district: property.district ?? undefined, floor: property.floor ?? undefined, floorsTotal: property.floorsTotal ?? undefined,
-    id: property.id, images: arrayMedia(property.photos, property.title), market: property.market,
+    id: property.id, images: arrayMedia(property.photos, property.title, options), market: property.market,
     priceMinorUnits: property.priceMinorUnits, pricePerMeterMinorUnits: property.pricePerMeterMinorUnits ?? undefined,
     rooms: property.rooms ?? undefined, seo: toPublicSEO(property.meta, `properties/${property.slug}`, property.title, options, property.status === 'sold'),
     slug: property.slug, status: property.status as PublicProperty['status'], title: property.title,
@@ -261,15 +261,19 @@ function toPublicProperty(property: PropertyView, options: PublicQueryOptions): 
 function toPublicComplex(complex: ComplexView, options: PublicQueryOptions): PublicComplex {
   return {
     address: complex.address ?? undefined, availablePropertyCount: complex.availablePropertyCount ?? 0,
+    classLabel: complex.classLabel ?? undefined, completionLabel: complex.completionLabel ?? undefined,
     description: complex.description ?? '', developer: complex.developer && typeof complex.developer === 'object' ? complex.developer.name : undefined,
-    district: complex.district ?? undefined, id: complex.id, images: arrayMedia(complex.photos, complex.name), name: complex.name,
+    district: complex.district ?? undefined, floorsLabel: complex.floorsLabel ?? undefined, id: complex.id,
+    images: arrayMedia(complex.photos, complex.name, options), latitude: complex.latitude ?? undefined, longitude: complex.longitude ?? undefined,
+    name: complex.name, priceFromMinorUnits: complex.priceFromMinorUnits ?? undefined,
     readiness: complex.readiness ?? undefined, seo: toPublicSEO(complex.meta, `complexes/${complex.slug}`, complex.name, options), slug: complex.slug,
+    updatedAt: complex.updatedAt,
   }
 }
 
 function toPublicAgent(agent: AgentView, options: PublicQueryOptions): PublicAgent {
   return {
-    bio: agent.bio ?? '', email: agent.email ?? undefined, id: agent.id, image: singleMedia(agent.photo, agent.name), name: agent.name,
+    bio: agent.bio ?? '', email: agent.email ?? undefined, id: agent.id, image: singleMedia(agent.photo, agent.name, options), name: agent.name,
     phone: agent.phone ?? undefined, position: agent.position ?? undefined, seo: toPublicSEO(agent.meta, `agents/${agent.slug}`, agent.name, options), slug: agent.slug,
   }
 }
@@ -292,7 +296,7 @@ function toPublicSEO(meta: Property['meta'], path: string, fallbackTitle: string
   return {
     canonical,
     description: meta?.description ?? undefined,
-    image: singleMedia(meta?.image, fallbackTitle),
+    image: singleMedia(meta?.image, fallbackTitle, options),
     noindex: forceNoindex || meta?.noindex === true,
     title: meta?.title || fallbackTitle,
   }
@@ -314,17 +318,28 @@ function propertyStructuredData(property: PropertyDetailView, options: PublicQue
   }
 }
 
-function arrayMedia(items: PropertyView['photos'] | ComplexView['photos'], fallbackAlt: string): PublicMediaView[] {
+function arrayMedia(items: PropertyView['photos'] | ComplexView['photos'], fallbackAlt: string, options: PublicQueryOptions): PublicMediaView[] {
   return (items ?? []).flatMap((item) => {
     if (item.externalUrl) return [{ alt: item.alt ?? fallbackAlt, src: item.externalUrl }]
-    const media = singleMedia(item.media, item.alt ?? fallbackAlt)
+    const media = singleMedia(item.media, item.alt ?? fallbackAlt, options)
     return media ? [media] : []
   })
 }
 
-function singleMedia(value: unknown, fallbackAlt: string): PublicMediaView | undefined {
+function singleMedia(value: unknown, fallbackAlt: string, options?: PublicQueryOptions): PublicMediaView | undefined {
   if (!value || typeof value !== 'object' || !('url' in value) || typeof value.url !== 'string') return undefined
-  return { alt: 'alt' in value && typeof value.alt === 'string' ? value.alt : fallbackAlt, src: value.url }
+  return { alt: 'alt' in value && typeof value.alt === 'string' ? value.alt : fallbackAlt, src: normalizeMediaURL(value.url, options) }
+}
+
+function normalizeMediaURL(value: string, options?: PublicQueryOptions) {
+  if (!options || value.startsWith('/')) return value
+  try {
+    const media = new URL(value)
+    const site = new URL(options.siteURL)
+    return media.origin === site.origin ? `${media.pathname}${media.search}` : value
+  } catch {
+    return value
+  }
 }
 
 function relationId(value: unknown) {

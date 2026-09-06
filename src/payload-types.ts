@@ -500,6 +500,10 @@ export interface ResidentialComplex {
   address?: string | null;
   latitude?: number | null;
   longitude?: number | null;
+  priceFromMinorUnits?: number | null;
+  completionLabel?: string | null;
+  classLabel?: string | null;
+  floorsLabel?: string | null;
   description?: string | null;
   photos?:
     | {
@@ -1151,6 +1155,10 @@ export interface ResidentialComplexesSelect<T extends boolean = true> {
   address?: T;
   latitude?: T;
   longitude?: T;
+  priceFromMinorUnits?: T;
+  completionLabel?: T;
+  classLabel?: T;
+  floorsLabel?: T;
   description?: T;
   photos?:
     | T

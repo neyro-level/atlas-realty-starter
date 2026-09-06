@@ -25,7 +25,7 @@ export function resolveNewBuildingMedia(asset: NewBuildingMediaAsset | null): Re
     return { src: null, alt: "Изображение жилого комплекса уточняется", isPlaceholder: true };
   }
 
-  if (/^https:\/\//.test(asset.src) || asset.src.startsWith("/")) {
+  if (/^https:\/\//.test(asset.src) || /^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?\//.test(asset.src) || asset.src.startsWith("/")) {
     return { ...asset, isPlaceholder: false };
   }
 

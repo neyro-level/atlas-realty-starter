@@ -28,6 +28,11 @@ if (!chunks.includes(required.NEXT_PUBLIC_SITE_URL)) {
   throw new Error('NEXT_PUBLIC_SITE_URL was not inlined into browser chunks.')
 }
 
+const yandexMapsApiKey = process.env.NEXT_PUBLIC_YANDEX_MAPS_API_KEY
+if (yandexMapsApiKey && !chunks.includes(yandexMapsApiKey)) {
+  throw new Error('Configured NEXT_PUBLIC_YANDEX_MAPS_API_KEY was not inlined into browser chunks.')
+}
+
 if (chunks.includes('process.env.NEXT_PUBLIC_SITE_URL')) {
   throw new Error('Browser chunks still contain a runtime NEXT_PUBLIC_SITE_URL lookup.')
 }

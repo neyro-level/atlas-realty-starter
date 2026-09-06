@@ -11,7 +11,7 @@ export const homeNewBuildingQuizContent = {
   manager: {
     name: "Роман Александрович",
     role: "Эксперт по новостройкам",
-    photo: "/images/leadgen/roman-aleksandrovich-new-buildings.png",
+    photo: "/images/leadgen/roman-aleksandrovich-new-buildings.webp",
   },
   headerTrust: {
     value: "170+",

@@ -2,9 +2,16 @@ import { describe, expect, it } from 'vitest'
 
 import { redactDeliveryError, retryDelay } from '@/core/data-access/system/leads/delivery'
 import { deliverToAmsLeads } from '@/project/leads/channels'
+import { isAllowedLeadSourcePagePath } from '@/modules/leads/source-page-policy'
 import { LEAD_BODY_LIMIT_BYTES, assertMinimumFillTime, idempotencyKeySchema, normalizeLeadPhone, publicLeadSchema, readBoundedJSON } from '@/shared/types/public-lead'
 
 describe('Stage 3 public lead contract', () => {
+  it('accepts semantic residential-complex routes without opening arbitrary root paths', () => {
+    expect(isAllowedLeadSourcePagePath('/zhk-greyd')).toBe(true)
+    expect(isAllowedLeadSourcePagePath('/mikrorayon-samolyot')).toBe(true)
+    expect(isAllowedLeadSourcePagePath('/external-import-123')).toBe(false)
+  })
+
   it('delivers a bounded Atlas lead with an idempotency key and classifies failures', async () => {
     const attempt = {
       attempt: 1, deliveryId: 'delivery-1', idempotencyKey: 'lead:atlas:12345678', leadId: 'lead-1',

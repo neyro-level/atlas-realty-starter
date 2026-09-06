@@ -5,13 +5,16 @@ import { CATALOG_PAGE_SIZE } from "@/lib/catalog";
 import { parseCatalogSearchParams, type CatalogSearchParams } from "@/modules/catalog";
 import { isLocalFullCatalogEnabled, LOCAL_FULL_CATALOG_LIMIT } from "@/modules/catalog/fallback-config";
 import type { CorporatePageConfig } from "@/project/corporate-pages";
+import { publishedNewBuildings, type NewBuilding } from "@/modules/new-buildings";
 import { getSiteEngine } from "./index";
+import { getSiteEngineMode } from "./index";
 
 export type CorporatePageData = {
   visitorQuery: CatalogQuery;
   showcaseLimit: number;
   showcaseQuery: CatalogQuery | null;
   showcase: CatalogSnapshot | null;
+  complexes: NewBuilding[];
   relatedArticles: ArticleSummary[];
   invalidPage: boolean;
 };
@@ -24,9 +27,10 @@ export async function loadCorporatePageData(page: CorporatePageConfig, searchPar
     : null;
   const engine = await getSiteEngine();
   const relatedArticleSlugs = page.relatedArticleSlugs ?? [];
-  const [showcase, articles] = await Promise.all([
+  const [showcase, articles, complexes] = await Promise.all([
     loadShowcase(page, showcaseQuery),
     relatedArticleSlugs.length ? engine.getArticles() : Promise.resolve([]),
+    showcaseQuery?.category === "new_building" ? loadNewBuildings() : Promise.resolve([]),
   ]);
   const currentPage = visitorQuery.page ?? 1;
   const totalPages = showcaseQuery && showcase
@@ -40,9 +44,15 @@ export async function loadCorporatePageData(page: CorporatePageConfig, searchPar
     showcaseLimit,
     showcaseQuery,
     showcase,
+    complexes,
     relatedArticles: matched,
     invalidPage: currentPage > totalPages,
   };
+}
+
+async function loadNewBuildings() {
+  if (getSiteEngineMode() !== "payload") return publishedNewBuildings;
+  return (await import("./payload-new-building")).getPayloadNewBuildings();
 }
 
 async function loadShowcase(page: CorporatePageConfig, query: CatalogQuery | null): Promise<CatalogSnapshot | null> {

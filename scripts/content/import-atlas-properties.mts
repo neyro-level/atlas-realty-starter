@@ -2,7 +2,7 @@ import { getPayload } from 'payload'
 
 import config from '../../src/payload.config'
 import { systemContext } from '../../src/core/data-access/system/operations'
-import { readAtlasCatalog, uploadCatalogMedia } from './catalog-manifest'
+import { atlasPublicSlug, readAtlasCatalog, uploadCatalogMedia } from './catalog-manifest'
 
 if (process.env.ATLAS_REPLACE_PROPERTY_CATALOG !== 'YES') {
   throw new Error('Replacing the public property catalog requires ATLAS_REPLACE_PROPERTY_CATALOG=YES.')
@@ -42,7 +42,7 @@ for (const item of catalog.properties) {
     firstSeenAt: existing?.firstSeenAt ?? item.provenance.collectedAt,
     floor: item.floor ?? undefined,
     floorsTotal: item.floorsTotal ?? undefined,
-    geoPrecision: 'unknown' as const,
+    geoPrecision: item.needsCoordinateReview ? 'unknown' as const : 'exact' as const,
     importHash: item.photos.map((photo) => photo.checksum).join(':'),
     isFeatured: item.order <= 6,
     isPublished: true,
@@ -51,7 +51,9 @@ for (const item of catalog.properties) {
     livingAreaCm2: item.livingArea ? Math.round(item.livingArea * 10_000) : undefined,
     localityName: 'Краснодар',
     market: 'secondary' as const,
-    needsReview: true,
+    latitude: item.latitude ?? undefined,
+    longitude: item.longitude ?? undefined,
+    needsReview: item.needsCoordinateReview,
     origin: 'manual' as const,
     photos,
     priceMinorUnits,
@@ -59,7 +61,7 @@ for (const item of catalog.properties) {
     publishedAt: item.provenance.collectedAt,
     region: 'Краснодарский край',
     rooms: item.rooms,
-    slug: item.slug,
+    slug: atlasPublicSlug(`${item.title}-${item.address}`),
     status: 'active' as const,
     title: item.title,
     totalAreaCm2,
