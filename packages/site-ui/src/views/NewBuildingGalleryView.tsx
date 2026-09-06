@@ -3,8 +3,8 @@
 import type { NewBuildingMediaDto } from "@starter/site-contracts";
 import type { SiteImageRenderer } from "../lib/adapters";
 import { useState } from "react";
-import { Camera, ChevronLeft, ChevronRight, ExternalLink, MapPin, Play } from "lucide-react";
-import { Building2 } from "lucide-react";
+import { Building2, Camera, ExternalLink, MapPin, Play } from "lucide-react";
+import { MediaGallery } from "./MediaGallery";
 
 export type NewBuildingGalleryViewProps = {
   address: string;
@@ -34,36 +34,22 @@ export function NewBuildingGalleryView({
   imageRenderer: Image,
 }: NewBuildingGalleryViewProps) {
   const [activeTab, setActiveTab] = useState<TabKey>("photos");
-  const [activeIndex, setActiveIndex] = useState(0);
-  const safeIndex = images.length > 0 ? Math.min(activeIndex, images.length - 1) : 0;
-  const active = images[safeIndex] ?? null;
-  const hasMany = images.length > 1;
   const vkEmbedSrc = buildVkEmbedSrc(videoUrl);
   const yandexUrl = buildYandexMapsUrl({ address, latitude, longitude, name });
   const hasCoordinates = latitude !== null && longitude !== null;
-
-  function goNext() {
-    if (!hasMany) return;
-    setActiveIndex((current) => (current + 1) % images.length);
-  }
-
-  function goPrev() {
-    if (!hasMany) return;
-    setActiveIndex((current) => (current - 1 + images.length) % images.length);
-  }
 
   return (
     <div className="grid h-[392px] grid-rows-[minmax(0,1fr)_44px] gap-2 md:h-[510px] lg:h-[640px]">
       <div className="relative min-h-0 overflow-hidden rounded-lg bg-[var(--surface-muted)]">
         {activeTab === "photos" ? (
-          <PhotosPanel
-            active={active}
+          <MediaGallery
+            images={images.flatMap((image) => image.src ? [{ src: image.src, alt: image.alt }] : [])}
             imageRenderer={Image}
-            hasMany={hasMany}
-            imageCount={images.length}
-            safeIndex={safeIndex}
-            onNext={goNext}
-            onPrev={goPrev}
+            imageSizes="(max-width: 639px) calc(100vw - 24px), (max-width: 1024px) calc(100vw - 40px), 890px"
+            priority
+            variant="light-controls"
+            emptyLabel="Изображение ЖК готовится к публикации"
+            emptyContent={<NewBuildingMediaPlaceholder />}
           />
         ) : null}
 
@@ -160,78 +146,6 @@ function MapExternalLink({ href }: { href: string }) {
   );
 }
 
-function PhotosPanel({
-  active,
-  imageRenderer: Image,
-  hasMany,
-  imageCount,
-  safeIndex,
-  onNext,
-  onPrev,
-}: {
-  active: NewBuildingMediaDto | null;
-  imageRenderer: SiteImageRenderer;
-  hasMany: boolean;
-  imageCount: number;
-  safeIndex: number;
-  onNext: () => void;
-  onPrev: () => void;
-}) {
-  return (
-    <>
-      {active?.src ? (
-        <Image
-          src={active.src}
-          alt={active.alt}
-          fill
-          priority
-          quality={80}
-          sizes="(max-width: 639px) calc(100vw - 24px), (max-width: 1024px) calc(100vw - 40px), 890px"
-          className="object-cover"
-        />
-      ) : (
-        <NewBuildingMediaPlaceholder />
-      )}
-
-      {hasMany ? (
-        <>
-          <span className="absolute left-3 top-3 rounded-lg bg-[var(--surface-dark)]/82 px-3 py-1.5 text-xs font-semibold tabular-nums text-white backdrop-blur-sm">
-            {safeIndex + 1} / {imageCount}
-          </span>
-          <button
-            type="button"
-            aria-label="Предыдущее фото касанием"
-            onClick={onPrev}
-            className="absolute inset-y-0 left-0 z-10 w-1/2 touch-manipulation lg:hidden"
-          />
-          <button
-            type="button"
-            aria-label="Следующее фото касанием"
-            onClick={onNext}
-            className="absolute inset-y-0 right-0 z-10 w-1/2 touch-manipulation lg:hidden"
-          />
-          <button
-            type="button"
-            aria-label="Предыдущее фото"
-            onClick={onPrev}
-            className="absolute left-5 top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-lg bg-white text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.16)] transition hover:bg-[var(--palette-f5f5f5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] lg:grid"
-          >
-            <ChevronLeft className="size-5" aria-hidden />
-          </button>
-          <button
-            type="button"
-            aria-label="Следующее фото"
-            onClick={onNext}
-            className="absolute right-5 top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-lg bg-white text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.16)] transition hover:bg-[var(--palette-f5f5f5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] lg:grid"
-          >
-            <ChevronRight className="size-5" aria-hidden />
-          </button>
-        </>
-      ) : null}
-    </>
-  );
-}
-
 function VideoPlaceholder() {
   return (
     <div className="relative grid h-full place-items-center overflow-hidden bg-[radial-gradient(circle_at_18%_18%,var(--surface)_0%,var(--accent-soft)_30%,transparent_58%),linear-gradient(135deg,var(--palette-f1eeee)_0%,var(--surface-card-soft)_48%,var(--surface)_100%)] p-6 text-center">
@@ -268,9 +182,9 @@ function VideoPlaceholder() {
   );
 }
 
-function NewBuildingMediaPlaceholder({ className = "" }: { className?: string }) {
+function NewBuildingMediaPlaceholder() {
   return (
-    <div className={`absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-[var(--palette-29292d)] px-6 text-center text-white ${className}`}>
+    <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-[var(--palette-29292d)] px-6 text-center text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(158,7,7,0.34),transparent_35%),linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.045)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px]" />
       <span className="relative flex size-16 items-center justify-center rounded-lg border border-white/14 bg-white/8"><Building2 className="size-8 text-[var(--palette-efb5b5)]" aria-hidden /></span>
       <p className="relative mt-5 text-sm font-extrabold">Изображение ЖК готовится к публикации</p>

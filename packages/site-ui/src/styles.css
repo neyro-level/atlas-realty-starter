@@ -1,4 +1,15 @@
+@import "yet-another-react-lightbox/styles.css";
+@import "yet-another-react-lightbox/plugins/thumbnails.css";
 @import "./styles/home.css";
 @import "./styles/promo.css";
 @import "./styles/journal.css";
 @import "./styles/shell.css";
+
+.atlas-media-lightbox {
+  --yarl__color_backdrop: color-mix(in srgb, var(--surface-dark-strong) 96%, transparent);
+  --yarl__color_button: var(--text-dark);
+  --yarl__color_button_active: var(--text-dark);
+  --yarl__color_button_disabled: var(--text-dark-muted);
+  --yarl__thumbnails_thumbnail_active_border_color: var(--accent);
+  --yarl__thumbnails_thumbnail_border_color: var(--dark-border);
+}
