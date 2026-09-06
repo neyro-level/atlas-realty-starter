@@ -3,6 +3,7 @@ export const SYSTEM_OPERATIONS = [
   'bootstrap-krasnodar-complexes',
   'business-audit',
   'import-job-failure',
+  'import-atlas-partner-catalog',
   'lead-delivery',
   'lead-intake',
   'lead-outbox',
