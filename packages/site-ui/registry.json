@@ -35,6 +35,7 @@
         { "path": "src/components/ui/breadcrumb.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/button.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/card.tsx", "type": "registry:ui" },
+        { "path": "src/components/ui/carousel.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/checkbox.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/dialog.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/field.tsx", "type": "registry:ui" },
@@ -47,6 +48,15 @@
         { "path": "src/components/ui/tabs.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/textarea.tsx", "type": "registry:ui" }
       ]
+    },
+    {
+      "name": "media-gallery",
+      "type": "registry:component",
+      "title": "Atlas media gallery",
+      "description": "Embla carousel and accessible fullscreen media viewer for property and residential-complex pages.",
+      "registryDependencies": ["atlas-theme", "atlas-primitives"],
+      "dependencies": ["embla-carousel-react@8.6.0", "yet-another-react-lightbox@3.32.2"],
+      "files": [{ "path": "src/views/MediaGallery.tsx", "type": "registry:component" }]
     },
     {
       "name": "property-card",

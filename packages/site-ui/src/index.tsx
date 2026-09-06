@@ -16,6 +16,7 @@ export {
 } from "./components/ui/breadcrumb";
 export { Button, buttonVariants } from "./components/ui/button";
 export { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card";
+export { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "./components/ui/carousel";
 export { Checkbox } from "./components/ui/checkbox";
 export {
   Dialog,
@@ -117,6 +118,7 @@ export { LegalDocumentModalView } from "./views/LegalDocumentModalView";
 export { LegalDocumentView } from "./views/LegalDocumentView";
 export { LegalHubView } from "./views/LegalHubView";
 export { MobileMenuView } from "./views/MobileMenuView";
+export { MediaGallery, type MediaGalleryImage, type MediaGalleryProps } from "./views/MediaGallery";
 export { NewBuildingGalleryView, type NewBuildingGalleryViewProps } from "./views/NewBuildingGalleryView";
 export { NewBuildingHeroView } from "./views/NewBuildingHeroView";
 export { NewBuildingRelatedView } from "./views/NewBuildingRelatedView";

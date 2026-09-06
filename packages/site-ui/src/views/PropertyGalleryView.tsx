@@ -2,15 +2,13 @@
 
 import {
   Camera,
-  ChevronLeft,
-  ChevronRight,
   ExternalLink,
   MapPin,
   Play,
-  X,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import type { SiteImageRenderer } from "../lib/adapters";
+import { MediaGallery } from "./MediaGallery";
 
 export type PropertyGalleryViewProps = {
   images: string[];
@@ -24,11 +22,6 @@ export type PropertyGalleryViewProps = {
 };
 
 type TabKey = "photos" | "video" | "map";
-type LightboxImage = {
-  src: string;
-  alt: string;
-};
-
 const TABS: Array<{ key: TabKey; label: string; icon: typeof Camera }> = [
   { key: "photos", label: "Фотографии", icon: Camera },
   { key: "video", label: "Видео", icon: Play },
@@ -54,106 +47,18 @@ export function PropertyGalleryView({
   const activeVideoUrl = safeVideoUrls[Math.min(activeVideoIndex, Math.max(safeVideoUrls.length - 1, 0))];
   const videoEmbedSrc = useMemo(() => buildVideoEmbedSrc(activeVideoUrl), [activeVideoUrl]);
   const [activeTab, setActiveTab] = useState<TabKey>("photos");
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [lightboxImage, setLightboxImage] = useState<LightboxImage | null>(null);
-  const touchStartX = useRef<number | null>(null);
-  const touchCurrentX = useRef<number | null>(null);
-  const suppressTapOpen = useRef(false);
-  const safeIndex = safeImages.length > 0 ? Math.min(activeIndex, safeImages.length - 1) : 0;
-  const currentImage = safeImages[safeIndex];
-  const canNavigate = safeImages.length > 1;
-
-  useEffect(() => {
-    if (!lightboxImage) return;
-
-    document.body.style.overflow = "hidden";
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setLightboxImage(null);
-    };
-    document.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      document.body.style.overflow = "";
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [lightboxImage]);
-
-  function goPrevious() {
-    setActiveIndex((current) => (current === 0 ? safeImages.length - 1 : current - 1));
-  }
-
-  function goNext() {
-    setActiveIndex((current) => (current + 1) % safeImages.length);
-  }
-
-  function handlePhotoTouchStart(event: React.TouchEvent<HTMLButtonElement>) {
-    if (!canNavigate) return;
-    touchStartX.current = event.touches[0]?.clientX ?? null;
-    touchCurrentX.current = touchStartX.current;
-    suppressTapOpen.current = false;
-  }
-
-  function handlePhotoTouchMove(event: React.TouchEvent<HTMLButtonElement>) {
-    if (!canNavigate || touchStartX.current === null) return;
-    touchCurrentX.current = event.touches[0]?.clientX ?? touchCurrentX.current;
-  }
-
-  function handlePhotoTouchEnd() {
-    if (!canNavigate || touchStartX.current === null || touchCurrentX.current === null) {
-      touchStartX.current = null;
-      touchCurrentX.current = null;
-      return;
-    }
-
-    const deltaX = touchCurrentX.current - touchStartX.current;
-    const swipeThreshold = 42;
-    const tapThreshold = 10;
-
-    if (Math.abs(deltaX) > tapThreshold) {
-      suppressTapOpen.current = true;
-    }
-
-    if (Math.abs(deltaX) >= swipeThreshold) {
-      if (deltaX < 0) {
-        goNext();
-      } else {
-        goPrevious();
-      }
-    }
-
-    touchStartX.current = null;
-    touchCurrentX.current = null;
-  }
-
-  function handlePhotoOpen() {
-    if (suppressTapOpen.current) {
-      suppressTapOpen.current = false;
-      return;
-    }
-
-    if (currentImage) {
-      setLightboxImage({ src: currentImage, alt: imageAlt });
-    }
-  }
 
   return (
     <div className="grid h-[392px] grid-rows-[minmax(0,1fr)_50px] gap-2 md:h-[510px] md:grid-rows-[minmax(0,1fr)_52px] lg:h-[640px] lg:gap-3 lg:rounded-lg lg:border lg:border-[var(--border)] lg:bg-white lg:p-3 lg:shadow-[0_1px_2px_rgba(0,0,0,0.03),0_18px_42px_rgba(23,22,26,0.08)]">
       <div className="relative min-h-0 overflow-hidden rounded-lg bg-[var(--surface-muted)]">
         {activeTab === "photos" ? (
-          <PhotosPanel
-            canNavigate={canNavigate}
-            currentImage={currentImage}
-            imageAlt={imageAlt}
-            activeIndex={safeIndex}
-            imageCount={safeImages.length}
-            onOpenLightbox={handlePhotoOpen}
-            onPrevious={goPrevious}
-            onNext={goNext}
-            onTouchStart={handlePhotoTouchStart}
-            onTouchMove={handlePhotoTouchMove}
-            onTouchEnd={handlePhotoTouchEnd}
+          <MediaGallery
+            images={safeImages.map((src) => ({ src, alt: imageAlt }))}
             imageRenderer={ImageRenderer}
+            imageSizes="(min-width: 1180px) calc(var(--site-frame-max) - 372px), 100vw"
+            priority
             shouldOptimizeImage={shouldOptimizeImage}
+            emptyLabel="Фото объекта уточняется"
           />
         ) : null}
 
@@ -219,117 +124,7 @@ export function PropertyGalleryView({
         ))}
       </div>
 
-      {lightboxImage ? (
-        <div className="fixed inset-0 z-[80] grid place-items-center bg-[var(--surface-dark-strong)]/92 p-16 max-md:p-4" role="dialog" aria-modal="true" aria-label="Медиа объекта">
-          <button
-            type="button"
-            onClick={() => setLightboxImage(null)}
-            className="absolute right-5 top-5 inline-flex size-11 items-center justify-center rounded-lg border border-white/70 bg-[var(--surface-dark)]/76 text-white"
-            aria-label="Закрыть просмотр"
-          >
-            <X className="size-5" aria-hidden />
-          </button>
-          <div className="relative h-[82vh] w-full max-w-[1120px]">
-            <ImageRenderer
-              src={lightboxImage.src}
-              alt={lightboxImage.alt}
-              fill
-              unoptimized={!shouldOptimizeImage(lightboxImage.src)}
-              sizes="100vw"
-              className="object-contain"
-            />
-          </div>
-        </div>
-      ) : null}
     </div>
-  );
-}
-
-function PhotosPanel({
-  canNavigate,
-  currentImage,
-  imageAlt,
-  activeIndex,
-  imageCount,
-  onOpenLightbox,
-  onPrevious,
-  onNext,
-  onTouchStart,
-  onTouchMove,
-  onTouchEnd,
-  imageRenderer: ImageRenderer,
-  shouldOptimizeImage,
-}: {
-  canNavigate: boolean;
-  currentImage?: string;
-  imageAlt: string;
-  activeIndex: number;
-  imageCount: number;
-  onOpenLightbox: () => void;
-  onPrevious: () => void;
-  onNext: () => void;
-  onTouchStart: (event: React.TouchEvent<HTMLButtonElement>) => void;
-  onTouchMove: (event: React.TouchEvent<HTMLButtonElement>) => void;
-  onTouchEnd: () => void;
-  imageRenderer: SiteImageRenderer;
-  shouldOptimizeImage: (src: string) => boolean;
-}) {
-  if (!currentImage) {
-    return (
-      <div className="grid h-full place-items-center text-sm font-semibold text-[var(--text-muted)]">
-        Фото объекта уточняется
-      </div>
-    );
-  }
-
-  return (
-    <>
-      <button
-        type="button"
-        onClick={onOpenLightbox}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-        className="relative block h-full w-full cursor-zoom-in border-0 bg-transparent p-0 [touch-action:pan-y]"
-        aria-label="Открыть фото на весь экран"
-      >
-        <ImageRenderer
-          src={currentImage}
-          alt={imageAlt}
-          fill
-          priority
-          unoptimized={!shouldOptimizeImage(currentImage)}
-          sizes="(min-width: 1180px) calc(var(--site-frame-max) - 372px), 100vw"
-          className="object-cover"
-        />
-        {canNavigate ? (
-          <span className="absolute left-3 top-3 rounded-lg bg-[var(--surface-dark)]/82 px-3 py-1.5 text-xs font-semibold tabular-nums text-white backdrop-blur-sm">
-            {activeIndex + 1} / {imageCount}
-          </span>
-        ) : null}
-      </button>
-
-      {canNavigate ? (
-        <>
-          <button
-            type="button"
-            onClick={onPrevious}
-            className="absolute left-3 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg border border-white/70 bg-[var(--surface-dark)]/76 text-white transition hover:bg-[var(--surface-dark)]"
-            aria-label="Предыдущее фото"
-          >
-            <ChevronLeft className="size-5" aria-hidden />
-          </button>
-          <button
-            type="button"
-            onClick={onNext}
-            className="absolute right-3 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg border border-white/70 bg-[var(--surface-dark)]/76 text-white transition hover:bg-[var(--surface-dark)]"
-            aria-label="Следующее фото"
-          >
-            <ChevronRight className="size-5" aria-hidden />
-          </button>
-        </>
-      ) : null}
-    </>
   );
 }
 
