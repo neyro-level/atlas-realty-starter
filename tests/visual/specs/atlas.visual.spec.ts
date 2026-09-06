@@ -32,6 +32,8 @@ async function settlePage(page: Page) {
     )
   })
   await page.waitForTimeout(500)
+  await page.evaluate(() => window.scrollTo(0, 0))
+  await page.waitForTimeout(100)
 }
 
 for (const [name, route] of routes) {
@@ -41,6 +43,8 @@ for (const [name, route] of routes) {
     await expect(page).toHaveScreenshot(`${name}.png`, {
       animations: 'disabled',
       fullPage: true,
+      mask: [page.locator('[data-visual-dynamic]')],
+      maskColor: '#e7e5e4',
       maxDiffPixelRatio: 0.002,
     })
   })

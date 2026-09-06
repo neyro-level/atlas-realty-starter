@@ -27,6 +27,7 @@ import type { CorporatePageConfig } from "@/project/corporate-pages";
 import { faqPageSchema } from "@/shared/lib/seo/schema";
 import { JsonLd } from "@/shared/ui/JsonLd";
 import { careersComparison, careersFinalCta, careersTraining, careersWorkSystem } from "@/project/careers-page";
+import type { NewBuilding } from "@/modules/new-buildings";
 
 type CorporateLandingPageProps = {
   page: CorporatePageConfig;
@@ -34,10 +35,11 @@ type CorporateLandingPageProps = {
   showcaseLimit: number;
   showcaseQuery: CatalogQuery | null;
   showcase: CatalogSnapshot | null;
+  complexes: NewBuilding[];
   relatedArticles: ArticleSummary[];
 };
 
-export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showcaseQuery, showcase, relatedArticles }: CorporateLandingPageProps) {
+export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showcaseQuery, showcase, complexes, relatedArticles }: CorporateLandingPageProps) {
   const hasCatalogHero = CATALOG_HERO_SLUGS.has(page.slug);
   const isMainCatalogIndex = page.slug === "nedvizhimost";
   const hasBuyerServices = Boolean(page.showcase && showcase && !isMainCatalogIndex);
@@ -79,7 +81,7 @@ export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showca
       </>}
       secondaryBreadcrumbs={<Breadcrumbs items={buildCorporateBreadcrumbs(page)} />}
       bodyAfterRelated={hasMortgagePage ? <><MortgageProgramsView /><MortgageCalculatorView /><MortgageBrokerSupportView imageRenderer={CorporateImage} /><MortgageConsultationSection /></> : null}
-      showcase={page.showcase && showcase ? <><CatalogSharpShowcase catalog={showcase} query={showcaseQuery ?? { limit: showcaseLimit }} paginationQuery={visitorQuery} initialFilter={page.showcase.initialFilter} sectionId="page-showcase" basePath={`/${page.slug}`} headline={hasSecondaryCatalogIntro ? page.heroTitle : undefined} heading={page.showcase.heading} description={page.showcase.description} emptyMessage={page.showcase.emptyMessage} servicePromo={isMainCatalogIndex ? "legal" : "mortgage"} />{hasBuyerServices ? <CatalogBuyerServicesSection sourcePage={`/${page.slug}`} /> : null}</> : null}
+      showcase={page.showcase && showcase ? <><CatalogSharpShowcase catalog={showcase} complexes={complexes} query={showcaseQuery ?? { limit: showcaseLimit }} paginationQuery={visitorQuery} initialFilter={page.showcase.initialFilter} sectionId="page-showcase" basePath={`/${page.slug}`} headline={hasSecondaryCatalogIntro ? page.heroTitle : undefined} heading={page.showcase.heading} description={page.showcase.description} emptyMessage={page.showcase.emptyMessage} servicePromo={isMainCatalogIndex ? "legal" : "mortgage"} />{hasBuyerServices ? <CatalogBuyerServicesSection sourcePage={`/${page.slug}`} /> : null}</> : null}
       afterShowcase={isMainCatalogIndex ? <PropertyPurchaseFlowBlocks sourcePage={`/${page.slug}`} leadTitle={getCatalogLeadTitle(page.slug)} /> : null}
       footerContent={catalogFaqItems ? <><JsonLd data={faqPageSchema(faqItemsToSchema(catalogFaqItems))} /><RealEstateFaqSection items={catalogFaqItems} />{isMainCatalogIndex ? <PopularSearchesSection /> : null}</> : null}
       linkRenderer={CorporateLink}

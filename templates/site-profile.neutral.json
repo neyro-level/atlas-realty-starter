@@ -1,0 +1,56 @@
+{
+  "brand": "БРЕНД",
+  "legalName": "Наименование оператора",
+  "projectName": "БРЕНД — недвижимость в городе",
+  "tagline": "Ваш ориентир в недвижимости",
+  "city": {
+    "nominative": "Город",
+    "genitive": "Города",
+    "prepositional": "Городе",
+    "slug": "city"
+  },
+  "domain": "https://example.invalid",
+  "indexable": false,
+  "expert": {
+    "name": "Специалист",
+    "portrait": "/images/brand/expert.webp"
+  },
+  "contacts": {
+    "phone": "+7 (000) 000-00-00",
+    "email": "mail@example.invalid",
+    "address": "Адрес офиса",
+    "hours": "Ежедневно, 9:00–20:00"
+  },
+  "social": { "telegram": null, "max": null, "vk": null },
+  "legal": {
+    "name": "Наименование оператора",
+    "inn": "000000000000",
+    "registrationNumber": "000000000000000"
+  },
+  "logo": {
+    "mark": "/images/brand/mark.svg",
+    "wordmark": null,
+    "favicon": "/favicon.ico",
+    "socialPreview": "/images/brand/social-preview.jpg"
+  },
+  "seo": {
+    "title": "Недвижимость в городе | БРЕНД",
+    "description": "Каталог недвижимости и сопровождение сделки."
+  },
+  "theme": {
+    "preset": "atlas-burgundy",
+    "primary": "var(--accent)",
+    "primaryHover": "var(--accent-hover)"
+  },
+  "map": {
+    "provider": "yandex",
+    "center": [45.03547, 38.975313],
+    "zoom": 12,
+    "catalogZoom": 12
+  },
+  "features": {
+    "catalogMap": true,
+    "mediaGallery": true,
+    "requests": true
+  }
+}

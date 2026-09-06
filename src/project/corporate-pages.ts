@@ -195,7 +195,7 @@ export const corporatePages: CorporatePageConfig[] = [
     heroTitle: "Оформи ипотеку с «АТЛАС»",
     heroDescription:
       "Разбираем ипотеку для новостроек, вторичного жилья, домов и строительства: проверяем требования банка к заемщику и объекту, считаем первый взнос и платеж, готовим документы и сопровождаем сделку.",
-    heroImage: { src: "/images/mortgage-consultation-hero.png", position: "center" },
+    heroImage: { src: "/images/mortgage-consultation-hero.webp", position: "center" },
     requestModalTitle: "Помогаем получить одобрение по кредиту даже в сложных ситуациях",
     primaryCta: { label: "Получить консультацию", href: "/kontakty" },
     microtext: "Сопоставим ваш бюджет, первый взнос и тип объекта с требованиями банка и подскажем следующий шаг.",
@@ -255,7 +255,7 @@ export const corporatePages: CorporatePageConfig[] = [
     heroTitle: "Юрист по недвижимости в Краснодаре",
     heroDescription:
       "Проверяем документы, готовим договоры и разбираем спорные вопросы до выхода на сделку. Объём и стоимость работ фиксируем заранее.",
-    heroImage: { src: "/images/agency-lawyer-hero.png", position: "center" },
+    heroImage: { src: "/images/agency-lawyer-hero.webp", position: "center" },
     primaryCta: { label: "Получить консультацию", href: "/kontakty" },
     requestModalTitle: "Получить консультацию юриста по недвижимости",
     requestModalFormType: "legal_consultation",

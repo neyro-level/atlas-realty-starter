@@ -51,7 +51,7 @@ try {
     const snapshot = await scrapeDetailPage(page, url);
     const product = snapshot.jsonLd.find((item) => item?.["@type"] === "Product") ?? {};
     const sourceId = url.match(/-(\d+)\/$/)?.[1] ?? hash(url).slice(0, 12);
-    const rawName = cleanName(snapshot.h1 || product.name || `Жилой комплекс ${index + 1}`);
+    const rawName = cleanComplexName(snapshot.h1 || product.name || `Жилой комплекс ${index + 1}`);
     const name = rawName.replace(/\s+[0-5](?:[.,]\d)?$/, "").trim();
     const developer = cleanDeveloper(product.brand?.name ?? bodyValue(snapshot.text, "О застройщике") ?? "Застройщик уточняется");
     const address = extractAddress(product.description, snapshot.text) ?? "Краснодар, адрес уточняется";
@@ -286,6 +286,14 @@ function sanitizePublicText(value = "") {
 }
 
 function cleanName(value) { return value.replace(/\s+/g, " ").trim(); }
+function cleanComplexName(value) {
+  return cleanName(value)
+    .replace(/\s+Нет оценок$/iu, "")
+    .replace(/^микрорайон/iu, "Микрорайон")
+    .replace(/^жилой район/iu, "Жилой район")
+    .replace(/^клубный квартал/iu, "Клубный квартал")
+    .replace(/DОГМА/gu, "DOGMA");
+}
 function cleanDeveloper(value) { return cleanName(String(value).replace(/^Застройщик\s+/i, "")); }
 function extractFirstPrice(text) { return Number((text.match(/\n([\d\s]{5,})\s*₽\n/)?.[1] ?? "").replace(/\s/g, "")) || 0; }
 function numberBeforeLabel(text, label) { return numberFrom(text.match(new RegExp(`([\\d,.]+)\\s*м²?\\n${escapeRegex(label)}`, "i"))?.[1]); }

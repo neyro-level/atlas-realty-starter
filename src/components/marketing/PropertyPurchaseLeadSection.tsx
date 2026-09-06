@@ -1,6 +1,6 @@
 import { AgencyInlineLeadSection } from "@/components/marketing/AgencyInlineLeadSection";
 
-const ANNA_SERGEEVNA_IMAGE = "/images/authors/anna-sergeevna.png";
+const ANNA_SERGEEVNA_IMAGE = "/images/authors/anna-sergeevna.webp";
 
 type PropertyPurchaseLeadSectionProps = {
   sourcePage?: string;

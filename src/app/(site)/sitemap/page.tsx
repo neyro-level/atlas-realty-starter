@@ -9,7 +9,7 @@ import { publishedNewBuildings } from "@/modules/new-buildings";
 import { buildSeoMetadata } from "@/modules/seo/metadata";
 import { corporatePagePaths, getCorporatePage } from "@/project/corporate-pages";
 import { legalDocuments } from "@/project/legal-pages";
-import { getSiteEngine } from "@/site-engine";
+import { getSiteEngine, getSiteEngineMode } from "@/site-engine";
 import { loadSitemapListingPage } from "@/site-engine/sitemap-page-data";
 
 export const revalidate = 300;
@@ -23,13 +23,20 @@ const servicePages = itemsFromCorporate(["ipoteka", "prodazha-nedvizhimosti", "b
 function SitemapLink({ href, children, className, ariaCurrent }: SiteLinkRendererProps) { return <Link href={href} className={className} aria-current={ariaCurrent}>{children}</Link>; }
 
 export default async function HtmlSitemapPage() {
-  const [objects, reserve, articles] = await Promise.all([loadSitemapListingPage("objects", 1, 1), loadSitemapListingPage("reserve", 1, 1), (await getSiteEngine()).getArticles()]);
+  const [objects, reserve, articles, residentialComplexes] = await Promise.all([
+    loadSitemapListingPage("objects", 1, 1),
+    loadSitemapListingPage("reserve", 1, 1),
+    (await getSiteEngine()).getArticles(),
+    getSiteEngineMode() === "payload"
+      ? (await import("@/site-engine/payload-new-building")).getPayloadNewBuildings()
+      : publishedNewBuildings,
+  ]);
   const paths = new Set(getSitemapCorporatePagePaths(corporatePagePaths));
   const main = getCorporateItem("nedvizhimost");
   const newBuildings = getCorporateItem("novostroy");
   const realEstate: SitemapColumnDto[] = [
     { title: "Квартиры", items: filterExisting(flatPages, paths) },
-    { title: "Новостройки", items: [...(newBuildings && paths.has(newBuildings.href) ? [newBuildings] : []), ...publishedNewBuildings.map((item) => ({ href: `/${item.slug}`, label: item.name }))] },
+    { title: "Новостройки", items: [...(newBuildings && paths.has(newBuildings.href) ? [newBuildings] : []), ...residentialComplexes.map((item) => ({ href: `/${item.slug}`, label: item.name }))] },
     { title: "Загородная", items: filterExisting(countrysidePages, paths) },
     { title: "Коммерческая", items: filterExisting(commercialPages, paths) },
     { title: "Общий раздел", items: main ? [main] : [] },

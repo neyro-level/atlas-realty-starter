@@ -18,6 +18,7 @@ const allowedSourcePagePrefixes = [
   `${featuresConfig.propertyRoute}/`, "/agents/", "/articles/", "/izbrannoe/s/",
   "/journal/", "/journal/category/", "/sotrudniki/",
 ] as const;
+const residentialComplexSourcePage = /^\/(?:zhk|mikrorayon|zhiloy-rayon|klubnyy-kvartal|kvartal)-[a-z0-9-]+$/;
 
 export function normalizeLeadSourcePagePath(sourcePage?: string | null) {
   if (!sourcePage) return null;
@@ -32,7 +33,9 @@ export function normalizeLeadSourcePagePath(sourcePage?: string | null) {
 }
 export function isAllowedLeadSourcePagePath(pathname?: string | null) {
   if (!pathname) return false;
-  return exactAllowedSourcePagePaths.has(pathname) || allowedSourcePagePrefixes.some((prefix) => pathname.startsWith(prefix));
+  return exactAllowedSourcePagePaths.has(pathname)
+    || allowedSourcePagePrefixes.some((prefix) => pathname.startsWith(prefix))
+    || residentialComplexSourcePage.test(pathname);
 }
 export function normalizeAllowedLeadSourcePage(sourcePage?: string | null) {
   const pathname = normalizeLeadSourcePagePath(sourcePage);

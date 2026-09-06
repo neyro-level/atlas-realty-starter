@@ -30,6 +30,7 @@ outputs/
 graphify-out/
 /public/r/
 /.atlas-import/
+/.atlas-client/
 
 # Editors and operating systems
 .DS_Store

@@ -32,9 +32,8 @@ export type PublicEnvInlineStrategy =
  * gate a silent no-op. Indexable is enforced by production runtime schema
  * (resolveClientEnv) and by public hydration smoke against live pages.
  *
- * NEXT_PUBLIC_YANDEX_MAPS_API_KEY is reserved for a future JS Maps API path.
- * The current project uses Yandex map-widget iframes, so requiring a chunk grep
- * for an unused key would only make local/CI gates depend on an irrelevant env.
+ * NEXT_PUBLIC_YANDEX_MAPS_API_KEY powers the interactive catalog map and must
+ * be demonstrably inlined into the production browser bundle.
  */
 export const PUBLIC_ENV_INLINE_CHECK: Record<RequiredPublicEnvKey, PublicEnvInlineStrategy> = {
   NEXT_PUBLIC_SITE_URL: { strategy: "chunk_value" },
@@ -44,11 +43,7 @@ export const PUBLIC_ENV_INLINE_CHECK: Record<RequiredPublicEnvKey, PublicEnvInli
       "Value is the boolean literal true/false; grepping chunks by value is meaningless. Enforced by production resolveClientEnv + hydration smoke.",
   },
   NEXT_PUBLIC_NEW_BUILDINGS_MEDIA_BASE_URL: { strategy: "chunk_value" },
-  NEXT_PUBLIC_YANDEX_MAPS_API_KEY: {
-    strategy: "skip_chunk_grep",
-    reason:
-      "Current production maps use Yandex map-widget iframes; the reserved JS API key is not part of the active browser bundle contract.",
-  },
+  NEXT_PUBLIC_YANDEX_MAPS_API_KEY: { strategy: "chunk_value" },
   NEXT_PUBLIC_YANDEX_METRIKA_ID: { strategy: "chunk_value" },
 };
 

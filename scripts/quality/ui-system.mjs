@@ -1,4 +1,6 @@
 import { readFile, readdir } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { stat } from "node:fs/promises";
 import { extname, join } from "node:path";
 
 const rootConfig = JSON.parse(await readFile("components.json", "utf8"));
@@ -39,9 +41,31 @@ for (const file of files) {
   }
 }
 
+const publicImages = await collectAll("public/images");
+const imageHashes = new Map();
+for (const file of publicImages) {
+  const bytes = await readFile(file);
+  if (bytes.length > 512 * 1024) errors.push(`static image exceeds 512 KiB: ${file.replaceAll("\\", "/")}`);
+  const checksum = createHash("sha256").update(bytes).digest("hex");
+  const duplicate = imageHashes.get(checksum);
+  if (duplicate) errors.push(`duplicate static image: ${duplicate} and ${file.replaceAll("\\", "/")}`);
+  else imageHashes.set(checksum, file.replaceAll("\\", "/"));
+}
+
 if (errors.length) {
   console.error(errors.join("\n"));
   process.exit(1);
 }
 
 console.log(`UI system guard passed for ${files.length} source files.`);
+
+async function collectAll(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const result = [];
+  for (const entry of entries) {
+    const file = join(directory, entry.name);
+    if (entry.isDirectory()) result.push(...(await collectAll(file)));
+    else if ((await stat(file)).isFile()) result.push(file);
+  }
+  return result;
+}

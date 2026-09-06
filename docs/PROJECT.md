@@ -4,7 +4,7 @@ Last reconciled with SourceCraft `main` commit `ab6e87e186db34d2907538210a117ef9
 
 ## Identity and lifecycle
 
-- Product: AMS Realty Platform Starter.
+- Product: Atlas Realty Starter, an independent Krasnodar reference product and reusable city starter.
 - Mode: CONFORMANT STARTER / BUILD MODE.
 - Profile: full-stack real-estate website and catalog up to about 50,000 active properties.
 - Data, auth, Admin, schema and migrations owner: Payload CMS.
@@ -25,6 +25,7 @@ This project uses the compact document set required by Standard 2.1 and does not
 | Security, roles and PII                          | `../SECURITY.md`                                                                                     |
 | Local runtime, CI, deploy, rollback and recovery | `OPERATIONS.md`                                                                                      |
 | Versions and compatibility check                 | `VERSION_MATRIX.md`                                                                                  |
+| UI system, registry and media rules              | `UI_SYSTEM.md`                                                                                       |
 | Difficult boundary decisions                     | `adr/`                                                                                               |
 
 ## Full-stack boundary
@@ -80,7 +81,7 @@ Credentials, feed URLs and chat identifiers do not belong in Git. The production
 ## Optional or configuration-gated features
 
 - Yandex Metrika loads only when a counter ID is configured and consent permits it.
-- Yandex Maps JavaScript API key is reserved; current map presentation uses deferred map-widget links/iframes.
+- The catalog uses Yandex Maps JavaScript API when `NEXT_PUBLIC_YANDEX_MAPS_API_KEY` is present; cards and contacts retain deferred lightweight widgets and a graceful fallback.
 - External media bases and feed/image host allowlists are empty until configured.
 - Fixture `SiteEngine` is for deterministic preview/testing, not production data ownership.
 - Fleet automation and a shared `@ams/realty-core` package are deferred until a second production clone makes them useful.
@@ -93,8 +94,10 @@ Lead PII retention default is 365 days and the baseline consent text version is 
 
 - Backend Standard 2.1 staging validation was completed for historical release `f7835daf1327741f6391627518cc4db31239c156` before the public UI boundary changed.
 - Public UI was later integrated through SourceCraft PR `!51`; the current exact-head live production proof is not recorded in this repository.
-- On 2026-09-06, local PostgreSQL 18.6 accepted all seven committed migrations and the current home page returned HTTP 200 through the Payload-backed `SiteEngine`.
-- Atlas remains non-indexable while its catalog contains demonstration data.
+- On 2026-09-06, local PostgreSQL 18.6 accepted the committed migrations and the Payload-backed UI returned HTTP 200 for home, catalog, property and dynamic residential-complex pages.
+- The local product catalog contains 20 unique Krasnodar residential complexes and 30 secondary properties split 10/10/10 by room count. Repeated imports created no duplicates; public DTO checks found no import provenance.
+- Atlas remains non-indexable by owner decision while the approved partner catalog is used as a product demonstration dataset.
+- The Yandex Maps JavaScript API integration and fallback are implemented; a real production key is still an external secret gate.
 - Before claiming current full-stack production readiness, run the exact-head Merge Gate, package/release flow and live smoke from `OPERATIONS.md` against an isolated client or validation contour.
 
 ## Standard 2.1 status

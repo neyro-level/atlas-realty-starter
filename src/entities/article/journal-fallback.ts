@@ -5,12 +5,12 @@ export const journalArticlePlaceholderImage = "/images/journal/article-cover-pla
 export const buyerHelpArticleCoverImage = "/images/journal/kak-my-pomogaem-kupit-kvartiru/03-office-open-space.png";
 
 const journalCoverImages: Partial<Record<string, string>> = {
-  "kak-proverit-kvartiru-pered-pokupkoy": "/images/journal/kak-proverit-kvartiru-pered-pokupkoy-cover.png",
-  "dokumenty-pri-pokupke-kvartiry": "/images/journal/dokumenty-pri-pokupke-kvartiry-cover-v2.png",
-  "etapy-stroitelstva-doma": "/images/journal/etapy-stroitelstva-doma-cover.png",
-  "smeta-na-stroitelstvo-doma": "/images/journal/smeta-na-stroitelstvo-doma-cover.png",
-  "kak-vybrat-ipoteku": "/images/journal/kak-vybrat-ipoteku-cover.png",
-  "kak-vybrat-kvartiru-v-ipoteku": "/images/journal/kak-vybrat-kvartiru-v-ipoteku-cover.png",
+  "kak-proverit-kvartiru-pered-pokupkoy": "/images/journal/kak-proverit-kvartiru-pered-pokupkoy-cover.webp",
+  "dokumenty-pri-pokupke-kvartiry": "/images/journal/dokumenty-pri-pokupke-kvartiry-cover-v2.webp",
+  "etapy-stroitelstva-doma": "/images/journal/etapy-stroitelstva-doma-cover.webp",
+  "smeta-na-stroitelstvo-doma": "/images/journal/smeta-na-stroitelstvo-doma-cover.webp",
+  "kak-vybrat-ipoteku": "/images/journal/dokumenty-pri-pokupke-kvartiry-cover-v2.webp",
+  "kak-vybrat-kvartiru-v-ipoteku": "/images/journal/kak-vybrat-kvartiru-v-ipoteku-cover.webp",
   "kak-my-pomogaem-kupit-kvartiru": buyerHelpArticleCoverImage,
 };
 

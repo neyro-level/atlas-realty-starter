@@ -13,6 +13,7 @@ export type CatalogMedia = {
 
 export type CatalogComplex = {
   address: string
+  buildingType: string | null
   classLabel: string | null
   completion: string | null
   description: string
@@ -20,9 +21,13 @@ export type CatalogComplex = {
   district: string | null
   floorsLabel: string | null
   layouts: CatalogMedia[]
+  latitude: number | null
+  longitude: number | null
   name: string
+  needsCoordinateReview: boolean
   order: number
   photos: CatalogMedia[]
+  priceFrom: number
   provenance: Provenance
   readiness: 'construction'
   slug: string
@@ -40,7 +45,10 @@ export type CatalogProperty = {
   floor: number | null
   floorsTotal: number | null
   kitchenArea: number | null
+  latitude: number | null
   livingArea: number | null
+  longitude: number | null
+  needsCoordinateReview: boolean
   order: number
   photos: CatalogMedia[]
   price: number
@@ -68,6 +76,7 @@ export type AtlasCatalog = {
 }
 
 const importRoot = path.resolve(process.env.ATLAS_CATALOG_DIR ?? '.atlas-import/yandex')
+const mediaCaches = new WeakMap<Payload, Promise<Map<string, { id: string }>>>()
 
 export async function readAtlasCatalog(): Promise<AtlasCatalog> {
   if (process.env.ATLAS_PARTNER_IMPORT_CONFIRM !== 'YES') {
@@ -94,16 +103,13 @@ export async function readAtlasCatalog(): Promise<AtlasCatalog> {
 
 export async function uploadCatalogMedia(payload: Payload, owner: string, items: readonly CatalogMedia[]) {
   const uploads = []
+  const mediaByFilename = await getMediaCache(payload)
   for (const [index, item] of items.entries()) {
     const sourcePath = resolveImportPath(item.path)
     const bytes = await readFile(sourcePath)
     if (sha256(bytes) !== item.checksum) throw new Error(`Media checksum mismatch for ${item.path}.`)
     const filename = `atlas-${item.checksum.slice(0, 20)}.webp`
-    const existing = await payload.find({
-      collection: 'media', depth: 0, limit: 1, overrideAccess: true, pagination: false,
-      where: { filename: { equals: filename } },
-    })
-    let media = existing.docs[0]
+    let media = mediaByFilename.get(filename)
     if (!media) {
       const stagingDir = path.join(importRoot, '.upload')
       const uploadPath = path.join(stagingDir, filename)
@@ -114,6 +120,7 @@ export async function uploadCatalogMedia(payload: Payload, owner: string, items:
           collection: 'media', overrideAccess: true, filePath: uploadPath,
           data: { alt: cleanAlt(item.alt, owner, index), isPublic: true },
         })
+        mediaByFilename.set(filename, { id: String(media.id) })
       } finally {
         await rm(uploadPath, { force: true })
       }
@@ -121,6 +128,18 @@ export async function uploadCatalogMedia(payload: Payload, owner: string, items:
     uploads.push({ media: media.id, alt: cleanAlt(item.alt, owner, index) })
   }
   return uploads
+}
+
+function getMediaCache(payload: Payload) {
+  let cache = mediaCaches.get(payload)
+  if (!cache) {
+    cache = payload.find({
+      collection: 'media', depth: 0, limit: 5_000, overrideAccess: true, pagination: false,
+      select: { filename: true },
+    }).then((result) => new Map(result.docs.flatMap((media) => media.filename ? [[media.filename, { id: String(media.id) }] as const] : [])))
+    mediaCaches.set(payload, cache)
+  }
+  return cache
 }
 
 export function atlasPublicSlug(value: string) {

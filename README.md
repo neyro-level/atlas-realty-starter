@@ -2,7 +2,7 @@
 
 Самостоятельный демонстрационный продукт для рынка недвижимости Краснодара на Next.js, Payload CMS и PostgreSQL.
 
-Production-домен: `https://atlas.ams24.ru`. Оператор: ИП Скрицкая Юлия Викторовна. До проверки реальных источников каталог содержит только явно обозначенные демонстрационные объекты и закрыт от индексации.
+Production-домен: `https://atlas.ams24.ru`. Оператор: ИП Скрицкая Юлия Викторовна. Каталог наполнен разрешённым партнёрским набором для продуктовой демонстрации и остаётся закрытым от индексации до отдельного решения владельца.
 
 ## Runtime map
 
@@ -38,5 +38,8 @@ See `docs/OPERATIONS.md` for local safety, Graphify, CI, release, rollback and i
 - `pnpm build` — sensitive-change and release build.
 - `pnpm owner:bootstrap` — one-time first-owner creation.
 - `pnpm jobs:run:all` — private all-queue worker command used by production service.
+- `pnpm ui:check` — design-token, ShadCN registry and static-image guard.
+- `pnpm template:profile -- --input <profile.json>` — generate a reviewed city profile without overwriting the active profile.
+- `pnpm atlas:content:verify-live` — verify the 20/30 Payload catalog, galleries and map input on local or live Atlas.
 
 Production release is never performed from a feature branch.
