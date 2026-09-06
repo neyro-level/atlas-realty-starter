@@ -27,6 +27,10 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.clientName}`,
   },
   description: siteConfig.defaultDescription,
+  icons: {
+    icon: [{ url: siteConfig.logo, type: "image/svg+xml" }],
+    shortcut: [siteConfig.logo],
+  },
   robots: isIndexable() ? { index: true, follow: true } : { index: false, follow: false },
   openGraph: {
     title: siteConfig.defaultTitle,
