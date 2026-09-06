@@ -28,6 +28,7 @@ playwright-report/
 test-results/
 outputs/
 graphify-out/
+/public/r/
 
 # Editors and operating systems
 .DS_Store

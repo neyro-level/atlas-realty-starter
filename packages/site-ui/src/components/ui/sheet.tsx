@@ -40,7 +40,7 @@ export function SheetContent({ side = "right", className, children, showClose = 
         {children}
         {showClose ? (
           <DialogPrimitive.Close
-            className="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-lg bg-[#F5F5F3] text-[var(--text-secondary)] transition hover:bg-[#ECEBE8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+            className="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-lg bg-[var(--palette-f5f5f3)] text-[var(--text-secondary)] transition hover:bg-[var(--palette-ecebe8)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
             aria-label="Закрыть"
           >
             <X className="size-5" aria-hidden />
@@ -64,5 +64,5 @@ export function SheetTitle({ className, ...props }: ComponentProps<typeof Dialog
 }
 
 export function SheetDescription({ className, ...props }: ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description data-slot="sheet-description" className={cn("text-sm leading-6 text-[#5B5860]", className)} {...props} />;
+  return <DialogPrimitive.Description data-slot="sheet-description" className={cn("text-sm leading-6 text-[var(--palette-5b5860)]", className)} {...props} />;
 }

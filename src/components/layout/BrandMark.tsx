@@ -18,8 +18,8 @@ export function BrandMark({
   markClassName,
 }: BrandMarkProps) {
   const filterClass = inverted ? "brightness-0 invert" : "";
-  const wordClass = inverted ? "text-white" : "text-[#17161A]";
-  const sloganClass = inverted ? "text-white/62" : "text-[#686466]";
+  const wordClass = inverted ? "text-white" : "text-[var(--text-primary)]";
+  const sloganClass = inverted ? "text-white/62" : "text-[var(--palette-686466)]";
   const markSize =
     markClassName ??
     (variant === "header"

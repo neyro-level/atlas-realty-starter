@@ -33,7 +33,7 @@ export function RouteStatusState({
   backgroundImageSrc = ROUTE_STATUS_BACKGROUND_IMAGE,
 }: RouteStatusStateProps) {
   return (
-    <main className="relative min-h-[calc(100vh-68px)] overflow-hidden bg-[#f7f5f4] text-[#17161a] lg:min-h-[calc(100vh-106px)]">
+    <main className="relative min-h-[calc(100vh-68px)] overflow-hidden bg-[var(--palette-f7f5f4)] text-[var(--text-primary)] lg:min-h-[calc(100vh-106px)]">
       <div className="pointer-events-none absolute inset-0" aria-hidden>
         <Image
           src={backgroundImageSrc}
@@ -59,10 +59,10 @@ export function RouteStatusState({
             ) : null}
 
             <div className="space-y-5">
-              <h1 className="text-[clamp(2rem,4.4vw,3rem)] font-semibold leading-[1.06] tracking-[-0.01em] text-[#17161a] md:whitespace-nowrap">
+              <h1 className="text-[clamp(2rem,4.4vw,3rem)] font-semibold leading-[1.06] tracking-[-0.01em] text-[var(--text-primary)] md:whitespace-nowrap">
                 {title}
               </h1>
-              <p className="mx-auto max-w-[560px] text-[15px] leading-7 text-[#555156] md:text-base md:leading-8">
+              <p className="mx-auto max-w-[560px] text-[15px] leading-7 text-[var(--palette-555156)] md:text-base md:leading-8">
                 {description}
               </p>
             </div>

@@ -74,7 +74,7 @@ export function CatalogHeroView({
   const titleLineClassName = collapseTitleLinesOnDesktop ? "block lg:inline" : "block lg:whitespace-nowrap";
 
   return (
-    <div className={`relative min-h-[220px] overflow-hidden rounded-xl bg-[#18181A] text-white shadow-[0_1px_2px_rgba(0,0,0,0.02),0_18px_44px_rgba(0,0,0,0.10)] sm:min-h-[240px] md:min-h-[260px] ${desktopHeightClassName}`}>
+    <div className={`relative min-h-[220px] overflow-hidden rounded-xl bg-[var(--surface-dark)] text-white shadow-[0_1px_2px_rgba(0,0,0,0.02),0_18px_44px_rgba(0,0,0,0.10)] sm:min-h-[240px] md:min-h-[260px] ${desktopHeightClassName}`}>
       <ImageRenderer
         src={imageSrc}
         alt=""

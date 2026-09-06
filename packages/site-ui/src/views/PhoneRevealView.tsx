@@ -22,12 +22,12 @@ export function PhoneRevealView({
   if (!phone || !phoneHref) return null;
 
   if (variant === "mobile") {
-    const className = "flex min-h-11 w-full items-center justify-center gap-1.5 rounded-[12px] bg-[#F3F3F3] px-3 text-[13px] font-medium tracking-[-0.01em] text-[var(--text-primary)] transition hover:bg-[#EBEBEB] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]";
+    const className = "flex min-h-11 w-full items-center justify-center gap-1.5 rounded-[12px] bg-[var(--palette-f3f3f3)] px-3 text-[13px] font-medium tracking-[-0.01em] text-[var(--text-primary)] transition hover:bg-[var(--palette-ebebeb)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]";
 
     if (visible) {
       return (
         <a href={phoneHref} data-analytics-context={analyticsContext} className={className}>
-          <Phone className="size-[15px] shrink-0 text-[#8C8C8C]" strokeWidth={1.75} aria-hidden />
+          <Phone className="size-[15px] shrink-0 text-[var(--palette-8c8c8c)]" strokeWidth={1.75} aria-hidden />
           <span className="truncate whitespace-nowrap tabular-nums">{phone}</span>
         </a>
       );
@@ -42,7 +42,7 @@ export function PhoneRevealView({
         className={className}
         aria-label={revealLabel}
       >
-        <Phone className="size-[15px] shrink-0 text-[#8C8C8C]" strokeWidth={1.75} aria-hidden />
+        <Phone className="size-[15px] shrink-0 text-[var(--palette-8c8c8c)]" strokeWidth={1.75} aria-hidden />
         <span>Позвонить</span>
       </button>
     );
@@ -72,7 +72,7 @@ export function PhoneRevealView({
       aria-label={revealLabel}
     >
       <Phone className="size-[18px] text-[var(--text-muted)]" aria-hidden />
-      <span className="whitespace-nowrap text-[#0A66CC] tabular-nums" aria-hidden>
+      <span className="whitespace-nowrap text-[var(--palette-0a66cc)] tabular-nums" aria-hidden>
         +7...Показать
       </span>
     </button>

@@ -20,9 +20,9 @@ export function OfficePhoneReveal({ phone, phoneHref, office }: OfficePhoneRevea
         href={phoneHref}
         data-analytics-context="contacts_office"
         data-analytics-item={office}
-        className="inline-flex min-h-8 items-center gap-1.5 text-sm font-semibold tabular-nums text-[#17161A] transition hover:text-[#8A1515]"
+        className="inline-flex min-h-8 items-center gap-1.5 text-sm font-semibold tabular-nums text-[var(--text-primary)] transition hover:text-[var(--accent)]"
       >
-        <Phone className="size-4 text-[#8A1515]" aria-hidden />
+        <Phone className="size-4 text-[var(--accent)]" aria-hidden />
         {phone}
       </a>
     );
@@ -35,10 +35,10 @@ export function OfficePhoneReveal({ phone, phoneHref, office }: OfficePhoneRevea
       data-analytics-context="contacts_office"
       data-analytics-item={office}
       onClick={() => setVisible(true)}
-      className="inline-flex min-h-8 items-center gap-1.5 text-sm font-semibold text-[#17161A] transition hover:text-[#8A1515] focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8A1515]"
+      className="inline-flex min-h-8 items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] transition hover:text-[var(--accent)] focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
       aria-label={`Показать телефон офиса ${office}`}
     >
-      <Phone className="size-4 text-[#8A1515]" aria-hidden />
+      <Phone className="size-4 text-[var(--accent)]" aria-hidden />
       <span className="whitespace-nowrap">Показать телефон</span>
     </button>
   );

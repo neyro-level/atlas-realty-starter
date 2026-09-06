@@ -286,8 +286,8 @@ export function PropertyObjectSidebar({
       phoneVisible={phoneVisible}
       phoneLabel={contacts.phone}
       phoneHref={contacts.phoneHref || buildTelHref(contacts.phone)}
-      favoriteAction={<SessionCollectionButton kind="favorites" item={sessionItem} className="mx-auto flex size-9 items-center justify-center rounded-lg border transition" inactiveClassName="border-transparent bg-white text-[#17161A] hover:bg-[#F4F4F3]" activeClassName="border-[#8A1515] bg-[#F7F2F2] text-[#8A1515]" />}
-      compareAction={<SessionCollectionButton kind="compare" item={sessionItem} className="mx-auto flex size-9 items-center justify-center rounded-lg border transition" inactiveClassName="border-transparent bg-white text-[#17161A] hover:bg-[#F4F4F3]" activeClassName="border-[#8A1515] bg-[#F7F2F2] text-[#8A1515]" />}
+      favoriteAction={<SessionCollectionButton kind="favorites" item={sessionItem} className="mx-auto flex size-9 items-center justify-center rounded-lg border transition" inactiveClassName="border-transparent bg-white text-[var(--text-primary)] hover:bg-[var(--background)]" activeClassName="border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]" />}
+      compareAction={<SessionCollectionButton kind="compare" item={sessionItem} className="mx-auto flex size-9 items-center justify-center rounded-lg border transition" inactiveClassName="border-transparent bg-white text-[var(--text-primary)] hover:bg-[var(--background)]" activeClassName="border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]" />}
       consentContent={<PrivacyConsentText className="font-semibold" />}
       onSubmit={handleSubmit}
       onOfferChange={handleOfferChange}

@@ -12,7 +12,7 @@ export function DeferredYandexMap({ widgetUrl, yandexUrl, title }: DeferredYande
   const [active, setActive] = useState(false);
 
   return (
-    <div className="relative h-full min-h-[320px] w-full overflow-hidden bg-[#EBEBE9] md:min-h-[380px]" data-map-deferred={!active}>
+    <div className="relative h-full min-h-[320px] w-full overflow-hidden bg-[var(--surface-muted)] md:min-h-[380px]" data-map-deferred={!active}>
       {active ? (
         <iframe
           src={widgetUrl}
@@ -25,12 +25,12 @@ export function DeferredYandexMap({ widgetUrl, yandexUrl, title }: DeferredYande
         <button
           type="button"
           onClick={() => setActive(true)}
-          className="grid h-full min-h-[320px] w-full place-items-center bg-[linear-gradient(135deg,#F4F4F3,#E6E2DE)] p-6 text-center md:min-h-[380px]"
+          className="grid h-full min-h-[320px] w-full place-items-center bg-[linear-gradient(135deg,var(--background),var(--palette-e6e2de))] p-6 text-center md:min-h-[380px]"
           aria-label="Загрузить интерактивную карту"
         >
           <span>
-            <strong className="block text-lg font-semibold text-[#17161A]">Показать карту</strong>
-            <span className="mt-2 block text-sm leading-6 text-[#5E5B5E]">Карта Яндекса загрузится только после нажатия.</span>
+            <strong className="block text-lg font-semibold text-[var(--text-primary)]">Показать карту</strong>
+            <span className="mt-2 block text-sm leading-6 text-[var(--palette-5e5b5e)]">Карта Яндекса загрузится только после нажатия.</span>
           </span>
         </button>
       )}
@@ -38,7 +38,7 @@ export function DeferredYandexMap({ widgetUrl, yandexUrl, title }: DeferredYande
         href={yandexUrl}
         target="_blank"
         rel="noreferrer"
-        className="absolute bottom-3 right-3 inline-flex min-h-10 items-center rounded-lg bg-white px-3 text-xs font-semibold text-[#17161A] shadow-[0_12px_30px_rgba(0,0,0,0.14)] transition hover:text-[#8A1515]"
+        className="absolute bottom-3 right-3 inline-flex min-h-10 items-center rounded-lg bg-white px-3 text-xs font-semibold text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.14)] transition hover:text-[var(--accent)]"
       >
         Открыть в Яндекс.Картах
       </a>

@@ -25,7 +25,7 @@ export function LawyerServicesGallery() {
   }, [isPaused]);
 
   return (
-    <div className="relative overflow-hidden rounded-xl bg-[#F4F5F5]" aria-label="Работа юридического отдела">
+    <div className="relative overflow-hidden rounded-xl bg-[var(--palette-f4f5f5)]" aria-label="Работа юридического отдела">
       <div className="hidden aspect-[4/3] overflow-hidden lg:block">
         <div className="flex h-full flex-col transition-transform duration-700 ease-out" style={{ transform: `translateY(-${activeIndex * 100}%)` }}>
           {IMAGES.map((image) => (

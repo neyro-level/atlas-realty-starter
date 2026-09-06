@@ -23,7 +23,7 @@ const PROMOTION_CHANNELS = [
 
 export function SalePromotionView() {
   return (
-    <section className="bg-[#F6F6F4] py-14 sm:py-16 lg:py-[88px]" aria-labelledby="sale-promotion-title">
+    <section className="bg-[var(--palette-f6f6f4)] py-14 sm:py-16 lg:py-[88px]" aria-labelledby="sale-promotion-title">
       <div className="mx-auto max-w-site-frame px-5">
         <div className="max-w-[900px]">
           <h2

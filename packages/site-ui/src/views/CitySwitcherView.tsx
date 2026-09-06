@@ -27,25 +27,25 @@ export function CitySwitcherView({ open, variant, options, linkRenderer: LinkRen
           aria-haspopup="menu"
           aria-expanded={open}
           aria-controls={panelId}
-          className="flex min-h-11 w-full items-center justify-between gap-2 rounded-[12px] bg-[#F3F3F3] px-3 text-[13px] font-medium tracking-[-0.01em] text-[#0A66CC] transition hover:bg-[#EBEBEB] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+          className="flex min-h-11 w-full items-center justify-between gap-2 rounded-[12px] bg-[var(--palette-f3f3f3)] px-3 text-[13px] font-medium tracking-[-0.01em] text-[var(--palette-0a66cc)] transition hover:bg-[var(--palette-ebebeb)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
           onClick={onToggle}
         >
           <span className="flex min-w-0 items-center gap-1.5">
-            <span className="inline-flex size-[15px] shrink-0 items-center justify-center text-[#8C8C8C]" aria-hidden>•</span>
+            <span className="inline-flex size-[15px] shrink-0 items-center justify-center text-[var(--palette-8c8c8c)]" aria-hidden>•</span>
             <span className="truncate">{currentCity.label}</span>
           </span>
-          <ChevronDown className={`size-3.5 shrink-0 text-[#8C8C8C] transition ${open ? "rotate-180" : ""}`} strokeWidth={1.75} aria-hidden />
+          <ChevronDown className={`size-3.5 shrink-0 text-[var(--palette-8c8c8c)] transition ${open ? "rotate-180" : ""}`} strokeWidth={1.75} aria-hidden />
         </button>
 
         <div
           id={panelId}
           role="menu"
           aria-labelledby={triggerId}
-          className={`${open ? "grid" : "hidden"} absolute left-0 right-0 top-[calc(100%+6px)] z-10 gap-0.5 rounded-[12px] border border-[#E8E8E8] bg-white p-1 shadow-[0_12px_34px_rgba(0,0,0,0.08)]`}
+          className={`${open ? "grid" : "hidden"} absolute left-0 right-0 top-[calc(100%+6px)] z-10 gap-0.5 rounded-[12px] border border-[var(--palette-e8e8e8)] bg-white p-1 shadow-[0_12px_34px_rgba(0,0,0,0.08)]`}
         >
           {options.map((city) => {
             const className = `block rounded-[10px] px-3 py-2 text-left text-[13px] transition ${
-              city.current ? "bg-[#F3F3F3] text-[var(--text-primary)]" : "text-[var(--text-secondary)] hover:bg-[#F7F7F7] hover:text-[var(--accent)]"
+              city.current ? "bg-[var(--palette-f3f3f3)] text-[var(--text-primary)]" : "text-[var(--text-secondary)] hover:bg-[var(--palette-f7f7f7)] hover:text-[var(--accent)]"
             }`;
             const content = (
               <>
@@ -57,7 +57,7 @@ export function CitySwitcherView({ open, variant, options, linkRenderer: LinkRen
                     <ArrowRight className="size-3.5 shrink-0 text-[var(--accent)] opacity-70" strokeWidth={1.75} aria-hidden />
                   )}
                 </span>
-                <span className="mt-0.5 block truncate text-[11px] font-medium text-[#8C8C8C]">{city.domainLabel}</span>
+                <span className="mt-0.5 block truncate text-[11px] font-medium text-[var(--palette-8c8c8c)]">{city.domainLabel}</span>
               </>
             );
 

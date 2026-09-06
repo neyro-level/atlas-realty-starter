@@ -1,7 +1,7 @@
 .site-ui-surface-card {
   border: 1px solid var(--color-site-border);
   border-radius: var(--radius-lg);
-  background: #fff;
+  background: var(--surface);
   box-shadow: 0 28px 80px rgba(24, 22, 24, 0.18);
 }
 
@@ -33,7 +33,7 @@
   overflow-y: auto;
   border: 1px solid rgba(227, 227, 225, 0.88);
   border-radius: var(--radius-lg);
-  background: #fff;
+  background: var(--surface);
   box-shadow: 0 24px 80px rgba(23, 22, 26, 0.18);
   padding: 0;
 }
@@ -97,21 +97,21 @@
   width: 116px;
   height: 116px;
   overflow: hidden;
-  border: 3px solid #fff;
+  border: 3px solid var(--surface);
   border-radius: 999px;
   box-shadow: 0 12px 26px rgba(23, 22, 26, 0.14);
 }
 
 .request-modal__avatar--brand {
-  background: linear-gradient(135deg, var(--accent-soft) 0%, #e6d7d7 54%, var(--accent) 100%);
+  background: linear-gradient(135deg, var(--accent-soft) 0%, var(--palette-e6d7d7) 54%, var(--accent) 100%);
 }
 
 .request-modal__avatar--light {
-  background: linear-gradient(135deg, #fff 0%, var(--surface-muted) 54%, var(--text-secondary) 100%);
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface-muted) 54%, var(--text-secondary) 100%);
 }
 
 .request-modal__avatar--dark {
-  background: linear-gradient(135deg, var(--surface-card-soft) 0%, #d0d0cd 52%, var(--text-primary) 100%);
+  background: linear-gradient(135deg, var(--surface-card-soft) 0%, var(--input) 52%, var(--text-primary) 100%);
 }
 
 .request-modal__avatar::after {
@@ -208,7 +208,7 @@
 .request-modal__input:focus {
   outline: none;
   border-color: var(--accent);
-  background: #fff;
+  background: var(--surface);
   box-shadow: 0 0 0 3px rgba(138, 21, 21, 0.12);
 }
 
@@ -269,7 +269,7 @@
   min-height: 52px;
   border-radius: var(--radius-sm);
   background: var(--accent);
-  color: #fff;
+  color: var(--surface);
   font-size: 14px;
   font-weight: 800;
   box-shadow: 0 4px 12px rgba(138, 21, 21, 0.2);
@@ -420,9 +420,9 @@
 }
 
 .site-footer__social:hover {
-  border-color: #fff;
+  border-color: var(--surface);
   background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  color: var(--surface);
 }
 
 .site-footer__social-icon {

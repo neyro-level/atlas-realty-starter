@@ -8,7 +8,7 @@ import { buildTelHref } from "@/shared/lib/tel";
 export function EmployeePhoneAction({ phone, slug, compact = false }: { phone: string | null; slug: string; compact?: boolean }) {
   const [visible, setVisible] = useState(false);
   const className = `inline-flex w-full items-center justify-center gap-2 rounded-lg font-semibold transition ${compact ? "min-h-10 px-3 text-[13px]" : "min-h-11 px-4 text-sm"} ${
-    compact ? "border border-[#DCDCD8] bg-white text-[#17161A] hover:border-[#8A1515]" : "bg-[#18181A] text-white hover:bg-[#2A292C]"
+    compact ? "border border-[var(--palette-dcdcd8)] bg-white text-[var(--text-primary)] hover:border-[var(--accent)]" : "bg-[var(--surface-dark)] text-white hover:bg-[var(--palette-2a292c)]"
   }`;
 
   if (!phone) {

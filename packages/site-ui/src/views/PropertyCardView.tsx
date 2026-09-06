@@ -238,7 +238,7 @@ export function PropertyCardView({
                 onClick={stop}
                 data-analytics-context="catalog_property_card"
                 data-analytics-item={listing.slug}
-                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold tabular-nums text-white transition hover:bg-[#2A292C] lg:text-sm sm:min-w-[190px]"
+                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold tabular-nums text-white transition hover:bg-[var(--palette-2a292c)] lg:text-sm sm:min-w-[190px]"
               >
                 <Phone className="size-[17.6px] lg:size-4" aria-hidden />
                 {phone}
@@ -253,7 +253,7 @@ export function PropertyCardView({
                   stop(event);
                   setPhoneVisible(true);
                 }}
-                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold text-white transition hover:bg-[#2A292C] lg:text-sm sm:min-w-[190px]"
+                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold text-white transition hover:bg-[var(--palette-2a292c)] lg:text-sm sm:min-w-[190px]"
               >
                 <Phone className="size-[17.6px] lg:size-4" aria-hidden />
                 Показать телефон

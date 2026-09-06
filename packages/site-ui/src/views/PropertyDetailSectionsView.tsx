@@ -103,7 +103,7 @@ export function PropertyDetailsView({ title, rows }: { title: string; rows: Prop
         {rows.map((row) => (
           <div key={`${row.label}-${row.value}`} className="grid grid-cols-[auto_minmax(32px,1fr)_auto] items-baseline gap-2 text-sm leading-6">
             <span className="text-[var(--text-secondary)]">{row.label}</span>
-            <span className="border-b border-dotted border-[#D0D0CD]" aria-hidden />
+            <span className="border-b border-dotted border-[var(--input)]" aria-hidden />
             <span className="max-w-[220px] text-right font-semibold text-[var(--text-primary)]">{row.value}</span>
           </div>
         ))}

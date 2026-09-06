@@ -45,7 +45,7 @@ export function NewBuildingAboutView({ detail, contained = false }: NewBuildingS
               {detail.about.features.slice(0, 4).map((feature, index) => (
                 <li key={feature.title} className="grid grid-cols-[36px_minmax(0,1fr)] gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] p-4">
                   <div className="grid size-9 place-items-center rounded-lg bg-[var(--surface-muted)] text-[12px] font-extrabold text-[var(--accent)] tabular-nums">{String(index + 1).padStart(2, "0")}</div>
-                  <div><h3 className="text-sm font-semibold leading-5 text-[var(--text-primary)]">{feature.title}</h3><p className="mt-1.5 text-xs leading-5 text-[#5E5B5E]">{feature.text}</p></div>
+                  <div><h3 className="text-sm font-semibold leading-5 text-[var(--text-primary)]">{feature.title}</h3><p className="mt-1.5 text-xs leading-5 text-[var(--palette-5e5b5e)]">{feature.text}</p></div>
                 </li>
               ))}
             </ol>
@@ -68,7 +68,7 @@ export function NewBuildingPurchaseTermsView({ detail, contained = false }: NewB
       <div className={gridClassName}>{terms.map((term, index) => { const Icon = icons[index % icons.length]; return (
         <article key={term.title} className="grid min-h-[178px] grid-rows-[auto_1fr_auto] rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] p-4">
           <div className="flex items-start justify-between gap-3"><span className="grid size-9 place-items-center rounded-lg bg-[var(--surface-muted)] text-[12px] font-extrabold text-[var(--accent)] tabular-nums">{String(index + 1).padStart(2, "0")}</span><span className="grid size-9 place-items-center rounded-lg bg-white text-[var(--accent)]"><Icon aria-hidden="true" size={17} strokeWidth={1.9} /></span></div>
-          <div className="mt-4"><p className="text-sm font-semibold leading-5 text-[var(--accent)]">{term.value ?? term.title}</p><h3 className="mt-2 text-sm font-semibold leading-5 text-[var(--text-primary)]">{term.title}</h3><p className="mt-1.5 text-xs leading-5 text-[#5E5B5E]">{term.text}</p></div>
+          <div className="mt-4"><p className="text-sm font-semibold leading-5 text-[var(--accent)]">{term.value ?? term.title}</p><h3 className="mt-2 text-sm font-semibold leading-5 text-[var(--text-primary)]">{term.title}</h3><p className="mt-1.5 text-xs leading-5 text-[var(--palette-5e5b5e)]">{term.text}</p></div>
         </article>
       ); })}</div>
     </div></div></section>
@@ -78,10 +78,10 @@ export function NewBuildingPurchaseTermsView({ detail, contained = false }: NewB
 export function NewBuildingSelectionView({ detail: _detail, contained = false, imageRenderer: Image, requestAction }: NewBuildingSectionProps & { imageRenderer: SiteImageRenderer; requestAction: ReactNode }) {
   const frame = sectionFrame(contained);
   return (
-    <section className={frame.section}><div className={frame.frame}><div className="group overflow-hidden rounded-lg border border-[#DDDCD8] bg-[#F5F5F3] shadow-[0_1px_2px_rgba(0,0,0,0.025),0_20px_48px_rgba(0,0,0,0.055)] transition duration-200 hover:border-[#D0D0CD] hover:shadow-[0_2px_4px_rgba(0,0,0,0.035),0_26px_64px_rgba(0,0,0,0.085)]">
+    <section className={frame.section}><div className={frame.frame}><div className="group overflow-hidden rounded-lg border border-[var(--palette-dddcd8)] bg-[var(--palette-f5f5f3)] shadow-[0_1px_2px_rgba(0,0,0,0.025),0_20px_48px_rgba(0,0,0,0.055)] transition duration-200 hover:border-[var(--input)] hover:shadow-[0_2px_4px_rgba(0,0,0,0.035),0_26px_64px_rgba(0,0,0,0.085)]">
       <div className="grid md:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_340px]">
         <div className="relative flex min-h-[300px] flex-col justify-center p-6 md:p-7 lg:min-h-[326px] lg:p-8"><span className="mb-7 block h-1 w-14 rounded-full bg-[var(--accent)]" aria-hidden /><h2 className="max-w-[520px] text-[28px] font-extrabold leading-[1.06] text-[var(--text-primary)] md:text-[34px] lg:text-[36px]"><span className="block">Бесплатный подбор</span><span className="block">новостроек в Краснодаре</span></h2><p className="mt-5 max-w-[500px] text-[14px] font-normal leading-[1.62] text-[var(--text-secondary)] md:text-[15px]">Сравним условия всех застройщиков и найдём для вас акции, о которых не пишут в рекламе.</p>{requestAction}</div>
-        <div className="relative min-h-[230px] overflow-hidden border-t border-[#DDDCD8] bg-[linear-gradient(145deg,#F7F7F5_0%,#ECECE8_54%,var(--surface)_100%)] md:min-h-full md:border-l md:border-t-0"><Image src="/images/catalog-buyer-expert.png" alt="Эксперт агентства недвижимости помогает выбрать квартиру в новостройке" fill quality={95} sizes="(max-width: 768px) calc(100vw - 40px), 340px" className="object-cover object-[50%_50%] transition duration-500 group-hover:scale-[1.025]" /><div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,16,17,0)_40%,rgba(16,16,17,0.18)_100%)]" /></div>
+        <div className="relative min-h-[230px] overflow-hidden border-t border-[var(--palette-dddcd8)] bg-[linear-gradient(145deg,var(--palette-f7f7f5)_0%,var(--palette-ecece8)_54%,var(--surface)_100%)] md:min-h-full md:border-l md:border-t-0"><Image src="/images/catalog-buyer-expert.png" alt="Эксперт агентства недвижимости помогает выбрать квартиру в новостройке" fill quality={95} sizes="(max-width: 768px) calc(100vw - 40px), 340px" className="object-cover object-[50%_50%] transition duration-500 group-hover:scale-[1.025]" /><div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,16,17,0)_40%,rgba(16,16,17,0.18)_100%)]" /></div>
       </div>
     </div></div></section>
   );
@@ -95,7 +95,7 @@ export function NewBuildingLocationView({ detail, contained = false, map }: NewB
       <div className="mt-5 overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] lg:grid lg:grid-cols-[minmax(0,1fr)_260px]">
         {map}
         <div className="grid content-start gap-2 border-t border-[var(--border)] p-3 lg:border-l lg:border-t-0">{detail.location.items.slice(0, 6).map((item) => { const Icon = getInfrastructureIcon(item.title); return (
-          <article key={`${item.title}-${item.timeLabel}`} className="rounded-lg border border-[var(--border)] bg-white p-3"><div className="flex items-start gap-3"><span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent)]"><Icon className="size-4" aria-hidden /></span><div className="min-w-0"><div className="flex items-start justify-between gap-2"><h3 className="text-sm font-semibold leading-5 text-[var(--text-primary)]">{item.title}</h3>{item.timeLabel ? <span className="shrink-0 rounded-md bg-[var(--surface-card-soft)] px-2 py-1 text-[11px] font-semibold text-[var(--text-secondary)]">{item.timeLabel}</span> : null}</div><p className="mt-1 text-xs leading-5 text-[#5E5B5E]">{item.text}</p></div></div></article>
+          <article key={`${item.title}-${item.timeLabel}`} className="rounded-lg border border-[var(--border)] bg-white p-3"><div className="flex items-start gap-3"><span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent)]"><Icon className="size-4" aria-hidden /></span><div className="min-w-0"><div className="flex items-start justify-between gap-2"><h3 className="text-sm font-semibold leading-5 text-[var(--text-primary)]">{item.title}</h3>{item.timeLabel ? <span className="shrink-0 rounded-md bg-[var(--surface-card-soft)] px-2 py-1 text-[11px] font-semibold text-[var(--text-secondary)]">{item.timeLabel}</span> : null}</div><p className="mt-1 text-xs leading-5 text-[var(--palette-5e5b5e)]">{item.text}</p></div></div></article>
         ); })}</div>
       </div>
     </div></div></section>

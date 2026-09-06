@@ -57,7 +57,7 @@ export function EmployeeReviewForm({ agentId, fullName }: { agentId: string; ful
 
   return (
     <>
-      <Button type="button" onClick={show} variant="outline" className="inline-flex min-h-11 rounded-lg border-[#DCDCD8] bg-white px-5 text-sm font-semibold text-[#17161A] hover:border-[#8A1515] hover:text-[#8A1515]">
+      <Button type="button" onClick={show} variant="outline" className="inline-flex min-h-11 rounded-lg border-[var(--palette-dcdcd8)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent)]">
         Оставить отзыв
       </Button>
       <EmployeeReviewDialogView
@@ -67,7 +67,7 @@ export function EmployeeReviewForm({ agentId, fullName }: { agentId: string; ful
         phone={phone}
         pending={pending}
         result={result}
-        consentContent={<><PrivacyConsentText /> и принимаю <Link href="/pravila-razmeshcheniya-otzyvov" className="text-[#8A1515] underline">правила размещения отзывов</Link>.</>}
+        consentContent={<><PrivacyConsentText /> и принимаю <Link href="/pravila-razmeshcheniya-otzyvov" className="text-[var(--accent)] underline">правила размещения отзывов</Link>.</>}
         onOpenChange={setOpen}
         onSubmit={submit}
         onRatingChange={setRating}

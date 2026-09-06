@@ -141,7 +141,7 @@ export function PropertyChatView({
           </label>
           {errors.consent ? <span className="text-xs font-semibold text-[var(--error)]">{errors.consent}</span> : null}
 
-          {resultMessage ? <div className="rounded-md border border-[#F2C6C6] bg-[#FFF7F7] px-3 py-2 text-sm font-semibold text-[var(--error)]">{resultMessage}</div> : null}
+          {resultMessage ? <div className="rounded-md border border-[var(--palette-f2c6c6)] bg-[var(--palette-fff7f7)] px-3 py-2 text-sm font-semibold text-[var(--error)]">{resultMessage}</div> : null}
 
           <button
             type="submit"

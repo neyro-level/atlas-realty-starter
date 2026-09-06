@@ -3,6 +3,7 @@ import type { SiteIdentity } from "@starter/site-contracts";
 
 export type { SiteImageRenderer, SiteImageRendererProps, SiteLinkRenderer, SiteLinkRendererProps } from "./lib/adapters";
 export { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/ui/accordion";
+export { AspectRatio } from "./components/ui/aspect-ratio";
 export { Badge, badgeVariants } from "./components/ui/badge";
 export {
   Breadcrumb,
@@ -42,6 +43,7 @@ export {
 } from "./components/ui/field";
 export { Input } from "./components/ui/input";
 export { Label } from "./components/ui/label";
+export { ScrollArea, ScrollBar } from "./components/ui/scroll-area";
 export { Separator } from "./components/ui/separator";
 export {
   Sheet,
@@ -55,6 +57,8 @@ export {
   SheetTrigger,
 } from "./components/ui/sheet";
 export { Textarea } from "./components/ui/textarea";
+export { Skeleton } from "./components/ui/skeleton";
+export { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 export { cn } from "./lib/utils";
 export { ArticleCardView } from "./views/ArticleCardView";
 export { JournalHubView } from "./views/JournalHubView";

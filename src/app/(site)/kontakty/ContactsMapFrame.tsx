@@ -37,10 +37,10 @@ export function ContactsMapFrame({ src, title }: ContactsMapFrameProps) {
           type="button"
           data-analytics-event="map_open"
           data-analytics-context="contacts_map"
-          className="absolute inset-0 z-10 flex items-end justify-center bg-transparent pb-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-[#8A1515] lg:hidden"
+          className="absolute inset-0 z-10 flex items-end justify-center bg-transparent pb-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-[var(--accent)] lg:hidden"
           onClick={() => setActive(true)}
         >
-          <span className="rounded-lg border border-[#E3E3E1] bg-white/92 px-3 py-2 text-[12px] font-semibold text-[#413F41] shadow-[0_8px_20px_rgba(23,22,26,0.08)] backdrop-blur-sm">
+          <span className="rounded-lg border border-[var(--border)] bg-white/92 px-3 py-2 text-[12px] font-semibold text-[var(--text-secondary)] shadow-[0_8px_20px_rgba(23,22,26,0.08)] backdrop-blur-sm">
             Нажмите, чтобы открыть карту
           </span>
         </button>

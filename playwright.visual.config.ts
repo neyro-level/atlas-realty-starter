@@ -15,7 +15,6 @@ export default defineConfig({
     baseURL,
     colorScheme: 'light',
     locale: 'ru-RU',
-    reducedMotion: 'reduce',
     trace: 'on-first-retry',
   },
   workers: 1,

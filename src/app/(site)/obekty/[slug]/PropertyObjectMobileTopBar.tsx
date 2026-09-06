@@ -41,8 +41,8 @@ export function PropertyObjectMobileTopBar({
             kind="compare"
             item={sessionItem}
             className="inline-flex size-9 items-center justify-center rounded-md transition"
-            inactiveClassName="text-[#413F41] hover:text-[#8A1515]"
-            activeClassName="text-[#8A1515]"
+            inactiveClassName="text-[var(--text-secondary)] hover:text-[var(--accent)]"
+            activeClassName="text-[var(--accent)]"
         />
       }
       favoriteAction={
@@ -50,8 +50,8 @@ export function PropertyObjectMobileTopBar({
             kind="favorites"
             item={sessionItem}
             className="inline-flex size-9 items-center justify-center rounded-md transition"
-            inactiveClassName="text-[#413F41] hover:text-[#8A1515]"
-            activeClassName="text-[#8A1515]"
+            inactiveClassName="text-[var(--text-secondary)] hover:text-[var(--accent)]"
+            activeClassName="text-[var(--accent)]"
         />
       }
       linkRenderer={PropertyMobileLink}

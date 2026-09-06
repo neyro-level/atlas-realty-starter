@@ -39,8 +39,8 @@ export function AgencyInlineLeadSection({
   return (
     <section id={id} className="bg-white" aria-labelledby={titleId}>
       <div className="mx-auto max-w-site-frame px-5 pb-20 pt-8 md:pb-24 md:pt-10 lg:pt-14">
-        <div className="grid overflow-hidden rounded-lg border border-[#E3E3E1] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.02),0_18px_44px_rgba(0,0,0,0.05)] lg:grid-cols-[0.34fr_0.66fr]">
-          <div className="relative min-h-[360px] bg-[#F7F7F5] md:min-h-[500px] lg:min-h-[520px]">
+        <div className="grid overflow-hidden rounded-lg border border-[var(--border)] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.02),0_18px_44px_rgba(0,0,0,0.05)] lg:grid-cols-[0.34fr_0.66fr]">
+          <div className="relative min-h-[360px] bg-[var(--palette-f7f7f5)] md:min-h-[500px] lg:min-h-[520px]">
             <Image
               src={expertImageSrc}
               alt={expertImageAlt}
@@ -57,23 +57,23 @@ export function AgencyInlineLeadSection({
           </div>
 
           <div className="flex flex-col justify-center p-6 md:p-10 lg:p-14">
-            <p className="mb-4 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#8A1515]">
+            <p className="mb-4 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[var(--accent)]">
               {eyebrow}
             </p>
             <h2
               id={titleId}
-              className="max-w-[760px] text-[26px] font-extrabold leading-[1.14] text-[#17161A] [text-wrap:balance] md:text-[32px] lg:text-[36px]"
+              className="max-w-[760px] text-[26px] font-extrabold leading-[1.14] text-[var(--text-primary)] [text-wrap:balance] md:text-[32px] lg:text-[36px]"
             >
               {title}
             </h2>
-            <p className="mt-7 max-w-[680px] text-[18px] leading-8 text-[#17161A]">
+            <p className="mt-7 max-w-[680px] text-[18px] leading-8 text-[var(--text-primary)]">
               {text}
             </p>
 
             {trustItems.length > 0 ? (
-              <ul className="mt-8 grid gap-3 text-[15px] font-semibold leading-6 text-[#4C494A] md:grid-cols-3">
+              <ul className="mt-8 grid gap-3 text-[15px] font-semibold leading-6 text-[var(--palette-4c494a)] md:grid-cols-3">
                 {trustItems.map((item) => (
-                  <li key={item} className="border-l border-[#8A1515]/30 pl-4">
+                  <li key={item} className="border-l border-[var(--accent)]/30 pl-4">
                     {item}
                   </li>
                 ))}

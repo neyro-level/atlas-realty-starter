@@ -105,9 +105,9 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
       data-testid="new-building-catalog-map"
       data-map-status={status}
       data-map-points={mappableComplexes.length}
-      className="mt-5 flex flex-col overflow-hidden rounded-xl border border-[#E3E3E1] bg-white lg:grid lg:h-[640px] lg:grid-cols-[340px_minmax(0,1fr)]"
+      className="mt-5 flex flex-col overflow-hidden rounded-xl border border-[var(--border)] bg-white lg:grid lg:h-[640px] lg:grid-cols-[340px_minmax(0,1fr)]"
     >
-      <aside className="order-2 border-t border-[#E3E3E1] bg-white p-3 lg:order-1 lg:overflow-y-auto lg:border-r lg:border-t-0 lg:p-4">
+      <aside className="order-2 border-t border-[var(--border)] bg-white p-3 lg:order-1 lg:overflow-y-auto lg:border-r lg:border-t-0 lg:p-4">
         <div data-testid="new-building-map-list" className="flex gap-3 overflow-x-auto px-0.5 pb-2 pt-0.5 lg:grid lg:gap-3 lg:overflow-visible">
           {complexes.map((complex) => {
             const selected = complex.slug === selectedSlug;
@@ -118,15 +118,15 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
                 type="button"
                 onClick={() => selectComplex(complex)}
                 className={`min-w-[254px] rounded-xl border bg-white px-3.5 py-3 text-left shadow-[0_6px_20px_rgba(23,22,26,0.05)] transition duration-200 lg:min-w-0 ${
-                  selected ? "border-[#8A1515] shadow-[0_10px_24px_rgba(138,21,21,0.12)]" : "border-[#E3E3E1] hover:-translate-y-0.5 hover:border-[#B45A5A] hover:shadow-[0_10px_24px_rgba(23,22,26,0.08)]"
+                  selected ? "border-[var(--accent)] shadow-[0_10px_24px_rgba(138,21,21,0.12)]" : "border-[var(--border)] hover:-translate-y-0.5 hover:border-[var(--palette-b45a5a)] hover:shadow-[0_10px_24px_rgba(23,22,26,0.08)]"
                 }`}
               >
                 <span className="flex items-start gap-2.5">
-                  <MapPin className={`mt-0.5 size-4 shrink-0 ${mapped ? "text-[#8A1515]" : "text-[#AAA7A8]"}`} aria-hidden />
+                  <MapPin className={`mt-0.5 size-4 shrink-0 ${mapped ? "text-[var(--accent)]" : "text-[var(--palette-aaa7a8)]"}`} aria-hidden />
                   <span className="min-w-0">
-                    <span className="block line-clamp-2 text-sm font-bold leading-5 text-[#17161A]">{complex.name}</span>
-                    <span className="mt-1.5 block line-clamp-1 text-xs leading-4 text-[#777477]">{complex.location.district ?? complex.location.address ?? "Адрес уточняется"}</span>
-                    <span className="mt-2.5 block text-sm font-extrabold text-[#17161A]">{complex.facts.priceFrom ? `от ${formatPrice(complex.facts.priceFrom)}` : "Цена уточняется"}</span>
+                    <span className="block line-clamp-2 text-sm font-bold leading-5 text-[var(--text-primary)]">{complex.name}</span>
+                    <span className="mt-1.5 block line-clamp-1 text-xs leading-4 text-[var(--palette-777477)]">{complex.location.district ?? complex.location.address ?? "Адрес уточняется"}</span>
+                    <span className="mt-2.5 block text-sm font-extrabold text-[var(--text-primary)]">{complex.facts.priceFrom ? `от ${formatPrice(complex.facts.priceFrom)}` : "Цена уточняется"}</span>
                   </span>
                 </span>
               </button>
@@ -135,15 +135,15 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
         </div>
       </aside>
 
-      <div className="order-1 relative min-h-[420px] bg-[#EBEBE9] lg:order-2 lg:min-h-0">
+      <div className="order-1 relative min-h-[420px] bg-[var(--surface-muted)] lg:order-2 lg:min-h-0">
         <div ref={mapElementRef} data-testid="new-building-map-canvas" className="absolute inset-0" aria-label="Карта жилых комплексов Краснодара" />
         {status !== "ready" ? (
-          <div className="absolute inset-0 grid place-items-center p-6 text-center text-sm font-semibold text-[#5E5B5E]">
+          <div className="absolute inset-0 grid place-items-center p-6 text-center text-sm font-semibold text-[var(--palette-5e5b5e)]">
             {status === "loading" ? "Загружаем карту жилых комплексов..." : "Карта временно недоступна. Выберите ЖК из списка слева."}
           </div>
         ) : null}
         {selectedComplex ? (
-          <Link href={newBuildingHref(selectedComplex)} className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-3 text-xs font-bold text-[#17161A] shadow-[0_12px_30px_rgba(0,0,0,0.14)] transition hover:text-[#8A1515]">
+          <Link href={newBuildingHref(selectedComplex)} className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-3 text-xs font-bold text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.14)] transition hover:text-[var(--accent)]">
             Открыть выбранный ЖК
             <ExternalLink className="size-3.5" aria-hidden />
           </Link>
