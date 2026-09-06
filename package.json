@@ -38,6 +38,7 @@
     "atlas:bootstrap:complexes": "cross-env NODE_OPTIONS=\"--conditions=react-server --no-deprecation\" tsx scripts/bootstrap-atlas-complexes.mts",
     "atlas:content:scrape": "node scripts/content/scrape-yandex-realty.mjs",
     "atlas:content:import:complexes": "cross-env NODE_OPTIONS=\"--conditions=react-server --no-deprecation\" tsx scripts/content/import-atlas-complexes.mts",
+    "atlas:content:import:properties": "cross-env NODE_OPTIONS=\"--conditions=react-server --no-deprecation\" tsx scripts/content/import-atlas-properties.mts",
     "release:pack": "node scripts/build-release-artifact.mjs",
     "start": "cross-env NODE_OPTIONS=--no-deprecation HOSTNAME=127.0.0.1 node .next/standalone/server.js",
     "test": "pnpm run test:int && pnpm run test:e2e",
