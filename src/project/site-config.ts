@@ -1,4 +1,5 @@
 import { siteIdentity } from "@/project/site-identity";
+import { siteProfile } from "@/project/site-profile";
 
 export const siteConfig = {
   clientSlug: "atlas",
@@ -11,10 +12,10 @@ export const siteConfig = {
   timezone: "Europe/Moscow",
   stagingDomain: siteIdentity.domain,
   productionDomain: siteIdentity.domain,
-  defaultTitle: `Недвижимость в ${siteIdentity.city.prepositional} | ${siteIdentity.brand}`,
-  defaultDescription: `${siteIdentity.brand}: квартиры, дома, новостройки, участки, коммерческая недвижимость и сопровождение сделки.`,
-  logo: "/images/brand/atlas-mark.svg",
-  favicon: "/favicon.ico",
+  defaultTitle: siteProfile.seo.title,
+  defaultDescription: siteProfile.seo.description,
+  logo: siteProfile.logo.mark,
+  favicon: siteProfile.logo.favicon,
   copyright: `© 2026 ${siteIdentity.legal.name ?? siteIdentity.brand}. Все права защищены.`,
   registry: siteIdentity.legal.inn ? `ИНН ${siteIdentity.legal.inn}` : "",
   disclaimer: "Информация на сайте носит справочный характер и не является публичной офертой.",
@@ -59,6 +60,8 @@ export const featuresConfig = {
   adminLite: true,
   localLeads: true,
   propertyRoute: "/obekty",
+  catalogMap: siteProfile.features.catalogMap,
+  mediaGallery: siteProfile.features.mediaGallery,
 } as const;
 
 export function getSiteUrl() { return siteIdentity.domain; }

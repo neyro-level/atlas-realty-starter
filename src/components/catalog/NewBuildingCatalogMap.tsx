@@ -7,6 +7,7 @@ import { formatPrice } from "@/lib/catalog";
 import { newBuildingHref, type NewBuilding } from "@/modules/new-buildings";
 import { tenant } from "@/project/tenant";
 import { clientEnv } from "@/project/public-env";
+import { siteProfile } from "@/project/site-profile";
 import { getMappableNewBuildings } from "./new-building-catalog-map-model";
 
 type YandexMap = {
@@ -28,12 +29,11 @@ declare global {
 }
 
 const MAP_SCRIPT_ID = "agency-yandex-maps-api";
-const city_CENTER: [number, number] = [48.574, 39.307];
-
 export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] }) {
   const mapElementRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<YandexMap | null>(null);
   const mappableComplexes = useMemo(() => getMappableNewBuildings(complexes), [complexes]);
+  const reviewRequiredCount = complexes.length - mappableComplexes.length;
   const [selectedSlug, setSelectedSlug] = useState(complexes[0]?.slug ?? null);
   const [status, setStatus] = useState<"loading" | "ready" | "unavailable">("loading");
 
@@ -46,13 +46,17 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
     }
 
     let cancelled = false;
+    const availabilityTimer = window.setTimeout(() => {
+      if (!cancelled) setStatus("unavailable");
+    }, 12_000);
     const initMap = () => {
       const ymaps = window.ymaps;
       if (!ymaps || cancelled) return;
 
       ymaps.ready(() => {
         if (cancelled || !mapElementRef.current) return;
-        const map = new ymaps.Map(mapElementRef.current, { center: city_CENTER, zoom: 12 }, { suppressMapOpenBlock: true });
+        const map = new ymaps.Map(mapElementRef.current, { center: [...siteProfile.map.center], zoom: siteProfile.map.catalogZoom }, { suppressMapOpenBlock: true });
+        window.clearTimeout(availabilityTimer);
         mapRef.current = map;
 
         mappableComplexes.forEach((complex) => {
@@ -86,6 +90,7 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
 
     return () => {
       cancelled = true;
+      window.clearTimeout(availabilityTimer);
       mapRef.current?.destroy();
       mapRef.current = null;
     };
@@ -105,10 +110,12 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
       data-testid="new-building-catalog-map"
       data-map-status={status}
       data-map-points={mappableComplexes.length}
+      data-map-review-required={reviewRequiredCount}
       className="mt-5 flex flex-col overflow-hidden rounded-xl border border-[var(--border)] bg-white lg:grid lg:h-[640px] lg:grid-cols-[340px_minmax(0,1fr)]"
     >
       <aside className="order-2 border-t border-[var(--border)] bg-white p-3 lg:order-1 lg:overflow-y-auto lg:border-r lg:border-t-0 lg:p-4">
         <div data-testid="new-building-map-list" className="flex gap-3 overflow-x-auto px-0.5 pb-2 pt-0.5 lg:grid lg:gap-3 lg:overflow-visible">
+          {reviewRequiredCount > 0 ? <p className="sr-only">Объекты без координат требуют ручной проверки: {reviewRequiredCount}</p> : null}
           {complexes.map((complex) => {
             const selected = complex.slug === selectedSlug;
             const mapped = complex.location.latitude !== null && complex.location.longitude !== null;

@@ -36,6 +36,35 @@ export type SiteIdentity = {
   };
 };
 
+export type SiteProfile = SiteIdentity & {
+  logo: {
+    mark: string;
+    wordmark: string | null;
+    favicon: string;
+    socialPreview: string;
+  };
+  seo: {
+    title: string;
+    description: string;
+  };
+  theme: {
+    preset: string;
+    primary: string;
+    primaryHover: string;
+  };
+  map: {
+    provider: "yandex";
+    center: readonly [latitude: number, longitude: number];
+    zoom: number;
+    catalogZoom: number;
+  };
+  features: {
+    catalogMap: boolean;
+    mediaGallery: boolean;
+    requests: boolean;
+  };
+};
+
 export type PublicContactDto = {
   phone: string;
   phoneHref: string;
