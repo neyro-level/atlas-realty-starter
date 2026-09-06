@@ -44,7 +44,7 @@ export function LeadgenConstructionProjectShowcase({
                   {project.buildTime}
                 </span>
                 <span className="rounded-[6px] bg-[#8A1515]/92 px-2.5 py-1.5 text-[11px] font-semibold leading-none text-white shadow-[0_10px_24px_rgba(0,0,0,0.14)] backdrop-blur-sm">
-                  Ваш город
+                  Краснодар
                 </span>
               </div>
             </div>

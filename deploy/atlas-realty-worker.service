@@ -1,0 +1,33 @@
+[Unit]
+Description=Atlas Realty Payload jobs worker
+After=network-online.target atlas-realty.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=atlas-realty
+Group=atlas-realty
+WorkingDirectory=/opt/ams-platform/atlas-realty/current
+Environment=NODE_ENV=production
+Environment=NEXT_TELEMETRY_DISABLED=1
+Environment=NODE_OPTIONS=--conditions=react-server
+Environment=HOME=/opt/ams-platform/atlas-realty/shared/home
+Environment=TMPDIR=/opt/ams-platform/atlas-realty/shared/tmp
+Environment=PATH=/opt/ams-platform/atlas-realty/runtime/bin:/usr/local/bin:/usr/bin:/bin
+EnvironmentFile=/etc/ams-platform/atlas-realty/runtime.env
+EnvironmentFile=/etc/ams-platform/atlas-realty/release.env
+ExecStartPre=/opt/ams-platform/atlas-realty/current/node_modules/.bin/tsx scripts/recover-orphaned-payload-jobs.mts
+ExecStart=/opt/ams-platform/atlas-realty/current/node_modules/.bin/payload jobs:run --cron "* * * * *" --all-queues --handle-schedules
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+KillSignal=SIGTERM
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/opt/ams-platform/atlas-realty/shared
+
+[Install]
+WantedBy=multi-user.target

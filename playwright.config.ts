@@ -11,15 +11,29 @@ const readinessURL = `${baseURL}/healthz`
 const webServerEnv: Record<string, string> = {
   APP_ENV: 'test',
   DATABASE_URL:
-    process.env.DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:5434/soyuz_rostov_dev',
+    process.env.DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:5434/atlas_realty_dev',
   NEXT_PUBLIC_APP_URL: baseURL,
   NEXT_PUBLIC_INDEXABLE: 'false',
-  NEXT_PUBLIC_SITE_URL: baseURL,
+  NEXT_PUBLIC_SITE_URL: isProductionSmoke ? 'https://atlas.e2e.test' : baseURL,
   NODE_ENV: isProductionSmoke ? 'production' : 'development',
   PAYLOAD_SECRET: process.env.PAYLOAD_SECRET || 'foundation-test-secret-please-change',
   PORT: testPort,
   REVALIDATE_SECRET: process.env.REVALIDATE_SECRET || 'e2e-revalidate-secret-value-32chars',
   SITE_ENGINE: process.env.SITE_ENGINE || 'payload',
+}
+
+if (isProductionSmoke) {
+  Object.assign(webServerEnv, {
+    APP_ENV: 'production',
+    AMS_LEADS_API_URL: 'https://leads.e2e.test/v1/leads',
+    AMS_LEADS_PROJECT_ID: 'atlas',
+    AMS_LEADS_SITE_KEY: 'atlas-e2e-site-key',
+    S3_ACCESS_KEY_ID: 'e2e-access',
+    S3_BUCKET: 'e2e-bucket',
+    S3_ENDPOINT: 'https://s3.e2e.test',
+    S3_REGION: 'ru-1',
+    S3_SECRET_ACCESS_KEY: 'e2e-secret',
+  })
 }
 
 export default defineConfig({

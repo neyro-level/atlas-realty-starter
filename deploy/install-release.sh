@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_USER="ams-realty-platform-starter"
-APP_RELEASE_USER="ams-realty-platform-release"
-APP_ROOT="/opt/ams-realty-platform-starter"
-ENV_FILE="/etc/ams-realty-platform-starter/runtime.env"
+APP_USER="atlas-realty"
+APP_RELEASE_USER="atlas-realty-release"
+APP_ROOT="/opt/ams-platform/atlas-realty"
+ENV_FILE="/etc/ams-platform/atlas-realty/runtime.env"
+MIGRATION_ENV_FILE="/etc/ams-platform/atlas-realty/migration.env"
 ARCHIVE="${1:-}"
 RELEASE_SHA="${2:-}"
 EXPECTED_SHA256="${3:-}"
@@ -17,7 +18,7 @@ if [[ ! "${RELEASE_SHA}" =~ ^[0-9a-f]{40}$ || ! "${EXPECTED_SHA256}" =~ ^[0-9a-f
   echo "Usage: install-release.sh <archive> <full-sha> <sha256>" >&2
   exit 1
 fi
-if [[ ! -f "${ARCHIVE}" || ! -f "${ENV_FILE}" ]]; then
+if [[ ! -f "${ARCHIVE}" || ! -f "${ENV_FILE}" || ! -f "${MIGRATION_ENV_FILE}" ]]; then
   echo "Archive or runtime environment is missing." >&2
   exit 1
 fi
@@ -115,20 +116,26 @@ if [[ ! -f "${release_dir}/server.js" || ! -x "${release_dir}/node_modules/.bin/
   exit 1
 fi
 
+set -a
+# shellcheck disable=SC1090
+source "${MIGRATION_ENV_FILE}"
+set +a
+export DATABASE_URL="${MIGRATION_DATABASE_URL:?MIGRATION_DATABASE_URL is required}"
 run_as_app "${release_dir}/node_modules/.bin/payload" migrate
+unset MIGRATION_DATABASE_URL
 
-printf 'RELEASE_SHA=%s\n' "${RELEASE_SHA}" > /etc/ams-realty-platform-starter/release.env
-chmod 0640 /etc/ams-realty-platform-starter/release.env
-chown root:"${APP_USER}" /etc/ams-realty-platform-starter/release.env
+printf 'RELEASE_SHA=%s\n' "${RELEASE_SHA}" > /etc/ams-platform/atlas-realty/release.env
+chmod 0640 /etc/ams-platform/atlas-realty/release.env
+chown root:"${APP_USER}" /etc/ams-platform/atlas-realty/release.env
 
 ln -sfn "${release_dir}" "${APP_ROOT}/current.next"
 mv -Tf "${APP_ROOT}/current.next" "${APP_ROOT}/current"
-systemctl restart ams-realty-platform-starter.service
+systemctl restart atlas-realty.service
 
 for attempt in $(seq 1 30); do
   if curl --fail --silent --show-error --max-time 5 http://127.0.0.1:3010/healthz >/dev/null; then
-    systemctl restart ams-realty-platform-starter-worker.service
-    if systemctl is-active --quiet ams-realty-platform-starter-worker.service; then
+    systemctl restart atlas-realty-worker.service
+    if systemctl is-active --quiet atlas-realty-worker.service; then
       systemctl reload nginx
       keep_release=1
       printf 'release_ok sha=%s previous=%s\n' "${RELEASE_SHA}" "${previous_release:-none}"
@@ -145,14 +152,14 @@ if [[ -n "${previous_release}" && "${previous_release}" == "${APP_ROOT}/releases
     echo "Previous release marker is invalid; rollback refused." >&2
     exit 1
   fi
-  printf 'RELEASE_SHA=%s\n' "${previous_sha}" > /etc/ams-realty-platform-starter/release.env
+  printf 'RELEASE_SHA=%s\n' "${previous_sha}" > /etc/ams-platform/atlas-realty/release.env
   ln -sfn "${previous_release}" "${APP_ROOT}/current.next"
   mv -Tf "${APP_ROOT}/current.next" "${APP_ROOT}/current"
-  systemctl restart ams-realty-platform-starter.service
-  systemctl restart ams-realty-platform-starter-worker.service || true
+  systemctl restart atlas-realty.service
+  systemctl restart atlas-realty-worker.service || true
 else
   rm -f "${APP_ROOT}/current"
-  systemctl stop ams-realty-platform-starter.service ams-realty-platform-starter-worker.service || true
+  systemctl stop atlas-realty.service atlas-realty-worker.service || true
 fi
 
 echo "Release health check failed; previous symlink restored when available." >&2

@@ -118,7 +118,7 @@ export function buildModalTitle(detail: RequestModalDetail, visiblePageTitle = g
   const triggerTitle = detail.title?.replace(/\s+/g, " ").trim() || "";
   const pageContext = normalizeTitleContext(visiblePageTitle);
   if (detail.formType === "home_hero" || /подобрать проверенный объект/i.test(triggerTitle)) {
-    return { kind: "lines", lines: ["Подберём проверенную", "недвижимость", "в вашем городе"] };
+    return { kind: "lines", lines: ["Подберём проверенную", "недвижимость", "в Краснодаре"] };
   }
 
   if (/подобрать проверенный вариант/i.test(triggerTitle) && pageContext) {
@@ -175,26 +175,19 @@ export function RequestModal() {
   const [startedAt, setStartedAt] = useState(() => Date.now());
   const [errors, setErrors] = useState<RequestModalErrors>({});
   const [result, setResult] = useState<CreateLeadActionResult | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [submissionId, setSubmissionId] = useState(() => crypto.randomUUID());
   const [isPending, startTransition] = useTransition();
   const panelRef = useRef<HTMLDivElement | null>(null);
   const phoneRef = useRef<HTMLInputElement | null>(null);
   const lastActiveElementRef = useRef<HTMLElement | null>(null);
-
-  function resetForm() {
-    setName("");
-    setPhone("");
-    setConsent(false);
-    setWebsite("");
-    setStartedAt(Date.now());
-    setErrors({});
-    setResult(null);
-  }
 
   function closeModal() {
     window.__agencyPendingRequestModal = undefined;
     setIsOpen(false);
     setErrors({});
     setResult(null);
+    setSubmitted(false);
   }
 
   useEffect(() => {
@@ -207,6 +200,8 @@ export function RequestModal() {
       setWebsite("");
       setErrors({});
       setResult(null);
+      setSubmitted(false);
+      setSubmissionId(crypto.randomUUID());
       const builtTitle = buildModalTitle(detail);
       setTitleLines(builtTitle.kind === "lines" ? builtTitle.lines : null);
       setTitle(builtTitle.kind === "text" ? builtTitle.value : builtTitle.lines.join(" "));
@@ -283,6 +278,7 @@ export function RequestModal() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (isPending || submitted) return;
 
     const nextErrors: RequestModalErrors = {};
     if (name.trim().length < 2) nextErrors.name = "Введите имя, чтобы мы понимали, как к вам обращаться.";
@@ -309,6 +305,7 @@ export function RequestModal() {
         .join("\n");
 
       const response = await createLeadAction({
+        submissionId,
         propertyId: leadContext.propertyId || null,
         agentId: leadContext.agentId || null,
         sourcePage: pathname || "/",
@@ -332,11 +329,10 @@ export function RequestModal() {
           : undefined,
       });
 
-      setResult(response.ok ? null : response);
-      trackEvent(response.ok ? "lead_submit_success" : "lead_submit_error", { form_type: formType });
+      setResult(response);
+      trackEvent(response.ok ? "lead_submit_success" : "lead_submit_error", { form_type: formType }, { announceLeadSuccess: !response.ok });
       if (response.ok) {
-        resetForm();
-        closeModal();
+        setSubmitted(true);
       }
     });
   }
@@ -359,6 +355,7 @@ export function RequestModal() {
       isPending={isPending}
       errors={errors}
       resultMessage={result && !result.ok ? result.message : null}
+      successMessage={submitted && result?.ok ? result.message : null}
       panelRef={panelRef}
       phoneRef={phoneRef}
       consentContent={<PrivacyConsentText className="request-modal__link" />}

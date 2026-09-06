@@ -35,6 +35,9 @@ const childEnvironment = {
 if (process.argv.includes('--production-migrate')) {
   Object.assign(childEnvironment, {
     APP_ENV: 'production',
+    AMS_LEADS_API_URL: 'https://leads.example.test/v1/leads',
+    AMS_LEADS_PROJECT_ID: 'atlas',
+    AMS_LEADS_SITE_KEY: 'atlas-migration-site-key',
     PAYLOAD_SECRET: 'production-migration-check-secret-32-characters',
     NEXT_PUBLIC_SITE_URL: 'https://example.test',
     S3_ACCESS_KEY_ID: 'migration-check',

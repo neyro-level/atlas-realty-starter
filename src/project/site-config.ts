@@ -1,7 +1,7 @@
 import { siteIdentity } from "@/project/site-identity";
 
 export const siteConfig = {
-  clientSlug: "starter-site",
+  clientSlug: "atlas",
   clientName: siteIdentity.brand,
   clientFullName: siteIdentity.brand,
   legalName: siteIdentity.legal.name ?? "Требует настройки перед публикацией",
@@ -15,7 +15,7 @@ export const siteConfig = {
   defaultDescription: `${siteIdentity.brand}: квартиры, дома, новостройки, участки, коммерческая недвижимость и сопровождение сделки.`,
   logo: "/images/brand/atlas-mark.svg",
   favicon: "/favicon.ico",
-  copyright: `© 2026 ${siteIdentity.brand}. Все права защищены.`,
+  copyright: `© 2026 ${siteIdentity.legal.name ?? siteIdentity.brand}. Все права защищены.`,
   registry: siteIdentity.legal.inn ? `ИНН ${siteIdentity.legal.inn}` : "",
   disclaimer: "Информация на сайте носит справочный характер и не является публичной офертой.",
 } as const;

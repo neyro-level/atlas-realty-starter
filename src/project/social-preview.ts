@@ -2,7 +2,7 @@ export const defaultSocialPreviewPath = "/images/brand/atlas-social-preview.svg"
 
 export const defaultSocialPreview = {
   url: defaultSocialPreviewPath,
-  alt: "АТЛАС — агентство недвижимости в вашем городе",
+  alt: "АТЛАС — агентство недвижимости в Краснодаре",
   width: 1200,
   height: 630,
 } as const;

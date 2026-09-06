@@ -62,12 +62,12 @@ The versioned headless API remains supported for external consumers; “headless
 - Payload Jobs for import, delivery, recovery and PII retention.
 - Optional persistent S3 storage; required by the protected production runtime.
 
-## Client replacement boundary
+## Atlas publication boundary
 
-The committed values `АТЛАС`, `Ваш город` and `starter-site` are deliberate placeholders. Before a concrete clone can be indexed or released, it must define and verify:
+Atlas is the concrete Krasnodar product at `atlas.ams24.ru`. Before enabling indexing it must verify:
 
-- client/legal identity, INN/registration data and current legal texts;
-- production domain, city/region scope, contacts, office data and indexability;
+- the current legal texts and operator details against the AMS policy source;
+- production domain, contacts, office map and indexability;
 - approved navigation, content, media and social links;
 - real feed sources, parser choice, allowlisted outbound hosts and source ownership;
 - lead routing fallback and enabled MAX/email/CRM adapters;
@@ -75,7 +75,7 @@ The committed values `АТЛАС`, `Ваш город` and `starter-site` are de
 - legal basis, consent version and PII retention owner;
 - production database, region, backups, TLS and release identity.
 
-No client identity, production domain, feed URL, delivery credential or secret belongs in this starter repository. The production delivery-channel registry is intentionally empty; only deterministic test adapters exist.
+Credentials, feed URLs and chat identifiers do not belong in Git. The production delivery channel is `ams-leads`; its URL, project key and site key come only from the protected runtime configuration.
 
 ## Optional or configuration-gated features
 
@@ -94,7 +94,7 @@ Lead PII retention default is 365 days and the baseline consent text version is 
 - Backend Standard 2.1 staging validation was completed for historical release `f7835daf1327741f6391627518cc4db31239c156` before the public UI boundary changed.
 - Public UI was later integrated through SourceCraft PR `!51`; the current exact-head live production proof is not recorded in this repository.
 - On 2026-09-06, local PostgreSQL 18.6 accepted all seven committed migrations and the current home page returned HTTP 200 through the Payload-backed `SiteEngine`.
-- The starter remains non-indexable by default and not client-publishable while neutral identity/legal/contact/integration placeholders remain.
+- Atlas remains non-indexable while its catalog contains demonstration data.
 - Before claiming current full-stack production readiness, run the exact-head Merge Gate, package/release flow and live smoke from `OPERATIONS.md` against an isolated client or validation contour.
 
 ## Standard 2.1 status

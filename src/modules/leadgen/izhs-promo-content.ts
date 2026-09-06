@@ -5,16 +5,16 @@ export const izhsPromoContent = {
   ...newBuildingsPromoContent,
   formPrefix: "leadgen_izhs_promo",
   route: "/promo/stroitelstvo-domov",
-  title: "Строительство домов в вашем городе",
+  title: "Строительство домов в Краснодаре",
   description:
-    "Рассчитайте стоимость строительства дома в вашем городе и получите каталог популярных проектов агентства недвижимости.",
+    "Рассчитайте стоимость строительства дома в Краснодаре и получите каталог популярных проектов агентства недвижимости.",
   heroBackgroundImage: "/images/agency-home-houses.jpg",
   hideAfterRequest: true,
   hideBaseSection: true,
   hideBonusSection: true,
   hideStandardExamples: true,
   hero: {
-    eyebrow: "Строительство домов в вашем городе и пригороде",
+    eyebrow: "Строительство домов в Краснодаре и пригороде",
     h1: "Рассчитайте точную стоимость строительства вашего дома за 1 минуту и получите фиксированную смету без скрытых доплат",
     h1Accent: "фиксированную смету без скрытых доплат",
     subtitle:
@@ -24,17 +24,17 @@ export const izhsPromoContent = {
     modalTitle: "Рассчитать стоимость строительства дома",
     modalSubtitle:
       "Оставьте контакты. Специалист агентства недвижимости уточнит параметры дома и подготовит расчет по проверенным проектам.",
-    badge: "Построено в вашем городе, 2024 г.",
+    badge: "Построено в Краснодаре, 2024 г.",
   },
   headerTrust: {
     value: "",
-    label: "Строительство домов в вашем городе",
+    label: "Строительство домов в Краснодаре",
   },
   headerRequest: {
     subtitle:
-      "Оставьте контакты. Специалист перезвонит и поможет рассчитать строительство дома в вашем городе.",
+      "Оставьте контакты. Специалист перезвонит и поможет рассчитать строительство дома в Краснодаре.",
     message:
-      "Клиент просит звонок по расчету строительства дома в вашем городе.",
+      "Клиент просит звонок по расчету строительства дома в Краснодаре.",
   },
   manager: {
     ...newBuildingsPromoContent.manager,
@@ -55,7 +55,7 @@ export const izhsPromoContent = {
       "Специалист агентства недвижимости свяжется с вами в течение 10 минут, уточнит детали и отправит расчет в мессенджер.",
     submitLabel: "Получить расчет",
     formType: "leadgen_izhs_promo_quiz",
-    messageIntro: "Клиент просит расчет стоимости строительства дома в вашем городе.",
+    messageIntro: "Клиент просит расчет стоимости строительства дома в Краснодаре.",
     steps: [
       {
         key: "houseArea",
@@ -73,7 +73,7 @@ export const izhsPromoContent = {
         key: "landPlot",
         label: "Участок",
         question: "У вас уже есть участок?",
-        options: ["Есть в вашем городе", "Есть в пригороде", "Подбираю участок", "Пока участка нет"],
+        options: ["Есть в Краснодаре", "Есть в пригороде", "Подбираю участок", "Пока участка нет"],
       },
       {
         key: "timeline",
@@ -83,7 +83,7 @@ export const izhsPromoContent = {
       },
     ],
   },
-  examplesTitle: "Примеры реализованных\nпроектов в вашем городе",
+  examplesTitle: "Примеры реализованных\nпроектов в Краснодаре",
   constructionExamples: [
     {
       id: "gasoblock-100",
@@ -92,7 +92,7 @@ export const izhsPromoContent = {
       buildTime: "4-5 месяцев",
       priceFrom: "от 5 544 000 ₽",
       image: "/images/construction-projects/project-104-1.jpg",
-      imageAlt: "Проект дома из газоблока в вашем городе",
+      imageAlt: "Проект дома из газоблока в Краснодаре",
     },
     {
       id: "brick-120",
@@ -101,7 +101,7 @@ export const izhsPromoContent = {
       buildTime: "6-8 месяцев",
       priceFrom: "от 6 900 000 ₽",
       image: "/images/construction-projects/project-101-1.jpg",
-      imageAlt: "Кирпичный проект дома в вашем городе",
+      imageAlt: "Кирпичный проект дома в Краснодаре",
     },
     {
       id: "keramoblock-80",
@@ -110,13 +110,13 @@ export const izhsPromoContent = {
       buildTime: "3-4 месяца",
       priceFrom: "от 4 592 000 ₽",
       image: "/images/construction-projects/project-111-1.jpg",
-      imageAlt: "Проект дома из керамоблока в вашем городе",
+      imageAlt: "Проект дома из керамоблока в Краснодаре",
     },
   ],
   finalCta: {
     title: "Пройдите тест за 1 минуту и получите расчет стоимости вашего дома",
     image: "/images/construction-projects/project-101-1.jpg",
-    imageAlt: "Проект дома агентства недвижимости для расчета строительства в вашем городе",
+    imageAlt: "Проект дома агентства недвижимости для расчета строительства в Краснодаре",
     bullets: [
       {
         text: "Это бесплатно и ни к чему вас не обязывает",

@@ -49,7 +49,7 @@ const editorialHubCards: Record<ArticleTopicKey, EditorialHubCard> = {
     href: "/prodazha-nedvizhimosti",
     label: "Открыть маршрут продажи",
   },
-  doma: { title: "Дома в вашем городе: подбор и проверка", text: "Два объекта в одной сделке: дом и земля. Маршрут проверки документов и безопасной покупки.", href: "/doma", label: "Смотреть дома" },
+  doma: { title: "Дома в Краснодаре: подбор и проверка", text: "Два объекта в одной сделке: дом и земля. Маршрут проверки документов и безопасной покупки.", href: "/doma", label: "Смотреть дома" },
   ipoteka: { title: "Ипотечный маршрут", text: "Выбор программы, объекта и условий.", href: "/ipoteka", label: "Открыть ипотечный центр" },
   stroitelstvo: { title: "Строительство дома", text: "Участок, смета и этапы до договора.", href: "/stroitelstvo", label: "Открыть строительство" },
   uchastki: { title: "Участки и земля", text: "Выбор и проверка земли до покупки.", href: "/zemelnye-uchastki", label: "Открыть участки" },
@@ -121,12 +121,12 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
       inlineLinks: [
         { label: "Документы при покупке квартиры", href: "/journal/dokumenty-pri-pokupke-kvartiry", description: "Какие бумаги смотреть, что спрашивать у продавца и как устроена безопасная сделка." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Как агентство проверяет сделки: согласованный стандарт проверки." },
-        { label: "Квартиры в вашем городе", href: "/kvartiry", description: "Витрина проверенных квартир с подбором по бюджету и комнатности." },
+        { label: "Квартиры в Краснодаре", href: "/kvartiry", description: "Витрина проверенных квартир с подбором по бюджету и комнатности." },
       ],
       footerLinks: [
-        { label: "Квартиры в вашем городе", href: "/kvartiry", description: "Подобрать квартиру с проверкой документов через «АТЛАС»." },
+        { label: "Квартиры в Краснодаре", href: "/kvartiry", description: "Подобрать квартиру с проверкой документов через «АТЛАС»." },
         { label: "Документы при покупке квартиры", href: "/journal/dokumenty-pri-pokupke-kvartiry", description: "Полный список документов, которые нужно проверить до аванса." },
-        { label: "Юрист по недвижимости в вашем городе", href: "/yurist", description: "Проверка документов, собственников, обременений и рисков до аванса." },
+        { label: "Юрист по недвижимости в Краснодаре", href: "/yurist", description: "Проверка документов, собственников, обременений и рисков до аванса." },
       ],
     },
     "dokumenty-pri-pokupke-kvartiry": {
@@ -134,12 +134,12 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
       inlineLinks: [
         { label: "Как проверить квартиру перед покупкой", href: "/journal/kak-proverit-kvartiru-pered-pokupkoy", description: "Чек-лист проверки квартиры: с чего начинать и что смотреть до показа." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Стандарт проверки: документы, собственники, история объекта и безопасный расчёт." },
-        { label: "Ипотека в вашем городе", href: "/ipoteka", description: "Программы, платёж, банки и помощь с одобрением." },
+        { label: "Ипотека в Краснодаре", href: "/ipoteka", description: "Программы, платёж, банки и помощь с одобрением." },
       ],
       footerLinks: [
-        { label: "Квартиры в вашем городе", href: "/kvartiry", description: "Проверенные квартиры с маршрутом сделки от агентства недвижимости." },
+        { label: "Квартиры в Краснодаре", href: "/kvartiry", description: "Проверенные квартиры с маршрутом сделки от агентства недвижимости." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Как устроена юридическая проверка сделки." },
-        { label: "Юрист по недвижимости в вашем городе", href: "/yurist", description: "Юридическая помощь с документами, регистрацией права и сопровождением сделки." },
+        { label: "Юрист по недвижимости в Краснодаре", href: "/yurist", description: "Юридическая помощь с документами, регистрацией права и сопровождением сделки." },
       ],
     },
     "kak-my-pomogaem-kupit-kvartiru": {
@@ -153,13 +153,13 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
         href: "/kvartiry",
       },
       inlineLinks: [
-        { label: "Квартиры в вашем городе", href: "/kvartiry", description: "Витрина проверенных квартир с подбором по бюджету и комнатности." },
+        { label: "Квартиры в Краснодаре", href: "/kvartiry", description: "Витрина проверенных квартир с подбором по бюджету и комнатности." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Как агентство проверяет сделки: согласованный стандарт проверки." },
-        { label: "Ипотека в вашем городе", href: "/ipoteka", description: "Программы, платёж, банки и помощь с одобрением." },
+        { label: "Ипотека в Краснодаре", href: "/ipoteka", description: "Программы, платёж, банки и помощь с одобрением." },
       ],
       footerLinks: [
-        { label: "Квартиры в вашем городе", href: "/kvartiry", description: "Подобрать квартиру с проверкой документов через «АТЛАС»." },
-        { label: "Новостройки вашего города", href: "/novostroyki", description: "ЖК, цены, ипотека по актуальным программам и квартиры в строящихся домах." },
+        { label: "Квартиры в Краснодаре", href: "/kvartiry", description: "Подобрать квартиру с проверкой документов через «АТЛАС»." },
+        { label: "Новостройки Краснодара", href: "/novostroyki", description: "ЖК, цены, ипотека по актуальным программам и квартиры в строящихся домах." },
         { label: "Юрист по недвижимости", href: "/yurist", description: "Наследство, перепланировки и сопровождение сделок." },
       ],
     },
@@ -168,12 +168,12 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
       inlineLinks: [
         { label: "Как выбрать участок под строительство", href: "/journal/kak-vybrat-uchastok-pod-stroitelstvo", description: "Назначение земли, границы, подъезд и документы, которые нужно проверить до покупки." },
         { label: "Смета на строительство дома", href: "/journal/smeta-na-stroitelstvo-doma", description: "Что смотреть в смете, как она должна быть структурирована и на что не соглашаться." },
-        { label: "Строительство домов в вашем городе", href: "/stroitelstvo", description: "Строительство под ключ с льготной льготная ипотека." },
+        { label: "Строительство домов в Краснодаре", href: "/stroitelstvo", description: "Строительство под ключ с льготной льготная ипотека." },
       ],
       footerLinks: [
-        { label: "Строительство домов в вашем городе", href: "/stroitelstvo", description: "Построить дом под ключ под льготную ипотеку." },
-        { label: "Земельные участки в вашем городе", href: "/zemelnye-uchastki", description: "Подобрать участок под строительство с проверкой документов." },
-        { label: "Ипотека в вашем городе", href: "/ipoteka", description: "Ипотека на строительство дома: программы и расчёт платежа." },
+        { label: "Строительство домов в Краснодаре", href: "/stroitelstvo", description: "Построить дом под ключ под льготную ипотеку." },
+        { label: "Земельные участки в Краснодаре", href: "/zemelnye-uchastki", description: "Подобрать участок под строительство с проверкой документов." },
+        { label: "Ипотека в Краснодаре", href: "/ipoteka", description: "Ипотека на строительство дома: программы и расчёт платежа." },
       ],
     },
     "smeta-na-stroitelstvo-doma": {
@@ -181,11 +181,11 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
       inlineLinks: [
         { label: "Этапы строительства частного дома", href: "/journal/etapy-stroitelstva-doma", description: "Что происходит от первого колышка до приёмки и как контролировать подрядчика." },
         { label: "Как выбрать участок для строительства", href: "/journal/kak-vybrat-uchastok-pod-stroitelstvo", description: "Семь проверок, которые нужно пройти до покупки земли под стройку." },
-        { label: "Строительство домов в вашем городе", href: "/stroitelstvo", description: "Строительство под ключ с сопровождением от агентства недвижимости." },
+        { label: "Строительство домов в Краснодаре", href: "/stroitelstvo", description: "Строительство под ключ с сопровождением от агентства недвижимости." },
       ],
       footerLinks: [
-        { label: "Строительство домов в вашем городе", href: "/stroitelstvo", description: "Дом под ключ от участка до ввода в эксплуатацию." },
-        { label: "Земельные участки в вашем городе", href: "/zemelnye-uchastki", description: "Участки под строительство: каталог и проверка документов." },
+        { label: "Строительство домов в Краснодаре", href: "/stroitelstvo", description: "Дом под ключ от участка до ввода в эксплуатацию." },
+        { label: "Земельные участки в Краснодаре", href: "/zemelnye-uchastki", description: "Участки под строительство: каталог и проверка документов." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Проверка договора с подрядчиком и сделки с землёй." },
       ],
     },
@@ -193,13 +193,13 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
       topic: "ipoteka", topicLabel: "Ипотека", href: "/ipoteka", cta: topicCta.ipoteka,
       inlineLinks: [
         { label: "Как выбрать квартиру в ипотеку", href: "/journal/kak-vybrat-kvartiru-v-ipoteku", description: "7 критериев, по которым банк одобрит объект и не откажет перед сделкой." },
-        { label: "Новостройки вашего города под актуальную ипотечную программу", href: "/novostroyki", description: "ЖК, которые подходят под льготную ипотечную программу." },
-        { label: "Ипотека в вашем городе", href: "/ipoteka", description: "Ипотечный центр агентства недвижимости: программы, банки и помощь с одобрением." },
+        { label: "Новостройки Краснодара под актуальную ипотечную программу", href: "/novostroyki", description: "ЖК, которые подходят под льготную ипотечную программу." },
+        { label: "Ипотека в Краснодаре", href: "/ipoteka", description: "Ипотечный центр агентства недвижимости: программы, банки и помощь с одобрением." },
       ],
       footerLinks: [
-        { label: "Ипотека в вашем городе", href: "/ipoteka", description: "Программы, платёж и сопровождение ипотечной сделки." },
-        { label: "Новостройки вашего города", href: "/novostroyki", description: "ЖК под актуальную ипотечную программу: цены, сроки, планировки." },
-        { label: "Квартиры в вашем городе", href: "/kvartiry", description: "Готовые квартиры под ипотеку на вторичном рынке." },
+        { label: "Ипотека в Краснодаре", href: "/ipoteka", description: "Программы, платёж и сопровождение ипотечной сделки." },
+        { label: "Новостройки Краснодара", href: "/novostroyki", description: "ЖК под актуальную ипотечную программу: цены, сроки, планировки." },
+        { label: "Квартиры в Краснодаре", href: "/kvartiry", description: "Готовые квартиры под ипотеку на вторичном рынке." },
       ],
     },
     "kak-vybrat-kvartiru-v-ipoteku": {
@@ -207,11 +207,11 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
       inlineLinks: [
         { label: "Как выбрать ипотеку для покупки жилья", href: "/journal/kak-vybrat-ipoteku", description: "Программы, банки, первый взнос и условия, на которые стоит обращать внимание." },
         { label: "Как проверить квартиру перед покупкой", href: "/journal/kak-proverit-kvartiru-pered-pokupkoy", description: "Проверка документов, собственника и рисков объекта до аванса." },
-        { label: "Ипотека в вашем городе", href: "/ipoteka", description: "Программы для вторичного жилья, новостроек, домов и строительства." },
+        { label: "Ипотека в Краснодаре", href: "/ipoteka", description: "Программы для вторичного жилья, новостроек, домов и строительства." },
       ],
       footerLinks: [
-        { label: "Ипотека в вашем городе", href: "/ipoteka", description: "Разобраться с программой, платежом и банком." },
-        { label: "Квартиры в вашем городе", href: "/kvartiry", description: "Квартиры, которые подходят под ипотеку." },
+        { label: "Ипотека в Краснодаре", href: "/ipoteka", description: "Разобраться с программой, платежом и банком." },
+        { label: "Квартиры в Краснодаре", href: "/kvartiry", description: "Квартиры, которые подходят под ипотеку." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Проверка объекта и сделки до выдачи кредита." },
       ],
     },
@@ -220,11 +220,11 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
       inlineLinks: [
         { label: "Как проверить земельный участок перед покупкой", href: "/journal/kak-proverit-zemelnyy-uchastok", description: "Чек-лист: права, границы, назначение, ограничения и что уточнить до аванса." },
         { label: "Этапы строительства частного дома", href: "/journal/etapy-stroitelstva-doma", description: "Что будет после покупки участка: порядок строительства и контроль работ." },
-        { label: "Земельные участки в вашем городе", href: "/zemelnye-uchastki", description: "Каталог участков под строительство с проверкой документов." },
+        { label: "Земельные участки в Краснодаре", href: "/zemelnye-uchastki", description: "Каталог участков под строительство с проверкой документов." },
       ],
       footerLinks: [
-        { label: "Земельные участки в вашем городе", href: "/zemelnye-uchastki", description: "Подобрать участок под строительство или дачу." },
-        { label: "Строительство домов в вашем городе", href: "/stroitelstvo", description: "Что будет после покупки участка: дом под ключ." },
+        { label: "Земельные участки в Краснодаре", href: "/zemelnye-uchastki", description: "Подобрать участок под строительство или дачу." },
+        { label: "Строительство домов в Краснодаре", href: "/stroitelstvo", description: "Что будет после покупки участка: дом под ключ." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Проверка документов на землю и сделки с участком." },
       ],
     },
@@ -233,12 +233,12 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
       inlineLinks: [
         { label: "Как выбрать участок для строительства дома", href: "/journal/kak-vybrat-uchastok-pod-stroitelstvo", description: "Семь проверок, которые нужно пройти до того, как подписать договор." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Как «АТЛАС» проверяет сделки с землёй и что входит в стандарт." },
-        { label: "Земельные участки в вашем городе", href: "/zemelnye-uchastki", description: "Каталог участков и помощь с проверкой документов на землю." },
+        { label: "Земельные участки в Краснодаре", href: "/zemelnye-uchastki", description: "Каталог участков и помощь с проверкой документов на землю." },
       ],
       footerLinks: [
-        { label: "Земельные участки в вашем городе", href: "/zemelnye-uchastki", description: "Проверенные участки с маршрутом сделки от агентства недвижимости." },
-        { label: "Строительство домов в вашем городе", href: "/stroitelstvo", description: "Построить дом на выбранном участке." },
-        { label: "Юрист по земельным вопросам в вашем городе", href: "/yurist", description: "Межевание, приватизация участка, ошибки в документах на землю." },
+        { label: "Земельные участки в Краснодаре", href: "/zemelnye-uchastki", description: "Проверенные участки с маршрутом сделки от агентства недвижимости." },
+        { label: "Строительство домов в Краснодаре", href: "/stroitelstvo", description: "Построить дом на выбранном участке." },
+        { label: "Юрист по земельным вопросам в Краснодаре", href: "/yurist", description: "Межевание, приватизация участка, ошибки в документах на землю." },
       ],
     },
     "kak-vybrat-novostroyku": {
@@ -246,24 +246,24 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
       inlineLinks: [
         { label: "Как выбрать квартиру в новостройке", href: "/journal/kak-vybrat-kvartiru-v-novostroyke", description: "Планировка, этаж, инфраструктура и документы, которые нужно запросить у застройщика." },
         { label: "Как выбрать ипотеку для покупки жилья", href: "/journal/kak-vybrat-ipoteku", description: "Как устроена ипотека по актуальным программам и что нужно проверить до одобрения." },
-        { label: "Новостройки вашего города", href: "/novostroyki", description: "Актуальные ЖК: цены, сроки, планировки и ипотека по актуальным программам." },
+        { label: "Новостройки Краснодара", href: "/novostroyki", description: "Актуальные ЖК: цены, сроки, планировки и ипотека по актуальным программам." },
       ],
       footerLinks: [
-        { label: "Новостройки вашего города", href: "/novostroyki", description: "Все ЖК вашего города: цены, сроки сдачи, ипотека по актуальным программам." },
-        { label: "Ипотека в вашем городе", href: "/ipoteka", description: "Разобраться с ипотечными программами для новостройки." },
-        { label: "Квартиры в вашем городе", href: "/kvartiry", description: "Готовые квартиры — как альтернатива новостройке." },
+        { label: "Новостройки Краснодара", href: "/novostroyki", description: "Все ЖК Краснодара: цены, сроки сдачи, ипотека по актуальным программам." },
+        { label: "Ипотека в Краснодаре", href: "/ipoteka", description: "Разобраться с ипотечными программами для новостройки." },
+        { label: "Квартиры в Краснодаре", href: "/kvartiry", description: "Готовые квартиры — как альтернатива новостройке." },
       ],
     },
     "kak-vybrat-kvartiru-v-novostroyke": {
       topic: "novostroyki", topicLabel: "Новостройки", href: "/novostroyki", cta: topicCta.novostroyki,
       inlineLinks: [
-        { label: "Как выбрать новостройку в вашем городе", href: "/journal/kak-vybrat-novostroyku", description: "С чего начать: район, застройщик, срок и ипотечный сценарий." },
+        { label: "Как выбрать новостройку в Краснодаре", href: "/journal/kak-vybrat-novostroyku", description: "С чего начать: район, застройщик, срок и ипотечный сценарий." },
         { label: "Как выбрать ипотеку для покупки жилья", href: "/journal/kak-vybrat-ipoteku", description: "Ипотека по актуальным программам, условия банков и что проверить до одобрения." },
-        { label: "Новостройки вашего города", href: "/novostroyki", description: "Актуальные ЖК с ценами, сроками и ипотекой." },
+        { label: "Новостройки Краснодара", href: "/novostroyki", description: "Актуальные ЖК с ценами, сроками и ипотекой." },
       ],
       footerLinks: [
-        { label: "Новостройки вашего города", href: "/novostroyki", description: "ЖК, квартиры и ипотека по актуальным программам от агентства недвижимости." },
-        { label: "Ипотека в вашем городе", href: "/ipoteka", description: "Ипотека на новостройку: программы и одобрение." },
+        { label: "Новостройки Краснодара", href: "/novostroyki", description: "ЖК, квартиры и ипотека по актуальным программам от агентства недвижимости." },
+        { label: "Ипотека в Краснодаре", href: "/ipoteka", description: "Ипотека на новостройку: программы и одобрение." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Проверка договора с застройщиком и сделки." },
       ],
     },
@@ -273,10 +273,10 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
       inlineLinks: [
         { label: "Документы при покупке дома и земли", href: "/journal/dokumenty-pri-pokupke-doma", description: "Полный список документов на строение и участок: что проверить до аванса." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Как «АТЛАС» проверяет сделки с домами: согласованный стандарт проверки." },
-        { label: "Дома в вашем городе", href: "/doma", description: "Каталог домов с проверкой документов через «АТЛАС»." },
+        { label: "Дома в Краснодаре", href: "/doma", description: "Каталог домов с проверкой документов через «АТЛАС»." },
       ],
       footerLinks: [
-        { label: "Дома в вашем городе", href: "/doma", description: "Подобрать дом с проверкой документов." },
+        { label: "Дома в Краснодаре", href: "/doma", description: "Подобрать дом с проверкой документов." },
         { label: "Документы при покупке дома", href: "/journal/dokumenty-pri-pokupke-doma", description: "Два пакета документов: на дом и на землю под ним." },
         { label: "Юрист по земельным вопросам", href: "/yurist", description: "Когда нужна юридическая помощь с документами на дом и участок." },
       ],
@@ -289,20 +289,20 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
         { label: "Юрист по земельным вопросам", href: "/yurist", description: "Межевание, приватизация, ошибки в документах на землю." },
       ],
       footerLinks: [
-        { label: "Дома в вашем городе", href: "/doma", description: "Проверенные дома с маршрутом сделки." },
+        { label: "Дома в Краснодаре", href: "/doma", description: "Проверенные дома с маршрутом сделки." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Юридическая проверка дома, земли и сделки." },
-        { label: "Земельные участки в вашем городе", href: "/zemelnye-uchastki", description: "Участки под строительство, если рассматриваете стройку вместо покупки." },
+        { label: "Земельные участки в Краснодаре", href: "/zemelnye-uchastki", description: "Участки под строительство, если рассматриваете стройку вместо покупки." },
       ],
     },
     "kak-prodat-kvartiru-v-gorode": {
       topic: "selling", topicLabel: "Продажа", href: "/prodazha-nedvizhimosti", cta: topicCta.selling,
       inlineLinks: [
-        { label: "Продажа недвижимости в вашем городе", href: "/prodazha-nedvizhimosti", description: "Управляемый маршрут продажи от оценки до сделки." },
+        { label: "Продажа недвижимости в Краснодаре", href: "/prodazha-nedvizhimosti", description: "Управляемый маршрут продажи от оценки до сделки." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Проверка документов и безопасные расчёты для продавца." },
-        { label: "Юрист по недвижимости в вашем городе", href: "/yurist", description: "Когда при продаже нужна юридическая помощь." },
+        { label: "Юрист по недвижимости в Краснодаре", href: "/yurist", description: "Когда при продаже нужна юридическая помощь." },
       ],
       footerLinks: [
-        { label: "Продажа недвижимости в вашем городе", href: "/prodazha-nedvizhimosti", description: "Продать квартиру, дом или участок через «АТЛАС»." },
+        { label: "Продажа недвижимости в Краснодаре", href: "/prodazha-nedvizhimosti", description: "Продать квартиру, дом или участок через «АТЛАС»." },
         { label: "Безопасная сделка", href: "/bezopasnaya-sdelka", description: "Безопасный расчёт и проверка покупателя." },
         { label: "Отзывы клиентов агентства недвижимости", href: "/otzyvy", description: "Реальные истории о продаже и покупке недвижимости." },
       ],
@@ -315,13 +315,13 @@ function getJournalMeta(slug: string): ArticleEditorialMeta | null {
         href: "/ipoteka",
       },
       inlineLinks: [
-        { label: "Как выбрать новостройку в вашем городе", href: "/journal/kak-vybrat-novostroyku", description: "ЖК, застройщики, сроки и ипотечные сценарии." },
+        { label: "Как выбрать новостройку в Краснодаре", href: "/journal/kak-vybrat-novostroyku", description: "ЖК, застройщики, сроки и ипотечные сценарии." },
         { label: "Как выбрать квартиру в новостройке", href: "/journal/kak-vybrat-kvartiru-v-novostroyke", description: "Планировка, этаж, инфраструктура и документы от застройщика." },
-        { label: "Новостройки вашего города под актуальную ипотечную программу", href: "/novostroyki", description: "Актуальные ЖК, цены и условия ипотечной программы." },
+        { label: "Новостройки Краснодара под актуальную ипотечную программу", href: "/novostroyki", description: "Актуальные ЖК, цены и условия ипотечной программы." },
       ],
       footerLinks: [
-        { label: "Ипотека в вашем городе", href: "/ipoteka", description: "Условия программ, расчёт платежа и помощь с одобрением." },
-        { label: "Новостройки вашего города", href: "/novostroyki", description: "ЖК под ипотеку: цены, сроки, планировки." },
+        { label: "Ипотека в Краснодаре", href: "/ipoteka", description: "Условия программ, расчёт платежа и помощь с одобрением." },
+        { label: "Новостройки Краснодара", href: "/novostroyki", description: "ЖК под ипотеку: цены, сроки, планировки." },
         { label: "Как выбрать ипотеку", href: "/journal/kak-vybrat-ipoteku", description: "Как сравнить программу, банк, первый взнос и ежемесячный платёж." },
       ],
     },

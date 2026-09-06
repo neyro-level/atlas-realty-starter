@@ -178,7 +178,7 @@ export function PropertyGalleryView({
         {activeTab === "map" ? (
           <div className="relative h-full w-full">
             <iframe
-              src={`https://yandex.ru/map-widget/v1/?text=${encodeURIComponent(`Ваш город, ${address}`)}&z=16`}
+              src={`https://yandex.ru/map-widget/v1/?text=${encodeURIComponent(`Краснодар, ${address}`)}&z=16`}
               title={`Расположение: ${address}`}
               allowFullScreen
               className="h-full w-full border-0"

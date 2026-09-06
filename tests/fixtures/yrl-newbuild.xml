@@ -5,7 +5,7 @@
     <type>продажа</type><category>квартира</category><name>Квартира в новом ЖК</name>
     <price><value>9000000</value><currency>RUR</currency></price>
     <area><value>60</value><unit>кв. м</unit></area>
-    <location><address>Ростов-на-Дону, Новый бульвар, 1</address></location>
+    <location><address>Краснодар, Новый бульвар, 1</address></location>
     <yandex-building-id>yb-1</yandex-building-id><yandex-house-id>yh-1</yandex-house-id>
     <complex-name>Новый ЖК</complex-name><building-name>Корпус 1</building-name>
     <developer><name>Надёжный застройщик</name></developer><building-state>construction</building-state>

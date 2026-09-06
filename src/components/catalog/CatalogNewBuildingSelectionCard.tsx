@@ -19,7 +19,7 @@ export function CatalogNewBuildingSelectionCard({
     window.dispatchEvent(new CustomEvent("open-request-modal", {
       detail: {
         title: "Узнать свои варианты",
-        subtitle: "Оставьте контакты. Специалист агентства недвижимости сравнит условия застройщиков и подберет подходящие новостройки в вашем городе.",
+        subtitle: "Оставьте контакты. Специалист агентства недвижимости сравнит условия застройщиков и подберет подходящие новостройки в Краснодаре.",
         source: variant === "list" ? `${source}:list` : source,
         formType,
       },

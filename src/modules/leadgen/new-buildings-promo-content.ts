@@ -4,14 +4,14 @@ export const newBuildingsPromoContent = {
   ...kvartiryPromoContent,
   formPrefix: "leadgen_new_buildings_promo",
   route: "/promo/novostroyki",
-  title: "Новостройки вашего города",
+  title: "Новостройки Краснодара",
   description:
-    "Оставьте заявку и получите подборку новостроек вашего города от специалистов агентства недвижимости.",
+    "Оставьте заявку и получите подборку новостроек Краснодара от специалистов агентства недвижимости.",
   heroBackgroundImage: "/images/leadgen/zhk-tsentralnyy-city-hero.jpg",
   hideBonusSection: true,
   hideStandardExamples: true,
   hero: {
-    eyebrow: "Новостройки вашего города с понятным подбором",
+    eyebrow: "Новостройки Краснодара с понятным подбором",
     h1: "Ответьте на несколько вопросов — подберём новостройку и подходящий ипотечный сценарий",
     h1Accent: "подходящий ипотечный сценарий",
     subtitle: "",
@@ -53,11 +53,11 @@ export const newBuildingsPromoContent = {
     subtitle:
       "Оставьте контакты. Специалист перезвонит и уточнит задачу по подбору новостройки.",
     message:
-      "Клиент просит звонок по подбору новостроек в вашем городе.",
+      "Клиент просит звонок по подбору новостроек в Краснодаре.",
   },
   mobileMenuText: "Ответьте на 4 вопроса — подготовим подходящие варианты новостроек под ваш бюджет.",
   quiz: {
-    title: "Подбор новостройки в вашем городе",
+    title: "Подбор новостройки в Краснодаре",
     expertText:
       "Ответьте на 4 вопроса — я уточню ваши параметры и подготовлю подходящие варианты.",
     expertNote:
@@ -71,7 +71,7 @@ export const newBuildingsPromoContent = {
     submitLabel: "Получить подборку",
     loadingLabel: "Отправляем...",
     formType: "leadgen_new_buildings_promo_quiz",
-    messageIntro: "Клиент просит подобрать новостройку в вашем городе.",
+    messageIntro: "Клиент просит подобрать новостройку в Краснодаре.",
     errors: {
       noAnswer: "Выберите один из вариантов.",
       name: "Введите имя.",
@@ -146,7 +146,7 @@ export const newBuildingsPromoContent = {
     ],
     microtext: "Бесплатно для вас — услуги оплачивает застройщик.",
     cta: "Пройти тест и получить подборку",
-    modalTitle: "Подбор новостройки в вашем городе",
+    modalTitle: "Подбор новостройки в Краснодаре",
     formType: "leadgen_new_buildings_promo_final_quiz",
     source: "leadgen_yandex_direct",
   },

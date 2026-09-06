@@ -1,5 +1,5 @@
 import type { RequestAvatarDto } from "@starter/site-contracts";
-import { X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import type { FormEvent, ReactNode, RefObject } from "react";
 import type { SiteImageRenderer } from "../lib/adapters";
 
@@ -22,6 +22,7 @@ type RequestModalViewProps = {
     consent?: string;
   };
   resultMessage?: string | null;
+  successMessage?: string | null;
   panelRef?: RefObject<HTMLDivElement | null>;
   phoneRef?: RefObject<HTMLInputElement | null>;
   phonePlaceholder?: string;
@@ -49,6 +50,7 @@ export function RequestModalView({
   isPending,
   errors,
   resultMessage,
+  successMessage,
   panelRef,
   phoneRef,
   phonePlaceholder = "+7 (___) ___-__-__",
@@ -73,6 +75,14 @@ export function RequestModalView({
           <X className="size-5" aria-hidden />
         </button>
 
+        {successMessage ? (
+          <div className="request-modal__success" role="status" aria-live="polite">
+            <span className="request-modal__success-icon"><Check className="size-8" aria-hidden /></span>
+            <h2 className="request-modal__title" id="request-modal-title">Заявка отправлена</h2>
+            <p className="request-modal__subtitle">{successMessage}</p>
+            <button className="home-btn-primary request-modal__submit" type="button" onClick={onClose}>Хорошо</button>
+          </div>
+        ) : <>
         <div className="request-modal__header">
           <div className="request-modal__visual" aria-hidden>
             <div className="request-modal__avatar-stack">
@@ -164,6 +174,7 @@ export function RequestModalView({
           </button>
           <p className="request-modal__note">Без спама. Только чтобы связаться по вашей задаче.</p>
         </form>
+        </>}
       </div>
     </div>
   );

@@ -18,14 +18,14 @@ const tenantSchema = z.object({
 export type TenantConfig = z.infer<typeof tenantSchema>;
 
 export const tenant = tenantSchema.parse({
-  slug: "starter-site",
+  slug: "atlas",
   brand: siteIdentity.brand,
   appName: siteIdentity.projectName,
   cityRu: siteIdentity.city.nominative,
   cityRuLocative: siteIdentity.city.prepositional,
   cityEn: siteIdentity.city.slug,
   siteDomain: new URL(siteIdentity.domain).host,
-  feedSlug: "starter-primary-yrl",
+  feedSlug: "atlas-primary-yrl",
   feedTitle: "Основной XML-фид",
   cityScope: [siteIdentity.city.slug],
   cityScopeLocalities: [],

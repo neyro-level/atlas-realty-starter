@@ -28,7 +28,7 @@ export async function createLeadAction(data: LeadFormData): Promise<CreateLeadAc
       email: parsed.data.email || undefined,
       formStartedAt: new Date(startedAt).toISOString(),
       formType: propertyId ? "property" : "general",
-      idempotencyKey: randomUUID(),
+      idempotencyKey: parsed.data.submissionId ?? randomUUID(),
       message: parsed.data.message || undefined,
       name: parsed.data.name || undefined,
       phone: parsed.data.phone,

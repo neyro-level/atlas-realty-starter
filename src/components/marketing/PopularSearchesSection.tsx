@@ -38,9 +38,9 @@ export const popularSearchGroups: PopularSearchGroup[] = [
       catalogLink("Квартиры на улице Оборонной", "/kvartiry", { category: "flat", q: "Оборонная" }),
       catalogLink("Квартиры на Советской", "/kvartiry", { category: "flat", q: "Советская" }),
       catalogLink("Квартиры на 16-й Линии", "/kvartiry", { category: "flat", q: "16-я Линия" }),
-      catalogLink("Квартиры на улице 50-летия Обороны вашего города", "/kvartiry", {
+      catalogLink("Квартиры на улице 50-летия Обороны Краснодара", "/kvartiry", {
         category: "flat",
-        q: "50-летия Обороны вашего города",
+        q: "50-летия Обороны Краснодара",
       }),
     ],
   },
@@ -58,10 +58,10 @@ export const popularSearchGroups: PopularSearchGroup[] = [
     kicker: "04",
     title: "По сценарию покупки",
     links: [
-      { label: "Купить квартиру в вашем городе", href: "/kvartiry" },
-      { label: "Купить дом в вашем городе", href: "/doma" },
-      { label: "Новостройки вашего города", href: "/novostroyki" },
-      { label: "Ипотека в вашем городе", href: "/ipoteka" },
+      { label: "Купить квартиру в Краснодаре", href: "/kvartiry" },
+      { label: "Купить дом в Краснодаре", href: "/doma" },
+      { label: "Новостройки Краснодара", href: "/novostroyki" },
+      { label: "Ипотека в Краснодаре", href: "/ipoteka" },
     ],
   },
 ];

@@ -14,6 +14,9 @@ type S3RuntimeConfig = {
 
 const environmentSchema = z.object({
   APP_ENV: z.enum(['development', 'local', 'production', 'staging', 'test']).optional(),
+  AMS_LEADS_API_URL: z.string().optional(),
+  AMS_LEADS_PROJECT_ID: z.string().optional(),
+  AMS_LEADS_SITE_KEY: z.string().optional(),
   DATABASE_POOL_MAX: z.string().optional(),
   DATABASE_URL: z.string().optional(),
   EXTERNAL_IMAGE_HOSTS: z.string().optional(),
@@ -48,6 +51,7 @@ export function buildRuntimeConfig(input: EnvironmentSource) {
   const siteURL = readSiteURL(env.NEXT_PUBLIC_SITE_URL, protectedRuntime)
 
   return {
+    amsLeads: readAmsLeadsConfig(env, protectedRuntime),
     databasePoolMax: readDatabasePoolMax(env.DATABASE_POOL_MAX, environment),
     databaseURL: requireRuntimeValue('DATABASE_URL', env.DATABASE_URL, protectedRuntime),
     environment,
@@ -63,6 +67,21 @@ export function buildRuntimeConfig(input: EnvironmentSource) {
     siteEngine: env.SITE_ENGINE ?? 'payload',
     siteURL,
   }
+}
+
+function readAmsLeadsConfig(env: z.infer<typeof environmentSchema>, required: boolean) {
+  const apiURL = requireRuntimeValue('AMS_LEADS_API_URL', env.AMS_LEADS_API_URL, required)
+  const projectId = requireRuntimeValue('AMS_LEADS_PROJECT_ID', env.AMS_LEADS_PROJECT_ID, required)
+  const siteKey = requireRuntimeValue('AMS_LEADS_SITE_KEY', env.AMS_LEADS_SITE_KEY, required)
+  if (!apiURL && !projectId && !siteKey) return null
+  if (!apiURL || !projectId || !siteKey) throw new Error('AMS Leads configuration is incomplete')
+  const parsedURL = z.url().parse(apiURL)
+  if (required && !parsedURL.startsWith('https://') && !parsedURL.startsWith('http://127.0.0.1:')) {
+    throw new Error('AMS_LEADS_API_URL must use HTTPS or localhost')
+  }
+  if (!/^[a-z0-9-]{2,64}$/.test(projectId)) throw new Error('AMS_LEADS_PROJECT_ID has invalid format')
+  if (siteKey.length < 12) throw new Error('AMS_LEADS_SITE_KEY must contain at least 12 characters')
+  return { apiURL: parsedURL.replace(/\/$/, ''), projectId, siteKey }
 }
 
 export const runtimeConfig = buildRuntimeConfig(process.env)

@@ -1,8 +1,8 @@
 {
-  "name": "ams-realty-platform-starter",
+  "name": "atlas-realty-starter",
   "version": "1.0.0",
   "private": true,
-  "description": "Starter engine for AMS realty platform on Next.js 16 and Payload CMS 3",
+  "description": "Atlas demo real-estate product for Krasnodar on Next.js and Payload CMS",
   "license": "MIT",
   "packageManager": "pnpm@11.24.0",
   "type": "module",
@@ -29,6 +29,7 @@
     "jobs:run:all": "cross-env NODE_OPTIONS=--no-deprecation payload jobs:run --cron \"* * * * *\" --all-queues --handle-schedules",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "owner:bootstrap": "cross-env NODE_OPTIONS=\"--conditions=react-server --no-deprecation\" tsx scripts/bootstrap-owner.mts",
+    "atlas:bootstrap": "cross-env NODE_OPTIONS=\"--conditions=react-server --no-deprecation\" tsx scripts/bootstrap-atlas-demo.mts",
     "release:pack": "node scripts/build-release-artifact.mjs",
     "start": "cross-env NODE_OPTIONS=--no-deprecation HOSTNAME=127.0.0.1 node .next/standalone/server.js",
     "test": "pnpm run test:int && pnpm run test:e2e",

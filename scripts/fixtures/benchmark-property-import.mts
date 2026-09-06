@@ -24,7 +24,7 @@ for (let offset = 0; offset < 50_000; offset += 500) {
       externalId: `benchmark-${sequence}`,
       market: 'secondary', category: 'apartment', dealType: 'sale', dealStatus: 'available',
       title: `Benchmark property ${sequence}`, priceMinorUnits: 500_000_000 + sequence, currency: 'RUB', totalAreaCm2: 5_000_000 + sequence,
-      address: { format: 'structured', addressPublic: `Ростов-на-Дону, Тестовая, ${sequence}`, localityName: 'Ростов-на-Дону', street: 'Тестовая', houseNumber: String(sequence) },
+      address: { format: 'structured', addressPublic: `Краснодар, Тестовая, ${sequence}`, localityName: 'Краснодар', street: 'Тестовая', houseNumber: String(sequence) },
       photos: [],
     }
   })

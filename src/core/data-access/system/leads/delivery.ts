@@ -6,7 +6,15 @@ const MAX_ATTEMPTS = 5
 const BASE_BACKOFF_MS = 30_000
 
 export type DeliveryProcessResult = { status: 'dead' | 'delivered' | 'failed' | 'skipped' }
-export type DeliveryAttempt = { attempt: number; deliveryId: string; idempotencyKey: string; leadId: string }
+export type DeliveryLeadSnapshot = {
+  email?: string | null
+  message?: string | null
+  name?: string | null
+  phone: string
+  propertyId?: string
+  sourcePage?: string | null
+}
+export type DeliveryAttempt = { attempt: number; deliveryId: string; idempotencyKey: string; lead: DeliveryLeadSnapshot; leadId: string }
 export type DeliveryResult =
   | { ok: true }
   | { code: string; kind: 'permanent' | 'retryable'; ok: false }
@@ -34,8 +42,10 @@ export async function processLeadDelivery(payload: Payload, deliveryId: string, 
   }, req)
 
   const adapter = resolveAdapter(delivery.channel)
+  const leadId = relationID(delivery.lead)
+  const lead = adapter ? await loadLeadSnapshot(payload, leadId, req) : undefined
   const result = adapter
-    ? await safeDeliver(adapter, { attempt, deliveryId, idempotencyKey: delivery.idempotencyKey, leadId: relationID(delivery.lead) })
+    ? await safeDeliver(adapter, { attempt, deliveryId, idempotencyKey: delivery.idempotencyKey, lead: lead!, leadId })
     : { code: 'channel_unavailable', kind: 'permanent' as const, ok: false as const }
 
   if (result.ok) {
@@ -57,6 +67,17 @@ export async function processLeadDelivery(payload: Payload, deliveryId: string, 
     })
   }
   return { status: dead ? 'dead' : 'failed' }
+}
+
+async function loadLeadSnapshot(payload: Payload, id: string, req?: PayloadRequest): Promise<DeliveryLeadSnapshot> {
+  const lead = await payload.findByID({
+    collection: 'leads', depth: 0, id, overrideAccess: true, req,
+    select: { email: true, message: true, name: true, phone: true, property: true, sourcePage: true },
+  })
+  return {
+    email: lead.email, message: lead.message, name: lead.name, phone: lead.phone,
+    propertyId: relationIDOptional(lead.property), sourcePage: lead.sourcePage,
+  }
 }
 
 export function retryDelay(attempt: number) {
@@ -86,4 +107,11 @@ function relationID(value: unknown) {
   if (typeof value === 'string') return value
   if (value && typeof value === 'object' && 'id' in value) return String(value.id)
   throw new Error('lead_delivery_missing_lead')
+}
+
+function relationIDOptional(value: unknown) {
+  if (!value) return undefined
+  if (typeof value === 'string') return value
+  if (typeof value === 'object' && 'id' in value) return String(value.id)
+  return undefined
 }

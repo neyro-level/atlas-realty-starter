@@ -7,7 +7,7 @@ describe("ArticleEditorialFooterLinks", () => {
   it("renders contextual service links below the article CTA", () => {
     const markup = renderToStaticMarkup(createElement(ArticleEditorialLinksView, {
       links: [{
-        label: "Юрист по недвижимости в вашем городе",
+        label: "Юрист по недвижимости в Краснодаре",
         href: "/yurist",
         description: "Проверка документов и сопровождение сделки.",
       }],

@@ -7,6 +7,11 @@ import { SECURITY_HEADERS } from './src/core/security/headers'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const securityHeaders = process.env.NODE_ENV === 'development'
+  ? SECURITY_HEADERS.map((header) => header.key === 'Content-Security-Policy'
+    ? { ...header, value: header.value.replace("script-src 'self' 'unsafe-inline'", "script-src 'self' 'unsafe-inline' 'unsafe-eval'") }
+    : header)
+  : [...SECURITY_HEADERS]
 const configuredRemotePatterns = [
   process.env.NEXT_PUBLIC_NEW_BUILDINGS_MEDIA_BASE_URL,
   process.env.NEXT_PUBLIC_SITE_MEDIA_BASE_URL,
@@ -18,7 +23,7 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   transpilePackages: ['@starter/site-contracts', '@starter/site-fixtures', '@starter/site-ui'],
   async headers() {
-    return [{ headers: [...SECURITY_HEADERS], source: '/:path*' }]
+    return [{ headers: securityHeaders, source: '/:path*' }]
   },
   images: {
     localPatterns: [{ pathname: '/api/media/file/**' }, { pathname: '/images/**' }, { pathname: '/og/**' }],

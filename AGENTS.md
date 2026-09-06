@@ -30,8 +30,8 @@
 - User-context Local API sets `overrideAccess: false`; update/delete also set `overrideLock: false`.
 - `overrideAccess: true` is allowed only in the typed System Gateway. Raw DB/SQL is allowed only in the Ingest Gateway, migrations and documented maintenance.
 - Production schema uses append-only `migrations-v2`; `push` stays false.
-- The committed identity is a neutral `АТЛАС / Ваш город` starter placeholder. A real domain, legal identity, contacts, feeds, delivery channels, indexing policy and secrets belong only to a concrete clone.
-- A clone must not be made indexable or released while placeholder identity or legal data remains.
+- Product identity is Atlas for Krasnodar at `atlas.ams24.ru`; legal and public contact data are defined in `src/project/site-identity.ts`.
+- Atlas must remain non-indexable while demonstration content is present or source rights are unverified.
 - External legacy runtime/database are validation inputs only and are never changed without a separate release command.
 
 ## Documentation map
