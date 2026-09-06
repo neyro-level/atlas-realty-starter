@@ -9,6 +9,7 @@
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build && node scripts/prepare-standalone.mjs",
     "build:public-env:check": "node scripts/check-public-env-inlined.mjs",
+    "visual:baseline": "node scripts/capture-visual-baseline.mjs",
     "db:backup:check": "node scripts/verify-backup-restore.mjs",
     "db:migrate:native:check": "node scripts/run-native-integration.mjs --migrate",
     "db:migrate:roles-check": "node scripts/run-native-integration.mjs --roles-check",
@@ -36,6 +37,7 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation HOSTNAME=127.0.0.1 node .next/standalone/server.js",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:unit": "vitest run --config ./vitest.unit.config.mts",
+    "test:visual": "playwright test --config=playwright.visual.config.ts",
     "test:e2e": "node scripts/run-native-integration.mjs --e2e",
     "test:e2e:production": "node scripts/run-native-integration.mjs --e2e-production",
     "test:e2e:production:raw": "cross-env APP_RUNTIME=production NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
