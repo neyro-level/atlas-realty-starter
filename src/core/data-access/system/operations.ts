@@ -1,5 +1,6 @@
 export const SYSTEM_OPERATIONS = [
   'bootstrap-first-owner',
+  'bootstrap-krasnodar-complexes',
   'business-audit',
   'import-job-failure',
   'lead-delivery',

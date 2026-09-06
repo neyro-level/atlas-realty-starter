@@ -77,6 +77,8 @@ Database rollback is not automatic. Every migration must be reviewed for backwar
 
 Initial content is loaded with `pnpm atlas:bootstrap`. The command is idempotent for its own 30 `atlas-demo-*` records and refuses a non-empty foreign catalog unless `ATLAS_BOOTSTRAP_ALLOW_EXISTING=true` is explicitly supplied after review.
 
+The separate `pnpm atlas:bootstrap:complexes` command loads 20 Краснодар construction records verified against the public ЕИСЖС catalog on 2026-09-06. Only factual fields are stored: object name, address, developer, commissioning status, source object ID and source URL. The command is idempotent, refuses to mix into an unrelated complex catalog unless `ATLAS_COMPLEXES_ALLOW_EXISTING=true`, and only refreshes source-owned fields when `ATLAS_COMPLEXES_REFRESH=true`; manual fields remain untouched.
+
 ### Historical evidence boundary
 
 On 2026-09-05, exact release `f7835daf1327741f6391627518cc4db31239c156` passed archive verification, `/healthz`, TLS, anonymous raw REST denial, public DTO checks, owner login/edit, idempotent leads, delivery recovery and log redaction. That release intentionally returned 404 at `/`.

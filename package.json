@@ -31,6 +31,7 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "owner:bootstrap": "cross-env NODE_OPTIONS=\"--conditions=react-server --no-deprecation\" tsx scripts/bootstrap-owner.mts",
     "atlas:bootstrap": "cross-env NODE_OPTIONS=\"--conditions=react-server --no-deprecation\" tsx scripts/bootstrap-atlas-demo.mts",
+    "atlas:bootstrap:complexes": "cross-env NODE_OPTIONS=\"--conditions=react-server --no-deprecation\" tsx scripts/bootstrap-atlas-complexes.mts",
     "release:pack": "node scripts/build-release-artifact.mjs",
     "start": "cross-env NODE_OPTIONS=--no-deprecation HOSTNAME=127.0.0.1 node .next/standalone/server.js",
     "test": "pnpm run test:int && pnpm run test:e2e",
