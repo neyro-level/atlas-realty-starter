@@ -8,6 +8,7 @@
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build && node scripts/prepare-standalone.mjs",
+    "build:public-env:check": "node scripts/check-public-env-inlined.mjs",
     "db:backup:check": "node scripts/verify-backup-restore.mjs",
     "db:migrate:native:check": "node scripts/run-native-integration.mjs --migrate",
     "db:migrate:roles-check": "node scripts/run-native-integration.mjs --roles-check",
