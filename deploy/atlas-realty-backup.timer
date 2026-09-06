@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily Atlas Realty encrypted PostgreSQL backup
+
+[Timer]
+OnCalendar=*-*-* 02:40:00 Europe/Moscow
+Persistent=true
+RandomizedDelaySec=15m
+Unit=atlas-realty-backup.service
+
+[Install]
+WantedBy=timers.target

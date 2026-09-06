@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, PayloadRequest } from 'payload'
 
 import { isPublicGatewayRequest } from '@/core/access/public-gateway'
 
@@ -6,8 +6,17 @@ import { canDeleteContent, canManageContent, publicMediaWhere } from './helpers'
 
 type CollectionAccess = NonNullable<CollectionConfig['access']>
 
+export function isPublicMediaFileRequest(req: Pick<PayloadRequest, 'url'>) {
+  if (!req.url) return false
+  try {
+    return /^\/api\/media\/file\/[^/]+$/.test(new URL(req.url, 'http://payload.local').pathname)
+  } catch {
+    return false
+  }
+}
+
 export const canReadMedia: NonNullable<CollectionAccess['read']> = ({ req }) =>
-  isPublicGatewayRequest(req) ? publicMediaWhere() : canManageContent(req.user)
+  isPublicGatewayRequest(req) || isPublicMediaFileRequest(req) ? publicMediaWhere() : canManageContent(req.user)
 
 export const canCreateMedia: NonNullable<CollectionAccess['create']> = ({ req }) =>
   canManageContent(req.user)

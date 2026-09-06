@@ -89,6 +89,8 @@ The retained Timeweb Managed PostgreSQL validation cluster reported automatic da
 
 On 2026-09-05, `pnpm db:backup:check` created a logical custom-format dump after six migrations, restored it into a temporary managed database and verified the same six migration records; the temporary database was then deleted. The repository now contains seven migrations, so a concrete current release must repeat restore proof when its production/validation database is provisioned or when backup architecture changes.
 
+Atlas production also runs `atlas-realty-backup.timer` daily. It creates a PostgreSQL custom-format dump, encrypts it with an age recipient before upload, and stores it in the private backup S3 bucket. The base64-encoded decryption identity and bucket name live only in root-readable `backup.env`; S3 credentials come from the runtime secret file. Configure a 30-day bucket lifecycle and run `/usr/local/sbin/verify-atlas-backup-restore` after provisioning or any backup change. The restore check uses only the fixed local database `atlas_realty_restore_check`, verifies all migrations and exactly 30 demo properties, and removes the validation database afterwards.
+
 ## Incident checklist
 
 1. Stop the leak or unsafe operation without deleting evidence.
