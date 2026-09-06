@@ -65,12 +65,20 @@ export function getPublicAgentBySlug(payload: Payload, slug: string, options: Pu
   return queryPublicAgentBySlug(payload, slug, options)
 }
 
+export function getPublicAgents(payload: Payload, options: PublicQueryOptions) {
+  return cacheFor(['agents'], [PUBLIC_CACHE_TAGS.agents], () => queryPublicAgents(payload, options))
+}
+
 export function getPublicPageBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
   return queryPublicPageBySlug(payload, slug, options)
 }
 
 export function getPublicPostBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
   return queryPublicPostBySlug(payload, slug, options)
+}
+
+export function getPublicPosts(payload: Payload, options: PublicQueryOptions) {
+  return cacheFor(['posts'], [PUBLIC_CACHE_TAGS.content], () => queryPublicPosts(payload, options))
 }
 
 export function getPublicConfig(payload: Payload): Promise<PublicConfig> {
@@ -161,6 +169,11 @@ async function queryPublicAgentBySlug(payload: Payload, slug: string, options: P
   return result.docs[0] ? toPublicAgent(result.docs[0], options) : null
 }
 
+async function queryPublicAgents(payload: Payload, options: PublicQueryOptions): Promise<PublicAgent[]> {
+  const result = await payload.find({ collection: 'agents', context: context(), depth: 1, limit: 200, overrideAccess: false, pagination: false, select: publicAgentSelect, sort: 'name' })
+  return result.docs.map((agent) => toPublicAgent(agent, options))
+}
+
 async function queryPublicPageBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
   const result = await payload.find({ collection: 'pages', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicPageSelect, where: { slug: { equals: slug } } })
   return result.docs[0] ? toPublicContent(result.docs[0], 'pages', options) : null
@@ -169,6 +182,11 @@ async function queryPublicPageBySlug(payload: Payload, slug: string, options: Pu
 async function queryPublicPostBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
   const result = await payload.find({ collection: 'posts', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicPostSelect, where: { slug: { equals: slug } } })
   return result.docs[0] ? toPublicContent(result.docs[0], 'posts', options) : null
+}
+
+async function queryPublicPosts(payload: Payload, options: PublicQueryOptions): Promise<PublicContentDocument[]> {
+  const result = await payload.find({ collection: 'posts', context: context(), depth: 1, limit: 200, overrideAccess: false, pagination: false, select: publicPostSelect, sort: '-publishedAt' })
+  return result.docs.map((post) => toPublicContent(post, 'posts', options))
 }
 
 async function queryPublicFacets(payload: Payload): Promise<PublicFacets> {

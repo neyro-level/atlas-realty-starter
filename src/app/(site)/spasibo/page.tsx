@@ -1,0 +1,45 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Button } from "@starter/site-ui";
+
+export const revalidate = 300;
+
+export const metadata: Metadata = {
+  title: "Спасибо за заявку",
+  description: "Страница подтверждения отправки заявки в контуре агентства недвижимости.",
+  alternates: { canonical: "/spasibo" },
+  robots: { index: false, follow: false },
+};
+
+export default function ThanksPage() {
+  return (
+    <main className="min-h-screen bg-white text-[#1f1f1f]">
+      <section className="border-b border-[#e0e0e0] bg-[#171717] text-white">
+        <div className="mx-auto max-w-5xl px-5 py-14 lg:py-20">
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#f0b7b7]">Контактный переход</p>
+          <h1 className="mt-5 max-w-3xl text-[clamp(2.2rem,4vw,3.8rem)] font-extrabold leading-[0.96]">Спасибо, заявка отправлена</h1>
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/74">Команда агентства недвижимости получила ваш запрос. Специалист свяжется с вами, чтобы уточнить задачу и собрать следующий шаг по объекту, подборке или сопровождению сделки.</p>
+        </div>
+      </section>
+
+      <section className="bg-white py-10 lg:py-14">
+        <div className="mx-auto grid max-w-5xl gap-5 px-5 md:grid-cols-2">
+          <article className="rounded-[24px] border border-[#e5e5e5] bg-[#fafafa] p-6 shadow-[0_14px_36px_rgba(0,0,0,0.04)]">
+            <h2 className="text-2xl font-extrabold leading-tight text-[#181818]">Что дальше</h2>
+            <p className="mt-4 text-sm leading-7 text-[#4f4f4f]">Мы уточним сценарий сделки, приоритетные районы, бюджет и нужный контур: покупка, продажа, новостройки или сопровождение.</p>
+          </article>
+          <article className="rounded-[24px] border border-[#e5e5e5] bg-[#fafafa] p-6 shadow-[0_14px_36px_rgba(0,0,0,0.04)]">
+            <h2 className="text-2xl font-extrabold leading-tight text-[#181818]">Пока ждёте ответ</h2>
+            <p className="mt-4 text-sm leading-7 text-[#4f4f4f]">Можно вернуться к разделам недвижимости, открыть нужный маршрут или посмотреть контакты агентства, если нужна более быстрая связь.</p>
+          </article>
+        </div>
+
+        <div className="mx-auto mt-8 flex max-w-5xl flex-col gap-3 px-5 sm:flex-row sm:flex-wrap">
+          <Button asChild size="lg"><Link href="/nedvizhimost">Открыть недвижимость вашего города</Link></Button>
+          <Button asChild size="lg" variant="outline"><Link href="/kvartiry">Открыть маршрут квартир</Link></Button>
+          <Button asChild size="lg" variant="outline"><Link href="/kontakty">Контакты агентства</Link></Button>
+        </div>
+      </section>
+    </main>
+  );
+}

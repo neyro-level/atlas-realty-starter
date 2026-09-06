@@ -1,0 +1,25 @@
+"use client";
+
+import { Camera, FileText, Wrench } from "lucide-react";
+import { useState } from "react";
+import type { SiteImageRenderer } from "../lib/adapters";
+
+const PREPARATION_STEPS = [
+  { title: "Даём честные рекомендации по ремонту", description: "Говорим прямо, что мешает продаже и что стоит поправить до выхода на рынок", icon: Wrench },
+  { title: "Делаем профессиональные фотографии", description: "Снимаем квартиру после подготовки. Так её увидит покупатель в первую очередь", icon: Camera },
+  { title: "Пишем понятное описание без штампов", description: "Текст в объявлении заранее отвечает на частые вопросы, отсеивая случайные звонки", icon: FileText },
+] as const;
+
+export function SalePreparationView({ beforeImage, afterImage, imageRenderer: ImageRenderer }: { beforeImage: string; afterImage: string; imageRenderer: SiteImageRenderer }) {
+  const [activeView, setActiveView] = useState<"before" | "after">("before");
+  return <section className="bg-white py-14 sm:py-16 lg:py-[88px]" aria-labelledby="sale-preparation-title">
+    <div className="mx-auto grid max-w-site-frame gap-10 px-5 lg:grid-cols-[minmax(0,3fr)_minmax(360px,2fr)] lg:items-start lg:gap-12">
+      <div className="order-2 lg:order-1"><h2 id="sale-preparation-title" className="max-w-[760px] text-[24px] font-semibold leading-[1.24] tracking-[-0.03em] text-[var(--text-primary)] text-balance sm:text-[clamp(24px,1.8vw,30px)] sm:leading-[1.2]">Готовим квартиру к продаже так, чтобы она выглядела дороже в объявлении</h2>
+        <div className="mt-8 grid gap-3 sm:mt-9">{PREPARATION_STEPS.map(({ title, description, icon: Icon }) => <article key={title} className="flex gap-4 rounded-2xl bg-[#F6F6F4] p-5 sm:p-6"><span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white text-[var(--text-secondary)]" aria-hidden><Icon className="size-[18px]" strokeWidth={1.6} /></span><div><h3 className="text-[16px] font-semibold leading-snug text-[var(--text-primary)]">{title}</h3><p className="mt-2 max-w-[62ch] text-[13px] leading-5 text-[var(--text-muted)]">{description}</p></div></article>)}</div>
+      </div>
+      <div className="order-1 lg:order-2"><div><div className="mb-3 inline-flex rounded-xl bg-[#F6F6F4] p-1" role="tablist" aria-label="Состояние квартиры">{(["before", "after"] as const).map((view) => { const active = activeView === view; return <button key={view} type="button" role="tab" aria-selected={active} onClick={() => setActiveView(view)} className={`min-h-11 min-w-24 rounded-lg px-5 text-sm font-semibold transition duration-300 ${active ? "bg-[var(--text-primary)] text-white shadow-sm" : "bg-transparent text-[#686668] hover:text-[var(--text-primary)]"}`}>{view === "before" ? "До" : "После"}</button>; })}</div>
+        <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[#F6F6F4]"><ImageRenderer src={beforeImage} alt="Комната до подготовки к продаже" fill sizes="(max-width: 1023px) 100vw, 42vw" className={`object-cover transition-opacity duration-300 ${activeView === "before" ? "opacity-100" : "opacity-0"}`} priority={false} /><ImageRenderer src={afterImage} alt="Комната после подготовки к продаже" fill sizes="(max-width: 1023px) 100vw, 42vw" className={`object-cover transition-opacity duration-300 ${activeView === "after" ? "opacity-100" : "opacity-0"}`} priority={false} /></div>
+      </div></div>
+    </div>
+  </section>;
+}

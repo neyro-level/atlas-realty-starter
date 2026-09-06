@@ -1,0 +1,25 @@
+html {
+  overflow-x: clip;
+}
+
+.admin-root {
+  font-family: "PT Root UI", "PT Root UI VF", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button.font-bold,
+button.font-extrabold,
+a.inline-flex.font-bold,
+a.inline-flex.font-extrabold {
+  font-weight: 600 !important;
+}
+
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}

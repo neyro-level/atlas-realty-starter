@@ -5,8 +5,8 @@ import { spawnSync } from 'node:child_process'
 const root = resolve('.')
 const command = process.platform === 'win32' ? 'cmd.exe' : 'pnpm'
 const args = process.platform === 'win32'
-  ? ['/d', '/s', '/c', 'pnpm', 'exec', 'depcruise', '-c', '.dependency-cruiser.cjs', '-T', 'json', 'src']
-  : ['exec', 'depcruise', '-c', '.dependency-cruiser.cjs', '-T', 'json', 'src']
+  ? ['/d', '/s', '/c', 'pnpm', 'exec', 'depcruise', '-c', '.dependency-cruiser.cjs', '-T', 'json', 'src', 'packages']
+  : ['exec', 'depcruise', '-c', '.dependency-cruiser.cjs', '-T', 'json', 'src', 'packages']
 const result = spawnSync(command, args, { cwd: root, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
 if (result.status !== 0 && !result.stdout) {
   process.stderr.write(result.stderr || 'Dependency Cruiser failed\n')
@@ -71,6 +71,7 @@ function traverse(start) {
     const current = pending.pop()
     if (seen.has(current)) continue
     seen.add(current)
+    if (current !== start && isServerActionBoundary(current)) continue
     const moduleInfo = modules.get(current)
     for (const dependency of moduleInfo?.dependencies ?? []) {
       const target = normalize(dependency.resolved)
@@ -78,6 +79,14 @@ function traverse(start) {
     }
   }
   return seen
+}
+
+function isServerActionBoundary(path) {
+  try {
+    return /^\s*(['"])use server\1;?/m.test(readFileSync(resolve(root, path), 'utf8'))
+  } catch {
+    return false
+  }
 }
 
 function isClientModule(path) {

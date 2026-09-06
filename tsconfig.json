@@ -16,6 +16,9 @@
     "plugins": [{ "name": "next" }],
     "paths": {
       "@/*": ["./src/*"],
+      "@starter/site-contracts": ["./packages/site-contracts/src/index.ts"],
+      "@starter/site-fixtures": ["./packages/site-fixtures/src/index.ts"],
+      "@starter/site-ui": ["./packages/site-ui/src/index.tsx"],
       "@payload-config": ["./src/payload.config.ts"]
     },
     "target": "ES2022",

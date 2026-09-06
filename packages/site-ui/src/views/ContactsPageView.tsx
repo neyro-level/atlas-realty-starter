@@ -1,0 +1,24 @@
+import { Clock3, Mail, MapPin } from "lucide-react";
+import type { ContactsPageDto } from "@starter/site-contracts";
+import type { ReactNode } from "react";
+import type { SiteImageRenderer } from "../lib/adapters";
+import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
+
+type Props = { page: ContactsPageDto; phoneActions: Record<string, ReactNode>; routeActions: Record<string, ReactNode>; map: ReactNode; imageRenderer: SiteImageRenderer };
+
+export function ContactsPageView({ page, phoneActions, routeActions, map, imageRenderer: ImageRenderer }: Props) {
+  const { contacts } = page;
+  return (
+    <main className="min-h-screen bg-white pb-28 pt-24 text-[var(--text-primary)] md:pb-32 lg:pb-40 lg:pt-[138px]">
+      <section className="mx-auto grid max-w-site-frame gap-6 px-5 lg:grid-cols-[338px_minmax(0,1fr)] xl:grid-cols-[356px_minmax(0,1fr)]">
+        <div className="min-w-0 lg:sticky lg:top-[132px]"><header className="mb-5 md:mb-6 lg:mb-4"><h1 className="text-left text-[24px] font-semibold leading-tight md:text-[28px] lg:text-center lg:text-[24px]">{page.title}</h1></header><div className="grid gap-5 lg:gap-3">
+          {contacts.email && contacts.emailHref ? <a href={contacts.emailHref} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border)] bg-white px-4 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"><Mail className="size-4 text-[var(--accent)]" aria-hidden />{contacts.email}</a> : null}
+          {page.offices.map((office) => <Card key={office.id} className="overflow-hidden rounded-lg border-[var(--border)] bg-white p-0 shadow-[0_10px_26px_rgba(23,22,26,0.045)] lg:grid lg:grid-cols-[92px_minmax(0,1fr)] lg:shadow-[0_8px_20px_rgba(23,22,26,0.04)]"><div className="aspect-[16/8.8] bg-[var(--surface-muted)] lg:aspect-auto lg:h-full">{office.photoUrl ? <ImageRenderer src={office.photoUrl} alt={`Офис ${office.title}`} width={712} height={392} unoptimized className="size-full object-cover" /> : <div className="relative flex h-full items-center justify-center overflow-hidden bg-[linear-gradient(135deg,var(--surface-card-soft)_0%,var(--surface-muted)_58%,var(--accent-soft)_100%)]"><div className="absolute inset-x-8 top-8 h-px bg-[var(--border)] lg:inset-x-4 lg:top-5" /><div className="absolute bottom-0 left-8 right-8 h-16 rounded-t-lg border border-b-0 border-[var(--border)] bg-white/48 lg:left-4 lg:right-4 lg:h-12" /><span className="relative inline-flex rounded-md border border-[var(--border)] bg-white/78 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)] lg:px-2 lg:py-1.5 lg:text-[9px] lg:tracking-[0.08em]">Фото офиса</span></div>}</div><div className="p-[18px] md:p-5 lg:p-3"><h2 className="text-[17px] font-semibold leading-snug text-[var(--text-primary)] lg:text-[14px]">{office.title}</h2><div className="mt-3.5 space-y-2.5 text-[13px] leading-5 text-[var(--text-secondary)] lg:mt-2 lg:space-y-1.5 lg:text-[12px] lg:leading-[18px]">{phoneActions[office.id]}<p className="flex gap-2"><MapPin className="mt-0.5 size-4 shrink-0 text-[var(--accent)]" aria-hidden /><span>{office.address}</span></p><p className="flex gap-2"><Clock3 className="mt-0.5 size-4 shrink-0 text-[var(--accent)]" aria-hidden /><span>{contacts.hours}</span></p><p className="text-[var(--text-secondary)]">{page.serviceLabel}</p></div><div className="mt-4 grid gap-2 lg:mt-2">{routeActions[office.id]}<Button type="button" variant="secondary" size="sm" data-request-modal data-request-modal-title="Записаться на встречу" data-request-modal-subtitle={`Оставьте телефон. Администратор агентства недвижимости уточнит задачу и согласует встречу: ${office.address}.`} data-request-modal-source={`contacts:${office.id}:appointment`} data-request-modal-form-type="office_appointment" data-request-modal-submit-label="Записаться на встречу" className="min-h-10 w-full rounded-lg bg-[var(--journal-surface)] px-4 text-sm text-[var(--accent)] hover:bg-[var(--surface-muted)] lg:min-h-9 lg:px-3 lg:text-[12px]">Записаться на встречу</Button></div></div></Card>)}
+          {!page.offices.length ? <p className="rounded-lg border border-dashed border-[var(--border)] bg-[var(--surface-card-soft)] p-5 text-sm text-[var(--text-secondary)]">Офисы скоро появятся. Пока можно позвонить по единому номеру {contacts.phone}.</p> : null}
+        </div></div>
+        <div className="min-w-0 overflow-hidden rounded-lg border border-[var(--border)] bg-white shadow-[var(--shadow-card)] lg:sticky lg:top-[132px] lg:mt-[50px] lg:h-[calc(100vh-164px)] lg:min-h-[540px] lg:max-h-[720px]">{page.mapSrc ? map : <div className="flex h-full min-h-[320px] items-center justify-center bg-[var(--accent-soft)] p-8 text-center text-sm text-[var(--text-secondary)]">Карта появится после настройки адреса офиса.</div>}</div>
+      </section>
+    </main>
+  );
+}

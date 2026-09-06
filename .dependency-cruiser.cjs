@@ -8,17 +8,10 @@ module.exports = {
       to: { circular: true },
     },
     {
-      name: 'no-presentation-to-payload-or-project',
+      name: 'no-reusable-presentation-to-payload-or-project',
       severity: 'error',
       comment: 'Reusable presentation consumes shared DTO/contracts, never Payload or client config.',
-      from: { path: '^src/(components|modules)/' },
-      to: { path: '^src/(payload(?:\\.config\\.ts|/)|project/)' },
-    },
-    {
-      name: 'no-shared-to-payload-or-project',
-      severity: 'error',
-      comment: 'Shared contracts remain independent from Payload and client identity.',
-      from: { path: '^src/shared/' },
+      from: { path: '^packages/(site-ui|site-contracts)/src/' },
       to: { path: '^src/(payload(?:\\.config\\.ts|/)|project/)' },
     },
     {

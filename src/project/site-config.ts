@@ -1,32 +1,66 @@
+import { siteIdentity } from "@/project/site-identity";
+
 export const siteConfig = {
-  clientName: 'AMS Realty',
-  clientFullName: 'AMS Realty Platform Starter',
-  defaultDescription: 'Headless starter for a real-estate platform runtime.',
-  defaultTitle: 'AMS Realty Platform Starter',
-  logo: '',
-  tagline: 'Headless real-estate platform starter',
-  copyright: `© ${new Date().getFullYear()} AMS Realty Platform Starter`,
-  registry: '',
-  disclaimer: 'Публичный интерфейс будет подключён отдельно.',
-}
+  clientSlug: "starter-site",
+  clientName: siteIdentity.brand,
+  clientFullName: siteIdentity.brand,
+  legalName: siteIdentity.legal.name ?? "Требует настройки перед публикацией",
+  projectName: siteIdentity.projectName,
+  tagline: siteIdentity.tagline,
+  city: siteIdentity.city.nominative,
+  timezone: "Europe/Moscow",
+  stagingDomain: siteIdentity.domain,
+  productionDomain: siteIdentity.domain,
+  defaultTitle: `Недвижимость в ${siteIdentity.city.prepositional} | ${siteIdentity.brand}`,
+  defaultDescription: `${siteIdentity.brand}: квартиры, дома, новостройки, участки, коммерческая недвижимость и сопровождение сделки.`,
+  logo: "/images/brand/atlas-mark.svg",
+  favicon: "/favicon.ico",
+  copyright: `© 2026 ${siteIdentity.brand}. Все права защищены.`,
+  registry: siteIdentity.legal.inn ? `ИНН ${siteIdentity.legal.inn}` : "",
+  disclaimer: "Информация на сайте носит справочный характер и не является публичной офертой.",
+} as const;
+
+export type SocialLink = { label: string; shortLabel: string; href?: string };
+
+const phone = siteIdentity.contacts.phone ?? "";
+const email = siteIdentity.contacts.email ?? "";
+
+export const contactsConfig = {
+  phone,
+  phoneHref: phone ? `tel:${phone.replace(/[^+\d]/gu, "")}` : "",
+  email,
+  emailHref: email ? `mailto:${email}` : "",
+  hours: siteIdentity.contacts.hours ?? "Время работы настраивается",
+  callbackHref: phone ? `tel:${phone.replace(/[^+\d]/gu, "")}` : "",
+  callbackLabel: "Оставить заявку",
+  privacyUrl: "/politika-konfidencialnosti",
+  socials: {
+    telegram: { label: "Telegram", shortLabel: "TG", href: siteIdentity.social.telegram ?? undefined },
+    max: { label: "Max", shortLabel: "MAX", href: siteIdentity.social.max ?? undefined },
+    vk: { label: "VK", shortLabel: "VK", href: siteIdentity.social.vk ?? undefined },
+  },
+  offices: siteIdentity.contacts.address
+    ? [{ city: siteIdentity.city.nominative, address: siteIdentity.contacts.address }]
+    : [],
+} as const;
 
 export const citySwitcherConfig = {
-  currentSlug: 'starter',
-  cities: [
-    { current: true, domainLabel: 'starter.local', href: '/', label: 'Starter', slug: 'starter' },
-  ],
-}
+  currentSlug: siteIdentity.city.slug,
+  cities: [{
+    slug: siteIdentity.city.slug,
+    label: siteIdentity.city.nominative,
+    href: "/",
+    domainLabel: new URL(siteIdentity.domain).host,
+    current: true,
+  }],
+} as const;
 
-export const publicContactFallback = {
-  address: 'Тестовый адрес стартового шаблона',
-  cityName: 'Starter',
-  callbackHref: '/admin',
-  callbackLabel: 'Открыть админку',
-  email: 'info@example.com',
-  phone: '+7 (900) 000-00-00',
-  workingHours: 'Пн-Пт 09:00–18:00',
-} as const
+export const featuresConfig = {
+  adminLite: true,
+  localLeads: true,
+  propertyRoute: "/obekty",
+} as const;
 
-export function getPropertyPath(slug: string) {
-  return `/properties/${slug}`
-}
+export function getSiteUrl() { return siteIdentity.domain; }
+export function isIndexable() { return siteIdentity.indexable; }
+export function getPropertyPath(slug: string) { return `${featuresConfig.propertyRoute}/${slug}`; }

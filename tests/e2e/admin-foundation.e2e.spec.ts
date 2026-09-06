@@ -2,13 +2,13 @@ import { expect, test } from '@playwright/test'
 
 import { foundationUsers, resetFoundationState, seedPrivilegedUsers } from '../helpers/payload'
 
-test.describe.serial('Payload native Admin and headless foundation', () => {
+test.describe.serial('Payload native Admin and public site foundation', () => {
   test.beforeAll(async () => {
     await resetFoundationState()
     await seedPrivilegedUsers()
   })
 
-  test('keeps native Admin available and the product root headless', async ({ page }) => {
+  test('keeps native Admin available alongside the public product site', async ({ page }) => {
     await page.goto('/admin/login', { waitUntil: 'domcontentloaded' })
     await expect(page).toHaveURL(/\/admin\/login/)
     await page.fill('#field-username', foundationUsers.superAdmin.username)
@@ -17,7 +17,7 @@ test.describe.serial('Payload native Admin and headless foundation', () => {
     await expect(page).toHaveURL(/\/admin\/?$/)
 
     await page.goto('/', { waitUntil: 'domcontentloaded' })
-    await expect(page.getByText('404')).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Проверенная недвижимость в вашем городе' })).toBeVisible()
   })
 
   test('exposes only the safe health endpoint and no GraphQL route', async ({ page }) => {

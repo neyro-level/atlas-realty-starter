@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import "@starter/site-ui/theme.css";
+@import "../styles/tokens.css";
+@import "../styles/base.css";
+@import "@starter/site-ui/styles.css";
+
+@source "../../../../packages/site-ui/src";
