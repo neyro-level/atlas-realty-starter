@@ -176,7 +176,6 @@ export default async function PropertyPage({ params }: Props) {
   const summarySpecs = buildObjectSummarySpecs(listing);
   const mobileTopBarTitle = buildObjectMobileTopBarTitle(listing);
   const mobileBackHref = [...objectBreadcrumbs].reverse().find((item) => item.href)?.href ?? "/nedvizhimost";
-  const updatedLabel = formatPropertyUpdatedAt(listing.lastModified ?? listing.updatedAt);
   const suggestedOffer = buildSuggestedOffer(listing);
   const sessionItem = toSessionListingItem(listing, displayTitle);
   const objectLeadAddress = listing.address?.trim() || visibleHeadingAddress || null;
@@ -229,8 +228,6 @@ export default async function PropertyPage({ params }: Props) {
       />}
       description={descriptionParagraphs ? <PropertyDescriptionView
                 paragraphs={descriptionParagraphs}
-                objectId={listing.objectCode ?? listing.id}
-                updatedLabel={updatedLabel}
       /> : null}
       details={<PropertyDetailsView title={buildDetailsHeading(listing)} rows={detailRows} />}
       building={<PropertyBuildingView description={buildingDescription} />}
@@ -712,19 +709,6 @@ function getMoscowStartOfDay() {
 
 function capitalizeFirst(value: string) {
   return value ? value[0].toLocaleUpperCase("ru-RU") + value.slice(1) : value;
-}
-
-function formatPropertyUpdatedAt(value?: string | null) {
-  if (!value) return null;
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return null;
-
-  return new Intl.DateTimeFormat("ru-RU", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
 }
 
 function buildYandexMapUrl(address: string) {

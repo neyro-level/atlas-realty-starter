@@ -83,8 +83,6 @@ export function PropertyCardView({
   const objectCode = listing.objectCode?.trim() || null;
   const isNewBuildingCard = cardKind === "new-building";
   const isXmlCatalogCard = cardKind === "property";
-  const showsPropertyIdentity = ["flat", "house", "land", "commercial"].includes(listing.categoryKey);
-  const displayObjectId = showsPropertyIdentity ? objectCode ?? listing.id : null;
   const listDescription = cleanListingDescription(
     listing.description,
     objectCode ?? listing.id,
@@ -171,7 +169,7 @@ export function PropertyCardView({
             </span>
           )}
 
-          <CatalogBadgeStack objectId={displayObjectId} imageBadge={imageBadge} className="left-3 top-3" />
+          <CatalogBadgeStack imageBadge={imageBadge} className="left-3 top-3" />
 
           {images.length > 1 ? (
             <>
@@ -343,7 +341,7 @@ export function PropertyCardView({
             </span>
           )}
 
-          <CatalogBadgeStack objectId={displayObjectId} imageBadge={imageBadge} className="left-2.5 top-2.5" />
+          <CatalogBadgeStack imageBadge={imageBadge} className="left-2.5 top-2.5" />
           <div
             className={`absolute right-2.5 top-2.5 z-20 ${isNewBuildingCard || isXmlCatalogCard ? "" : "lg:hidden"}`}
             onClick={stop}
@@ -503,23 +501,14 @@ export function PropertyCardView({
   );
 }
 
-function CatalogBadgeStack({ objectId, imageBadge, className }: { objectId: string | null; imageBadge?: string; className: string }) {
-  if (!objectId && !imageBadge) return null;
+function CatalogBadgeStack({ imageBadge, className }: { imageBadge?: string; className: string }) {
+  if (!imageBadge) return null;
 
   return (
     <div data-catalog-badge-stack className={`absolute z-10 flex flex-col items-start gap-1.5 ${className}`}>
       {imageBadge ? (
         <span data-sales-leader-badge className="inline-flex min-h-6 items-center rounded-md bg-[var(--accent)] px-2.5 text-[10px] font-bold leading-none text-white shadow-[0_5px_14px_rgba(138,21,21,0.20)]">
           {imageBadge}
-        </span>
-      ) : null}
-      {objectId ? (
-        <span
-          data-catalog-object-code={objectId}
-          className="inline-flex min-h-6 max-w-[168px] items-center truncate rounded-md bg-white/94 px-2 text-[10px] font-medium leading-none tabular-nums text-[var(--text-primary)] shadow-[0_5px_14px_rgba(0,0,0,0.07)] backdrop-blur-sm"
-          title={`ID объекта: ${objectId}`}
-        >
-          ID: {objectId}
         </span>
       ) : null}
     </div>

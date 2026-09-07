@@ -65,7 +65,7 @@ export function PropertyDetailSummaryView({
   );
 }
 
-export function PropertyDescriptionView({ paragraphs, objectId, updatedLabel }: { paragraphs?: string[]; objectId: string; updatedLabel?: string | null }) {
+export function PropertyDescriptionView({ paragraphs }: { paragraphs?: string[] }) {
   const [expanded, setExpanded] = useState(false);
   if (!paragraphs?.length) return null;
 
@@ -87,10 +87,6 @@ export function PropertyDescriptionView({ paragraphs, objectId, updatedLabel }: 
           {expanded ? "Свернуть" : "Подробнее"}
         </button>
       ) : null}
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium leading-5 text-[var(--text-muted)]">
-        <span>ID объекта: <span className="tabular-nums">{objectId}</span></span>
-        {updatedLabel ? <span>Обновлено {updatedLabel}</span> : null}
-      </div>
     </Card>
   );
 }
