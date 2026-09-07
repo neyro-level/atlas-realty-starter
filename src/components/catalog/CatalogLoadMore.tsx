@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { sameOriginFetch } from "@/core/security/outbound-http/browser";
 import Link from "next/link";
-import { CatalogLoadMoreView, type CatalogPaginationItemDto, type SiteLinkRendererProps } from "@starter/site-ui";
+import { CatalogLoadMoreView, type CatalogPaginationItemDto, type SiteLinkRendererProps } from "@ams/realty-ui";
 import {
   buildSearchParams,
   CATALOG_PAGE_SIZE,

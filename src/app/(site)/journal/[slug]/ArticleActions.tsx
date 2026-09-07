@@ -1,5 +1,5 @@
 "use client";
-import { ArticleActionsView } from "@starter/site-ui";
+import { ArticleActionsView } from "@ams/realty-ui";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { createArticleSessionItem, isDefaultFavoriteArticleId } from "@/modules/session-collections/favorite-article";
 import { isSessionCollectionItemActive, SESSION_COLLECTION_EVENT, toggleSessionCollectionItem } from "@/modules/session-collections/storage";

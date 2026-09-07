@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SiteFooterView } from "@starter/site-ui";
+import { SiteFooterView } from "@ams/realty-ui";
 import { BrandMark } from "@/components/layout/BrandMark";
 import {
   FOOTER_COLUMNS,

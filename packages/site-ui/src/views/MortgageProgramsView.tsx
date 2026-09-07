@@ -42,7 +42,7 @@ const SUPPORT_OPTIONS = [
   },
 ] as const;
 
-export function MortgageProgramsView() {
+export function MortgageProgramsView({ cityPrepositional }: { cityPrepositional: string }) {
   return (
     <section className="bg-white py-12 sm:py-16 lg:py-[88px]" aria-labelledby="mortgage-programs-title">
       <div className="mx-auto max-w-site-frame px-5">
@@ -51,7 +51,7 @@ export function MortgageProgramsView() {
             id="mortgage-programs-title"
             className="text-[24px] font-semibold leading-[1.1] tracking-[-0.03em] text-[var(--text-primary)] sm:text-[clamp(24px,1.8vw,30px)] sm:whitespace-nowrap"
           >
-            Ипотечные программы в Краснодаре
+            Ипотечные программы в {cityPrepositional}
           </h2>
         </div>
 

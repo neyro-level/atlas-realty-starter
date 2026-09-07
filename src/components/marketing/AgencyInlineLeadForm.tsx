@@ -5,6 +5,7 @@ import { ChangeEvent, FormEvent, useState, useTransition } from "react";
 import { createLeadAction, type CreateLeadActionResult } from "@/modules/leads";
 import { PrivacyConsentText } from "@/components/forms/PrivacyConsentText";
 import { trackEvent } from "@/modules/analytics";
+import { formatRuMobileDigits, formatRuMobilePhone, normalizeRuMobileDigits } from "@/modules/leads/phone";
 
 type AgencyInlineLeadFormProps = {
   sourcePage: string;
@@ -20,56 +21,6 @@ type AgencyInlineLeadFormProps = {
 };
 
 const MIN_FORM_FILL_TIME_MS = 1400;
-
-function normalizeRuMobileDigits(value: string) {
-  let digits = value.replace(/\D/g, "");
-
-  if (digits.startsWith("7") || digits.startsWith("8")) {
-    digits = digits.slice(1);
-  }
-
-  if (!digits) {
-    return "";
-  }
-
-  if (!digits.startsWith("9")) {
-    digits = `9${digits}`;
-  }
-
-  return digits.slice(0, 10);
-}
-
-function formatRuMobileDigits(digits: string) {
-  const value = digits.replace(/\D/g, "").slice(0, 10);
-
-  if (!value) {
-    return "";
-  }
-
-  let formatted = `+7 (${value.slice(0, 3)}`;
-
-  if (value.length >= 3) {
-    formatted += ")";
-  }
-
-  if (value.length > 3) {
-    formatted += ` ${value.slice(3, 6)}`;
-  }
-
-  if (value.length > 6) {
-    formatted += `-${value.slice(6, 8)}`;
-  }
-
-  if (value.length > 8) {
-    formatted += `-${value.slice(8, 10)}`;
-  }
-
-  return formatted;
-}
-
-function formatRuMobilePhone(value: string) {
-  return formatRuMobileDigits(normalizeRuMobileDigits(value));
-}
 
 export function AgencyInlineLeadForm({
   sourcePage,

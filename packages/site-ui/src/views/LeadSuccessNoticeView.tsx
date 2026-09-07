@@ -1,6 +1,7 @@
 import { Check, X } from "lucide-react";
 import type { RefObject } from "react";
 import { Button } from "../components/ui/button";
+import { Dialog, DialogContent } from "../components/ui/dialog";
 
 type LeadSuccessNoticeViewProps = {
   onClose: () => void;
@@ -9,27 +10,23 @@ type LeadSuccessNoticeViewProps = {
 
 export function LeadSuccessNoticeView({ onClose, closeButtonRef }: LeadSuccessNoticeViewProps) {
   return (
-    <div
-      className="fixed inset-0 z-[120] grid place-items-center bg-[var(--text-primary)]/20 px-4 backdrop-blur-[2px]"
-      role="presentation"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <section
-        role="dialog"
-        aria-modal="true"
+    <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogContent
+        showClose={false}
+        overlayClassName="z-[120] bg-[var(--overlay-soft)] backdrop-blur-[2px]"
         aria-labelledby="lead-success-title"
-        className="relative w-full max-w-[430px] overflow-hidden rounded-xl border border-white/80 bg-white px-7 pb-7 pt-10 text-center shadow-[0_28px_90px_rgba(23,22,26,0.22)] sm:px-9 sm:pb-9"
+        className="z-[121] w-[min(calc(100vw-32px),430px)] max-w-[430px] overflow-hidden rounded-xl border border-white/80 bg-white px-7 pb-7 pt-10 text-center shadow-[var(--shadow-dialog)] sm:px-9 sm:pb-9"
       >
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           type="button"
           onClick={onClose}
           aria-label="Закрыть уведомление"
           className="absolute right-4 top-4 grid size-9 place-items-center rounded-lg text-[var(--palette-777375)] transition hover:bg-[var(--palette-f4f3f1)] hover:text-[var(--text-primary)]"
         >
           <X className="size-5" aria-hidden />
-        </button>
+        </Button>
         <span className="mx-auto grid size-14 place-items-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]">
           <Check className="size-7" strokeWidth={2} aria-hidden />
         </span>
@@ -47,7 +44,7 @@ export function LeadSuccessNoticeView({ onClose, closeButtonRef }: LeadSuccessNo
         >
           Хорошо
         </Button>
-      </section>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

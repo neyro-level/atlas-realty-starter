@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { HtmlSitemapPageDto, SitemapColumnDto, SitemapLinkDto } from "@starter/site-contracts";
-import { HtmlSitemapView, type SiteLinkRendererProps } from "@starter/site-ui";
+import { HtmlSitemapView, type SiteLinkRendererProps } from "@ams/realty-ui";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { journalCategories } from "@/entities/article/journal-config";
 import { catalogPresets } from "@/modules/catalog/presets";

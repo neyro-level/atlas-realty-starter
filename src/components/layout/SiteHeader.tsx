@@ -8,7 +8,7 @@ import {
   type SiteCityOptionViewDto,
   type SiteHeaderNavItemDto,
   type SiteLinkRendererProps,
-} from "@starter/site-ui";
+} from "@ams/realty-ui";
 import {
   ALL_REALTY_CATALOG_PATH,
   isCatalogShowcasePath,
@@ -22,6 +22,7 @@ import { MobileMenuOverlay } from "@/components/layout/MobileMenuOverlay";
 import { HEADER_NAV } from "@/lib/site-shell";
 import { SessionCollectionNavLink } from "@/modules/session-collections";
 import { citySwitcherConfig } from "@/project/site-config";
+import { tenant } from "@/project/tenant";
 import type { PublicSiteContacts } from "@/shared/types/public-site-contacts";
 
 function SiteLinkAdapter({ href, children, ariaLabel, ...props }: SiteLinkRendererProps) {
@@ -172,6 +173,7 @@ function SiteHeaderInner({
       desktopNav={desktopNav}
       cityOptions={cityOptions}
       brand={<BrandMark variant="header" compact={docked} showSlogan={false} />}
+      brandLabel={tenant.brand}
       mobileMenu={<MobileMenuOverlay open={mobileOpen} contacts={contacts} onClose={() => setMobileOpen(false)} />}
       compareAction={<SessionCollectionNavLink kind="compare" href="/sravnenie" label="Сравнение" compact={docked} />}
       favoritesAction={<SessionCollectionNavLink kind="favorites" href="/izbrannoe" label="Избранное" compact={docked} />}

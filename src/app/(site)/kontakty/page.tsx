@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image, { type ImageProps } from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import type { ContactsPageDto } from "@starter/site-contracts";
-import { ContactsPageView, type SiteImageRendererProps } from "@starter/site-ui";
+import { ContactsPageView, type SiteImageRendererProps } from "@ams/realty-ui";
 import { siteConfig } from "@/project/site-config";
 import { getSiteEngine } from "@/site-engine";
 import { ContactsMapFrame } from "./ContactsMapFrame";

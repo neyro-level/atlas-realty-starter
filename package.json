@@ -74,7 +74,7 @@
     "@payloadcms/ui": "3.88.0",
     "@starter/site-contracts": "workspace:*",
     "@starter/site-fixtures": "workspace:*",
-    "@starter/site-ui": "workspace:*",
+    "@ams/realty-ui": "workspace:*",
     "cross-env": "7.0.3",
     "dotenv": "16.4.7",
     "lucide-react": "1.38.0",

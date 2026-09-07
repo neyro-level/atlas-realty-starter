@@ -15,7 +15,7 @@ const routes = [
 ] as const
 
 async function settlePage(page: Page) {
-  await page.locator('main').waitFor({ state: 'visible' })
+  await page.locator('main:not([aria-busy="true"])').waitFor({ state: 'visible' })
   await page.evaluate(async () => {
     await document.fonts.ready
     await Promise.all(
@@ -49,3 +49,45 @@ for (const [name, route] of routes) {
     })
   })
 }
+
+test('request modal keeps validation and success-ready layout', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'domcontentloaded' })
+  await settlePage(page)
+  await page.locator('[data-request-modal-source="home-hero"]').click()
+  const dialog = page.getByRole('dialog')
+  await dialog.locator('button[type="submit"]').click()
+  await expect(dialog.getByText('Введите имя')).toBeVisible()
+  await expect(page).toHaveScreenshot('request-modal-validation.png', { animations: 'disabled', mask: [page.locator('[data-visual-dynamic]')], maskColor: '#e7e5e4', maxDiffPixelRatio: 0.002 })
+})
+
+test('media gallery keeps the approved empty and tab layout', async ({ page }) => {
+  await page.goto('/aura', { waitUntil: 'domcontentloaded' })
+  await settlePage(page)
+  await expect(page.getByText('Изображение ЖК готовится к публикации')).toBeVisible()
+  await expect(page.locator('main')).toHaveScreenshot('gallery-empty.png', { animations: 'disabled', mask: [page.locator('[data-visual-dynamic]')], maskColor: '#e7e5e4', maxDiffPixelRatio: 0.002 })
+})
+
+test('catalog empty state stays readable', async ({ page }) => {
+  await page.goto('/nedvizhimost?q=__visual_no_results__', { waitUntil: 'domcontentloaded' })
+  await settlePage(page)
+  await expect(page.locator('main')).toHaveScreenshot('catalog-empty.png', { animations: 'disabled', mask: [page.locator('[data-visual-dynamic]')], maskColor: '#e7e5e4', maxDiffPixelRatio: 0.002 })
+})
+
+test('mobile menu and filters preserve focus-safe overlays', async ({ page }, testInfo) => {
+  test.skip(!['390', '768'].includes(testInfo.project.name), 'Mobile and tablet state')
+  await page.goto('/nedvizhimost', { waitUntil: 'domcontentloaded' })
+  await settlePage(page)
+  await page.getByRole('button', { name: 'Открыть меню' }).click()
+  await expect(page.locator('#site-mobile-menu')).toBeVisible()
+  await expect(page).toHaveScreenshot('mobile-menu.png', { animations: 'disabled', mask: [page.locator('[data-visual-dynamic]')], maskColor: '#e7e5e4', maxDiffPixelRatio: 0.002 })
+  await page.keyboard.press('Escape')
+})
+
+test('catalog map has a stable interactive or fallback state', async ({ page }) => {
+  await page.goto('/novostroyki?view=map', { waitUntil: 'domcontentloaded' })
+  await settlePage(page)
+  const map = page.getByTestId('new-building-catalog-map')
+  await expect(map).toBeVisible()
+  await expect.poll(async () => map.getAttribute('data-map-status'), { timeout: 15_000 }).toMatch(/ready|unavailable/)
+  await expect(map).toHaveScreenshot('catalog-map.png', { animations: 'disabled', mask: [page.locator('[data-visual-dynamic]')], maskColor: '#e7e5e4', maxDiffPixelRatio: 0.002 })
+})

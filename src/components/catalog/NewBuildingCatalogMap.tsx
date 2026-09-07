@@ -143,7 +143,7 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
       </aside>
 
       <div className="order-1 relative min-h-[420px] bg-[var(--surface-muted)] lg:order-2 lg:min-h-0">
-        <div ref={mapElementRef} data-testid="new-building-map-canvas" className="absolute inset-0" aria-label="Карта жилых комплексов Краснодара" />
+        <div ref={mapElementRef} data-testid="new-building-map-canvas" className="absolute inset-0" aria-label={`Карта жилых комплексов ${siteProfile.city.genitive}`} />
         {status !== "ready" ? (
           <div className="absolute inset-0 grid place-items-center p-6 text-center text-sm font-semibold text-[var(--palette-5e5b5e)]">
             {status === "loading" ? "Загружаем карту жилых комплексов..." : "Карта временно недоступна. Выберите ЖК из списка слева."}

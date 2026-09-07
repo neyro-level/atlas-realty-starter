@@ -9,6 +9,7 @@ import { PrivacyConsentText } from "@/components/forms/PrivacyConsentText";
 import { trackEvent } from "@/modules/analytics";
 import { createLeadAction, type CreateLeadActionResult } from "./actions";
 import { leadSchema, type LeadFormData } from "./schema";
+import { formatRuMobilePhone } from "./phone";
 
 type LeadFormProps = {
   sourcePage: string;
@@ -23,21 +24,6 @@ type LeadFormProps = {
   className?: string;
   premiumCompact?: boolean;
 };
-
-function formatRuMobilePhone(value: string) {
-  let digits = value.replace(/\D/g, "");
-  if (digits.startsWith("7") || digits.startsWith("8")) digits = digits.slice(1);
-  if (!digits) return "";
-  if (!digits.startsWith("9")) digits = `9${digits}`;
-  digits = digits.slice(0, 10);
-
-  let formatted = `+7 (${digits.slice(0, 3)}`;
-  if (digits.length >= 3) formatted += ")";
-  if (digits.length > 3) formatted += ` ${digits.slice(3, 6)}`;
-  if (digits.length > 6) formatted += `-${digits.slice(6, 8)}`;
-  if (digits.length > 8) formatted += `-${digits.slice(8, 10)}`;
-  return formatted;
-}
 
 export function LeadForm({
   sourcePage,

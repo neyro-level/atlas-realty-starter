@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ['127.0.0.1', 'localhost'],
   experimental: { cpus: 1 },
   output: 'standalone',
-  transpilePackages: ['@starter/site-contracts', '@starter/site-fixtures', '@starter/site-ui'],
+  transpilePackages: ['@starter/site-contracts', '@starter/site-fixtures', '@ams/realty-ui'],
   async headers() {
     return [{ headers: securityHeaders, source: '/:path*' }]
   },

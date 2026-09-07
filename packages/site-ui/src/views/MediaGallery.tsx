@@ -93,7 +93,7 @@ export function MediaGallery({
         index={index}
         slides={safeImages}
         plugins={[Counter, Fullscreen, Thumbnails, Zoom]}
-        className="atlas-media-lightbox"
+        className="ams-realty-media-lightbox"
         carousel={{ finite: !hasMany, preload: 2 }}
         thumbnails={{ hidden: !hasMany, showToggle: hasMany }}
         zoom={{ maxZoomPixelRatio: 3, pinchZoomV4: true, scrollToZoom: true }}

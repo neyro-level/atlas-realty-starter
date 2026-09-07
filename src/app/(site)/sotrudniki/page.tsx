@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { EmployeeDirectoryPageDto } from "@starter/site-contracts";
-import { EmployeesDirectoryView, type SiteLinkRendererProps } from "@starter/site-ui";
+import { EmployeesDirectoryView, type SiteLinkRendererProps } from "@ams/realty-ui";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { CatalogHeroBlock } from "@/components/marketing/CatalogHeroBlock";
 import { EmployeeTeamCard } from "@/modules/employees/ui/EmployeeTeamCard";

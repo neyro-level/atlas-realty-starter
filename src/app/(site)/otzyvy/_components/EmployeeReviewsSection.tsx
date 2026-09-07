@@ -1,7 +1,7 @@
 import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
 import type { EmployeeReviewsPageDto } from "@starter/site-contracts";
-import { EmployeeReviewsView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui";
+import { EmployeeReviewsView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@ams/realty-ui";
 import type { EmployeeReviewDirectoryResult } from "@/modules/employees";
 import { EMPLOYEE_PORTRAIT_PLACEHOLDER } from "@/modules/employees/photo-policy";
 

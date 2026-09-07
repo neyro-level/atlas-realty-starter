@@ -10,7 +10,7 @@ import {
   CatalogSortTabsView,
   CatalogViewSwitchView,
   type SiteLinkRendererProps,
-} from "@starter/site-ui";
+} from "@ams/realty-ui";
 import {
   buildSearchParams,
   CATALOG_PAGE_SIZE,

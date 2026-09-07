@@ -27,6 +27,7 @@ type LeadgenPromoLandingViewProps = {
   imageRenderer: SiteImageRenderer;
   copyright: string;
   registry: string;
+  city: { nominative: string; genitive: string; prepositional: string };
 };
 
 export function LeadgenPromoLandingView({
@@ -36,6 +37,7 @@ export function LeadgenPromoLandingView({
   imageRenderer: ImageRenderer,
   copyright,
   registry,
+  city,
 }: LeadgenPromoLandingViewProps) {
   const { PromoHeader, RequestButton, CurrentDateBadge, ConstructionProjectShowcase, InlinePhoneForm, ApartmentShowcase, QuizModal, SimpleRequestModal, PrivacyModal } = adapters;
   const heroBackgroundImage = content.heroBackgroundImage ?? leadgenHeroImage;
@@ -46,7 +48,7 @@ export function LeadgenPromoLandingView({
     formTitle: "Получить подборку бесплатно",
     submitLabel: "Смотреть базу бесплатно",
     message:
-      "Клиент просит открыть закрытую базу квартир в Краснодаре.",
+      `Клиент просит открыть закрытую базу квартир в ${city.prepositional}.`,
   };
 
   return (
@@ -288,7 +290,7 @@ export function LeadgenPromoLandingView({
         </section>
       ) : null}
 
-      {compact ? null : <LeadgenFinalQuizCta content={content} imageRenderer={ImageRenderer} requestButton={RequestButton} />}
+      {compact ? null : <LeadgenFinalQuizCta content={content} city={city} imageRenderer={ImageRenderer} requestButton={RequestButton} />}
 
       <LeadgenPromoFooter copyright={copyright} registry={registry} privacyModal={PrivacyModal} />
       <QuizModal content={content} />
@@ -492,7 +494,7 @@ function BaseSectionPreview({ content, imageRenderer: ImageRenderer }: { content
   );
 }
 
-function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestButton: RequestButton }: { content: LeadgenPromoContentDto; imageRenderer: SiteImageRenderer; requestButton: ElementType }) {
+function LeadgenFinalQuizCta({ content, city, imageRenderer: ImageRenderer, requestButton: RequestButton }: { content: LeadgenPromoContentDto; city: { nominative: string; prepositional: string }; imageRenderer: SiteImageRenderer; requestButton: ElementType }) {
   if (content.hideFinalCta) {
     return null;
   }
@@ -530,7 +532,7 @@ function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestBut
                       {hasConstructionPreview ? "Расчет строительства" : "Подборка новостроек"}
                     </p>
                     <p className="mt-1 text-[10px] font-medium leading-4 text-[var(--text-muted)]">
-                      {hasConstructionPreview ? "Краснодар · каталог проектов" : "Краснодар · расчет ипотеки"}
+                      {hasConstructionPreview ? `${city.nominative} · каталог проектов` : `${city.nominative} · расчет ипотеки`}
                     </p>
                   </div>
                   <span className="rounded-[5px] bg-[var(--accent-soft)] px-2 py-1 text-[10px] font-semibold leading-none text-[var(--accent)]">
@@ -687,7 +689,7 @@ function LeadgenFinalQuizCta({ content, imageRenderer: ImageRenderer, requestBut
             <RequestButton
               className={`${primaryButtonClass} sm:w-[330px]`}
               mode="quiz"
-              title="Бесплатный подбор проверенных квартир в Краснодаре"
+              title={`Бесплатный подбор проверенных квартир в ${city.prepositional}`}
               submitLabel="Получить подборку"
               formType={`${content.formPrefix}_final_quiz`}
             >

@@ -1,16 +1,18 @@
 "use client";
 
-import { PropertyGalleryView, type PropertyGalleryViewProps, type SiteImageRendererProps } from "@starter/site-ui";
+import { PropertyGalleryView, type PropertyGalleryViewProps, type SiteImageRendererProps } from "@ams/realty-ui";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { shouldOptimizeCatalogImage } from "@/modules/media/image-optimization";
+import { siteProfile } from "@/project/site-profile";
 
-type PropertyObjectGalleryProps = Omit<PropertyGalleryViewProps, "imageRenderer" | "shouldOptimizeImage">;
+type PropertyObjectGalleryProps = Omit<PropertyGalleryViewProps, "cityNominative" | "imageRenderer" | "shouldOptimizeImage">;
 
 export function PropertyObjectGallery(props: PropertyObjectGalleryProps) {
   return (
     <PropertyGalleryView
       {...props}
+      cityNominative={siteProfile.city.nominative}
       imageRenderer={PropertyGalleryImage}
       shouldOptimizeImage={shouldOptimizeCatalogImage}
     />

@@ -1,6 +1,7 @@
 "use client";
 
-import { CatalogNewBuildingSelectionCardView, type CatalogView } from "@starter/site-ui";
+import { CatalogNewBuildingSelectionCardView, type CatalogView } from "@ams/realty-ui";
+import { siteProfile } from "@/project/site-profile";
 
 type Props = {
   variant?: CatalogView;
@@ -19,7 +20,7 @@ export function CatalogNewBuildingSelectionCard({
     window.dispatchEvent(new CustomEvent("open-request-modal", {
       detail: {
         title: "Узнать свои варианты",
-        subtitle: "Оставьте контакты. Специалист агентства недвижимости сравнит условия застройщиков и подберет подходящие новостройки в Краснодаре.",
+        subtitle: `Оставьте контакты. Специалист агентства недвижимости сравнит условия застройщиков и подберет подходящие новостройки в ${siteProfile.city.prepositional}.`,
         source: variant === "list" ? `${source}:list` : source,
         formType,
       },
@@ -29,6 +30,7 @@ export function CatalogNewBuildingSelectionCard({
   return (
     <CatalogNewBuildingSelectionCardView
       variant={variant}
+      cityPrepositional={siteProfile.city.prepositional}
       source={source}
       formType={formType}
       onRequest={openRequest}

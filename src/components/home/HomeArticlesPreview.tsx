@@ -1,6 +1,6 @@
 import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
-import { HomeArticlesPreviewView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui";
+import { HomeArticlesPreviewView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@ams/realty-ui";
 import { HomeCarouselScrollHint } from "@/components/home/HomeCarouselScrollHint";
 import { journalCategories } from "@/entities/article/journal-config";
 import type { ArticleSummary } from "@/entities/article/model";

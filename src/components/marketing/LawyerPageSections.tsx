@@ -1,4 +1,4 @@
-import { LawyerPageView } from "@starter/site-ui";
+import { LawyerPageView } from "@ams/realty-ui";
 import { AgencyFaqAccordion } from "@/components/marketing/AgencyFaqAccordion";
 import { AgencyInlineLeadForm } from "@/components/marketing/AgencyInlineLeadForm";
 import type { AgencyFaqItem } from "@/components/marketing/agency-faq-content";
@@ -8,6 +8,7 @@ import { EmployeeTeamCard, getEmployeeDirectory } from "@/modules/employees";
 import { EmployeePortrait } from "@/modules/employees/ui/EmployeePortrait";
 import { faqPageSchema } from "@/shared/lib/seo/schema";
 import { JsonLd } from "@/shared/ui/JsonLd";
+import { siteProfile } from "@/project/site-profile";
 
 const LAWYER_FAQ_ITEMS: AgencyFaqItem[] = [
   { question: "Чем юрист агентства недвижимости отличается от нотариуса или стороннего адвоката?", answer: [{ type: "paragraph", text: "Нотариус удостоверяет сделки и оформляет наследство в стандартных случаях. Юрист подключается, когда стандартный путь не работает: пропущен срок, документы старого образца, есть спор или нужен суд. Мы работаем только с недвижимостью и видим всю картину сделки, а не отдельную бумагу." }] },
@@ -29,6 +30,7 @@ export async function LawyerPageSections() {
   const schemaItems = LAWYER_FAQ_ITEMS.map((item) => ({ question: item.question, answer: item.answer.map((block) => block.type === "paragraph" ? block.text : block.items.join(" ")).join(" ") }));
 
   return <><JsonLd data={faqPageSchema(schemaItems)} /><LawyerPageView
+    cityPrepositional={siteProfile.city.prepositional}
     expert={expert ? { fullName: expert.fullName, position: expert.position, portrait: <EmployeePortrait photoUrl={expert.photoUrl} fullName={expert.fullName} sizes="(max-width: 1024px) 100vw, 520px" /> } : undefined}
     employeeCards={employees.map((employee) => <EmployeeTeamCard key={employee.id} employee={employee} showPhoneAction />)}
     servicesGallery={<LawyerServicesGallery />}

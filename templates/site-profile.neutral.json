@@ -13,6 +13,7 @@
   "indexable": false,
   "expert": {
     "name": "Специалист",
+    "role": "Эксперт по недвижимости",
     "portrait": "/images/brand/expert.webp"
   },
   "contacts": {
@@ -38,18 +39,18 @@
     "description": "Каталог недвижимости и сопровождение сделки."
   },
   "theme": {
-    "preset": "atlas-burgundy",
+    "preset": "ams-neutral",
     "primary": "var(--accent)",
     "primaryHover": "var(--accent-hover)"
   },
   "map": {
     "provider": "yandex",
-    "center": [45.03547, 38.975313],
-    "zoom": 12,
-    "catalogZoom": 12
+    "center": [0, 0],
+    "zoom": 10,
+    "catalogZoom": 10
   },
   "features": {
-    "catalogMap": true,
+    "catalogMap": false,
     "mediaGallery": true,
     "requests": true
   }

@@ -2,6 +2,10 @@ import type { RequestAvatarDto } from "@starter/site-contracts";
 import { Check, X } from "lucide-react";
 import type { FormEvent, ReactNode, RefObject } from "react";
 import type { SiteImageRenderer } from "../lib/adapters";
+import { Dialog, DialogContent } from "../components/ui/dialog";
+import { Button } from "../components/ui/button";
+import { Checkbox } from "../components/ui/checkbox";
+import { Input } from "../components/ui/input";
 
 type RequestModalViewProps = {
   avatars: readonly RequestAvatarDto[];
@@ -63,24 +67,18 @@ export function RequestModalView({
   onWebsiteChange,
 }: RequestModalViewProps) {
   return (
-    <div
-      className="request-modal__overlay"
-      role="presentation"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <div className="request-modal__panel" role="dialog" aria-modal="true" aria-labelledby="request-modal-title" ref={panelRef}>
-        <button className="request-modal__close" type="button" aria-label="Закрыть форму" onClick={onClose}>
+    <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogContent placement="bottom-mobile" showClose={false} overlayClassName="request-modal__overlay" className="request-modal__panel" aria-labelledby="request-modal-title" ref={panelRef}>
+        <Button variant="ghost" size="icon" className="request-modal__close" type="button" aria-label="Закрыть форму" onClick={onClose}>
           <X className="size-5" aria-hidden />
-        </button>
+        </Button>
 
         {successMessage ? (
           <div className="request-modal__success" role="status" aria-live="polite">
             <span className="request-modal__success-icon"><Check className="size-8" aria-hidden /></span>
             <h2 className="request-modal__title" id="request-modal-title">Заявка отправлена</h2>
             <p className="request-modal__subtitle">{successMessage}</p>
-            <button className="home-btn-primary request-modal__submit" type="button" onClick={onClose}>Хорошо</button>
+            <Button className="home-btn-primary request-modal__submit" type="button" onClick={onClose}>Хорошо</Button>
           </div>
         ) : <>
         <div className="request-modal__header">
@@ -120,7 +118,7 @@ export function RequestModalView({
             <label className="request-modal__label" htmlFor="request-modal-name">
               Ваше имя
             </label>
-            <input
+            <Input
               id="request-modal-name"
               className="request-modal__input"
               autoComplete="name"
@@ -138,7 +136,7 @@ export function RequestModalView({
             <label className="request-modal__label" htmlFor="request-modal-phone">
               Номер телефона
             </label>
-            <input
+            <Input
               id="request-modal-phone"
               ref={phoneRef}
               className="request-modal__input"
@@ -155,13 +153,12 @@ export function RequestModalView({
           </div>
 
           <label className="request-modal__consent">
-            <input
+            <Checkbox
               className="request-modal__checkbox"
-              type="checkbox"
               checked={consent}
               aria-invalid={Boolean(errors.consent)}
               aria-describedby={errors.consent ? "request-modal-consent-error" : undefined}
-              onChange={(event) => onConsentChange(event.target.checked)}
+              onCheckedChange={(checked) => onConsentChange(checked === true)}
             />
             <span>{consentContent}</span>
           </label>
@@ -169,13 +166,13 @@ export function RequestModalView({
 
           {resultMessage ? <p className="request-modal__submit-error" role="alert">{resultMessage}</p> : null}
 
-          <button className="home-btn-primary request-modal__submit" type="submit" disabled={isPending}>
+          <Button className="home-btn-primary request-modal__submit" type="submit" disabled={isPending}>
             {isPending ? "Отправляем..." : submitLabel}
-          </button>
+          </Button>
           <p className="request-modal__note">Без спама. Только чтобы связаться по вашей задаче.</p>
         </form>
         </>}
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

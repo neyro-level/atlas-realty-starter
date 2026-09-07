@@ -14,7 +14,7 @@ import {
   PropertyDetailSummaryView,
   PropertyRelatedView,
   type SiteLinkRendererProps,
-} from "@starter/site-ui";
+} from "@ams/realty-ui";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PropertyPageActions } from "./PropertyPageActions";

@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { RequestModalView } from "@starter/site-ui";
+import { RequestModalView } from "@ams/realty-ui";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useTransition, type FormEvent } from "react";
 import { createLeadAction, type CreateLeadActionResult } from "@/modules/leads";
 import { trackEvent } from "@/modules/analytics";
 import { useRequestModalRealtorAvatars } from "@/components/layout/RequestModalRealtorAvatarsProvider";
 import { PrivacyConsentText } from "@/components/forms/PrivacyConsentText";
+import { formatRuMobilePhone, isValidRuMobilePhone } from "@/modules/leads/phone";
 
 export type RequestModalDetail = {
   title?: string;
@@ -41,28 +42,6 @@ const MIN_FORM_FILL_TIME_MS = 1400;
 
 function isRequestModalEvent(event: Event): event is CustomEvent<RequestModalDetail> {
   return "detail" in event;
-}
-
-function validatePhone(phone: string) {
-  const digits = phone.replace(/\D/g, "");
-  const normalized = digits.startsWith("8") ? `7${digits.slice(1)}` : digits;
-  return normalized.length === 11 && normalized.startsWith("79");
-}
-
-function formatPhoneInput(value: string) {
-  const digits = value.replace(/\D/g, "").slice(0, 11);
-  if (!digits) return "";
-
-  const normalized = digits.startsWith("8") ? `7${digits.slice(1)}` : digits;
-  const hasCountry = normalized.startsWith("7");
-  const body = hasCountry ? normalized.slice(1) : normalized;
-  const parts = [body.slice(0, 3), body.slice(3, 6), body.slice(6, 8), body.slice(8, 10)].filter(Boolean);
-
-  if (!hasCountry) return parts.join(" ");
-  if (parts.length === 1) return `+7 (${parts[0]}`;
-  if (parts.length === 2) return `+7 (${parts[0]}) ${parts[1]}`;
-  if (parts.length === 3) return `+7 (${parts[0]}) ${parts[1]}-${parts[2]}`;
-  return `+7 (${parts[0]}) ${parts[1]}-${parts[2]}-${parts[3]}`;
 }
 
 function normalizeSubmitLabel(label?: string | null) {
@@ -236,44 +215,12 @@ export function RequestModal() {
 
   useEffect(() => {
     if (!isOpen) {
-      document.body.style.overflow = "";
       lastActiveElementRef.current?.focus();
       return;
     }
 
-    document.body.style.overflow = "hidden";
     const focusTimer = window.setTimeout(() => phoneRef.current?.focus(), 80);
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closeModal();
-        return;
-      }
-
-      if (event.key !== "Tab" || !panelRef.current) return;
-
-      const focusable = Array.from(panelRef.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'));
-      if (!focusable.length) return;
-
-      const firstElement = focusable[0];
-      const lastElement = focusable[focusable.length - 1];
-
-      if (event.shiftKey && document.activeElement === firstElement) {
-        event.preventDefault();
-        lastElement.focus();
-      } else if (!event.shiftKey && document.activeElement === lastElement) {
-        event.preventDefault();
-        firstElement.focus();
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      window.clearTimeout(focusTimer);
-      window.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = "";
-    };
+    return () => window.clearTimeout(focusTimer);
   }, [isOpen]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -282,7 +229,7 @@ export function RequestModal() {
 
     const nextErrors: RequestModalErrors = {};
     if (name.trim().length < 2) nextErrors.name = "Введите имя, чтобы мы понимали, как к вам обращаться.";
-    if (!validatePhone(phone)) nextErrors.phone = "Введите российский мобильный номер в формате +7 (9XX) XXX-XX-XX.";
+    if (!isValidRuMobilePhone(phone)) nextErrors.phone = "Введите российский мобильный номер в формате +7 (9XX) XXX-XX-XX.";
     if (!consent) nextErrors.consent = "Необходимо согласие на обработку персональных данных.";
 
     setErrors(nextErrors);
@@ -366,7 +313,7 @@ export function RequestModal() {
         if (errors.name) setErrors((current) => ({ ...current, name: undefined }));
       }}
       onPhoneChange={(value) => {
-        setPhone(formatPhoneInput(value));
+        setPhone(formatRuMobilePhone(value));
         if (errors.phone) setErrors((current) => ({ ...current, phone: undefined }));
       }}
       onConsentChange={(checked) => {

@@ -16,12 +16,12 @@ The starter itself does not become a client production system. A concrete clone 
 
 ## Canonical document mapping
 
-This project uses the compact document set required by Standard 2.1 and does not duplicate it with parallel files.
+This project uses the compact document set required by the active Realty Platform Core 3.0 and does not duplicate it with parallel files.
 
 | Canonical role                                   | Source of truth                                                                                      |
 | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
 | Product, profile, modules and current state      | this file                                                                                            |
-| Architecture and data model                      | `AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md` plus actual `src/core`, `src/payload` and migrations |
+| Architecture and data model                      | global Realty Platform Core 3.0 plus actual `src/core`, `src/payload` and migrations; the tracked 2.1 standard is historical evidence |
 | Security, roles and PII                          | `../SECURITY.md`                                                                                     |
 | Local runtime, CI, deploy, rollback and recovery | `OPERATIONS.md`                                                                                      |
 | Versions and compatibility check                 | `VERSION_MATRIX.md`                                                                                  |

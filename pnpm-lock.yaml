@@ -44,7 +44,7 @@ importers:
       '@starter/site-fixtures':
         specifier: workspace:*
         version: link:packages/site-fixtures
-      '@starter/site-ui':
+      '@ams/realty-ui':
         specifier: workspace:*
         version: link:packages/site-ui
       cross-env:

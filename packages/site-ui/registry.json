@@ -1,20 +1,20 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "atlas-site-ui",
-  "homepage": "https://atlas.ams24.ru",
+  "name": "ams-realty-ui",
+  "homepage": "https://ams24.ru",
   "items": [
     {
-      "name": "atlas-theme",
+      "name": "ams-realty-foundation",
       "type": "registry:theme",
-      "title": "Atlas theme",
-      "description": "Semantic colors, typography, spacing, radii, shadows and breakpoints for Atlas realty sites.",
+      "title": "AMS Realty foundation",
+      "description": "Neutral semantic colors, typography, spacing, radii, shadows and breakpoints for AMS realty sites.",
       "files": [{ "path": "src/theme.css", "type": "registry:theme" }]
     },
     {
-      "name": "atlas-primitives",
+      "name": "ams-realty-primitives",
       "type": "registry:ui",
-      "title": "Atlas shadcn primitives",
-      "description": "The supported primitive layer used by Atlas application components.",
+      "title": "AMS Realty shadcn primitives",
+      "description": "The supported neutral primitive layer used by AMS Realty application components.",
       "dependencies": [
         "@radix-ui/react-accordion@1.2.12",
         "@radix-ui/react-aspect-ratio@1.1.15",
@@ -41,6 +41,7 @@
         { "path": "src/components/ui/field.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/input.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/label.tsx", "type": "registry:ui" },
+        { "path": "src/components/ui/layout.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/scroll-area.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/separator.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/sheet.tsx", "type": "registry:ui" },
@@ -50,48 +51,48 @@
       ]
     },
     {
-      "name": "media-gallery",
+      "name": "ams-realty-media-gallery",
       "type": "registry:component",
-      "title": "Atlas media gallery",
+      "title": "AMS Realty media gallery",
       "description": "Embla carousel and accessible fullscreen media viewer for property and residential-complex pages.",
-      "registryDependencies": ["atlas-theme", "atlas-primitives"],
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives"],
       "dependencies": ["embla-carousel-react@8.6.0", "yet-another-react-lightbox@3.32.2"],
       "files": [{ "path": "src/views/MediaGallery.tsx", "type": "registry:component" }]
     },
     {
-      "name": "property-card",
+      "name": "ams-realty-property-card",
       "type": "registry:component",
-      "registryDependencies": ["atlas-theme", "atlas-primitives"],
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives"],
       "files": [{ "path": "src/views/PropertyCardView.tsx", "type": "registry:component" }]
     },
     {
-      "name": "residential-complex-card",
+      "name": "ams-realty-residential-complex-card",
       "type": "registry:component",
-      "registryDependencies": ["atlas-theme", "atlas-primitives"],
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives"],
       "files": [{ "path": "src/views/ResidentialComplexCardView.tsx", "type": "registry:component" }]
     },
     {
-      "name": "catalog-filters",
+      "name": "ams-realty-catalog-filters",
       "type": "registry:block",
-      "registryDependencies": ["atlas-theme", "atlas-primitives"],
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives"],
       "files": [
         { "path": "src/views/CatalogControlsView.tsx", "type": "registry:block" },
         { "path": "src/views/CatalogMobileFilterView.tsx", "type": "registry:block" }
       ]
     },
     {
-      "name": "request-form",
+      "name": "ams-realty-request-form",
       "type": "registry:block",
-      "registryDependencies": ["atlas-theme", "atlas-primitives"],
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives"],
       "files": [
         { "path": "src/views/RequestModalView.tsx", "type": "registry:block" },
         { "path": "src/views/ExpertRequestModalView.tsx", "type": "registry:block" }
       ]
     },
     {
-      "name": "atlas-cta-blocks",
+      "name": "ams-realty-cta-blocks",
       "type": "registry:block",
-      "registryDependencies": ["atlas-theme", "atlas-primitives", "request-form"],
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives", "ams-realty-request-form"],
       "files": [
         { "path": "src/views/CorporateFormSectionViews.tsx", "type": "registry:block" },
         { "path": "src/views/HomePreFooterView.tsx", "type": "registry:block" }

@@ -1,8 +1,8 @@
 import { Globe2 } from "lucide-react";
 
-const PROMOTION_CHANNELS = [
+function getPromotionChannels(cityGenitive: string, cityPrepositional: string) { return [
   {
-    title: "Корпоративный сайт и порталы Краснодара",
+    title: `Корпоративный сайт и порталы ${cityGenitive}`,
     description:
       "Объявление выходит на главных площадках города. Обновляем размещение, чтобы оно не терялось в выдаче.",
     icon: <Globe2 className="size-[20px]" strokeWidth={1.6} />,
@@ -10,7 +10,7 @@ const PROMOTION_CHANNELS = [
   {
     title: "Группа ВКонтакте",
     description:
-      "Публикуем отдельный пост по каждой квартире. Аудитория — 15 000 подписчиков в Краснодаре.",
+      `Публикуем отдельный пост по каждой квартире. Аудитория — 15 000 подписчиков в ${cityPrepositional}.`,
     icon: <VkIcon />,
   },
   {
@@ -19,9 +19,10 @@ const PROMOTION_CHANNELS = [
       "Отправляем объект в закрытый канал агентов в мессенджере MAX. Если у коллеги есть покупатель — сделка идёт быстрее.",
     icon: <MaxIcon />,
   },
-] as const;
+] as const; }
 
-export function SalePromotionView() {
+export function SalePromotionView({ cityGenitive, cityPrepositional }: { cityGenitive: string; cityPrepositional: string }) {
+  const promotionChannels = getPromotionChannels(cityGenitive, cityPrepositional);
   return (
     <section className="bg-[var(--palette-f6f6f4)] py-14 sm:py-16 lg:py-[88px]" aria-labelledby="sale-promotion-title">
       <div className="mx-auto max-w-site-frame px-5">
@@ -38,7 +39,7 @@ export function SalePromotionView() {
         </div>
 
         <div className="mt-8 grid gap-4 sm:mt-9 md:grid-cols-3 lg:gap-5">
-          {PROMOTION_CHANNELS.map(({ title, description, icon }) => (
+          {promotionChannels.map(({ title, description, icon }) => (
             <article key={title} className="flex min-h-[220px] flex-col rounded-2xl bg-white p-5 sm:p-6">
               <span
                 className="flex size-11 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-[var(--accent)]"

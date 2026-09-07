@@ -10,7 +10,7 @@ import {
   type PropertyCardCollectionActionProps,
   type SiteImageRendererProps,
   type SiteLinkRendererProps,
-} from "@starter/site-ui";
+} from "@ams/realty-ui";
 import { type CatalogView, type ListingCard } from "@/lib/catalog";
 import { useSiteContacts } from "@/components/layout/SiteContactsProvider";
 import { shouldOptimizeCatalogImage } from "@/modules/media/image-optimization";

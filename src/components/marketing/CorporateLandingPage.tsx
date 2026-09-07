@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image, { type ImageProps } from "next/image";
 import { ArrowRight } from "lucide-react";
 import type { CorporateLandingPageDto } from "@starter/site-contracts";
-import { CareersComparisonView, CareersFinalCtaView, CareersTrainingView, CareersWorkSystemView, CorporateLandingView, MortgageBrokerSupportView, MortgageCalculatorView, MortgageProgramsView, SaleFinalCtaView, SalePricingPrinciplesView, SalePromotionView, SaleReportingView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui";
+import { CareersComparisonView, CareersFinalCtaView, CareersTrainingView, CareersWorkSystemView, CorporateLandingView, MortgageBrokerSupportView, MortgageCalculatorView, MortgageProgramsView, SaleFinalCtaView, SalePricingPrinciplesView, SalePromotionView, SaleReportingView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@ams/realty-ui";
 import { AboutCompanyDirectorSection } from "@/components/marketing/AboutCompanyDirectorSection";
 import { AboutCompanyFinalCtaSection } from "@/components/marketing/AboutCompanyFinalCtaSection";
 import { AboutCompanyTeamSection } from "@/components/marketing/AboutCompanyTeamSection";
@@ -11,6 +11,7 @@ import { CatalogHeroBlock } from "@/components/marketing/CatalogHeroBlock";
 import { CareersQuizButton, CareersQuizModal } from "@/components/marketing/CareersQuiz";
 import { MortgageConsultationSection } from "@/components/marketing/MortgageConsultationSection";
 import { LawyerPageSections } from "@/components/marketing/LawyerPageSections";
+import { siteProfile } from "@/project/site-profile";
 import { Breadcrumbs, type BreadcrumbItem } from "@/components/layout/Breadcrumbs";
 import { CatalogSharpShowcase } from "@/components/catalog/CatalogSharpShowcase";
 import { RealEstateFaqSection } from "@/components/marketing/RealEstateFaqSection";
@@ -75,12 +76,12 @@ export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showca
       primaryAction={<CorporatePrimaryCta page={page} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--accent-hover)] sm:w-fit" />}
       bodyBeforeRelated={<>
         {page.slug === "o-kompanii" ? <><AboutCompanyDirectorSection /><AboutCompanyTeamSection /><AboutCompanyFinalCtaSection /></> : null}
-        {page.slug === "prodazha-nedvizhimosti" ? <><SalePricingPrinciplesView /><SalePreparationSection /><SalePromotionView /><SaleNegotiationSection /><SaleReportingView /><SaleFinalCtaView /><SaleFaqSection /></> : null}
+        {page.slug === "prodazha-nedvizhimosti" ? <><SalePricingPrinciplesView /><SalePreparationSection /><SalePromotionView cityGenitive={siteProfile.city.genitive} cityPrepositional={siteProfile.city.prepositional} /><SaleNegotiationSection /><SaleReportingView /><SaleFinalCtaView /><SaleFaqSection /></> : null}
         {page.slug === "yurist" ? <LawyerPageSections /> : null}
         {page.slug === "rabota-rieltorom" ? <><CareersWorkSystemView content={careersWorkSystem} /><CareersComparisonView content={careersComparison} /><CareersTrainingView content={careersTraining} imageRenderer={CorporateImage} /><CareersFinalCtaView content={careersFinalCta} quizButton={<CareersQuizButton source="corporate:rabota-rieltorom:final" className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[var(--accent)] px-6 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] sm:w-auto sm:min-w-[260px]" />} /><CareersQuizModal /></> : null}
       </>}
       secondaryBreadcrumbs={<Breadcrumbs items={buildCorporateBreadcrumbs(page)} />}
-      bodyAfterRelated={hasMortgagePage ? <><MortgageProgramsView /><MortgageCalculatorView /><MortgageBrokerSupportView imageRenderer={CorporateImage} /><MortgageConsultationSection /></> : null}
+      bodyAfterRelated={hasMortgagePage ? <><MortgageProgramsView cityPrepositional={siteProfile.city.prepositional} /><MortgageCalculatorView /><MortgageBrokerSupportView imageRenderer={CorporateImage} /><MortgageConsultationSection /></> : null}
       showcase={page.showcase && showcase ? <><CatalogSharpShowcase catalog={showcase} complexes={complexes} query={showcaseQuery ?? { limit: showcaseLimit }} paginationQuery={visitorQuery} initialFilter={page.showcase.initialFilter} sectionId="page-showcase" basePath={`/${page.slug}`} headline={hasSecondaryCatalogIntro ? page.heroTitle : undefined} heading={page.showcase.heading} description={page.showcase.description} emptyMessage={page.showcase.emptyMessage} servicePromo={isMainCatalogIndex ? "legal" : "mortgage"} />{hasBuyerServices ? <CatalogBuyerServicesSection sourcePage={`/${page.slug}`} /> : null}</> : null}
       afterShowcase={isMainCatalogIndex ? <PropertyPurchaseFlowBlocks sourcePage={`/${page.slug}`} leadTitle={getCatalogLeadTitle(page.slug)} /> : null}
       footerContent={catalogFaqItems ? <><JsonLd data={faqPageSchema(faqItemsToSchema(catalogFaqItems))} /><RealEstateFaqSection items={catalogFaqItems} />{isMainCatalogIndex ? <PopularSearchesSection /> : null}</> : null}

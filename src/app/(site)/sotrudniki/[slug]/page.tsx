@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { EmployeeProfilePageDto } from "@starter/site-contracts";
-import { EmployeeProfileView, type SiteLinkRendererProps } from "@starter/site-ui";
+import { EmployeeProfileView, type SiteLinkRendererProps } from "@ams/realty-ui";
 import { CatalogPropertyCard } from "@/components/catalog/CatalogPropertyCard";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import type { EmployeeProfileResult } from "@/modules/employees";

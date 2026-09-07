@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ArrowRight, RefreshCcw, SearchX } from "lucide-react";
-import { Badge, Button } from "@starter/site-ui";
+import { Badge, Button } from "@ams/realty-ui";
 import { IS_DEVELOPMENT } from "@/shared/lib/is-development";
 
 export const ROUTE_STATUS_BACKGROUND_IMAGE = "/images/agency-home-secondary-hero.webp";

@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { ExpertRequestModalView } from "@starter/site-ui";
+import { ExpertRequestModalView } from "@ams/realty-ui";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition, type ChangeEvent, type FormEvent } from "react";
 import { createLeadAction, type CreateLeadActionResult } from "@/modules/leads";
 import { trackEvent } from "@/modules/analytics";
 import { useRequestModalRealtorAvatars } from "@/components/layout/RequestModalRealtorAvatarsProvider";
 import { PrivacyConsentText } from "@/components/forms/PrivacyConsentText";
+import { formatRuMobileDigits, formatRuMobilePhone, normalizeRuMobileDigits } from "@/modules/leads/phone";
 
 export type ExpertRequestModalDetail = {
   propertyId?: string;
@@ -25,30 +26,6 @@ const MIN_FORM_FILL_TIME_MS = 1400;
 
 function isExpertRequestModalEvent(event: Event): event is CustomEvent<ExpertRequestModalDetail> {
   return "detail" in event;
-}
-
-function normalizeRuMobileDigits(value: string) {
-  let digits = value.replace(/\D/g, "");
-  if (digits.startsWith("7") || digits.startsWith("8")) digits = digits.slice(1);
-  if (!digits) return "";
-  if (!digits.startsWith("9")) digits = `9${digits}`;
-  return digits.slice(0, 10);
-}
-
-function formatRuMobileDigits(digits: string) {
-  const value = digits.replace(/\D/g, "").slice(0, 10);
-  if (!value) return "";
-
-  let formatted = `+7 (${value.slice(0, 3)}`;
-  if (value.length >= 3) formatted += ")";
-  if (value.length > 3) formatted += ` ${value.slice(3, 6)}`;
-  if (value.length > 6) formatted += `-${value.slice(6, 8)}`;
-  if (value.length > 8) formatted += `-${value.slice(8, 10)}`;
-  return formatted;
-}
-
-function formatRuMobilePhone(value: string) {
-  return formatRuMobileDigits(normalizeRuMobileDigits(value));
 }
 
 declare global {
@@ -122,22 +99,11 @@ export function ExpertRequestModal() {
   }, []);
 
   useEffect(() => {
-    if (!isOpen) {
-      document.body.style.overflow = "";
-      return;
-    }
+    if (!isOpen) return;
 
-    document.body.style.overflow = "hidden";
     const focusTimer = window.setTimeout(() => phoneRef.current?.focus(), 80);
-    const onEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeModal();
-    };
-
-    window.addEventListener("keydown", onEscape);
     return () => {
       window.clearTimeout(focusTimer);
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onEscape);
       lastActiveElementRef.current?.focus();
     };
   }, [isOpen]);

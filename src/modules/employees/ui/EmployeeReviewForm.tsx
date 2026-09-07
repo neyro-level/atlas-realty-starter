@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button, EmployeeReviewDialogView } from "@starter/site-ui";
+import { Button, EmployeeReviewDialogView } from "@ams/realty-ui";
 import { useState, useTransition, type FormEvent } from "react";
 import { trackEvent } from "@/modules/analytics";
 import { PrivacyConsentText } from "@/components/forms/PrivacyConsentText";

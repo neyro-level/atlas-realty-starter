@@ -1,10 +1,11 @@
 "use client";
 
-import { PropertyChatView } from "@starter/site-ui";
+import { PropertyChatView } from "@ams/realty-ui";
 import { useEffect, useRef, useState, useTransition, type FormEvent } from "react";
 import { createLeadAction, type CreateLeadActionResult } from "@/modules/leads";
 import { trackEvent } from "@/modules/analytics";
 import { PrivacyConsentText } from "@/components/forms/PrivacyConsentText";
+import { formatRuMobilePhone, isValidRuMobilePhone } from "@/modules/leads/phone";
 
 export type PropertyChatDetail = {
   propertyId?: string;
@@ -28,28 +29,6 @@ const MIN_FORM_FILL_TIME_MS = 1400;
 
 function isPropertyChatEvent(event: Event): event is CustomEvent<PropertyChatDetail> {
   return "detail" in event;
-}
-
-function isValidPhone(value: string) {
-  const digits = value.replace(/\D/g, "");
-  const normalized = digits.startsWith("8") ? `7${digits.slice(1)}` : digits;
-  return normalized.length === 11 && normalized.startsWith("79");
-}
-
-function formatPhoneInput(value: string) {
-  const digits = value.replace(/\D/g, "").slice(0, 11);
-  if (!digits) return "";
-
-  const normalized = digits.startsWith("8") ? `7${digits.slice(1)}` : digits;
-  const hasCountry = normalized.startsWith("7");
-  const body = hasCountry ? normalized.slice(1) : normalized;
-  const parts = [body.slice(0, 3), body.slice(3, 6), body.slice(6, 8), body.slice(8, 10)].filter(Boolean);
-
-  if (!hasCountry) return parts.join(" ");
-  if (parts.length === 1) return `+7 (${parts[0]}`;
-  if (parts.length === 2) return `+7 (${parts[0]}) ${parts[1]}`;
-  if (parts.length === 3) return `+7 (${parts[0]}) ${parts[1]}-${parts[2]}`;
-  return `+7 (${parts[0]}) ${parts[1]}-${parts[2]}-${parts[3]}`;
 }
 
 function normalizeLeadEntityId(value?: string | null) {
@@ -128,23 +107,6 @@ export function PropertyChat() {
   }, []);
 
   useEffect(() => {
-    if (!isOpen) {
-      document.body.style.overflow = "";
-      return;
-    }
-
-    document.body.style.overflow = "hidden";
-    const onEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsOpen(false);
-    };
-    window.addEventListener("keydown", onEscape);
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onEscape);
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
     if (!isOpen) return;
 
     const textarea = textareaRef.current;
@@ -174,7 +136,7 @@ export function PropertyChat() {
     const nextErrors: PropertyChatErrors = {};
 
     if (message.trim().length < 5) nextErrors.message = "Напишите коротко, что нужно уточнить по объекту.";
-    if (!isValidPhone(phone)) nextErrors.phone = "Введите корректный телефон.";
+    if (!isValidRuMobilePhone(phone)) nextErrors.phone = "Введите корректный телефон.";
     if (!consent) nextErrors.consent = "Необходимо согласие на обработку персональных данных.";
 
     setErrors(nextErrors);
@@ -233,7 +195,7 @@ export function PropertyChat() {
       onClose={() => setIsOpen(false)}
       onSubmit={handleSubmit}
       onMessageChange={setMessage}
-      onPhoneChange={(value) => setPhone(formatPhoneInput(value))}
+      onPhoneChange={(value) => setPhone(formatRuMobilePhone(value))}
       onConsentChange={setConsent}
       onWebsiteChange={setWebsite}
     />

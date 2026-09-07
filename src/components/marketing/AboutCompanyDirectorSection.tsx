@@ -1,5 +1,5 @@
 import Image, { type ImageProps } from "next/image";
-import { AboutCompanyDirectorView, type SiteImageRendererProps } from "@starter/site-ui";
+import { AboutCompanyDirectorView, type SiteImageRendererProps } from "@ams/realty-ui";
 import { HOME_DIRECTOR } from "@/project/home-page";
 
 function DirectorImage({ alt, ...props }: SiteImageRendererProps) {

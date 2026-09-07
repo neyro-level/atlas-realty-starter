@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { JournalArticleView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui";
+import { JournalArticleView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@ams/realty-ui";
+import { siteProfile } from "@/project/site-profile";
 import { CatalogPropertyCard } from "@/components/catalog/CatalogPropertyCard";
 import { getArticleEditorialMeta } from "@/entities/article/editorial";
 import { isSalesLeaderNewBuilding } from "@/modules/new-buildings";
@@ -25,5 +26,5 @@ export default async function JournalArticlePage({ params }: Props) {
   const meta = getArticleEditorialMeta(page.article.slug);
   const actions = (variant: "desktop" | "mobile") => <ArticleActions title={page.article.title} slug={page.article.slug} coverImage={page.article.coverImage} excerpt={page.article.excerpt ?? page.article.seoDescription} variant={variant} className={variant === "desktop" ? "hidden sm:flex" : "mt-4 sm:hidden"} />;
   const renderCard = (items: typeof page.relatedNewBuildings, index: number) => { const item = items[index]!; const isNewBuilding = item.id.startsWith("new-building:"); return <CatalogPropertyCard key={item.id} listing={item} href={isNewBuilding ? `/${item.slug}` : undefined} imageBadge={isNewBuilding && isSalesLeaderNewBuilding(item.slug) ? "Лидер продаж" : undefined} />; };
-  return <><JsonLd data={breadcrumbSchema([{ name: "Главная", url: "/" }, { name: "Журнал агентства", url: "/journal" }, { name: page.article.title, url: `/journal/${page.article.slug}` }])} /><JsonLd data={articleSchema(page.article, meta)} />{page.faq.length ? <JsonLd data={faqPageSchema(page.faq)} /> : null}<JournalArticleView page={page} linkRenderer={JournalLink} imageRenderer={JournalImage} renderActions={actions} renderShowcaseCard={(index) => renderCard(page.showcase?.items ?? [], index)} renderBottomNewBuildingCard={(index) => renderCard(page.relatedNewBuildings, index)} /></>;
+  return <><JsonLd data={breadcrumbSchema([{ name: "Главная", url: "/" }, { name: "Журнал агентства", url: "/journal" }, { name: page.article.title, url: `/journal/${page.article.slug}` }])} /><JsonLd data={articleSchema(page.article, meta)} />{page.faq.length ? <JsonLd data={faqPageSchema(page.faq)} /> : null}<JournalArticleView page={page} cityGenitive={siteProfile.city.genitive} linkRenderer={JournalLink} imageRenderer={JournalImage} renderActions={actions} renderShowcaseCard={(index) => renderCard(page.showcase?.items ?? [], index)} renderBottomNewBuildingCard={(index) => renderCard(page.relatedNewBuildings, index)} /></>;
 }

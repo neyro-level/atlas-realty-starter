@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { NewBuildingGalleryView } from "@starter/site-ui";
+import { NewBuildingGalleryView } from "@ams/realty-ui";
 import type { ResolvedNewBuildingMedia } from "../format";
 
 type NewBuildingGalleryProps = {

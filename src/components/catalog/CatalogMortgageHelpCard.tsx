@@ -5,7 +5,7 @@ import {
   CatalogMortgageHelpCardView,
   type CatalogView,
   type SiteImageRendererProps,
-} from "@starter/site-ui";
+} from "@ams/realty-ui";
 
 export const CATALOG_MORTGAGE_HELP_CARD_INDEX = 8;
 

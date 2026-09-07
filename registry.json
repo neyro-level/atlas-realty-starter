@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "atlas-realty",
-  "homepage": "https://atlas.ams24.ru",
+  "name": "ams-realty-ui",
+  "homepage": "https://ams24.ru",
   "include": ["packages/site-ui/registry.json"]
 }

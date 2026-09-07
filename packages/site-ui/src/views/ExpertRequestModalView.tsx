@@ -2,6 +2,10 @@ import type { RequestAvatarDto } from "@starter/site-contracts";
 import { CheckCircle2, Loader2, ShieldCheck, UserRoundCheck, X } from "lucide-react";
 import type { ChangeEvent, FormEvent, ReactNode, RefObject } from "react";
 import type { SiteImageRenderer } from "../lib/adapters";
+import { Button } from "../components/ui/button";
+import { Checkbox } from "../components/ui/checkbox";
+import { Dialog, DialogContent } from "../components/ui/dialog";
+import { Input } from "../components/ui/input";
 
 type ExpertRequestModalViewProps = {
   avatars: readonly RequestAvatarDto[];
@@ -50,27 +54,24 @@ export function ExpertRequestModalView({
   consentContent,
 }: ExpertRequestModalViewProps) {
   return (
-    <div
-      className="fixed inset-0 z-[80] flex items-end bg-[var(--surface-dark-strong)]/24 px-2 py-2 backdrop-blur-[1px] sm:items-center sm:justify-center"
-      role="presentation"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <section
-        role="dialog"
-        aria-modal="true"
+    <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogContent
+        placement="bottom-mobile"
+        showClose={false}
+        overlayClassName="z-[80] bg-[var(--overlay-soft)] backdrop-blur-[1px]"
         aria-labelledby="expert-request-title"
-        className="relative w-full max-w-[452px] overflow-hidden rounded-lg bg-white shadow-[0_24px_80px_rgba(23,22,26,0.18)]"
+        className="z-[81] w-[min(calc(100vw-16px),452px)] max-w-[452px] gap-0 overflow-hidden rounded-lg border-0 bg-white p-0 shadow-[var(--shadow-dialog)]"
       >
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           type="button"
           aria-label="Закрыть форму"
           onClick={onClose}
           className="absolute right-4 top-4 z-10 flex size-9 items-center justify-center rounded-lg text-[var(--text-primary)] transition hover:bg-white/80"
         >
           <X className="size-5" aria-hidden />
-        </button>
+        </Button>
 
         <div className="bg-[linear-gradient(180deg,var(--accent-soft)_0%,var(--surface-card-soft)_66%,var(--surface)_100%)] px-6 pb-6 pt-14">
           <div className="mb-12 flex justify-center">
@@ -130,7 +131,7 @@ export function ExpertRequestModalView({
                   ▼
                 </span>
               </span>
-              <input
+              <Input
                 id="expert-request-phone"
                 ref={phoneRef}
                 name="phone"
@@ -149,10 +150,9 @@ export function ExpertRequestModalView({
           </div>
 
           <label className="flex items-start gap-2 text-[11px] leading-4 text-[var(--text-secondary)]">
-            <input
-              type="checkbox"
+            <Checkbox
               checked={consent}
-              onChange={(event) => onConsentChange(event.target.checked)}
+              onCheckedChange={(checked) => onConsentChange(checked === true)}
               className="mt-0.5 size-4 shrink-0 rounded border-[var(--input)] accent-[var(--accent)]"
             />
             <span>{consentContent}</span>
@@ -165,16 +165,16 @@ export function ExpertRequestModalView({
             </div>
           ) : null}
 
-          <button
+          <Button
             type="submit"
             disabled={isPending}
             className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--text-primary)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--palette-2a292c)] disabled:cursor-wait disabled:opacity-70"
           >
             {isPending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
             {isPending ? "Отправляем" : "Позвоните мне"}
-          </button>
+          </Button>
         </form>
-      </section>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

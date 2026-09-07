@@ -1,5 +1,10 @@
 import { Loader2, Send, X } from "lucide-react";
 import type { FormEvent, ReactNode, RefObject } from "react";
+import { Button } from "../components/ui/button";
+import { Checkbox } from "../components/ui/checkbox";
+import { Dialog, DialogContent } from "../components/ui/dialog";
+import { Input } from "../components/ui/input";
+import { Textarea } from "../components/ui/textarea";
 
 type PropertyChatViewProps = {
   message: string;
@@ -45,18 +50,13 @@ export function PropertyChatView({
   onWebsiteChange,
 }: PropertyChatViewProps) {
   return (
-    <div
-      className="fixed inset-0 z-[70] flex items-end bg-[var(--surface-dark-strong)]/56 px-4 py-4 backdrop-blur-sm sm:items-center sm:justify-center"
-      role="presentation"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <section
-        role="dialog"
-        aria-modal="true"
+    <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogContent
+        placement="bottom-mobile"
+        showClose={false}
+        overlayClassName="z-[70] bg-[var(--overlay-default)] backdrop-blur-sm"
         aria-labelledby="property-chat-title"
-        className="w-full max-w-[520px] rounded-lg bg-white px-5 pb-8 pt-5 shadow-[0_28px_90px_rgba(0,0,0,0.22)] sm:px-6 sm:pb-10 sm:pt-6"
+        className="z-[71] w-[min(calc(100vw-32px),520px)] max-w-[520px] rounded-lg bg-white px-5 pb-8 pt-5 shadow-[var(--shadow-dialog)] sm:px-6 sm:pb-10 sm:pt-6"
       >
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -65,14 +65,16 @@ export function PropertyChatView({
               Напишите сообщение ответственному специалисту
             </h2>
           </div>
-          <button
+          <Button
+            variant="outline"
+            size="icon"
             type="button"
             aria-label="Закрыть чат"
             onClick={onClose}
             className="flex size-10 shrink-0 items-center justify-center rounded-md border border-[var(--border)] text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
           >
             <X className="size-5" aria-hidden />
-          </button>
+          </Button>
         </div>
 
         <form className="mt-7 grid gap-4 pb-2" onSubmit={onSubmit} data-analytics-form-type="property_chat" noValidate>
@@ -105,7 +107,7 @@ export function PropertyChatView({
             <label className="grid gap-2.5 text-[13px] font-semibold text-[var(--text-primary)]">
               Сообщение
               <div className="relative">
-                <textarea
+                <Textarea
                   ref={textareaRef}
                   autoFocus
                   value={message}
@@ -122,7 +124,7 @@ export function PropertyChatView({
 
           <label className="grid gap-2.5 text-[13px] font-semibold text-[var(--text-primary)]">
             Телефон для связи
-            <input
+            <Input
               value={phone}
               onChange={(event) => onPhoneChange(event.target.value)}
               className="min-h-11 rounded-md border border-[var(--border)] bg-white px-3 text-[13px] outline-none transition focus:border-[var(--accent)]"
@@ -136,23 +138,23 @@ export function PropertyChatView({
           </label>
 
           <label className="mt-1 flex gap-3 text-[11px] leading-5 text-[var(--text-secondary)]">
-            <input type="checkbox" checked={consent} onChange={(event) => onConsentChange(event.target.checked)} className="mt-1 size-4 shrink-0 accent-[var(--accent)]" />
+            <Checkbox checked={consent} onCheckedChange={(checked) => onConsentChange(checked === true)} className="mt-1 size-4 shrink-0" />
             <span>{consentContent}</span>
           </label>
           {errors.consent ? <span className="text-xs font-semibold text-[var(--error)]">{errors.consent}</span> : null}
 
           {resultMessage ? <div className="rounded-md border border-[var(--palette-f2c6c6)] bg-[var(--palette-fff7f7)] px-3 py-2 text-sm font-semibold text-[var(--error)]">{resultMessage}</div> : null}
 
-          <button
+          <Button
             type="submit"
             disabled={isPending}
             className="mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[var(--accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70"
           >
             {isPending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <Send className="size-4" aria-hidden />}
             {isPending ? "Отправляем" : "Отправить сообщение"}
-          </button>
+          </Button>
         </form>
-      </section>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -1,5 +1,5 @@
 import Image, { type ImageProps } from "next/image";
-import { LeadgenPromoLandingView, type LeadgenPromoLandingAdapters, type SiteImageRendererProps } from "@starter/site-ui";
+import { LeadgenPromoLandingView, type LeadgenPromoLandingAdapters, type SiteImageRendererProps } from "@ams/realty-ui";
 import { LeadgenApartmentShowcase } from "./LeadgenApartmentShowcase";
 import { LeadgenConstructionProjectShowcase } from "./LeadgenConstructionProjectShowcase";
 import { LeadgenCurrentDateBadge } from "./LeadgenCurrentDateBadge";
@@ -11,6 +11,7 @@ import { LeadgenRequestButton } from "./LeadgenRequestButton";
 import { LeadgenSimpleRequestModal } from "./LeadgenSimpleRequestModal";
 import { kvartiryPromoContent, type LeadgenPromoContent } from "./kvartiry-promo-content";
 import { siteConfig } from "@/project/site-config";
+import { siteProfile } from "@/project/site-profile";
 
 const adapters: LeadgenPromoLandingAdapters = {
   PromoHeader: LeadgenPromoHeader,
@@ -29,5 +30,5 @@ function PromoImage({ alt, ...props }: SiteImageRendererProps) {
 }
 
 export function KvartiryPromoLandingPage({ content = kvartiryPromoContent, compact = false }: { content?: LeadgenPromoContent; compact?: boolean }) {
-  return <LeadgenPromoLandingView content={content} compact={compact} adapters={adapters} imageRenderer={PromoImage} copyright={siteConfig.copyright} registry={siteConfig.registry} />;
+  return <LeadgenPromoLandingView content={content} compact={compact} adapters={adapters} imageRenderer={PromoImage} copyright={siteConfig.copyright} registry={siteConfig.registry} city={siteProfile.city} />;
 }

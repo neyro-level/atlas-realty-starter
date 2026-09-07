@@ -1,5 +1,7 @@
 import type { LegalDocumentSectionDto } from "@starter/site-contracts";
 import { X } from "lucide-react";
+import { Button } from "../components/ui/button";
+import { Dialog, DialogContent } from "../components/ui/dialog";
 
 type LegalDocumentModalViewProps = {
   title: string;
@@ -17,17 +19,11 @@ export function LegalDocumentModalView({
   onClose,
 }: LegalDocumentModalViewProps) {
   return (
-    <div
-      className="fixed inset-0 z-[120] grid place-items-center bg-black/45 px-4 py-5 text-left sm:py-6"
-      role="presentation"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <div
-        className="relative grid max-h-[88dvh] w-full max-w-[860px] grid-rows-[auto_minmax(0,1fr)] overflow-hidden rounded-[8px] border border-[var(--border)] bg-white text-left shadow-[0_28px_90px_rgba(0,0,0,0.28)]"
-        role="dialog"
-        aria-modal="true"
+    <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+      <DialogContent
+        showClose={false}
+        overlayClassName="z-[120] bg-[var(--overlay-default)]"
+        className="z-[121] grid max-h-[88dvh] w-[min(calc(100vw-32px),860px)] max-w-[860px] grid-rows-[auto_minmax(0,1fr)] gap-0 overflow-hidden rounded-[8px] border border-[var(--border)] bg-white p-0 text-left shadow-[var(--shadow-dialog)]"
         aria-labelledby="legal-document-modal-title"
       >
         <div className="border-b border-[var(--border)] px-5 py-4 pr-14 text-left sm:px-7 sm:py-5">
@@ -37,7 +33,9 @@ export function LegalDocumentModalView({
           <h2 id="legal-document-modal-title" className="mt-2 max-w-[680px] text-left text-[20px] font-semibold leading-tight text-[var(--text-primary)] sm:text-[26px]">
             {title}
           </h2>
-          <button
+          <Button
+            variant="outline"
+            size="icon"
             type="button"
             autoFocus
             className="absolute right-4 top-4 grid size-9 place-items-center rounded-[6px] border border-[var(--border)] bg-white text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
@@ -45,7 +43,7 @@ export function LegalDocumentModalView({
             onClick={onClose}
           >
             <X className="size-4" aria-hidden />
-          </button>
+          </Button>
         </div>
 
         <div className="overflow-y-auto px-5 py-5 text-left sm:px-7 sm:py-6">
@@ -74,7 +72,7 @@ export function LegalDocumentModalView({
             ))}
           </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

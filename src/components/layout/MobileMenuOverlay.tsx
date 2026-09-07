@@ -8,7 +8,7 @@ import {
   type SiteLinkRendererProps,
   type SiteMobileMenuActionDto,
   type SiteNavLinkDto,
-} from "@starter/site-ui";
+} from "@ams/realty-ui";
 import { BrandMark } from "@/components/layout/BrandMark";
 import {
   MOBILE_MENU_PROPERTY_LINKS,

@@ -1,5 +1,5 @@
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
-import { NewBuildingHeroView } from "@starter/site-ui";
+import { NewBuildingHeroView } from "@ams/realty-ui";
 import { NEW_BUILDING_DETAIL_FRAME_CLASS } from "../template";
 import type { NewBuilding } from "../schema";
 

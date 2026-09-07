@@ -39,7 +39,7 @@ See `docs/OPERATIONS.md` for local safety, Graphify, CI, release, rollback and i
 - `pnpm owner:bootstrap` — one-time first-owner creation.
 - `pnpm jobs:run:all` — private all-queue worker command used by production service.
 - `pnpm ui:check` — design-token, ShadCN registry and static-image guard.
-- `pnpm template:profile -- --input <profile.json>` — generate a reviewed city profile without overwriting the active profile.
+- `pnpm template:profile -- --input <profile.json>` — generate a reviewed city profile, brand asset manifest and deployment checklist in `.ams-client/` without overwriting the active profile.
 - `pnpm atlas:content:verify-live` — verify the 20/30 Payload catalog, galleries and map input on local or live Atlas.
 
 Production release is never performed from a feature branch.

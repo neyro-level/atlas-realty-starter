@@ -7,14 +7,14 @@
 - Profile: public real-estate site and catalog up to about 50,000 active properties.
 - Stack: Next.js 16.3.4, React 19.2.8, TypeScript 6.0.3, Payload 3.88.0, PostgreSQL 18, Node.js 24.20.0, pnpm 11.24.0.
 - Repository mode: SOURCECRAFT_PRIMARY_GITHUB_MIRROR; `origin/main` is canonical.
-- Platform contract: `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md`.
+- Platform contract: global `AMS Realty Platform Core 3.0`; the tracked 2.1 document is historical implementation evidence, not the active standard.
 
 ## Reading order
 
 1. Global AMS instructions and the minimal relevant skills.
 2. This file.
 3. `docs/PROJECT.md` and one relevant document: `VERSION_MATRIX`, `SECURITY` or `OPERATIONS`.
-4. The relevant part of `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md` for architecture, data, security or compliance scope.
+4. The relevant part of global `AMS Realty Platform Core 3.0`; use the tracked 2.1 document only to understand historical decisions.
 5. `package.json`, `src/payload.config.ts`, `src/site-engine`, `src/core`, `src/payload/migrations-v2`, tests and actual code.
 6. Graphify only as a navigation aid after checking that its reported commit matches `HEAD`.
 
@@ -36,7 +36,7 @@
 
 ## Documentation map
 
-- Architecture and canonical data rules: `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md`.
+- Architecture and canonical data rules: global `AMS Realty Platform Core 3.0`, actual code and migrations; the tracked 2.1 standard remains historical evidence.
 - Product profile, active modules, client-replacement boundary and current state: `docs/PROJECT.md`.
 - Security and PII boundaries: `SECURITY.md`.
 - Local runtime, CI, deploy, rollback, backup and incident response: `docs/OPERATIONS.md`.

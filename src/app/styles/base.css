@@ -1,5 +1,19 @@
 html {
   overflow-x: clip;
+  scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--surface-page);
+  color: var(--content-strong);
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.01em;
 }
 
 .admin-root {
@@ -20,6 +34,25 @@ a.inline-flex.font-extrabold {
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--surface);
+  background: var(--action-primary);
+  color: var(--content-inverse);
+}
+
+:focus-visible {
+  outline-color: var(--focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

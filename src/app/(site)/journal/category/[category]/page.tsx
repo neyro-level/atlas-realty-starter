@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { JournalCategoryView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui";
+import { JournalCategoryView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@ams/realty-ui";
 import { CatalogPropertyCard } from "@/components/catalog/CatalogPropertyCard";
 import { journalCategories, journalCategoryMap, type JournalCategoryKey } from "@/entities/article/journal-config";
 import { isSalesLeaderNewBuilding } from "@/modules/new-buildings";

@@ -1,4 +1,4 @@
-import { NewBuildingPurchaseTermsView } from "@starter/site-ui";
+import { NewBuildingPurchaseTermsView } from "@ams/realty-ui";
 import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";
 

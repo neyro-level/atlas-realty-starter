@@ -1,6 +1,6 @@
 "use client";
 
-import { LeadSuccessNoticeView } from "@starter/site-ui";
+import { LeadSuccessNoticeView } from "@ams/realty-ui";
 import { useEffect, useRef, useState } from "react";
 import { PUBLIC_LEAD_SUCCESS_EVENT } from "@/modules/analytics";
 
@@ -21,11 +21,6 @@ export function LeadSuccessNotice() {
   useEffect(() => {
     if (!open) return;
     buttonRef.current?.focus();
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") close();
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
   function close() {

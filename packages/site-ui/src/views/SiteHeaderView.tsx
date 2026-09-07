@@ -4,6 +4,7 @@ import { Building2, Menu, SlidersHorizontal, X } from "lucide-react";
 import type { ReactNode, RefObject } from "react";
 import type { SiteLinkRenderer } from "../lib/adapters";
 import { Button } from "../components/ui/button";
+import { Container } from "../components/ui/layout";
 import { CitySwitcherView } from "./CitySwitcherView";
 import { DesktopSiteNavView } from "./DesktopSiteNavView";
 import { PhoneRevealView } from "./PhoneRevealView";
@@ -16,6 +17,7 @@ type SiteHeaderViewProps = {
   desktopNav: SiteHeaderNavItemDto[];
   cityOptions: SiteCityOptionViewDto[];
   brand: ReactNode;
+  brandLabel: string;
   mobileMenu: ReactNode;
   compareAction: ReactNode;
   favoritesAction: ReactNode;
@@ -45,7 +47,7 @@ type SiteHeaderViewProps = {
 
 export function SiteHeaderView(props: SiteHeaderViewProps) {
   const {
-    headerRef, pathname, contacts, desktopNav, cityOptions, brand, mobileMenu, compareAction, favoritesAction,
+    headerRef, pathname, contacts, desktopNav, cityOptions, brand, brandLabel, mobileMenu, compareAction, favoritesAction,
     stickyCollectionAction, catalogHref, docked, compactSticky, propertyObjectPage, sessionCollectionPage,
     mobileOpen, citySwitcherOpen, phoneVisible, openDesktop, stickyDesktop, linkRenderer: LinkRenderer,
     onToggleMobile, onOpenFilters, onCloseMobile, onToggleCity, onCloseCity, onRevealPhone,
@@ -60,7 +62,7 @@ export function SiteHeaderView(props: SiteHeaderViewProps) {
   return (
     <>
       <header ref={headerRef} id="site-header" data-state={docked ? "dock" : "top"} data-catalog-sticky={compactSticky ? "true" : "false"} data-overlay={mobileOpen ? "true" : "false"} className={`${propertyObjectMobileHideClass} ${headerClass}`}>
-        <div className={`mobile-safe-shell mx-auto h-full max-w-site-frame transition-[padding] duration-300 ${compactSticky ? "px-3 lg:px-6 xl:px-8" : docked ? "px-5 lg:px-6 xl:px-8" : "px-5 lg:px-10 xl:px-12"}`}>
+        <Container className={`mobile-safe-shell h-full transition-[padding] duration-300 ${compactSticky ? "px-3 lg:px-6 xl:px-8" : docked ? "px-5 lg:px-6 xl:px-8" : "px-5 lg:px-10 xl:px-12"}`}>
           {compactSticky ? (
             <div className="flex h-full items-center gap-3 lg:hidden">
               {sessionCollectionPage ? (
@@ -75,7 +77,7 @@ export function SiteHeaderView(props: SiteHeaderViewProps) {
           ) : null}
           <div className={compactSticky ? "hidden h-full lg:block" : "h-full"}>
             <div className="flex h-full items-center gap-3 lg:h-[56px] xl:gap-4">
-              <LinkRenderer href="/" ariaLabel="АТЛАС — на главную" className="flex shrink-0 items-center" onClick={onCloseMobile}>{brand}</LinkRenderer>
+              <LinkRenderer href="/" ariaLabel={`${brandLabel} — на главную`} className="flex shrink-0 items-center" onClick={onCloseMobile}>{brand}</LinkRenderer>
               <div className="hidden items-center gap-2 text-sm font-semibold text-[var(--text-secondary)] lg:flex xl:gap-3">
                 <CitySwitcherView variant="desktop" open={citySwitcherOpen} options={cityOptions} linkRenderer={LinkRenderer} onToggle={onToggleCity} onClose={onCloseCity} />
                 <PhoneRevealView variant="desktop" phone={contacts.phone} phoneHref={contacts.phoneHref} visible={phoneVisible} analyticsContext="site_header" onReveal={onRevealPhone} />
@@ -95,7 +97,7 @@ export function SiteHeaderView(props: SiteHeaderViewProps) {
               <DesktopSiteNavView items={desktopNav} pathname={pathname} compact={docked} openLabel={openDesktop} stickyLabel={stickyDesktop} linkRenderer={LinkRenderer} onOpen={onOpenDropdown} onClose={onCloseDropdown} onToggle={onToggleDropdown} onNavigate={onNavigate} />
             </div>
           </div>
-        </div>
+        </Container>
       </header>
       {mobileMenu}
     </>

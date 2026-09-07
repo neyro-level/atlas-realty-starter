@@ -9,6 +9,7 @@ import {
 import { useMemo, useState } from "react";
 import type { SiteImageRenderer } from "../lib/adapters";
 import { MediaGallery } from "./MediaGallery";
+import { Tabs, TabsList, TabsTrigger } from "../components/ui/tabs";
 
 export type PropertyGalleryViewProps = {
   images: string[];
@@ -17,6 +18,7 @@ export type PropertyGalleryViewProps = {
   imageAlt: string;
   address: string;
   mapUrl: string;
+  cityNominative: string;
   imageRenderer: SiteImageRenderer;
   shouldOptimizeImage?: (src: string) => boolean;
 };
@@ -35,6 +37,7 @@ export function PropertyGalleryView({
   imageAlt,
   address,
   mapUrl,
+  cityNominative,
   imageRenderer: ImageRenderer,
   shouldOptimizeImage = () => false,
 }: PropertyGalleryViewProps) {
@@ -50,7 +53,7 @@ export function PropertyGalleryView({
 
   return (
     <div className="grid h-[392px] grid-rows-[minmax(0,1fr)_50px] gap-2 md:h-[510px] md:grid-rows-[minmax(0,1fr)_52px] lg:h-[640px] lg:gap-3 lg:rounded-lg lg:border lg:border-[var(--border)] lg:bg-white lg:p-3 lg:shadow-[0_1px_2px_rgba(0,0,0,0.03),0_18px_42px_rgba(23,22,26,0.08)]">
-      <div className="relative min-h-0 overflow-hidden rounded-lg bg-[var(--surface-muted)]">
+      <div id={`property-media-panel-${activeTab}`} role="tabpanel" aria-labelledby={`property-media-tab-${activeTab}`} className="relative min-h-0 overflow-hidden rounded-lg bg-[var(--surface-muted)]">
         {activeTab === "photos" ? (
           <MediaGallery
             images={safeImages.map((src) => ({ src, alt: imageAlt }))}
@@ -83,7 +86,7 @@ export function PropertyGalleryView({
         {activeTab === "map" ? (
           <div className="relative h-full w-full">
             <iframe
-              src={`https://yandex.ru/map-widget/v1/?text=${encodeURIComponent(`Краснодар, ${address}`)}&z=16`}
+              src={`https://yandex.ru/map-widget/v1/?text=${encodeURIComponent(`${cityNominative}, ${address}`)}&z=16`}
               title={`Расположение: ${address}`}
               allowFullScreen
               className="h-full w-full border-0"
@@ -104,14 +107,14 @@ export function PropertyGalleryView({
         ) : null}
       </div>
 
-      <div className="grid min-h-0 w-full grid-cols-3 gap-2" role="tablist" aria-label="Медиа объекта">
+      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as TabKey)}>
+      <TabsList className="grid min-h-0 h-auto w-full grid-cols-3 gap-2 bg-transparent p-0" aria-label="Медиа объекта">
         {TABS.map(({ key, label, icon: Icon }) => (
-          <button
-            type="button"
+          <TabsTrigger
             key={key}
-            role="tab"
-            aria-selected={activeTab === key}
-            onClick={() => setActiveTab(key)}
+            id={`property-media-tab-${key}`}
+            aria-controls={`property-media-panel-${key}`}
+            value={key}
             className={`inline-flex min-h-[36px] items-center justify-center gap-1.25 rounded-[12px] border px-2 text-[11px] font-semibold transition md:min-h-[38px] ${
               activeTab === key
                 ? "border-[var(--accent)] bg-[var(--accent)] text-white"
@@ -120,9 +123,10 @@ export function PropertyGalleryView({
           >
             <Icon className="size-[13px] shrink-0 md:size-[14px]" aria-hidden />
             <span className="truncate">{label}</span>
-          </button>
+          </TabsTrigger>
         ))}
-      </div>
+      </TabsList>
+      </Tabs>
 
     </div>
   );

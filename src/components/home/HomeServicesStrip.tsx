@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { HomeServicesView, type HomeServiceItemViewDto, type SiteLinkRendererProps } from "@starter/site-ui";
+import { HomeServicesView, type HomeServiceItemViewDto, type SiteLinkRendererProps } from "@ams/realty-ui";
 import { HomeNewBuildingQuizModal } from "@/modules/leadgen/HomeNewBuildingQuizModal";
 import { HOME_SERVICE_ACTIONS } from "@/project/home-page";
 

@@ -1,5 +1,5 @@
 import { JsonLd } from "@/shared/ui/JsonLd";
-import { NewBuildingDetailPageView } from "@starter/site-ui";
+import { NewBuildingDetailPageView } from "@ams/realty-ui";
 import { resolveNewBuildingMedia, type ResolvedNewBuildingMedia } from "../format";
 import { getRelatedNewBuildings } from "../registry";
 import { newBuildingBreadcrumbSchema, newBuildingSchema } from "../seo";

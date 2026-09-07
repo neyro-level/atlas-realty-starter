@@ -1,5 +1,5 @@
 import { CatalogResidentialComplexCard } from "@/components/catalog/CatalogResidentialComplexCard";
-import { NewBuildingRelatedView } from "@starter/site-ui";
+import { NewBuildingRelatedView } from "@ams/realty-ui";
 import type { NewBuilding } from "../schema";
 import { toNewBuildingCardDto } from "../to-detail-dto";
 
