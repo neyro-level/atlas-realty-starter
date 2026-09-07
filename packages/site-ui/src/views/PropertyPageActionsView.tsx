@@ -1,7 +1,9 @@
 "use client";
 
+import { Button } from "../components/ui/button";
 import { MessageCircle, Phone, Tags } from "lucide-react";
 import type { SiteImageRenderer } from "../lib/adapters";
+import { RequestModalButton } from "../components/shared/site-overlay-context";
 
 export function PropertyPageActionsView({
   agentName,
@@ -43,22 +45,22 @@ export function PropertyPageActionsView({
       </div>
 
       {phoneVisible ? (
-        <a href={phoneHref} data-analytics-context="property_page_actions" className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold tabular-nums text-white transition hover:bg-[var(--palette-2a292c)]">
+        <a href={phoneHref} data-analytics-context="property_page_actions" className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold tabular-nums text-white transition hover:bg-[var(--property-page-actions-surface-01)]">
           <Phone className="size-4" aria-hidden />{phone}
         </a>
       ) : (
-        <button type="button" data-analytics-event="phone_reveal" data-analytics-context="property_page_actions" onClick={onRevealPhone} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold text-white transition hover:bg-[var(--palette-2a292c)]">
+        <Button unstyled type="button" data-analytics-event="phone_reveal" data-analytics-context="property_page_actions" onClick={onRevealPhone} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold text-white transition hover:bg-[var(--property-page-actions-surface-01)]">
           <Phone className="size-4" aria-hidden />Показать телефон
-        </button>
+        </Button>
       )}
 
-      <button type="button" onClick={onOpenChat} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-[var(--border)] bg-white px-5 text-sm font-bold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]">
+      <Button unstyled type="button" onClick={onOpenChat} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-[var(--border)] bg-white px-5 text-sm font-bold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]">
         <MessageCircle className="size-4" aria-hidden />Написать сообщение
-      </button>
+      </Button>
 
-      <button type="button" data-request-modal data-request-modal-title="Предложить свою цену" data-request-modal-subtitle="Укажите ваш номер телефона, специалист свяжется с вами" data-request-modal-source={priceOfferSource} data-request-modal-form-type="property_price_offer" className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--accent-hover)]">
+      <RequestModalButton type="button" unstyled request={{ title: "Предложить свою цену", subtitle: "Укажите ваш номер телефона, специалист свяжется с вами", source: priceOfferSource, formType: "property_price_offer" }} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--accent-hover)]">
         <Tags className="size-4" aria-hidden />Предложить свою цену
-      </button>
+      </RequestModalButton>
     </div>
   );
 }

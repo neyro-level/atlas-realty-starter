@@ -1,3 +1,4 @@
+import { Button } from "../components/ui/button";
 import { ArrowRight, Building2, ChevronDown, Home, Store, TreePine } from "lucide-react";
 import type { ReactNode } from "react";
 import type { SiteLinkRenderer } from "../lib/adapters";
@@ -100,7 +101,7 @@ function DesktopNavItemView({
         <SmartLink item={item} linkRenderer={linkRenderer} onNavigate={onNavigate} className={`inline-flex min-h-10 items-center pl-3 pr-1 text-[13px] font-semibold ${compact ? "pl-2.5" : ""}`}>
           {item.label}
         </SmartLink>
-        <button
+        <Button unstyled
           type="button"
           aria-expanded={isOpen}
           aria-controls={panelId}
@@ -109,13 +110,13 @@ function DesktopNavItemView({
           onClick={onToggle}
         >
           <ChevronDown className={`size-4 transition ${isOpen ? "rotate-180" : ""}`} aria-hidden />
-        </button>
+        </Button>
       </div>
 
       <div className="absolute left-0 top-full h-4 w-full" aria-hidden />
 
       <div className={`${panelPositionClass} transition duration-150 ${isOpen ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 pointer-events-none opacity-0"}`} onPointerEnter={onOpen}>
-        <div id={panelId} className="rounded-[12px] border border-[var(--border)] bg-white py-2 shadow-[0_22px_64px_rgba(0,0,0,0.12)]">
+        <div id={panelId} className="rounded-[12px] border border-[var(--border)] bg-white py-2 shadow-[var(--desktop-site-nav-shadow-01)]">
           {item.megaSections?.length ? (
             <div className="p-3">
               <div className="mb-3 flex items-center justify-center rounded-[8px] border border-[var(--border)] bg-[var(--background)] p-3 text-center text-[var(--text-primary)]">

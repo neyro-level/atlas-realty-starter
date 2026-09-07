@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@ams/realty-ui";
+
 import { Heart, ListPlus } from "lucide-react";
 import type { MouseEvent } from "react";
 import { useEffect, useState } from "react";
@@ -45,7 +47,7 @@ export function SessionCollectionButton({
   }
 
   return (
-    <button
+    <Button unstyled
       type="button"
       data-analytics-event={kind === "favorites" ? "favorites_interaction" : "compare_interaction"}
       onClick={onClick}
@@ -55,6 +57,6 @@ export function SessionCollectionButton({
       className={`${className} ${active ? activeClassName : inactiveClassName}`}
     >
       <Icon className={`size-5 ${kind === "favorites" && active ? "fill-current" : ""}`} aria-hidden />
-    </button>
+    </Button>
   );
 }

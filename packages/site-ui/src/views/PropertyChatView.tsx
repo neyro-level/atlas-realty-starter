@@ -65,7 +65,7 @@ export function PropertyChatView({
               Напишите сообщение ответственному специалисту
             </h2>
           </div>
-          <Button
+          <Button unstyled
             variant="outline"
             size="icon"
             type="button"
@@ -81,7 +81,7 @@ export function PropertyChatView({
           <label className="sr-only" htmlFor="property-chat-website">
             Сайт
           </label>
-          <input
+          <Input unstyled
             id="property-chat-website"
             name="website"
             type="text"
@@ -107,7 +107,7 @@ export function PropertyChatView({
             <label className="grid gap-2.5 text-[13px] font-semibold text-[var(--text-primary)]">
               Сообщение
               <div className="relative">
-                <Textarea
+                <Textarea unstyled
                   ref={textareaRef}
                   autoFocus
                   value={message}
@@ -124,7 +124,7 @@ export function PropertyChatView({
 
           <label className="grid gap-2.5 text-[13px] font-semibold text-[var(--text-primary)]">
             Телефон для связи
-            <Input
+            <Input unstyled
               value={phone}
               onChange={(event) => onPhoneChange(event.target.value)}
               className="min-h-11 rounded-md border border-[var(--border)] bg-white px-3 text-[13px] outline-none transition focus:border-[var(--accent)]"
@@ -143,9 +143,9 @@ export function PropertyChatView({
           </label>
           {errors.consent ? <span className="text-xs font-semibold text-[var(--error)]">{errors.consent}</span> : null}
 
-          {resultMessage ? <div className="rounded-md border border-[var(--palette-f2c6c6)] bg-[var(--palette-fff7f7)] px-3 py-2 text-sm font-semibold text-[var(--error)]">{resultMessage}</div> : null}
+          {resultMessage ? <div className="rounded-md border border-[var(--property-chat-border-01)] bg-[var(--property-chat-surface-01)] px-3 py-2 text-sm font-semibold text-[var(--error)]">{resultMessage}</div> : null}
 
-          <Button
+          <Button unstyled
             type="submit"
             disabled={isPending}
             className="mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[var(--accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70"

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ReviewsPageView } from "@ams/realty-ui";
+import { RequestModalButton, ReviewsPageView } from "@ams/realty-ui";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { CatalogHeroBlock } from "@/components/marketing/CatalogHeroBlock";
 import { getEmployeeDirectory, getPublishedEmployeeReviews, type EmployeeReviewDirectoryResult } from "@/modules/employees";
@@ -80,18 +80,14 @@ export default async function ReviewsPage({ searchParams }: Props) {
             descriptionVisibility="always"
             actionVisibility="always"
             action={(
-              <button
+              <RequestModalButton
                 type="button"
-                data-request-modal
-                data-request-modal-title="Консультация по недвижимости"
-                data-request-modal-subtitle="Ответим на ваши вопросы и подскажем следующий шаг по покупке, продаже, ипотеке или документам."
-                data-request-modal-show-subtitle="true"
-                data-request-modal-source="corporate:reviews:hero"
-                data-request-modal-form-type="corporate_reviews"
+                unstyled
+                request={{ title: "Консультация по недвижимости", subtitle: "Ответим на ваши вопросы и подскажем следующий шаг по покупке, продаже, ипотеке или документам.", showSubtitle: true, source: "corporate:reviews:hero", formType: "corporate_reviews" }}
                 className="inline-flex min-h-12 w-full max-w-full shrink-0 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-sm font-semibold whitespace-nowrap text-white transition hover:bg-[var(--accent-hover)] sm:w-auto sm:min-w-[252px] sm:px-6"
               >
                 Получить консультацию
-              </button>
+              </RequestModalButton>
             )}
           />
         </div>

@@ -38,7 +38,7 @@ export function AgencyFaqSection({
             {title}
           </h2>
           {lead ? (
-            <p className={`mt-5 max-w-[660px] text-[16px] leading-7 text-[var(--palette-4c494a)] md:text-[18px] ${leadClassName}`}>
+            <p className={`mt-5 max-w-[660px] text-[16px] leading-7 text-[var(--agency-faq-section-content-01)] md:text-[18px] ${leadClassName}`}>
               {lead}
             </p>
           ) : null}

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@ams/realty-ui";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import { useState } from "react";
@@ -8,7 +9,7 @@ import { buildTelHref } from "@/shared/lib/tel";
 export function EmployeePhoneAction({ phone, slug, compact = false }: { phone: string | null; slug: string; compact?: boolean }) {
   const [visible, setVisible] = useState(false);
   const className = `inline-flex w-full items-center justify-center gap-2 rounded-lg font-semibold transition ${compact ? "min-h-10 px-3 text-[13px]" : "min-h-11 px-4 text-sm"} ${
-    compact ? "border border-[var(--palette-dcdcd8)] bg-white text-[var(--text-primary)] hover:border-[var(--accent)]" : "bg-[var(--surface-dark)] text-white hover:bg-[var(--palette-2a292c)]"
+    compact ? "border border-[var(--employee-phone-action-border-01)] bg-white text-[var(--text-primary)] hover:border-[var(--accent)]" : "bg-[var(--surface-dark)] text-white hover:bg-[var(--employee-phone-action-surface-01)]"
   }`;
 
   if (!phone) {
@@ -23,7 +24,7 @@ export function EmployeePhoneAction({ phone, slug, compact = false }: { phone: s
     );
   }
   return (
-    <button
+    <Button unstyled
       type="button"
       data-analytics-event="phone_reveal"
       data-analytics-context="employee"
@@ -33,7 +34,7 @@ export function EmployeePhoneAction({ phone, slug, compact = false }: { phone: s
     >
       <Phone className="size-4" aria-hidden />
       Показать телефон
-    </button>
+    </Button>
   );
 }
 

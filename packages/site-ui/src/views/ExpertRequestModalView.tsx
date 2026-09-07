@@ -62,7 +62,7 @@ export function ExpertRequestModalView({
         aria-labelledby="expert-request-title"
         className="z-[81] w-[min(calc(100vw-16px),452px)] max-w-[452px] gap-0 overflow-hidden rounded-lg border-0 bg-white p-0 shadow-[var(--shadow-dialog)]"
       >
-        <Button
+        <Button unstyled
           variant="ghost"
           size="icon"
           type="button"
@@ -79,7 +79,7 @@ export function ExpertRequestModalView({
               {avatars.map((avatar, index) => (
                 <div
                   key={avatar.src}
-                  className="absolute size-[116px] overflow-hidden rounded-full border-[3px] border-white shadow-[0_12px_26px_rgba(23,22,26,0.14)]"
+                  className="absolute size-[116px] overflow-hidden rounded-full border-[3px] border-white shadow-[var(--expert-request-modal-shadow-01)]"
                   style={{ left: `${index * 70}px`, zIndex: index === 1 ? 3 : 2 }}
                 >
                   <ImageRenderer src={avatar.src} alt="" fill unoptimized sizes="116px" className="object-cover object-[center_18%]" />
@@ -97,7 +97,7 @@ export function ExpertRequestModalView({
           <label className="sr-only" htmlFor="expert-request-website">
             Сайт
           </label>
-          <input
+          <Input unstyled
             id="expert-request-website"
             name="website"
             type="text"
@@ -131,7 +131,7 @@ export function ExpertRequestModalView({
                   ▼
                 </span>
               </span>
-              <Input
+              <Input unstyled
                 id="expert-request-phone"
                 ref={phoneRef}
                 name="phone"
@@ -160,15 +160,15 @@ export function ExpertRequestModalView({
           {errors.consent ? <span className="text-xs font-semibold text-[var(--error)]">{errors.consent}</span> : null}
 
           {resultMessage ? (
-            <div className="rounded-lg border border-[var(--palette-f2c6c6)] bg-[var(--palette-fff7f7)] px-3 py-2 text-sm font-semibold text-[var(--error)]">
+            <div className="rounded-lg border border-[var(--expert-request-modal-border-01)] bg-[var(--expert-request-modal-surface-01)] px-3 py-2 text-sm font-semibold text-[var(--error)]">
               {resultMessage}
             </div>
           ) : null}
 
-          <Button
+          <Button unstyled
             type="submit"
             disabled={isPending}
-            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--text-primary)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--palette-2a292c)] disabled:cursor-wait disabled:opacity-70"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--text-primary)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--expert-request-modal-surface-02)] disabled:cursor-wait disabled:opacity-70"
           >
             {isPending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
             {isPending ? "Отправляем" : "Позвоните мне"}

@@ -11,7 +11,7 @@ import { getDefaultEmployeeTeamSection } from "@/modules/employees/positions";
 import { EmployeeContactDetails } from "@/modules/employees/ui/EmployeeContactDetails";
 import { EmployeePortrait } from "@/modules/employees/ui/EmployeePortrait";
 import { EmployeeReviewForm } from "@/modules/employees/ui/EmployeeReviewForm";
-import { LeadForm } from "@/modules/leads";
+import { RequestForm } from "@/modules/leads";
 import { buildSeoMetadata } from "@/modules/seo/metadata";
 import { breadcrumbSchema, employeeProfileSchema } from "@/shared/lib/seo/schema";
 import { JsonLd } from "@/shared/ui/JsonLd";
@@ -89,7 +89,7 @@ export default async function EmployeeProfilePage({ params, searchParams }: Prop
         bottomBreadcrumbs={<Breadcrumbs items={breadcrumbItems} />}
         portrait={<EmployeePortrait photoUrl={employee.photoUrl} fullName={employee.fullName} priority />}
         contactDetails={<EmployeeContactDetails phone={publicPhone} email={employee.email || contacts.email} employeeSlug={employee.slug} />}
-        leadForm={<LeadForm sourcePage={path} source="employee_profile" formType="employee_callback" agentId={employee.id} title="Связаться со специалистом" description="Оставьте номер — специалист перезвонит и уточнит вашу задачу." submitLabel="Перезвоните мне" message={`Заявка со страницы сотрудника: ${employee.fullName}`} premiumCompact className="h-full rounded-lg !border-[var(--palette-e1e1dd)] !bg-white !p-6 md:!p-7" />}
+        leadForm={<RequestForm sourcePage={path} source="employee_profile" formType="employee_callback" agentId={employee.id} title="Связаться со специалистом" description="Оставьте номер — специалист перезвонит и уточнит вашу задачу." submitLabel="Перезвоните мне" message={`Заявка со страницы сотрудника: ${employee.fullName}`} premiumCompact className="h-full rounded-lg !border-[var(--page-border-01)] !bg-white !p-6 md:!p-7" />}
         reviewForm={<EmployeeReviewForm agentId={employee.id} fullName={employee.fullName} />}
         listingCards={profile.listings.map((listing) => <CatalogPropertyCard key={listing.id} listing={listing} />)}
         linkRenderer={EmployeeProfileLink}

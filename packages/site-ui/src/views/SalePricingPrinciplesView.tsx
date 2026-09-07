@@ -41,7 +41,7 @@ export function SalePricingPrinciplesView() {
           {PRICING_PRINCIPLES.map(({ title, description, icon: Icon }) => (
             <article
               key={title}
-              className="group flex min-h-[184px] flex-col rounded-2xl bg-[var(--palette-f6f6f4)] p-5 transition duration-300 ease-out hover:-translate-y-0.5 hover:bg-[var(--accent-soft)] hover:shadow-[0_16px_34px_rgba(0,0,0,0.06)] sm:p-6"
+              className="group flex min-h-[184px] flex-col rounded-2xl bg-[var(--sale-pricing-principles-surface-01)] p-5 transition duration-300 ease-out hover:-translate-y-0.5 hover:bg-[var(--accent-soft)] hover:shadow-[var(--sale-pricing-principles-shadow-01)] sm:p-6"
             >
               <span
                 className="flex size-10 items-center justify-center rounded-xl bg-white text-[var(--text-secondary)] transition duration-300 group-hover:text-[var(--accent)]"

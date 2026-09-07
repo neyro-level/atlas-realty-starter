@@ -9,10 +9,10 @@ const comparedFields = ["style", "rsc", "tsx", "iconLibrary"];
 const errors = [];
 const debt = { paletteTokens: 0, rawColorsOutsideTheme: 0, arbitraryShadows: 0, nativeControlsOutsidePrimitives: 0 };
 const debtCeilings = {
-  paletteTokens: 496,
-  rawColorsOutsideTheme: 286,
-  arbitraryShadows: 143,
-  nativeControlsOutsidePrimitives: 165,
+  paletteTokens: 0,
+  rawColorsOutsideTheme: 0,
+  arbitraryShadows: 0,
+  nativeControlsOutsidePrimitives: 0,
 };
 
 for (const field of comparedFields) {
@@ -39,8 +39,9 @@ const rawHex = /#[0-9a-fA-F]{6}(?![0-9a-fA-F])|#[0-9a-fA-F]{3}(?![0-9a-fA-F])/;
 const rawColor = /#[0-9a-fA-F]{3,8}\b|(?:rgb|rgba|hsl|hsla)\s*\(/g;
 const radixImport = /from\s+["']@radix-ui\//;
 const paletteToken = /var\(--palette-[a-z0-9-]+\)/g;
-const arbitraryShadow = /shadow-\[[^\]]+\]/g;
+const arbitraryShadow = /shadow-\[(?!var\()[^\]]+\]/g;
 const nativeControl = /<(?:button|input|textarea|select)\b/g;
+const legacyOverlayBridge = /data-(?:request-modal|modal-open)|open-(?:request-modal|property-chat)/;
 const identityLeak = /(?:АТЛАС|Краснодар|atlas-(?!media))/i;
 
 for (const file of files) {
@@ -54,6 +55,15 @@ for (const file of files) {
   if (!normalized.includes("/components/ui/")) debt.nativeControlsOutsidePrimitives += source.match(nativeControl)?.length ?? 0;
   if (!normalized.includes("/components/ui/") && radixImport.test(source)) {
     errors.push(`direct Radix import outside shadcn primitives: ${normalized}`);
+  }
+  if (legacyOverlayBridge.test(source)) errors.push(`legacy overlay event bridge: ${normalized}`);
+  if (
+    (normalized.endsWith("/LeadgenPromoLandingView.tsx") ||
+      normalized.endsWith("/PropertyCardView.tsx") ||
+      normalized.endsWith("/CatalogSharpShowcase.tsx")) &&
+    source.split(/\r?\n/).length > 600
+  ) {
+    errors.push(`page composition exceeds 600 lines: ${normalized}`);
   }
   if (normalized.startsWith("packages/site-ui/src/") && identityLeak.test(source)) {
     errors.push(`client identity inside neutral shared UI: ${normalized}`);

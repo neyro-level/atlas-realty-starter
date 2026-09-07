@@ -116,7 +116,7 @@ for (const forbiddenPath of [
 
 console.log(JSON.stringify({
   status: violations.length ? 'FAIL' : 'PASS',
-  enforcedStandard: 'AMS Realty Platform Core 2.1 Solo',
+  enforcedStandard: 'AMS Realty Platform Core 3.0 project security baseline',
   violations,
 }, null, 2))
 if (violations.length) process.exit(1)

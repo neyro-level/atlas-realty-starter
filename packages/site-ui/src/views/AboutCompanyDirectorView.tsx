@@ -13,26 +13,26 @@ const DIRECTOR_PRINCIPLES = [
 
 export function AboutCompanyDirectorView({ director, imageRenderer: ImageRenderer }: AboutCompanyDirectorViewProps) {
   return (
-    <section className="bg-[var(--palette-f9fafb)] py-12 sm:py-16 lg:py-14" aria-label="Слово директора">
+    <section className="bg-[var(--about-company-director-surface-01)] py-12 sm:py-16 lg:py-14" aria-label="Слово директора">
       <div className="mx-auto max-w-site-frame px-5">
         <div className="grid gap-8 lg:grid-cols-[minmax(320px,0.72fr)_minmax(0,1.28fr)] lg:items-stretch lg:gap-12">
-          <figure className="relative min-h-[420px] overflow-hidden rounded-xl bg-[var(--palette-f5f6f6)] sm:min-h-[500px]">
+          <figure className="relative min-h-[420px] overflow-hidden rounded-xl bg-[var(--about-company-director-surface-02)] sm:min-h-[500px]">
             <ImageRenderer src={director.image} alt={director.name} fill sizes="(max-width: 1024px) 100vw, 520px" className="object-cover object-top" />
           </figure>
           <div className="flex flex-col justify-center">
             <blockquote className="max-w-[760px] text-[24px] font-semibold leading-[1.25] text-[var(--text-primary)] sm:text-[30px]">{director.quote}</blockquote>
-            <p className="mt-6 max-w-[760px] text-[16px] leading-7 text-[var(--palette-5e5a5f)]">
+            <p className="mt-6 max-w-[760px] text-[16px] leading-7 text-[var(--about-company-director-content-01)]">
               Я не раз видел, как сделка срывалась перед подписанием, потому что документы проверили слишком поздно. Поэтому в агентстве недвижимости проверка начинается до аванса, а агент работает вместе с юристом и ипотечным брокером.
             </p>
             <div className="mt-6 border-l-2 border-[var(--accent)] pl-4">
               <p className="text-[16px] font-semibold text-[var(--text-primary)]">{director.name}</p>
-              <p className="mt-1 text-[14px] leading-6 text-[var(--palette-5e5a5f)]">{director.role}</p>
+              <p className="mt-1 text-[14px] leading-6 text-[var(--about-company-director-content-01)]">{director.role}</p>
             </div>
             <div className="mt-8 overflow-hidden rounded-xl border border-[var(--border)] bg-white">
               {DIRECTOR_PRINCIPLES.map((item, index) => (
                 <article key={item.title} className={`grid grid-cols-[36px_1fr] gap-4 p-4 sm:p-5 ${index < DIRECTOR_PRINCIPLES.length - 1 ? "border-b border-[var(--border)]" : ""}`}>
                   <span className="text-[13px] font-semibold text-[var(--accent)]">0{index + 1}</span>
-                  <div><h3 className="text-[16px] font-semibold leading-snug text-[var(--text-primary)]">{item.title}</h3><p className="mt-2 text-[14px] leading-6 text-[var(--palette-5e5a5f)]">{item.description}</p></div>
+                  <div><h3 className="text-[16px] font-semibold leading-snug text-[var(--text-primary)]">{item.title}</h3><p className="mt-2 text-[14px] leading-6 text-[var(--about-company-director-content-01)]">{item.description}</p></div>
                 </article>
               ))}
             </div>

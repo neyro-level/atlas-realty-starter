@@ -74,7 +74,7 @@ export function CatalogHeroView({
   const titleLineClassName = collapseTitleLinesOnDesktop ? "block lg:inline" : "block lg:whitespace-nowrap";
 
   return (
-    <div className={`relative min-h-[220px] overflow-hidden rounded-xl bg-[var(--surface-dark)] text-white shadow-[0_1px_2px_rgba(0,0,0,0.02),0_18px_44px_rgba(0,0,0,0.10)] sm:min-h-[240px] md:min-h-[260px] ${desktopHeightClassName}`}>
+    <div className={`relative min-h-[220px] overflow-hidden rounded-xl bg-[var(--surface-dark)] text-white shadow-[var(--catalog-hero-shadow-01)] sm:min-h-[240px] md:min-h-[260px] ${desktopHeightClassName}`}>
       <ImageRenderer
         src={imageSrc}
         alt=""
@@ -86,8 +86,8 @@ export function CatalogHeroView({
         className={`object-cover brightness-[1.08] contrast-[1.02] ${focusImageBottomDesktop ? "lg:object-bottom" : ""}`}
         style={{ objectPosition: focusImageBottomDesktop ? undefined : imagePosition }}
       />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,16,17,0.84)_0%,rgba(16,16,17,0.62)_38%,rgba(16,16,17,0.22)_72%,rgba(16,16,17,0.06)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(16,16,17,0.46)_0%,rgba(16,16,17,0.08)_54%,rgba(16,16,17,0)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--catalog-hero-effect-01)_0%,var(--catalog-hero-effect-02)_38%,var(--catalog-hero-effect-03)_72%,var(--catalog-hero-effect-04)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(0deg,var(--catalog-hero-effect-05)_0%,var(--catalog-hero-effect-06)_54%,var(--catalog-hero-effect-07)_100%)]" />
       <div className={shellClassName}>
         <div className={contentClassName}>
           <h1 className={titleClassName}>

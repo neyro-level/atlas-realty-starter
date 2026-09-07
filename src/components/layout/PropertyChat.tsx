@@ -27,10 +27,6 @@ type PropertyChatErrors = {
 
 const MIN_FORM_FILL_TIME_MS = 1400;
 
-function isPropertyChatEvent(event: Event): event is CustomEvent<PropertyChatDetail> {
-  return "detail" in event;
-}
-
 function normalizeLeadEntityId(value?: string | null) {
   const trimmed = value?.trim();
   return trimmed && /^[a-z0-9]{8,64}$/i.test(trimmed) ? trimmed : undefined;
@@ -57,17 +53,11 @@ function buildDefaultMessage(detail: PropertyChatDetail) {
   return `Здравствуйте, интересует этот объект.\nАдрес: ${address}\n`;
 }
 
-declare global {
-  interface Window {
-    __agencyPendingPropertyChat?: PropertyChatDetail;
-  }
-}
-
-export function PropertyChat() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [context, setContext] = useState<PropertyChatDetail>({});
-  const [message, setMessage] = useState("");
-  const [lockMessage, setLockMessage] = useState(false);
+export function PropertyChat({ detail, onClosed }: { detail: PropertyChatDetail; onClosed?: () => void }) {
+  const [isOpen, setIsOpen] = useState(true);
+  const [context] = useState<PropertyChatDetail>(detail);
+  const [message, setMessage] = useState(() => detail.initialMessage?.trim() || buildDefaultMessage(detail));
+  const [lockMessage] = useState(Boolean(detail.lockMessage && detail.initialMessage?.trim()));
   const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
   const [website, setWebsite] = useState("");
@@ -78,33 +68,6 @@ export function PropertyChat() {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const defaultMessage = buildDefaultMessage(context);
   const showInlineHint = message.trim() === defaultMessage.trim();
-
-  useEffect(() => {
-    const onOpen = (event: Event) => {
-      const detail = isPropertyChatEvent(event) ? event.detail : {};
-      window.__agencyPendingPropertyChat = undefined;
-      setContext(detail);
-      setMessage(detail.initialMessage?.trim() || buildDefaultMessage(detail));
-      setLockMessage(Boolean(detail.lockMessage && detail.initialMessage?.trim()));
-      setPhone("");
-      setConsent(false);
-      setWebsite("");
-      setStartedAt(Date.now());
-      setErrors({});
-      setResult(null);
-      setIsOpen(true);
-    };
-
-    window.addEventListener("open-property-chat", onOpen);
-
-    if (window.__agencyPendingPropertyChat) {
-      const detail = window.__agencyPendingPropertyChat;
-      window.__agencyPendingPropertyChat = undefined;
-      window.setTimeout(() => onOpen(new CustomEvent("open-property-chat", { detail })), 0);
-    }
-
-    return () => window.removeEventListener("open-property-chat", onOpen);
-  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -173,6 +136,7 @@ export function PropertyChat() {
         setWebsite("");
         setStartedAt(Date.now());
         setIsOpen(false);
+        onClosed?.();
       }
     });
   }
@@ -192,7 +156,7 @@ export function PropertyChat() {
       errors={errors}
       consentContent={<PrivacyConsentText className="font-bold" />}
       textareaRef={textareaRef}
-      onClose={() => setIsOpen(false)}
+      onClose={() => { setIsOpen(false); onClosed?.(); }}
       onSubmit={handleSubmit}
       onMessageChange={setMessage}
       onPhoneChange={(value) => setPhone(formatRuMobilePhone(value))}

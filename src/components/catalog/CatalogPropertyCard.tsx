@@ -21,6 +21,7 @@ import { getPropertyPath } from "@/project/site-config";
 import { tenant } from "@/project/tenant";
 import { splitBlurredAddress, shouldBlurPropertyAddress } from "@/shared/lib/property-address-blur";
 import { buildTelHref } from "@/shared/lib/tel";
+import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
 
 type Props = {
   listing: ListingCard;
@@ -43,6 +44,7 @@ function PropertyImageAdapter(props: SiteImageRendererProps) {
 }
 
 export function CatalogPropertyCard({ listing, variant = "grid", priority = false, href, imageBadge }: Props) {
+  const { openPropertyChat: showPropertyChat } = useSiteOverlay();
   const path = href ?? getPropertyPath(listing.slug);
   const contacts = useSiteContacts();
   const phoneHref = contacts.phoneHref || buildTelHref(contacts.phone);
@@ -71,8 +73,7 @@ export function CatalogPropertyCard({ listing, variant = "grid", priority = fals
   }
 
   function openPropertyChat() {
-    window.dispatchEvent(new CustomEvent("open-property-chat", {
-      detail: {
+    showPropertyChat({
         propertyId: normalizedPropertyId,
         agentId: normalizedAgentId,
         sourcePage: window.location.pathname,
@@ -80,8 +81,7 @@ export function CatalogPropertyCard({ listing, variant = "grid", priority = fals
         title,
         address: displayAddress,
         objectCode: listing.objectCode?.trim() || null,
-      },
-    }));
+    });
   }
 
   return (

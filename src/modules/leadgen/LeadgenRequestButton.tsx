@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@ams/realty-ui";
+
 import type { ReactNode } from "react";
 
 type LeadgenRequestButtonProps = {
@@ -34,7 +36,7 @@ export function LeadgenRequestButton({
   onOpen,
 }: LeadgenRequestButtonProps) {
   return (
-    <button
+    <Button unstyled
       type="button"
       className={className}
       onClick={() => {
@@ -47,6 +49,6 @@ export function LeadgenRequestButton({
       }}
     >
       {children}
-    </button>
+    </Button>
   );
 }

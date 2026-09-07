@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "../components/ui/button";
 import type { NewBuildingMediaDto } from "@starter/site-contracts";
 import type { SiteImageRenderer } from "../lib/adapters";
 import { useState } from "react";
@@ -84,7 +85,7 @@ export function NewBuildingGalleryView({
 
       <div className="grid min-h-0 grid-cols-3 gap-2" role="tablist" aria-label="Медиа жилого комплекса">
         {TABS.map(({ key, label, icon: Icon }) => (
-          <button
+          <Button unstyled
             type="button"
             key={key}
             role="tab"
@@ -98,7 +99,7 @@ export function NewBuildingGalleryView({
           >
             <Icon className="size-4 shrink-0" aria-hidden />
             <span className="truncate">{label}</span>
-          </button>
+          </Button>
         ))}
       </div>
     </div>
@@ -137,7 +138,7 @@ function MapExternalLink({ href }: { href: string }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-3 text-xs font-semibold text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.14)] transition hover:text-[var(--accent)] max-md:bottom-2 max-md:right-2"
+      className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-3 text-xs font-semibold text-[var(--text-primary)] shadow-[var(--new-building-gallery-shadow-01)] transition hover:text-[var(--accent)] max-md:bottom-2 max-md:right-2"
     >
       <MapPin className="size-3.5" aria-hidden />
       Открыть на карте
@@ -148,13 +149,13 @@ function MapExternalLink({ href }: { href: string }) {
 
 function VideoPlaceholder() {
   return (
-    <div className="relative grid h-full place-items-center overflow-hidden bg-[radial-gradient(circle_at_18%_18%,var(--surface)_0%,var(--accent-soft)_30%,transparent_58%),linear-gradient(135deg,var(--palette-f1eeee)_0%,var(--surface-card-soft)_48%,var(--surface)_100%)] p-6 text-center">
+    <div className="relative grid h-full place-items-center overflow-hidden bg-[radial-gradient(circle_at_18%_18%,var(--surface)_0%,var(--accent-soft)_30%,transparent_58%),linear-gradient(135deg,var(--new-building-gallery-color-01)_0%,var(--surface-card-soft)_48%,var(--surface)_100%)] p-6 text-center">
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 720 420" aria-hidden>
         <defs>
           <linearGradient id="new-building-video-room-gradient" x1="158" x2="562" y1="122" y2="298" gradientUnits="userSpaceOnUse">
             <stop stopColor="var(--surface)" />
             <stop offset="0.55" stopColor="var(--accent-soft)" />
-            <stop offset="1" stopColor="var(--palette-f1eeee)" />
+            <stop offset="1" stopColor="var(--new-building-gallery-color-01)" />
           </linearGradient>
           <filter id="new-building-video-placeholder-shadow" x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow dx="0" dy="18" stdDeviation="20" floodColor="var(--text-primary)" floodOpacity="0.12" />
@@ -163,7 +164,7 @@ function VideoPlaceholder() {
         <path d="M74 328C128 220 170 115 295 106c82-6 124 36 193 11 54-20 92-58 139-27 54 35 37 121 8 179-42 84-121 116-243 121-145 6-256-9-318-62Z" fill="var(--accent)" opacity="0.055" />
         <g filter="url(#new-building-video-placeholder-shadow)">
           <path d="M122 82H598V338H122z" fill="var(--surface)" stroke="var(--surface)" strokeWidth="12" />
-          <path d="M150 112H570V306H150z" fill="url(#new-building-video-room-gradient)" stroke="var(--palette-d8d6d3)" strokeWidth="2" />
+          <path d="M150 112H570V306H150z" fill="url(#new-building-video-room-gradient)" stroke="var(--new-building-gallery-color-02)" strokeWidth="2" />
           <path d="M150 112h420v194H150z" fill="var(--surface)" opacity="0.22" />
           <path d="M183 155h124v86H183z" fill="var(--surface)" fillOpacity="0.58" stroke="var(--border)" strokeWidth="2" />
           <path d="M404 147h108v106H404z" fill="var(--background)" stroke="var(--border)" strokeWidth="2" />
@@ -174,7 +175,7 @@ function VideoPlaceholder() {
         </g>
       </svg>
       <div className="relative self-end pb-8 max-md:pb-5">
-        <p className="rounded-lg border border-white/70 bg-white/88 px-5 py-3 text-base font-semibold leading-tight text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.10)] backdrop-blur-sm max-md:px-4 max-md:py-2.5 max-md:text-sm">
+        <p className="rounded-lg border border-white/70 bg-white/88 px-5 py-3 text-base font-semibold leading-tight text-[var(--text-primary)] shadow-[var(--new-building-gallery-shadow-02)] backdrop-blur-sm max-md:px-4 max-md:py-2.5 max-md:text-sm">
           Видео жилого комплекса не загружено
         </p>
       </div>
@@ -184,9 +185,9 @@ function VideoPlaceholder() {
 
 function NewBuildingMediaPlaceholder() {
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-[var(--palette-29292d)] px-6 text-center text-white">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(158,7,7,0.34),transparent_35%),linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.045)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px]" />
-      <span className="relative flex size-16 items-center justify-center rounded-lg border border-white/14 bg-white/8"><Building2 className="size-8 text-[var(--palette-efb5b5)]" aria-hidden /></span>
+    <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-[var(--new-building-gallery-surface-01)] px-6 text-center text-white">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,var(--new-building-gallery-effect-01),transparent_35%),linear-gradient(var(--new-building-gallery-effect-02)_1px,transparent_1px),linear-gradient(90deg,var(--new-building-gallery-effect-02)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px]" />
+      <span className="relative flex size-16 items-center justify-center rounded-lg border border-white/14 bg-white/8"><Building2 className="size-8 text-[var(--new-building-gallery-content-01)]" aria-hidden /></span>
       <p className="relative mt-5 text-sm font-extrabold">Изображение ЖК готовится к публикации</p>
       <p className="relative mt-2 max-w-xs text-xs leading-5 text-white/58">Покажем только проверенные материалы проекта</p>
     </div>

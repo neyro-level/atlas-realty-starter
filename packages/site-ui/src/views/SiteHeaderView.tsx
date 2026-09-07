@@ -54,10 +54,10 @@ export function SiteHeaderView(props: SiteHeaderViewProps) {
     onOpenDropdown, onCloseDropdown, onToggleDropdown, onNavigate,
   } = props;
   const headerClass = compactSticky
-    ? "fixed left-3 right-3 top-3 z-50 mx-auto h-[52px] max-w-site-frame-floating rounded-2xl border border-[var(--border)] bg-white/96 shadow-[0_14px_40px_rgba(0,0,0,0.1)] backdrop-blur-xl transition-all duration-300 lg:h-[106px]"
+    ? "fixed left-3 right-3 top-3 z-50 mx-auto h-[52px] max-w-site-frame-floating rounded-2xl border border-[var(--border)] bg-white/96 shadow-[var(--site-header-shadow-01)] backdrop-blur-xl transition-all duration-300 lg:h-[106px]"
     : docked
-      ? "fixed left-3 right-3 top-3 z-50 mx-auto h-[68px] max-w-site-frame-floating rounded-[18px] border border-[var(--border)] bg-white/96 shadow-[0_18px_58px_rgba(0,0,0,0.12)] backdrop-blur-xl transition-all duration-300 lg:h-[106px]"
-      : "fixed left-0 right-0 top-0 z-50 h-[68px] border-b border-[var(--border)] bg-white/92 shadow-[0_1px_0_rgba(0,0,0,0.04)] backdrop-blur-xl transition-all duration-300 lg:h-[106px]";
+      ? "fixed left-3 right-3 top-3 z-50 mx-auto h-[68px] max-w-site-frame-floating rounded-[18px] border border-[var(--border)] bg-white/96 shadow-[var(--site-header-shadow-02)] backdrop-blur-xl transition-all duration-300 lg:h-[106px]"
+      : "fixed left-0 right-0 top-0 z-50 h-[68px] border-b border-[var(--border)] bg-white/92 shadow-[var(--site-header-shadow-03)] backdrop-blur-xl transition-all duration-300 lg:h-[106px]";
   const propertyObjectMobileHideClass = propertyObjectPage && docked ? "max-lg:pointer-events-none max-lg:-translate-y-full max-lg:opacity-0" : "";
   return (
     <>

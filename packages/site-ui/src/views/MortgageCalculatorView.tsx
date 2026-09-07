@@ -1,7 +1,11 @@
 "use client";
 
+import { Select } from "../components/ui/select";
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { useDeferredValue, useState } from "react";
+import { useSiteOverlay } from "../components/shared/site-overlay-context";
 
 type MortgageProgram = {
   id: string;
@@ -39,6 +43,7 @@ function calculateMonthlyPayment(loan: number, rate: number, years: number) {
 }
 
 export function MortgageCalculatorView() {
+  const { openRequest } = useSiteOverlay();
   const [programId, setProgramId] = useState(MORTGAGE_PROGRAMS[0].id);
   const [price, setPrice] = useState(INITIAL_PRICE);
   const [downPayment, setDownPayment] = useState(INITIAL_DOWN_PAYMENT);
@@ -66,18 +71,14 @@ export function MortgageCalculatorView() {
 
   function openMortgageRequest() {
     const summary = `${program.label}: стоимость ${formatCurrency(price)} ₽, первоначальный взнос ${formatCurrency(eligibleDownPayment)} ₽, срок ${termYears} лет, платёж от ${formatCurrency(payment)} ₽/мес.`;
-    window.dispatchEvent(
-      new CustomEvent("open-request-modal", {
-        detail: {
+    openRequest({
           title: "Получить предложение по ипотеке",
           subtitle: summary,
           source: "mortgage-calculator",
           formType: "mortgage_calculator",
           submitLabel: "Получить предложение",
           showSubtitle: true,
-        },
-      }),
-    );
+    });
   }
 
   return (
@@ -99,14 +100,14 @@ export function MortgageCalculatorView() {
               <label htmlFor="mortgage-program" className="grid gap-1.5 text-[13px] font-medium text-[var(--text-secondary)] sm:col-span-2">
                 Программа
                 <span className="relative">
-                  <select
+                  <Select unstyled
                     id="mortgage-program"
                     value={programId}
                     onChange={(event) => setProgramId(event.target.value)}
                     className="min-h-11 w-full appearance-none rounded-xl border border-[var(--border)] bg-white px-4 pr-10 text-[14px] font-medium text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)]"
                   >
                     {MORTGAGE_PROGRAMS.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
-                  </select>
+                  </Select>
                   <ChevronDown className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-[var(--text-muted)]" aria-hidden />
                 </span>
               </label>
@@ -118,7 +119,7 @@ export function MortgageCalculatorView() {
                   <span className="text-[11px] font-normal text-[var(--text-muted)]">минимум {formatCurrency(minimumDownPayment)} ₽ · {minimumDownPaymentPercent}%</span>
                 </span>
                 <span className="relative">
-                  <input
+                  <Input unstyled
                     id="mortgage-down-payment"
                     value={formatCurrency(downPayment)}
                     onChange={(event) => updateAmount(setDownPayment, event.target.value)}
@@ -133,7 +134,7 @@ export function MortgageCalculatorView() {
               <label htmlFor="mortgage-term" className="grid gap-1.5 text-[13px] font-medium text-[var(--text-secondary)]">
                 Срок кредита
                 <span className="relative">
-                  <input
+                  <Input unstyled
                     id="mortgage-term"
                     type="number"
                     min="1"
@@ -156,13 +157,13 @@ export function MortgageCalculatorView() {
               <p>Демонстрационная ставка <span className="font-medium text-white">{program.rate}%</span></p>
               <p className="mt-1">Сумма кредита {formatCurrency(loan)} ₽</p>
             </div>
-            <button
+            <Button unstyled
               type="button"
               onClick={openMortgageRequest}
               className="mt-auto min-h-11 rounded-xl bg-[var(--accent)] px-5 text-[14px] font-semibold text-white transition hover:bg-[var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Получить предложение
-            </button>
+            </Button>
             <p className="mt-3 text-[11px] leading-4 text-white/45">Расчёт демонстрационный и не является предложением банка. Актуальные условия настройте перед публикацией.</p>
           </aside>
         </div>
@@ -188,7 +189,7 @@ function CurrencyField({
     <label htmlFor={id} className={`grid gap-1.5 text-[13px] font-medium text-[var(--text-secondary)] ${className ?? ""}`}>
       {label}
       <span className="relative">
-        <input
+        <Input unstyled
           id={id}
           value={formatCurrency(value)}
           onChange={(event) => onChange(event.target.value)}

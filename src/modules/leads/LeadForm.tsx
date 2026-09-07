@@ -1,5 +1,7 @@
 "use client";
 
+import { Button, Input } from "@ams/realty-ui";
+
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, ShieldCheck } from "lucide-react";
@@ -25,7 +27,7 @@ type LeadFormProps = {
   premiumCompact?: boolean;
 };
 
-export function LeadForm({
+export function RequestForm({
   sourcePage,
   source = "page_showcase",
   formType = "lead",
@@ -97,44 +99,44 @@ export function LeadForm({
     <form
       onSubmit={handleSubmit(onSubmit)}
       data-analytics-form-type={formType}
-      className={`border border-[var(--palette-dcdcdc)] bg-[var(--palette-f7f7f9)] p-5 shadow-[0_12px_36px_rgba(0,0,0,0.05)] ${className}`}
+      className={`border border-[var(--lead-form-border-01)] bg-[var(--lead-form-surface-01)] p-5 shadow-[var(--lead-form-shadow-01)] ${className}`}
     >
-      <input type="hidden" {...register("sourcePage")} />
-      <input type="hidden" {...register("source")} />
-      <input type="hidden" {...register("formType")} />
-      <input type="hidden" {...register("propertyId")} />
-      <input type="hidden" {...register("agentId")} />
-      <input type="hidden" {...register("message")} />
+      <Input unstyled type="hidden" {...register("sourcePage")} />
+      <Input unstyled type="hidden" {...register("source")} />
+      <Input unstyled type="hidden" {...register("formType")} />
+      <Input unstyled type="hidden" {...register("propertyId")} />
+      <Input unstyled type="hidden" {...register("agentId")} />
+      <Input unstyled type="hidden" {...register("message")} />
       <label className="hidden">
         Сайт
-        <input tabIndex={-1} autoComplete="off" {...register("website")} />
+        <Input unstyled tabIndex={-1} autoComplete="off" {...register("website")} />
       </label>
 
-      <div className={premiumCompact ? "mb-6" : "mb-5 border-b border-[var(--palette-e0e0e0)] pb-4"}>
-        <p className={premiumCompact ? "text-xl font-semibold leading-tight text-[var(--text-primary)]" : "text-[11px] font-extrabold uppercase tracking-[0.08em] text-[var(--palette-9e0707)]"}>
+      <div className={premiumCompact ? "mb-6" : "mb-5 border-b border-[var(--lead-form-border-02)] pb-4"}>
+        <p className={premiumCompact ? "text-xl font-semibold leading-tight text-[var(--text-primary)]" : "text-[11px] font-extrabold uppercase tracking-[0.08em] text-[var(--lead-form-content-01)]"}>
           {title}
         </p>
-        <p className={`mt-2 text-sm text-[var(--palette-5f5b5d)] ${premiumCompact ? "leading-5" : "leading-6"}`}>{description}</p>
+        <p className={`mt-2 text-sm text-[var(--lead-form-content-02)] ${premiumCompact ? "leading-5" : "leading-6"}`}>{description}</p>
       </div>
 
       <div className="grid gap-3">
-        <label className="grid gap-2 text-sm font-semibold text-[var(--palette-1f1f1f)]">
+        <label className="grid gap-2 text-sm font-semibold text-[var(--lead-form-content-03)]">
           Ваше имя
-          <input
+          <Input unstyled
             autoComplete="name"
-            className="min-h-11 rounded-lg border border-[var(--palette-dedede)] bg-white px-3 text-base outline-none transition focus:border-[var(--palette-9e0707)]"
+            className="min-h-11 rounded-lg border border-[var(--lead-form-border-03)] bg-white px-3 text-base outline-none transition focus:border-[var(--lead-form-border-04)]"
             {...register("name")}
           />
         </label>
 
-        <label className="grid gap-2 text-sm font-semibold text-[var(--palette-1f1f1f)]">
+        <label className="grid gap-2 text-sm font-semibold text-[var(--lead-form-content-03)]">
           Телефон
-          <input
+          <Input unstyled
             type="tel"
             autoComplete="tel"
             inputMode="tel"
             placeholder="+7 (9__) ___-__-__"
-            className="min-h-11 rounded-lg border border-[var(--palette-dedede)] bg-white px-3 text-base font-medium tabular-nums outline-none transition placeholder:text-[var(--palette-9a9798)] focus:border-[var(--palette-9e0707)]"
+            className="min-h-11 rounded-lg border border-[var(--lead-form-border-03)] bg-white px-3 text-base font-medium tabular-nums outline-none transition placeholder:text-[var(--lead-form-content-04)] focus:border-[var(--lead-form-border-04)]"
             {...register("phone")}
             value={phone}
             onFocus={() => {
@@ -147,43 +149,43 @@ export function LeadForm({
             }}
           />
           {errors.phone ? (
-            <span className="text-xs font-semibold text-[var(--palette-9e0707)]">{errors.phone.message}</span>
+            <span className="text-xs font-semibold text-[var(--lead-form-content-01)]">{errors.phone.message}</span>
           ) : null}
         </label>
       </div>
 
-      <label className={`mt-4 flex text-xs leading-5 text-[var(--palette-666666)] ${premiumCompact ? "items-center gap-2.5" : "gap-3"}`}>
-        <input
+      <label className={`mt-4 flex text-xs leading-5 text-[var(--lead-form-content-05)] ${premiumCompact ? "items-center gap-2.5" : "gap-3"}`}>
+        <Input unstyled
           type="checkbox"
-          className={`${premiumCompact ? "" : "mt-1"} size-4 shrink-0 accent-[var(--palette-9e0707)]`}
+          className={`${premiumCompact ? "" : "mt-1"} size-4 shrink-0 accent-[var(--lead-form-control-01)]`}
           {...register("consent")}
         />
         <span><PrivacyConsentText className="font-semibold" /></span>
       </label>
       {errors.consent ? (
-        <p className="mt-2 text-xs font-semibold text-[var(--palette-9e0707)]">{errors.consent.message}</p>
+        <p className="mt-2 text-xs font-semibold text-[var(--lead-form-content-01)]">{errors.consent.message}</p>
       ) : null}
 
       {premiumCompact ? (
-        <p className="mt-4 flex items-center gap-2 text-[11px] leading-4 text-[var(--palette-777375)]">
+        <p className="mt-4 flex items-center gap-2 text-[11px] leading-4 text-[var(--lead-form-content-06)]">
           <ShieldCheck className="size-4 shrink-0 text-[var(--accent)]" aria-hidden />
           Невидимая защита от спама включена
         </p>
       ) : null}
 
-      <button
+      <Button unstyled
         type="submit"
         disabled={isPending}
-        className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-[var(--palette-9e0707)] px-5 text-sm font-bold text-white transition hover:bg-[var(--palette-7a0505)] disabled:cursor-wait disabled:opacity-70"
+        className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-[var(--lead-form-surface-02)] px-5 text-sm font-bold text-white transition hover:bg-[var(--lead-form-surface-03)] disabled:cursor-wait disabled:opacity-70"
       >
         {isPending ? "Отправляем..." : submitLabel}
         {!premiumCompact ? <ArrowRight className="size-4" aria-hidden /> : null}
-      </button>
+      </Button>
 
       {result ? (
         <p
           className={`mt-3 text-sm font-semibold ${
-            result.ok ? "text-[var(--palette-1f7a3a)]" : "text-[var(--palette-9e0707)]"
+            result.ok ? "text-[var(--lead-form-content-07)]" : "text-[var(--lead-form-content-01)]"
           }`}
         >
           {result.message}
@@ -192,3 +194,6 @@ export function LeadForm({
     </form>
   );
 }
+
+/** @deprecated Use RequestForm for all new lead entry points. */
+export const LeadForm = RequestForm;

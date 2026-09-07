@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "../components/ui/button";
 import {
   Camera,
   ExternalLink,
@@ -52,7 +53,7 @@ export function PropertyGalleryView({
   const [activeTab, setActiveTab] = useState<TabKey>("photos");
 
   return (
-    <div className="grid h-[392px] grid-rows-[minmax(0,1fr)_50px] gap-2 md:h-[510px] md:grid-rows-[minmax(0,1fr)_52px] lg:h-[640px] lg:gap-3 lg:rounded-lg lg:border lg:border-[var(--border)] lg:bg-white lg:p-3 lg:shadow-[0_1px_2px_rgba(0,0,0,0.03),0_18px_42px_rgba(23,22,26,0.08)]">
+    <div className="grid h-[392px] grid-rows-[minmax(0,1fr)_50px] gap-2 md:h-[510px] md:grid-rows-[minmax(0,1fr)_52px] lg:h-[640px] lg:gap-3 lg:rounded-lg lg:border lg:border-[var(--border)] lg:bg-white lg:p-3 lg:shadow-[var(--property-gallery-shadow-01)]">
       <div id={`property-media-panel-${activeTab}`} role="tabpanel" aria-labelledby={`property-media-tab-${activeTab}`} className="relative min-h-0 overflow-hidden rounded-lg bg-[var(--surface-muted)]">
         {activeTab === "photos" ? (
           <MediaGallery
@@ -76,7 +77,7 @@ export function PropertyGalleryView({
                 allowFullScreen
                 className="h-full w-full border-0"
               />
-              {safeVideoUrls.length > 1 ? <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2 rounded-[15px] bg-[var(--surface-dark)]/80 p-1.5 backdrop-blur-sm">{safeVideoUrls.map((url, index) => <button key={url} type="button" onClick={() => setActiveVideoIndex(index)} className={`min-h-9 rounded-[10px] px-3 text-xs font-semibold transition ${index === activeVideoIndex ? "bg-white text-[var(--text-primary)]" : "text-white hover:bg-white/15"}`}>{videoProviderLabel(url)}</button>)}</div> : null}
+              {safeVideoUrls.length > 1 ? <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2 rounded-[15px] bg-[var(--surface-dark)]/80 p-1.5 backdrop-blur-sm">{safeVideoUrls.map((url, index) => <Button unstyled key={url} type="button" onClick={() => setActiveVideoIndex(index)} className={`min-h-9 rounded-[10px] px-3 text-xs font-semibold transition ${index === activeVideoIndex ? "bg-white text-[var(--text-primary)]" : "text-white hover:bg-white/15"}`}>{videoProviderLabel(url)}</Button>)}</div> : null}
             </div>
           ) : (
             <MediaPlaceholder title="Видео объекта не загружено" />
@@ -97,7 +98,7 @@ export function PropertyGalleryView({
               rel="noreferrer"
               data-analytics-event="map_open"
               data-analytics-context="property_gallery_map"
-              className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-3 text-xs font-semibold text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.14)] transition hover:text-[var(--accent)] max-md:bottom-2 max-md:right-2"
+              className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-3 text-xs font-semibold text-[var(--text-primary)] shadow-[var(--property-gallery-shadow-02)] transition hover:text-[var(--accent)] max-md:bottom-2 max-md:right-2"
             >
               <MapPin className="size-3.5" aria-hidden />
               Открыть на карте
@@ -138,13 +139,13 @@ function MediaPlaceholder({
   title: string;
 }) {
   return (
-    <div className="relative grid h-full place-items-center overflow-hidden bg-[radial-gradient(circle_at_18%_18%,var(--surface)_0%,var(--accent-soft)_30%,transparent_58%),linear-gradient(135deg,var(--palette-f1eeee)_0%,var(--surface-card-soft)_48%,var(--surface)_100%)] p-6 text-center">
+    <div className="relative grid h-full place-items-center overflow-hidden bg-[radial-gradient(circle_at_18%_18%,var(--surface)_0%,var(--accent-soft)_30%,transparent_58%),linear-gradient(135deg,var(--property-gallery-color-01)_0%,var(--surface-card-soft)_48%,var(--surface)_100%)] p-6 text-center">
       <svg className="absolute inset-0 h-full w-full" viewBox="0 0 720 420" aria-hidden>
         <defs>
           <linearGradient id="object-video-room-gradient" x1="158" x2="562" y1="122" y2="298" gradientUnits="userSpaceOnUse">
             <stop stopColor="var(--surface)" />
             <stop offset="0.55" stopColor="var(--accent-soft)" />
-            <stop offset="1" stopColor="var(--palette-f1eeee)" />
+            <stop offset="1" stopColor="var(--property-gallery-color-01)" />
           </linearGradient>
           <filter id="object-video-placeholder-shadow" x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow dx="0" dy="18" stdDeviation="20" floodColor="var(--text-primary)" floodOpacity="0.12" />
@@ -153,7 +154,7 @@ function MediaPlaceholder({
         <path d="M74 328C128 220 170 115 295 106c82-6 124 36 193 11 54-20 92-58 139-27 54 35 37 121 8 179-42 84-121 116-243 121-145 6-256-9-318-62Z" fill="var(--accent)" opacity="0.055" />
         <g filter="url(#object-video-placeholder-shadow)">
           <path d="M122 82H598V338H122z" fill="var(--surface)" stroke="var(--surface)" strokeWidth="12" />
-          <path d="M150 112H570V306H150z" fill="url(#object-video-room-gradient)" stroke="var(--palette-d8d6d3)" strokeWidth="2" />
+          <path d="M150 112H570V306H150z" fill="url(#object-video-room-gradient)" stroke="var(--property-gallery-color-02)" strokeWidth="2" />
           <path d="M150 112h420v194H150z" fill="var(--surface)" opacity="0.22" />
           <path d="M183 155h124v86H183z" fill="var(--surface)" fillOpacity="0.58" stroke="var(--border)" strokeWidth="2" />
           <path d="M404 147h108v106H404z" fill="var(--background)" stroke="var(--border)" strokeWidth="2" />
@@ -164,7 +165,7 @@ function MediaPlaceholder({
         </g>
       </svg>
       <div className="relative self-end pb-8 max-md:pb-5">
-        <p className="rounded-lg border border-white/70 bg-white/88 px-5 py-3 text-base font-semibold leading-tight text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.10)] backdrop-blur-sm max-md:px-4 max-md:py-2.5 max-md:text-sm">
+        <p className="rounded-lg border border-white/70 bg-white/88 px-5 py-3 text-base font-semibold leading-tight text-[var(--text-primary)] shadow-[var(--property-gallery-shadow-03)] backdrop-blur-sm max-md:px-4 max-md:py-2.5 max-md:text-sm">
           {title}
         </p>
       </div>

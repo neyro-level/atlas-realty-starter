@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
 import type { SiteLinkRenderer } from "../lib/adapters";
 import { Badge } from "../components/ui/badge";
+import { RequestModalButton } from "../components/shared/site-overlay-context";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 
@@ -68,7 +69,7 @@ function HomeInterestSelectionCard({ mode }: { mode: InterestMode }) {
   return (
     <Card className="home-interest__selection-card">
       <h3>{title}</h3><p>{subtitle}</p>
-      <Button type="button" data-request-modal data-request-modal-title="Получить подборку объектов" data-request-modal-subtitle="Оставьте контакты. Специалист агентства недвижимости уточнит задачу и подберет лучшие варианты под ваш запрос и бюджет." data-request-modal-source={`home-interest:${mode}:selection-card`} data-request-modal-form-type={`home_interest_${mode}_selection`}>Получить подборку бесплатно</Button>
+      <RequestModalButton type="button" request={{ title: "Получить подборку объектов", subtitle: "Оставьте контакты. Специалист агентства недвижимости уточнит задачу и подберет лучшие варианты под ваш запрос и бюджет.", source: `home-interest:${mode}:selection-card`, formType: `home_interest_${mode}_selection` }}>Получить подборку бесплатно</RequestModalButton>
     </Card>
   );
 }

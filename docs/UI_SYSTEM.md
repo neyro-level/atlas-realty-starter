@@ -14,7 +14,7 @@ The root and package `components.json` files must keep the same ShadCN style, Re
 
 ## Shared components
 
-The private AMS registry owns ShadCN Button, Card, Badge, Dialog, Carousel, Aspect Ratio, Scroll Area, Skeleton, Tabs, Form, Field, Input and Checkbox plus neutral realty gallery, catalog cards, filters, request forms and CTA blocks. Registry items use the `ams-realty-*` namespace and never contain client branding, domains, legal data or city-specific copy.
+The private AMS registry owns ShadCN Button, Card, Badge, Dialog, Carousel, Aspect Ratio, Scroll Area, Skeleton, Tabs, Form, Field, Input, Textarea, Select and Checkbox plus neutral realty gallery, catalog cards, filters, request forms and CTA blocks. Registry items use the `ams-realty-*` namespace and never contain client branding, domains, legal data or city-specific copy.
 
 New UI follows `reuse -> variant -> create`. Application components do not import Radix directly and do not recreate native controls when an admitted primitive or semantic variant exists.
 
@@ -23,8 +23,10 @@ New UI follows `reuse -> variant -> create`. Application components do not impor
 ## Visual and media gates
 
 - `pnpm test:visual` compares the key routes at 390, 768, 1280 and 1440 px.
-- `pnpm ui:check` rejects raw HEX outside the theme, direct Radix imports outside primitives, identity/registry drift, duplicate static images and static images above 512 KiB. Existing palette, raw color, arbitrary-shadow and native-control debt is protected by decreasing ceilings: any regression fails the gate, and ceilings are lowered with each migration until zero.
+- `pnpm ui:check` rejects raw colors outside the theme, palette tokens, arbitrary shadows, native controls outside primitives, legacy modal event bridges, direct Radix imports outside primitives, oversized page compositions, identity/registry drift, duplicate static images and static images above 512 KiB. All migrated UI debt ceilings are zero.
 - `pnpm images:optimize` converts only oversized PNG files to high-quality WebP, updates tracked references and removes proven duplicates.
 - Logos, UI graphics, social previews and small fallbacks may stay in Git. Property and ЖК photography belongs to Payload Media and persistent local/S3 storage.
 
 The active identity lives in `src/project/site-profile.ts`. Project themes override neutral semantic tokens without changing component APIs. `templates/site-profile.neutral.json` and `pnpm template:profile` provide a neutral starting profile for a new city. The neutral preset contains no Atlas theme or Краснодар coordinates; map activation requires reviewed coordinates. The generator also emits a brand asset manifest and deployment checklist into `.ams-client/`. One client still receives its own repository, database, S3 bucket and deployment contour.
+
+`RequestForm` is the canonical React Hook Form + Zod entry point for inline leads. Overlay triggers use the registry-owned typed context instead of DOM events or `data-*` dispatch attributes. All lead entry points retain the same server action, phone normalization, consent, honeypot, idempotency and server-error contract.

@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@ams/realty-ui";
+
 import { LegalDocumentModalView } from "@ams/realty-ui";
 import { useEffect, useRef, useState } from "react";
 import { getLegalPage } from "@/project/legal-pages";
@@ -44,7 +46,7 @@ export function LeadgenPrivacyModal({
 
   return (
     <>
-      <button
+      <Button unstyled
         ref={openButtonRef}
         type="button"
         className={`cursor-pointer border-0 bg-transparent p-0 font-[inherit] ${className}`}
@@ -57,7 +59,7 @@ export function LeadgenPrivacyModal({
         }}
       >
         {label}
-      </button>
+      </Button>
 
       {isOpen ? (
         <LegalDocumentModalView

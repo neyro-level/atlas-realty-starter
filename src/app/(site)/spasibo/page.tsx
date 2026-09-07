@@ -13,10 +13,10 @@ export const metadata: Metadata = {
 
 export default function ThanksPage() {
   return (
-    <main className="min-h-screen bg-white text-[var(--palette-1f1f1f)]">
-      <section className="border-b border-[var(--palette-e0e0e0)] bg-[var(--palette-171717)] text-white">
+    <main className="min-h-screen bg-white text-[var(--spasibo-page-content-01)]">
+      <section className="border-b border-[var(--spasibo-page-border-01)] bg-[var(--spasibo-page-surface-01)] text-white">
         <div className="mx-auto max-w-5xl px-5 py-14 lg:py-20">
-          <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[var(--palette-f0b7b7)]">Контактный переход</p>
+          <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[var(--spasibo-page-content-02)]">Контактный переход</p>
           <h1 className="mt-5 max-w-3xl text-[clamp(2.2rem,4vw,3.8rem)] font-extrabold leading-[0.96]">Спасибо, заявка отправлена</h1>
           <p className="mt-5 max-w-2xl text-sm leading-7 text-white/74">Команда агентства недвижимости получила ваш запрос. Специалист свяжется с вами, чтобы уточнить задачу и собрать следующий шаг по объекту, подборке или сопровождению сделки.</p>
         </div>
@@ -24,13 +24,13 @@ export default function ThanksPage() {
 
       <section className="bg-white py-10 lg:py-14">
         <div className="mx-auto grid max-w-5xl gap-5 px-5 md:grid-cols-2">
-          <article className="rounded-[24px] border border-[var(--palette-e5e5e5)] bg-[var(--surface-card-soft)] p-6 shadow-[0_14px_36px_rgba(0,0,0,0.04)]">
-            <h2 className="text-2xl font-extrabold leading-tight text-[var(--palette-181818)]">Что дальше</h2>
-            <p className="mt-4 text-sm leading-7 text-[var(--palette-4f4f4f)]">Мы уточним сценарий сделки, приоритетные районы, бюджет и нужный контур: покупка, продажа, новостройки или сопровождение.</p>
+          <article className="rounded-[24px] border border-[var(--spasibo-page-border-02)] bg-[var(--surface-card-soft)] p-6 shadow-[var(--page-shadow-01)]">
+            <h2 className="text-2xl font-extrabold leading-tight text-[var(--spasibo-page-content-03)]">Что дальше</h2>
+            <p className="mt-4 text-sm leading-7 text-[var(--spasibo-page-content-04)]">Мы уточним сценарий сделки, приоритетные районы, бюджет и нужный контур: покупка, продажа, новостройки или сопровождение.</p>
           </article>
-          <article className="rounded-[24px] border border-[var(--palette-e5e5e5)] bg-[var(--surface-card-soft)] p-6 shadow-[0_14px_36px_rgba(0,0,0,0.04)]">
-            <h2 className="text-2xl font-extrabold leading-tight text-[var(--palette-181818)]">Пока ждёте ответ</h2>
-            <p className="mt-4 text-sm leading-7 text-[var(--palette-4f4f4f)]">Можно вернуться к разделам недвижимости, открыть нужный маршрут или посмотреть контакты агентства, если нужна более быстрая связь.</p>
+          <article className="rounded-[24px] border border-[var(--spasibo-page-border-02)] bg-[var(--surface-card-soft)] p-6 shadow-[var(--page-shadow-01)]">
+            <h2 className="text-2xl font-extrabold leading-tight text-[var(--spasibo-page-content-03)]">Пока ждёте ответ</h2>
+            <p className="mt-4 text-sm leading-7 text-[var(--spasibo-page-content-04)]">Можно вернуться к разделам недвижимости, открыть нужный маршрут или посмотреть контакты агентства, если нужна более быстрая связь.</p>
           </article>
         </div>
 

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useSiteContacts } from "@/components/layout/SiteContactsProvider";
 import { buildTelHref } from "@/shared/lib/tel";
+import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
 
 type PropertyPageActionsProps = {
   propertyId: string;
@@ -24,19 +25,18 @@ export function PropertyPageActions({
   title,
 }: PropertyPageActionsProps) {
   const contacts = useSiteContacts();
+  const { openPropertyChat: showPropertyChat } = useSiteOverlay();
   const [phoneVisible, setPhoneVisible] = useState(false);
   const displayAgentName = agentName || "Эксперт агентства недвижимости";
 
   function openPropertyChat() {
-    window.dispatchEvent(new CustomEvent("open-property-chat", {
-      detail: {
+    showPropertyChat({
         propertyId,
         agentId,
         sourcePage,
         title,
         propertyPath: sourcePage,
-      },
-    }));
+    });
   }
 
   return (

@@ -78,7 +78,7 @@ export function RequestModalView({
             <span className="request-modal__success-icon"><Check className="size-8" aria-hidden /></span>
             <h2 className="request-modal__title" id="request-modal-title">Заявка отправлена</h2>
             <p className="request-modal__subtitle">{successMessage}</p>
-            <Button className="home-btn-primary request-modal__submit" type="button" onClick={onClose}>Хорошо</Button>
+            <Button unstyled className="home-btn-primary request-modal__submit" type="button" onClick={onClose}>Хорошо</Button>
           </div>
         ) : <>
         <div className="request-modal__header">
@@ -111,14 +111,14 @@ export function RequestModalView({
         <form className="request-modal__form" onSubmit={onSubmit} data-analytics-form-type={formType} noValidate>
           <label className="request-modal__honeypot">
             Сайт
-            <input tabIndex={-1} autoComplete="off" value={website} onChange={(event) => onWebsiteChange(event.target.value)} />
+            <Input unstyled tabIndex={-1} autoComplete="off" value={website} onChange={(event) => onWebsiteChange(event.target.value)} />
           </label>
 
           <div className="request-modal__field">
             <label className="request-modal__label" htmlFor="request-modal-name">
               Ваше имя
             </label>
-            <Input
+            <Input unstyled
               id="request-modal-name"
               className="request-modal__input"
               autoComplete="name"
@@ -136,7 +136,7 @@ export function RequestModalView({
             <label className="request-modal__label" htmlFor="request-modal-phone">
               Номер телефона
             </label>
-            <Input
+            <Input unstyled
               id="request-modal-phone"
               ref={phoneRef}
               className="request-modal__input"
@@ -166,7 +166,7 @@ export function RequestModalView({
 
           {resultMessage ? <p className="request-modal__submit-error" role="alert">{resultMessage}</p> : null}
 
-          <Button className="home-btn-primary request-modal__submit" type="submit" disabled={isPending}>
+          <Button unstyled className="home-btn-primary request-modal__submit" type="submit" disabled={isPending}>
             {isPending ? "Отправляем..." : submitLabel}
           </Button>
           <p className="request-modal__note">Без спама. Только чтобы связаться по вашей задаче.</p>

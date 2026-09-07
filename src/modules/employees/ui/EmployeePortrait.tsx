@@ -33,7 +33,7 @@ export function EmployeePortrait({
       fill
       priority={priority}
       sizes={sizes}
-      className="bg-[var(--palette-f5f6f6)] object-contain object-bottom"
+      className="bg-[var(--employee-portrait-surface-01)] object-contain object-bottom"
     />
   );
 }

@@ -22,7 +22,7 @@ export function PropertyMobileTopBarView({
   linkRenderer: SiteLinkRenderer;
 }) {
   return (
-    <div className={`sticky top-0 z-40 transition-all duration-200 lg:hidden ${docked ? "border-b border-[var(--border)] bg-white/96 shadow-[0_8px_24px_rgba(23,22,26,0.08)] backdrop-blur-xl" : ""}`}>
+    <div className={`sticky top-0 z-40 transition-all duration-200 lg:hidden ${docked ? "border-b border-[var(--border)] bg-white/96 shadow-[var(--property-mobile-top-bar-shadow-01)] backdrop-blur-xl" : ""}`}>
       <div className="mx-auto grid min-h-[44px] max-w-site-frame grid-cols-[36px_minmax(0,1fr)_80px] items-center gap-2 px-2.5 py-1.5 text-[var(--text-secondary)] sm:px-3">
         <LinkRenderer href={backHref} ariaLabel="Вернуться в каталог" className="inline-flex size-9 items-center justify-center rounded-md text-[var(--text-primary)] transition hover:text-[var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]">
           <ArrowLeft className="size-5" aria-hidden />

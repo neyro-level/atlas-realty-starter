@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "../components/ui/button";
 import type { PropertyCardDto } from "@starter/site-contracts";
 import { useMemo, useRef, useState, type MouseEvent, type ReactNode, type TouchEvent } from "react";
 import {
@@ -12,6 +13,15 @@ import {
   Phone,
 } from "lucide-react";
 import type { SiteImageRenderer, SiteLinkRenderer } from "../lib/adapters";
+import {
+  AddressLine,
+  buildPropertyCardListTitle,
+  buildPropertyCardTitle,
+  cleanListingDescription,
+  cleanPropertyCardDisplayAddress,
+  formatCardPrice,
+  formatListingDate,
+} from "./property-card-support";
 
 export type PropertyCardViewProps = {
   listing: PropertyCardDto;
@@ -134,7 +144,7 @@ export function PropertyCardView({
   if (isList) {
     return (
       <article
-        className="group relative grid cursor-pointer gap-5 bg-transparent p-4 transition duration-300 hover:relative hover:z-10 hover:rounded-lg hover:bg-[var(--surface-card-soft)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.02),0_22px_52px_rgba(0,0,0,0.10)] md:grid-cols-[300px_minmax(0,1fr)_230px] md:px-0 md:py-6"
+        className="group relative grid cursor-pointer gap-5 bg-transparent p-4 transition duration-300 hover:relative hover:z-10 hover:rounded-lg hover:bg-[var(--surface-card-soft)] hover:shadow-[var(--property-card-shadow-01)] md:grid-cols-[300px_minmax(0,1fr)_230px] md:px-0 md:py-6"
       >
         <LinkRenderer
           href={path}
@@ -173,22 +183,22 @@ export function PropertyCardView({
 
           {images.length > 1 ? (
             <>
-              <button
+              <Button unstyled
                 type="button"
                 onClick={showPrevious}
                 className="absolute left-2.5 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg bg-[var(--surface-dark)]/28 text-white opacity-60 backdrop-blur-sm transition active:opacity-90 lg:left-3 lg:size-9 lg:bg-[var(--surface-dark)]/62 lg:opacity-0 lg:group-hover:opacity-100"
                 aria-label="Предыдущее фото"
               >
                 <ChevronLeft className="size-5 lg:size-5" aria-hidden />
-              </button>
-              <button
+              </Button>
+              <Button unstyled
                 type="button"
                 onClick={showNext}
                 className="absolute right-2.5 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg bg-[var(--surface-dark)]/28 text-white opacity-60 backdrop-blur-sm transition active:opacity-90 lg:right-3 lg:size-9 lg:bg-[var(--surface-dark)]/62 lg:opacity-0 lg:group-hover:opacity-100"
                 aria-label="Следующее фото"
               >
                 <ChevronRight className="size-5 lg:size-5" aria-hidden />
-              </button>
+              </Button>
               <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1" aria-hidden>
                 {images.map((_, index) => (
                   <span
@@ -199,7 +209,7 @@ export function PropertyCardView({
                   />
                 ))}
               </div>
-              <span className="absolute bottom-3 right-3 z-20 inline-flex min-h-7 items-center gap-1 rounded-full bg-[var(--surface-dark)]/72 px-2.5 text-[10px] font-bold tabular-nums text-white shadow-[0_5px_14px_rgba(0,0,0,0.12)] backdrop-blur-sm">
+              <span className="absolute bottom-3 right-3 z-20 inline-flex min-h-7 items-center gap-1 rounded-full bg-[var(--surface-dark)]/72 px-2.5 text-[10px] font-bold tabular-nums text-white shadow-[var(--property-card-shadow-02)] backdrop-blur-sm">
                 <ImageIcon className="size-3.5" aria-hidden />
                 {activeImage + 1}/{images.length}
               </span>
@@ -236,13 +246,13 @@ export function PropertyCardView({
                 onClick={stop}
                 data-analytics-context="catalog_property_card"
                 data-analytics-item={listing.slug}
-                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold tabular-nums text-white transition hover:bg-[var(--palette-2a292c)] lg:text-sm sm:min-w-[190px]"
+                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold tabular-nums text-white transition hover:bg-[var(--property-card-surface-01)] lg:text-sm sm:min-w-[190px]"
               >
                 <Phone className="size-[17.6px] lg:size-4" aria-hidden />
                 {phone}
               </a>
             ) : (
-              <button
+              <Button unstyled
                 type="button"
                 data-analytics-event="phone_reveal"
                 data-analytics-context="catalog_property_card"
@@ -251,20 +261,20 @@ export function PropertyCardView({
                   stop(event);
                   setPhoneVisible(true);
                 }}
-                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold text-white transition hover:bg-[var(--palette-2a292c)] lg:text-sm sm:min-w-[190px]"
+                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold text-white transition hover:bg-[var(--property-card-surface-01)] lg:text-sm sm:min-w-[190px]"
               >
                 <Phone className="size-[17.6px] lg:size-4" aria-hidden />
                 Показать телефон
-              </button>
+              </Button>
             )}
-            <button
+            <Button unstyled
               type="button"
               onClick={openPropertyChat}
               className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] px-5 text-center text-[15.4px] font-semibold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)] lg:text-sm sm:min-w-[130px]"
             >
               <MessageCircle className="size-[17.6px] lg:size-4" aria-hidden />
               Написать
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -301,8 +311,8 @@ export function PropertyCardView({
     <article
       className={`group relative cursor-pointer rounded-lg bg-white/0 transition duration-300 ${
         isList
-          ? "grid overflow-hidden border border-[var(--border)] bg-white shadow-none hover:-translate-y-0.5 hover:shadow-[0_4px_8px_rgba(0,0,0,0.02),0_20px_48px_rgba(0,0,0,0.08)] md:grid-cols-[320px_minmax(0,1fr)_210px]"
-          : "-m-2 overflow-visible border border-transparent p-2 shadow-[0_1px_2px_rgba(0,0,0,0.015),0_6px_16px_rgba(0,0,0,0.035)] transition-shadow lg:shadow-none hover:-translate-y-0.5 hover:border-[var(--border)] hover:bg-white hover:shadow-[0_1px_2px_rgba(0,0,0,0.03),0_18px_42px_rgba(0,0,0,0.08)]"
+          ? "grid overflow-hidden border border-[var(--border)] bg-white shadow-none hover:-translate-y-0.5 hover:shadow-[var(--property-card-shadow-03)] md:grid-cols-[320px_minmax(0,1fr)_210px]"
+          : "-m-2 overflow-visible border border-transparent p-2 shadow-[var(--property-card-shadow-04)] transition-shadow lg:shadow-none hover:-translate-y-0.5 hover:border-[var(--border)] hover:bg-white hover:shadow-[var(--property-card-shadow-05)]"
       }`}
     >
       <LinkRenderer
@@ -317,7 +327,7 @@ export function PropertyCardView({
 
       <div className={isList ? "p-3 md:pr-0" : ""}>
         <div
-          className={`relative z-20 touch-pan-y select-none overflow-hidden rounded-lg bg-[var(--surface-muted)] ${isList ? "aspect-[16/10] md:h-full md:min-h-[214px]" : "aspect-[3/2] shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition duration-300 group-hover:shadow-[0_8px_22px_rgba(0,0,0,0.09)]"}`}
+          className={`relative z-20 touch-pan-y select-none overflow-hidden rounded-lg bg-[var(--surface-muted)] ${isList ? "aspect-[16/10] md:h-full md:min-h-[214px]" : "aspect-[3/2] shadow-[var(--property-card-shadow-06)] transition duration-300 group-hover:shadow-[var(--property-card-shadow-07)]"}`}
           onTouchStart={onGalleryTouchStart}
           onTouchEnd={onGalleryTouchEnd}
         >
@@ -356,22 +366,22 @@ export function PropertyCardView({
 
           {images.length > 1 ? (
             <>
-              <button
+              <Button unstyled
                 type="button"
                 onClick={showPrevious}
                 className="absolute left-2.5 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg bg-[var(--surface-dark)]/28 text-white opacity-60 backdrop-blur-sm transition active:opacity-90 lg:left-3 lg:size-9 lg:bg-[var(--surface-dark)]/62 lg:opacity-0 lg:group-hover:opacity-100"
                 aria-label="Предыдущее фото"
               >
                 <ChevronLeft className="size-5" aria-hidden />
-              </button>
-              <button
+              </Button>
+              <Button unstyled
                 type="button"
                 onClick={showNext}
                 className="absolute right-2.5 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg bg-[var(--surface-dark)]/28 text-white opacity-60 backdrop-blur-sm transition active:opacity-90 lg:right-3 lg:size-9 lg:bg-[var(--surface-dark)]/62 lg:opacity-0 lg:group-hover:opacity-100"
                 aria-label="Следующее фото"
               >
                 <ChevronRight className="size-5" aria-hidden />
-              </button>
+              </Button>
 
               <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/35 via-black/10 to-transparent px-2.5 pb-2.5 pt-10 lg:hidden" />
 
@@ -390,7 +400,7 @@ export function PropertyCardView({
                 ))}
               </div>
 
-              <span className="absolute bottom-2.5 right-2.5 z-20 inline-flex min-h-6 items-center gap-1 rounded-md bg-[var(--surface-dark)]/66 px-2 text-[10px] font-bold tabular-nums text-white shadow-[0_5px_14px_rgba(0,0,0,0.10)] backdrop-blur-sm">
+              <span className="absolute bottom-2.5 right-2.5 z-20 inline-flex min-h-6 items-center gap-1 rounded-md bg-[var(--surface-dark)]/66 px-2 text-[10px] font-bold tabular-nums text-white shadow-[var(--property-card-shadow-08)] backdrop-blur-sm">
                 <ImageIcon className="size-3" aria-hidden />
                 {activeImage + 1}/{images.length}
               </span>
@@ -416,14 +426,14 @@ export function PropertyCardView({
               >
                 <Phone className="size-[18.7px]" strokeWidth={1.85} aria-hidden />
               </a>
-              <button
+              <Button unstyled
                 type="button"
                 onClick={openPropertyChat}
                 aria-label="Открыть чат"
                 className="inline-flex size-10 items-center justify-center rounded-lg bg-[var(--surface-card-soft)] text-[var(--text-secondary)] transition hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
               >
                 <MessageCircle className="size-[18.7px]" strokeWidth={1.85} aria-hidden />
-              </button>
+              </Button>
             </div>
           </div>
           {!isNewBuildingCard && !isXmlCatalogCard ? (
@@ -472,7 +482,7 @@ export function PropertyCardView({
               {phone}
             </a>
           ) : (
-            <button
+            <Button unstyled
               type="button"
                 data-analytics-event="phone_reveal"
                 data-analytics-context="catalog_property_card"
@@ -485,16 +495,16 @@ export function PropertyCardView({
               >
               <Phone className="size-4" aria-hidden />
               Показать телефон
-            </button>
+            </Button>
           )}
-          <button
+          <Button unstyled
             type="button"
             onClick={openPropertyChat}
             className="relative z-20 inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-white px-3 text-center text-sm font-bold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
           >
             <MessageCircle className="size-4" aria-hidden />
             Написать
-          </button>
+          </Button>
         </div>
       ) : null}
     </article>
@@ -507,7 +517,7 @@ function CatalogBadgeStack({ imageBadge, className }: { imageBadge?: string; cla
   return (
     <div data-catalog-badge-stack className={`absolute z-10 flex flex-col items-start gap-1.5 ${className}`}>
       {imageBadge ? (
-        <span data-sales-leader-badge className="inline-flex min-h-6 items-center rounded-md bg-[var(--accent)] px-2.5 text-[10px] font-bold leading-none text-white shadow-[0_5px_14px_rgba(138,21,21,0.20)]">
+        <span data-sales-leader-badge className="inline-flex min-h-6 items-center rounded-md bg-[var(--accent)] px-2.5 text-[10px] font-bold leading-none text-white shadow-[var(--property-card-shadow-09)]">
           {imageBadge}
         </span>
       ) : null}
@@ -520,169 +530,11 @@ function ExclusiveBadge() {
     <span
       data-exclusive-badge
       data-exclusive-placement="price"
-      className="inline-flex min-h-6 shrink-0 items-center rounded-md bg-[var(--accent)] px-2 text-[9px] font-bold leading-none text-white shadow-[0_5px_14px_rgba(138,21,21,0.20)] sm:text-[10px]"
+      className="inline-flex min-h-6 shrink-0 items-center rounded-md bg-[var(--accent)] px-2 text-[9px] font-bold leading-none text-white shadow-[var(--property-card-shadow-09)] sm:text-[10px]"
     >
       Эксклюзив
     </span>
   );
 }
 
-export function buildPropertyCardTitle(listing: PropertyCardDto, cardKind: NonNullable<PropertyCardViewProps["cardKind"]>) {
-  if (cardKind === "new-building") {
-    return listing.title;
-  }
-
-  if (listing.categoryKey === "construction") {
-    const area = listing.area ? `${formatNumber(listing.area)} м²` : null;
-    return area && !listing.title.includes(area) ? `${listing.title}, ${area}` : listing.title;
-  }
-
-  const type = listing.categoryKey === "flat" || listing.categoryKey === "room"
-    ? "квартира"
-    : listing.categoryKey === "house"
-      ? "дом"
-      : listing.categoryKey === "land"
-        ? "участок"
-        : listing.categoryKey === "commercial"
-          ? "коммерческий объект"
-          : listing.category.toLowerCase();
-
-  const parts = [
-    type,
-    listing.area ? `${listing.area} м²` : null,
-    listing.floor ? `${listing.floor}/${listing.floorsTotal ?? "-"} эт.` : null,
-  ].filter(Boolean) as string[];
-
-  const roomPrefix = listing.rooms ? `${listing.rooms}-комн. ` : "";
-
-  return parts.length ? `${roomPrefix}${parts.join(", ")}` : listing.title;
-}
-
-export function buildPropertyCardListTitle(listing: PropertyCardDto, cardKind: NonNullable<PropertyCardViewProps["cardKind"]>) {
-  if (cardKind === "new-building") {
-    return listing.title;
-  }
-
-  if (listing.categoryKey === "construction") {
-    const facts = [
-      listing.title,
-      listing.area ? `${formatNumber(listing.area)} м²` : null,
-      listing.rooms ? `${listing.rooms} комнаты` : null,
-      listing.floorsTotal ? `${listing.floorsTotal} этаж` : null,
-    ].filter(Boolean) as string[];
-
-    return facts.join(" · ");
-  }
-
-  const type = listing.categoryKey === "flat" || listing.categoryKey === "room"
-    ? "квартира"
-    : listing.categoryKey === "house"
-      ? "дом"
-      : listing.categoryKey === "land"
-        ? "участок"
-        : listing.categoryKey === "commercial"
-          ? "коммерческий объект"
-          : listing.category.toLowerCase();
-
-  const parts = [
-    `${listing.rooms ? `${listing.rooms}-комн. ` : ""}${type}`,
-    listing.area ? `${formatNumber(listing.area)} м²` : null,
-    listing.floor ? `${listing.floor}/${listing.floorsTotal ?? "-"} эт.` : null,
-  ].filter(Boolean) as string[];
-
-  return parts.length ? parts.join(" · ") : listing.title;
-}
-
-function AddressLine({
-  visiblePrefix,
-  hiddenHousePart,
-  compact = false,
-}: {
-  visiblePrefix: string | null;
-  hiddenHousePart: string | null;
-  compact?: boolean;
-}) {
-  if (!hiddenHousePart) {
-    return <span className={compact ? "min-w-0 truncate" : "line-clamp-1"}>{visiblePrefix}</span>;
-  }
-
-  return (
-    <span className={`min-w-0 ${compact ? "truncate" : "line-clamp-1"}`}>
-      <span>{visiblePrefix}</span>
-      <span
-        aria-label="Номер дома скрыт"
-        className="inline-flex align-baseline text-slate-400 select-none"
-      >
-        …
-      </span>
-    </span>
-  );
-}
-
-export function cleanPropertyCardDisplayAddress(address: string) {
-  const parts = address.split(",").map((part) => part.trim()).filter(Boolean);
-  const withoutCountry = parts.filter((part, index) => {
-    if (index > 1) return true;
-    const normalized = part.toLowerCase().replace(/\./g, "");
-    return normalized !== "россия" && normalized !== "рф" && normalized !== "российская федерация";
-  });
-
-  return withoutCountry.join(", ") || address;
-}
-
-function formatNumber(value: number) {
-  return new Intl.NumberFormat("ru-RU", {
-    maximumFractionDigits: 1,
-  }).format(value);
-}
-
-function formatCardPrice(listing: PropertyCardDto, cardKind: NonNullable<PropertyCardViewProps["cardKind"]>) {
-  const price = formatPrice(listing.price);
-
-  if ((cardKind === "construction" || cardKind === "new-building") && listing.price) {
-    return `от ${price}`;
-  }
-
-  return price;
-}
-
-function formatPrice(price: number | null | undefined, fallback = "Цена по запросу") {
-  if (price === null || price === undefined) return fallback;
-
-  return new Intl.NumberFormat("ru-RU", {
-    style: "currency",
-    currency: "RUB",
-    maximumFractionDigits: 0,
-  }).format(price);
-}
-
-function formatListingDate(value?: string | null) {
-  if (!value) return null;
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return null;
-
-  return new Intl.DateTimeFormat("ru-RU", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(date);
-}
-
-function cleanListingDescription(value?: string | null, objectCode?: string) {
-  if (!value) return null;
-
-  const escapedCode = objectCode?.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const codePattern = escapedCode
-    ? new RegExp(`^\\s*Код\\s+объекта\\s*[:№#]?\\s*${escapedCode}\\.?\\s*`, "i")
-    : /^\s*Код\s+объекта\s*[:№#]?\s*[\w.-]+\.?\s*/i;
-
-  const normalized = value
-    .replace(/<br\s*\/?>/gi, " ")
-    .replace(/<\/?[^>]+>/g, " ")
-    .replace(codePattern, "")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  return normalized || null;
-}
+export { buildPropertyCardListTitle, buildPropertyCardTitle, cleanPropertyCardDisplayAddress } from "./property-card-support";

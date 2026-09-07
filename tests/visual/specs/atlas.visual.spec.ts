@@ -53,7 +53,7 @@ for (const [name, route] of routes) {
 test('request modal keeps validation and success-ready layout', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' })
   await settlePage(page)
-  await page.locator('[data-request-modal-source="home-hero"]').click()
+  await page.getByRole('button', { name: 'Подобрать проверенный объект' }).click()
   const dialog = page.getByRole('dialog')
   await dialog.locator('button[type="submit"]').click()
   await expect(dialog.getByText('Введите имя')).toBeVisible()

@@ -23,7 +23,7 @@ export function LeadSuccessNoticeView({ onClose, closeButtonRef }: LeadSuccessNo
           type="button"
           onClick={onClose}
           aria-label="Закрыть уведомление"
-          className="absolute right-4 top-4 grid size-9 place-items-center rounded-lg text-[var(--palette-777375)] transition hover:bg-[var(--palette-f4f3f1)] hover:text-[var(--text-primary)]"
+          className="absolute right-4 top-4 grid size-9 place-items-center rounded-lg text-[var(--lead-success-notice-content-01)] transition hover:bg-[var(--lead-success-notice-surface-01)] hover:text-[var(--text-primary)]"
         >
           <X className="size-5" aria-hidden />
         </Button>
@@ -33,7 +33,7 @@ export function LeadSuccessNoticeView({ onClose, closeButtonRef }: LeadSuccessNo
         <h2 id="lead-success-title" className="mt-5 text-2xl font-semibold leading-tight text-[var(--text-primary)]">
           Спасибо за обращение
         </h2>
-        <p className="mx-auto mt-3 max-w-[320px] text-sm leading-6 text-[var(--palette-5f5b5d)]">
+        <p className="mx-auto mt-3 max-w-[320px] text-sm leading-6 text-[var(--lead-success-notice-content-02)]">
           Ваша заявка зафиксирована. Мы свяжемся с вами в ближайшее время.
         </p>
         <Button

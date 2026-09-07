@@ -8,7 +8,7 @@ export function Breadcrumb({ className, ...props }: ComponentProps<"nav">) {
 }
 
 export function BreadcrumbList({ className, ...props }: ComponentProps<"ol">) {
-  return <ol data-slot="breadcrumb-list" className={cn("flex flex-wrap items-center gap-1.5 text-sm text-[var(--palette-777375)]", className)} {...props} />;
+  return <ol data-slot="breadcrumb-list" className={cn("flex flex-wrap items-center gap-1.5 text-sm text-[var(--breadcrumb-content-01)]", className)} {...props} />;
 }
 
 export function BreadcrumbItem({ className, ...props }: ComponentProps<"li">) {
@@ -26,7 +26,7 @@ export function BreadcrumbPage({ className, ...props }: HTMLAttributes<HTMLSpanE
 
 export function BreadcrumbSeparator({ className, children, ...props }: HTMLAttributes<HTMLLIElement>) {
   return (
-    <li data-slot="breadcrumb-separator" aria-hidden="true" className={cn("text-[var(--palette-aaa7a0)]", className)} {...props}>
+    <li data-slot="breadcrumb-separator" aria-hidden="true" className={cn("text-[var(--breadcrumb-content-02)]", className)} {...props}>
       {children ?? <ChevronRight className="size-3.5" />}
     </li>
   );

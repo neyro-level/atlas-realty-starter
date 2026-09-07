@@ -1,6 +1,6 @@
 import type { HomePageDto } from "@starter/site-contracts";
 import type { SiteImageRenderer, SiteLinkRenderer } from "../lib/adapters";
-import { Button } from "../components/ui/button";
+import { RequestModalButton } from "../components/shared/site-overlay-context";
 
 export type HomeHeroContentDto = {
   eyebrow: string;
@@ -38,17 +38,13 @@ export function HomeHeroView({ featured, content, linkRenderer: LinkRenderer, im
               <span className="home-hero__lead-second">{content.leadLines[1]}</span>
             </p>
             <div className="home-hero__actions">
-              <Button
+              <RequestModalButton
                 type="button"
                 className="home-btn-primary"
-                data-request-modal
-                data-request-modal-title={content.cta}
-                data-request-modal-subtitle={content.ctaSubtitle}
-                data-request-modal-source="home-hero"
-                data-request-modal-form-type="home_hero"
+                request={{ title: content.cta, subtitle: content.ctaSubtitle, source: "home-hero", formType: "home_hero", submitLabel: content.cta }}
               >
                 {content.cta}
-              </Button>
+              </RequestModalButton>
               <p className="home-hero__trust tabular-nums">
                 {content.trustItems.map((item) => <span key={item}>{item}</span>)}
               </p>

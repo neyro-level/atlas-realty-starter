@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@ams/realty-ui";
 import Image from "next/image";
 import { Bed, BrickWall, Building2, Paintbrush, PencilRuler } from "lucide-react";
 import { useState, type MouseEvent } from "react";
@@ -32,8 +33,8 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             overflow: hidden;
             border: 1px solid var(--border);
             border-radius: 8px;
-            background: var(--palette-f5f5f4);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 18px 42px rgba(23,22,26,0.04);
+            background: var(--leadgen-apartment-showcase-color-01);
+            box-shadow: 0 1px 2px var(--leadgen-apartment-showcase-effect-01), 0 18px 42px var(--leadgen-apartment-showcase-effect-02);
             transition:
               transform 0.25s ease,
               border-color 0.25s ease,
@@ -54,8 +55,8 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
 
           .leadgen-catalog-card:hover {
             transform: translateY(-3px);
-            border-color: rgba(138,21,21,0.22);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 24px 56px rgba(23,22,26,0.07);
+            border-color: var(--leadgen-apartment-showcase-effect-03);
+            box-shadow: 0 1px 2px var(--leadgen-apartment-showcase-effect-04), 0 24px 56px var(--leadgen-apartment-showcase-effect-05);
           }
 
           .leadgen-catalog-card__visual {
@@ -91,7 +92,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             min-width: 0;
             align-items: center;
             gap: 8px;
-            color: var(--palette-4f4b4c);
+            color: var(--leadgen-apartment-showcase-color-02);
             font-size: 12px;
             font-weight: 500;
             line-height: 1.35;
@@ -120,7 +121,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             font-weight: 600;
             line-height: 1.35;
             padding: 0 14px;
-            box-shadow: 0 10px 22px rgba(138,21,21,0.16);
+            box-shadow: 0 10px 22px var(--leadgen-apartment-showcase-effect-06);
             transition:
               background-color 0.2s ease,
               color 0.2s ease,
@@ -133,7 +134,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
           .leadgen-catalog-card__quick-cta:focus-visible {
             background: var(--accent-hover);
             color: var(--surface);
-            box-shadow: 0 14px 30px rgba(138,21,21,0.22);
+            box-shadow: 0 14px 30px var(--leadgen-apartment-showcase-effect-03);
             transform: translateY(-1px);
           }
 
@@ -183,7 +184,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             }
 
             .leadgen-catalog-card {
-              box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 14px 34px rgba(23,22,26,0.06);
+              box-shadow: 0 1px 2px var(--leadgen-apartment-showcase-effect-01), 0 14px 34px var(--leadgen-apartment-showcase-effect-07);
             }
 
             .leadgen-catalog-card:hover {
@@ -264,7 +265,7 @@ function LeadgenApartmentCard({ apartment, formPrefix }: { apartment: PromoApart
         {images.length > 1 ? (
           <div className="leadgen-catalog-card__dots" aria-label="Фотографии квартиры">
             {images.map((image, index) => (
-              <button
+              <Button unstyled
                 key={image}
                 type="button"
                 className={`leadgen-catalog-card__dot ${index === activeImage ? "is-active" : ""}`}

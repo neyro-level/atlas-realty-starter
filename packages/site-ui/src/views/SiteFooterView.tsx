@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "../components/ui/button";
 import type {
   PublicContactDto,
   SiteFooterColumnDto,
@@ -125,7 +126,7 @@ function FooterPhoneReveal({ phone, phoneHref }: { phone: string; phoneHref: str
   }
 
   return (
-    <button
+    <Button unstyled
       type="button"
       className="site-footer__phone site-footer__phone--hidden tabular-nums"
       data-analytics-event="phone_reveal"
@@ -135,7 +136,7 @@ function FooterPhoneReveal({ phone, phoneHref }: { phone: string; phoneHref: str
     >
       <Phone className="site-footer__phone-icon" aria-hidden />
       <span>+7...Показать</span>
-    </button>
+    </Button>
   );
 }
 

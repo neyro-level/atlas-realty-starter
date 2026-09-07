@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import type { SiteLinkRenderer } from "../lib/adapters";
 import { Button } from "../components/ui/button";
+import { useSiteOverlay } from "../components/shared/site-overlay-context";
 
 export type HomeServiceItemViewDto = {
   title: string;
@@ -26,6 +27,7 @@ type HomeServicesViewProps = {
 };
 
 export function HomeServicesView({ brand, items, linkRenderer: LinkRenderer, overlay }: HomeServicesViewProps) {
+  const { openRequest } = useSiteOverlay();
   return (
     <section id="section-home-services" className="home-services" aria-label={`Сервисы агентства «${brand}»`}>
       <div className="home-shell">
@@ -40,13 +42,7 @@ export function HomeServicesView({ brand, items, linkRenderer: LinkRenderer, ove
                   type="button"
                   variant="ghost"
                   className="home-services__item"
-                  onClick={item.onClick}
-                  data-request-modal={item.onClick ? undefined : true}
-                  data-request-modal-title={item.modal?.title}
-                  data-request-modal-subtitle={item.modal?.subtitle}
-                  data-request-modal-source={item.modal?.source}
-                  data-request-modal-form-type={item.modal?.formType}
-                  data-request-modal-submit-label={item.modal?.submitLabel}
+                  onClick={item.onClick ?? (() => openRequest(item.modal))}
                 >
                   {content}
                 </Button>

@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@ams/realty-ui";
+
 import { useState } from "react";
 import { Phone } from "lucide-react";
 
@@ -29,7 +31,7 @@ export function OfficePhoneReveal({ phone, phoneHref, office }: OfficePhoneRevea
   }
 
   return (
-    <button
+    <Button unstyled
       type="button"
       data-analytics-event="phone_reveal"
       data-analytics-context="contacts_office"
@@ -40,6 +42,6 @@ export function OfficePhoneReveal({ phone, phoneHref, office }: OfficePhoneRevea
     >
       <Phone className="size-4 text-[var(--accent)]" aria-hidden />
       <span className="whitespace-nowrap">Показать телефон</span>
-    </button>
+    </Button>
   );
 }

@@ -40,10 +40,6 @@ const DEFAULT_SUBMIT_LABEL = "Отправить заявку";
 const LEGAL_CONSULTATION_TITLE = "Получить консультацию юриста по недвижимости";
 const MIN_FORM_FILL_TIME_MS = 1400;
 
-function isRequestModalEvent(event: Event): event is CustomEvent<RequestModalDetail> {
-  return "detail" in event;
-}
-
 function normalizeSubmitLabel(label?: string | null) {
   const normalized = label?.replace(/\s+/g, " ").trim();
   if (!normalized || normalized.length > 42) return DEFAULT_SUBMIT_LABEL;
@@ -115,12 +111,6 @@ export function buildModalTitle(detail: RequestModalDetail, visiblePageTitle = g
   return { kind: "text", value: triggerTitle || DEFAULT_TITLE };
 }
 
-declare global {
-  interface Window {
-    __agencyPendingRequestModal?: RequestModalDetail;
-  }
-}
-
 function RequestModalImage(props: {
   src: string;
   alt: string;
@@ -135,7 +125,7 @@ function RequestModalImage(props: {
   return <Image {...props} alt={props.alt} />;
 }
 
-export function RequestModal() {
+export function RequestModal({ detail, onClosed }: { detail?: RequestModalDetail; onClosed?: () => void }) {
   const requestModalRealtorAvatars = useRequestModalRealtorAvatars();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -162,16 +152,16 @@ export function RequestModal() {
   const lastActiveElementRef = useRef<HTMLElement | null>(null);
 
   function closeModal() {
-    window.__agencyPendingRequestModal = undefined;
     setIsOpen(false);
     setErrors({});
     setResult(null);
     setSubmitted(false);
+    onClosed?.();
   }
 
   useEffect(() => {
+    if (!detail) return;
     const openModal = (detail: RequestModalDetail = {}) => {
-      window.__agencyPendingRequestModal = undefined;
       lastActiveElementRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       setName("");
       setPhone("");
@@ -194,24 +184,8 @@ export function RequestModal() {
       setIsOpen(true);
     };
 
-    const onOpenModal = (event: Event) => {
-      openModal(isRequestModalEvent(event) ? event.detail : {});
-    };
-
-    window.addEventListener("open-request-modal", onOpenModal);
-    window.addEventListener("open-modal", onOpenModal);
-
-    if (window.__agencyPendingRequestModal) {
-      const detail = window.__agencyPendingRequestModal;
-      window.__agencyPendingRequestModal = undefined;
-      openModal(detail);
-    }
-
-    return () => {
-      window.removeEventListener("open-request-modal", onOpenModal);
-      window.removeEventListener("open-modal", onOpenModal);
-    };
-  }, [pathname]);
+    openModal(detail);
+  }, [detail, pathname]);
 
   useEffect(() => {
     if (!isOpen) {

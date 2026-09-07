@@ -17,7 +17,7 @@ Production-домен: `https://atlas.ams24.ru`. Оператор: ИП Скри
 
 1. `AGENTS.md`
 2. `docs/PROJECT.md`
-3. the relevant part of `docs/AMS_REALTY_PLATFORM_CORE_STANDARD_2.1_SOLO.md`
+3. the relevant part of the global AMS Realty Platform Core 3.0 contract; the tracked 2.1 document is historical implementation evidence only
 4. `docs/VERSION_MATRIX.md`
 5. `SECURITY.md` or `docs/OPERATIONS.md` by scope
 6. `package.json`, migrations, tests and runtime configuration

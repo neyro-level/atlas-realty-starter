@@ -18,6 +18,7 @@ import {
 import { SessionCollectionNavLink } from "@/modules/session-collections";
 import { citySwitcherConfig } from "@/project/site-config";
 import type { PublicSiteContacts } from "@/shared/types/public-site-contacts";
+import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
 
 type Props = {
   open: boolean;
@@ -76,6 +77,7 @@ function mapActions(actions: readonly MobileMenuAction[]): SiteMobileMenuActionD
 }
 
 export function MobileMenuOverlay({ open, contacts, onClose }: Props) {
+  const { openRequest } = useSiteOverlay();
   const [cityOpen, setCityOpen] = useState(false);
   const [phoneVisible, setPhoneVisible] = useState(false);
   const cityOptions = useMemo(() => mapCityOptions(), []);
@@ -127,18 +129,14 @@ export function MobileMenuOverlay({ open, contacts, onClose }: Props) {
       onRevealPhone={() => setPhoneVisible(true)}
       onClose={handleClose}
       onAction={(action) => {
-        window.dispatchEvent(
-          new CustomEvent("open-request-modal", {
-            detail: {
+        openRequest({
               title: action.title,
               subtitle: action.subtitle,
               source: action.source,
               formType: action.formType,
               submitLabel: action.submitLabel ?? "Отправить",
               showSubtitle: action.showSubtitle ?? true,
-            },
-          }),
-        );
+        });
       }}
     />
   );

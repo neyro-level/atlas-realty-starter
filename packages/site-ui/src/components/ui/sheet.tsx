@@ -12,11 +12,11 @@ export const SheetClose = DialogPrimitive.Close;
 export const SheetPortal = DialogPrimitive.Portal;
 
 export function SheetOverlay({ className, ...props }: ComponentProps<typeof DialogPrimitive.Overlay>) {
-  return <DialogPrimitive.Overlay data-slot="sheet-overlay" className={cn("fixed inset-0 z-50 bg-[rgba(23,22,26,0.2)] backdrop-blur-[2px]", className)} {...props} />;
+  return <DialogPrimitive.Overlay data-slot="sheet-overlay" className={cn("fixed inset-0 z-50 bg-[var(--sheet-effect-01)] backdrop-blur-[2px]", className)} {...props} />;
 }
 
 const sheetVariants = cva(
-  "fixed z-50 grid gap-4 bg-white p-6 shadow-[0_28px_80px_rgba(24,22,24,0.18)] transition ease-in-out sm:p-8",
+  "fixed z-50 grid gap-4 bg-white p-6 shadow-[var(--sheet-shadow-01)] transition ease-in-out sm:p-8",
   {
     variants: {
       side: {
@@ -40,7 +40,7 @@ export function SheetContent({ side = "right", className, children, showClose = 
         {children}
         {showClose ? (
           <DialogPrimitive.Close
-            className="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-lg bg-[var(--palette-f5f5f3)] text-[var(--text-secondary)] transition hover:bg-[var(--palette-ecebe8)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+            className="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-lg bg-[var(--sheet-surface-01)] text-[var(--text-secondary)] transition hover:bg-[var(--sheet-surface-02)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
             aria-label="Закрыть"
           >
             <X className="size-5" aria-hidden />
@@ -64,5 +64,5 @@ export function SheetTitle({ className, ...props }: ComponentProps<typeof Dialog
 }
 
 export function SheetDescription({ className, ...props }: ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description data-slot="sheet-description" className={cn("text-sm leading-6 text-[var(--palette-5b5860)]", className)} {...props} />;
+  return <DialogPrimitive.Description data-slot="sheet-description" className={cn("text-sm leading-6 text-[var(--sheet-content-01)]", className)} {...props} />;
 }

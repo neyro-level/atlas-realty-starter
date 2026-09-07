@@ -6,6 +6,7 @@ import {
   type CatalogView,
   type SiteImageRendererProps,
 } from "@ams/realty-ui";
+import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
 
 export const CATALOG_MORTGAGE_HELP_CARD_INDEX = 8;
 
@@ -26,15 +27,14 @@ export function CatalogMortgageHelpCard({
   source = "catalog:mortgage-help-card",
   formType = "mortgage_catalog_request",
 }: Props) {
+  const { openRequest: showRequest } = useSiteOverlay();
   function openRequest(eventSource: string, eventFormType: string) {
-    window.dispatchEvent(new CustomEvent("open-request-modal", {
-      detail: {
+    showRequest({
         title: "Помощь с ипотекой",
         subtitle: "Оставьте контакты. Специалист агентства недвижимости разберет ситуацию, подберет программу и поможет подготовить документы к подаче в банк.",
         source: eventSource,
         formType: eventFormType,
-      },
-    }));
+    });
   }
 
   return (

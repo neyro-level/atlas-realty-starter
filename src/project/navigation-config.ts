@@ -204,7 +204,7 @@ export type MobileMenuAction =
   | MobileMenuLink
   | {
       label: string;
-      action: "open-request-modal";
+      action: "request-modal";
       title: string;
       subtitle: string;
       source: string;

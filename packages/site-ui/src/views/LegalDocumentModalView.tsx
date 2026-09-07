@@ -47,7 +47,7 @@ export function LegalDocumentModalView({
         </div>
 
         <div className="overflow-y-auto px-5 py-5 text-left sm:px-7 sm:py-6">
-          <div className="grid max-w-[720px] gap-6 text-left text-[14px] font-normal leading-[1.7] text-[var(--palette-4f4b4c)] sm:text-[15px]">
+          <div className="grid max-w-[720px] gap-6 text-left text-[14px] font-normal leading-[1.7] text-[var(--legal-document-modal-content-01)] sm:text-[15px]">
             {sections.map((section) => (
               <section key={section.title}>
                 <h3 className="text-left text-[15px] font-semibold leading-tight text-[var(--text-primary)] sm:text-base">{section.title}</h3>

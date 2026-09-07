@@ -1,5 +1,7 @@
 "use client";
 
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
 import { Check, Phone, Share2 } from "lucide-react";
 import { type FormEvent, type ReactNode, useRef } from "react";
 
@@ -102,7 +104,7 @@ export function PropertySidebarView({
           Предложите свою цену
         </label>
         <div className="relative">
-          <input
+          <Input unstyled
             id={`property-offer-price-${variant}`}
             value={formattedOfferInputValue}
             onChange={(event) => onOfferChange(event.target.value)}
@@ -122,45 +124,45 @@ export function PropertySidebarView({
         <div className="rounded-lg border border-[var(--border)] bg-white px-3 py-3">
           <label className="flex flex-wrap items-baseline gap-x-1 gap-y-1 text-xs font-medium leading-5 text-[var(--text-primary)]">
             <span>{defaultQuestion}</span>
-            <input
+            <Input unstyled
               ref={questionRef}
               aria-label="Вопрос продавцу"
               value={messageDraft}
               onChange={(event) => onMessageChange(event.target.value)}
               autoFocus={!desktopVariant}
               placeholder="Здесь можно написать сообщение"
-              className="min-w-[170px] flex-1 bg-transparent text-xs font-medium leading-5 text-[var(--text-primary)] outline-none placeholder:text-[var(--palette-b2b1b5)]"
+              className="min-w-[170px] flex-1 bg-transparent text-xs font-medium leading-5 text-[var(--text-primary)] outline-none placeholder:text-[var(--property-sidebar-content-01)]"
             />
           </label>
           {formattedOfferValue ? (
-            <p className="mt-2 border-t border-[var(--palette-f0f0ee)] pt-2 text-xs font-medium leading-5 text-[var(--text-primary)]">{`Предлагаю ${formattedOfferValue} за этот объект.`}</p>
+            <p className="mt-2 border-t border-[var(--property-sidebar-border-01)] pt-2 text-xs font-medium leading-5 text-[var(--text-primary)]">{`Предлагаю ${formattedOfferValue} за этот объект.`}</p>
           ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
           {QUICK_QUESTIONS.map((item) => (
-            <button
+            <Button unstyled
               type="button"
               key={item}
               onClick={() => {
                 onQuickQuestion(item);
                 focusQuestionArea();
               }}
-              className="inline-flex min-h-7 items-center rounded-lg bg-[var(--background)] px-2.5 text-[11px] font-bold text-[var(--text-primary)] transition hover:bg-[var(--palette-e8e8e6)] hover:text-[var(--accent)]"
+              className="inline-flex min-h-7 items-center rounded-lg bg-[var(--background)] px-2.5 text-[11px] font-bold text-[var(--text-primary)] transition hover:bg-[var(--property-sidebar-surface-01)] hover:text-[var(--accent)]"
             >
               {item}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
 
       <label className="hidden">
         Сайт
-        <input value={website} onChange={(event) => onWebsiteChange(event.target.value)} tabIndex={-1} autoComplete="off" />
+        <Input unstyled value={website} onChange={(event) => onWebsiteChange(event.target.value)} tabIndex={-1} autoComplete="off" />
       </label>
 
       <div className="grid gap-2">
         <label htmlFor={`property-chat-phone-${variant}`} className="text-xs font-semibold leading-5 text-[var(--text-primary)]">Телефон для связи</label>
-        <input
+        <Input unstyled
           id={`property-chat-phone-${variant}`}
           value={phone}
           onChange={(event) => onPhoneChange(event.target.value)}
@@ -175,7 +177,7 @@ export function PropertySidebarView({
       </div>
 
       <label className="flex items-start gap-3 text-[11px] leading-5 text-[var(--text-muted)]">
-        <input
+        <Input unstyled
           type="checkbox"
           checked={consent}
           onChange={(event) => onConsentChange(event.target.checked)}
@@ -184,25 +186,25 @@ export function PropertySidebarView({
         <span>{consentContent}</span>
       </label>
 
-      {result ? <p className={`text-sm font-semibold ${result.ok ? "text-[var(--palette-159947)]" : "text-[var(--accent)]"}`}>{result.message}</p> : null}
+      {result ? <p className={`text-sm font-semibold ${result.ok ? "text-[var(--property-sidebar-content-02)]" : "text-[var(--accent)]"}`}>{result.message}</p> : null}
 
-      <button
+      <Button unstyled
         type="submit"
         disabled={pending}
-        className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--surface-dark)] px-4 text-sm font-semibold text-white transition hover:bg-[var(--palette-2a292c)] disabled:cursor-wait disabled:opacity-70"
+        className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--surface-dark)] px-4 text-sm font-semibold text-white transition hover:bg-[var(--property-sidebar-surface-02)] disabled:cursor-wait disabled:opacity-70"
       >
         {pending ? "Отправляем..." : "Отправить сообщение"}
-      </button>
+      </Button>
     </form>
   );
 
   const panel = (
-    <div className="grid gap-4 rounded-lg border border-[var(--border)] bg-white p-4 shadow-[0_18px_52px_rgba(0,0,0,0.06)]">
+    <div className="grid gap-4 rounded-lg border border-[var(--border)] bg-white p-4 shadow-[var(--property-sidebar-shadow-01)]">
       {desktopVariant ? (
         <div className="grid grid-cols-3 items-center gap-2">
           {favoriteAction}
           {compareAction}
-          <button
+          <Button unstyled
             type="button"
             data-analytics-event="share_click"
             onClick={onCopyLink}
@@ -210,8 +212,8 @@ export function PropertySidebarView({
             aria-label="Скопировать ссылку на объект"
             title={copied ? "Ссылка скопирована" : "Скопировать ссылку"}
           >
-            {copied ? <Check className="size-4 text-[var(--palette-159947)]" aria-hidden /> : <Share2 className="size-4" aria-hidden />}
-          </button>
+            {copied ? <Check className="size-4 text-[var(--property-sidebar-content-02)]" aria-hidden /> : <Share2 className="size-4" aria-hidden />}
+          </Button>
         </div>
       ) : null}
 
@@ -226,22 +228,22 @@ export function PropertySidebarView({
             <a
               href={phoneHref}
               data-analytics-context="property_sidebar"
-              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold tabular-nums text-white transition hover:bg-[var(--palette-2a292c)]"
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold tabular-nums text-white transition hover:bg-[var(--property-sidebar-surface-02)]"
             >
               <Phone className="size-4" aria-hidden />
               {phoneLabel}
             </a>
           ) : (
-            <button
+            <Button unstyled
               type="button"
               data-analytics-event="phone_reveal"
               data-analytics-context="property_sidebar"
               onClick={onRevealPhone}
-              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold text-white transition hover:bg-[var(--palette-2a292c)]"
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold text-white transition hover:bg-[var(--property-sidebar-surface-02)]"
             >
               <Phone className="size-4" aria-hidden />
               Показать телефон
-            </button>
+            </Button>
           )}
         </div>
       ) : null}

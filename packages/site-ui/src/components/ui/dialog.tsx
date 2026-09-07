@@ -14,7 +14,7 @@ export function DialogOverlay({ className, ...props }: ComponentProps<typeof Dia
   return (
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
-      className={cn("fixed inset-0 z-50 bg-[rgba(23,22,26,0.18)] backdrop-blur-[2px]", className)}
+      className={cn("fixed inset-0 z-50 bg-[var(--dialog-effect-01)] backdrop-blur-[2px]", className)}
       {...props}
     />
   );
@@ -43,7 +43,7 @@ export function DialogContent({ className, children, showClose = true, overlayCl
         {children}
         {showClose ? (
           <DialogPrimitive.Close
-            className="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-lg bg-[var(--palette-f5f5f3)] text-[var(--text-secondary)] transition hover:bg-[var(--palette-ecebe8)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+            className="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-lg bg-[var(--dialog-surface-01)] text-[var(--text-secondary)] transition hover:bg-[var(--dialog-surface-02)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
             aria-label="Закрыть"
           >
             <X className="size-5" aria-hidden />
@@ -67,5 +67,5 @@ export function DialogTitle({ className, ...props }: ComponentProps<typeof Dialo
 }
 
 export function DialogDescription({ className, ...props }: ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description data-slot="dialog-description" className={cn("text-sm leading-6 text-[var(--palette-5b5860)]", className)} {...props} />;
+  return <DialogPrimitive.Description data-slot="dialog-description" className={cn("text-sm leading-6 text-[var(--dialog-content-01)]", className)} {...props} />;
 }

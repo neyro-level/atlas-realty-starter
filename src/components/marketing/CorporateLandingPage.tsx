@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image, { type ImageProps } from "next/image";
 import { ArrowRight } from "lucide-react";
 import type { CorporateLandingPageDto } from "@starter/site-contracts";
-import { CareersComparisonView, CareersFinalCtaView, CareersTrainingView, CareersWorkSystemView, CorporateLandingView, MortgageBrokerSupportView, MortgageCalculatorView, MortgageProgramsView, SaleFinalCtaView, SalePricingPrinciplesView, SalePromotionView, SaleReportingView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@ams/realty-ui";
+import { CareersComparisonView, CareersFinalCtaView, CareersTrainingView, CareersWorkSystemView, CorporateLandingView, MortgageBrokerSupportView, MortgageCalculatorView, MortgageProgramsView, RequestModalButton, SaleFinalCtaView, SalePricingPrinciplesView, SalePromotionView, SaleReportingView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@ams/realty-ui";
 import { AboutCompanyDirectorSection } from "@/components/marketing/AboutCompanyDirectorSection";
 import { AboutCompanyFinalCtaSection } from "@/components/marketing/AboutCompanyFinalCtaSection";
 import { AboutCompanyTeamSection } from "@/components/marketing/AboutCompanyTeamSection";
@@ -226,19 +226,18 @@ function CorporatePrimaryCta({
   }
 
   return (
-    <button type="button" {...getPrimaryCtaRequestProps(page)} className={className}>
+    <RequestModalButton type="button" unstyled request={getPrimaryCtaRequest(page)} className={className}>
       {page.primaryCta.label}
       {showIcon ? <ArrowRight className="size-4" aria-hidden /> : null}
-    </button>
+    </RequestModalButton>
   );
 }
 
-function getPrimaryCtaRequestProps(page: CorporatePageConfig) {
+function getPrimaryCtaRequest(page: CorporatePageConfig) {
   return {
-    "data-request-modal": "true",
-    "data-request-modal-title": page.requestModalTitle ?? page.primaryCta.label,
-    "data-request-modal-subtitle": `${page.microtext} Оставьте контакты - специалист агентства недвижимости уточнит детали и предложит следующий шаг.`,
-    "data-request-modal-source": `corporate:${page.slug}:hero`,
-    "data-request-modal-form-type": page.requestModalFormType ?? `corporate_${page.slug.replace(/-/g, "_")}`,
+    title: page.requestModalTitle ?? page.primaryCta.label,
+    subtitle: `${page.microtext} Оставьте контакты - специалист агентства недвижимости уточнит детали и предложит следующий шаг.`,
+    source: `corporate:${page.slug}:hero`,
+    formType: page.requestModalFormType ?? `corporate_${page.slug.replace(/-/g, "_")}`,
   };
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@ams/realty-ui";
+
 import { Mail, Phone } from "lucide-react";
 import { useState } from "react";
 import { buildTelHref } from "@/shared/lib/tel";
@@ -25,7 +27,7 @@ export function EmployeeContactDetails({ phone, email, employeeSlug }: { phone: 
                 {formattedPhone}
               </a>
             ) : (
-              <button
+              <Button unstyled
                 type="button"
                 data-analytics-event="phone_reveal"
                 data-analytics-context="employee_profile"
@@ -35,7 +37,7 @@ export function EmployeeContactDetails({ phone, email, employeeSlug }: { phone: 
                 aria-label="Показать полный номер телефона"
               >
                 +7...Показать
-              </button>
+              </Button>
             )
           ) : (
             <span className="text-sm text-[var(--text-muted)]">По запросу</span>

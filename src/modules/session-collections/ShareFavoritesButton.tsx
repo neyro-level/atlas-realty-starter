@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@ams/realty-ui";
+
 import { Copy, Share2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { sameOriginFetch } from "@/core/security/outbound-http/browser";
@@ -101,7 +103,7 @@ export function ShareFavoritesButton({ items }: Props) {
 
   return (
     <div className="flex shrink-0 flex-col items-end gap-1.5">
-      <button
+      <Button unstyled
         type="button"
         data-analytics-event="share_click"
         onClick={handleShareClick}
@@ -114,7 +116,7 @@ export function ShareFavoritesButton({ items }: Props) {
           <Share2 className="size-3.5 shrink-0 translate-y-[0.05em]" aria-hidden />
         )}
         {state === "loading" ? "…" : "Поделиться"}
-      </button>
+      </Button>
       {messageToRender ? (
         <span className={`max-w-[260px] text-right text-[11px] font-medium leading-4 ${state === "error" ? "text-[var(--accent)]" : "text-[var(--text-muted)]"}`}>
           {messageToRender}

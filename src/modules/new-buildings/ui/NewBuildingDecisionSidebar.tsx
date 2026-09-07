@@ -8,8 +8,10 @@ import { resolveNewBuildingMedia } from "../format";
 import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";
 import { RequestCta } from "./RequestCta";
+import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
 
 export function NewBuildingDecisionSidebar({ complex }: { complex: NewBuilding }) {
+  const { openPropertyChat } = useSiteOverlay();
   const [question, setQuestion] = useState("Здравствуйте! Хочу уточнить наличие квартир.");
   const [copied, setCopied] = useState(false);
   const href = `/${complex.slug}`;
@@ -38,7 +40,7 @@ export function NewBuildingDecisionSidebar({ complex }: { complex: NewBuilding }
   };
 
   function openNewBuildingChat(initialMessage = question) {
-    window.dispatchEvent(new CustomEvent("open-property-chat", { detail: { sourcePage: href, title: complex.name, propertyPath: href, initialMessage } }));
+    openPropertyChat({ sourcePage: href, title: complex.name, propertyPath: href, initialMessage });
   }
 
   async function copyLink() {
@@ -63,7 +65,7 @@ export function NewBuildingDecisionSidebar({ complex }: { complex: NewBuilding }
       onCopyLink={copyLink}
       favoriteAction={<SessionCollectionButton kind="favorites" item={sessionItem} className={collectionClassName} inactiveClassName="border-transparent bg-white text-[var(--text-primary)] hover:bg-[var(--background)]" activeClassName="border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]" />}
       compareAction={<SessionCollectionButton kind="compare" item={sessionItem} className={collectionClassName} inactiveClassName="border-transparent bg-white text-[var(--text-primary)] hover:bg-[var(--background)]" activeClassName="border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)]" />}
-      mortgageAction={<RequestCta label="Одобрить ипотеку" complexName={complex.name} slug={complex.slug} modalTitle={`Одобрить ипотеку в ${complex.name}`} showIcon={false} className="min-h-10 w-full bg-[var(--surface-dark)] text-xs text-white hover:bg-[var(--palette-2a292c)]" />}
+      mortgageAction={<RequestCta label="Одобрить ипотеку" complexName={complex.name} slug={complex.slug} modalTitle={`Одобрить ипотеку в ${complex.name}`} showIcon={false} className="min-h-10 w-full bg-[var(--surface-dark)] text-xs text-white hover:bg-[var(--new-building-decision-sidebar-surface-01)]" />}
       availabilityAction={<RequestCta label="Узнать наличие квартир" complexName={complex.name} slug={complex.slug} variant="secondary" modalTitle={`Узнать наличие квартир в ${complex.name}`} showIcon={false} className="min-h-10 w-full border-[var(--border)] bg-[var(--background)] text-xs text-[var(--text-primary)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]" />}
     />
   );

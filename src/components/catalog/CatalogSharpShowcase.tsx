@@ -1,3 +1,4 @@
+import { Input, Select } from "@ams/realty-ui";
 import Link from "next/link";
 import { Map } from "lucide-react";
 import {
@@ -30,136 +31,18 @@ import {
 } from "./CatalogNewBuildingSelectionCard";
 import { CatalogResidentialComplexCard } from "./CatalogResidentialComplexCard";
 import { NewBuildingCatalogMap } from "./NewBuildingCatalogMap";
+import {
+  FILTER_FIELD_BY_FORM_NAME,
+  PUBLIC_FILTER_VALUE_LABELS,
+  SORT_TABS,
+  TYPE_FILTER_OPTIONS,
+  TYPE_TAB_PATHS,
+  TYPE_TABS,
+  type CatalogFilterId as FilterId,
+} from "./catalog-sharp-config";
 
 const PAGE_SIZE = CATALOG_PAGE_SIZE;
 
-const TYPE_TABS = [
-  ["all", "Все"],
-  ["flat", "Квартиры"],
-  ["house", "Дома"],
-  ["land", "Участки"],
-  ["construction", "Строительство"],
-  ["commercial", "Коммерция"],
-  ["new_building", "Новостройки"],
-] as const;
-
-const TYPE_TAB_PATHS: Record<FilterId, string> = {
-  all: "/nedvizhimost",
-  flat: "/kvartiry",
-  house: "/doma",
-  land: "/zemelnye-uchastki",
-  commercial: "/kommercheskaya-nedvizhimost",
-  new_building: "/novostroyki",
-  construction: "/stroitelstvo",
-};
-
-const TYPE_FILTER_OPTIONS = [
-  { value: "flat", label: "Квартира" },
-  { value: "house", label: "Дом" },
-  { value: "land", label: "Участок" },
-  { value: "construction", label: "Строительство" },
-  { value: "commercial", label: "Коммерция" },
-] as const;
-
-const SORT_TABS = [
-  ["newest", "Сначала новые"],
-  ["price_asc", "Сначала дешевле"],
-  ["price_desc", "Сначала дороже"],
-] as const;
-
-const PUBLIC_FILTER_VALUE_LABELS: Record<string, Record<string, string>> = {
-  category: {
-    flat: "Квартира",
-    house: "Дом",
-    land: "Участок",
-    commercial: "Коммерция",
-    new_building: "Новостройки",
-    construction: "Строительство",
-  },
-  dealType: {
-    sale: "Продажа",
-    rent: "Аренда",
-  },
-  sort: {
-    recommended: "Рекомендуемые",
-    newest: "Сначала новые",
-    price_asc: "Сначала дешевле",
-    price_desc: "Сначала дороже",
-    area_desc: "Сначала больше площадь",
-  },
-  view: {
-    grid: "Плитка",
-    list: "Список",
-    map: "Карта",
-  },
-  buildingType: {
-    brick: "Кирпичный",
-    panel: "Панельный",
-    monolith: "Монолитный",
-    monolithic: "Монолитный",
-    block: "Блочный",
-    wooden: "Деревянный",
-  },
-  renovation: {
-    none: "Без ремонта",
-    cosmetic: "Косметический ремонт",
-    euro: "Евроремонт",
-    design: "Дизайнерский ремонт",
-    rough: "Черновая отделка",
-    prefinished: "Предчистовая отделка",
-    finished: "С отделкой",
-    needs_repair: "Требует ремонта",
-  },
-  landUseType: {
-    individual_housing: "ИЖС",
-    izhs: "ИЖС",
-    gardening: "Садоводство",
-    dacha: "Дачный участок",
-    agricultural: "Сельхозназначение",
-    commercial: "Коммерческое назначение",
-  },
-  commercialType: {
-    "auto repair": "Автосервис",
-    office: "Офис",
-    retail: "Торговое помещение",
-    "free purpose": "Свободное назначение",
-    free_purpose: "Свободное назначение",
-    warehouse: "Склад",
-    manufacturing: "Производство",
-    production: "Производство",
-    business: "Готовый бизнес",
-    "public catering": "Общепит",
-    land: "Земельный участок",
-  },
-  commercialBuildingType: {
-    business_center: "Бизнес-центр",
-    "business center": "Бизнес-центр",
-    shopping_center: "Торговый центр",
-    residential_building: "Жилой дом",
-    detached: "Отдельное здание",
-    "detached building": "Отдельное здание",
-    warehouse: "Складское здание",
-  },
-  entranceType: {
-    street: "С улицы",
-    yard: "Со двора",
-    separate: "Отдельный вход",
-    common: "Общий вход",
-  },
-};
-
-const FILTER_FIELD_BY_FORM_NAME: Record<string, string> = {
-  category: "category",
-  district: "district",
-  building_type: "buildingType",
-  renovation: "renovation",
-  land_use_type: "landUseType",
-  commercial_type: "commercialType",
-  commercial_building_type: "commercialBuildingType",
-  entrance_type: "entranceType",
-};
-
-type FilterId = "all" | "flat" | "house" | "land" | "commercial" | "new_building" | "construction";
 type Props = {
   catalog: CatalogSnapshot;
   complexes?: readonly NewBuilding[];
@@ -251,7 +134,7 @@ export function CatalogSharpShowcase({
           isMapView ? (
             <NewBuildingCatalogMap complexes={complexes} />
           ) : complexes.length ? (
-            <div className={isListView ? "mt-4 divide-y divide-[var(--palette-e9e9e6)] border-y border-[var(--palette-e9e9e6)] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
+            <div className={isListView ? "mt-4 divide-y divide-[var(--catalog-sharp-showcase-border-01)] border-y border-[var(--catalog-sharp-showcase-border-01)] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
               {complexes.map((complex, index) => (
                 <FragmentWithNewBuildingSelectionCard
                   key={complex.slug}
@@ -266,7 +149,7 @@ export function CatalogSharpShowcase({
             <CatalogEmptyStateView message="По выбранному запросу жилые комплексы не найдены. Оставьте заявку, и специалист агентства недвижимости уточнит подходящие варианты вручную." linkRenderer={CatalogLinkAdapter} />
           )
         ) : catalog.listings.length ? (
-          <div className={isListView ? "mt-4 divide-y divide-[var(--palette-e9e9e6)] border-y border-[var(--palette-e9e9e6)] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
+          <div className={isListView ? "mt-4 divide-y divide-[var(--catalog-sharp-showcase-border-01)] border-y border-[var(--catalog-sharp-showcase-border-01)] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
             <CatalogLoadMore
               key={buildSearchParams(applied).toString()}
               basePath={basePath}
@@ -313,12 +196,12 @@ function FragmentWithNewBuildingSelectionCard({
 function ResidentialComplexFilterForm({ basePath, query }: { basePath: string; query: CatalogQuery }) {
   return (
     <CatalogAutoSubmitForm action={basePath} className="mt-5">
-      <input type="hidden" name="city" value={query.city ?? tenant.cityEn} />
-      <input type="hidden" name="deal_type" value={query.dealType ?? "sale"} />
-      <input type="hidden" name="category" value="new_building" />
-      <input type="hidden" name="limit" value={query.limit ?? PAGE_SIZE} />
-      <input type="hidden" name="view" value={query.view ?? "grid"} />
-      <input type="hidden" name="sort" value={query.sort ?? "newest"} />
+      <Input unstyled type="hidden" name="city" value={query.city ?? tenant.cityEn} />
+      <Input unstyled type="hidden" name="deal_type" value={query.dealType ?? "sale"} />
+      <Input unstyled type="hidden" name="category" value="new_building" />
+      <Input unstyled type="hidden" name="limit" value={query.limit ?? PAGE_SIZE} />
+      <Input unstyled type="hidden" name="view" value={query.view ?? "grid"} />
+      <Input unstyled type="hidden" name="sort" value={query.sort ?? "newest"} />
 
       <div className="lg:max-w-[520px]"><CatalogSearchFieldView defaultValue={query.q} placeholder="Название ЖК, район или застройщик" /></div>
     </CatalogAutoSubmitForm>
@@ -344,28 +227,28 @@ function CatalogFilterForm({
 
   return (
     <CatalogAutoSubmitForm action={basePath} className="mt-5">
-      <input type="hidden" name="city" value={query.city ?? tenant.cityEn} />
-      <input type="hidden" name="deal_type" value={query.dealType ?? "sale"} />
-      <input type="hidden" name="limit" value={query.limit ?? PAGE_SIZE} />
-      <input type="hidden" name="view" value={query.view ?? "grid"} />
-      <input type="hidden" name="sort" value={query.sort ?? "newest"} />
-      {query.category ? <input type="hidden" name="category" value={query.category} /> : null}
+      <Input unstyled type="hidden" name="city" value={query.city ?? tenant.cityEn} />
+      <Input unstyled type="hidden" name="deal_type" value={query.dealType ?? "sale"} />
+      <Input unstyled type="hidden" name="limit" value={query.limit ?? PAGE_SIZE} />
+      <Input unstyled type="hidden" name="view" value={query.view ?? "grid"} />
+      <Input unstyled type="hidden" name="sort" value={query.sort ?? "newest"} />
+      {query.category ? <Input unstyled type="hidden" name="category" value={query.category} /> : null}
 
       <div className="grid gap-2 lg:grid-cols-[minmax(260px,1.4fr)_minmax(150px,0.7fr)_minmax(120px,0.55fr)_minmax(150px,0.7fr)]">
         <CatalogSearchFieldView defaultValue={query.q} placeholder="Район, улица, ЖК или код" />
         <CatalogRangePairView from="price_from" to="price_to" label="Цена" fromValue={query.priceFrom} toValue={query.priceTo} />
         <label className="min-h-12 rounded-lg border border-[var(--border)] bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--text-muted)]">
           Комнаты
-          <select name="rooms" defaultValue={formatRoomsValue(query.rooms)} className="block w-full bg-transparent pt-0.5 text-sm font-semibold normal-case tracking-[0] text-[var(--text-primary)] outline-none">
+          <Select unstyled name="rooms" defaultValue={formatRoomsValue(query.rooms)} className="block w-full bg-transparent pt-0.5 text-sm font-semibold normal-case tracking-[0] text-[var(--text-primary)] outline-none">
             <option value="">Любые</option>
             {catalog.facets.rooms.map((room) => (
               <option key={room.value} value={room.value}>{room.value}</option>
             ))}
-          </select>
+          </Select>
         </label>
         {activeFilter === "flat" ? (
           <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[var(--border)] bg-white px-3 text-sm font-semibold text-[var(--text-secondary)]">
-            <input name="studio" type="checkbox" value="1" defaultChecked={query.studio === true} className="size-4 accent-[var(--accent)]" />
+            <Input unstyled name="studio" type="checkbox" value="1" defaultChecked={query.studio === true} className="size-4 accent-[var(--accent)]" />
             Студия
           </label>
         ) : null}
@@ -377,7 +260,7 @@ function CatalogFilterForm({
           {!isLand ? <CatalogRangePairView from="floor_from" to="floor_to" label={isHouse ? "Этажность" : "Этаж"} fromValue={query.floorFrom} toValue={query.floorTo} /> : null}
           {activeFilter === "all" ? select("category", query.category, [...TYPE_FILTER_OPTIONS], "Тип объекта") : null}
           <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[var(--border)] bg-white px-3 text-sm font-semibold text-[var(--text-secondary)]">
-            <input
+            <Input unstyled
               name="exclusive"
               type="checkbox"
               value="1"
@@ -432,7 +315,7 @@ function CheckboxGroup({ items }: { items: Array<[string, string, boolean | unde
     <div className="grid gap-2 rounded-lg border border-[var(--border)] bg-white p-3 text-sm font-semibold text-[var(--text-secondary)]">
       {items.map(([name, label, checked]) => (
         <label key={name} className="flex items-center gap-2">
-          <input name={name} type="checkbox" value="1" defaultChecked={checked} className="size-4 accent-[var(--accent)]" />
+          <Input unstyled name={name} type="checkbox" value="1" defaultChecked={checked} className="size-4 accent-[var(--accent)]" />
           {label}
         </label>
       ))}

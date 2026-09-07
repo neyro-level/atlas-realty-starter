@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@ams/realty-ui";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ExternalLink, MapPin } from "lucide-react";
@@ -120,23 +121,23 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
             const selected = complex.slug === selectedSlug;
             const mapped = complex.location.latitude !== null && complex.location.longitude !== null;
             return (
-              <button
+              <Button unstyled
                 key={complex.slug}
                 type="button"
                 onClick={() => selectComplex(complex)}
-                className={`min-w-[254px] rounded-xl border bg-white px-3.5 py-3 text-left shadow-[0_6px_20px_rgba(23,22,26,0.05)] transition duration-200 lg:min-w-0 ${
-                  selected ? "border-[var(--accent)] shadow-[0_10px_24px_rgba(138,21,21,0.12)]" : "border-[var(--border)] hover:-translate-y-0.5 hover:border-[var(--palette-b45a5a)] hover:shadow-[0_10px_24px_rgba(23,22,26,0.08)]"
+                className={`min-w-[254px] rounded-xl border bg-white px-3.5 py-3 text-left shadow-[var(--new-building-catalog-map-shadow-01)] transition duration-200 lg:min-w-0 ${
+                  selected ? "border-[var(--accent)] shadow-[var(--new-building-catalog-map-shadow-02)]" : "border-[var(--border)] hover:-translate-y-0.5 hover:border-[var(--new-building-catalog-map-border-01)] hover:shadow-[var(--new-building-catalog-map-shadow-03)]"
                 }`}
               >
                 <span className="flex items-start gap-2.5">
-                  <MapPin className={`mt-0.5 size-4 shrink-0 ${mapped ? "text-[var(--accent)]" : "text-[var(--palette-aaa7a8)]"}`} aria-hidden />
+                  <MapPin className={`mt-0.5 size-4 shrink-0 ${mapped ? "text-[var(--accent)]" : "text-[var(--new-building-catalog-map-content-01)]"}`} aria-hidden />
                   <span className="min-w-0">
                     <span className="block line-clamp-2 text-sm font-bold leading-5 text-[var(--text-primary)]">{complex.name}</span>
-                    <span className="mt-1.5 block line-clamp-1 text-xs leading-4 text-[var(--palette-777477)]">{complex.location.district ?? complex.location.address ?? "Адрес уточняется"}</span>
+                    <span className="mt-1.5 block line-clamp-1 text-xs leading-4 text-[var(--new-building-catalog-map-content-02)]">{complex.location.district ?? complex.location.address ?? "Адрес уточняется"}</span>
                     <span className="mt-2.5 block text-sm font-extrabold text-[var(--text-primary)]">{complex.facts.priceFrom ? `от ${formatPrice(complex.facts.priceFrom)}` : "Цена уточняется"}</span>
                   </span>
                 </span>
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -145,12 +146,12 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
       <div className="order-1 relative min-h-[420px] bg-[var(--surface-muted)] lg:order-2 lg:min-h-0">
         <div ref={mapElementRef} data-testid="new-building-map-canvas" className="absolute inset-0" aria-label={`Карта жилых комплексов ${siteProfile.city.genitive}`} />
         {status !== "ready" ? (
-          <div className="absolute inset-0 grid place-items-center p-6 text-center text-sm font-semibold text-[var(--palette-5e5b5e)]">
+          <div className="absolute inset-0 grid place-items-center p-6 text-center text-sm font-semibold text-[var(--new-building-catalog-map-content-03)]">
             {status === "loading" ? "Загружаем карту жилых комплексов..." : "Карта временно недоступна. Выберите ЖК из списка слева."}
           </div>
         ) : null}
         {selectedComplex ? (
-          <Link href={newBuildingHref(selectedComplex)} className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-3 text-xs font-bold text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.14)] transition hover:text-[var(--accent)]">
+          <Link href={newBuildingHref(selectedComplex)} className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-3 text-xs font-bold text-[var(--text-primary)] shadow-[var(--new-building-catalog-map-shadow-04)] transition hover:text-[var(--accent)]">
             Открыть выбранный ЖК
             <ExternalLink className="size-3.5" aria-hidden />
           </Link>

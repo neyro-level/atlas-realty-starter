@@ -1,3 +1,5 @@
+import { RequestModalButton } from "../components/shared/site-overlay-context";
+
 export function SaleFinalCtaView() {
   return (
     <section className="bg-white py-14 sm:py-16 lg:py-[88px]" aria-labelledby="sale-final-cta-title">
@@ -13,17 +15,14 @@ export function SaleFinalCtaView() {
             Оценка, фотосъёмка, реклама, переговоры и регистрация уже включены в эту сумму.
           </p>
 
-          <button
+          <RequestModalButton
             type="button"
-            data-request-modal
-            data-request-modal-title="Получите план продаж объекта недвижимости."
-            data-request-modal-subtitle="Оценка, фотосъёмка, реклама, переговоры и регистрация уже включены в эту сумму."
-            data-request-modal-source="corporate:prodazha-nedvizhimosti:final"
-            data-request-modal-form-type="corporate_prodazha_nedvizhimosti_city"
+            unstyled
+            request={{ title: "Получите план продаж объекта недвижимости.", subtitle: "Оценка, фотосъёмка, реклама, переговоры и регистрация уже включены в эту сумму.", source: "corporate:prodazha-nedvizhimosti:final", formType: "corporate_prodazha_nedvizhimosti_city" }}
             className="mt-8 inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[var(--accent)] px-6 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto sm:min-w-[260px]"
           >
             Получить план продажи
-          </button>
+          </RequestModalButton>
           <p className="mt-3 text-[12px] leading-5 text-white/55">
             Это бесплатно и ни к чему вас не обязывает.
           </p>

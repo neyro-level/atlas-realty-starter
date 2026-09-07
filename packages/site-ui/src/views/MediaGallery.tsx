@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "../components/ui/button";
 import { ChevronLeft, ChevronRight, Images } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Lightbox, { type SlideImage } from "yet-another-react-lightbox";
@@ -67,7 +68,7 @@ export function MediaGallery({
   }
 
   const controlClass = variant === "light-controls"
-    ? "bg-white text-[var(--text-primary)] shadow-[0_12px_30px_rgba(0,0,0,0.16)] hover:bg-[var(--home-articles-chip)]"
+    ? "bg-white text-[var(--text-primary)] shadow-[var(--media-gallery-shadow-01)] hover:bg-[var(--home-articles-chip)]"
     : "border border-white/70 bg-[var(--surface-dark)]/76 text-white hover:bg-[var(--surface-dark)]";
 
   return (
@@ -76,15 +77,15 @@ export function MediaGallery({
         <CarouselContent className="h-full">
           {safeImages.map((image, imageIndex) => (
             <CarouselItem key={`${image.src}-${imageIndex}`} className="relative h-full">
-              <button type="button" ref={imageIndex === index ? openerRef : undefined} onClick={(event) => openAt(imageIndex, event.currentTarget)} className="relative block h-full w-full cursor-zoom-in border-0 bg-transparent p-0" aria-label={`Открыть фото ${imageIndex + 1} на весь экран`}>
+              <Button unstyled type="button" ref={imageIndex === index ? openerRef : undefined} onClick={(event) => openAt(imageIndex, event.currentTarget)} className="relative block h-full w-full cursor-zoom-in border-0 bg-transparent p-0" aria-label={`Открыть фото ${imageIndex + 1} на весь экран`}>
                 <ImageRenderer src={image.src} alt={image.alt} fill priority={priority && imageIndex === 0} unoptimized={!shouldOptimizeImage(image.src)} sizes={imageSizes} className={imageClassName} />
-              </button>
+              </Button>
             </CarouselItem>
           ))}
         </CarouselContent>
 
         {hasMany ? <span className="absolute left-3 top-3 rounded-lg bg-[var(--surface-dark)]/82 px-3 py-1.5 text-xs font-semibold tabular-nums text-white backdrop-blur-sm">{index + 1} / {safeImages.length}</span> : null}
-        {hasMany ? <><button type="button" onClick={() => api?.scrollPrev()} className={cn("absolute left-3 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg transition lg:left-5", controlClass)} aria-label="Предыдущее фото"><ChevronLeft className="size-5" aria-hidden /></button><button type="button" onClick={() => api?.scrollNext()} className={cn("absolute right-3 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg transition lg:right-5", controlClass)} aria-label="Следующее фото"><ChevronRight className="size-5" aria-hidden /></button></> : null}
+        {hasMany ? <><Button unstyled type="button" onClick={() => api?.scrollPrev()} className={cn("absolute left-3 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg transition lg:left-5", controlClass)} aria-label="Предыдущее фото"><ChevronLeft className="size-5" aria-hidden /></Button><Button unstyled type="button" onClick={() => api?.scrollNext()} className={cn("absolute right-3 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg transition lg:right-5", controlClass)} aria-label="Следующее фото"><ChevronRight className="size-5" aria-hidden /></Button></> : null}
       </Carousel>
 
       <Lightbox

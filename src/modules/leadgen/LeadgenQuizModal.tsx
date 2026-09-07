@@ -1,5 +1,7 @@
 "use client";
 
+import { Button, Input } from "@ams/realty-ui";
+
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Check, ChevronLeft, X } from "lucide-react";
@@ -283,30 +285,30 @@ export function LeadgenQuizModal({
         aria-describedby="leadgen-quiz-description"
         ref={panelRef}
       >
-        <button className="request-modal__close" type="button" aria-label="Закрыть квиз" onClick={closeModal}>
+        <Button unstyled className="request-modal__close" type="button" aria-label="Закрыть квиз" onClick={closeModal}>
           <X className="size-5" aria-hidden />
-        </button>
+        </Button>
         <p className="sr-only" id="leadgen-quiz-description">{quiz.title}</p>
 
         <style>
           {`
             .leadgen-quiz-modal {
-              background: var(--palette-f6f2f2) !important;
+              background: var(--leadgen-quiz-modal-color-01) !important;
             }
 
             .leadgen-quiz-modal .request-modal__header {
-              background: linear-gradient(180deg, var(--palette-fbf8f8) 0%, var(--palette-f4f1f1) 100%) !important;
+              background: linear-gradient(180deg, var(--leadgen-quiz-modal-color-02) 0%, var(--leadgen-quiz-modal-color-03) 100%) !important;
               padding-top: 34px;
               padding-bottom: 24px;
             }
 
             .leadgen-quiz-modal .leadgen-quiz-expert-card {
-              border-color: rgba(138, 21, 21, 0.1) !important;
-              background: rgba(255, 255, 255, 0.72) !important;
+              border-color: var(--leadgen-quiz-modal-effect-01) !important;
+              background: var(--leadgen-quiz-modal-effect-02) !important;
             }
 
             .leadgen-quiz-modal .leadgen-quiz-expert-text {
-              color: var(--palette-5f5656) !important;
+              color: var(--leadgen-quiz-modal-color-04) !important;
               font-size: 12px !important;
               font-weight: 400 !important;
               line-height: 1.5 !important;
@@ -317,7 +319,7 @@ export function LeadgenQuizModal({
             }
 
             .leadgen-quiz-modal .leadgen-quiz-option-dot {
-              border-color: var(--palette-d6c2c2);
+              border-color: var(--leadgen-quiz-modal-color-05);
             }
 
             .leadgen-quiz-modal .request-modal__form {
@@ -342,7 +344,7 @@ export function LeadgenQuizModal({
               .leadgen-quiz-modal {
                 width: min(calc(100vw - 80px), 960px);
                 max-height: min(640px, calc(100dvh - 56px));
-                background: var(--palette-f6f2f2);
+                background: var(--leadgen-quiz-modal-color-01);
               }
 
               .leadgen-quiz-modal__layout {
@@ -356,7 +358,7 @@ export function LeadgenQuizModal({
                 justify-items: start;
                 min-height: 600px;
                 padding: 26px 26px 32px;
-                background: linear-gradient(180deg, var(--palette-fbf8f8) 0%, var(--palette-f4f1f1) 100%);
+                background: linear-gradient(180deg, var(--leadgen-quiz-modal-color-02) 0%, var(--leadgen-quiz-modal-color-03) 100%);
                 border-right: 0;
                 text-align: left;
               }
@@ -375,16 +377,16 @@ export function LeadgenQuizModal({
               .leadgen-quiz-expert-card {
                 margin-top: 16px;
                 border-radius: 8px;
-                border: 1px solid rgba(138, 21, 21, 0.1);
-                background: rgba(255, 255, 255, 0.68);
+                border: 1px solid var(--leadgen-quiz-modal-effect-01);
+                background: var(--leadgen-quiz-modal-effect-03);
                 padding: 12px;
-                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62);
+                box-shadow: inset 0 1px 0 var(--leadgen-quiz-modal-effect-04);
               }
 
               .leadgen-quiz-expert-note {
                 margin-top: auto;
                 max-width: 210px;
-                color: var(--palette-756d6d);
+                color: var(--leadgen-quiz-modal-color-06);
               }
 
               .leadgen-quiz-step,
@@ -521,17 +523,17 @@ export function LeadgenQuizModal({
               Заявка отправлена
             </h2>
             <p className="request-modal__subtitle">{quiz.successText}</p>
-            <button className="site-primary-action request-modal__submit" type="button" onClick={closeModal}>
+            <Button unstyled className="site-primary-action request-modal__submit" type="button" onClick={closeModal}>
               Хорошо
-            </button>
+            </Button>
           </div>
         ) : (
             <div className="leadgen-quiz-modal__layout">
             <div
               className="request-modal__header pb-0"
-              style={{ background: "linear-gradient(180deg, var(--palette-fbf8f8) 0%, var(--palette-f4f1f1) 100%)" }}
+              style={{ background: "linear-gradient(180deg, var(--leadgen-quiz-modal-color-02) 0%, var(--leadgen-quiz-modal-color-03) 100%)" }}
             >
-              <div className="leadgen-quiz-manager-photo relative size-14 overflow-hidden rounded-[6px] bg-white shadow-[0_10px_24px_rgba(23,22,26,0.1)]">
+              <div className="leadgen-quiz-manager-photo relative size-14 overflow-hidden rounded-[6px] bg-white shadow-[var(--leadgen-quiz-modal-shadow-01)]">
                 <Image
                   src={content.manager.photo}
                   alt={`${content.manager.name}, ${content.manager.role}`}
@@ -546,28 +548,28 @@ export function LeadgenQuizModal({
               <div
                 className="leadgen-quiz-expert-card"
                 style={{
-                  borderColor: "rgba(138, 21, 21, 0.1)",
-                  background: "rgba(255, 255, 255, 0.72)",
+                  borderColor: "var(--leadgen-quiz-modal-effect-01)",
+                  background: "var(--leadgen-quiz-modal-effect-02)",
                 }}
               >
                 <p className="text-[13px] font-semibold leading-tight text-[var(--text-primary)]">{content.manager.name}</p>
                 <p className="mt-1 text-[11px] font-normal leading-4 text-[var(--accent)]">{content.manager.role}</p>
-                <p className="leadgen-quiz-expert-text mt-3 text-[12px] font-normal leading-[1.5] text-[var(--palette-5f5656)]">{quiz.expertText}</p>
+                <p className="leadgen-quiz-expert-text mt-3 text-[12px] font-normal leading-[1.5] text-[var(--leadgen-quiz-modal-content-01)]">{quiz.expertText}</p>
               </div>
-              <p className="leadgen-quiz-expert-note text-[11px] font-normal leading-[1.45] text-[var(--palette-756d6d)]">{quiz.expertNote}</p>
+              <p className="leadgen-quiz-expert-note text-[11px] font-normal leading-[1.45] text-[var(--leadgen-quiz-modal-content-02)]">{quiz.expertNote}</p>
             </div>
 
             {!isFinalStep && currentStep ? (
               <div className="leadgen-quiz-step grid gap-5 px-7 pb-7 sm:px-8">
                 <div className="leadgen-quiz-workspace">
                   <div>
-                    <div className="leadgen-quiz-progress h-1.5 w-full overflow-hidden rounded-full bg-[var(--palette-f1e7e7)]" aria-label={`Заполнено ${progress}%`}>
+                    <div className="leadgen-quiz-progress h-1.5 w-full overflow-hidden rounded-full bg-[var(--leadgen-quiz-modal-surface-01)]" aria-label={`Заполнено ${progress}%`}>
                       <div className="h-full rounded-full bg-[var(--accent)] transition-all duration-300" style={{ width: `${progress}%` }} />
                     </div>
                     <p className="mt-4 text-[22px] font-extrabold leading-tight text-[var(--text-primary)] sm:text-[25px]" id="leadgen-quiz-title">
                       {currentStep.question}
                     </p>
-                    <p className="mt-2 text-sm font-normal leading-6 text-[var(--palette-777)]">
+                    <p className="mt-2 text-sm font-normal leading-6 text-[var(--leadgen-quiz-modal-content-03)]">
                       {quiz.questionHint}
                     </p>
                   </div>
@@ -576,33 +578,33 @@ export function LeadgenQuizModal({
                     {currentStep.options.map((option) => {
                       const isSelected = selectedAnswer === option;
                       return (
-                        <button
+                        <Button unstyled
                           key={option}
                           type="button"
                           data-quiz-option
                           className={`leadgen-quiz-option grid min-h-[58px] grid-cols-[24px_1fr] items-center gap-3 rounded-[6px] border px-4 text-left text-sm font-semibold transition ${
                             isSelected
-                              ? "border-[var(--accent)] bg-[var(--palette-fbf7f7)] text-[var(--text-primary)] shadow-[0_12px_28px_rgba(138,21,21,0.1)]"
-                              : "border-[var(--border)] bg-white text-[var(--palette-4a4a4a)] hover:border-[var(--palette-d6c2c2)] hover:bg-[var(--palette-fbf7f7)]"
+                              ? "border-[var(--accent)] bg-[var(--leadgen-quiz-modal-surface-02)] text-[var(--text-primary)] shadow-[var(--leadgen-quiz-modal-shadow-02)]"
+                              : "border-[var(--border)] bg-white text-[var(--leadgen-quiz-modal-content-04)] hover:border-[var(--leadgen-quiz-modal-border-01)] hover:bg-[var(--leadgen-quiz-modal-surface-02)]"
                           }`}
                           style={{
                             borderColor: isSelected ? "var(--accent)" : "var(--border)",
-                            background: isSelected ? "var(--palette-fbf7f7)" : "var(--surface)",
+                            background: isSelected ? "var(--leadgen-quiz-modal-color-07)" : "var(--surface)",
                           }}
                           aria-pressed={isSelected}
                           onClick={() => selectAnswer(currentStep, option)}
                         >
                           <span
-                            className={`leadgen-quiz-option-dot grid size-5 place-items-center rounded-full border ${isSelected ? "border-[var(--accent)] bg-[var(--accent)] text-white" : "border-[var(--palette-d6c2c2)] text-transparent"}`}
+                            className={`leadgen-quiz-option-dot grid size-5 place-items-center rounded-full border ${isSelected ? "border-[var(--accent)] bg-[var(--accent)] text-white" : "border-[var(--leadgen-quiz-modal-border-01)] text-transparent"}`}
                             style={{
-                              borderColor: isSelected ? "var(--accent)" : "var(--palette-d6c2c2)",
+                              borderColor: isSelected ? "var(--accent)" : "var(--leadgen-quiz-modal-color-05)",
                               background: isSelected ? "var(--accent)" : "transparent",
                             }}
                           >
                             <Check className="size-3.5" aria-hidden />
                           </span>
                           <span>{option}</span>
-                        </button>
+                        </Button>
                       );
                     })}
                   </div>
@@ -611,24 +613,24 @@ export function LeadgenQuizModal({
                     {errors.submit ? <p className="request-modal__error mb-3">{errors.submit}</p> : null}
 
                     <div className="flex items-center justify-between gap-3 pt-1">
-                      <p className="text-xs font-semibold text-[var(--palette-aaa)]">Шаг: {stepIndex + 1}/{totalSteps}</p>
+                      <p className="text-xs font-semibold text-[var(--leadgen-quiz-modal-content-05)]">Шаг: {stepIndex + 1}/{totalSteps}</p>
                       <div className="flex items-center gap-2">
-                        <button
+                        <Button unstyled
                           type="button"
-                          className="inline-flex min-h-12 w-[52px] items-center justify-center rounded-[6px] border border-[var(--border)] bg-white text-[var(--accent)] transition hover:border-[var(--palette-d6c2c2)] hover:bg-[var(--palette-fbf7f7)] disabled:cursor-not-allowed disabled:opacity-45"
+                          className="inline-flex min-h-12 w-[52px] items-center justify-center rounded-[6px] border border-[var(--border)] bg-white text-[var(--accent)] transition hover:border-[var(--leadgen-quiz-modal-border-01)] hover:bg-[var(--leadgen-quiz-modal-surface-02)] disabled:cursor-not-allowed disabled:opacity-45"
                           aria-label="Вернуться к предыдущему вопросу"
                           onClick={goBack}
                           disabled={stepIndex === 0}
                         >
                           <ChevronLeft className="size-5" aria-hidden />
-                        </button>
-                        <button
+                        </Button>
+                        <Button unstyled
                           type="button"
                           className="inline-flex min-h-12 min-w-[130px] items-center justify-center rounded-[6px] bg-[var(--accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-45"
                           onClick={goNext}
                         >
                           Далее
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -637,16 +639,16 @@ export function LeadgenQuizModal({
             ) : (
               <form className="request-modal__form leadgen-quiz-final-form pt-0" onSubmit={handleSubmit} data-analytics-form-type={activeFormType} noValidate>
                 <div>
-                  <div className="leadgen-quiz-progress h-1.5 w-full overflow-hidden rounded-full bg-[var(--palette-f1e7e7)]" aria-label={`Заполнено ${progress}%`}>
+                  <div className="leadgen-quiz-progress h-1.5 w-full overflow-hidden rounded-full bg-[var(--leadgen-quiz-modal-surface-01)]" aria-label={`Заполнено ${progress}%`}>
                     <div className="h-full rounded-full bg-[var(--accent)] transition-all duration-300" style={{ width: `${progress}%` }} />
                   </div>
                   <h3 className="leadgen-quiz-final-title mt-4 text-[25px] font-extrabold leading-tight text-[var(--text-primary)]" id="leadgen-quiz-title">{quiz.finalTitle}</h3>
-                  <p className="leadgen-quiz-final-text mt-4 max-w-[600px] text-sm font-normal leading-[1.55] text-[var(--palette-5f5a5a)]">{quiz.finalText}</p>
+                  <p className="leadgen-quiz-final-text mt-4 max-w-[600px] text-sm font-normal leading-[1.55] text-[var(--leadgen-quiz-modal-content-06)]">{quiz.finalText}</p>
                 </div>
 
                 <label className="request-modal__honeypot">
                   Сайт
-                  <input
+                  <Input unstyled
                     tabIndex={-1}
                     autoComplete="off"
                     value={website}
@@ -659,7 +661,7 @@ export function LeadgenQuizModal({
                     <label className="request-modal__label" htmlFor="leadgen-quiz-name">
                       {quiz.fields.nameLabel}
                     </label>
-                    <input
+                    <Input unstyled
                       id="leadgen-quiz-name"
                       className="request-modal__input"
                       autoComplete="name"
@@ -680,7 +682,7 @@ export function LeadgenQuizModal({
                     <label className="request-modal__label" htmlFor="leadgen-quiz-phone">
                       {quiz.fields.phoneLabel}
                     </label>
-                    <input
+                    <Input unstyled
                       id="leadgen-quiz-phone"
                       ref={phoneRef}
                       className="request-modal__input"
@@ -704,7 +706,7 @@ export function LeadgenQuizModal({
                 </div>
 
                 <label className="request-modal__consent">
-                  <input
+                  <Input unstyled
                     className="request-modal__checkbox"
                     type="checkbox"
                     checked={consent}
@@ -722,23 +724,23 @@ export function LeadgenQuizModal({
                 {result && !result.ok ? <p className="request-modal__submit-error" role="alert">{result.message}</p> : null}
 
                 <div className="leadgen-quiz-final-actions flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs font-semibold text-[var(--palette-aaa)]">Шаг: {totalSteps}/{totalSteps}</p>
+                  <p className="text-xs font-semibold text-[var(--leadgen-quiz-modal-content-05)]">Шаг: {totalSteps}/{totalSteps}</p>
                   <div className="flex items-center gap-2">
-                    <button
+                    <Button unstyled
                       type="button"
-                      className="leadgen-quiz-final-back inline-flex min-h-12 items-center justify-center rounded-[6px] border border-[var(--border)] bg-white text-[var(--accent)] transition hover:border-[var(--palette-d6c2c2)] hover:bg-[var(--palette-fbf7f7)]"
+                      className="leadgen-quiz-final-back inline-flex min-h-12 items-center justify-center rounded-[6px] border border-[var(--border)] bg-white text-[var(--accent)] transition hover:border-[var(--leadgen-quiz-modal-border-01)] hover:bg-[var(--leadgen-quiz-modal-surface-02)]"
                       aria-label="Вернуться к предыдущему вопросу"
                       onClick={goBack}
                     >
                       <ChevronLeft className="size-5" aria-hidden />
-                    </button>
-                    <button
-                      className="leadgen-quiz-final-submit inline-flex min-h-12 items-center justify-center rounded-[6px] bg-[var(--accent)] px-6 text-sm font-bold text-white shadow-[0_10px_22px_rgba(138,21,21,0.18)] transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+                    </Button>
+                    <Button unstyled
+                      className="leadgen-quiz-final-submit inline-flex min-h-12 items-center justify-center rounded-[6px] bg-[var(--accent)] px-6 text-sm font-bold text-white shadow-[var(--leadgen-quiz-modal-shadow-03)] transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
                       type="submit"
                       disabled={isPending}
                     >
                       {isPending ? quiz.loadingLabel : quiz.submitLabel}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </form>

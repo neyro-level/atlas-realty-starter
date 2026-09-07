@@ -1,5 +1,6 @@
 "use client";
 
+import { Button, Input } from "@ams/realty-ui";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState, useTransition } from "react";
 import { createLeadAction, type CreateLeadActionResult } from "@/modules/leads";
@@ -127,7 +128,7 @@ export function AgencyInlineLeadForm({
       <label className="sr-only" htmlFor={`${formType}-website`}>
         Не заполняйте это поле
       </label>
-      <input
+      <Input unstyled
         id={`${formType}-website`}
         name="website"
         type="text"
@@ -149,14 +150,14 @@ export function AgencyInlineLeadForm({
         <label className="sr-only" htmlFor={`${formType}-name`}>
           Ваше Имя
         </label>
-        <input
+        <Input unstyled
           id={`${formType}-name`}
           name="name"
           type="text"
           required={requireName}
           autoComplete="name"
           placeholder={requireName ? "Имя" : "Ваше Имя"}
-          className="min-h-[58px] rounded-lg border border-[var(--palette-d8d8d3)] bg-white px-5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--palette-8a8a8a)] focus:border-[var(--accent)]"
+          className="min-h-[58px] rounded-lg border border-[var(--agency-inline-lead-form-border-01)] bg-white px-5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-01)] focus:border-[var(--accent)]"
         />
 
         <label className="sr-only" htmlFor={`${formType}-phone`}>
@@ -165,11 +166,11 @@ export function AgencyInlineLeadForm({
         <div className="relative">
           <span className="pointer-events-none absolute left-5 top-1/2 flex -translate-y-1/2 items-center gap-1 text-base font-semibold text-[var(--text-primary)]">
             <span aria-hidden>🇷🇺</span>
-            <span className="text-xs text-[var(--palette-777777)]" aria-hidden>
+            <span className="text-xs text-[var(--agency-inline-lead-form-content-02)]" aria-hidden>
               ▼
             </span>
           </span>
-          <input
+          <Input unstyled
             id={`${formType}-phone`}
             name="phone"
             type="tel"
@@ -181,25 +182,25 @@ export function AgencyInlineLeadForm({
             onFocus={onPhoneFocus}
             aria-invalid={Boolean(errorMessage)}
             aria-describedby={errorMessage ? errorId : undefined}
-            className="min-h-[58px] w-full rounded-lg border border-[var(--palette-d8d8d3)] bg-white px-5 pl-[78px] text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--palette-8a8a8a)] focus:border-[var(--accent)]"
+            className="min-h-[58px] w-full rounded-lg border border-[var(--agency-inline-lead-form-border-01)] bg-white px-5 pl-[78px] text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-01)] focus:border-[var(--accent)]"
           />
         </div>
 
-        <button
+        <Button unstyled
           type="submit"
           disabled={isPending}
           className="min-h-[58px] rounded-lg bg-[var(--accent)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70 xl:whitespace-nowrap"
         >
           {submitLabel}
-        </button>
+        </Button>
       </div>
 
       <label
-        className={`mx-auto mt-5 flex max-w-[620px] items-start gap-3 text-xs leading-5 text-[var(--palette-5e5a5f)] ${
+        className={`mx-auto mt-5 flex max-w-[620px] items-start gap-3 text-xs leading-5 text-[var(--agency-inline-lead-form-content-03)] ${
           centerConsent ? "justify-center text-center" : ""
         }`}
       >
-        <input
+        <Input unstyled
           name="consent"
           type="checkbox"
           className="mt-0.5 size-4 shrink-0 accent-[var(--accent)]"

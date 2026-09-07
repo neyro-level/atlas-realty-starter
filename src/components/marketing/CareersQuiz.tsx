@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@ams/realty-ui";
+
 import { ArrowRight } from "lucide-react";
 import { LeadgenQuizModal } from "@/modules/leadgen/LeadgenQuizModal";
 import {
@@ -30,7 +32,7 @@ export function CareersQuizButton({
   }
 
   return (
-    <button
+    <Button unstyled
       type="button"
       className={className}
       data-careers-quiz-trigger
@@ -39,7 +41,7 @@ export function CareersQuizButton({
     >
       Пройти отбор
       {showIcon ? <ArrowRight className="size-4" aria-hidden /> : null}
-    </button>
+    </Button>
   );
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { Button, Input } from "@ams/realty-ui";
 import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState, useTransition } from "react";
 import { createLeadAction, type CreateLeadActionResult } from "@/modules/leads";
@@ -138,7 +139,7 @@ export function LeadgenInlinePhoneForm({
 
   return (
     <form
-      className="relative flex h-full flex-col overflow-hidden rounded-[8px] border border-[var(--palette-eadede)] bg-[linear-gradient(180deg,var(--surface)_0%,var(--palette-fbf8f7)_100%)] p-4 shadow-[0_18px_46px_rgba(23,22,26,0.07)] sm:p-5"
+      className="relative flex h-full flex-col overflow-hidden rounded-[8px] border border-[var(--leadgen-inline-phone-form-border-01)] bg-[linear-gradient(180deg,var(--surface)_0%,var(--leadgen-inline-phone-form-color-01)_100%)] p-4 shadow-[var(--leadgen-inline-phone-form-shadow-01)] sm:p-5"
       onSubmit={onSubmit}
       data-analytics-form-type={formType}
       noValidate
@@ -147,13 +148,13 @@ export function LeadgenInlinePhoneForm({
       <div className="mb-4">
         <p className="text-[17px] font-semibold leading-tight text-[var(--text-primary)]">{title}</p>
         {description ? (
-          <p className="mt-2 text-[12px] font-medium leading-5 text-[var(--palette-6a6465)]">{description}</p>
+          <p className="mt-2 text-[12px] font-medium leading-5 text-[var(--leadgen-inline-phone-form-content-01)]">{description}</p>
         ) : null}
       </div>
       <label className="sr-only" htmlFor={`${formType}-website`}>
         Не заполняйте это поле
       </label>
-      <input
+      <Input unstyled
         id={`${formType}-website`}
         name="website"
         type="text"
@@ -167,7 +168,7 @@ export function LeadgenInlinePhoneForm({
         Номер телефона
       </label>
       <div>
-        <input
+        <Input unstyled
           id={`${formType}-phone`}
           name="phone"
           type="tel"
@@ -179,20 +180,20 @@ export function LeadgenInlinePhoneForm({
           onFocus={onPhoneFocus}
           aria-invalid={Boolean(errorMessage)}
           aria-describedby={errorMessage ? errorId : undefined}
-          className="min-h-[50px] w-full rounded-[6px] border border-[var(--palette-ddd5d3)] bg-white/88 px-4 text-base font-medium text-[var(--text-primary)] outline-none transition placeholder:text-[var(--palette-9b9697)] focus:border-[var(--accent)] focus:bg-white sm:text-[14px]"
+          className="min-h-[50px] w-full rounded-[6px] border border-[var(--leadgen-inline-phone-form-border-02)] bg-white/88 px-4 text-base font-medium text-[var(--text-primary)] outline-none transition placeholder:text-[var(--leadgen-inline-phone-form-content-02)] focus:border-[var(--accent)] focus:bg-white sm:text-[14px]"
         />
       </div>
 
-      <button
+      <Button unstyled
         type="submit"
         disabled={isPending}
-        className="mt-3 min-h-[52px] w-full rounded-[6px] bg-[var(--accent)] px-4 text-[15px] font-semibold text-white shadow-[0_12px_26px_rgba(138,21,21,0.2)] transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70 sm:min-h-[50px] sm:text-[14px]"
+        className="mt-3 min-h-[52px] w-full rounded-[6px] bg-[var(--accent)] px-4 text-[15px] font-semibold text-white shadow-[var(--leadgen-inline-phone-form-shadow-02)] transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70 sm:min-h-[50px] sm:text-[14px]"
       >
         {isPending ? "Отправляем..." : submitLabel}
-      </button>
+      </Button>
 
-      <label className="mx-auto mt-3 flex w-full items-center justify-center gap-1 whitespace-nowrap text-center text-[9px] font-medium leading-none text-[var(--palette-8a8586)] sm:text-[9px]">
-        <input
+      <label className="mx-auto mt-3 flex w-full items-center justify-center gap-1 whitespace-nowrap text-center text-[9px] font-medium leading-none text-[var(--leadgen-inline-phone-form-content-03)] sm:text-[9px]">
+        <Input unstyled
           type="checkbox"
           checked={consent}
           onChange={(event) => {

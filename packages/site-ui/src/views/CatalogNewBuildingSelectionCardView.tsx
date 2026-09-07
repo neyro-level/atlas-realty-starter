@@ -26,11 +26,11 @@ export function CatalogNewBuildingSelectionCardView({
   return <CatalogNewBuildingSelectionGridCard cityPrepositional={cityPrepositional} source={source} formType={formType} onRequest={onRequest} />;
 }
 
-function CatalogNewBuildingSelectionGridCard({ cityPrepositional, source, formType, onRequest }: { cityPrepositional: string; source: string; formType: string; onRequest?: () => void }) {
+function CatalogNewBuildingSelectionGridCard({ cityPrepositional, source: _source, formType: _formType, onRequest }: { cityPrepositional: string; source: string; formType: string; onRequest?: () => void }) {
   return (
     <article className="-m-2 min-w-0 p-2">
-      <div className="flex h-full min-h-[342px] flex-col rounded-lg border border-[var(--palette-e6dcdc)] bg-[var(--accent-soft)] p-5 transition duration-300 hover:-translate-y-0.5 hover:border-[var(--palette-d8c9c9)] hover:shadow-[0_1px_2px_rgba(0,0,0,0.03),0_18px_42px_rgba(0,0,0,0.08)]">
-        <div className="flex size-11 items-center justify-center rounded-lg bg-white text-[var(--accent)] shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+      <div className="flex h-full min-h-[342px] flex-col rounded-lg border border-[var(--catalog-new-building-selection-card-border-01)] bg-[var(--accent-soft)] p-5 transition duration-300 hover:-translate-y-0.5 hover:border-[var(--catalog-new-building-selection-card-border-02)] hover:shadow-[var(--catalog-new-building-selection-card-shadow-01)]">
+        <div className="flex size-11 items-center justify-center rounded-lg bg-white text-[var(--accent)] shadow-[var(--catalog-new-building-selection-card-shadow-02)]">
           <Building2 className="size-5" aria-hidden />
         </div>
         <h3 className="mt-5 text-[1.18rem] font-extrabold leading-[1.25] text-[var(--text-primary)]">
@@ -41,8 +41,6 @@ function CatalogNewBuildingSelectionGridCard({ cityPrepositional, source, formTy
         </p>
         <Button
           type="button"
-          data-request-modal-source={source}
-          data-request-modal-form-type={formType}
           onClick={onRequest}
           className="mt-auto inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-center text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)]"
         >
@@ -53,10 +51,10 @@ function CatalogNewBuildingSelectionGridCard({ cityPrepositional, source, formTy
   );
 }
 
-function CatalogNewBuildingSelectionListCard({ cityPrepositional, source, formType, onRequest }: { cityPrepositional: string; source: string; formType: string; onRequest?: () => void }) {
+function CatalogNewBuildingSelectionListCard({ cityPrepositional, source: _source, formType: _formType, onRequest }: { cityPrepositional: string; source: string; formType: string; onRequest?: () => void }) {
   return (
     <article className="bg-transparent py-6">
-      <div className="grid gap-5 rounded-lg border border-[var(--palette-e6dcdc)] bg-[var(--accent-soft)] p-6 md:grid-cols-[minmax(0,1fr)_260px] md:items-end">
+      <div className="grid gap-5 rounded-lg border border-[var(--catalog-new-building-selection-card-border-01)] bg-[var(--accent-soft)] p-6 md:grid-cols-[minmax(0,1fr)_260px] md:items-end">
         <div className="max-w-2xl">
           <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--accent)]">Бесплатный подбор</p>
           <h3 className="mt-3 text-[1.45rem] font-extrabold leading-[1.16] text-[var(--text-primary)]">
@@ -68,8 +66,6 @@ function CatalogNewBuildingSelectionListCard({ cityPrepositional, source, formTy
         </div>
         <Button
           type="button"
-          data-request-modal-source={source}
-          data-request-modal-form-type={formType}
           onClick={onRequest}
           className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-center text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)]"
         >

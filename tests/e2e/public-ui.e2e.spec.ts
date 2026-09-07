@@ -40,7 +40,7 @@ test.describe('Public site UI', () => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/', { waitUntil: 'domcontentloaded' })
     const dialog = page.getByRole('dialog')
-    await page.locator('[data-request-modal-source="home-hero"]').click()
+    await page.getByRole('button', { name: 'Подобрать проверенный объект' }).click()
     await expect(dialog).toBeVisible()
     const submit = dialog.locator('button[type="submit"]')
     await submit.click()

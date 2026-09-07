@@ -2,6 +2,7 @@
 
 import { CatalogNewBuildingSelectionCardView, type CatalogView } from "@ams/realty-ui";
 import { siteProfile } from "@/project/site-profile";
+import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
 
 type Props = {
   variant?: CatalogView;
@@ -16,15 +17,14 @@ export function CatalogNewBuildingSelectionCard({
   source = "catalog:new-building-selection-card",
   formType = "new_building_selection_request",
 }: Props) {
+  const { openRequest: showRequest } = useSiteOverlay();
   function openRequest() {
-    window.dispatchEvent(new CustomEvent("open-request-modal", {
-      detail: {
+    showRequest({
         title: "Узнать свои варианты",
         subtitle: `Оставьте контакты. Специалист агентства недвижимости сравнит условия застройщиков и подберет подходящие новостройки в ${siteProfile.city.prepositional}.`,
         source: variant === "list" ? `${source}:list` : source,
         formType,
-      },
-    }));
+    });
   }
 
   return (

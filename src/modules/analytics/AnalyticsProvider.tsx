@@ -77,23 +77,6 @@ export function AnalyticsProvider({ counterId }: { counterId?: string }) {
     };
   }, []);
   useEffect(() => {
-    function onCustomEvent(event: Event) {
-      const detail = (event as CustomEvent<{ formType?: string; source?: string }>).detail;
-      if (event.type === "open-property-chat") {
-        trackEvent("chat_open", { form_type: "property_chat" });
-        return;
-      }
-
-      const fallbackFormType =
-        event.type === "open-expert-request-modal" ? "property_expert_purchase_request" : "request_modal";
-
-      trackEvent("modal_open", {
-        modal: event.type,
-        form_type: detail?.formType ?? fallbackFormType,
-        source: detail?.source,
-      });
-    }
-
     function onDocumentClick(event: MouseEvent) {
       if (isServicePath(window.location.pathname)) return;
       const target = event.target instanceof Element ? event.target.closest("a,button") : null;
@@ -129,13 +112,9 @@ export function AnalyticsProvider({ counterId }: { counterId?: string }) {
       });
     }
 
-    // Leadgen/home quiz modals track modal_open themselves — do not duplicate here.
-    const modalEvents = ["open-request-modal", "open-modal", "open-expert-request-modal", "open-property-chat"];
-    modalEvents.forEach((name) => window.addEventListener(name, onCustomEvent));
     document.addEventListener("click", onDocumentClick);
     document.addEventListener("submit", onSubmit);
     return () => {
-      modalEvents.forEach((name) => window.removeEventListener(name, onCustomEvent));
       document.removeEventListener("click", onDocumentClick);
       document.removeEventListener("submit", onSubmit);
     };

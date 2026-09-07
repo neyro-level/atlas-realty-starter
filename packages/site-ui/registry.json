@@ -43,9 +43,11 @@
         { "path": "src/components/ui/label.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/layout.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/scroll-area.tsx", "type": "registry:ui" },
+        { "path": "src/components/ui/select.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/separator.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/sheet.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/skeleton.tsx", "type": "registry:ui" },
+        { "path": "src/components/ui/slot.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/tabs.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/textarea.tsx", "type": "registry:ui" }
       ]
@@ -85,6 +87,7 @@
       "type": "registry:block",
       "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives"],
       "files": [
+        { "path": "src/components/shared/site-overlay-context.tsx", "type": "registry:block" },
         { "path": "src/views/RequestModalView.tsx", "type": "registry:block" },
         { "path": "src/views/ExpertRequestModalView.tsx", "type": "registry:block" }
       ]
