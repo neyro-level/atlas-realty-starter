@@ -2,6 +2,8 @@
 
 ## Local Windows runtime
 
+On the prepared owner workstation, the normal entry point is `pnpm dev:start`. It performs the safe database, migration, demo-data and HTTP checks below automatically. Use `pnpm dev:open` when the default browser should also open. The manual sequence remains the first-time setup and recovery path.
+
 1. Copy `.env.example` to an untracked `.env.local`.
 2. Confirm that `DATABASE_URL` targets an isolated database ending in `_dev`, `_test` or `_staging`. Never use a client production database for local UI work.
 3. Ensure PostgreSQL 18 is reachable; do not stop or reconfigure an unrelated shared Windows service.
@@ -9,7 +11,7 @@
 5. Check schema state with `pnpm payload migrate:status`.
 6. Apply only committed pending migrations with `pnpm payload migrate`. Do not use schema push/reset.
 7. Run `pnpm verify`.
-8. Start with `pnpm dev` and open `http://127.0.0.1:3000/`.
+8. Start with `pnpm dev:start` and open `http://127.0.0.1:3000/`.
 9. Verify `/healthz`, the home page and one data-backed route relevant to the task.
 
 The root page depends on the catalog schema. A code/DB mismatch can surface as HTTP 500 even when PostgreSQL is reachable; migration status is therefore part of local startup proof.
@@ -79,11 +81,20 @@ Partner content is staged outside Git in `.atlas-import/yandex`: `catalog.json`,
 
 Content workflow:
 
-1. `pnpm atlas:content:scrape` creates exactly 20 unique construction complexes and 30 secondary properties split 10/10/10 by room count.
+1. `pnpm atlas:content:scrape` creates exactly 20 unique construction complexes and 60 properties: 30 secondary apartments split 10/10/10 by room count, 10 houses, 10 land plots and 10 commercial properties.
 2. `pnpm atlas:content:coordinates` reads exact structured coordinates from the approved partner pages; unresolved objects remain marked for manual review.
 3. With `ATLAS_PARTNER_IMPORT_CONFIRM=YES`, run `pnpm atlas:content:import:complexes`.
 4. With the same confirmation plus `ATLAS_REPLACE_PROPERTY_CATALOG=YES`, run `pnpm atlas:content:import:properties`. Replacement archives old public properties only after all incoming records and media were created.
-5. Repeat both imports and run `pnpm atlas:content:verify-live`. Counts must remain 20 and 30, all ЖК must have coordinates, both galleries must open on mobile and desktop, and no provenance may appear in the public API.
+5. Repeat both imports and run `pnpm atlas:content:verify-live`. Counts must remain 20 and 60, all ЖК must have coordinates, both galleries must open on mobile and desktop, and no provenance may appear in the public API.
+
+If an approved complex source has no description, the importer writes a neutral fallback assembled only from its verified name, construction status and address. It must not invent amenities, deadlines or commercial claims.
+
+After replacing Atlas demo catalogs, remove only unreferenced importer-owned media with
+`ATLAS_CLEANUP_ORPHAN_MEDIA=YES pnpm atlas:content:cleanup-media`. The maintenance command
+discovers every database foreign key to `media`, scans text/JSON fields for embedded media
+UUIDs, and deletes only unreferenced `atlas-*.webp` records through Payload so local files
+are removed by the upload lifecycle. Media outside the Atlas namespace is reported but never
+deleted. Direct SQL deletion of media records or files is forbidden.
 
 The private package is transferred to the release operator separately from the immutable application artifact. Local Payload Media uses its persistent media volume; production uploads the same verified files through Payload to the isolated Atlas S3 bucket.
 
@@ -99,7 +110,7 @@ The retained Timeweb Managed PostgreSQL validation cluster reported automatic da
 
 On 2026-09-05, `pnpm db:backup:check` created a logical custom-format dump after six migrations, restored it into a temporary managed database and verified the same six migration records; the temporary database was then deleted. The repository now contains eight migrations, so a concrete current release must repeat restore proof when its production/validation database is provisioned or when backup architecture changes.
 
-Atlas production also runs `atlas-realty-backup.timer` daily. It creates a PostgreSQL custom-format dump, encrypts it with an age recipient before upload, and stores it in the private backup S3 bucket. The base64-encoded decryption identity and bucket name live only in root-readable `backup.env`; S3 credentials come from the runtime secret file. Configure a 30-day bucket lifecycle and run `/usr/local/sbin/verify-atlas-backup-restore` after provisioning or any backup change. The restore check uses only the fixed local database `atlas_realty_restore_check`, verifies the exact migration count, 30 published product-demo properties and 20 published residential complexes, then removes the validation database. Archived replacement records may remain in production history and are intentionally excluded from the public-count assertion.
+Atlas production also runs `atlas-realty-backup.timer` daily. It creates a PostgreSQL custom-format dump, encrypts it with an age recipient before upload, and stores it in the private backup S3 bucket. The base64-encoded decryption identity and bucket name live only in root-readable `backup.env`; S3 credentials come from the runtime secret file. Configure a 30-day bucket lifecycle and run `/usr/local/sbin/verify-atlas-backup-restore` after provisioning or any backup change. The restore check uses only the fixed local database `atlas_realty_restore_check`, verifies the exact migration count, 60 published product-demo properties and 20 published residential complexes, then removes the validation database. Archived replacement records may remain in production history and are intentionally excluded from the public-count assertion.
 
 ## Incident checklist
 

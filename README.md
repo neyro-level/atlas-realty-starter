@@ -13,6 +13,8 @@ Production-домен: `https://atlas.ams24.ru`. Оператор: ИП Скри
 - Presentation packages: `packages/site-contracts`, `packages/site-ui`, `packages/site-fixtures`.
 - Background work: Payload Jobs queues for imports, lead delivery, recovery and retention.
 
+The word “headless” applies only to the external API contract. It does not disable the public site: `/` is the required home page and must return HTTP 200 in local and release smoke checks.
+
 ## Source of truth
 
 1. `AGENTS.md`
@@ -24,13 +26,17 @@ Production-домен: `https://atlas.ams24.ru`. Оператор: ИП Скри
 
 ## Local start
 
-1. Copy `.env.example` to an untracked `.env.local` and point `DATABASE_URL` to an isolated `_dev` database.
-2. Run `pnpm install --frozen-lockfile`.
-3. Run `pnpm payload migrate:status`; apply committed pending migrations with `pnpm payload migrate`.
-4. Run `pnpm verify`.
-5. Start with `pnpm dev`, then open `http://127.0.0.1:3000/`.
+For the prepared Windows workstation:
 
-See `docs/OPERATIONS.md` for local safety, Graphify, CI, release, rollback and incident procedures.
+```powershell
+pnpm dev:start
+```
+
+The command reads only the project `.env.local`, verifies PostgreSQL 18, migrations, 60 demo properties (30 apartments, 10 houses, 10 land plots and 10 commercial properties), 20 residential complexes and matching media records/files, then reuses or starts Atlas at `http://127.0.0.1:3000/`.
+
+Use `pnpm dev:open` to also open the site, `pnpm dev:status` for a safe summary and `pnpm dev:stop` to stop only the process started by this launcher.
+
+See `docs/LOCAL_START.md` for the one-minute project runbook and `docs/OPERATIONS.md` for first-time setup, local safety, CI, release, rollback and incident procedures.
 
 ## Daily commands
 
@@ -40,6 +46,6 @@ See `docs/OPERATIONS.md` for local safety, Graphify, CI, release, rollback and i
 - `pnpm jobs:run:all` — private all-queue worker command used by production service.
 - `pnpm ui:check` — design-token, ShadCN registry and static-image guard.
 - `pnpm template:profile -- --input <profile.json>` — generate a reviewed city profile, brand asset manifest and deployment checklist in `.ams-client/` without overwriting the active profile.
-- `pnpm atlas:content:verify-live` — verify the 20/30 Payload catalog, galleries and map input on local or live Atlas.
+- `pnpm atlas:content:verify-live` — verify the 20/60 Payload catalog, galleries and map input on local or live Atlas.
 
 Production release is never performed from a feature branch.

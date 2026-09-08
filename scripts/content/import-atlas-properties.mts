@@ -28,10 +28,14 @@ for (const item of catalog.properties) {
   const totalAreaCm2 = Math.round(item.area * 10_000)
   const data = {
     addressPublic: item.address,
-    buildingState: item.renovation ?? undefined,
+    buildingState: item.category === 'commercial'
+      ? item.commercialType ?? undefined
+      : item.category === 'land'
+        ? item.landUseType ?? undefined
+        : item.renovation ?? undefined,
     buildingType: item.buildingType ?? undefined,
     builtYear: item.builtYear ?? undefined,
-    category: 'apartment' as const,
+    category: item.category,
     ceilingHeightCm: item.ceilingHeight ? Math.round(item.ceilingHeight * 100) : undefined,
     currency: 'RUB' as const,
     dealStatus: 'available' as const,
@@ -40,7 +44,7 @@ for (const item of catalog.properties) {
     district: item.district ?? undefined,
     externalId: item.externalId,
     firstSeenAt: existing?.firstSeenAt ?? item.provenance.collectedAt,
-    floor: item.floor ?? undefined,
+    floor: item.category === 'house' ? undefined : item.floor ?? undefined,
     floorsTotal: item.floorsTotal ?? undefined,
     geoPrecision: item.needsCoordinateReview ? 'unknown' as const : 'exact' as const,
     importHash: item.photos.map((photo) => photo.checksum).join(':'),
@@ -60,7 +64,7 @@ for (const item of catalog.properties) {
     pricePerMeterMinorUnits: Math.round(priceMinorUnits / item.area),
     publishedAt: item.provenance.collectedAt,
     region: 'Краснодарский край',
-    rooms: item.rooms,
+    rooms: item.rooms ?? undefined,
     slug: atlasPublicSlug(`${item.title}-${item.address}`),
     status: 'active' as const,
     title: item.title,
@@ -93,9 +97,14 @@ const proof = await payload.find({
   where: { and: [{ isPublished: { equals: true } }, { status: { equals: 'active' } }] },
 })
 const roomCounts = new Map<number, number>()
-for (const property of proof.docs) roomCounts.set(property.rooms ?? 0, (roomCounts.get(property.rooms ?? 0) ?? 0) + 1)
-if (proof.docs.length !== 30 || [1, 2, 3].some((rooms) => roomCounts.get(rooms) !== 10)) {
-  throw new Error(`Expected 30 published properties split 10/10/10; received ${JSON.stringify(Object.fromEntries(roomCounts))}.`)
+const categoryCounts = new Map<string, number>()
+for (const property of proof.docs) {
+  categoryCounts.set(property.category, (categoryCounts.get(property.category) ?? 0) + 1)
+  if (property.category === 'apartment') roomCounts.set(property.rooms ?? 0, (roomCounts.get(property.rooms ?? 0) ?? 0) + 1)
 }
-payload.logger.info({ created, published: proof.docs.length, removed, updated }, 'Atlas secondary properties imported')
+if (proof.docs.length !== 60 || [1, 2, 3].some((rooms) => roomCounts.get(rooms) !== 10)
+  || categoryCounts.get('apartment') !== 30 || ['house', 'land', 'commercial'].some((category) => categoryCounts.get(category) !== 10)) {
+  throw new Error(`Expected 60 published properties (30 apartments and 10/10/10 house/land/commercial); received categories=${JSON.stringify(Object.fromEntries(categoryCounts))}, rooms=${JSON.stringify(Object.fromEntries(roomCounts))}.`)
+}
+payload.logger.info({ categoryCounts: Object.fromEntries(categoryCounts), created, published: proof.docs.length, removed, updated }, 'Atlas demo properties imported')
 process.exit(0)

@@ -10,7 +10,7 @@ function HomeLink({ href, children, ariaLabel, ...props }: SiteLinkRendererProps
 export function HomeServicesStrip() {
   const items: HomeServiceItemViewDto[] = HOME_SERVICE_ACTIONS.map((service) => ({
     title: service.title,
-    icon: <service.icon className="size-7" strokeWidth={1.85} />,
+    icon: <service.icon strokeWidth={1.75} />,
     href: service.href,
     modal: service.modal,
     onClick: service.modal?.variant === "quiz" ? () => window.dispatchEvent(new CustomEvent("open-home-new-building-quiz", { detail: { formType: service.modal?.formType, source: service.modal?.source } })) : undefined,

@@ -2,6 +2,7 @@ export const SYSTEM_OPERATIONS = [
   'bootstrap-first-owner',
   'bootstrap-krasnodar-complexes',
   'business-audit',
+  'cleanup-orphaned-atlas-media',
   'import-job-failure',
   'import-atlas-partner-catalog',
   'lead-delivery',

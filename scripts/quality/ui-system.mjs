@@ -57,7 +57,9 @@ for (const file of files) {
     errors.push(`direct Radix import outside shadcn primitives: ${normalized}`);
   }
   if (legacyOverlayBridge.test(source)) errors.push(`legacy overlay event bridge: ${normalized}`);
-  if (
+  if (normalized.endsWith("/page.tsx") && source.split(/\r?\n/).length > 600) {
+    errors.push(`page composition exceeds 600 lines: ${normalized}`);
+  } else if (
     (normalized.endsWith("/LeadgenPromoLandingView.tsx") ||
       normalized.endsWith("/PropertyCardView.tsx") ||
       normalized.endsWith("/CatalogSharpShowcase.tsx")) &&

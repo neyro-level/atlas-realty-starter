@@ -1,6 +1,6 @@
 # Project
 
-Last reconciled with SourceCraft `main` commit `ab6e87e186db34d2907538210a117ef97c8b93a0` on 2026-09-06.
+Last reconciled with SourceCraft `main` commit `783e22af25e8343d1362d0ff62a41b6657699ca7` on 2026-09-08.
 
 ## Identity and lifecycle
 
@@ -18,15 +18,15 @@ The starter itself does not become a client production system. A concrete clone 
 
 This project uses the compact document set required by the active Realty Platform Core 3.0 and does not duplicate it with parallel files.
 
-| Canonical role                                   | Source of truth                                                                                      |
-| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| Product, profile, modules and current state      | this file                                                                                            |
+| Canonical role                                   | Source of truth                                                                                                                       |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Product, profile, modules and current state      | this file                                                                                                                             |
 | Architecture and data model                      | global Realty Platform Core 3.0 plus actual `src/core`, `src/payload` and migrations; the tracked 2.1 standard is historical evidence |
-| Security, roles and PII                          | `../SECURITY.md`                                                                                     |
-| Local runtime, CI, deploy, rollback and recovery | `OPERATIONS.md`                                                                                      |
-| Versions and compatibility check                 | `VERSION_MATRIX.md`                                                                                  |
-| UI system, registry and media rules              | `UI_SYSTEM.md`                                                                                       |
-| Difficult boundary decisions                     | `adr/`                                                                                               |
+| Security, roles and PII                          | `../SECURITY.md`                                                                                                                      |
+| Local runtime, CI, deploy, rollback and recovery | `OPERATIONS.md`                                                                                                                       |
+| Versions and compatibility check                 | `VERSION_MATRIX.md`                                                                                                                   |
+| UI system, registry and media rules              | `UI_SYSTEM.md`                                                                                                                        |
+| Difficult boundary decisions                     | `adr/`                                                                                                                                |
 
 ## Full-stack boundary
 
@@ -94,8 +94,8 @@ Lead PII retention default is 365 days and the baseline consent text version is 
 
 - Backend Standard 2.1 staging validation was completed for historical release `f7835daf1327741f6391627518cc4db31239c156` before the public UI boundary changed.
 - Public UI was later integrated through SourceCraft PR `!51`; the current exact-head live production proof is not recorded in this repository.
-- On 2026-09-06, local PostgreSQL 18.6 accepted the committed migrations and the Payload-backed UI returned HTTP 200 for home, catalog, property and dynamic residential-complex pages.
-- The local product catalog contains 20 unique Krasnodar residential complexes and 30 secondary properties split 10/10/10 by room count. Repeated imports created no duplicates; public DTO checks found no import provenance.
+- On 2026-09-08, local PostgreSQL 18.6 had all eight committed migrations applied and the Payload-backed UI returned HTTP 200 for the home page, catalog, property and residential-complex routes.
+- The local product catalog contains 20 unique Krasnodar residential complexes and 60 properties: 30 secondary apartments split 10/10/10 by room count, 10 houses, 10 land plots and 10 commercial properties. On 2026-09-08 the catalog was rebuilt from current partner listings with 60 unique addresses and 346 property images whose checksums do not repeat across properties; together with residential complexes the clean local media set contains 547 referenced files. Public DTOs contain no import provenance.
 - Atlas remains non-indexable by owner decision while the approved partner catalog is used as a product demonstration dataset.
 - The Yandex Maps JavaScript API integration and fallback are implemented; a real production key is still an external secret gate.
 - Before claiming current full-stack production readiness, run the exact-head Merge Gate, package/release flow and live smoke from `OPERATIONS.md` against an isolated client or validation contour.

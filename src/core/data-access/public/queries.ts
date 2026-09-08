@@ -228,6 +228,8 @@ function propertyWhere(query: PublicCatalogQuery, catalogOnly: boolean): Where {
   if (query.market) and.push({ market: { equals: query.market } })
   if (query.dealType) and.push({ dealType: { equals: query.dealType } })
   if (query.category) and.push({ category: { equals: query.category } })
+  if (query.buildingState) and.push({ buildingState: { equals: query.buildingState } })
+  if (query.buildingType) and.push({ buildingType: { equals: query.buildingType } })
   if (query.district) and.push({ district: { equals: query.district } })
   if (query.rooms !== undefined) and.push({ rooms: { equals: query.rooms } })
   if (query.priceMinMinor !== undefined) and.push({ priceMinorUnits: { greater_than_equal: query.priceMinMinor } })

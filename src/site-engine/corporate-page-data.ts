@@ -61,10 +61,8 @@ async function loadShowcase(page: CorporatePageConfig, query: CatalogQuery | nul
   if (query.category === "new_building") return emptySnapshot(query, "fallback");
   const engine = await getSiteEngine();
   const result = await engine.getCatalog({
+    ...query,
     category: normalizeCategory(query.category),
-    dealType: query.dealType,
-    limit: query.limit,
-    page: query.page,
   });
   return {
     ...emptySnapshot(query, "fallback"),

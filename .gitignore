@@ -28,9 +28,11 @@ playwright-report/
 test-results/
 outputs/
 graphify-out/
+.playwright-mcp/
 /public/r/
 /.atlas-import/
 /.ams-client/
+/.local-dev/
 
 # Editors and operating systems
 .DS_Store

@@ -8,6 +8,9 @@ import sharp from "sharp";
 const outputRoot = path.resolve(".atlas-import/yandex");
 const mediaRoot = path.join(outputRoot, "media");
 const collectedAt = new Date().toISOString();
+const propertiesOnly = process.env.ATLAS_SCRAPE_PROPERTIES_ONLY === "YES";
+const roomFilter = Number(process.env.ATLAS_SCRAPE_ROOMS ?? 0) || null;
+const categoryFilter = new Set((process.env.ATLAS_SCRAPE_CATEGORIES ?? "").split(",").map((value) => value.trim()).filter(Boolean));
 
 const complexUrls = [
   "https://realty.yandex.ru/krasnodar/kupit/novostrojka/dogma-park-3013191/",
@@ -33,9 +36,12 @@ const complexUrls = [
 ];
 
 const secondarySearches = [
-  { rooms: 1, url: "https://realty.yandex.ru/krasnodar/kupit/kvartira/odnokomnatnaya/vtorichniy-rynok/" },
-  { rooms: 2, url: "https://realty.yandex.ru/krasnodar/kupit/kvartira/dvuhkomnatnaya/vtorichniy-rynok/" },
-  { rooms: 3, url: "https://realty.yandex.ru/krasnodar/kupit/kvartira/tryohkomnatnaya/vtorichniy-rynok/" },
+  { category: "apartment", rooms: 1, url: "https://realty.yandex.ru/krasnodar/kupit/kvartira/odnokomnatnaya/vtorichniy-rynok/" },
+  { category: "apartment", rooms: 2, url: "https://realty.yandex.ru/krasnodar/kupit/kvartira/dvuhkomnatnaya/vtorichniy-rynok/" },
+  { category: "apartment", rooms: 3, url: "https://realty.yandex.ru/krasnodar/kupit/kvartira/tryohkomnatnaya/vtorichniy-rynok/" },
+  { category: "house", rooms: null, url: "https://realty.yandex.ru/krasnodar/kupit/dom/" },
+  { category: "land", rooms: null, url: "https://realty.yandex.ru/krasnodar/kupit/uchastok/" },
+  { category: "commercial", rooms: null, url: "https://realty.yandex.ru/krasnodar/kupit/kommercheskaya-nedvizhimost/" },
 ];
 
 await mkdir(mediaRoot, { recursive: true });
@@ -45,8 +51,13 @@ const page = await context.newPage();
 page.setDefaultTimeout(45_000);
 
 try {
+  let previousCatalog = null;
   const complexes = [];
-  for (const [index, url] of complexUrls.entries()) {
+  if (propertiesOnly) {
+    previousCatalog = JSON.parse(await readFile(path.join(outputRoot, "catalog.json"), "utf8"));
+    complexes.push(...previousCatalog.complexes.map((item) => ({ ...item, name: cleanComplexName(item.name), slug: slugify(cleanComplexName(item.name)) })));
+  }
+  for (const [index, url] of (propertiesOnly ? [] : complexUrls).entries()) {
     console.log(`[complex ${index + 1}/${complexUrls.length}] ${url}`);
     const snapshot = await scrapeDetailPage(page, url);
     const product = snapshot.jsonLd.find((item) => item?.["@type"] === "Product") ?? {};
@@ -85,57 +96,65 @@ try {
     await page.waitForTimeout(650);
   }
 
-  const properties = [];
-  for (const search of secondarySearches) {
-    await page.goto(search.url, { waitUntil: "domcontentloaded" });
-    await page.locator("main").waitFor({ state: "visible" });
-    await page.waitForTimeout(2_000);
-    const offerUrls = await page.evaluate(() => {
-      const seen = new Set();
-      return [...document.querySelectorAll('a[href*="/offer/"]')]
-        .map((anchor) => anchor.href)
-        .filter((url) => /\/offer\/\d+\/?$/.test(url) && !seen.has(url) && seen.add(url))
-        .slice(0, 24);
-    });
-    if (offerUrls.length < 10) throw new Error(`Expected at least 10 offers for ${search.rooms} rooms, received ${offerUrls.length}`);
+  const selectedSearches = secondarySearches.filter((item) =>
+    (!categoryFilter.size || categoryFilter.has(item.category)) && (!roomFilter || item.rooms === roomFilter));
+  const selectedKeys = new Set(selectedSearches.map((item) => `${item.category}:${item.rooms ?? "all"}`));
+  const properties = previousCatalog
+    ? previousCatalog.properties
+      .map((item) => ({ ...item, category: item.category ?? "apartment", rooms: item.rooms ?? null }))
+      .filter((item) => !selectedKeys.has(`${item.category}:${item.category === "apartment" ? item.rooms : "all"}`))
+    : [];
+  const usedPropertyAddresses = new Set(properties.map((item) => normalize(item.address)));
+  const usedPropertyPhotoChecksums = new Set(properties.flatMap((item) => item.photos.map((photo) => photo.checksum)));
+  for (const search of selectedSearches) {
+    const offers = await collectOffers(page, search.url, 5);
+    if (offers.length < 10) throw new Error(`Expected at least 10 offers for ${search.category}, received ${offers.length}`);
 
     let accepted = 0;
-    for (const [index, url] of offerUrls.entries()) {
+    for (const [index, offer] of offers.entries()) {
       if (accepted === 10) break;
-      console.log(`[property ${search.rooms} rooms candidate ${index + 1}/${offerUrls.length}] ${url}`);
+      const { url, photos } = offer;
+      console.log(`[property ${search.category} candidate ${index + 1}/${offers.length}] ${url}`);
       try {
         const snapshot = await scrapeDetailPage(page, url);
         const product = snapshot.jsonLd.find((item) => item?.["@type"] === "Product") ?? {};
         const externalId = url.match(/\/offer\/(\d+)/)?.[1] ?? hash(url).slice(0, 12);
-        const parsed = parseProperty(snapshot, product, search.rooms);
-        const photos = selectImages(snapshot.images, parsed.title, 10, "/get-realty-offers/");
-        if (photos.length < 3 || !parsed.area || !parsed.price || parsed.address.includes("уточняется")) {
+        const parsed = parseProperty(snapshot, product, search);
+        const addressIdentity = normalize(parsed.address);
+        if (photos.length < 5 || !parsed.area || !parsed.price || !isKrasnodarAddress(parsed.address) || (search.rooms === 3 && parsed.area < 55)) {
           throw new Error("incomplete public card");
         }
+        if (usedPropertyAddresses.has(addressIdentity)) throw new Error("duplicate public address");
         const media = await downloadMediaSet({ kind: "property", slug: externalId, photos, layouts: [] });
+        const uniquePhotos = media.photos.filter((photo) => !usedPropertyPhotoChecksums.has(photo.checksum));
+        if (uniquePhotos.length < 5) throw new Error("fewer than five unique property photos");
         properties.push({
           type: "property",
           order: properties.length + 1,
-          slug: `krasnodar-${search.rooms}k-${externalId}`,
+          slug: `krasnodar-${search.category}-${externalId}`,
           externalId,
-          rooms: search.rooms,
+          category: search.category,
+          rooms: parsed.rooms,
           ...parsed,
-          photos: media.photos,
+          photos: uniquePhotos,
           needsCoordinateReview: true,
           latitude: null,
           longitude: null,
           provenance: { source: "partner-yandex-realty", externalId, technicalUrl: url, collectedAt },
         });
+        usedPropertyAddresses.add(addressIdentity);
+        for (const photo of uniquePhotos) usedPropertyPhotoChecksums.add(photo.checksum);
         accepted += 1;
       } catch (error) {
-        console.warn(`[skip ${search.rooms} rooms] ${error instanceof Error ? error.message : String(error)}`);
+        console.warn(`[skip ${search.category}] ${error instanceof Error ? error.message : String(error)}`);
       }
       await page.waitForTimeout(650);
     }
-    if (accepted !== 10) throw new Error(`Expected 10 complete offers for ${search.rooms} rooms, received ${accepted}`);
+    if (accepted !== 10) throw new Error(`Expected 10 complete offers for ${search.category}, received ${accepted}`);
   }
 
   const catalog = { schemaVersion: 1, city: "Краснодар", collectedAt, complexes, properties };
+  assertCatalogQuality(catalog);
   catalog.checksum = hash(JSON.stringify(catalog));
   await writeFile(path.join(outputRoot, "catalog.json"), JSON.stringify(catalog, null, 2));
   await writeFile(path.join(outputRoot, "media-manifest.json"), JSON.stringify(buildMediaManifest(catalog), null, 2));
@@ -144,6 +163,34 @@ try {
 } finally {
   await context.close();
   await browser.close();
+}
+
+async function collectOffers(page, searchUrl, maxPages) {
+  const seen = new Map();
+  for (let pageNumber = 1; pageNumber <= maxPages; pageNumber += 1) {
+    const url = new URL(searchUrl);
+    if (pageNumber > 1) url.searchParams.set("page", String(pageNumber));
+    await page.goto(url.href, { waitUntil: "domcontentloaded" });
+    await page.locator("main").waitFor({ state: "visible" });
+    await page.waitForTimeout(2_000);
+    const pageOffers = await page.evaluate(() => [...document.querySelectorAll("li.OffersSerp__list-item_type_offer")].flatMap((card) => {
+      const url = [...card.querySelectorAll('a[href*="/offer/"]')].map((anchor) => anchor.href).find((href) => /\/offer\/\d+\/?$/.test(href));
+      if (!url) return [];
+      const identities = new Set();
+      const photos = [...card.querySelectorAll('img[src*="/get-realty-offers/"]')].flatMap((image) => {
+        const raw = image.currentSrc || image.src;
+        const identity = raw.replace(/\/(?:app_[^/?]+|realty_[^/?]+|large)(?:\?.*)?$/, "");
+        if (identities.has(identity)) return [];
+        identities.add(identity);
+        return [{ src: `${identity}/app_large`, alt: image.alt, width: image.naturalWidth, height: image.naturalHeight }];
+      }).slice(0, 5);
+      return [{ url, photos }];
+    }));
+    for (const offer of pageOffers) {
+      if (!seen.has(offer.url) || seen.get(offer.url).photos.length < offer.photos.length) seen.set(offer.url, offer);
+    }
+  }
+  return [...seen.values()];
 }
 
 async function scrapeDetailPage(page, url) {
@@ -172,20 +219,26 @@ async function scrapeDetailPage(page, url) {
   });
 }
 
-function parseProperty(snapshot, product, rooms) {
-  const area = numberFrom(snapshot.h1.match(/([\d.,]+)\s*м²/)?.[1]) || numberFrom(product.description?.match(/([\d.,]+)\s*м²/)?.[1]);
+function parseProperty(snapshot, product, search) {
+  const lotArea = numberFrom(snapshot.h1.match(/([\d.,]+)\s*сот/i)?.[1]) || numberFrom(snapshot.text.match(/([\d.,]+)\s*сот(?:ки|ок)?\n(?:участок|общая)/i)?.[1]);
+  const buildingArea = numberFrom(snapshot.h1.match(/([\d.,]+)\s*м²/)?.[1]) || numberFrom(product.description?.match(/([\d.,]+)\s*м²/)?.[1]);
+  const area = search.category === "land" && lotArea ? lotArea * 100 : buildingArea;
   const floorMatch = snapshot.title.match(/(\d+)\s*этаж из\s*(\d+)/);
   const price = Number(product.offers?.price ?? 0) || extractFirstPrice(snapshot.text);
   const address = extractAddress(product.description, snapshot.text) ?? "Краснодар, адрес уточняется";
   const description = extractListingDescription(snapshot.text) || snapshot.metaDescription;
   return {
-    title: area ? `${rooms}-комнатная квартира, ${formatArea(area)} м²` : `${rooms}-комнатная квартира`,
+    title: listingTitle(search, area, lotArea, snapshot.h1),
     address,
     district: extractDistrict(address),
     price,
     area,
-    livingArea: numberBeforeLabel(snapshot.text, "жилая"),
-    kitchenArea: numberBeforeLabel(snapshot.text, "кухня"),
+    rooms: search.rooms ?? numberFrom(snapshot.text.match(/(\d+)\s*комнат[аы]?\n(?:в\s*)?доме/i)?.[1]),
+    lotArea,
+    landUseType: snapshot.text.match(/\n([^\n]+)\nтип участка/i)?.[1]?.trim() ?? null,
+    commercialType: commercialType(snapshot.h1),
+    livingArea: search.category === "apartment" || search.category === "house" ? numberBeforeLabel(snapshot.text, "жилая") : null,
+    kitchenArea: search.category === "apartment" || search.category === "house" ? numberBeforeLabel(snapshot.text, "кухня") : null,
     floor: Number(floorMatch?.[1] ?? 0) || null,
     floorsTotal: Number(floorMatch?.[2] ?? 0) || null,
     ceilingHeight: numberBeforeLabel(snapshot.text, "потолки"),
@@ -195,6 +248,25 @@ function parseProperty(snapshot, product, rooms) {
     description: sanitizePublicText(description),
   };
 }
+
+function listingTitle(search, area, lotArea, h1) {
+  if (search.category === "apartment") return area ? `${search.rooms}-комнатная квартира, ${formatArea(area)} м²` : `${search.rooms}-комнатная квартира`;
+  if (search.category === "house") return area ? `Дом, ${formatArea(area)} м²` : "Дом";
+  if (search.category === "land") return lotArea ? `Участок, ${formatArea(lotArea)} сот.` : "Земельный участок";
+  const kind = h1.replace(/^[\d.,\s\u00a0]+м²\s*,\s*/iu, "").trim();
+  return area ? `${sentenceCase(kind || "Коммерческая недвижимость")}, ${formatArea(area)} м²` : sentenceCase(kind || "Коммерческая недвижимость");
+}
+
+function commercialType(value) {
+  if (/офис/i.test(value)) return "office";
+  if (/торгов/i.test(value)) return "retail";
+  if (/склад/i.test(value)) return "warehouse";
+  if (/готовый бизнес/i.test(value)) return "business";
+  return "free_purpose";
+}
+
+function isKrasnodarAddress(value) { return /^(?:г\.?\s*)?Краснодар(?:,|$)/iu.test(value); }
+function sentenceCase(value) { return value ? value[0].toLocaleUpperCase("ru-RU") + value.slice(1) : value; }
 
 async function downloadMediaSet({ kind, slug, photos, layouts }) {
   const directory = path.join(mediaRoot, kind, slug);
@@ -206,22 +278,25 @@ async function downloadMediaSet({ kind, slug, photos, layouts }) {
 }
 
 async function downloadGroup(directory, prefix, items) {
-  const result = [];
-  for (const [index, item] of items.entries()) {
+  const result = await Promise.all(items.map(async (item, index) => {
     const filename = `${prefix}-${String(index + 1).padStart(2, "0")}.webp`;
     const filePath = path.join(directory, filename);
-    let bytes;
-    try { bytes = await readFile(filePath); }
-    catch {
-      const response = await fetch(item.src, { headers: { Referer: "https://realty.yandex.ru/", "User-Agent": "Mozilla/5.0 AtlasPartnerImporter/1.0" } });
-      if (!response.ok) throw new Error(`Media download failed: ${response.status}`);
+    try {
+      const response = await fetch(item.src, {
+        headers: { Referer: "https://realty.yandex.ru/", "User-Agent": "Mozilla/5.0 AtlasPartnerImporter/1.0" },
+        signal: AbortSignal.timeout(15_000),
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const original = Buffer.from(await response.arrayBuffer());
-      bytes = await sharp(original).rotate().resize({ width: 1800, height: 1400, fit: "inside", withoutEnlargement: true }).webp({ quality: 82 }).toBuffer();
+      const bytes = await sharp(original).rotate().resize({ width: 1800, height: 1400, fit: "inside", withoutEnlargement: true }).webp({ quality: 82 }).toBuffer();
       await writeFile(filePath, bytes);
+      return { path: path.relative(outputRoot, filePath).replaceAll("\\", "/"), alt: item.alt, width: item.width, height: item.height, checksum: hash(bytes) };
+    } catch (error) {
+      console.warn(`[skip media] ${error instanceof Error ? error.message : String(error)}`);
+      return null;
     }
-    result.push({ path: path.relative(outputRoot, filePath).replaceAll("\\", "/"), alt: item.alt, width: item.width, height: item.height, checksum: hash(bytes) });
-  }
-  return result;
+  }));
+  return result.filter(Boolean);
 }
 
 function selectImages(images, name, limit, requiredPath = "/get-verba/") {
@@ -231,6 +306,7 @@ function selectImages(images, name, limit, requiredPath = "/get-verba/") {
     const src = image.src.replace(/^\/\//, "https://");
     if (!src.includes("avatars.mds.yandex.net") || !src.includes(requiredPath) || image.width < 650 || image.height < 400) return false;
     if (requiredPath === "/get-verba/" && nameWords.length && !nameWords.some((word) => normalize(image.alt).includes(word))) return false;
+    if (requiredPath === "/get-realty-offers/" && !normalize(image.alt).startsWith(normalize(name))) return false;
     const identity = src.replace(/\/(?:realty_[^/?]+|app_[^/?]+|large)(?:\?.*)?$/, "");
     if (seen.has(identity)) return false;
     seen.add(identity);
@@ -292,7 +368,12 @@ function cleanComplexName(value) {
     .replace(/^микрорайон/iu, "Микрорайон")
     .replace(/^жилой район/iu, "Жилой район")
     .replace(/^клубный квартал/iu, "Клубный квартал")
-    .replace(/DОГМА/gu, "DOGMA");
+    .replace(/DОГМА/gu, "Dogma")
+    .replace(/DOGMA ПАРК/giu, "Dogma Парк")
+    .replace(/ГРЕЙД/gu, "Грейд")
+    .replace(/РИДЗ/gu, "Ридз")
+    .replace(/САМОЛЁТ 7/gu, "Самолёт 7")
+    .replace(/ПЕРВОЕ МЕСТО/gu, "Первое место");
 }
 function cleanDeveloper(value) { return cleanName(String(value).replace(/^Застройщик\s+/i, "")); }
 function extractFirstPrice(text) { return Number((text.match(/\n([\d\s]{5,})\s*₽\n/)?.[1] ?? "").replace(/\s/g, "")) || 0; }
@@ -312,10 +393,34 @@ function buildMediaManifest(catalog) {
   };
 }
 
+function assertCatalogQuality(catalog) {
+  const roomCounts = new Map([1, 2, 3].map((rooms) => [rooms, 0]));
+  const categoryCounts = new Map(["apartment", "house", "land", "commercial"].map((category) => [category, 0]));
+  const addresses = new Set();
+  const photoOwners = new Map();
+  for (const property of catalog.properties) {
+    categoryCounts.set(property.category, (categoryCounts.get(property.category) ?? 0) + 1);
+    if (property.category === "apartment") roomCounts.set(property.rooms, (roomCounts.get(property.rooms) ?? 0) + 1);
+    const address = normalize(property.address);
+    if (addresses.has(address)) throw new Error(`Duplicate property address: ${property.address}`);
+    addresses.add(address);
+    for (const photo of property.photos) {
+      const owner = photoOwners.get(photo.checksum);
+      if (owner && owner !== property.externalId) throw new Error(`Photo checksum is shared by ${owner} and ${property.externalId}`);
+      photoOwners.set(photo.checksum, property.externalId);
+    }
+  }
+  const validCategories = categoryCounts.get("apartment") === 30
+    && ["house", "land", "commercial"].every((category) => categoryCounts.get(category) === 10);
+  if (catalog.complexes.length !== 20 || catalog.properties.length !== 60 || !validCategories || [1, 2, 3].some((rooms) => roomCounts.get(rooms) !== 10)) {
+    throw new Error(`Invalid catalog counts: complexes=${catalog.complexes.length}, properties=${catalog.properties.length}, categories=${JSON.stringify(Object.fromEntries(categoryCounts))}, rooms=${JSON.stringify(Object.fromEntries(roomCounts))}`);
+  }
+}
+
 function renderCatalog(catalog) {
   const lines = ["# Закрытый каталог импорта Atlas", "", `Собрано: ${catalog.collectedAt}`, `Checksum: ${catalog.checksum}`, "", "## 20 жилых комплексов", ""];
   for (const item of catalog.complexes) lines.push(`${item.order}. ${item.name} — ${item.developer}; фото: ${item.photos.length}; планировки: ${item.layouts.length}.`);
-  lines.push("", "## 30 квартир вторичного рынка", "");
+  lines.push("", "## 60 объектов: 30 квартир, 10 домов, 10 участков, 10 коммерческих", "");
   for (const item of catalog.properties) lines.push(`${item.order}. ${item.title} — ${item.address}; фото: ${item.photos.length}.`);
   lines.push("", "Технические URL и внешние ID хранятся только в закрытом JSON-manifest и не передаются в публичный DTO.", "");
   return lines.join("\n");

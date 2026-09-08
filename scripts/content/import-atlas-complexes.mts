@@ -13,13 +13,21 @@ let created = 0
 let updated = 0
 
 for (const item of catalog.complexes) {
-  let developer = (await payload.find({
-    collection: 'developers', depth: 0, limit: 1, overrideAccess: true, pagination: false,
-    where: { slug: { equals: atlasPublicSlug(item.developer) } },
-  })).docs[0]
+  let developer = (
+    await payload.find({
+      collection: 'developers',
+      depth: 0,
+      limit: 1,
+      overrideAccess: true,
+      pagination: false,
+      where: { slug: { equals: atlasPublicSlug(item.developer) } },
+    })
+  ).docs[0]
   if (!developer) {
     developer = await payload.create({
-      collection: 'developers', context, overrideAccess: true,
+      collection: 'developers',
+      context,
+      overrideAccess: true,
       data: {
         description: `Застройщик жилого комплекса «${item.name}» в Краснодаре.`,
         isPublished: true,
@@ -31,24 +39,39 @@ for (const item of catalog.complexes) {
   developerIds.set(item.developer, String(developer.id))
 
   const existingBySource = await payload.find({
-    collection: 'residential-complexes', depth: 0, limit: 1, overrideAccess: true, pagination: false,
+    collection: 'residential-complexes',
+    depth: 0,
+    limit: 1,
+    overrideAccess: true,
+    pagination: false,
     where: { yandexBuildingId: { equals: item.provenance.externalId } },
   })
-  const existingBySlug = existingBySource.docs[0] ? null : (await payload.find({
-    collection: 'residential-complexes', depth: 0, limit: 1, overrideAccess: true, pagination: false,
-    where: { slug: { equals: atlasPublicSlug(item.name) } },
-  })).docs[0]
+  const existingBySlug = existingBySource.docs[0]
+    ? null
+    : (
+        await payload.find({
+          collection: 'residential-complexes',
+          depth: 0,
+          limit: 1,
+          overrideAccess: true,
+          pagination: false,
+          where: { slug: { equals: atlasPublicSlug(item.name) } },
+        })
+      ).docs[0]
   const existing = existingBySource.docs[0] ?? existingBySlug
   const photos = await uploadCatalogMedia(payload, item.name, [...item.photos, ...item.layouts])
   const data = {
     address: item.address,
     classLabel: item.classLabel ?? undefined,
     completionLabel: item.completion ?? undefined,
-    description: item.description,
+    description:
+      item.description.trim() ||
+      `${item.name} — строящийся жилой комплекс в Краснодаре по адресу ${item.address}.`,
     developer: developerIds.get(item.developer),
     district: item.district ?? undefined,
     importOwnership: {
-      fields: {}, manualFields: [],
+      fields: {},
+      manualFields: [],
       provenance: {
         sourceCode: item.provenance.source,
         sourceObjectId: item.provenance.externalId,
@@ -69,28 +92,56 @@ for (const item of catalog.complexes) {
     yandexBuildingId: item.provenance.externalId,
   }
   if (existing) {
-    const result = await payload.update({ collection: 'residential-complexes', context, data, id: existing.id, overrideAccess: true })
+    const result = await payload.update({
+      collection: 'residential-complexes',
+      context,
+      data,
+      id: existing.id,
+      overrideAccess: true,
+    })
     importedIds.add(String(result.id))
     updated += 1
   } else {
-    const result = await payload.create({ collection: 'residential-complexes', context, data, overrideAccess: true })
+    const result = await payload.create({
+      collection: 'residential-complexes',
+      context,
+      data,
+      overrideAccess: true,
+    })
     importedIds.add(String(result.id))
     created += 1
   }
 }
 
-const published = await payload.find({ collection: 'residential-complexes', depth: 0, limit: 500, overrideAccess: true, pagination: false })
+const published = await payload.find({
+  collection: 'residential-complexes',
+  depth: 0,
+  limit: 500,
+  overrideAccess: true,
+  pagination: false,
+})
 let hidden = 0
 for (const complex of published.docs) {
   if (importedIds.has(String(complex.id)) || complex.status === 'hidden') continue
   await payload.update({
-    collection: 'residential-complexes', context, id: complex.id, overrideAccess: true,
+    collection: 'residential-complexes',
+    context,
+    id: complex.id,
+    overrideAccess: true,
     data: { status: 'hidden' },
   })
   hidden += 1
 }
 
-const proof = await payload.count({ collection: 'residential-complexes', overrideAccess: true, where: { status: { equals: 'published' } } })
-if (proof.totalDocs !== 20) throw new Error(`Expected 20 published residential complexes, received ${proof.totalDocs}.`)
-payload.logger.info({ created, hidden, published: proof.totalDocs, updated }, 'Atlas residential complexes imported')
+const proof = await payload.count({
+  collection: 'residential-complexes',
+  overrideAccess: true,
+  where: { status: { equals: 'published' } },
+})
+if (proof.totalDocs !== 20)
+  throw new Error(`Expected 20 published residential complexes, received ${proof.totalDocs}.`)
+payload.logger.info(
+  { created, hidden, published: proof.totalDocs, updated },
+  'Atlas residential complexes imported',
+)
 process.exit(0)

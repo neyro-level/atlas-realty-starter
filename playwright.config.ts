@@ -11,7 +11,8 @@ const readinessURL = `${baseURL}/healthz`
 const webServerEnv: Record<string, string> = {
   APP_ENV: 'test',
   DATABASE_URL:
-    process.env.DATABASE_URL || 'postgresql://postgres:postgres@127.0.0.1:5434/atlas_realty_dev',
+    process.env.DATABASE_URL ||
+    'postgresql://atlas_realty_starter_local:replace-local-password@127.0.0.1:5435/atlas_realty_starter_test',
   NEXT_PUBLIC_APP_URL: baseURL,
   NEXT_PUBLIC_INDEXABLE: 'false',
   NEXT_PUBLIC_SITE_URL: isProductionSmoke ? 'https://atlas.e2e.test' : baseURL,

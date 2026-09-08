@@ -13,10 +13,11 @@
 
 1. Global AMS instructions and the minimal relevant skills.
 2. This file.
-3. `docs/PROJECT.md` and one relevant document: `VERSION_MATRIX`, `SECURITY` or `OPERATIONS`.
-4. The relevant part of global `AMS Realty Platform Core 3.0`; use the tracked 2.1 document only to understand historical decisions.
-5. `package.json`, `src/payload.config.ts`, `src/site-engine`, `src/core`, `src/payload/migrations-v2`, tests and actual code.
-6. Graphify only as a navigation aid after checking that its reported commit matches `HEAD`.
+3. At the beginning of local work, run `pnpm dev:start`; use `docs/LOCAL_START.md` instead of rediscovering the local runtime.
+4. `docs/PROJECT.md` and one relevant document: `VERSION_MATRIX`, `SECURITY` or `OPERATIONS`.
+5. The relevant part of global `AMS Realty Platform Core 3.0`; use the tracked 2.1 document only to understand historical decisions.
+6. `package.json`, `src/payload.config.ts`, `src/site-engine`, `src/core`, `src/payload/migrations-v2`, tests and actual code.
+7. Graphify only as a navigation aid after checking that its reported commit matches `HEAD`.
 
 ## Invariants
 
@@ -40,6 +41,7 @@
 - Product profile, active modules, client-replacement boundary and current state: `docs/PROJECT.md`.
 - Security and PII boundaries: `SECURITY.md`.
 - Local runtime, CI, deploy, rollback, backup and incident response: `docs/OPERATIONS.md`.
+- One-minute local start and project orientation: `docs/LOCAL_START.md`.
 - Exact human-readable stack baseline: `docs/VERSION_MATRIX.md`.
 - UI tokens, ShadCN registry, galleries and static-media rules: `docs/UI_SYSTEM.md`.
 - Long-lived deviations and boundary changes: `docs/adr/`.

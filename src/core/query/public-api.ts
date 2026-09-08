@@ -8,6 +8,8 @@ export const slugSchema = z.string().trim().min(1).max(160).regex(/^[a-z0-9]+(?:
 export const catalogQuerySchema = z.object({
   areaMaxCm2: optionalInteger(1, 1_000_000_000),
   areaMinCm2: optionalInteger(1, 1_000_000_000),
+  buildingState: optionalText(100),
+  buildingType: optionalText(100),
   category: z.enum(['apartment', 'commercial', 'house', 'land', 'parking', 'townhouse']).optional(),
   dealType: z.enum(['rent', 'sale']).optional(),
   district: optionalText(100),

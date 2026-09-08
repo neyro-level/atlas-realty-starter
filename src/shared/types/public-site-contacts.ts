@@ -15,11 +15,3 @@ export type PublicSiteContacts = {
   max?: string;
   vk?: string;
 };
-
-export type PublicOffice = {
-  id: string;
-  title: string;
-  address: string;
-  mapUrl: string;
-  photoUrl: string | null;
-};

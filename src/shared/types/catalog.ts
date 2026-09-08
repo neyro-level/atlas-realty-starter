@@ -1,4 +1,4 @@
-import type { PaginatedPublicResult, PropertyCategory, PublicComplex, PublicProperty } from './public-content'
+import type { PropertyCategory } from './public-content'
 
 export type CatalogMode = 'all' | 'commercial' | 'country' | 'flat' | 'new_building'
 export type CatalogSort = 'area-desc' | 'newest' | 'price-asc' | 'price-desc'
@@ -57,10 +57,4 @@ export type CatalogPageContent = {
   }
   eyebrow: string
   tabs: Array<{ href: string; label: string }>
-}
-
-export type CatalogPageData = {
-  complexes?: PublicComplex[]
-  properties?: PublicProperty[]
-  result: Pick<PaginatedPublicResult<unknown>, 'page' | 'totalDocs' | 'totalPages'>
 }

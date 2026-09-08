@@ -42,11 +42,15 @@ export type CatalogProperty = {
   description: string
   district: string | null
   externalId: string
+  category: 'apartment' | 'commercial' | 'house' | 'land'
+  commercialType: 'business' | 'free_purpose' | 'office' | 'retail' | 'warehouse' | null
   floor: number | null
   floorsTotal: number | null
   kitchenArea: number | null
+  landUseType: string | null
   latitude: number | null
   livingArea: number | null
+  lotArea: number | null
   longitude: number | null
   needsCoordinateReview: boolean
   order: number
@@ -54,7 +58,7 @@ export type CatalogProperty = {
   price: number
   provenance: Provenance
   renovation: string | null
-  rooms: 1 | 2 | 3
+  rooms: number | null
   slug: string
   title: string
 }
@@ -89,13 +93,37 @@ export async function readAtlasCatalog(): Promise<AtlasCatalog> {
   if (catalog.complexes.length !== 20 || new Set(catalog.complexes.map((item) => item.name)).size !== 20) {
     throw new Error('Atlas catalog must contain exactly 20 unique residential complexes.')
   }
+  const apartments = catalog.properties.filter((item) => item.category === 'apartment')
   for (const rooms of [1, 2, 3] as const) {
-    if (catalog.properties.filter((item) => item.rooms === rooms).length !== 10) {
+    if (apartments.filter((item) => item.rooms === rooms).length !== 10) {
       throw new Error(`Atlas catalog must contain exactly 10 properties with ${rooms} rooms.`)
     }
   }
-  if (catalog.properties.some((item) => item.photos.length < 3) || catalog.complexes.some((item) => item.photos.length < 1)) {
+  for (const category of ['house', 'land', 'commercial'] as const) {
+    if (catalog.properties.filter((item) => item.category === category).length !== 10) {
+      throw new Error(`Atlas catalog must contain exactly 10 ${category} properties.`)
+    }
+  }
+  if (catalog.properties.length !== 60) throw new Error('Atlas catalog must contain exactly 60 properties.')
+  if (catalog.properties.some((item) => item.photos.length < 5) || catalog.complexes.some((item) => item.photos.length < 1)) {
     throw new Error('Every catalog item must contain a usable gallery.')
+  }
+  const addresses = new Set<string>()
+  const photoOwners = new Map<string, string>()
+  for (const property of catalog.properties) {
+    const address = property.address.toLocaleLowerCase('ru-RU').replace(/\s+/g, ' ').trim()
+    if (addresses.has(address)) throw new Error(`Duplicate property address: ${property.address}`)
+    addresses.add(address)
+    if (property.category === 'apartment' && property.rooms === 3 && property.area < 55) {
+      throw new Error(`Three-room property is too small for the Atlas demo catalog: ${property.externalId}`)
+    }
+    for (const photo of property.photos) {
+      const owner = photoOwners.get(photo.checksum)
+      if (owner && owner !== property.externalId) {
+        throw new Error(`Property photo is shared by ${owner} and ${property.externalId}`)
+      }
+      photoOwners.set(photo.checksum, property.externalId)
+    }
   }
   assertNoPublicProvenance(catalog)
   return catalog

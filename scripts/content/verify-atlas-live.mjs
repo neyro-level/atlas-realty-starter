@@ -7,7 +7,7 @@ const [propertyResponse, complexResponse] = await Promise.all([
 ])
 const properties = propertyResponse.data
 const complexes = complexResponse.data
-if (properties.totalDocs !== 30 || complexes.totalDocs !== 20) throw new Error('Atlas catalog count mismatch.')
+if (properties.totalDocs !== 60 || complexes.totalDocs !== 20) throw new Error('Atlas catalog count mismatch.')
 if (complexes.docs.filter((item) => item.latitude && item.longitude).length !== 20) throw new Error('Every residential complex must have coordinates.')
 const serialized = JSON.stringify({ properties, complexes })
 if (/technicalUrl|externalId|collectedAt|sourceUrl|источник|yandex|яндекс/i.test(serialized)) throw new Error('Public API exposes import provenance.')
@@ -39,7 +39,7 @@ try {
 } finally {
   await browser.close()
 }
-console.log('Atlas live content check passed: 20 complexes, 30 properties, responsive galleries and 20 map points.')
+console.log('Atlas live content check passed: 20 complexes, 60 properties, responsive galleries and 20 map points.')
 
 function assertResponse(response) {
   if (!response.ok) throw new Error(`Request failed: ${response.status} ${response.url}`)
