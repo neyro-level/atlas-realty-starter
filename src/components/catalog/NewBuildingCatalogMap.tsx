@@ -125,15 +125,15 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
                 key={complex.slug}
                 type="button"
                 onClick={() => selectComplex(complex)}
-                className={`min-w-[254px] rounded-xl border bg-white px-3.5 py-3 text-left shadow-[var(--new-building-catalog-map-shadow-01)] transition duration-200 lg:min-w-0 ${
-                  selected ? "border-[var(--accent)] shadow-[var(--new-building-catalog-map-shadow-02)]" : "border-[var(--border)] hover:-translate-y-0.5 hover:border-[var(--new-building-catalog-map-border-01)] hover:shadow-[var(--new-building-catalog-map-shadow-03)]"
+                className={`min-w-[254px] rounded-xl border bg-white px-3.5 py-3 text-left shadow-[var(--new-building-map-shadow-card)] transition duration-200 lg:min-w-0 ${
+                  selected ? "border-[var(--accent)] shadow-[var(--new-building-map-shadow-selected)]" : "border-[var(--border)] hover:-translate-y-0.5 hover:border-[var(--new-building-map-border-hover)] hover:shadow-[var(--new-building-map-shadow-hover)]"
                 }`}
               >
                 <span className="flex items-start gap-2.5">
-                  <MapPin className={`mt-0.5 size-4 shrink-0 ${mapped ? "text-[var(--accent)]" : "text-[var(--new-building-catalog-map-content-01)]"}`} aria-hidden />
+                  <MapPin className={`mt-0.5 size-4 shrink-0 ${mapped ? "text-[var(--accent)]" : "text-[var(--new-building-map-content-muted)]"}`} aria-hidden />
                   <span className="min-w-0">
                     <span className="block line-clamp-2 text-sm font-bold leading-5 text-[var(--text-primary)]">{complex.name}</span>
-                    <span className="mt-1.5 block line-clamp-1 text-xs leading-4 text-[var(--new-building-catalog-map-content-02)]">{complex.location.district ?? complex.location.address ?? "Адрес уточняется"}</span>
+                    <span className="mt-1.5 block line-clamp-1 text-xs leading-4 text-[var(--new-building-map-content-default)]">{complex.location.district ?? complex.location.address ?? "Адрес уточняется"}</span>
                     <span className="mt-2.5 block text-sm font-extrabold text-[var(--text-primary)]">{complex.facts.priceFrom ? `от ${formatPrice(complex.facts.priceFrom)}` : "Цена уточняется"}</span>
                   </span>
                 </span>
@@ -146,12 +146,12 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
       <div className="order-1 relative min-h-[420px] bg-[var(--surface-muted)] lg:order-2 lg:min-h-0">
         <div ref={mapElementRef} data-testid="new-building-map-canvas" className="absolute inset-0" aria-label={`Карта жилых комплексов ${siteProfile.city.genitive}`} />
         {status !== "ready" ? (
-          <div className="absolute inset-0 grid place-items-center p-6 text-center text-sm font-semibold text-[var(--new-building-catalog-map-content-03)]">
+          <div className="absolute inset-0 grid place-items-center p-6 text-center text-sm font-semibold text-[var(--new-building-map-content-strong)]">
             {status === "loading" ? "Загружаем карту жилых комплексов..." : "Карта временно недоступна. Выберите ЖК из списка слева."}
           </div>
         ) : null}
         {selectedComplex ? (
-          <Link href={newBuildingHref(selectedComplex)} className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-3 text-xs font-bold text-[var(--text-primary)] shadow-[var(--new-building-catalog-map-shadow-04)] transition hover:text-[var(--accent)]">
+          <Link href={newBuildingHref(selectedComplex)} className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-3 text-xs font-bold text-[var(--text-primary)] shadow-[var(--new-building-map-shadow-floating)] transition hover:text-[var(--accent)]">
             Открыть выбранный ЖК
             <ExternalLink className="size-3.5" aria-hidden />
           </Link>

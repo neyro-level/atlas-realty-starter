@@ -12,6 +12,8 @@ The root and package `components.json` files keep the same ShadCN style, React S
 
 `packages/site-ui/src/theme.css` is the only global token source. Manrope is the sole primary font. Brand, surfaces, text, borders, focus, status colors, radius, shadows, spacing and motion use semantic CSS variables. Application components must not add raw HEX values or import Radix directly; `pnpm ui:check` enforces both boundaries.
 
+The canonical token groups are `surface`, `content`, `border`, `action`, `status`, `typography`, `spacing`, `radius`, `shadow`, `container` and `motion`. The initial Constitution 3.1 inventory contained exactly 752 declarations: 67 semantic foundation tokens, 30 project/theme tokens, 579 used numbered component tokens and 76 compatibility or dead candidates. Candidates are removed only after static use reaches zero; the new-buildings domain is the first domain with zero numbered tokens. `pnpm ui:tokens` rejects unresolved variables, missing foundation groups, unused numbered aliases and regressions in the migrated domain.
+
 ## Shared components
 
 The private AMS registry owns ShadCN Button, Card, Badge, Dialog, Carousel, Aspect Ratio, Scroll Area, Skeleton, Tabs, Form, Field, Input, Textarea, Select and Checkbox plus neutral realty gallery, catalog cards, filters, request forms and CTA blocks. Registry items use the `ams-realty-*` namespace and never contain client branding, domains, legal data or city-specific copy.

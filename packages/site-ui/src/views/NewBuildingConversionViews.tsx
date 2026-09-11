@@ -47,7 +47,7 @@ export function NewBuildingMobileCommercialView({ detail, primaryAction, mortgag
 
   return (
     <section className="grid gap-3 pt-7 md:gap-4 md:pt-9 lg:hidden" aria-label={`Цены, планировки и ипотека в ${detail.name}`} data-new-building-mobile-commercial>
-      <Card className="overflow-hidden rounded-lg bg-white shadow-[var(--new-building-detail-sections-shadow-02)]">
+      <Card className="overflow-hidden rounded-lg bg-white shadow-[var(--new-building-section-shadow-raised)]">
         <CardHeader className="gap-4 p-5 md:p-6">
           <div className="flex items-start justify-between gap-4">
             <div className="grid gap-1">
@@ -72,7 +72,7 @@ export function NewBuildingMobileCommercialView({ detail, primaryAction, mortgag
         </CardFooter>
       </Card>
 
-      <Card className="overflow-hidden rounded-lg border-[var(--surface-dark)] bg-[var(--surface-dark)] text-white shadow-[var(--new-building-detail-sections-shadow-02)] md:grid md:grid-cols-[minmax(0,1fr)_240px] md:items-center">
+      <Card className="overflow-hidden rounded-lg border-[var(--surface-dark)] bg-[var(--surface-dark)] text-white shadow-[var(--new-building-section-shadow-raised)] md:grid md:grid-cols-[minmax(0,1fr)_240px] md:items-center">
         <CardHeader className="p-5 md:p-6">
           <span className="grid size-10 place-items-center rounded-lg bg-white/10 text-white"><BadgePercent className="size-5" aria-hidden /></span>
           <CardTitle className="mt-4 text-[22px] font-extrabold leading-[1.14] text-white md:text-[25px]">Поможем разобраться с ипотекой</CardTitle>
@@ -90,7 +90,7 @@ export function NewBuildingMobileWhyAgencyView({ detail, brand, requestAction }:
   const icons: LucideIcon[] = [SearchCheck, BadgePercent, Scale, Handshake];
   return (
     <section className="bg-white pt-6 text-[var(--text-primary)] md:pt-7 lg:hidden" aria-labelledby="mobile-why-agency-title">
-      <Card className="rounded-lg bg-[var(--surface-card-soft)] p-5 shadow-[var(--new-building-detail-sections-shadow-02)] md:p-6">
+      <Card className="rounded-lg bg-[var(--surface-card-soft)] p-5 shadow-[var(--new-building-section-shadow-raised)] md:p-6">
         <Badge>Бесплатный подбор</Badge>
         <h2 id="mobile-why-agency-title" className="mt-4 text-[24px] font-extrabold leading-[1.12] md:text-[28px]">Почему выгодно покупать через {brand}</h2>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--text-secondary)]">Сравним предложения, проверим условия и поможем пройти путь до сделки без лишних рисков.</p>
@@ -110,7 +110,7 @@ export function NewBuildingCatalogWhyAgencyView({ brand, benefits, expertName, e
   return (
     <section className="bg-white pb-16 sm:pb-20 lg:pb-24" aria-labelledby="new-building-why-agency-title">
       <div className="mx-auto max-w-site-frame px-5">
-        <Card className="grid overflow-hidden rounded-lg bg-[var(--surface-card-soft)] shadow-[var(--new-building-detail-sections-shadow-02)] lg:grid-cols-[minmax(0,1.15fr)_minmax(360px,0.85fr)]">
+        <Card className="grid overflow-hidden rounded-lg bg-[var(--surface-card-soft)] shadow-[var(--new-building-section-shadow-raised)] lg:grid-cols-[minmax(0,1.15fr)_minmax(360px,0.85fr)]">
           <div className="flex flex-col px-5 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-16">
             <Badge className="rounded-md">Подбор и ипотечная консультация бесплатны</Badge>
             <h2 id="new-building-why-agency-title" className="mt-7 max-w-[720px] text-[30px] font-extrabold leading-[1.08] sm:text-[38px] lg:text-[46px]">Почему новостройку выбирают через <span className="text-[var(--accent)]">{brand}</span></h2>
@@ -123,7 +123,7 @@ export function NewBuildingCatalogWhyAgencyView({ brand, benefits, expertName, e
           <div className="relative min-h-[360px] overflow-hidden border-t border-[var(--border)] bg-[var(--surface-muted)] sm:min-h-[460px] lg:min-h-full lg:border-l lg:border-t-0">
             <Image src={portrait} alt={`${expertName}, ${expertRole}`} fill quality={95} sizes="(max-width: 1023px) calc(100vw - 40px), 42vw" className="object-cover object-[50%_10%] sm:object-[50%_20%] lg:object-[50%_30%]" />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_52%,var(--catalog-hero-effect-02)_100%)]" />
-            <div className="absolute inset-x-5 bottom-5 rounded-lg border border-white/50 bg-white/95 px-4 py-3 shadow-[var(--new-building-detail-sections-shadow-02)] backdrop-blur sm:inset-x-6 sm:bottom-6 sm:px-5 sm:py-4"><p className="text-[15px] font-bold leading-5">{expertName}</p><p className="mt-1 text-[12px] leading-5 text-[var(--text-secondary)] sm:text-[13px]">{expertRole}</p></div>
+            <div className="absolute inset-x-5 bottom-5 rounded-lg border border-white/50 bg-white/95 px-4 py-3 shadow-[var(--new-building-section-shadow-raised)] backdrop-blur sm:inset-x-6 sm:bottom-6 sm:px-5 sm:py-4"><p className="text-[15px] font-bold leading-5">{expertName}</p><p className="mt-1 text-[12px] leading-5 text-[var(--text-secondary)] sm:text-[13px]">{expertRole}</p></div>
           </div>
         </Card>
       </div>

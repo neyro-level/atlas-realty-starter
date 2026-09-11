@@ -22,7 +22,7 @@ export function NewBuildingLayoutsSection({ complex, contained = false }: { comp
           variant="primary"
           modalTitle={`Получить подборку новостроек в ${siteProfile.city.prepositional}`}
           showIcon={false}
-          className="mt-8 w-full bg-[var(--accent)] text-white shadow-[var(--new-building-layouts-section-shadow-01)] hover:bg-[var(--accent-hover)] md:w-auto"
+          className="mt-8 w-full bg-[var(--accent)] text-white shadow-[var(--new-building-layouts-shadow-action)] hover:bg-[var(--accent-hover)] md:w-auto"
         />
       }
     />
