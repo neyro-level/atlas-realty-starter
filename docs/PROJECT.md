@@ -12,6 +12,14 @@ Last reconciled with SourceCraft `main` commit `783e22af25e8343d1362d0ff62a41b66
 - Public API: `/api/public/v1` through the Public Gateway and DTOs.
 - Repository: SourceCraft is primary; GitHub is an exact-SHA mirror only.
 
+## Delivery profile
+
+`DELIVERY_PROFILE = CRITICAL` because the production contour accepts personal data in leads,
+uses a valuable persistent catalog database and depends on protected delivery integrations.
+Branch pushes and pull requests use zero CI. Every merge requires review plus one manual
+SourceCraft `merge-standard` or risk-specific `merge-risky` gate bound to the exact PR head SHA.
+Production is a separate owner-approved release from the exact clean canonical `main` SHA.
+
 The starter itself does not become a client production system. A concrete clone enters MAINTENANCE MODE only after client configuration, review, release and live verification.
 
 ## Canonical document mapping

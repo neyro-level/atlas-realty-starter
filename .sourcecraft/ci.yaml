@@ -1,22 +1,25 @@
-"on":
-  pull_request:
-    - workflows: [pr-check]
-      filter:
-        source_branches: ["**"]
-        target_branches: ["main"]
-  push:
-    - workflows: [main-static-gate]
-      filter:
-        branches: ["main"]
+# SourceCraft CI/CD - Atlas Realty Starter
+# Pushes and pull requests intentionally run no workflows. Merge gates and
+# release packaging are manual and fail closed on the selected full commit SHA.
 
 workflows:
-  pr-check:
+  merge-standard:
+    inputs:
+      expected_commit_sha:
+        type: string
+        required: true
+        description: "Full 40-character SHA reviewed for the STANDARD merge"
     tasks:
-      - name: static-contract
+      - name: standard-gate
+        checkout:
+          fetch_depth: 1
+        env:
+          EXPECTED_COMMIT_SHA: ${{ inputs.expected_commit_sha }}
         cubes:
-          - name: node-static-contract
+          - name: static-contract
             image: docker.io/library/node:24.20.0-bookworm
             script:
+              - test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT_SHA"
               - corepack enable
               - corepack prepare pnpm@11.24.0 --activate
               - pnpm install --frozen-lockfile
@@ -24,13 +27,63 @@ workflows:
               - pnpm generate:importmap
               - git diff --exit-code -- src/payload-types.ts 'src/app/(payload)/admin/importMap.js'
               - pnpm verify
-  main-static-gate:
+
+  merge-risky:
+    inputs:
+      expected_commit_sha:
+        type: string
+        required: true
+        description: "Full 40-character SHA reviewed for the RISKY merge"
     tasks:
-      - name: static-contract
+      - name: risky-gate
+        checkout:
+          fetch_depth: 1
+        env:
+          EXPECTED_COMMIT_SHA: ${{ inputs.expected_commit_sha }}
         cubes:
-          - name: node-static-contract
+          - name: production-contract
             image: docker.io/library/node:24.20.0-bookworm
             script:
+              - test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT_SHA"
+              - corepack enable
+              - corepack prepare pnpm@11.24.0 --activate
+              - pnpm install --frozen-lockfile
+              - pnpm generate:types
+              - pnpm generate:importmap
+              - git diff --exit-code -- src/payload-types.ts 'src/app/(payload)/admin/importMap.js'
+              - pnpm verify
+              - NEXT_PUBLIC_SITE_URL=https://atlas.ams24.ru NEXT_PUBLIC_INDEXABLE=false pnpm build
+              - NEXT_PUBLIC_SITE_URL=https://atlas.ams24.ru NEXT_PUBLIC_INDEXABLE=false pnpm build:public-env:check
+
+  release:
+    inputs:
+      expected_commit_sha:
+        type: string
+        required: true
+        description: "Full 40-character SHA from canonical SourceCraft main"
+      confirm_release:
+        type: choice
+        required: true
+        description: "Must select release after owner approval"
+        default: "no"
+        options:
+          - "no"
+          - "release"
+    tasks:
+      - name: exact-main-artifact
+        checkout:
+          fetch_depth: 0
+          remove_credentials: true
+        env:
+          EXPECTED_COMMIT_SHA: ${{ inputs.expected_commit_sha }}
+          CONFIRM_RELEASE: ${{ inputs.confirm_release }}
+        cubes:
+          - name: build-and-package
+            image: docker.io/library/node:24.20.0-bookworm
+            script:
+              - test "$CONFIRM_RELEASE" = "release"
+              - test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT_SHA"
+              - test "$(git branch -r --contains HEAD | grep -c 'origin/main')" -gt 0
               - corepack enable
               - corepack prepare pnpm@11.24.0 --activate
               - pnpm install --frozen-lockfile
