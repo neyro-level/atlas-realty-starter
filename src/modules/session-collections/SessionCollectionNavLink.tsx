@@ -61,9 +61,9 @@ export function SessionCollectionNavLink({
       <Link
         href={href}
         onClick={onNavigate}
-        className="relative inline-flex min-h-11 items-center justify-center gap-1.5 rounded-[12px] bg-[var(--session-collection-nav-link-surface-01)] px-3 text-[13px] font-medium tracking-[-0.01em] text-[var(--session-collection-nav-link-content-01)] transition hover:bg-[var(--session-collection-nav-link-surface-02)] hover:text-[var(--accent)]"
+        className="relative inline-flex min-h-11 items-center justify-center gap-1.5 rounded-[12px] bg-[var(--session-collection-nav-link-surface-default)] px-3 text-[13px] font-medium tracking-[-0.01em] text-[var(--session-collection-nav-link-content-strong)] transition hover:bg-[var(--session-collection-nav-link-surface-hover)] hover:text-[var(--accent)]"
       >
-        <Icon className="size-[16px] shrink-0 text-[var(--session-collection-nav-link-content-02)]" strokeWidth={1.75} aria-hidden />
+        <Icon className="size-[16px] shrink-0 text-[var(--session-collection-nav-link-content-muted)]" strokeWidth={1.75} aria-hidden />
         <span>{label}</span>
         {count > 0 ? (
           <span className="inline-flex min-w-[18px] items-center justify-center rounded-full bg-[var(--accent)] px-1 text-[10px] font-semibold tabular-nums text-white">
