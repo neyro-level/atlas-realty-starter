@@ -161,6 +161,7 @@ export { PropertyGalleryView, type PropertyGalleryViewProps } from "./views/Prop
 export { PropertyDetailPageView } from "./views/PropertyDetailPageView";
 export { PropertyRelatedView } from "./views/PropertyRelatedView";
 export { RequestModalView } from "./views/RequestModalView";
+export type { RequestAvatar } from "./contracts/request";
 export { ReviewsPageView } from "./views/ReviewsPageView";
 export { ContactsPageView } from "./views/ContactsPageView";
 export { CorporateLandingView } from "./views/CorporateLandingView";

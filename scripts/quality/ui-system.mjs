@@ -64,8 +64,10 @@ const nativeControl = /<(?:button|input|textarea|select)\b/g;
 const legacyOverlayBridge = /data-(?:request-modal|modal-open)|open-(?:request-modal|property-chat)/;
 const identityLeak = /(?:АТЛАС|Краснодар|atlas-(?!media))/i;
 const componentNumberedToken = /var\(--[a-z0-9-]+-(?:color|surface|content|border|shadow|effect|icon)-[0-9]{2}\)/g;
-const arbitraryTypography = /text-\[[^\]]+\]/g;
-const arbitraryLayout = /(?:m[trblxy]?|p[trblxy]?|gap|space-[xy]|w|h|min-[wh]|max-[wh]|rounded)-\[[^\]]+\]/g;
+const arbitraryTypography = /\btext-\[(?![^\]]*var\()[^\]]+\]/g;
+const arbitraryLayout = /\b(?:m[trblxy]?|p[trblxy]?|gap|space-[xy]|w|h|min-[wh]|max-[wh]|rounded)-\[(?![^\]]*var\()[^\]]+\]/g;
+const arbitraryTypographyUses = new Map();
+const arbitraryLayoutUses = new Map();
 const unstyled = /\bunstyled\b/g;
 const inputCheckbox = /<Input\b[^>]{0,400}type=["']checkbox["']/gs;
 const spaceUtility = /\bspace-[xy]-[a-z0-9.\[\]-]+/g;
@@ -83,8 +85,8 @@ for (const file of files) {
   debt.paletteTokens += source.match(paletteToken)?.length ?? 0;
   debt.arbitraryShadows += source.match(arbitraryShadow)?.length ?? 0;
   debt.componentNumberedTokens += source.match(componentNumberedToken)?.length ?? 0;
-  debt.arbitraryTypography += source.match(arbitraryTypography)?.length ?? 0;
-  debt.arbitraryLayout += source.match(arbitraryLayout)?.length ?? 0;
+  for (const match of source.matchAll(arbitraryTypography)) arbitraryTypographyUses.set(match[0], (arbitraryTypographyUses.get(match[0]) ?? 0) + 1);
+  for (const match of source.matchAll(arbitraryLayout)) arbitraryLayoutUses.set(match[0], (arbitraryLayoutUses.get(match[0]) ?? 0) + 1);
   debt.unstyled += source.match(unstyled)?.length ?? 0;
   debt.inputCheckbox += source.match(inputCheckbox)?.length ?? 0;
   debt.spaceUtilities += source.match(spaceUtility)?.length ?? 0;
@@ -113,6 +115,9 @@ for (const file of files) {
     errors.push(`client identity inside neutral shared UI: ${normalized}`);
   }
 }
+
+debt.arbitraryTypography = repeatedDebt(arbitraryTypographyUses);
+debt.arbitraryLayout = repeatedDebt(arbitraryLayoutUses);
 
 const registry = JSON.parse(await readFile("packages/site-ui/registry.json", "utf8"));
 const inspectedRegistryFiles = new Set();
@@ -170,4 +175,8 @@ async function collectAll(directory) {
     else if ((await stat(file)).isFile()) result.push(file);
   }
   return result;
+}
+
+function repeatedDebt(uses) {
+  return [...uses.values()].reduce((total, count) => total + Math.max(0, count - 1), 0);
 }

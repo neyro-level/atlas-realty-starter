@@ -105,7 +105,7 @@ export function PropertySidebarView({
           Предложите свою цену
         </label>
         <div className="relative">
-          <Input unstyled
+          <Input variant="plain"
             id={`property-offer-price-${variant}`}
             value={formattedOfferInputValue}
             onChange={(event) => onOfferChange(event.target.value)}
@@ -117,7 +117,7 @@ export function PropertySidebarView({
           />
           <span className="pointer-events-none absolute inset-y-0 right-3 inline-flex items-center text-xs font-semibold text-[var(--text-muted)]">₽</span>
         </div>
-        <p className="text-[11px] leading-4 text-[var(--text-muted)]">Можно вводить просто цифрами. Например: 3 700 000.</p>
+        <p className="text-caption leading-4 text-[var(--text-muted)]">Можно вводить просто цифрами. Например: 3 700 000.</p>
       </div>
 
       <div className="grid gap-2.5">
@@ -125,14 +125,14 @@ export function PropertySidebarView({
         <div className="rounded-lg border border-[var(--border)] bg-white px-3 py-3">
           <label className="flex flex-wrap items-baseline gap-x-1 gap-y-1 text-xs font-medium leading-5 text-[var(--text-primary)]">
             <span>{defaultQuestion}</span>
-            <Input unstyled
+            <Input variant="plain"
               ref={questionRef}
               aria-label="Вопрос продавцу"
               value={messageDraft}
               onChange={(event) => onMessageChange(event.target.value)}
               autoFocus={!desktopVariant}
               placeholder="Здесь можно написать сообщение"
-              className="min-w-[170px] flex-1 bg-transparent text-xs font-medium leading-5 text-[var(--text-primary)] outline-none placeholder:text-[var(--property-sidebar-content-muted)]"
+              className="min-w-42.5 flex-1 bg-transparent text-xs font-medium leading-5 text-[var(--text-primary)] outline-none placeholder:text-[var(--property-sidebar-content-muted)]"
             />
           </label>
           {formattedOfferValue ? (
@@ -148,7 +148,7 @@ export function PropertySidebarView({
                 onQuickQuestion(item);
                 focusQuestionArea();
               }}
-              className="inline-flex min-h-7 items-center rounded-lg bg-[var(--background)] px-2.5 text-[11px] font-bold text-[var(--text-primary)] transition hover:bg-[var(--property-sidebar-surface-chip-hover)] hover:text-[var(--accent)]"
+              className="inline-flex min-h-7 items-center rounded-lg bg-[var(--background)] px-2.5 text-caption font-bold text-[var(--text-primary)] transition hover:bg-[var(--property-sidebar-surface-chip-hover)] hover:text-[var(--accent)]"
             >
               {item}
             </Button>
@@ -158,12 +158,12 @@ export function PropertySidebarView({
 
       <label className="hidden">
         Сайт
-        <Input unstyled value={website} onChange={(event) => onWebsiteChange(event.target.value)} tabIndex={-1} autoComplete="off" />
+        <Input variant="plain" value={website} onChange={(event) => onWebsiteChange(event.target.value)} tabIndex={-1} autoComplete="off" />
       </label>
 
       <div className="grid gap-2">
         <label htmlFor={`property-chat-phone-${variant}`} className="text-xs font-semibold leading-5 text-[var(--text-primary)]">Телефон для связи</label>
-        <Input unstyled
+        <Input variant="plain"
           id={`property-chat-phone-${variant}`}
           value={phone}
           onChange={(event) => onPhoneChange(event.target.value)}
@@ -177,7 +177,7 @@ export function PropertySidebarView({
         />
       </div>
 
-      <label className="flex items-start gap-3 text-[11px] leading-5 text-[var(--text-muted)]">
+      <label className="flex items-start gap-3 text-caption leading-5 text-[var(--text-muted)]">
         <Checkbox
           checked={consent}
           onCheckedChange={(checked) => onConsentChange(checked === true)}
@@ -218,7 +218,7 @@ export function PropertySidebarView({
       ) : null}
 
       <div className="grid gap-1">
-        <p className="text-[clamp(22px,2vw,28px)] font-extrabold leading-tight tabular-nums text-[var(--text-primary)]">{price}</p>
+        <p className="text-card-fluid font-extrabold leading-tight tabular-nums text-[var(--text-primary)]">{price}</p>
         {meterPrice ? <p className="text-xs font-medium leading-5 text-[var(--text-secondary)]">{meterPrice} за м²</p> : null}
       </div>
 

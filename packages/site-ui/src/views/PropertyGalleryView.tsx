@@ -53,7 +53,7 @@ export function PropertyGalleryView({
   const [activeTab, setActiveTab] = useState<TabKey>("photos");
 
   return (
-    <div className="grid h-[392px] grid-rows-[minmax(0,1fr)_50px] gap-2 md:h-[510px] md:grid-rows-[minmax(0,1fr)_52px] lg:h-[640px] lg:gap-3 lg:rounded-lg lg:border lg:border-[var(--border)] lg:bg-white lg:p-3 lg:shadow-[var(--property-gallery-shadow-panel)]">
+    <div className="grid h-98 grid-rows-[minmax(0,1fr)_50px] gap-2 md:h-127.5 md:grid-rows-[minmax(0,1fr)_52px] lg:h-160 lg:gap-3 lg:rounded-lg lg:border lg:border-[var(--border)] lg:bg-white lg:p-3 lg:shadow-[var(--property-gallery-shadow-panel)]">
       <div id={`property-media-panel-${activeTab}`} role="tabpanel" aria-labelledby={`property-media-tab-${activeTab}`} className="relative min-h-0 overflow-hidden rounded-lg bg-[var(--surface-muted)]">
         {activeTab === "photos" ? (
           <MediaGallery
@@ -77,7 +77,7 @@ export function PropertyGalleryView({
                 allowFullScreen
                 className="h-full w-full border-0"
               />
-              {safeVideoUrls.length > 1 ? <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2 rounded-[15px] bg-[var(--surface-dark)]/80 p-1.5 backdrop-blur-sm">{safeVideoUrls.map((url, index) => <Button variant="plain" key={url} type="button" onClick={() => setActiveVideoIndex(index)} className={`min-h-9 rounded-[10px] px-3 text-xs font-semibold transition ${index === activeVideoIndex ? "bg-white text-[var(--text-primary)]" : "text-white hover:bg-white/15"}`}>{videoProviderLabel(url)}</Button>)}</div> : null}
+              {safeVideoUrls.length > 1 ? <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2 rounded-[15px] bg-[var(--surface-dark)]/80 p-1.5 backdrop-blur-sm">{safeVideoUrls.map((url, index) => <Button variant="plain" key={url} type="button" onClick={() => setActiveVideoIndex(index)} className={`min-h-9 rounded-md px-3 text-xs font-semibold transition ${index === activeVideoIndex ? "bg-white text-[var(--text-primary)]" : "text-white hover:bg-white/15"}`}>{videoProviderLabel(url)}</Button>)}</div> : null}
             </div>
           ) : (
             <MediaPlaceholder title="Видео объекта не загружено" />
@@ -116,7 +116,7 @@ export function PropertyGalleryView({
             id={`property-media-tab-${key}`}
             aria-controls={`property-media-panel-${key}`}
             value={key}
-            className={`inline-flex min-h-[36px] items-center justify-center gap-1.25 rounded-[12px] border px-2 text-[11px] font-semibold transition md:min-h-[38px] ${
+            className={`inline-flex min-h-9 items-center justify-center gap-1.25 rounded-lg border px-2 text-caption font-semibold transition md:min-h-9.5 ${
               activeTab === key
                 ? "border-[var(--accent)] bg-[var(--accent)] text-white"
                 : "border-[var(--border)] bg-[var(--surface-card-soft)] text-[var(--text-secondary)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"

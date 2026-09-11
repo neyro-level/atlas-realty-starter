@@ -18,11 +18,12 @@ type HomeInterestViewProps = {
   chips: Array<{ label: string; href: string }>;
   linkRenderer: SiteLinkRenderer;
   scrollHint?: ReactNode;
+  selectionCopy: Record<InterestMode, { title: ReactNode; subtitle: string; requestTitle: string; requestSubtitle: string; action: string }>;
 };
 
 const MODE_LABELS: Record<InterestMode, string> = { flat: "Вторичная", country: "Загородная" };
 
-export function HomeInterestView({ flatCards, countryCards, modeHrefs, chips, linkRenderer: LinkRenderer, scrollHint }: HomeInterestViewProps) {
+export function HomeInterestView({ flatCards, countryCards, modeHrefs, chips, linkRenderer: LinkRenderer, scrollHint, selectionCopy }: HomeInterestViewProps) {
   const [mode, setMode] = useState<InterestMode>("flat");
   const visibleCards = useMemo(() => (mode === "flat" ? flatCards : countryCards).slice(0, 10), [countryCards, flatCards, mode]);
   const desktopPrimary = visibleCards.slice(0, 4);
@@ -53,7 +54,7 @@ export function HomeInterestView({ flatCards, countryCards, modeHrefs, chips, li
             </div>
             <div className="home-interest__grid home-interest__grid--desktop">
               {desktopPrimary.map((card) => <div key={card.id}>{card.content}</div>)}
-              <HomeInterestSelectionCard mode={mode} />
+              <HomeInterestSelectionCard mode={mode} copy={selectionCopy[mode]} />
               {desktopSecondary.map((card) => <div key={card.id}>{card.content}</div>)}
             </div>
           </>
@@ -63,13 +64,11 @@ export function HomeInterestView({ flatCards, countryCards, modeHrefs, chips, li
   );
 }
 
-function HomeInterestSelectionCard({ mode }: { mode: InterestMode }) {
-  const title = mode === "flat" ? <>Эксперт поможет <br />в подборе</> : "Подберём загородный вариант";
-  const subtitle = mode === "flat" ? "Подберёт лучшие варианты под ваш запрос и бюджет. Быстро и без лишних просмотров." : "Сравнит дома и участки, отсеет слабые варианты и подберёт объекты под ваш бюджет.";
+function HomeInterestSelectionCard({ mode, copy }: { mode: InterestMode; copy: HomeInterestViewProps["selectionCopy"][InterestMode] }) {
   return (
     <Card className="home-interest__selection-card">
-      <h3>{title}</h3><p>{subtitle}</p>
-      <RequestModalButton type="button" request={{ title: "Получить подборку объектов", subtitle: "Оставьте контакты. Специалист агентства недвижимости уточнит задачу и подберет лучшие варианты под ваш запрос и бюджет.", source: `home-interest:${mode}:selection-card`, formType: `home_interest_${mode}_selection` }}>Получить подборку бесплатно</RequestModalButton>
+      <h3>{copy.title}</h3><p>{copy.subtitle}</p>
+      <RequestModalButton type="button" request={{ title: copy.requestTitle, subtitle: copy.requestSubtitle, source: `home-interest:${mode}:selection-card`, formType: `home_interest_${mode}_selection` }}>{copy.action}</RequestModalButton>
     </Card>
   );
 }

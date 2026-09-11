@@ -1,4 +1,4 @@
-import type { RequestAvatarDto } from "@starter/site-contracts";
+import type { RequestAvatar } from "../contracts/request";
 import { CheckCircle2, Loader2, ShieldCheck, UserRoundCheck, X } from "lucide-react";
 import type { ChangeEvent, FormEvent, ReactNode, RefObject } from "react";
 import type { SiteImageRenderer } from "../lib/adapters";
@@ -8,7 +8,7 @@ import { Dialog, DialogContent } from "../components/ui/dialog";
 import { Input } from "../components/ui/input";
 
 type ExpertRequestModalViewProps = {
-  avatars: readonly RequestAvatarDto[];
+  avatars: readonly RequestAvatar[];
   imageRenderer: SiteImageRenderer;
   phone: string;
   consent: boolean;
@@ -60,7 +60,7 @@ export function ExpertRequestModalView({
         showClose={false}
         overlayClassName="z-[80] bg-[var(--overlay-soft)] backdrop-blur-[1px]"
         aria-labelledby="expert-request-title"
-        className="z-[81] w-[min(calc(100vw-16px),452px)] max-w-[452px] gap-0 overflow-hidden rounded-lg border-0 bg-white p-0 shadow-[var(--shadow-dialog)]"
+        className="z-[81] w-[min(calc(100vw-16px),452px)] max-w-113 gap-0 overflow-hidden rounded-lg border-0 bg-white p-0 shadow-[var(--shadow-dialog)]"
       >
         <Button
           variant="ghost"
@@ -75,11 +75,11 @@ export function ExpertRequestModalView({
 
         <div className="bg-[linear-gradient(180deg,var(--accent-soft)_0%,var(--surface-card-soft)_66%,var(--surface)_100%)] px-6 pb-6 pt-14">
           <div className="mb-12 flex justify-center">
-            <div className="relative flex h-[116px] w-[256px] items-center justify-center">
+            <div className="relative flex h-29 w-64 items-center justify-center">
               {avatars.map((avatar, index) => (
                 <div
                   key={avatar.src}
-                  className="absolute size-[116px] overflow-hidden rounded-full border-[3px] border-white shadow-[var(--expert-request-modal-shadow-01)]"
+                  className="absolute size-[116px] overflow-hidden rounded-full border-[3px] border-white shadow-[var(--expert-request-modal-shadow-primary)]"
                   style={{ left: `${index * 70}px`, zIndex: index === 1 ? 3 : 2 }}
                 >
                   <ImageRenderer src={avatar.src} alt="" fill unoptimized sizes="116px" className="object-cover object-[center_18%]" />
@@ -88,7 +88,7 @@ export function ExpertRequestModalView({
             </div>
           </div>
 
-          <h2 id="expert-request-title" className="text-center text-[25px] font-extrabold leading-[1.14] text-[var(--text-primary)]">
+          <h2 id="expert-request-title" className="text-center text-section-base font-extrabold leading-[1.14] text-[var(--text-primary)]">
             Доверьте покупку эксперту агентства недвижимости
           </h2>
         </div>
@@ -109,7 +109,7 @@ export function ExpertRequestModalView({
             aria-hidden="true"
           />
 
-          <div className="grid gap-[18px]">
+          <div className="grid gap-4.5">
             {BULLETS.map(({ icon: Icon, text }) => (
               <div key={text} className="grid grid-cols-[30px_minmax(0,1fr)] items-start gap-3 text-sm leading-5 text-[var(--text-secondary)]">
                 <span className="grid size-[30px] place-items-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent)]">
@@ -127,7 +127,7 @@ export function ExpertRequestModalView({
             <div className="relative">
               <span className="pointer-events-none absolute left-4 top-1/2 flex -translate-y-1/2 items-center gap-1 text-sm font-semibold text-[var(--text-primary)]">
                 <span aria-hidden>🇷🇺</span>
-                <span className="text-[10px] text-[var(--text-muted)]" aria-hidden>
+                <span className="text-overline text-[var(--text-muted)]" aria-hidden>
                   ▼
                 </span>
               </span>
@@ -143,13 +143,13 @@ export function ExpertRequestModalView({
                 inputMode="tel"
                 placeholder="+7 (9__) ___-__-__"
                 aria-invalid={Boolean(errors.phone)}
-                className="min-h-12 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] px-4 pl-[70px] text-base font-semibold tabular-nums text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:bg-white"
+                className="min-h-12 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] px-4 pl-17.5 text-base font-semibold tabular-nums text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:bg-white"
               />
             </div>
             {errors.phone ? <span className="text-xs font-semibold text-[var(--error)]">{errors.phone}</span> : null}
           </div>
 
-          <label className="flex items-start gap-2 text-[11px] leading-4 text-[var(--text-secondary)]">
+          <label className="flex items-start gap-2 text-caption leading-4 text-[var(--text-secondary)]">
             <Checkbox
               checked={consent}
               onCheckedChange={(checked) => onConsentChange(checked === true)}
@@ -160,7 +160,7 @@ export function ExpertRequestModalView({
           {errors.consent ? <span className="text-xs font-semibold text-[var(--error)]">{errors.consent}</span> : null}
 
           {resultMessage ? (
-            <div className="rounded-lg border border-[var(--expert-request-modal-border-01)] bg-[var(--expert-request-modal-surface-01)] px-3 py-2 text-sm font-semibold text-[var(--error)]">
+            <div className="rounded-lg border border-[var(--expert-request-modal-border-primary)] bg-[var(--expert-request-modal-surface-primary)] px-3 py-2 text-sm font-semibold text-[var(--error)]">
               {resultMessage}
             </div>
           ) : null}
@@ -168,7 +168,7 @@ export function ExpertRequestModalView({
           <Button variant="plain"
             type="submit"
             disabled={isPending}
-            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--text-primary)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--expert-request-modal-surface-02)] disabled:cursor-wait disabled:opacity-70"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--text-primary)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--expert-request-modal-surface-secondary)] disabled:cursor-wait disabled:opacity-70"
           >
             {isPending ? <Loader2 className="animate-spin" aria-hidden /> : null}
             {isPending ? "Отправляем" : "Позвоните мне"}

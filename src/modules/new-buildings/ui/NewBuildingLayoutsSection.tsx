@@ -13,6 +13,7 @@ export function NewBuildingLayoutsSection({ complex, contained = false }: { comp
       cityPrepositional={siteProfile.city.prepositional}
       expert={{ ...siteProfile.expert, ratingLabel: null }}
       imageRenderer={Image}
+      headingLead="Бесплатный подбор"
       requestAction={
         <RequestCta
           label="Получить подборку"

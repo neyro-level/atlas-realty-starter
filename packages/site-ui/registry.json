@@ -157,7 +157,8 @@
       "files": [
         { "path": "src/components/shared/site-overlay-context.tsx", "type": "registry:block" },
         { "path": "src/views/RequestModalView.tsx", "type": "registry:block" },
-        { "path": "src/views/ExpertRequestModalView.tsx", "type": "registry:block" },
+          { "path": "src/views/ExpertRequestModalView.tsx", "type": "registry:block" },
+          { "path": "src/contracts/request.ts", "type": "registry:lib" },
         { "path": "src/styles/request-modal.css", "type": "registry:style" }
       ]
     },

@@ -15,7 +15,7 @@ export function LeadSuccessNoticeView({ onClose, closeButtonRef }: LeadSuccessNo
         showClose={false}
         overlayClassName="z-[120] bg-[var(--overlay-soft)] backdrop-blur-[2px]"
         aria-labelledby="lead-success-title"
-        className="z-[121] w-[min(calc(100vw-32px),430px)] max-w-[430px] overflow-hidden rounded-xl border border-white/80 bg-white px-7 pb-7 pt-10 text-center shadow-[var(--shadow-dialog)] sm:px-9 sm:pb-9"
+        className="z-[121] w-[min(calc(100vw-32px),430px)] max-w-107.5 overflow-hidden rounded-xl border border-white/80 bg-white px-7 pb-7 pt-10 text-center shadow-[var(--shadow-dialog)] sm:px-9 sm:pb-9"
       >
         <Button
           variant="ghost"
@@ -23,7 +23,7 @@ export function LeadSuccessNoticeView({ onClose, closeButtonRef }: LeadSuccessNo
           type="button"
           onClick={onClose}
           aria-label="Закрыть уведомление"
-          className="absolute right-4 top-4 grid place-items-center rounded-lg text-[var(--lead-success-notice-content-01)] transition hover:bg-[var(--lead-success-notice-surface-01)] hover:text-[var(--text-primary)]"
+          className="absolute right-4 top-4 grid place-items-center rounded-lg text-[var(--lead-success-notice-content-primary)] transition hover:bg-[var(--lead-success-notice-surface-primary)] hover:text-[var(--text-primary)]"
         >
           <X className="" aria-hidden />
         </Button>
@@ -33,7 +33,7 @@ export function LeadSuccessNoticeView({ onClose, closeButtonRef }: LeadSuccessNo
         <h2 id="lead-success-title" className="mt-5 text-2xl font-semibold leading-tight text-[var(--text-primary)]">
           Спасибо за обращение
         </h2>
-        <p className="mx-auto mt-3 max-w-[320px] text-sm leading-6 text-[var(--lead-success-notice-content-02)]">
+        <p className="mx-auto mt-3 max-w-80 text-sm leading-6 text-[var(--lead-success-notice-content-secondary)]">
           Ваша заявка зафиксирована. Мы свяжемся с вами в ближайшее время.
         </p>
         <Button

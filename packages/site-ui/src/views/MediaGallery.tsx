@@ -68,7 +68,7 @@ export function MediaGallery({
   }
 
   const controlClass = variant === "light-controls"
-    ? "bg-white text-[var(--text-primary)] shadow-[var(--media-gallery-shadow-01)] hover:bg-[var(--home-articles-chip)]"
+    ? "bg-white text-[var(--text-primary)] shadow-[var(--media-gallery-shadow-primary)] hover:bg-[var(--home-articles-chip)]"
     : "border border-white/70 bg-[var(--surface-dark)]/76 text-white hover:bg-[var(--surface-dark)]";
 
   return (

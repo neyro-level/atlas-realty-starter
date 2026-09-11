@@ -1,12 +1,12 @@
 {
-  "componentNumberedTokens": 195,
-  "arbitraryTypography": 1758,
-  "arbitraryLayout": 728,
-  "unstyled": 61,
+  "componentNumberedTokens": 0,
+  "arbitraryTypography": 0,
+  "arbitraryLayout": 0,
+  "unstyled": 0,
   "inputCheckbox": 0,
-  "spaceUtilities": 37,
+  "spaceUtilities": 0,
   "manualButtonIconSize": 0,
-  "registryWorkspaceImports": 2,
-  "sharedProjectAssets": 3,
-  "sharedBusinessClaims": 18
+  "registryWorkspaceImports": 0,
+  "sharedProjectAssets": 0,
+  "sharedBusinessClaims": 0
 }

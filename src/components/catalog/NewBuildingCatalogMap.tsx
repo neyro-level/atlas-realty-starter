@@ -121,7 +121,7 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
                 key={complex.slug}
                 type="button"
                 onClick={() => selectComplex(complex)}
-                className={`min-w-[254px] rounded-xl border bg-white px-3.5 py-3 text-left shadow-[var(--new-building-map-shadow-card)] transition duration-200 lg:min-w-0 ${
+                className={`min-w-63.5 rounded-xl border bg-white px-3.5 py-3 text-left shadow-[var(--new-building-map-shadow-card)] transition duration-200 lg:min-w-0 ${
                   selected ? "border-[var(--accent)] shadow-[var(--new-building-map-shadow-selected)]" : "border-[var(--border)] hover:-translate-y-0.5 hover:border-[var(--new-building-map-border-hover)] hover:shadow-[var(--new-building-map-shadow-hover)]"
                 }`}
               >

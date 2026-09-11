@@ -30,6 +30,10 @@ export function HomeLatestFlats({ flatListings, countryListings }: { flatListing
       modeHrefs={MODE_HREFS}
       chips={INTEREST_CHIPS}
       linkRenderer={HomeLink}
+      selectionCopy={{
+        flat: { title: <>Эксперт поможет <br />в подборе</>, subtitle: "Подберёт лучшие варианты под ваш запрос и бюджет. Быстро и без лишних просмотров.", requestTitle: "Получить подборку объектов", requestSubtitle: "Оставьте контакты. Специалист агентства недвижимости уточнит задачу и подберет лучшие варианты под ваш запрос и бюджет.", action: "Получить подборку бесплатно" },
+        country: { title: "Подберём загородный вариант", subtitle: "Сравнит дома и участки, отсеет слабые варианты и подберёт объекты под ваш бюджет.", requestTitle: "Получить подборку объектов", requestSubtitle: "Оставьте контакты. Специалист агентства недвижимости уточнит задачу и подберет лучшие варианты под ваш запрос и бюджет.", action: "Получить подборку бесплатно" },
+      }}
       scrollHint={<HomeCarouselScrollHintView trackId="home-interest-track" />}
     />
   );

@@ -27,7 +27,7 @@ export function PropertyPageActionsView({
   onOpenChat: () => void;
 }) {
   return (
-    <div className="space-y-4">
+    <div className="grid gap-4">
       <div className="rounded-lg border border-[var(--border)] bg-white p-4">
         <div className="flex items-center gap-3">
           <div className="relative size-14 overflow-hidden rounded-lg bg-[var(--surface-muted)]">

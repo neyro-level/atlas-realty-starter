@@ -157,7 +157,7 @@ export function PropertyCardView({
         </LinkRenderer>
 
         <div
-          className="relative z-20 h-[238px] touch-pan-y select-none overflow-hidden rounded-lg bg-[var(--surface-muted)] sm:h-[280px] md:h-[288px]"
+          className="relative z-20 h-59.5 touch-pan-y select-none overflow-hidden rounded-lg bg-[var(--surface-muted)] sm:h-70 md:h-72"
           onTouchStart={onGalleryTouchStart}
           onTouchEnd={onGalleryTouchEnd}
         >
@@ -209,7 +209,7 @@ export function PropertyCardView({
                   />
                 ))}
               </div>
-              <span className="absolute bottom-3 right-3 z-20 inline-flex min-h-7 items-center gap-1 rounded-full bg-[var(--surface-dark)]/72 px-2.5 text-[10px] font-bold tabular-nums text-white shadow-[var(--property-card-shadow-counter)] backdrop-blur-sm">
+              <span className="absolute bottom-3 right-3 z-20 inline-flex min-h-7 items-center gap-1 rounded-full bg-[var(--surface-dark)]/72 px-2.5 text-overline font-bold tabular-nums text-white shadow-[var(--property-card-shadow-counter)] backdrop-blur-sm">
                 <ImageIcon className="size-3.5" aria-hidden />
                 {activeImage + 1}/{images.length}
               </span>
@@ -217,16 +217,16 @@ export function PropertyCardView({
           ) : null}
         </div>
 
-        <div className="flex min-h-[238px] flex-col md:min-h-[288px]">
+        <div className="flex min-h-59.5 flex-col md:min-h-72">
           <div className="min-w-0">
             <h3 className="text-[1.15rem] font-extrabold leading-6 tracking-[-0.01em] text-[var(--text-primary)]">
               {listTitle}
             </h3>
-            <div className="mt-2 space-y-1.5 text-sm leading-5 tracking-[0.01em] text-[var(--text-muted)]">
+            <div className="mt-2 grid gap-1.5 text-sm leading-5 tracking-[0.01em] text-[var(--text-muted)]">
               {listing.district && listing.district !== cityName ? (
                 <p className="font-semibold text-[var(--accent)]">{listing.district}</p>
               ) : null}
-              <p className="flex min-w-0 items-center gap-1.5 text-[15.4px] leading-[22px] text-[var(--text-secondary)] lg:text-sm lg:leading-5">
+              <p className="flex min-w-0 items-center gap-1.5 text-body-dense leading-[22px] text-[var(--text-secondary)] lg:text-sm lg:leading-5">
                 <MapPin className="size-3.5 shrink-0 text-[var(--accent)]" aria-hidden />
                 <AddressLine visiblePrefix={addressParts.visiblePrefix} hiddenHousePart={addressParts.hiddenHousePart} />
               </p>
@@ -246,7 +246,7 @@ export function PropertyCardView({
                 onClick={stop}
                 data-analytics-context="catalog_property_card"
                 data-analytics-item={listing.slug}
-                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold tabular-nums text-white transition hover:bg-[var(--property-card-surface-action-hover)] lg:text-sm sm:min-w-[190px]"
+                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-body-dense font-semibold tabular-nums text-white transition hover:bg-[var(--property-card-surface-action-hover)] lg:text-sm sm:min-w-47.5"
               >
                 <Phone className="size-[17.6px] lg:size-4" aria-hidden />
                 {phone}
@@ -261,7 +261,7 @@ export function PropertyCardView({
                   stop(event);
                   setPhoneVisible(true);
                 }}
-                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold text-white transition hover:bg-[var(--property-card-surface-action-hover)] lg:text-sm sm:min-w-[190px]"
+                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-body-dense font-semibold text-white transition hover:bg-[var(--property-card-surface-action-hover)] lg:text-sm sm:min-w-47.5"
               >
                 <Phone className="" aria-hidden />
                 Показать телефон
@@ -270,7 +270,7 @@ export function PropertyCardView({
             <Button variant="plain"
               type="button"
               onClick={openPropertyChat}
-              className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] px-5 text-center text-[15.4px] font-semibold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)] lg:text-sm sm:min-w-[130px]"
+              className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] px-5 text-center text-body-dense font-semibold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)] lg:text-sm sm:min-w-32.5"
             >
               <MessageCircle className="" aria-hidden />
               Написать
@@ -278,7 +278,7 @@ export function PropertyCardView({
           </div>
         </div>
 
-        <div className={`flex min-h-[238px] flex-col justify-between gap-4 md:min-h-[288px] ${isNewBuildingCard || isXmlCatalogCard ? "md:pr-6" : ""}`}>
+        <div className={`flex min-h-59.5 flex-col justify-between gap-4 md:min-h-72 ${isNewBuildingCard || isXmlCatalogCard ? "md:pr-6" : ""}`}>
           <div className={isNewBuildingCard ? "flex flex-col items-end gap-4 pt-1" : "flex items-start justify-between gap-4 md:justify-end"}>
             <div data-catalog-price-row className="flex min-w-0 items-center gap-2 md:justify-end">
               <p className="text-[1.2rem] font-extrabold leading-none tabular-nums tracking-[-0.01em] text-[var(--text-primary)]">
@@ -327,7 +327,7 @@ export function PropertyCardView({
 
       <div className={isList ? "p-3 md:pr-0" : ""}>
         <div
-          className={`relative z-20 touch-pan-y select-none overflow-hidden rounded-lg bg-[var(--surface-muted)] ${isList ? "aspect-[16/10] md:h-full md:min-h-[214px]" : "aspect-[3/2] shadow-[var(--property-card-shadow-media-rest)] transition duration-300 group-hover:shadow-[var(--property-card-shadow-media-hover)]"}`}
+          className={`relative z-20 touch-pan-y select-none overflow-hidden rounded-lg bg-[var(--surface-muted)] ${isList ? "aspect-[16/10] md:h-full md:min-h-53.5" : "aspect-[3/2] shadow-[var(--property-card-shadow-media-rest)] transition duration-300 group-hover:shadow-[var(--property-card-shadow-media-hover)]"}`}
           onTouchStart={onGalleryTouchStart}
           onTouchEnd={onGalleryTouchEnd}
         >
@@ -386,7 +386,7 @@ export function PropertyCardView({
               <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/35 via-black/10 to-transparent px-2.5 pb-2.5 pt-10 lg:hidden" />
 
               <div
-                className="pointer-events-none absolute bottom-2.5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-[3px]"
+                className="pointer-events-none absolute bottom-2.5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-0.75"
                 aria-hidden
                 data-gallery-bars
               >
@@ -400,7 +400,7 @@ export function PropertyCardView({
                 ))}
               </div>
 
-              <span className="absolute bottom-2.5 right-2.5 z-20 inline-flex min-h-6 items-center gap-1 rounded-md bg-[var(--surface-dark)]/66 px-2 text-[10px] font-bold tabular-nums text-white shadow-[var(--property-card-shadow-badge)] backdrop-blur-sm">
+              <span className="absolute bottom-2.5 right-2.5 z-20 inline-flex min-h-6 items-center gap-1 rounded-md bg-[var(--surface-dark)]/66 px-2 text-overline font-bold tabular-nums text-white shadow-[var(--property-card-shadow-badge)] backdrop-blur-sm">
                 <ImageIcon className="size-3" aria-hidden />
                 {activeImage + 1}/{images.length}
               </span>
@@ -415,8 +415,8 @@ export function PropertyCardView({
             <p className="min-w-0 text-[1.19rem] font-extrabold leading-none tabular-nums tracking-[-0.01em] text-[var(--text-primary)] md:text-[1.32rem] lg:text-[1.28rem]">{priceLabel}</p>
             {showExclusiveBadge ? <ExclusiveBadge /> : null}
           </div>
-          <div className="relative z-20 row-span-3 flex w-10 shrink-0 flex-col items-center gap-[7px] self-start justify-start lg:hidden" onClick={stop}>
-            <div className="flex w-10 flex-col items-center gap-[7px]">
+          <div className="relative z-20 row-span-3 flex w-10 shrink-0 flex-col items-center gap-1.75 self-start justify-start lg:hidden" onClick={stop}>
+            <div className="flex w-10 flex-col items-center gap-1.75">
               <a
                 href={phoneHref}
                 aria-label={`Позвонить: ${phone}`}
@@ -455,7 +455,7 @@ export function PropertyCardView({
           <h3 className="line-clamp-2 rounded-md text-[0.9rem] font-extrabold leading-[1.2] tracking-[-0.01em] text-[var(--text-primary)] transition-colors group-active:text-[var(--accent)] md:text-[0.99rem] md:leading-[1.32rem] lg:mt-2 lg:text-[0.98rem] lg:leading-5 lg:group-hover:text-[var(--accent)]">
           {title}
           </h3>
-          <div className="text-[10.45px] leading-[1.16rem] tracking-[0.01em] text-[var(--text-muted)] md:text-[11px] md:leading-[1.19rem] lg:mt-2 lg:text-xs lg:leading-5">
+          <div className="text-[10.45px] leading-[1.16rem] tracking-[0.01em] text-[var(--text-muted)] md:text-caption md:leading-[1.19rem] lg:mt-2 lg:text-xs lg:leading-5">
           <p className="flex min-w-0 items-center gap-1 font-semibold text-[var(--text-secondary)] md:gap-1.5">
             <MapPin className="size-3 shrink-0 text-[var(--accent)] md:size-3.5" aria-hidden />
             <AddressLine visiblePrefix={addressParts.visiblePrefix} hiddenHousePart={addressParts.hiddenHousePart} compact />
@@ -465,7 +465,7 @@ export function PropertyCardView({
         {isList && listing.description ? (
           <p className="mt-3 line-clamp-3 text-sm leading-6 tracking-[0.01em] text-[var(--text-secondary)]">{listing.description}</p>
         ) : null}
-        {isList ? <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--text-muted)]">{listing.category} · база агентства недвижимости</p> : null}
+        {isList ? <p className="mt-3 text-caption font-bold uppercase tracking-[0.08em] text-[var(--text-muted)]">{listing.category} · база агентства недвижимости</p> : null}
       </div>
 
       {isList ? (
@@ -517,7 +517,7 @@ function CatalogBadgeStack({ imageBadge, className }: { imageBadge?: string; cla
   return (
     <div data-catalog-badge-stack className={`absolute z-10 flex flex-col items-start gap-1.5 ${className}`}>
       {imageBadge ? (
-        <span data-sales-leader-badge className="inline-flex min-h-6 items-center rounded-md bg-[var(--accent)] px-2.5 text-[10px] font-bold leading-none text-white shadow-[var(--property-card-shadow-sales-badge)]">
+        <span data-sales-leader-badge className="inline-flex min-h-6 items-center rounded-md bg-[var(--accent)] px-2.5 text-overline font-bold leading-none text-white shadow-[var(--property-card-shadow-sales-badge)]">
           {imageBadge}
         </span>
       ) : null}
@@ -530,7 +530,7 @@ function ExclusiveBadge() {
     <span
       data-exclusive-badge
       data-exclusive-placement="price"
-      className="inline-flex min-h-6 shrink-0 items-center rounded-md bg-[var(--accent)] px-2 text-[9px] font-bold leading-none text-white shadow-[var(--property-card-shadow-sales-badge)] sm:text-[10px]"
+      className="inline-flex min-h-6 shrink-0 items-center rounded-md bg-[var(--accent)] px-2 text-micro font-bold leading-none text-white shadow-[var(--property-card-shadow-sales-badge)] sm:text-overline"
     >
       Эксклюзив
     </span>

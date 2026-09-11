@@ -40,7 +40,7 @@ export function NewBuildingGalleryView({
   const hasCoordinates = latitude !== null && longitude !== null;
 
   return (
-    <div className="grid h-[392px] grid-rows-[minmax(0,1fr)_44px] gap-2 md:h-[510px] lg:h-[640px]">
+    <div className="grid h-98 grid-rows-[minmax(0,1fr)_44px] gap-2 md:h-127.5 lg:h-160">
       <div className="relative min-h-0 overflow-hidden rounded-lg bg-[var(--surface-muted)]">
         {activeTab === "photos" ? (
           <MediaGallery

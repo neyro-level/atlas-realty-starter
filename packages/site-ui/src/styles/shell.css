@@ -2,7 +2,7 @@
   border: 1px solid var(--color-site-border);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  box-shadow: 0 28px 80px var(--shell-effect-01);
+  box-shadow: 0 28px 80px var(--shell-effect-primary);
 }
 
 .site-ui-phone-link {

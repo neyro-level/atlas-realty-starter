@@ -28,10 +28,10 @@ export function SalePricingPrinciplesView() {
       aria-labelledby="sale-pricing-principles-title"
     >
       <div className="mx-auto max-w-site-frame px-5">
-        <div className="max-w-[900px]">
+        <div className="max-w-225">
           <h2
             id="sale-pricing-principles-title"
-            className="text-[24px] font-semibold leading-[1.24] tracking-[-0.03em] text-[var(--text-primary)] text-balance sm:text-[clamp(24px,1.8vw,30px)] sm:leading-[1.2]"
+            className="text-section-small font-semibold leading-[1.24] tracking-[-0.03em] text-[var(--text-primary)] text-balance sm:text-[length:var(--site-type-section)] sm:leading-[1.2]"
           >
             Называем реальную цену, чтобы продать выгодно и без долгого ожидания
           </h2>
@@ -41,7 +41,7 @@ export function SalePricingPrinciplesView() {
           {PRICING_PRINCIPLES.map(({ title, description, icon: Icon }) => (
             <article
               key={title}
-              className="group flex min-h-[184px] flex-col rounded-2xl bg-[var(--sale-pricing-principles-surface-primary)] p-5 transition duration-300 ease-out hover:-translate-y-0.5 hover:bg-[var(--accent-soft)] hover:shadow-[var(--sale-pricing-principles-shadow-primary)] sm:p-6"
+              className="group flex min-h-46 flex-col rounded-2xl bg-[var(--sale-pricing-principles-surface-primary)] p-5 transition duration-300 ease-out hover:-translate-y-0.5 hover:bg-[var(--accent-soft)] hover:shadow-[var(--sale-pricing-principles-shadow-primary)] sm:p-6"
             >
               <span
                 className="flex size-10 items-center justify-center rounded-xl bg-white text-[var(--text-secondary)] transition duration-300 group-hover:text-[var(--accent)]"
@@ -49,10 +49,10 @@ export function SalePricingPrinciplesView() {
               >
                 <Icon className="size-[18px]" strokeWidth={1.6} />
               </span>
-              <h3 className="mt-5 text-[16px] font-semibold leading-snug text-[var(--text-primary)]">
+              <h3 className="mt-5 text-body-large font-semibold leading-snug text-[var(--text-primary)]">
                 {title}
               </h3>
-              <p className="mt-2 max-w-[38ch] text-[13px] leading-5 text-[var(--text-muted)]">{description}</p>
+              <p className="mt-2 max-w-[var(--container-copy-measure)] text-support leading-5 text-[var(--text-muted)]">{description}</p>
             </article>
           ))}
         </div>

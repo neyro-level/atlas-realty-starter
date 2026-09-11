@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
-test.beforeEach(async ({ context }) => {
+test.beforeEach(async ({ context, page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
   await context.addInitScript(() => {
     window.localStorage.setItem('agency.cookie.notice.dismissed', '1')
   })
@@ -41,6 +42,8 @@ for (const [name, route] of routes) {
   test(`${name} keeps the approved layout`, async ({ page }) => {
     await page.goto(route, { waitUntil: 'domcontentloaded' })
     await settlePage(page)
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true)
+    await expect.poll(() => page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches)).toBe(true)
     await expect(page).toHaveScreenshot(`${name}.png`, {
       animations: 'disabled',
       fullPage: true,
@@ -59,6 +62,8 @@ test('request modal keeps validation and success-ready layout', async ({ page })
   await dialog.locator('button[type="submit"]').click()
   await expect(dialog.getByText('Введите имя')).toBeVisible()
   await expect(page).toHaveScreenshot('request-modal-validation.png', { animations: 'disabled', mask: [page.locator('[data-visual-dynamic]')], maskColor: '#e7e5e4', maxDiffPixelRatio: 0.002 })
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('button', { name: 'Подобрать проверенный объект' })).toBeFocused()
 })
 
 test('media gallery keeps the approved empty and tab layout', async ({ page }) => {
@@ -82,6 +87,7 @@ test('mobile menu and filters preserve focus-safe overlays', async ({ page }, te
   await expect(page.locator('#site-mobile-menu')).toBeVisible()
   await expect(page).toHaveScreenshot('mobile-menu.png', { animations: 'disabled', mask: [page.locator('[data-visual-dynamic]')], maskColor: '#e7e5e4', maxDiffPixelRatio: 0.002 })
   await page.keyboard.press('Escape')
+  await expect(page.getByRole('button', { name: 'Открыть меню' })).toBeFocused()
 })
 
 test('catalog map has a stable interactive or fallback state', async ({ page }) => {

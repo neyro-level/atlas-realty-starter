@@ -1,4 +1,4 @@
-import type { RequestAvatarDto } from "@starter/site-contracts";
+import type { RequestAvatar } from "../contracts/request";
 import { Check, X } from "lucide-react";
 import type { FormEvent, ReactNode, RefObject } from "react";
 import type { SiteImageRenderer } from "../lib/adapters";
@@ -8,7 +8,7 @@ import { Checkbox } from "../components/ui/checkbox";
 import { Input } from "../components/ui/input";
 
 type RequestModalViewProps = {
-  avatars: readonly RequestAvatarDto[];
+  avatars: readonly RequestAvatar[];
   imageRenderer: SiteImageRenderer;
   title: string;
   titleLines: readonly string[] | null;

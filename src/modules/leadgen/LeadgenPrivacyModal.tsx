@@ -16,7 +16,7 @@ type LeadgenPrivacyModalProps = {
 
 export function LeadgenPrivacyModal({
   label = "Политика конфиденциальности",
-  className = "text-[11px] font-medium leading-4 text-white/55 underline-offset-4 transition hover:text-white hover:underline",
+  className = "text-caption font-medium leading-4 text-white/55 underline-offset-4 transition hover:text-white hover:underline",
   suppressLabelClick = false,
 }: LeadgenPrivacyModalProps) {
   const [isOpen, setIsOpen] = useState(false);

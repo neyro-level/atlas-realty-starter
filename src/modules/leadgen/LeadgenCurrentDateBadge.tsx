@@ -30,13 +30,13 @@ export function LeadgenCurrentDateBadge({ className = "mt-6" }: LeadgenCurrentDa
   }, []);
 
   return (
-    <div className={`${className} inline-flex items-center gap-2 rounded-[6px] border border-[var(--leadgen-current-date-badge-border-primary)] bg-[var(--leadgen-current-date-badge-surface-primary)] px-3 py-2 shadow-[var(--leadgen-current-date-badge-shadow-primary)]`}>
-      <span className="grid size-6 shrink-0 place-items-center rounded-[4px] bg-white text-[var(--accent)] shadow-[var(--leadgen-current-date-badge-shadow-secondary)]">
+    <div className={`${className} inline-flex items-center gap-2 rounded-compact border border-[var(--leadgen-current-date-badge-border-primary)] bg-[var(--leadgen-current-date-badge-surface-primary)] px-3 py-2 shadow-[var(--leadgen-current-date-badge-shadow-primary)]`}>
+      <span className="grid size-6 shrink-0 place-items-center rounded-micro bg-white text-[var(--accent)] shadow-[var(--leadgen-current-date-badge-shadow-secondary)]">
         <CalendarDays className="size-3.5" aria-hidden />
       </span>
       <span className="grid gap-0.5">
         <span className="text-[8.5px] font-semibold uppercase leading-none tracking-[0.08em] text-[var(--text-muted)]">Актуально на дату</span>
-        <time dateTime={currentDate.split(".").reverse().join("-")} className="text-[12px] font-semibold leading-none tabular-nums text-[var(--accent)]">
+        <time dateTime={currentDate.split(".").reverse().join("-")} className="text-label font-semibold leading-none tabular-nums text-[var(--accent)]">
           {currentDate}
         </time>
       </span>

@@ -26,7 +26,7 @@ export function Breadcrumbs({ items, className = "", tone = "light" }: Breadcrum
       link: "shrink-0 whitespace-nowrap font-medium leading-5 transition hover:text-[var(--accent)]",
       current: "min-w-0 truncate font-semibold leading-5 text-[var(--text-primary)]",
       parent: "shrink-0 whitespace-nowrap font-medium leading-5 text-[var(--text-muted)]",
-      separator: "size-3.5 shrink-0 self-center text-[var(--breadcrumbs-content-01)]",
+      separator: "size-3.5 shrink-0 self-center text-[var(--breadcrumbs-content-primary)]",
     },
     dark: {
       nav: "text-white/58",

@@ -28,7 +28,7 @@ export function AccordionTrigger({ className, children, trailing, ...props }: Co
 
 export function AccordionContent({ className, children, ...props }: ComponentProps<typeof AccordionPrimitive.Content>) {
   return (
-    <AccordionPrimitive.Content data-slot="accordion-content" className="overflow-hidden text-sm text-[var(--accordion-content-01)]" {...props}>
+    <AccordionPrimitive.Content data-slot="accordion-content" className="overflow-hidden text-sm text-[var(--accordion-content-primary)]" {...props}>
       <div className={cn("pb-4 pt-0 leading-6", className)}>{children}</div>
     </AccordionPrimitive.Content>
   );

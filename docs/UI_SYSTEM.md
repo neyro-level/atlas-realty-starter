@@ -12,7 +12,7 @@ The root and package `components.json` files keep the same ShadCN style, React S
 
 `packages/site-ui/src/theme.css` is the only global token source. Manrope is the sole primary font. Brand, surfaces, text, borders, focus, status colors, radius, shadows, spacing and motion use semantic CSS variables. Application components must not add raw HEX values or import Radix directly; `pnpm ui:check` enforces both boundaries.
 
-The canonical token groups are `surface`, `content`, `border`, `action`, `status`, `typography`, `spacing`, `radius`, `shadow`, `container` and `motion`. The initial Constitution 3.1 inventory contained exactly 752 declarations: 67 semantic foundation tokens, 30 project/theme tokens, 579 used numbered component tokens and 76 compatibility or dead candidates. Candidates are removed only after static use reaches zero; the new-buildings domain is the first domain with zero numbered tokens. `pnpm ui:tokens` rejects unresolved variables, missing foundation groups, unused numbered aliases and regressions in the migrated domain.
+The canonical token groups are `surface`, `content`, `border`, `action`, `status`, `typography`, `spacing`, `radius`, `shadow`, `container` and `motion`. The initial Constitution 3.1 inventory contained exactly 752 declarations: 67 semantic foundation tokens, 30 project/theme tokens, 579 used numbered component tokens and 76 compatibility or dead candidates. The completed migration contains 851 declared semantic/project/component-role tokens, zero numbered tokens, zero compatibility aliases and zero unresolved references. `pnpm ui:tokens` enforces that contract for every migrated domain.
 
 ## Shared components
 
@@ -38,7 +38,7 @@ The `/novostroyki` mobile showcase uses one large complex card with the edge of 
 
 - `pnpm test:visual` compares the key routes at 390, 768, 1280 and 1440 px.
 - `pnpm ui:check` rejects raw colors outside the theme, palette tokens, arbitrary shadows, native controls outside primitives, legacy modal event bridges, direct Radix imports outside primitives, oversized page compositions, identity/registry drift, duplicate static images and static images above 512 KiB. All migrated UI debt ceilings are zero.
-- UI debt that predates Constitution 3.1 is recorded in `scripts/quality/ui-debt-baseline.json`. The guard rejects every increase; each migration epic lowers the committed ceiling together with the code until the baseline reaches zero. Covered debt includes numbered component tokens, repeated arbitrary typography/layout, unstyled controls, checkbox misuse, `space-x/y`, manual Button icon sizing, Registry workspace imports, project assets and hardcoded business claims inside shared UI.
+- The Constitution 3.1 baseline in `scripts/quality/ui-debt-baseline.json` is zero in every covered category. The guard rejects numbered component tokens, repeated arbitrary typography/layout, unstyled controls, checkbox misuse, `space-x/y`, manual Button icon sizing, Registry workspace imports, project assets and hardcoded business claims inside shared UI.
 - `pnpm images:optimize` converts only oversized PNG files to high-quality WebP, updates tracked references and removes proven duplicates.
 - Logos, UI graphics, social previews and small fallbacks may stay in Git. Property and ЖК photography belongs to Payload Media and persistent local/S3 storage.
 

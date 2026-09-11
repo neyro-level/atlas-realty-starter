@@ -46,7 +46,7 @@ export function NewBuildingMobileCarouselView({ items, imageRenderer: Image, lin
                 </div>
                 <CardHeader className="p-5 pb-0">
                   <p className="text-[1.42rem] font-extrabold leading-none tabular-nums">{formatPrice(item.priceFrom)}</p>
-                  <CardTitle className="mt-3 text-[1.35rem] font-extrabold leading-[1.18]">{item.title}</CardTitle>
+                  <CardTitle className="mt-3 text-heading-compact font-extrabold leading-[1.18]">{item.title}</CardTitle>
                   <p className="mt-2 flex items-start gap-1.5 text-sm font-medium leading-5 text-[var(--text-secondary)]"><MapPin className="mt-0.5 size-4 shrink-0 text-[var(--accent)]" aria-hidden />{item.address}</p>
                 </CardHeader>
                 <CardContent className="p-5">
@@ -59,13 +59,13 @@ export function NewBuildingMobileCarouselView({ items, imageRenderer: Image, lin
           ))}
         </CarouselContent>
       </Carousel>
-      <div className="mt-5 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4"><p className="min-w-[58px] text-sm font-semibold tabular-nums" aria-live="polite">{selectedIndex + 1} из {snapCount}</p><div className="h-1 overflow-hidden rounded-full bg-[var(--surface-muted)]" aria-hidden><div className="h-full rounded-full bg-[var(--accent)] transition-[width] duration-300" style={{ width: `${progress}%` }} /></div><div className="flex gap-2"><Button type="button" variant="outline" size="icon" onClick={() => api?.scrollPrev()} disabled={!api?.canScrollPrev()} aria-label="Предыдущий жилой комплекс"><ArrowRight className="rotate-180" aria-hidden /></Button><Button type="button" variant="outline" size="icon" onClick={() => api?.scrollNext()} disabled={!api?.canScrollNext()} aria-label="Следующий жилой комплекс"><ArrowRight aria-hidden /></Button></div></div>
+      <div className="mt-5 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4"><p className="min-w-14.5 text-sm font-semibold tabular-nums" aria-live="polite">{selectedIndex + 1} из {snapCount}</p><div className="h-1 overflow-hidden rounded-full bg-[var(--surface-muted)]" aria-hidden><div className="h-full rounded-full bg-[var(--accent)] transition-[width] duration-300" style={{ width: `${progress}%` }} /></div><div className="flex gap-2"><Button type="button" variant="outline" size="icon" onClick={() => api?.scrollPrev()} disabled={!api?.canScrollPrev()} aria-label="Предыдущий жилой комплекс"><ArrowRight className="rotate-180" aria-hidden /></Button><Button type="button" variant="outline" size="icon" onClick={() => api?.scrollNext()} disabled={!api?.canScrollNext()} aria-label="Следующий жилой комплекс"><ArrowRight aria-hidden /></Button></div></div>
     </section>
   );
 }
 
 function Fact({ label, value }: { label: string; value: string }) {
-  return <div className="min-w-0"><dt className="text-[10px] font-semibold uppercase text-[var(--text-muted)]">{label}</dt><dd className="mt-1.5 text-sm font-medium leading-5 text-[var(--text-secondary)]">{value}</dd></div>;
+  return <div className="min-w-0"><dt className="text-overline font-semibold uppercase text-[var(--text-muted)]">{label}</dt><dd className="mt-1.5 text-sm font-medium leading-5 text-[var(--text-secondary)]">{value}</dd></div>;
 }
 
 function formatPrice(value: number | null) {

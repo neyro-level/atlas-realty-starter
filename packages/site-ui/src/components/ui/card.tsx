@@ -20,7 +20,7 @@ export function CardTitle({ className, ...props }: HTMLAttributes<HTMLHeadingEle
 }
 
 export function CardDescription({ className, ...props }: HTMLAttributes<HTMLParagraphElement>) {
-  return <p data-slot="card-description" className={cn("text-sm leading-6 text-[var(--text-secondary,var(--card-color-01))]", className)} {...props} />;
+  return <p data-slot="card-description" className={cn("text-sm leading-6 text-[var(--text-secondary,var(--card-visual-primary))]", className)} {...props} />;
 }
 
 export function CardAction({ className, ...props }: HTMLAttributes<HTMLDivElement>) {

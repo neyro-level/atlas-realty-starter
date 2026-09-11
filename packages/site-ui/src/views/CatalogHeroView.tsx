@@ -54,31 +54,31 @@ export function CatalogHeroView({
   const descriptionVisibleAlways = descriptionVisibility === "always";
   const actionVisibleAlways = actionVisibility === "always";
   const titleClassName = isNewBuildingHero
-    ? "text-[34px] font-extrabold leading-[1.04] text-white sm:text-[38px] md:text-[42px] lg:text-[46px]"
+    ? "text-display-small font-extrabold leading-[1.04] text-white sm:text-display-medium md:text-display-large lg:text-display-extra-large"
     : titleSize === "standard"
-    ? "text-[34px] font-extrabold leading-[1.08] text-white md:text-[42px] lg:text-[46px]"
+    ? "text-display-small font-extrabold leading-[1.08] text-white md:text-display-large lg:text-display-extra-large"
     : isLongTitle
-    ? `text-[28px] font-extrabold leading-[1.08] text-white sm:text-[32px] md:max-w-[980px] md:text-[40px] lg:text-[44px]${
+    ? `text-section-prominent font-extrabold leading-[1.08] text-white sm:text-heading-extra-large md:max-w-245 md:text-[40px] lg:text-[44px]${
         collapseTitleLinesOnDesktop ? " lg:max-w-none lg:whitespace-nowrap" : ""
       }`
-    : "text-[34px] font-extrabold leading-[1.08] text-white lg:whitespace-nowrap md:text-[42px] lg:text-[46px]";
-  const contentClassName = hasControlledLines ? "max-w-[980px]" : "max-w-[780px]";
-  const descriptionMaxWidth = hasControlledLines ? "max-w-[980px]" : "max-w-[760px]";
+    : "text-display-small font-extrabold leading-[1.08] text-white lg:whitespace-nowrap md:text-display-large lg:text-display-extra-large";
+  const contentClassName = hasControlledLines ? "max-w-245" : "max-w-195";
+  const descriptionMaxWidth = hasControlledLines ? "max-w-245" : "max-w-190";
   const descriptionClassName = isNewBuildingHero
-    ? "mt-4 w-fit max-w-[620px] rounded-lg border border-white/20 bg-black/30 px-4 py-3 text-[0.95rem] font-medium leading-6 text-white/92 shadow-[var(--catalog-hero-shadow-panel)] backdrop-blur-md [text-wrap:pretty] sm:text-[1rem] sm:leading-7 md:mt-5 md:px-5 md:py-4 md:text-[1.08rem] lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none"
+    ? "mt-4 w-fit max-w-155 rounded-lg border border-white/20 bg-black/30 px-4 py-3 text-body-compact font-medium leading-6 text-white/92 shadow-[var(--catalog-hero-shadow-panel)] backdrop-blur-md [text-wrap:pretty] sm:text-base sm:leading-7 md:mt-5 md:px-5 md:py-4 md:text-body-emphasis lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none"
     : descriptionVisibleAlways
-    ? `mt-3 ${descriptionMaxWidth} text-[0.95rem] font-medium leading-6 text-white/84 [text-wrap:pretty] sm:mt-4 sm:text-[1rem] sm:leading-7 md:mt-5 md:text-[1.08rem]`
-    : `mt-5 hidden ${descriptionMaxWidth} text-[1rem] font-medium leading-7 text-white/84 [text-wrap:pretty] lg:block md:text-[1.08rem]`;
-  const desktopHeightClassName = expandedDesktop ? "lg:min-h-[460px]" : "lg:min-h-[390px]";
+    ? `mt-3 ${descriptionMaxWidth} text-body-compact font-medium leading-6 text-white/84 [text-wrap:pretty] sm:mt-4 sm:text-base sm:leading-7 md:mt-5 md:text-body-emphasis`
+    : `mt-5 hidden ${descriptionMaxWidth} text-base font-medium leading-7 text-white/84 [text-wrap:pretty] lg:block md:text-body-emphasis`;
+  const desktopHeightClassName = expandedDesktop ? "lg:min-h-115" : "lg:min-h-97.5";
   const shellClassName = isNewBuildingHero
-    ? `relative z-10 flex min-h-[340px] flex-col justify-end p-5 pb-6 sm:min-h-[360px] sm:p-6 sm:pb-7 md:min-h-[280px] md:p-8 md:pb-9 ${desktopHeightClassName} lg:p-12`
+    ? `relative z-10 flex min-h-85 flex-col justify-end p-5 pb-6 sm:min-h-90 sm:p-6 sm:pb-7 md:min-h-70 md:p-8 md:pb-9 ${desktopHeightClassName} lg:p-12`
     : elevateContent
-    ? `relative z-10 flex min-h-[220px] flex-col justify-end p-5 pb-6 sm:min-h-[240px] sm:pb-7 md:min-h-[260px] md:p-8 md:pb-10 ${desktopHeightClassName} lg:p-12 lg:pb-16`
-    : `relative z-10 flex min-h-[220px] flex-col justify-end p-5 sm:min-h-[240px] md:min-h-[260px] md:p-8 ${desktopHeightClassName} lg:p-12`;
+    ? `relative z-10 flex min-h-55 flex-col justify-end p-5 pb-6 sm:min-h-60 sm:pb-7 md:min-h-65 md:p-8 md:pb-10 ${desktopHeightClassName} lg:p-12 lg:pb-16`
+    : `relative z-10 flex min-h-55 flex-col justify-end p-5 sm:min-h-60 md:min-h-65 md:p-8 ${desktopHeightClassName} lg:p-12`;
   const titleLineClassName = collapseTitleLinesOnDesktop ? "block lg:inline" : "block lg:whitespace-nowrap";
 
   return (
-    <div className={`relative overflow-hidden rounded-lg bg-[var(--surface-dark)] text-white shadow-[var(--catalog-hero-shadow-panel)] ${isNewBuildingHero ? `min-h-[340px] sm:min-h-[360px] md:min-h-[280px] ${desktopHeightClassName}` : `min-h-[220px] sm:min-h-[240px] md:min-h-[260px] ${desktopHeightClassName}`}`}>
+    <div className={`relative overflow-hidden rounded-lg bg-[var(--surface-dark)] text-white shadow-[var(--catalog-hero-shadow-panel)] ${isNewBuildingHero ? `min-h-85 sm:min-h-90 md:min-h-70 ${desktopHeightClassName}` : `min-h-55 sm:min-h-60 md:min-h-65 ${desktopHeightClassName}`}`}>
       <ImageRenderer
         src={imageSrc}
         alt=""

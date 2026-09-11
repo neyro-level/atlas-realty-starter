@@ -128,7 +128,7 @@ export function AgencyInlineLeadForm({
       <label className="sr-only" htmlFor={`${formType}-website`}>
         Не заполняйте это поле
       </label>
-      <Input unstyled
+      <Input variant="plain"
         id={`${formType}-website`}
         name="website"
         type="text"
@@ -150,14 +150,14 @@ export function AgencyInlineLeadForm({
         <label className="sr-only" htmlFor={`${formType}-name`}>
           Ваше Имя
         </label>
-        <Input unstyled
+        <Input variant="plain"
           id={`${formType}-name`}
           name="name"
           type="text"
           required={requireName}
           autoComplete="name"
           placeholder={requireName ? "Имя" : "Ваше Имя"}
-          className="min-h-[58px] rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-white px-5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
+          className="min-h-14.5 rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-white px-5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
         />
 
         <label className="sr-only" htmlFor={`${formType}-phone`}>
@@ -170,7 +170,7 @@ export function AgencyInlineLeadForm({
               ▼
             </span>
           </span>
-          <Input unstyled
+          <Input variant="plain"
             id={`${formType}-phone`}
             name="phone"
             type="tel"
@@ -182,21 +182,21 @@ export function AgencyInlineLeadForm({
             onFocus={onPhoneFocus}
             aria-invalid={Boolean(errorMessage)}
             aria-describedby={errorMessage ? errorId : undefined}
-            className="min-h-[58px] w-full rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-white px-5 pl-[78px] text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
+            className="min-h-14.5 w-full rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-white px-5 pl-19.5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
           />
         </div>
 
         <Button variant="plain"
           type="submit"
           disabled={isPending}
-          className="min-h-[58px] rounded-lg bg-[var(--accent)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70 xl:whitespace-nowrap"
+          className="min-h-14.5 rounded-lg bg-[var(--accent)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70 xl:whitespace-nowrap"
         >
           {submitLabel}
         </Button>
       </div>
 
       <label
-        className={`mx-auto mt-5 flex max-w-[620px] items-start gap-3 text-xs leading-5 text-[var(--agency-inline-lead-form-content-tertiary)] ${
+        className={`mx-auto mt-5 flex max-w-155 items-start gap-3 text-xs leading-5 text-[var(--agency-inline-lead-form-content-tertiary)] ${
           centerConsent ? "justify-center text-center" : ""
         }`}
       >

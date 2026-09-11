@@ -31,7 +31,7 @@ export function FieldTitle({ className, ...props }: HTMLAttributes<HTMLParagraph
 }
 
 export function FieldDescription({ className, ...props }: HTMLAttributes<HTMLParagraphElement>) {
-  return <p data-slot="field-description" className={cn("text-xs leading-5 text-[var(--field-content-01)]", className)} {...props} />;
+  return <p data-slot="field-description" className={cn("text-xs leading-5 text-[var(--field-content-primary)]", className)} {...props} />;
 }
 
 export function FieldSeparator({ className, ...props }: HTMLAttributes<HTMLDivElement>) {

@@ -5,18 +5,18 @@ export type CareersComparisonContent = { title: string; description: string; mar
 export function CareersComparisonView({ content: careersComparison }: { content: CareersComparisonContent }) {
   return (
     <section
-      className="bg-[var(--careers-comparison-surface-primary)] py-12 sm:py-16 lg:py-[88px]"
+      className="bg-[var(--careers-comparison-surface-primary)] py-12 sm:py-16 lg:py-22"
       aria-labelledby="careers-comparison-title"
     >
       <div className="mx-auto max-w-site-frame px-5">
         <div className="w-full">
           <h2
             id="careers-comparison-title"
-            className="text-[26px] font-semibold leading-[1.12] text-[var(--text-primary)] sm:text-[clamp(28px,2.2vw,36px)] lg:whitespace-nowrap"
+            className="text-section-large font-semibold leading-[1.12] text-[var(--text-primary)] sm:text-section-expanded lg:whitespace-nowrap"
           >
             {careersComparison.title}
           </h2>
-          <p className="mt-4 text-[15px] leading-7 text-[var(--careers-comparison-content-primary)] sm:text-[16px]">
+          <p className="mt-4 text-body-compact leading-7 text-[var(--careers-comparison-content-primary)] sm:text-body-large">
             {careersComparison.description}
           </p>
         </div>
@@ -29,7 +29,7 @@ export function CareersComparisonView({ content: careersComparison }: { content:
           />
 
           <div className="flex min-h-12 items-center justify-center" aria-hidden>
-            <span className="hidden size-12 items-center justify-center rounded-full border border-[var(--careers-comparison-border-primary)] bg-white text-[12px] font-semibold uppercase text-[var(--text-muted)] lg:flex">
+            <span className="hidden size-12 items-center justify-center rounded-full border border-[var(--careers-comparison-border-primary)] bg-white text-label font-semibold uppercase text-[var(--text-muted)] lg:flex">
               vs
             </span>
             <span className="flex size-10 items-center justify-center rounded-full bg-white text-[var(--accent)] shadow-[var(--careers-comparison-shadow-primary)] lg:hidden">
@@ -44,8 +44,8 @@ export function CareersComparisonView({ content: careersComparison }: { content:
           />
         </div>
 
-        <div className="mx-auto mt-10 max-w-[980px] border-t border-[var(--careers-comparison-border-secondary)] pt-8 text-center sm:mt-12 sm:pt-10">
-          <p className="text-[20px] font-semibold leading-8 text-[var(--text-primary)] sm:text-[clamp(21px,1.7vw,26px)] sm:leading-[1.4]">
+        <div className="mx-auto mt-10 max-w-245 border-t border-[var(--careers-comparison-border-secondary)] pt-8 text-center sm:mt-12 sm:pt-10">
+          <p className="text-heading-small font-semibold leading-8 text-[var(--text-primary)] sm:text-[clamp(21px,1.7vw,26px)] sm:leading-[1.4]">
             {careersComparison.conclusion}
           </p>
         </div>
@@ -73,14 +73,14 @@ function ComparisonPanel({
           : "border border-[var(--border)] bg-white text-[var(--text-primary)]"
       }`}
     >
-      <h3 className={`text-[20px] font-semibold leading-7 ${isBrand ? "text-white" : "text-[var(--text-secondary)]"}`}>
+      <h3 className={`text-heading-small font-semibold leading-7 ${isBrand ? "text-white" : "text-[var(--text-secondary)]"}`}>
         {label}
       </h3>
       <ul className="mt-6 grid gap-4">
         {items.map((item) => (
           <li
             key={item}
-            className={`grid grid-cols-[22px_minmax(0,1fr)] items-start gap-3 text-[15px] leading-6 ${
+            className={`grid grid-cols-[22px_minmax(0,1fr)] items-start gap-3 text-body-compact leading-6 ${
               isBrand ? "text-white/82" : "text-[var(--careers-comparison-content-primary)]"
             }`}
           >

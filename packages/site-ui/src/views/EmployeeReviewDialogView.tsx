@@ -61,7 +61,7 @@ export function EmployeeReviewDialogView({
           </div>
         ) : (
           <form onSubmit={onSubmit} data-analytics-form-type="employee_review" className="mt-7 grid gap-4">
-            <Input unstyled name="website" tabIndex={-1} autoComplete="off" className="hidden" />
+            <Input variant="plain" name="website" tabIndex={-1} autoComplete="off" className="hidden" />
             <div>
               <span className="text-sm font-medium text-[var(--text-primary)]">Ваша оценка</span>
               <div className="mt-2 flex gap-1" aria-label={`Оценка ${rating} из 5`}>
@@ -75,7 +75,7 @@ export function EmployeeReviewDialogView({
             <Field label="Ваше имя" name="authorName" autoComplete="name" error={result?.fieldErrors?.authorName} />
             <label className="grid gap-2 text-sm font-medium text-[var(--text-primary)]">
               Телефон для проверки отзыва
-              <Input unstyled
+              <Input variant="plain"
                 name="authorPhone"
                 type="tel"
                 autoComplete="tel"
@@ -87,14 +87,14 @@ export function EmployeeReviewDialogView({
                 className="min-h-12 rounded-lg border border-[var(--employee-review-dialog-border-secondary)] px-4 text-base font-medium tabular-nums outline-none transition placeholder:text-[var(--employee-review-dialog-content-tertiary)] focus:border-[var(--accent)]"
               />
               {result?.fieldErrors?.authorPhone ? <span className="text-xs text-[var(--accent)]">{result.fieldErrors.authorPhone}</span> : null}
-              <span className="flex items-center gap-2 text-[11px] font-normal leading-4 text-[var(--employee-review-dialog-content-subtle)]">
+              <span className="flex items-center gap-2 text-caption font-normal leading-4 text-[var(--employee-review-dialog-content-subtle)]">
                 <ShieldCheck className="size-4 shrink-0 text-[var(--accent)]" aria-hidden />
                 Невидимая защита от спама включена
               </span>
             </label>
             <label className="grid gap-2 text-sm font-medium text-[var(--text-primary)]">
               Отзыв
-              <Textarea unstyled name="text" rows={5} className="resize-none rounded-lg border border-[var(--employee-review-dialog-border-secondary)] px-4 py-3 text-base font-normal outline-none transition focus:border-[var(--accent)]" />
+              <Textarea variant="plain" name="text" rows={5} className="resize-none rounded-lg border border-[var(--employee-review-dialog-border-secondary)] px-4 py-3 text-base font-normal outline-none transition focus:border-[var(--accent)]" />
               {result?.fieldErrors?.text ? <span className="text-xs text-[var(--accent)]">{result.fieldErrors.text}</span> : null}
             </label>
             <label className="flex gap-3 text-xs leading-5 text-[var(--employee-review-dialog-content-muted)]">
@@ -118,7 +118,7 @@ function Field({ label, name, type = "text", autoComplete, error }: { label: str
   return (
     <label className="grid gap-2 text-sm font-medium text-[var(--text-primary)]">
       {label}
-      <Input unstyled name={name} type={type} autoComplete={autoComplete} className="min-h-12 rounded-lg border border-[var(--employee-review-dialog-border-secondary)] px-4 text-base font-normal outline-none transition focus:border-[var(--accent)]" />
+      <Input variant="plain" name={name} type={type} autoComplete={autoComplete} className="min-h-12 rounded-lg border border-[var(--employee-review-dialog-border-secondary)] px-4 text-base font-normal outline-none transition focus:border-[var(--accent)]" />
       {error ? <span className="text-xs text-[var(--accent)]">{error}</span> : null}
     </label>
   );

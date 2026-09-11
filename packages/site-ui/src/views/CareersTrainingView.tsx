@@ -6,19 +6,19 @@ export type CareersTrainingContent = { title: string; image: string; imageAlt: s
 export function CareersTrainingView({ content: careersTraining, imageRenderer: ImageRenderer }: { content: CareersTrainingContent; imageRenderer: SiteImageRenderer }) {
   return (
     <section
-      className="bg-white py-12 sm:py-16 lg:py-[88px]"
+      className="bg-white py-12 sm:py-16 lg:py-22"
       aria-labelledby="careers-training-title"
     >
       <div className="mx-auto max-w-site-frame px-5">
         <h2
           id="careers-training-title"
-          className="text-[26px] font-semibold leading-[1.12] text-[var(--text-primary)] sm:text-[clamp(28px,2.2vw,36px)]"
+          className="text-section-large font-semibold leading-[1.12] text-[var(--text-primary)] sm:text-section-expanded"
         >
           {careersTraining.title}
         </h2>
 
         <div className="mt-9 grid gap-6 lg:mt-12 lg:grid-cols-[minmax(360px,0.92fr)_minmax(0,1.08fr)] lg:items-stretch lg:gap-8">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[var(--careers-training-surface-primary)] lg:aspect-auto lg:min-h-[470px]">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-[var(--careers-training-surface-primary)] lg:aspect-auto lg:min-h-117.5">
             <ImageRenderer
               src={careersTraining.image}
               alt={careersTraining.imageAlt}
@@ -29,21 +29,21 @@ export function CareersTrainingView({ content: careersTraining, imageRenderer: I
           </div>
 
           <div className="flex flex-col rounded-2xl bg-[var(--careers-training-surface-secondary)] p-5 sm:p-7 lg:p-9">
-            <div className="space-y-1 text-[17px] leading-7 text-[var(--text-secondary)] sm:text-[18px]">
+            <div className="grid gap-1 text-body-emphasis leading-7 text-[var(--text-secondary)] sm:text-lead">
               {careersTraining.intro.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
 
             <div className="mt-8 border-t border-[var(--careers-training-border-primary)] pt-7">
-              <h3 className="text-[18px] font-semibold leading-7 text-[var(--text-primary)]">
+              <h3 className="text-lead font-semibold leading-7 text-[var(--text-primary)]">
                 {careersTraining.skillsTitle}
               </h3>
               <ul className="mt-5 grid gap-4">
                 {careersTraining.skills.map((skill) => (
                   <li
                     key={skill}
-                    className="grid grid-cols-[20px_minmax(0,1fr)] items-start gap-3 text-[15px] leading-6 text-[var(--text-secondary)]"
+                    className="grid grid-cols-[20px_minmax(0,1fr)] items-start gap-3 text-body-compact leading-6 text-[var(--text-secondary)]"
                   >
                     <span className="mt-0.5 flex size-5 items-center justify-center rounded-full bg-white text-[var(--accent)]">
                       <Check className="size-3.5" strokeWidth={2} aria-hidden />
@@ -59,7 +59,7 @@ export function CareersTrainingView({ content: careersTraining, imageRenderer: I
                 {careersTraining.support.map((line, index) => (
                   <p
                     key={line}
-                    className={`text-[14px] font-medium leading-6 ${index > 0 ? "mt-2 text-white/76" : ""}`}
+                    className={`text-body font-medium leading-6 ${index > 0 ? "mt-2 text-white/76" : ""}`}
                   >
                     {line}
                   </p>
@@ -70,26 +70,26 @@ export function CareersTrainingView({ content: careersTraining, imageRenderer: I
         </div>
 
         <div className="mt-10 border-t border-[var(--border)] pt-7 sm:mt-12 sm:pt-8">
-          <h3 className="text-[15px] font-medium leading-none text-[var(--text-secondary)]">
+          <h3 className="text-body-compact font-medium leading-none text-[var(--text-secondary)]">
             {careersTraining.stepsLabel}
           </h3>
           <ol className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {careersTraining.steps.map((step, index) => (
               <li
                 key={step.title}
-                className="flex min-h-[190px] flex-col rounded-xl bg-[var(--careers-training-surface-subtle)] p-5"
+                className="flex min-h-47.5 flex-col rounded-xl bg-[var(--careers-training-surface-subtle)] p-5"
               >
-                <span className="text-[12px] font-semibold tabular-nums text-[var(--accent)]">
+                <span className="text-label font-semibold tabular-nums text-[var(--accent)]">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <h4 className="mt-5 text-[16px] font-semibold leading-6 text-[var(--text-primary)]">
+                <h4 className="mt-5 text-body-large font-semibold leading-6 text-[var(--text-primary)]">
                   {step.title}
                 </h4>
-                <p className="mt-3 text-[14px] font-medium leading-6 text-[var(--text-secondary)]">
+                <p className="mt-3 text-body font-medium leading-6 text-[var(--text-secondary)]">
                   {step.lead}
                 </p>
                 {"description" in step ? (
-                  <p className="mt-2 text-[13px] leading-5 text-[var(--text-muted)]">
+                  <p className="mt-2 text-support leading-5 text-[var(--text-muted)]">
                     {step.description}
                   </p>
                 ) : null}

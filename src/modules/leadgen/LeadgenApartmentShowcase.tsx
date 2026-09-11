@@ -283,8 +283,8 @@ function LeadgenApartmentCard({ apartment, formPrefix }: { apartment: PromoApart
 
       <div className="leadgen-catalog-card__body">
         <div className="grid gap-3">
-          <p className="text-[18px] font-bold leading-tight tabular-nums text-[var(--text-primary)]">{apartment.price}</p>
-          <p className="text-[13px] font-semibold leading-tight text-[var(--text-secondary)]">{roomsLabel}</p>
+          <p className="text-lead font-bold leading-tight tabular-nums text-[var(--text-primary)]">{apartment.price}</p>
+          <p className="text-support font-semibold leading-tight text-[var(--text-secondary)]">{roomsLabel}</p>
         </div>
 
         <div className="grid gap-3">

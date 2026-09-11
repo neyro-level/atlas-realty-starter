@@ -14,7 +14,7 @@ export function LegalServicesPromoBanner({ placement }: Props) {
   const content = (
     <div className="group overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--legal-services-promo-banner-surface-primary)] shadow-[var(--legal-services-promo-banner-shadow-primary)] transition duration-300 hover:border-[var(--legal-services-promo-banner-border-primary)] hover:shadow-[var(--legal-services-promo-banner-shadow-secondary)]">
       <div className="grid md:grid-cols-[minmax(280px,0.88fr)_minmax(0,1.12fr)]">
-        <div className="relative min-h-[240px] overflow-hidden bg-[var(--legal-services-promo-banner-surface-secondary)] sm:min-h-[290px] md:min-h-[360px]">
+        <div className="relative min-h-60 overflow-hidden bg-[var(--legal-services-promo-banner-surface-secondary)] sm:min-h-72.5 md:min-h-90">
           <Image
             src={LEGAL_SERVICE_IMAGE}
             alt="Юрист агентства недвижимости проверяет документы по сделке с недвижимостью"
@@ -26,19 +26,19 @@ export function LegalServicesPromoBanner({ placement }: Props) {
         </div>
 
         <div className="flex flex-col justify-center px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
-          <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--accent)]">
+          <p className="text-caption font-bold uppercase tracking-[0.12em] text-[var(--accent)]">
             Юридический отдел агентства недвижимости
           </p>
           {isCatalog ? (
-            <h3 className="mt-4 max-w-[680px] text-[26px] font-extrabold leading-[1.08] tracking-[-0.025em] text-[var(--text-primary)] sm:text-[32px] lg:text-[38px]">
+            <h3 className="mt-4 max-w-170 text-section-large font-extrabold leading-[1.08] tracking-[-0.025em] text-[var(--text-primary)] sm:text-heading-extra-large lg:text-display-medium">
               Проверим документы до задатка и выхода на сделку
             </h3>
           ) : (
-            <h2 className="mt-4 max-w-[680px] text-[26px] font-extrabold leading-[1.08] tracking-[-0.025em] text-[var(--text-primary)] sm:text-[32px] lg:text-[38px]">
+            <h2 className="mt-4 max-w-170 text-section-large font-extrabold leading-[1.08] tracking-[-0.025em] text-[var(--text-primary)] sm:text-heading-extra-large lg:text-display-medium">
               Проверим документы до задатка и выхода на сделку
             </h2>
           )}
-          <p className="mt-4 max-w-[640px] text-[15px] leading-6 text-[var(--legal-services-promo-banner-content-primary)] sm:text-base sm:leading-7">
+          <p className="mt-4 max-w-160 text-body-compact leading-6 text-[var(--legal-services-promo-banner-content-primary)] sm:text-base sm:leading-7">
             Разберём документы старого образца, наследство, регистрацию права и ситуации, в которых вопрос приходится решать через суд.
           </p>
 

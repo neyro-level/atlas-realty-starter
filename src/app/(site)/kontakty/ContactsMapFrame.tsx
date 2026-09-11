@@ -26,7 +26,7 @@ export function ContactsMapFrame({ src, title }: ContactsMapFrameProps) {
   }, [active]);
 
   return (
-    <div className="relative h-[320px] w-full md:h-[420px] lg:h-full">
+    <div className="relative h-80 w-full md:h-105 lg:h-full">
       <iframe
         title={title}
         src={src}
@@ -42,7 +42,7 @@ export function ContactsMapFrame({ src, title }: ContactsMapFrameProps) {
           className="absolute inset-0 z-10 flex items-end justify-center bg-transparent pb-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-[var(--accent)] lg:hidden"
           onClick={() => setActive(true)}
         >
-          <span className="rounded-lg border border-[var(--border)] bg-white/92 px-3 py-2 text-[12px] font-semibold text-[var(--text-secondary)] shadow-[var(--contacts-map-frame-shadow-01)] backdrop-blur-sm">
+          <span className="rounded-lg border border-[var(--border)] bg-white/92 px-3 py-2 text-label font-semibold text-[var(--text-secondary)] shadow-[var(--contacts-map-frame-shadow-primary)] backdrop-blur-sm">
             Нажмите, чтобы открыть карту
           </span>
         </Button>

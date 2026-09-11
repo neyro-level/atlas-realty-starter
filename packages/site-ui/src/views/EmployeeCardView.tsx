@@ -39,7 +39,7 @@ export function EmployeeCardView({
         </div>
       </LinkRenderer>
       <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--accent)]">{position}</p>
+        <p className="text-caption font-semibold uppercase tracking-[0.1em] text-[var(--accent)]">{position}</p>
         <h3 className="mt-2 text-lg font-semibold leading-6 text-[var(--text-primary)]">{fullName}</h3>
         <p className="mt-3 text-sm leading-6 text-[var(--employee-card-content-primary)]">{summary}</p>
         <div className="mt-auto pt-5">

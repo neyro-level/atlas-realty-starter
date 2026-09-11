@@ -56,12 +56,12 @@ export function PropertyChatView({
         showClose={false}
         overlayClassName="z-[70] bg-[var(--overlay-default)] backdrop-blur-sm"
         aria-labelledby="property-chat-title"
-        className="z-[71] w-[min(calc(100vw-32px),520px)] max-w-[520px] rounded-lg bg-white px-5 pb-8 pt-5 shadow-[var(--shadow-dialog)] sm:px-6 sm:pb-10 sm:pt-6"
+        className="z-[71] w-[min(calc(100vw-32px),520px)] max-w-130 rounded-lg bg-white px-5 pb-8 pt-5 shadow-[var(--shadow-dialog)] sm:px-6 sm:pb-10 sm:pt-6"
       >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">Сообщение по объекту</p>
-            <h2 id="property-chat-title" className="mt-3 max-w-[400px] text-[20px] font-semibold leading-[1.28] text-[var(--text-primary)] sm:text-[22px]">
+            <p className="text-overline font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">Сообщение по объекту</p>
+            <h2 id="property-chat-title" className="mt-3 max-w-100 text-heading-small font-semibold leading-[1.28] text-[var(--text-primary)] sm:text-heading-compact">
               Напишите сообщение ответственному специалисту
             </h2>
           </div>
@@ -81,7 +81,7 @@ export function PropertyChatView({
           <label className="sr-only" htmlFor="property-chat-website">
             Сайт
           </label>
-          <Input unstyled
+          <Input variant="plain"
             id="property-chat-website"
             name="website"
             type="text"
@@ -94,40 +94,40 @@ export function PropertyChatView({
           />
 
           {lockMessage ? (
-            <div className="grid gap-2.5 text-[13px] font-semibold text-[var(--text-primary)]">
+            <div className="grid gap-2.5 text-support font-semibold text-[var(--text-primary)]">
               <span>Сообщение</span>
-              <div className="rounded-md border border-[var(--border)] bg-[var(--surface-card-soft)] px-3 py-3 text-[13px] font-normal leading-6 whitespace-pre-wrap text-[var(--text-primary)]">
+              <div className="rounded-md border border-[var(--border)] bg-[var(--surface-card-soft)] px-3 py-3 text-support font-normal leading-6 whitespace-pre-wrap text-[var(--text-primary)]">
                 {message}
               </div>
-              <p className="text-[11px] font-medium leading-5 text-[var(--text-muted)]">
+              <p className="text-caption font-medium leading-5 text-[var(--text-muted)]">
                 Сообщение уже подготовлено. Оставьте телефон, и специалист свяжется с вами по этому вопросу.
               </p>
             </div>
           ) : (
-            <label className="grid gap-2.5 text-[13px] font-semibold text-[var(--text-primary)]">
+            <label className="grid gap-2.5 text-support font-semibold text-[var(--text-primary)]">
               Сообщение
               <div className="relative">
-                <Textarea unstyled
+                <Textarea variant="plain"
                   ref={textareaRef}
                   autoFocus
                   value={message}
                   onChange={(event) => onMessageChange(event.target.value)}
                   rows={4}
-                  className="min-h-32 w-full rounded-md border border-[var(--border)] bg-white px-3 py-3 text-[13px] font-normal leading-6 outline-none transition focus:border-[var(--accent)]"
+                  className="min-h-32 w-full rounded-md border border-[var(--border)] bg-white px-3 py-3 text-support font-normal leading-6 outline-none transition focus:border-[var(--accent)]"
                   placeholder="Здравствуйте, есть вопросы по этому объекту."
                 />
               </div>
-              {showInlineHint ? <span className="text-[12px] font-normal leading-5 text-[var(--text-muted)]">Здесь можно написать свое сообщение.</span> : null}
+              {showInlineHint ? <span className="text-label font-normal leading-5 text-[var(--text-muted)]">Здесь можно написать свое сообщение.</span> : null}
               {errors.message ? <span className="text-xs text-[var(--error)]">{errors.message}</span> : null}
             </label>
           )}
 
-          <label className="grid gap-2.5 text-[13px] font-semibold text-[var(--text-primary)]">
+          <label className="grid gap-2.5 text-support font-semibold text-[var(--text-primary)]">
             Телефон для связи
-            <Input unstyled
+            <Input variant="plain"
               value={phone}
               onChange={(event) => onPhoneChange(event.target.value)}
-              className="min-h-11 rounded-md border border-[var(--border)] bg-white px-3 text-[13px] outline-none transition focus:border-[var(--accent)]"
+              className="min-h-11 rounded-md border border-[var(--border)] bg-white px-3 text-support outline-none transition focus:border-[var(--accent)]"
               type="tel"
               autoComplete="tel"
               inputMode="tel"
@@ -137,7 +137,7 @@ export function PropertyChatView({
             {errors.phone ? <span className="text-xs text-[var(--error)]">{errors.phone}</span> : null}
           </label>
 
-          <label className="mt-1 flex gap-3 text-[11px] leading-5 text-[var(--text-secondary)]">
+          <label className="mt-1 flex gap-3 text-caption leading-5 text-[var(--text-secondary)]">
             <Checkbox checked={consent} onCheckedChange={(checked) => onConsentChange(checked === true)} className="mt-1 size-4 shrink-0" />
             <span>{consentContent}</span>
           </label>
