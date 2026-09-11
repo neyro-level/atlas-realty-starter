@@ -27,7 +27,7 @@ export function EmployeeContactDetails({ phone, email, employeeSlug }: { phone: 
                 {formattedPhone}
               </a>
             ) : (
-              <Button unstyled
+              <Button variant="plain"
                 type="button"
                 data-analytics-event="phone_reveal"
                 data-analytics-context="employee_profile"

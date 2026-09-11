@@ -36,7 +36,7 @@ export function LeadgenRequestButton({
   onOpen,
 }: LeadgenRequestButtonProps) {
   return (
-    <Button unstyled
+    <Button variant="plain"
       type="button"
       className={className}
       onClick={() => {

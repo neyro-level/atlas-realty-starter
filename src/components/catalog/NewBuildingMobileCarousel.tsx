@@ -15,7 +15,7 @@ export function NewBuildingMobileCarousel({ complexes }: { complexes: readonly N
     const item = toSessionListingItem(listing, complex.name, newBuildingHref(complex));
     return [
       `new-building:${complex.slug}`,
-      <SessionCollectionButton key={complex.slug} kind="favorites" item={item} className="flex size-11 items-center justify-center rounded-lg border border-white/70 shadow-[var(--property-card-shadow-01)] backdrop-blur-sm transition" inactiveClassName="bg-white/94 text-[var(--text-primary)] hover:text-[var(--accent)]" activeClassName="bg-[var(--accent-soft)] text-[var(--accent)]" />,
+      <SessionCollectionButton key={complex.slug} kind="favorites" item={item} className="flex size-11 items-center justify-center rounded-lg border border-white/70 shadow-[var(--property-card-shadow-raised)] backdrop-blur-sm transition" inactiveClassName="bg-white/94 text-[var(--text-primary)] hover:text-[var(--accent)]" activeClassName="bg-[var(--accent-soft)] text-[var(--accent)]" />,
     ];
   }));
 

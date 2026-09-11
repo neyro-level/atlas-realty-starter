@@ -43,6 +43,9 @@ export type SiteProfile = SiteIdentity & {
     favicon: string;
     socialPreview: string;
   };
+  media: {
+    catalogMortgageService: string;
+  };
   seo: {
     title: string;
     description: string;
@@ -827,7 +830,7 @@ export type LeadgenPromoNewBuildingExampleDto = { id:string; name:string; distri
 export type LeadgenPromoConstructionExampleDto = { id:string; material:string; area:string; buildTime:string; priceFrom:string; image:string; imageAlt:string };
 export type LeadgenQuizStepDto = { key:string; label:string; question:string; options:readonly string[] };
 export type LeadgenPromoContentDto = {
-  formPrefix:string; route:string; title:string; description:string; heroBackgroundImage?:string;
+  formPrefix:string; route:string; title:string; description:string; heroBackgroundImage:string;
   hideAfterRequest?:boolean; hideBaseSection?:boolean; hideBonusSection?:boolean; hideStandardExamples?:boolean; hideFinalCta?:boolean;
   hero:{eyebrow:string;h1:string;h1Accent?:string;subtitle?:string;cta:string;microtext:string;modalTitle:string;modalSubtitle:string;badge?:string};
   afterRequestTitle:string;

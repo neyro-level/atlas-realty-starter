@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process'
+import path from 'node:path'
 
 import dotenv from 'dotenv'
 import pg from 'pg'
@@ -6,6 +7,13 @@ import pg from 'pg'
 const hasInjectedIntegrationEnvironment = Boolean(process.env.DATABASE_URL)
 dotenv.config({ path: '.env' })
 dotenv.config({ override: !hasInjectedIntegrationEnvironment, path: '.env.local' })
+if (!process.env.DATABASE_URL) {
+  const commonDir = spawnSync('git', ['rev-parse', '--path-format=absolute', '--git-common-dir'], {
+    encoding: 'utf8',
+    windowsHide: true,
+  }).stdout.trim()
+  if (commonDir) dotenv.config({ path: path.join(path.dirname(commonDir), '.env.local') })
+}
 
 const appDatabaseURL = process.env.DATABASE_URL
 if (!appDatabaseURL) throw new Error('Native integration tests require DATABASE_URL')
@@ -374,6 +382,11 @@ if (process.argv.includes('--roles-check')) {
   process.exit(0)
 }
 
+const requestedSpec = process.argv.find((value) => value.startsWith('--spec='))?.slice('--spec='.length)
+if (requestedSpec && !/^tests\/int\/[a-z0-9._/-]+\.int\.spec\.ts$/i.test(requestedSpec)) {
+  throw new Error('Unsafe integration spec path')
+}
+const integrationCommand = requestedSpec ? `pnpm test:int:raw ${requestedSpec}` : 'pnpm test:int:raw'
 const command =
   process.argv.includes('--migrate') || process.argv.includes('--production-migrate')
     ? 'pnpm payload migrate'
@@ -381,5 +394,5 @@ const command =
       ? 'pnpm payload migrate && pnpm test:e2e:production:raw'
       : process.argv.includes('--e2e')
         ? 'pnpm payload migrate && pnpm test:e2e:raw'
-        : 'pnpm payload migrate && pnpm test:int:raw'
+        : `pnpm payload migrate && ${integrationCommand}`
 run(command)

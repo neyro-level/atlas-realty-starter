@@ -18,7 +18,7 @@ const STEPS = [
 ] as const;
 
 export function NewBuildingCatalogConversion() {
-  return <><NewBuildingCatalogWhyAgencyView brand={siteProfile.brand} benefits={BENEFITS} expertName={siteProfile.expert.name} expertRole={siteProfile.expert.role} portrait={siteProfile.expert.portrait} imageRenderer={CatalogImage} /><NewBuildingPurchaseProcessView steps={STEPS} /></>;
+  return <><NewBuildingCatalogWhyAgencyView brand={siteProfile.brand} benefits={BENEFITS} expertName={siteProfile.expert.name} expertRole={siteProfile.expert.role} portrait={siteProfile.expert.portrait} imageRenderer={CatalogImage} badgeLabel="Подбор и ипотечная консультация бесплатны" /><NewBuildingPurchaseProcessView steps={STEPS} /></>;
 }
 
 function CatalogImage({ alt, ...props }: SiteImageRendererProps) {

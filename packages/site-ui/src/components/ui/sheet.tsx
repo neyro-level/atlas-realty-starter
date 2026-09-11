@@ -12,18 +12,18 @@ export const SheetClose = DialogPrimitive.Close;
 export const SheetPortal = DialogPrimitive.Portal;
 
 export function SheetOverlay({ className, ...props }: ComponentProps<typeof DialogPrimitive.Overlay>) {
-  return <DialogPrimitive.Overlay data-slot="sheet-overlay" className={cn("fixed inset-0 z-50 bg-[var(--sheet-effect-01)] backdrop-blur-[2px]", className)} {...props} />;
+  return <DialogPrimitive.Overlay data-slot="sheet-overlay" className={cn("fixed inset-0 z-50 bg-[var(--sheet-effect-primary)] backdrop-blur-[2px]", className)} {...props} />;
 }
 
 const sheetVariants = cva(
-  "fixed z-50 grid gap-4 bg-white p-6 shadow-[var(--sheet-shadow-01)] transition ease-in-out sm:p-8",
+  "fixed z-50 grid gap-4 bg-white p-6 shadow-[var(--sheet-shadow-primary)] transition ease-in-out sm:p-8",
   {
     variants: {
       side: {
         top: "inset-x-0 top-0 border-b border-[var(--border)]",
         bottom: "inset-x-0 bottom-0 border-t border-[var(--border)]",
-        left: "inset-y-0 left-0 h-full w-[min(92vw,420px)] border-r border-[var(--border)]",
-        right: "inset-y-0 right-0 h-full w-[min(92vw,420px)] border-l border-[var(--border)]",
+        left: "inset-y-0 left-0 h-full w-[var(--container-overlay)] border-r border-[var(--border)]",
+        right: "inset-y-0 right-0 h-full w-[var(--container-overlay)] border-l border-[var(--border)]",
       },
     },
     defaultVariants: {
@@ -40,7 +40,7 @@ export function SheetContent({ side = "right", className, children, showClose = 
         {children}
         {showClose ? (
           <DialogPrimitive.Close
-            className="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-lg bg-[var(--sheet-surface-01)] text-[var(--text-secondary)] transition hover:bg-[var(--sheet-surface-02)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+            className="absolute right-4 top-4 inline-flex size-10 items-center justify-center rounded-lg bg-[var(--sheet-surface-primary)] text-[var(--text-secondary)] transition hover:bg-[var(--sheet-surface-secondary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
             aria-label="Закрыть"
           >
             <X className="size-5" aria-hidden />
@@ -64,5 +64,5 @@ export function SheetTitle({ className, ...props }: ComponentProps<typeof Dialog
 }
 
 export function SheetDescription({ className, ...props }: ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description data-slot="sheet-description" className={cn("text-sm leading-6 text-[var(--sheet-content-01)]", className)} {...props} />;
+  return <DialogPrimitive.Description data-slot="sheet-description" className={cn("text-sm leading-6 text-[var(--sheet-content-primary)]", className)} {...props} />;
 }

@@ -1,4 +1,4 @@
-import type { RequestAvatarDto } from "@starter/site-contracts";
+import type { RequestAvatar } from "../contracts/request";
 import { Check, X } from "lucide-react";
 import type { FormEvent, ReactNode, RefObject } from "react";
 import type { SiteImageRenderer } from "../lib/adapters";
@@ -8,7 +8,7 @@ import { Checkbox } from "../components/ui/checkbox";
 import { Input } from "../components/ui/input";
 
 type RequestModalViewProps = {
-  avatars: readonly RequestAvatarDto[];
+  avatars: readonly RequestAvatar[];
   imageRenderer: SiteImageRenderer;
   title: string;
   titleLines: readonly string[] | null;
@@ -70,7 +70,7 @@ export function RequestModalView({
     <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
       <DialogContent placement="bottom-mobile" showClose={false} overlayClassName="request-modal__overlay" className="request-modal__panel" aria-labelledby="request-modal-title" ref={panelRef}>
         <Button variant="ghost" size="icon" className="request-modal__close" type="button" aria-label="Закрыть форму" onClick={onClose}>
-          <X className="size-5" aria-hidden />
+          <X className="" aria-hidden />
         </Button>
 
         {successMessage ? (
@@ -78,7 +78,7 @@ export function RequestModalView({
             <span className="request-modal__success-icon"><Check className="size-8" aria-hidden /></span>
             <h2 className="request-modal__title" id="request-modal-title">Заявка отправлена</h2>
             <p className="request-modal__subtitle">{successMessage}</p>
-            <Button unstyled className="home-btn-primary request-modal__submit" type="button" onClick={onClose}>Хорошо</Button>
+            <Button variant="plain" className="home-btn-primary request-modal__submit" type="button" onClick={onClose}>Хорошо</Button>
           </div>
         ) : <>
         <div className="request-modal__header">
@@ -111,14 +111,14 @@ export function RequestModalView({
         <form className="request-modal__form" onSubmit={onSubmit} data-analytics-form-type={formType} noValidate>
           <label className="request-modal__honeypot">
             Сайт
-            <Input unstyled tabIndex={-1} autoComplete="off" value={website} onChange={(event) => onWebsiteChange(event.target.value)} />
+            <Input tabIndex={-1} autoComplete="off" value={website} onChange={(event) => onWebsiteChange(event.target.value)} />
           </label>
 
           <div className="request-modal__field">
             <label className="request-modal__label" htmlFor="request-modal-name">
               Ваше имя
             </label>
-            <Input unstyled
+            <Input
               id="request-modal-name"
               className="request-modal__input"
               autoComplete="name"
@@ -136,7 +136,7 @@ export function RequestModalView({
             <label className="request-modal__label" htmlFor="request-modal-phone">
               Номер телефона
             </label>
-            <Input unstyled
+            <Input
               id="request-modal-phone"
               ref={phoneRef}
               className="request-modal__input"
@@ -166,7 +166,7 @@ export function RequestModalView({
 
           {resultMessage ? <p className="request-modal__submit-error" role="alert">{resultMessage}</p> : null}
 
-          <Button unstyled className="home-btn-primary request-modal__submit" type="submit" disabled={isPending}>
+          <Button variant="plain" className="home-btn-primary request-modal__submit" type="submit" disabled={isPending}>
             {isPending ? "Отправляем..." : submitLabel}
           </Button>
           <p className="request-modal__note">Без спама. Только чтобы связаться по вашей задаче.</p>

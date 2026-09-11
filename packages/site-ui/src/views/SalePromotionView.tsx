@@ -24,31 +24,31 @@ function getPromotionChannels(cityGenitive: string, cityPrepositional: string) {
 export function SalePromotionView({ cityGenitive, cityPrepositional }: { cityGenitive: string; cityPrepositional: string }) {
   const promotionChannels = getPromotionChannels(cityGenitive, cityPrepositional);
   return (
-    <section className="bg-[var(--sale-promotion-surface-01)] py-14 sm:py-16 lg:py-[88px]" aria-labelledby="sale-promotion-title">
+    <section className="bg-[var(--sale-promotion-surface-primary)] py-14 sm:py-16 lg:py-22" aria-labelledby="sale-promotion-title">
       <div className="mx-auto max-w-site-frame px-5">
-        <div className="max-w-[900px]">
+        <div className="max-w-225">
           <h2
             id="sale-promotion-title"
-            className="text-[24px] font-semibold leading-[1.24] tracking-[-0.03em] text-[var(--text-primary)] text-balance sm:text-[clamp(24px,1.8vw,30px)] sm:leading-[1.2]"
+            className="text-section-small font-semibold leading-[1.24] tracking-[-0.03em] text-[var(--text-primary)] text-balance sm:text-[length:var(--site-type-section)] sm:leading-[1.2]"
           >
             Ищем покупателя сами, а не ждём звонков
           </h2>
-          <p className="mt-4 max-w-[760px] text-[15px] leading-6 text-[var(--text-muted)] sm:text-[16px] sm:leading-7">
+          <p className="mt-4 max-w-190 text-body-compact leading-6 text-[var(--text-muted)] sm:text-body-large sm:leading-7">
             Размещаем объект на 5 площадках, продвигаем в соцсетях и показываем партнёрам-риелторам. Случайные звонки отсеиваем.
           </p>
         </div>
 
         <div className="mt-8 grid gap-4 sm:mt-9 md:grid-cols-3 lg:gap-5">
           {promotionChannels.map(({ title, description, icon }) => (
-            <article key={title} className="flex min-h-[220px] flex-col rounded-2xl bg-white p-5 sm:p-6">
+            <article key={title} className="flex min-h-55 flex-col rounded-2xl bg-white p-5 sm:p-6">
               <span
                 className="flex size-11 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-[var(--accent)]"
                 aria-hidden="true"
               >
                 {icon}
               </span>
-              <h3 className="mt-5 text-[16px] font-semibold leading-snug text-[var(--text-primary)]">{title}</h3>
-              <p className="mt-2 max-w-[38ch] text-[13px] leading-5 text-[var(--text-muted)]">{description}</p>
+              <h3 className="mt-5 text-body-large font-semibold leading-snug text-[var(--text-primary)]">{title}</h3>
+              <p className="mt-2 max-w-[var(--container-copy-measure)] text-support leading-5 text-[var(--text-muted)]">{description}</p>
             </article>
           ))}
         </div>

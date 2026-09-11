@@ -4,7 +4,7 @@ import { MortgageConsultationView } from "@ams/realty-ui";
 const FORM_TYPE = "mortgage_consultation";
 
 export function MortgageConsultationSection() {
-  return <MortgageConsultationView form={<AgencyInlineLeadForm
+  return <MortgageConsultationView title={<><span className="block">Получите бесплатную консультацию по ипотеке</span><span className="block">и узнайте свой ипотечный потенциал</span></>} subtitle="Заполните эту форму, и мы перезвоним вам." form={<AgencyInlineLeadForm
               sourcePage="/ipoteka"
               source="mortgage:consultation"
               formType={FORM_TYPE}

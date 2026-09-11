@@ -26,7 +26,7 @@ export function LawyerServicesGallery() {
   }, [isPaused]);
 
   return (
-    <div className="relative overflow-hidden rounded-xl bg-[var(--lawyer-services-gallery-surface-01)]" aria-label="Работа юридического отдела">
+    <div className="relative overflow-hidden rounded-xl bg-[var(--lawyer-services-gallery-surface-primary)]" aria-label="Работа юридического отдела">
       <div className="hidden aspect-[4/3] overflow-hidden lg:block">
         <div className="flex h-full flex-col transition-transform duration-700 ease-out" style={{ transform: `translateY(-${activeIndex * 100}%)` }}>
           {IMAGES.map((image) => (
@@ -49,7 +49,7 @@ export function LawyerServicesGallery() {
 
       <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/35 px-3 py-2 backdrop-blur-sm">
         {IMAGES.map((image, index) => (
-          <Button unstyled
+          <Button variant="plain"
             key={image.src}
             type="button"
             onClick={() => {
@@ -61,11 +61,11 @@ export function LawyerServicesGallery() {
             aria-current={index === activeIndex ? "true" : undefined}
           />
         ))}
-        <Button unstyled
+        <Button variant="plain"
           type="button"
           onClick={() => setIsPaused((current) => !current)}
           aria-pressed={isPaused}
-          className="ml-1 rounded-full border border-white/40 px-2.5 py-1 text-[11px] font-semibold text-white transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="ml-1 rounded-full border border-white/40 px-2.5 py-1 text-caption font-semibold text-white transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           {isPaused ? "Продолжить" : "Пауза"}
         </Button>

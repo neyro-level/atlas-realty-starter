@@ -1,12 +1,12 @@
 "use client";
 
-import { Button, Input } from "@ams/realty-ui";
+import { Button, Checkbox, Field, FieldError, FieldGroup, FieldLabel, Input } from "@ams/realty-ui";
 
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { PrivacyConsentText } from "@/components/forms/PrivacyConsentText";
 import { trackEvent } from "@/modules/analytics";
 import { createLeadAction, type CreateLeadActionResult } from "./actions";
@@ -50,6 +50,7 @@ export function RequestForm({
     handleSubmit,
     reset,
     setValue,
+    control,
     formState: { errors },
   } = useForm<LeadFormData>({
     resolver: zodResolver(leadSchema),
@@ -99,44 +100,44 @@ export function RequestForm({
     <form
       onSubmit={handleSubmit(onSubmit)}
       data-analytics-form-type={formType}
-      className={`border border-[var(--lead-form-border-01)] bg-[var(--lead-form-surface-01)] p-5 shadow-[var(--lead-form-shadow-01)] ${className}`}
+      className={`border border-[var(--lead-form-border-primary)] bg-[var(--lead-form-surface-primary)] p-5 shadow-[var(--lead-form-shadow-primary)] ${className}`}
     >
-      <Input unstyled type="hidden" {...register("sourcePage")} />
-      <Input unstyled type="hidden" {...register("source")} />
-      <Input unstyled type="hidden" {...register("formType")} />
-      <Input unstyled type="hidden" {...register("propertyId")} />
-      <Input unstyled type="hidden" {...register("agentId")} />
-      <Input unstyled type="hidden" {...register("message")} />
+      <Input type="hidden" {...register("sourcePage")} />
+      <Input type="hidden" {...register("source")} />
+      <Input type="hidden" {...register("formType")} />
+      <Input type="hidden" {...register("propertyId")} />
+      <Input type="hidden" {...register("agentId")} />
+      <Input type="hidden" {...register("message")} />
       <label className="hidden">
         Сайт
-        <Input unstyled tabIndex={-1} autoComplete="off" {...register("website")} />
+        <Input tabIndex={-1} autoComplete="off" {...register("website")} />
       </label>
 
-      <div className={premiumCompact ? "mb-6" : "mb-5 border-b border-[var(--lead-form-border-02)] pb-4"}>
-        <p className={premiumCompact ? "text-xl font-semibold leading-tight text-[var(--text-primary)]" : "text-[11px] font-extrabold uppercase tracking-[0.08em] text-[var(--lead-form-content-01)]"}>
+      <div className={premiumCompact ? "mb-6" : "mb-5 border-b border-[var(--lead-form-border-secondary)] pb-4"}>
+        <p className={premiumCompact ? "text-xl font-semibold leading-tight text-[var(--text-primary)]" : "text-caption font-extrabold uppercase tracking-[0.08em] text-[var(--lead-form-content-primary)]"}>
           {title}
         </p>
-        <p className={`mt-2 text-sm text-[var(--lead-form-content-02)] ${premiumCompact ? "leading-5" : "leading-6"}`}>{description}</p>
+        <p className={`mt-2 text-sm text-[var(--lead-form-content-secondary)] ${premiumCompact ? "leading-5" : "leading-6"}`}>{description}</p>
       </div>
 
-      <div className="grid gap-3">
-        <label className="grid gap-2 text-sm font-semibold text-[var(--lead-form-content-03)]">
-          Ваше имя
-          <Input unstyled
+      <FieldGroup className="gap-3">
+        <Field>
+          <FieldLabel>Ваше имя</FieldLabel>
+          <Input
             autoComplete="name"
-            className="min-h-11 rounded-lg border border-[var(--lead-form-border-03)] bg-white px-3 text-base outline-none transition focus:border-[var(--lead-form-border-04)]"
+            className="min-h-11 rounded-lg border border-[var(--lead-form-border-tertiary)] bg-white px-3 text-base outline-none transition focus:border-[var(--lead-form-border-subtle)]"
             {...register("name")}
           />
-        </label>
+        </Field>
 
-        <label className="grid gap-2 text-sm font-semibold text-[var(--lead-form-content-03)]">
-          Телефон
-          <Input unstyled
+        <Field>
+          <FieldLabel>Телефон</FieldLabel>
+          <Input
             type="tel"
             autoComplete="tel"
             inputMode="tel"
             placeholder="+7 (9__) ___-__-__"
-            className="min-h-11 rounded-lg border border-[var(--lead-form-border-03)] bg-white px-3 text-base font-medium tabular-nums outline-none transition placeholder:text-[var(--lead-form-content-04)] focus:border-[var(--lead-form-border-04)]"
+            className="min-h-11 rounded-lg border border-[var(--lead-form-border-tertiary)] bg-white px-3 text-base font-medium tabular-nums outline-none transition placeholder:text-[var(--lead-form-content-subtle)] focus:border-[var(--lead-form-border-subtle)]"
             {...register("phone")}
             value={phone}
             onFocus={() => {
@@ -148,44 +149,40 @@ export function RequestForm({
               setValue("phone", formatted, { shouldDirty: true, shouldValidate: true });
             }}
           />
-          {errors.phone ? (
-            <span className="text-xs font-semibold text-[var(--lead-form-content-01)]">{errors.phone.message}</span>
-          ) : null}
-        </label>
-      </div>
+          <FieldError errors={[errors.phone]} />
+        </Field>
+      </FieldGroup>
 
-      <label className={`mt-4 flex text-xs leading-5 text-[var(--lead-form-content-05)] ${premiumCompact ? "items-center gap-2.5" : "gap-3"}`}>
-        <Input unstyled
-          type="checkbox"
-          className={`${premiumCompact ? "" : "mt-1"} size-4 shrink-0 accent-[var(--lead-form-control-01)]`}
-          {...register("consent")}
-        />
-        <span><PrivacyConsentText className="font-semibold" /></span>
-      </label>
-      {errors.consent ? (
-        <p className="mt-2 text-xs font-semibold text-[var(--lead-form-content-01)]">{errors.consent.message}</p>
-      ) : null}
+      <Field className="mt-4">
+        <label className={`flex text-xs leading-5 text-[var(--lead-form-content-muted)] ${premiumCompact ? "items-center gap-2.5" : "items-start gap-3"}`}>
+          <Controller control={control} name="consent" render={({ field }) => (
+            <Checkbox checked={field.value} onCheckedChange={(checked) => field.onChange(checked === true)} aria-invalid={Boolean(errors.consent)} />
+          )} />
+          <span><PrivacyConsentText className="font-semibold" /></span>
+        </label>
+        <FieldError errors={[errors.consent]} />
+      </Field>
 
       {premiumCompact ? (
-        <p className="mt-4 flex items-center gap-2 text-[11px] leading-4 text-[var(--lead-form-content-06)]">
+        <p className="mt-4 flex items-center gap-2 text-caption leading-4 text-[var(--lead-form-content-strong)]">
           <ShieldCheck className="size-4 shrink-0 text-[var(--accent)]" aria-hidden />
           Невидимая защита от спама включена
         </p>
       ) : null}
 
-      <Button unstyled
+      <Button variant="plain"
         type="submit"
         disabled={isPending}
-        className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-[var(--lead-form-surface-02)] px-5 text-sm font-bold text-white transition hover:bg-[var(--lead-form-surface-03)] disabled:cursor-wait disabled:opacity-70"
+        className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-[var(--lead-form-surface-secondary)] px-5 text-sm font-bold text-white transition hover:bg-[var(--lead-form-surface-tertiary)] disabled:cursor-wait disabled:opacity-70"
       >
         {isPending ? "Отправляем..." : submitLabel}
-        {!premiumCompact ? <ArrowRight className="size-4" aria-hidden /> : null}
+        {!premiumCompact ? <ArrowRight className="" aria-hidden /> : null}
       </Button>
 
       {result ? (
         <p
           className={`mt-3 text-sm font-semibold ${
-            result.ok ? "text-[var(--lead-form-content-07)]" : "text-[var(--lead-form-content-01)]"
+            result.ok ? "text-[var(--lead-form-content-inverse)]" : "text-[var(--lead-form-content-primary)]"
           }`}
         >
           {result.message}

@@ -18,7 +18,7 @@ type Props = {
 type ShareState = "idle" | "loading" | "success" | "error";
 
 const textButtonClass =
-  "inline-flex items-baseline gap-1.5 text-[15px] font-semibold leading-none text-[var(--text-muted)] transition hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-55 md:text-[16px]";
+  "inline-flex items-baseline gap-1.5 text-body-compact font-semibold leading-none text-[var(--text-muted)] transition hover:text-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-55 md:text-body-large";
 
 export function ShareFavoritesButton({ items }: Props) {
   const [state, setState] = useState<ShareState>("idle");
@@ -103,7 +103,7 @@ export function ShareFavoritesButton({ items }: Props) {
 
   return (
     <div className="flex shrink-0 flex-col items-end gap-1.5">
-      <Button unstyled
+      <Button variant="plain"
         type="button"
         data-analytics-event="share_click"
         onClick={handleShareClick}
@@ -111,14 +111,14 @@ export function ShareFavoritesButton({ items }: Props) {
         className={textButtonClass}
       >
         {shareUrl ? (
-          <Copy className="size-3.5 shrink-0 translate-y-[0.05em]" aria-hidden />
+          <Copy className="shrink-0 translate-y-[0.05em]" aria-hidden />
         ) : (
-          <Share2 className="size-3.5 shrink-0 translate-y-[0.05em]" aria-hidden />
+          <Share2 className="shrink-0 translate-y-[0.05em]" aria-hidden />
         )}
         {state === "loading" ? "…" : "Поделиться"}
       </Button>
       {messageToRender ? (
-        <span className={`max-w-[260px] text-right text-[11px] font-medium leading-4 ${state === "error" ? "text-[var(--accent)]" : "text-[var(--text-muted)]"}`}>
+        <span className={`max-w-65 text-right text-caption font-medium leading-4 ${state === "error" ? "text-[var(--accent)]" : "text-[var(--text-muted)]"}`}>
           {messageToRender}
         </span>
       ) : null}

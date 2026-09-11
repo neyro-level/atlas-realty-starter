@@ -58,6 +58,7 @@ function SiteHeaderInner({
 }) {
   const router = useRouter();
   const headerRef = useRef<HTMLElement | null>(null);
+  const mobileButtonRef = useRef<HTMLButtonElement | null>(null);
   const closeTimer = useRef<number | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDesktop, setOpenDesktop] = useState<string | null>(null);
@@ -155,6 +156,11 @@ function SiteHeaderInner({
     setCitySwitcherOpen(false);
   }
 
+  function closeMobile() {
+    setMobileOpen(false);
+    window.requestAnimationFrame(() => mobileButtonRef.current?.focus());
+  }
+
   function openStickyFilters() {
     if (catalogPage) {
       requestOpenCatalogFilters();
@@ -168,13 +174,14 @@ function SiteHeaderInner({
   return (
     <SiteHeaderView
       headerRef={headerRef}
+      mobileButtonRef={mobileButtonRef}
       pathname={pathname}
       contacts={contacts}
       desktopNav={desktopNav}
       cityOptions={cityOptions}
       brand={<BrandMark variant="header" compact={docked} showSlogan={false} />}
       brandLabel={tenant.brand}
-      mobileMenu={<MobileMenuOverlay open={mobileOpen} contacts={contacts} onClose={() => setMobileOpen(false)} />}
+      mobileMenu={<MobileMenuOverlay open={mobileOpen} contacts={contacts} onClose={closeMobile} />}
       compareAction={<SessionCollectionNavLink kind="compare" href="/sravnenie" label="Сравнение" compact={docked} />}
       favoritesAction={<SessionCollectionNavLink kind="favorites" href="/izbrannoe" label="Избранное" compact={docked} />}
       stickyCollectionAction={<SessionCollectionNavLink kind="favorites" href="/izbrannoe" label="Избранное" variant="catalogSticky" />}
@@ -191,7 +198,7 @@ function SiteHeaderInner({
       linkRenderer={SiteLinkAdapter}
       onToggleMobile={toggleMobile}
       onOpenFilters={openStickyFilters}
-      onCloseMobile={() => setMobileOpen(false)}
+      onCloseMobile={closeMobile}
       onToggleCity={() => setCitySwitcherOpen((prev) => !prev)}
       onCloseCity={() => setCitySwitcherOpen(false)}
       onRevealPhone={() => setHeaderPhoneVisible(true)}

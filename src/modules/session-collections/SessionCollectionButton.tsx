@@ -47,7 +47,7 @@ export function SessionCollectionButton({
   }
 
   return (
-    <Button unstyled
+    <Button variant="plain"
       type="button"
       data-analytics-event={kind === "favorites" ? "favorites_interaction" : "compare_interaction"}
       onClick={onClick}

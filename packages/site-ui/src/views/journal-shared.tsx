@@ -20,7 +20,7 @@ export function JournalArticleCard({ article, linkRenderer, imageRenderer }: {
   return <ArticleCardView href={article.href} title={article.title} excerpt={article.excerpt} metaLabel={`${article.dateLabel} · ${article.topicLabel}`} imageSrc={article.image} linkRenderer={linkRenderer} imageRenderer={imageRenderer} />;
 }
 
-export function JournalArticleImage({ article, className, sizes, priority = false, showExcerpt = true, titleClassName = "text-[21px]", linkRenderer: LinkRenderer, imageRenderer: ImageRenderer }: {
+export function JournalArticleImage({ article, className, sizes, priority = false, showExcerpt = true, titleClassName = "text-card-large", linkRenderer: LinkRenderer, imageRenderer: ImageRenderer }: {
   article: JournalArticleCardDto;
   className: string;
   sizes: string;
@@ -35,9 +35,9 @@ export function JournalArticleImage({ article, className, sizes, priority = fals
       <span className={`relative block overflow-hidden rounded-lg bg-[var(--surface-muted)] ${className}`}>
         <ImageRenderer src={article.image} alt="" fill priority={priority} unoptimized={article.image.startsWith("http") || article.image.startsWith("/")} sizes={sizes} className="object-cover transition duration-500 group-hover:scale-[1.03]" />
       </span>
-      <h2 className={`mt-4 max-w-[760px] font-semibold leading-snug text-[var(--text-primary)] transition group-hover:text-[var(--accent)] ${titleClassName}`}>{article.title}</h2>
-      {showExcerpt ? <p className="mt-2 max-w-[760px] text-sm leading-6 text-[var(--text-secondary)]">{article.excerpt}</p> : null}
-      <span className="mt-2 block text-[11px] leading-4 text-[var(--text-muted)]">{article.dateLabel} · {article.topicLabel}</span>
+      <h2 className={`mt-4 max-w-190 font-semibold leading-snug text-[var(--text-primary)] transition group-hover:text-[var(--accent)] ${titleClassName}`}>{article.title}</h2>
+      {showExcerpt ? <p className="mt-2 max-w-190 text-sm leading-6 text-[var(--text-secondary)]">{article.excerpt}</p> : null}
+      <span className="mt-2 block text-caption leading-4 text-[var(--text-muted)]">{article.dateLabel} · {article.topicLabel}</span>
     </LinkRenderer>
   );
 }
@@ -50,7 +50,7 @@ export function JournalSectionHeader({ id, title, action, linkRenderer: LinkRend
 }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <h2 id={id} className="text-[23px] font-semibold leading-tight text-[var(--text-primary)]">{title}</h2>
+      <h2 id={id} className="text-heading-medium font-semibold leading-tight text-[var(--text-primary)]">{title}</h2>
       <LinkRenderer href={action.href} className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-[var(--text-secondary)] transition hover:text-[var(--accent)]">
         {action.label}<ChevronRight className="size-4" aria-hidden />
       </LinkRenderer>

@@ -39,8 +39,8 @@ export function AgencyInlineLeadSection({
   return (
     <section id={id} className="bg-white" aria-labelledby={titleId}>
       <div className="mx-auto max-w-site-frame px-5 pb-20 pt-8 md:pb-24 md:pt-10 lg:pt-14">
-        <div className="grid overflow-hidden rounded-lg border border-[var(--border)] bg-white shadow-[var(--agency-inline-lead-section-shadow-01)] lg:grid-cols-[0.34fr_0.66fr]">
-          <div className="relative min-h-[360px] bg-[var(--agency-inline-lead-section-surface-01)] md:min-h-[500px] lg:min-h-[520px]">
+        <div className="grid overflow-hidden rounded-lg border border-[var(--border)] bg-white shadow-[var(--agency-inline-lead-section-shadow-primary)] lg:grid-cols-[0.34fr_0.66fr]">
+          <div className="relative min-h-90 bg-[var(--agency-inline-lead-section-surface-primary)] md:min-h-125 lg:min-h-130">
             <Image
               src={expertImageSrc}
               alt={expertImageAlt}
@@ -49,29 +49,29 @@ export function AgencyInlineLeadSection({
               sizes="(max-width: 1024px) 100vw, 620px"
               className="object-cover object-[center_6%] brightness-[1.05] lg:object-[center_24%]"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--agency-inline-lead-section-effect-01)_42%,var(--agency-inline-lead-section-effect-02)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--agency-inline-lead-section-effect-primary)_42%,var(--agency-inline-lead-section-effect-secondary)_100%)]" />
             <div className="absolute bottom-0 left-0 right-0 p-6 text-white md:p-8">
-              <p className="text-[24px] font-extrabold leading-tight">{expertName}</p>
+              <p className="text-section-small font-extrabold leading-tight">{expertName}</p>
               <p className="mt-2 text-sm font-semibold text-white/78">{expertCaption}</p>
             </div>
           </div>
 
           <div className="flex flex-col justify-center p-6 md:p-10 lg:p-14">
-            <p className="mb-4 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[var(--accent)]">
+            <p className="mb-4 text-caption font-extrabold uppercase tracking-[0.16em] text-[var(--accent)]">
               {eyebrow}
             </p>
             <h2
               id={titleId}
-              className="max-w-[760px] text-[26px] font-extrabold leading-[1.14] text-[var(--text-primary)] [text-wrap:balance] md:text-[32px] lg:text-[36px]"
+              className="max-w-190 text-section-large font-extrabold leading-[1.14] text-[var(--text-primary)] [text-wrap:balance] md:text-heading-extra-large lg:text-display-base"
             >
               {title}
             </h2>
-            <p className="mt-7 max-w-[680px] text-[18px] leading-8 text-[var(--text-primary)]">
+            <p className="mt-7 max-w-170 text-lead leading-8 text-[var(--text-primary)]">
               {text}
             </p>
 
             {trustItems.length > 0 ? (
-              <ul className="mt-8 grid gap-3 text-[15px] font-semibold leading-6 text-[var(--agency-inline-lead-section-content-01)] md:grid-cols-3">
+              <ul className="mt-8 grid gap-3 text-body-compact font-semibold leading-6 text-[var(--agency-inline-lead-section-content-primary)] md:grid-cols-3">
                 {trustItems.map((item) => (
                   <li key={item} className="border-l border-[var(--accent)]/30 pl-4">
                     {item}

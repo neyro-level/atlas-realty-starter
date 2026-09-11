@@ -68,7 +68,7 @@ export function MediaGallery({
   }
 
   const controlClass = variant === "light-controls"
-    ? "bg-white text-[var(--text-primary)] shadow-[var(--media-gallery-shadow-01)] hover:bg-[var(--home-articles-chip)]"
+    ? "bg-white text-[var(--text-primary)] shadow-[var(--media-gallery-shadow-primary)] hover:bg-[var(--home-articles-chip)]"
     : "border border-white/70 bg-[var(--surface-dark)]/76 text-white hover:bg-[var(--surface-dark)]";
 
   return (
@@ -77,7 +77,7 @@ export function MediaGallery({
         <CarouselContent className="h-full">
           {safeImages.map((image, imageIndex) => (
             <CarouselItem key={`${image.src}-${imageIndex}`} className="relative h-full">
-              <Button unstyled type="button" ref={imageIndex === index ? openerRef : undefined} onClick={(event) => openAt(imageIndex, event.currentTarget)} className="relative block h-full w-full cursor-zoom-in border-0 bg-transparent p-0" aria-label={`Открыть фото ${imageIndex + 1} на весь экран`}>
+              <Button variant="plain" type="button" ref={imageIndex === index ? openerRef : undefined} onClick={(event) => openAt(imageIndex, event.currentTarget)} className="relative block h-full w-full cursor-zoom-in border-0 bg-transparent p-0" aria-label={`Открыть фото ${imageIndex + 1} на весь экран`}>
                 <ImageRenderer src={image.src} alt={image.alt} fill priority={priority && imageIndex === 0} unoptimized={!shouldOptimizeImage(image.src)} sizes={imageSizes} className={imageClassName} />
               </Button>
             </CarouselItem>
@@ -85,7 +85,7 @@ export function MediaGallery({
         </CarouselContent>
 
         {hasMany ? <span className="absolute left-3 top-3 rounded-lg bg-[var(--surface-dark)]/82 px-3 py-1.5 text-xs font-semibold tabular-nums text-white backdrop-blur-sm">{index + 1} / {safeImages.length}</span> : null}
-        {hasMany ? <><Button unstyled type="button" onClick={() => api?.scrollPrev()} className={cn("absolute left-3 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg transition lg:left-5", controlClass)} aria-label="Предыдущее фото"><ChevronLeft className="size-5" aria-hidden /></Button><Button unstyled type="button" onClick={() => api?.scrollNext()} className={cn("absolute right-3 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg transition lg:right-5", controlClass)} aria-label="Следующее фото"><ChevronRight className="size-5" aria-hidden /></Button></> : null}
+        {hasMany ? <><Button variant="plain" type="button" onClick={() => api?.scrollPrev()} className={cn("absolute left-3 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg transition lg:left-5", controlClass)} aria-label="Предыдущее фото"><ChevronLeft className="" aria-hidden /></Button><Button variant="plain" type="button" onClick={() => api?.scrollNext()} className={cn("absolute right-3 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg transition lg:right-5", controlClass)} aria-label="Следующее фото"><ChevronRight className="" aria-hidden /></Button></> : null}
       </Carousel>
 
       <Lightbox

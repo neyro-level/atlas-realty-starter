@@ -32,7 +32,7 @@ export function CareersQuizButton({
   }
 
   return (
-    <Button unstyled
+    <Button variant="plain"
       type="button"
       className={className}
       data-careers-quiz-trigger
@@ -40,7 +40,7 @@ export function CareersQuizButton({
       onClick={openQuiz}
     >
       Пройти отбор
-      {showIcon ? <ArrowRight className="size-4" aria-hidden /> : null}
+      {showIcon ? <ArrowRight className="" aria-hidden /> : null}
     </Button>
   );
 }

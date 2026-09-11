@@ -19,7 +19,7 @@ export function BrandMark({
 }: BrandMarkProps) {
   const filterClass = inverted ? "brightness-0 invert" : "";
   const wordClass = inverted ? "text-white" : "text-[var(--text-primary)]";
-  const sloganClass = inverted ? "text-white/62" : "text-[var(--brand-mark-content-01)]";
+  const sloganClass = inverted ? "text-white/62" : "text-[var(--brand-mark-content-primary)]";
   const markSize =
     markClassName ??
     (variant === "header"
@@ -44,11 +44,11 @@ export function BrandMark({
         />
       </span>
       <span className="grid min-w-0 gap-0.5">
-        <span className={`atlas-brand-mark__word text-[19px] font-extrabold leading-none tracking-[0.19em] lg:text-[21px] ${wordClass}`}>
+        <span className={`atlas-brand-mark__word text-lead-compact font-extrabold leading-none tracking-[0.19em] lg:text-card-large ${wordClass}`}>
           {tenant.brand}
         </span>
         {!compact && showSlogan ? (
-          <span className={`max-w-[172px] text-[9px] font-semibold leading-[1.18] tracking-[0.02em] ${sloganClass}`}>
+          <span className={`max-w-43 text-micro font-semibold leading-[1.18] tracking-[0.02em] ${sloganClass}`}>
             {siteConfig.tagline}
           </span>
         ) : null}

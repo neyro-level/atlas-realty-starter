@@ -4,6 +4,8 @@
 
 On the prepared owner workstation, the normal entry point is `pnpm dev:start`. It performs the safe database, migration, demo-data and HTTP checks below automatically. Use `pnpm dev:open` when the default browser should also open. The manual sequence remains the first-time setup and recovery path.
 
+In a linked Git worktree, the launcher resolves the primary checkout through Git metadata and reuses its untracked `.env.local`. When the worktree has no local `media` directory, it creates a Windows directory junction to the primary checkout media. Secrets and media are not copied, committed or duplicated, and the resolved database must still pass the isolated development-database guard.
+
 1. Copy `.env.example` to an untracked `.env.local`.
 2. Confirm that `DATABASE_URL` targets an isolated database ending in `_dev`, `_test` or `_staging`. Never use a client production database for local UI work.
 3. Ensure PostgreSQL 18 is reachable; do not stop or reconfigure an unrelated shared Windows service.

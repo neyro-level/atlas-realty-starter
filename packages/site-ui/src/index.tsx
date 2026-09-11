@@ -2,6 +2,9 @@ import type { ReactNode } from "react";
 import type { SiteIdentity } from "@starter/site-contracts";
 
 export type { SiteImageRenderer, SiteImageRendererProps, SiteLinkRenderer, SiteLinkRendererProps } from "./lib/adapters";
+export type { PublicContactViewDto, SiteFooterColumnViewDto, SiteFooterMetaViewDto, SiteHeaderNavItemViewDto, SiteNavLinkViewDto, SiteSocialLinkViewDto } from "./contracts/site-shell";
+export type { PropertyCardViewDto, PropertyDetailRowDto, PropertyDetailSummaryItemDto, PropertyRelatedItemDto, PropertyViewingDateDto, PublicFormResultDto, SessionCollectionGroupDto, SessionCollectionItemDto } from "./contracts/property";
+export type { CatalogFacetsDto, CatalogQueryDto, CatalogViewDto } from "./contracts/catalog";
 export { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/ui/accordion";
 export { AspectRatio } from "./components/ui/aspect-ratio";
 export { Badge, badgeVariants } from "./components/ui/badge";
@@ -16,6 +19,7 @@ export {
 } from "./components/ui/breadcrumb";
 export { Button, buttonVariants } from "./components/ui/button";
 export { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card";
+export { CatalogMapFrameView } from "./views/CatalogMapFrameView";
 export { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "./components/ui/carousel";
 export { Checkbox } from "./components/ui/checkbox";
 export {
@@ -157,6 +161,7 @@ export { PropertyGalleryView, type PropertyGalleryViewProps } from "./views/Prop
 export { PropertyDetailPageView } from "./views/PropertyDetailPageView";
 export { PropertyRelatedView } from "./views/PropertyRelatedView";
 export { RequestModalView } from "./views/RequestModalView";
+export type { RequestAvatar } from "./contracts/request";
 export { ReviewsPageView } from "./views/ReviewsPageView";
 export { ContactsPageView } from "./views/ContactsPageView";
 export { CorporateLandingView } from "./views/CorporateLandingView";

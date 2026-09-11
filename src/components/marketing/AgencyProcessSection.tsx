@@ -17,17 +17,17 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
 
   return (
     <section id={id} className="bg-white" aria-labelledby={titleId}>
-      <div className="mx-auto max-w-site-frame px-5 py-[72px] md:py-[88px] lg:py-[104px]">
+      <div className="mx-auto max-w-site-frame px-5 py-18 md:py-22 lg:py-26">
         <div className="rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] p-5 md:p-8 lg:p-10">
-          <div className="mx-auto mb-10 grid max-w-[820px] gap-5 text-center md:mb-12 lg:mb-14">
+          <div className="mx-auto mb-10 grid max-w-205 gap-5 text-center md:mb-12 lg:mb-14">
             <h2
               id={titleId}
-              className="text-[30px] font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-[38px] lg:text-[42px]"
+              className="text-heading-large font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-display-medium lg:text-display-large"
             >
               {title}
             </h2>
             {lead ? (
-              <p className="mx-auto max-w-[640px] text-[16px] leading-7 text-[var(--agency-process-section-content-01)] md:text-[18px]">
+              <p className="mx-auto max-w-160 text-body-large leading-7 text-[var(--agency-process-section-content-primary)] md:text-lead">
                 {lead}
               </p>
             ) : null}
@@ -41,7 +41,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
               return (
                 <article
                   key={`${number}-${step.title}`}
-                  className={`relative flex flex-col border-[var(--border)] p-6 md:p-8 lg:min-h-[300px] lg:p-8 xl:p-10 ${
+                  className={`relative flex flex-col border-[var(--border)] p-6 md:p-8 lg:min-h-75 lg:p-8 xl:p-10 ${
                     isLast ? "" : "border-b lg:border-b-0 lg:border-r"
                   }`}
                 >
@@ -51,7 +51,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
                   >
                     {number}
                   </span>
-                  <h3 className="flex min-h-[49px] max-w-[400px] flex-col justify-start text-[20px] font-bold leading-[1.22] text-[var(--text-primary)] md:min-h-[54px] md:text-[22px]">
+                  <h3 className="flex min-h-12.25 max-w-100 flex-col justify-start text-heading-small font-bold leading-[1.22] text-[var(--text-primary)] md:min-h-13.5 md:text-heading-compact">
                     {step.titleLines?.length
                       ? step.titleLines.map((line) => (
                           <span key={line} className="block">
@@ -60,7 +60,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
                         ))
                       : step.title}
                   </h3>
-                  <p className="mt-4 max-w-[420px] text-[15px] leading-7 text-[var(--agency-process-section-content-02)] md:text-[16px]">
+                  <p className="mt-4 max-w-105 text-body-compact leading-7 text-[var(--agency-process-section-content-secondary)] md:text-body-large">
                     {step.text}
                   </p>
                 </article>

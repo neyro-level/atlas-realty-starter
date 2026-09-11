@@ -30,7 +30,7 @@ export function CatalogNewBuildingSelectionCard({
   return (
     <CatalogNewBuildingSelectionCardView
       variant={variant}
-      cityPrepositional={siteProfile.city.prepositional}
+      copy={{ eyebrow: "Бесплатный подбор", title: `Объективный подбор новостроек в ${siteProfile.city.prepositional}. Бесплатно.`, description: "Застройщик продаёт свой объект. Мы найдём для вас лучшие условия на всём рынке.", action: "Узнать свои варианты" }}
       source={source}
       formType={formType}
       onRequest={openRequest}

@@ -31,7 +31,7 @@ export function OfficePhoneReveal({ phone, phoneHref, office }: OfficePhoneRevea
   }
 
   return (
-    <Button unstyled
+    <Button variant="plain"
       type="button"
       data-analytics-event="phone_reveal"
       data-analytics-context="contacts_office"
@@ -40,7 +40,7 @@ export function OfficePhoneReveal({ phone, phoneHref, office }: OfficePhoneRevea
       className="inline-flex min-h-8 items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] transition hover:text-[var(--accent)] focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
       aria-label={`Показать телефон офиса ${office}`}
     >
-      <Phone className="size-4 text-[var(--accent)]" aria-hidden />
+      <Phone className="text-[var(--accent)]" aria-hidden />
       <span className="whitespace-nowrap">Показать телефон</span>
     </Button>
   );

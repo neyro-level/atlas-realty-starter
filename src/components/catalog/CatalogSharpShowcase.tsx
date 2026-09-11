@@ -1,4 +1,4 @@
-import { Input, Select } from "@ams/realty-ui";
+import { Checkbox, Input, Select } from "@ams/realty-ui";
 import Link from "next/link";
 import {
   CatalogEmptyStateView,
@@ -147,7 +147,7 @@ export function CatalogSharpShowcase({
           ) : complexes.length ? (
             <>
               <NewBuildingMobileCarousel complexes={complexes} />
-              <div className={isListView ? "mt-4 hidden divide-y divide-[var(--catalog-sharp-showcase-border-01)] border-y border-[var(--catalog-sharp-showcase-border-01)] md:block" : "mt-5 hidden gap-x-5 gap-y-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}>
+              <div className={isListView ? "mt-4 hidden divide-y divide-[var(--catalog-sharp-showcase-border-divider)] border-y border-[var(--catalog-sharp-showcase-border-divider)] md:block" : "mt-5 hidden gap-x-5 gap-y-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}>
                 {complexes.map((complex, index) => (
                   <CatalogResidentialComplexCard key={complex.slug} complex={complex} variant={activeView} priority={index === 0} />
                 ))}
@@ -157,7 +157,7 @@ export function CatalogSharpShowcase({
             <CatalogEmptyStateView message="По выбранному запросу жилые комплексы не найдены. Оставьте заявку, и специалист агентства недвижимости уточнит подходящие варианты вручную." linkRenderer={CatalogLinkAdapter} />
           )
         ) : catalog.listings.length ? (
-          <div className={isListView ? "mt-4 divide-y divide-[var(--catalog-sharp-showcase-border-01)] border-y border-[var(--catalog-sharp-showcase-border-01)] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
+          <div className={isListView ? "mt-4 divide-y divide-[var(--catalog-sharp-showcase-border-divider)] border-y border-[var(--catalog-sharp-showcase-border-divider)] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
             <CatalogLoadMore
               key={buildSearchParams(applied).toString()}
               basePath={basePath}
@@ -179,14 +179,14 @@ export function CatalogSharpShowcase({
 function ResidentialComplexFilterForm({ basePath, query, defaultView }: { basePath: string; query: CatalogQuery; defaultView: CatalogView }) {
   return (
     <CatalogAutoSubmitForm action={basePath} className="mt-5">
-      <Input unstyled type="hidden" name="city" value={query.city ?? tenant.cityEn} />
-      <Input unstyled type="hidden" name="deal_type" value={query.dealType ?? "sale"} />
-      <Input unstyled type="hidden" name="category" value="new_building" />
-      <Input unstyled type="hidden" name="limit" value={query.limit ?? PAGE_SIZE} />
-      <Input unstyled type="hidden" name="view" value={query.view ?? defaultView} />
-      <Input unstyled type="hidden" name="sort" value={query.sort ?? "newest"} />
+      <Input variant="plain" type="hidden" name="city" value={query.city ?? tenant.cityEn} />
+      <Input variant="plain" type="hidden" name="deal_type" value={query.dealType ?? "sale"} />
+      <Input variant="plain" type="hidden" name="category" value="new_building" />
+      <Input variant="plain" type="hidden" name="limit" value={query.limit ?? PAGE_SIZE} />
+      <Input variant="plain" type="hidden" name="view" value={query.view ?? defaultView} />
+      <Input variant="plain" type="hidden" name="sort" value={query.sort ?? "newest"} />
 
-      <div className="grid gap-2 lg:max-w-[820px] lg:grid-cols-[minmax(280px,1.35fr)_minmax(300px,1fr)]">
+      <div className="grid gap-2 lg:max-w-205 lg:grid-cols-[minmax(280px,1.35fr)_minmax(300px,1fr)]">
         <CatalogSearchFieldView defaultValue={query.q} placeholder="Название ЖК, район или застройщик" />
         <CatalogRangePairView from="price_from" to="price_to" label="Цена" fromValue={query.priceFrom} toValue={query.priceTo} />
       </div>
@@ -213,19 +213,19 @@ function CatalogFilterForm({
 
   return (
     <CatalogAutoSubmitForm action={basePath} className="mt-5">
-      <Input unstyled type="hidden" name="city" value={query.city ?? tenant.cityEn} />
-      <Input unstyled type="hidden" name="deal_type" value={query.dealType ?? "sale"} />
-      <Input unstyled type="hidden" name="limit" value={query.limit ?? PAGE_SIZE} />
-      <Input unstyled type="hidden" name="view" value={query.view ?? "grid"} />
-      <Input unstyled type="hidden" name="sort" value={query.sort ?? "newest"} />
-      {query.category ? <Input unstyled type="hidden" name="category" value={query.category} /> : null}
+      <Input variant="plain" type="hidden" name="city" value={query.city ?? tenant.cityEn} />
+      <Input variant="plain" type="hidden" name="deal_type" value={query.dealType ?? "sale"} />
+      <Input variant="plain" type="hidden" name="limit" value={query.limit ?? PAGE_SIZE} />
+      <Input variant="plain" type="hidden" name="view" value={query.view ?? "grid"} />
+      <Input variant="plain" type="hidden" name="sort" value={query.sort ?? "newest"} />
+      {query.category ? <Input variant="plain" type="hidden" name="category" value={query.category} /> : null}
 
       <div className="grid gap-2 lg:grid-cols-[minmax(260px,1.4fr)_minmax(150px,0.7fr)_minmax(120px,0.55fr)_minmax(150px,0.7fr)]">
         <CatalogSearchFieldView defaultValue={query.q} placeholder="Район, улица, ЖК или код" />
         <CatalogRangePairView from="price_from" to="price_to" label="Цена" fromValue={query.priceFrom} toValue={query.priceTo} />
-        <label className="min-h-12 rounded-lg border border-[var(--border)] bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--text-muted)]">
+        <label className="min-h-12 rounded-lg border border-[var(--border)] bg-white px-3 py-1 text-caption font-bold uppercase tracking-[0.08em] text-[var(--text-muted)]">
           Комнаты
-          <Select unstyled name="rooms" defaultValue={formatRoomsValue(query.rooms)} className="block w-full bg-transparent pt-0.5 text-sm font-semibold normal-case tracking-[0] text-[var(--text-primary)] outline-none">
+          <Select variant="plain" name="rooms" defaultValue={formatRoomsValue(query.rooms)} className="block w-full bg-transparent pt-0.5 text-sm font-semibold normal-case tracking-[0] text-[var(--text-primary)] outline-none">
             <option value="">Любые</option>
             {catalog.facets.rooms.map((room) => (
               <option key={room.value} value={room.value}>{room.value}</option>
@@ -234,7 +234,7 @@ function CatalogFilterForm({
         </label>
         {activeFilter === "flat" ? (
           <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[var(--border)] bg-white px-3 text-sm font-semibold text-[var(--text-secondary)]">
-            <Input unstyled name="studio" type="checkbox" value="1" defaultChecked={query.studio === true} className="size-4 accent-[var(--accent)]" />
+            <Checkbox name="studio" value="1" defaultChecked={query.studio === true} />
             Студия
           </label>
         ) : null}
@@ -246,12 +246,10 @@ function CatalogFilterForm({
           {!isLand ? <CatalogRangePairView from="floor_from" to="floor_to" label={isHouse ? "Этажность" : "Этаж"} fromValue={query.floorFrom} toValue={query.floorTo} /> : null}
           {activeFilter === "all" ? select("category", query.category, [...TYPE_FILTER_OPTIONS], "Тип объекта") : null}
           <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[var(--border)] bg-white px-3 text-sm font-semibold text-[var(--text-secondary)]">
-            <Input unstyled
+            <Checkbox
               name="exclusive"
-              type="checkbox"
               value="1"
               defaultChecked={query.exclusive === true}
-              className="size-4 accent-[var(--accent)]"
             />
             Только эксклюзивы
           </label>
@@ -301,7 +299,7 @@ function CheckboxGroup({ items }: { items: Array<[string, string, boolean | unde
     <div className="grid gap-2 rounded-lg border border-[var(--border)] bg-white p-3 text-sm font-semibold text-[var(--text-secondary)]">
       {items.map(([name, label, checked]) => (
         <label key={name} className="flex items-center gap-2">
-          <Input unstyled name={name} type="checkbox" value="1" defaultChecked={checked} className="size-4 accent-[var(--accent)]" />
+          <Checkbox name={name} value="1" defaultChecked={checked} />
           {label}
         </label>
       ))}

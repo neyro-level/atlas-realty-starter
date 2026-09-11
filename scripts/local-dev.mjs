@@ -10,7 +10,9 @@ import pg from 'pg'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const localDir = path.join(root, '.local-dev')
-const envPath = path.join(root, '.env.local')
+const primaryRoot = resolvePrimaryCheckoutRoot()
+const checkoutEnvPath = path.join(root, '.env.local')
+const envPath = fs.existsSync(checkoutEnvPath) ? checkoutEnvPath : path.join(primaryRoot, '.env.local')
 const runtimeEnvPath = path.join(localDir, 'runtime.env')
 const pidPath = path.join(localDir, 'app.pid')
 const stdoutPath = path.join(localDir, 'server.log')
@@ -18,6 +20,16 @@ const stderrPath = path.join(localDir, 'server.error.log')
 const siteUrl = 'http://127.0.0.1:3000'
 const expected = { properties: 60, complexes: 20 }
 const minimumMedia = expected.properties + expected.complexes
+
+function resolvePrimaryCheckoutRoot() {
+  const result = spawnSync('git', ['rev-parse', '--path-format=absolute', '--git-common-dir'], {
+    cwd: root,
+    encoding: 'utf8',
+    windowsHide: true,
+  })
+  if (result.status !== 0) return root
+  return path.dirname(result.stdout.trim())
+}
 
 function fail(message) {
   console.error(`Ошибка: ${message}`)
@@ -33,6 +45,14 @@ function readProjectEnv() {
     throw new Error('в .env.local не задан DATABASE_URL.')
   }
   return parsed
+}
+
+function ensureSharedMedia() {
+  const mediaDir = path.join(root, 'media')
+  if (fs.existsSync(mediaDir)) return
+  const sharedMediaDir = path.join(primaryRoot, 'media')
+  if (primaryRoot === root || !fs.existsSync(sharedMediaDir)) return
+  fs.symlinkSync(sharedMediaDir, mediaDir, 'junction')
 }
 
 function safeDatabaseTarget(connectionString) {
@@ -146,14 +166,14 @@ async function probeTotal(pathname, timeout = 10_000) {
   }
 }
 
-async function inspectSite(homeTimeout = 10_000) {
+async function inspectSite(homeTimeout = 30_000) {
   const health = await probe(`${siteUrl}/healthz`)
   const home = health === 200 ? await probe(`${siteUrl}/`, homeTimeout) : null
   const [properties, complexes] =
     home === 200
       ? await Promise.all([
-          probeTotal('/api/public/v1/catalog?limit=1'),
-          probeTotal('/api/public/v1/complexes?limit=1'),
+          probeTotal('/api/public/v1/catalog?limit=1', homeTimeout),
+          probeTotal('/api/public/v1/complexes?limit=1', homeTimeout),
         ])
       : [
           { status: null, total: null },
@@ -258,7 +278,7 @@ function startNext(projectEnv) {
 }
 
 async function waitUntilReady(pid) {
-  const deadline = Date.now() + 60_000
+  const deadline = Date.now() + 180_000
   while (Date.now() < deadline) {
     const remaining = deadline - Date.now()
     const site = await inspectSite(Math.max(1_000, Math.min(45_000, remaining)))
@@ -266,7 +286,7 @@ async function waitUntilReady(pid) {
     if (!processExists(pid)) break
     await new Promise((resolve) => setTimeout(resolve, 500))
   }
-  throw new Error(`сайт не поднялся за 60 секунд. Логи: ${stdoutPath} и ${stderrPath}.`)
+  throw new Error(`сайт не поднялся за 180 секунд. Логи: ${stdoutPath} и ${stderrPath}.`)
 }
 
 function openSite() {
@@ -279,6 +299,7 @@ function openSite() {
 }
 
 async function printStatus() {
+  ensureSharedMedia()
   console.log(`Проект: ${gitIdentity()}`)
   let projectEnv
   try {
@@ -305,6 +326,7 @@ async function printStatus() {
 }
 
 async function start() {
+  ensureSharedMedia()
   const startedAt = Date.now()
   const projectEnv = readProjectEnv()
   const database = await inspectDatabase(projectEnv)

@@ -37,7 +37,7 @@ export function SiteChrome({
     <SiteOverlayProvider><RequestModalRealtorAvatarsProvider avatars={requestModalAvatars}>
       <SiteContactsProvider contacts={contacts}>
         <SiteHeader contacts={contacts} />
-        <div className="flex flex-1 flex-col pt-[68px] lg:pt-[106px]">{children}</div>
+        <div className="flex flex-1 flex-col pt-17 lg:pt-26.5">{children}</div>
         <SiteFooter contacts={contacts} />
         <DeferredSiteOverlays />
       </SiteContactsProvider>

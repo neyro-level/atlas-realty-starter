@@ -1,4 +1,4 @@
-import type { PropertyCardDto } from "@starter/site-contracts";
+import type { PropertyCardDto } from "../contracts/property";
 import type { PropertyCardViewProps } from "./PropertyCardView";
 
 export function buildPropertyCardTitle(listing: PropertyCardDto, cardKind: NonNullable<PropertyCardViewProps["cardKind"]>) {

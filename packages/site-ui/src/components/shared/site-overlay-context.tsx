@@ -1,7 +1,7 @@
 "use client";
 
 import { Slot } from "../ui/slot";
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
 import { Button } from "../ui/button";
 
 export type RequestOverlayDetail = {
@@ -47,10 +47,20 @@ const SiteOverlayContext = createContext<SiteOverlayContextValue | null>(null);
 
 export function SiteOverlayProvider({ children, onOpen }: { children: React.ReactNode; onOpen?: (kind: "request" | "property-chat") => void }) {
   const [request, setRequest] = useState<RequestOverlayDetail | null>(null);
+  const requestTriggerRef = useRef<HTMLElement | null>(null);
   const [propertyChat, setPropertyChat] = useState<PropertyChatOverlayDetail | null>(null);
   const [propertyChatVersion, setPropertyChatVersion] = useState(0);
-  const openRequest = useCallback((detail: RequestOverlayDetail = {}) => { setRequest(detail); onOpen?.("request"); }, [onOpen]);
-  const closeRequest = useCallback(() => setRequest(null), []);
+  const openRequest = useCallback((detail: RequestOverlayDetail = {}) => {
+    requestTriggerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    setRequest(detail);
+    onOpen?.("request");
+  }, [onOpen]);
+  const closeRequest = useCallback(() => {
+    setRequest(null);
+    const trigger = requestTriggerRef.current;
+    requestTriggerRef.current = null;
+    window.requestAnimationFrame(() => trigger?.focus());
+  }, []);
   const openPropertyChat = useCallback((detail: PropertyChatOverlayDetail = {}) => { setPropertyChat(detail); setPropertyChatVersion((value) => value + 1); onOpen?.("property-chat"); }, [onOpen]);
   const closePropertyChat = useCallback(() => setPropertyChat(null), []);
   const value = useMemo(

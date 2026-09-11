@@ -24,21 +24,21 @@ export function AgencyFaqSection({
 
   return (
     <section id={id} className="bg-white" aria-labelledby={titleId}>
-      <div className="mx-auto max-w-site-frame px-5 py-20 md:py-24 lg:py-[104px]">
-        <div className="mb-12 max-w-[920px] text-left md:mb-14">
+      <div className="mx-auto max-w-site-frame px-5 py-20 md:py-24 lg:py-26">
+        <div className="mb-12 max-w-230 text-left md:mb-14">
           {eyebrow ? (
-            <p className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[var(--accent)]">
+            <p className="mb-3 text-caption font-extrabold uppercase tracking-[0.16em] text-[var(--accent)]">
               {eyebrow}
             </p>
           ) : null}
           <h2
             id={titleId}
-            className={`max-w-[920px] text-[30px] font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-[38px] lg:text-[42px] ${titleClassName}`}
+            className={`max-w-230 text-heading-large font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-display-medium lg:text-display-large ${titleClassName}`}
           >
             {title}
           </h2>
           {lead ? (
-            <p className={`mt-5 max-w-[660px] text-[16px] leading-7 text-[var(--agency-faq-section-content-01)] md:text-[18px] ${leadClassName}`}>
+            <p className={`mt-5 max-w-165 text-body-large leading-7 text-[var(--agency-faq-section-content-primary)] md:text-lead ${leadClassName}`}>
               {lead}
             </p>
           ) : null}

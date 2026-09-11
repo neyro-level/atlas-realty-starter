@@ -15,7 +15,7 @@ describe("public employee profile", () => {
   it("uses the shared compact protected lead form and balanced profile layout", () => {
     expect(source).toContain("premiumCompact");
     expect(source).toContain('description="Оставьте номер — специалист перезвонит и уточнит вашу задачу."');
-    expect(source).toContain("md:min-h-[440px]");
+    expect(source).toContain("md:min-h-110");
     expect(source).toContain("lg:h-full");
   });
 

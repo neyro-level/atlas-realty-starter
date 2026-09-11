@@ -43,12 +43,12 @@ export function SessionCollectionNavLink({
       <Link
         href={href}
         onClick={onNavigate}
-        className="relative inline-flex min-h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-[var(--surface-muted)] px-3 text-[12px] font-semibold text-[var(--text-secondary)] transition hover:bg-[var(--border)] hover:text-[var(--accent)]"
+        className="relative inline-flex min-h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-[var(--surface-muted)] px-3 text-label font-semibold text-[var(--text-secondary)] transition hover:bg-[var(--border)] hover:text-[var(--accent)]"
       >
         <Icon className="size-3.5 shrink-0" strokeWidth={1.85} aria-hidden />
         <span>{label}</span>
         {count > 0 ? (
-          <span className="inline-flex min-w-[16px] items-center justify-center rounded-full bg-[var(--accent)] px-1 text-[9px] font-semibold tabular-nums leading-4 text-white">
+          <span className="inline-flex min-w-4 items-center justify-center rounded-full bg-[var(--accent)] px-1 text-micro font-semibold tabular-nums leading-4 text-white">
             {count}
           </span>
         ) : null}
@@ -61,12 +61,12 @@ export function SessionCollectionNavLink({
       <Link
         href={href}
         onClick={onNavigate}
-        className="relative inline-flex min-h-11 items-center justify-center gap-1.5 rounded-[12px] bg-[var(--session-collection-nav-link-surface-01)] px-3 text-[13px] font-medium tracking-[-0.01em] text-[var(--session-collection-nav-link-content-01)] transition hover:bg-[var(--session-collection-nav-link-surface-02)] hover:text-[var(--accent)]"
+        className="relative inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-[var(--session-collection-nav-link-surface-default)] px-3 text-support font-medium tracking-[-0.01em] text-[var(--session-collection-nav-link-content-strong)] transition hover:bg-[var(--session-collection-nav-link-surface-hover)] hover:text-[var(--accent)]"
       >
-        <Icon className="size-[16px] shrink-0 text-[var(--session-collection-nav-link-content-02)]" strokeWidth={1.75} aria-hidden />
+        <Icon className="size-[16px] shrink-0 text-[var(--session-collection-nav-link-content-muted)]" strokeWidth={1.75} aria-hidden />
         <span>{label}</span>
         {count > 0 ? (
-          <span className="inline-flex min-w-[18px] items-center justify-center rounded-full bg-[var(--accent)] px-1 text-[10px] font-semibold tabular-nums text-white">
+          <span className="inline-flex min-w-4.5 items-center justify-center rounded-full bg-[var(--accent)] px-1 text-overline font-semibold tabular-nums text-white">
             {count}
           </span>
         ) : null}
@@ -85,7 +85,7 @@ export function SessionCollectionNavLink({
       <Icon className="size-[18px]" aria-hidden />
       <span className={compact ? "sr-only xl:not-sr-only" : ""}>{label}</span>
       {count > 0 ? (
-        <span className="-ml-1 inline-flex min-w-5 items-center justify-center rounded-full bg-[var(--accent)] px-1.5 text-[11px] font-extrabold tabular-nums text-white">
+        <span className="-ml-1 inline-flex min-w-5 items-center justify-center rounded-full bg-[var(--accent)] px-1.5 text-caption font-extrabold tabular-nums text-white">
           {count}
         </span>
       ) : null}

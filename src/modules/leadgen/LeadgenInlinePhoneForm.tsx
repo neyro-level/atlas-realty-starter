@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input } from "@ams/realty-ui";
+import { Button, Checkbox, Input } from "@ams/realty-ui";
 import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState, useTransition } from "react";
 import { createLeadAction, type CreateLeadActionResult } from "@/modules/leads";
@@ -139,22 +139,22 @@ export function LeadgenInlinePhoneForm({
 
   return (
     <form
-      className="relative flex h-full flex-col overflow-hidden rounded-[8px] border border-[var(--leadgen-inline-phone-form-border-01)] bg-[linear-gradient(180deg,var(--surface)_0%,var(--leadgen-inline-phone-form-color-01)_100%)] p-4 shadow-[var(--leadgen-inline-phone-form-shadow-01)] sm:p-5"
+      className="relative flex h-full flex-col overflow-hidden rounded-sm border border-[var(--leadgen-inline-phone-form-border-primary)] bg-[linear-gradient(180deg,var(--surface)_0%,var(--leadgen-inline-phone-form-visual-primary)_100%)] p-4 shadow-[var(--leadgen-inline-phone-form-shadow-primary)] sm:p-5"
       onSubmit={onSubmit}
       data-analytics-form-type={formType}
       noValidate
     >
-      <div className="absolute inset-x-4 top-0 h-[2px] rounded-b-full bg-[var(--accent)]/80" aria-hidden />
+      <div className="absolute inset-x-4 top-0 h-0.5 rounded-b-full bg-[var(--accent)]/80" aria-hidden />
       <div className="mb-4">
-        <p className="text-[17px] font-semibold leading-tight text-[var(--text-primary)]">{title}</p>
+        <p className="text-body-emphasis font-semibold leading-tight text-[var(--text-primary)]">{title}</p>
         {description ? (
-          <p className="mt-2 text-[12px] font-medium leading-5 text-[var(--leadgen-inline-phone-form-content-01)]">{description}</p>
+          <p className="mt-2 text-label font-medium leading-5 text-[var(--leadgen-inline-phone-form-content-primary)]">{description}</p>
         ) : null}
       </div>
       <label className="sr-only" htmlFor={`${formType}-website`}>
         Не заполняйте это поле
       </label>
-      <Input unstyled
+      <Input variant="plain"
         id={`${formType}-website`}
         name="website"
         type="text"
@@ -168,7 +168,7 @@ export function LeadgenInlinePhoneForm({
         Номер телефона
       </label>
       <div>
-        <Input unstyled
+        <Input variant="plain"
           id={`${formType}-phone`}
           name="phone"
           type="tel"
@@ -180,27 +180,26 @@ export function LeadgenInlinePhoneForm({
           onFocus={onPhoneFocus}
           aria-invalid={Boolean(errorMessage)}
           aria-describedby={errorMessage ? errorId : undefined}
-          className="min-h-[50px] w-full rounded-[6px] border border-[var(--leadgen-inline-phone-form-border-02)] bg-white/88 px-4 text-base font-medium text-[var(--text-primary)] outline-none transition placeholder:text-[var(--leadgen-inline-phone-form-content-02)] focus:border-[var(--accent)] focus:bg-white sm:text-[14px]"
+          className="min-h-12.5 w-full rounded-compact border border-[var(--leadgen-inline-phone-form-border-secondary)] bg-white/88 px-4 text-base font-medium text-[var(--text-primary)] outline-none transition placeholder:text-[var(--leadgen-inline-phone-form-content-secondary)] focus:border-[var(--accent)] focus:bg-white sm:text-body"
         />
       </div>
 
-      <Button unstyled
+      <Button variant="plain"
         type="submit"
         disabled={isPending}
-        className="mt-3 min-h-[52px] w-full rounded-[6px] bg-[var(--accent)] px-4 text-[15px] font-semibold text-white shadow-[var(--leadgen-inline-phone-form-shadow-02)] transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70 sm:min-h-[50px] sm:text-[14px]"
+        className="mt-3 min-h-13 w-full rounded-compact bg-[var(--accent)] px-4 text-body-compact font-semibold text-white shadow-[var(--leadgen-inline-phone-form-shadow-secondary)] transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70 sm:min-h-12.5 sm:text-body"
       >
         {isPending ? "Отправляем..." : submitLabel}
       </Button>
 
-      <label className="mx-auto mt-3 flex w-full items-center justify-center gap-1 whitespace-nowrap text-center text-[9px] font-medium leading-none text-[var(--leadgen-inline-phone-form-content-03)] sm:text-[9px]">
-        <Input unstyled
-          type="checkbox"
+      <label className="mx-auto mt-3 flex w-full items-center justify-center gap-1 whitespace-nowrap text-center text-micro font-medium leading-none text-[var(--leadgen-inline-phone-form-content-tertiary)] sm:text-micro">
+        <Checkbox
           checked={consent}
-          onChange={(event) => {
-            setConsent(event.target.checked);
+          onCheckedChange={(checked) => {
+            setConsent(checked === true);
             setClientError(null);
           }}
-          className="size-3.5 shrink-0 accent-[var(--accent)] sm:size-3.5"
+          className="size-3.5"
           aria-invalid={errorMessage === "Необходимо согласие на обработку персональных данных."}
         />
         <span className="min-w-0 whitespace-nowrap"><PrivacyConsentText /></span>

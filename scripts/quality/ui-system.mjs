@@ -5,14 +5,31 @@ import { extname, join } from "node:path";
 
 const rootConfig = JSON.parse(await readFile("components.json", "utf8"));
 const packageConfig = JSON.parse(await readFile("packages/site-ui/components.json", "utf8"));
+const migrationBaseline = JSON.parse(await readFile("scripts/quality/ui-debt-baseline.json", "utf8"));
 const comparedFields = ["style", "rsc", "tsx", "iconLibrary"];
 const errors = [];
-const debt = { paletteTokens: 0, rawColorsOutsideTheme: 0, arbitraryShadows: 0, nativeControlsOutsidePrimitives: 0 };
+const debt = {
+  paletteTokens: 0,
+  rawColorsOutsideTheme: 0,
+  arbitraryShadows: 0,
+  nativeControlsOutsidePrimitives: 0,
+  componentNumberedTokens: 0,
+  arbitraryTypography: 0,
+  arbitraryLayout: 0,
+  unstyled: 0,
+  inputCheckbox: 0,
+  spaceUtilities: 0,
+  manualButtonIconSize: 0,
+  registryWorkspaceImports: 0,
+  sharedProjectAssets: 0,
+  sharedBusinessClaims: 0,
+};
 const debtCeilings = {
   paletteTokens: 0,
   rawColorsOutsideTheme: 0,
   arbitraryShadows: 0,
   nativeControlsOutsidePrimitives: 0,
+  ...migrationBaseline,
 };
 
 for (const field of comparedFields) {
@@ -20,6 +37,9 @@ for (const field of comparedFields) {
 }
 if (rootConfig.tailwind?.baseColor !== packageConfig.tailwind?.baseColor) {
   errors.push("components.json mismatch: tailwind.baseColor");
+}
+if (JSON.stringify(rootConfig.registries) !== JSON.stringify(packageConfig.registries)) {
+  errors.push("components.json mismatch: registries");
 }
 
 async function collect(directory) {
@@ -43,6 +63,18 @@ const arbitraryShadow = /shadow-\[(?!var\()[^\]]+\]/g;
 const nativeControl = /<(?:button|input|textarea|select)\b/g;
 const legacyOverlayBridge = /data-(?:request-modal|modal-open)|open-(?:request-modal|property-chat)/;
 const identityLeak = /(?:АТЛАС|Краснодар|atlas-(?!media))/i;
+const componentNumberedToken = /var\(--[a-z0-9-]+-(?:color|surface|content|border|shadow|effect|icon)-[0-9]{2}\)/g;
+const arbitraryTypography = /\btext-\[(?![^\]]*var\()[^\]]+\]/g;
+const arbitraryLayout = /\b(?:m[trblxy]?|p[trblxy]?|gap|space-[xy]|w|h|min-[wh]|max-[wh]|rounded)-\[(?![^\]]*var\()[^\]]+\]/g;
+const arbitraryTypographyUses = new Map();
+const arbitraryLayoutUses = new Map();
+const unstyled = /\bunstyled\b/g;
+const inputCheckbox = /<Input\b[^>]{0,400}type=["']checkbox["']/gs;
+const spaceUtility = /\bspace-[xy]-[a-z0-9.\[\]-]+/g;
+const projectAsset = /["']\/images\/[^"']+["']/g;
+const businessClaim = /(?:бесплат|гарант|перезвонит\s+в\s+течение\s+\d+\s+минут|рейтинг\s*[:=]?\s*["']?\d[.,]\d)/gi;
+const buttonBlock = /<(?:Button|RequestModalButton)\b[\s\S]{0,900}?<\/(?:Button|RequestModalButton)>/g;
+const manuallySizedIcon = /<[A-Z][A-Za-z0-9]*\b[^>]*className=["'][^"']*\bsize-/;
 
 for (const file of files) {
   const normalized = file.replaceAll("\\", "/");
@@ -52,6 +84,18 @@ for (const file of files) {
   if (normalized !== themePath) debt.rawColorsOutsideTheme += source.match(rawColor)?.length ?? 0;
   debt.paletteTokens += source.match(paletteToken)?.length ?? 0;
   debt.arbitraryShadows += source.match(arbitraryShadow)?.length ?? 0;
+  debt.componentNumberedTokens += source.match(componentNumberedToken)?.length ?? 0;
+  for (const match of source.matchAll(arbitraryTypography)) arbitraryTypographyUses.set(match[0], (arbitraryTypographyUses.get(match[0]) ?? 0) + 1);
+  for (const match of source.matchAll(arbitraryLayout)) arbitraryLayoutUses.set(match[0], (arbitraryLayoutUses.get(match[0]) ?? 0) + 1);
+  debt.unstyled += source.match(unstyled)?.length ?? 0;
+  debt.inputCheckbox += source.match(inputCheckbox)?.length ?? 0;
+  debt.spaceUtilities += source.match(spaceUtility)?.length ?? 0;
+  if (normalized.startsWith("packages/site-ui/src/")) debt.sharedProjectAssets += source.match(projectAsset)?.length ?? 0;
+  if (normalized.startsWith("packages/site-ui/src/")) debt.sharedBusinessClaims += source.match(businessClaim)?.length ?? 0;
+  for (const match of source.matchAll(buttonBlock)) {
+    const body = match[0].slice(match[0].indexOf(">") + 1);
+    if (manuallySizedIcon.test(body)) debt.manualButtonIconSize += 1;
+  }
   if (!normalized.includes("/components/ui/")) debt.nativeControlsOutsidePrimitives += source.match(nativeControl)?.length ?? 0;
   if (!normalized.includes("/components/ui/") && radixImport.test(source)) {
     errors.push(`direct Radix import outside shadcn primitives: ${normalized}`);
@@ -72,14 +116,36 @@ for (const file of files) {
   }
 }
 
-for (const [name, count] of Object.entries(debt)) {
-  if (count > debtCeilings[name]) errors.push(`UI debt regression: ${name}=${count}, ceiling=${debtCeilings[name]}`);
-}
+debt.arbitraryTypography = repeatedDebt(arbitraryTypographyUses);
+debt.arbitraryLayout = repeatedDebt(arbitraryLayoutUses);
 
 const registry = JSON.parse(await readFile("packages/site-ui/registry.json", "utf8"));
+const inspectedRegistryFiles = new Set();
 for (const item of registry.items ?? []) {
   if (!item.name?.startsWith("ams-realty-")) errors.push(`registry item must use ams-realty-* namespace: ${item.name}`);
   if (identityLeak.test(JSON.stringify(item))) errors.push(`client identity inside neutral registry item: ${item.name}`);
+  for (const file of item.files ?? []) {
+    if (inspectedRegistryFiles.has(file.path)) continue;
+    inspectedRegistryFiles.add(file.path);
+    const registrySource = await readFile(join("packages/site-ui", file.path), "utf8");
+    debt.registryWorkspaceImports += registrySource.match(/@starter\//g)?.length ?? 0;
+  }
+}
+
+if (process.argv.includes("--self-test")) {
+  const fixture = '<Input type="checkbox" /><Button unstyled><Star className="size-4" /></Button><div className="space-y-4 text-[13px] max-w-[760px]">var(--demo-color-01)</div><img src="/images/project.webp" /><p>Гарантия, консультация бесплатно</p>';
+  const detected = [inputCheckbox, unstyled, spaceUtility, arbitraryTypography, arbitraryLayout, componentNumberedToken].every((pattern) => {
+    pattern.lastIndex = 0;
+    return pattern.test(fixture);
+  });
+  if (!detected || !manuallySizedIcon.test(fixture) || !projectAsset.test(fixture) || !businessClaim.test(fixture)) {
+    errors.push("UI guard self-test failed to detect intentional debt");
+  }
+}
+
+for (const [name, count] of Object.entries(debt)) {
+  if (!(name in debtCeilings)) errors.push(`UI debt ceiling is missing: ${name}`);
+  else if (count > debtCeilings[name]) errors.push(`UI debt regression: ${name}=${count}, ceiling=${debtCeilings[name]}`);
 }
 
 const publicImages = await collectAll("public/images");
@@ -109,4 +175,8 @@ async function collectAll(directory) {
     else if ((await stat(file)).isFile()) result.push(file);
   }
   return result;
+}
+
+function repeatedDebt(uses) {
+  return [...uses.values()].reduce((total, count) => total + Math.max(0, count - 1), 0);
 }

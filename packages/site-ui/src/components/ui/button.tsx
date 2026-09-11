@@ -14,6 +14,7 @@ const buttonVariants = cva(
         secondary: "bg-[var(--secondary)] text-[var(--secondary-foreground)] hover:bg-[var(--muted)]",
         ghost: "text-[var(--foreground)] hover:bg-[var(--accent)] hover:text-[var(--accent-foreground)]",
         link: "text-[var(--primary)] underline-offset-4 hover:underline",
+        plain: "bg-transparent text-inherit",
       },
       size: {
         sm: "h-9 px-3",
@@ -26,12 +27,12 @@ const buttonVariants = cva(
   },
 );
 
-export const Button = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button"> & VariantProps<typeof buttonVariants> & { asChild?: boolean; unstyled?: boolean }>(function Button(
-  { className, variant, size, asChild = false, unstyled = false, ...props },
+export const Button = React.forwardRef<HTMLButtonElement, React.ComponentProps<"button"> & VariantProps<typeof buttonVariants> & { asChild?: boolean }>(function Button(
+  { className, variant, size, asChild = false, ...props },
   ref,
 ) {
   const Comp = asChild ? Slot : "button";
-  return <Comp ref={ref} data-slot="button" className={unstyled ? className : cn(buttonVariants({ variant, size, className }))} {...props} />;
+  return <Comp ref={ref} data-slot="button" className={variant === "plain" ? className : cn(buttonVariants({ variant, size, className }))} {...props} />;
 });
 
 export { buttonVariants };

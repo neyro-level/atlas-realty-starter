@@ -1,13 +1,7 @@
 "use client";
 
 import { Button } from "../components/ui/button";
-import type {
-  PublicContactDto,
-  SiteFooterColumnDto,
-  SiteFooterMetaDto,
-  SiteNavLinkDto,
-  SiteSocialLinkDto,
-} from "@starter/site-contracts";
+import type { PublicContactViewDto, SiteFooterColumnViewDto, SiteFooterMetaViewDto, SiteNavLinkViewDto, SiteSocialLinkViewDto } from "../contracts/site-shell";
 import { Phone } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import type { SiteLinkRenderer } from "../lib/adapters";
@@ -15,11 +9,11 @@ import type { SiteLinkRenderer } from "../lib/adapters";
 type SiteFooterViewProps = {
   brand: ReactNode;
   brandLabel: string;
-  contacts: PublicContactDto;
-  columns: SiteFooterColumnDto[];
-  legalLinks: SiteNavLinkDto[];
-  meta: SiteFooterMetaDto;
-  socials: SiteSocialLinkDto[];
+  contacts: PublicContactViewDto;
+  columns: SiteFooterColumnViewDto[];
+  legalLinks: SiteNavLinkViewDto[];
+  meta: SiteFooterMetaViewDto;
+  socials: SiteSocialLinkViewDto[];
   linkRenderer: SiteLinkRenderer;
 };
 
@@ -126,7 +120,7 @@ function FooterPhoneReveal({ phone, phoneHref }: { phone: string; phoneHref: str
   }
 
   return (
-    <Button unstyled
+    <Button variant="plain"
       type="button"
       className="site-footer__phone site-footer__phone--hidden tabular-nums"
       data-analytics-event="phone_reveal"

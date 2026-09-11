@@ -31,19 +31,19 @@ export function AgencyFaqAccordion({ items }: AgencyFaqAccordionProps) {
             itemProp="mainEntity"
             itemType="https://schema.org/Question"
           >
-            <Button unstyled
+            <Button variant="plain"
               type="button"
               id={triggerId}
               aria-expanded={isOpen}
               aria-controls={panelId}
               onClick={() => setOpenIndex(isOpen ? null : index)}
-              className="group grid min-h-[70px] w-full grid-cols-[1fr_auto] items-center gap-3 bg-white px-4 py-5 text-left transition duration-200 hover:bg-[var(--surface-card-soft)] sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:gap-5 md:min-h-[78px] md:px-6 md:py-5"
+              className="group grid min-h-17.5 w-full grid-cols-[1fr_auto] items-center gap-3 bg-white px-4 py-5 text-left transition duration-200 hover:bg-[var(--surface-card-soft)] sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:gap-5 md:min-h-19.5 md:px-6 md:py-5"
             >
-              <span className="col-span-2 font-mono text-[11px] font-semibold leading-5 tracking-[0.12em] text-[var(--agency-faq-accordion-content-01)] tabular-nums sm:col-span-1">
+              <span className="col-span-2 font-mono text-caption font-semibold leading-5 tracking-[0.12em] text-[var(--agency-faq-accordion-content-primary)] tabular-nums sm:col-span-1">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <span
-                className="min-w-0 text-[15px] font-semibold leading-6 text-[var(--text-primary)] md:text-[16px] md:leading-6"
+                className="min-w-0 text-body-compact font-semibold leading-6 text-[var(--text-primary)] md:text-body-large md:leading-6"
                 itemProp="name"
               >
                 {item.question}
@@ -76,7 +76,7 @@ export function AgencyFaqAccordion({ items }: AgencyFaqAccordionProps) {
               itemType="https://schema.org/Answer"
             >
               <div className="overflow-hidden">
-                <div className="max-w-[760px] space-y-4 px-4 pb-7 pt-0 text-[14px] leading-7 text-[var(--agency-faq-accordion-content-02)] sm:pl-[92px] sm:pr-16 md:pb-8 md:text-[15px] md:leading-7">
+                <div className="max-w-190 grid gap-4 px-4 pb-7 pt-0 text-body leading-7 text-[var(--agency-faq-accordion-content-secondary)] sm:pl-23 sm:pr-16 md:pb-8 md:text-body-compact md:leading-7">
                   <meta itemProp="text" content={faqItemToPlainAnswer(item)} />
                   {item.answer.map((block, blockIndex) =>
                     block.type === "paragraph" ? (
@@ -84,7 +84,7 @@ export function AgencyFaqAccordion({ items }: AgencyFaqAccordionProps) {
                     ) : (
                       <ul
                         key={`${item.question}-list-${blockIndex}`}
-                        className="list-disc space-y-2 pl-5"
+                        className="list-disc grid gap-2 pl-5"
                       >
                         {block.items.map((listItem) => (
                           <li key={listItem}>{listItem}</li>

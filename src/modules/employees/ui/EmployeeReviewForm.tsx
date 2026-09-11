@@ -57,7 +57,7 @@ export function EmployeeReviewForm({ agentId, fullName }: { agentId: string; ful
 
   return (
     <>
-      <Button type="button" onClick={show} variant="outline" className="inline-flex min-h-11 rounded-lg border-[var(--employee-review-form-border-01)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent)]">
+      <Button type="button" onClick={show} variant="outline" className="inline-flex min-h-11 rounded-lg border-[var(--employee-review-form-border-primary)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent)]">
         Оставить отзыв
       </Button>
       <EmployeeReviewDialogView

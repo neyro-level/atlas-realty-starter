@@ -59,7 +59,7 @@ export function CatalogBuyerServicesSection({ sourcePage }: CatalogBuyerServices
     >
       <div className="mx-auto max-w-site-frame px-5">
         <div className="mb-12 md:mb-14 lg:mb-16">
-          <h2 className="max-w-none text-[30px] font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-[38px] lg:whitespace-nowrap lg:text-[clamp(32px,3.05vw,42px)]">
+          <h2 className="max-w-none text-heading-large font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-display-medium lg:whitespace-nowrap lg:text-[clamp(32px,3.05vw,42px)]">
             Подключите сервисы <span className="text-[var(--accent)]">агентства недвижимости</span> там, где они нужны
           </h2>
         </div>
@@ -72,22 +72,22 @@ export function CatalogBuyerServicesSection({ sourcePage }: CatalogBuyerServices
 
             return (
               <RequestModalTrigger key={service.id} request={{ title: modalTitle, subtitle: service.modalSubtitle, submitLabel: "Получить консультацию", source: `${service.source}:${sourcePage}`, formType: service.formType }}><article
-                className="group grid min-h-[286px] cursor-pointer overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] shadow-[var(--catalog-buyer-services-section-shadow-01)] transition duration-200 hover:-translate-y-0.5 hover:border-[var(--catalog-buyer-services-section-border-01)] hover:shadow-[var(--catalog-buyer-services-section-shadow-02)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)] md:min-h-[304px] md:grid-cols-[minmax(0,1fr)_220px] lg:grid-cols-1 xl:grid-cols-[minmax(0,1fr)_188px]"
+                className="group grid min-h-71.5 cursor-pointer overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] shadow-[var(--catalog-buyer-services-section-shadow-primary)] transition duration-200 hover:-translate-y-0.5 hover:border-[var(--catalog-buyer-services-section-border-primary)] hover:shadow-[var(--catalog-buyer-services-section-shadow-secondary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)] md:min-h-76 md:grid-cols-[minmax(0,1fr)_220px] lg:grid-cols-1 xl:grid-cols-[minmax(0,1fr)_188px]"
                 data-catalog-buyer-service={service.id}
                 role="button"
                 tabIndex={0}
                 aria-label={`${modalTitle}. Получить консультацию`}
               >
-                <div className="flex min-h-[220px] flex-col p-5 md:min-h-[240px] md:p-6">
-                  <h3 className="max-w-[360px] text-[20px] font-semibold leading-[1.16] text-[var(--text-primary)] [text-wrap:balance]">
+                <div className="flex min-h-55 flex-col p-5 md:min-h-60 md:p-6">
+                  <h3 className="max-w-90 text-heading-small font-semibold leading-[1.16] text-[var(--text-primary)] [text-wrap:balance]">
                     {title}
                   </h3>
-                  <p className="mt-4 max-w-[360px] text-[14px] leading-[1.6] text-[var(--catalog-buyer-services-section-content-01)]">
+                  <p className="mt-4 max-w-90 text-body leading-[1.6] text-[var(--catalog-buyer-services-section-content-primary)]">
                     <ServiceText text={service.text} highlight={service.highlight} />
                   </p>
                   <div className="mt-auto pt-7">
                     <span
-                      className="inline-flex min-h-10 items-center justify-center border-b border-[var(--accent)]/35 bg-transparent px-0 text-[13px] font-medium leading-none text-[var(--accent)] transition hover:border-[var(--accent)] hover:text-[var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]"
+                      className="inline-flex min-h-10 items-center justify-center border-b border-[var(--accent)]/35 bg-transparent px-0 text-support font-medium leading-none text-[var(--accent)] transition hover:border-[var(--accent)] hover:text-[var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]"
                       aria-hidden
                     >
                       Получить консультацию
@@ -138,7 +138,7 @@ function ServiceVisual({
   imagePosition?: string;
 }) {
   return (
-    <div className="relative min-h-[158px] overflow-hidden border-t border-[var(--border)] bg-[linear-gradient(145deg,var(--catalog-buyer-services-section-color-01)_0%,var(--catalog-buyer-services-section-color-02)_54%,var(--surface)_100%)] md:min-h-full md:border-l md:border-t-0 lg:min-h-[184px] lg:border-l-0 lg:border-t xl:min-h-full xl:border-l xl:border-t-0">
+    <div className="relative min-h-39.5 overflow-hidden border-t border-[var(--border)] bg-[linear-gradient(145deg,var(--catalog-buyer-services-section-visual-primary)_0%,var(--catalog-buyer-services-section-visual-secondary)_54%,var(--surface)_100%)] md:min-h-full md:border-l md:border-t-0 lg:min-h-46 lg:border-l-0 lg:border-t xl:min-h-full xl:border-l xl:border-t-0">
       {imageSrc ? (
         <>
           <Image
@@ -149,14 +149,14 @@ function ServiceVisual({
             sizes="(max-width: 768px) calc(100vw - 40px), (max-width: 1280px) 520px, 520px"
             className={`object-cover ${imagePosition ?? "object-center"} transition duration-500 group-hover:scale-[1.025]`}
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--catalog-buyer-services-section-effect-01)_46%,var(--catalog-buyer-services-section-effect-02)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--catalog-buyer-services-section-effect-primary)_46%,var(--catalog-buyer-services-section-effect-secondary)_100%)]" />
         </>
       ) : (
         <>
-          <div className="absolute inset-0 opacity-70 [background-image:radial-gradient(circle_at_18%_16%,var(--catalog-buyer-services-section-effect-03),transparent_30%),linear-gradient(135deg,var(--catalog-buyer-services-section-effect-04)_0_1px,transparent_1px)] [background-size:auto,18px_18px]" />
+          <div className="absolute inset-0 opacity-70 [background-image:radial-gradient(circle_at_18%_16%,var(--catalog-buyer-services-section-effect-tertiary),transparent_30%),linear-gradient(135deg,var(--catalog-buyer-services-section-effect-subtle)_0_1px,transparent_1px)] [background-size:auto,18px_18px]" />
           <svg
             viewBox="0 0 220 260"
-            className="absolute inset-x-0 bottom-0 mx-auto h-full w-full max-w-[220px] text-[var(--accent)]"
+            className="absolute inset-x-0 bottom-0 mx-auto h-full w-full max-w-55 text-[var(--accent)]"
             aria-hidden
           >
             {kind === "selection" ? <SelectionPlaceholder /> : null}
@@ -172,11 +172,11 @@ function ServiceVisual({
 function SelectionPlaceholder() {
   return (
     <>
-      <circle cx="116" cy="64" r="30" fill="var(--catalog-buyer-services-section-color-03)" stroke="var(--catalog-buyer-services-section-color-04)" strokeWidth="3" />
-      <path d="M86 144c6-31 54-31 60 0" fill="var(--catalog-buyer-services-section-color-03)" stroke="var(--catalog-buyer-services-section-color-04)" strokeWidth="3" strokeLinecap="round" />
-      <rect x="42" y="116" width="82" height="96" rx="10" fill="var(--surface)" stroke="var(--catalog-buyer-services-section-color-05)" strokeWidth="3" />
-      <path d="M60 144h46M60 164h34M60 184h26" stroke="var(--catalog-buyer-services-section-color-06)" strokeWidth="4" strokeLinecap="round" />
-      <circle cx="150" cy="160" r="34" fill="var(--catalog-buyer-services-section-color-07)" stroke="var(--accent)" strokeWidth="4" />
+      <circle cx="116" cy="64" r="30" fill="var(--catalog-buyer-services-section-visual-tertiary)" stroke="var(--catalog-buyer-services-section-visual-subtle)" strokeWidth="3" />
+      <path d="M86 144c6-31 54-31 60 0" fill="var(--catalog-buyer-services-section-visual-tertiary)" stroke="var(--catalog-buyer-services-section-visual-subtle)" strokeWidth="3" strokeLinecap="round" />
+      <rect x="42" y="116" width="82" height="96" rx="10" fill="var(--surface)" stroke="var(--catalog-buyer-services-section-visual-muted)" strokeWidth="3" />
+      <path d="M60 144h46M60 164h34M60 184h26" stroke="var(--catalog-buyer-services-section-visual-strong)" strokeWidth="4" strokeLinecap="round" />
+      <circle cx="150" cy="160" r="34" fill="var(--catalog-buyer-services-section-visual-inverse)" stroke="var(--accent)" strokeWidth="4" />
       <path d="m133 160 12 12 24-27" fill="none" stroke="var(--accent)" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
     </>
   );
@@ -185,10 +185,10 @@ function SelectionPlaceholder() {
 function MortgagePlaceholder() {
   return (
     <>
-      <path d="M46 98h128L110 54 46 98Z" fill="var(--surface)" stroke="var(--catalog-buyer-services-section-color-05)" strokeWidth="3" strokeLinejoin="round" />
-      <path d="M62 110v64M92 110v64M122 110v64M152 110v64" stroke="var(--catalog-buyer-services-section-color-06)" strokeWidth="9" strokeLinecap="round" />
-      <path d="M44 188h132" stroke="var(--catalog-buyer-services-section-color-05)" strokeWidth="10" strokeLinecap="round" />
-      <rect x="124" y="32" width="56" height="74" rx="12" fill="var(--catalog-buyer-services-section-color-07)" stroke="var(--accent)" strokeWidth="4" />
+      <path d="M46 98h128L110 54 46 98Z" fill="var(--surface)" stroke="var(--catalog-buyer-services-section-visual-muted)" strokeWidth="3" strokeLinejoin="round" />
+      <path d="M62 110v64M92 110v64M122 110v64M152 110v64" stroke="var(--catalog-buyer-services-section-visual-strong)" strokeWidth="9" strokeLinecap="round" />
+      <path d="M44 188h132" stroke="var(--catalog-buyer-services-section-visual-muted)" strokeWidth="10" strokeLinecap="round" />
+      <rect x="124" y="32" width="56" height="74" rx="12" fill="var(--catalog-buyer-services-section-visual-inverse)" stroke="var(--accent)" strokeWidth="4" />
       <path d="m139 84 26-34M141 54h.1M164 82h.1" stroke="var(--accent)" strokeWidth="7" strokeLinecap="round" />
       <path d="M141 54h.1M164 82h.1" stroke="var(--accent)" strokeWidth="10" strokeLinecap="round" />
     </>
@@ -198,11 +198,11 @@ function MortgagePlaceholder() {
 function LegalPlaceholder() {
   return (
     <>
-      <path d="M110 44 160 64v38c0 42-22 70-50 86-28-16-50-44-50-86V64l50-20Z" fill="var(--catalog-buyer-services-section-color-03)" stroke="var(--catalog-buyer-services-section-color-04)" strokeWidth="3" strokeLinejoin="round" />
-      <path d="M110 62v108" stroke="var(--catalog-buyer-services-section-color-08)" strokeWidth="3" />
-      <rect x="48" y="130" width="86" height="70" rx="10" fill="var(--surface)" stroke="var(--catalog-buyer-services-section-color-05)" strokeWidth="3" />
-      <path d="M64 154h50M64 174h36" stroke="var(--catalog-buyer-services-section-color-06)" strokeWidth="4" strokeLinecap="round" />
-      <circle cx="146" cy="150" r="28" fill="var(--catalog-buyer-services-section-color-07)" stroke="var(--accent)" strokeWidth="4" />
+      <path d="M110 44 160 64v38c0 42-22 70-50 86-28-16-50-44-50-86V64l50-20Z" fill="var(--catalog-buyer-services-section-visual-tertiary)" stroke="var(--catalog-buyer-services-section-visual-subtle)" strokeWidth="3" strokeLinejoin="round" />
+      <path d="M110 62v108" stroke="var(--catalog-buyer-services-section-visual-hover)" strokeWidth="3" />
+      <rect x="48" y="130" width="86" height="70" rx="10" fill="var(--surface)" stroke="var(--catalog-buyer-services-section-visual-muted)" strokeWidth="3" />
+      <path d="M64 154h50M64 174h36" stroke="var(--catalog-buyer-services-section-visual-strong)" strokeWidth="4" strokeLinecap="round" />
+      <circle cx="146" cy="150" r="28" fill="var(--catalog-buyer-services-section-visual-inverse)" stroke="var(--accent)" strokeWidth="4" />
       <path d="m132 150 10 10 20-24" fill="none" stroke="var(--accent)" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
     </>
   );

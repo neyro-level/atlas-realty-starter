@@ -20,8 +20,8 @@ type RequestCtaProps = {
 };
 
 const variants = {
-  primary: "bg-[var(--request-cta-surface-01)] text-white hover:bg-[var(--request-cta-surface-02)]",
-  secondary: "border border-[var(--request-cta-border-01)] bg-white text-[var(--request-cta-content-01)] hover:border-[var(--request-cta-border-02)] hover:text-[var(--request-cta-content-02)]",
+  primary: "bg-[var(--request-cta-surface-primary)] text-white hover:bg-[var(--request-cta-surface-secondary)]",
+  secondary: "border border-[var(--request-cta-border-primary)] bg-white text-[var(--request-cta-content-primary)] hover:border-[var(--request-cta-border-secondary)] hover:text-[var(--request-cta-content-secondary)]",
   "dark-secondary": "border border-white/28 bg-white/5 text-white hover:border-white/55 hover:bg-white/10",
 };
 
@@ -41,8 +41,7 @@ export function RequestCta({
 }: RequestCtaProps) {
   const { openRequest } = useSiteOverlay();
   return (
-    <Button
-      unstyled
+    <Button variant="plain"
       type="button"
       onClick={() => openRequest({
         title: modalTitle ?? label,

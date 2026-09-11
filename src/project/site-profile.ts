@@ -36,6 +36,9 @@ export const siteProfile = {
     favicon: "/favicon.ico",
     socialPreview: "/images/brand/atlas-social-preview.jpg",
   },
+  media: {
+    catalogMortgageService: "/images/catalog-mortgage-service.webp",
+  },
   seo: {
     title: "Недвижимость в Краснодаре | АТЛАС",
     description: "АТЛАС: квартиры, дома, новостройки, участки, коммерческая недвижимость и сопровождение сделки.",

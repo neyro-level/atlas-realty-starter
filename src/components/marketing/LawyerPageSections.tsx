@@ -35,6 +35,9 @@ export async function LawyerPageSections() {
     employeeCards={employees.map((employee) => <EmployeeTeamCard key={employee.id} employee={employee} showPhoneAction />)}
     servicesGallery={<LawyerServicesGallery />}
     consultationForm={<AgencyInlineLeadForm sourcePage="/yurist" source="corporate:yurist:final" formType="legal_consultation" message="Юридическая консультация" submitLabel="Получить консультацию" centerConsent requireName stacked buttonAgreementConsent />}
+    initialConsultationText="Кратко описываете ситуацию. Первая консультация по телефону — бесплатно."
+    consultationTitle="Оставьте заявку — юрист перезвонит в течение 15 минут и оценит вашу ситуацию"
+    consultationDescription="Первая консультация по телефону бесплатно. Расскажите кратко о ситуации, и мы скажем, можно ли решить вопрос без суда или нужна подготовка документов."
     faq={<AgencyFaqAccordion items={LAWYER_FAQ_ITEMS} />}
   /></>;
 }

@@ -77,16 +77,16 @@ export function MobileMenuView({
           aria-label="Мобильное меню"
           className="flex h-dvh max-h-dvh flex-col bg-[var(--surface-card-soft)]"
         >
-          <div className="shrink-0 border-b border-[var(--mobile-menu-border-01)] bg-white px-4 pb-2.5 pt-[max(0.65rem,env(safe-area-inset-top,0px))]">
+          <div className="shrink-0 border-b border-[var(--mobile-menu-border-primary)] bg-white px-4 pb-2.5 pt-[max(0.65rem,env(safe-area-inset-top,0px))]">
             <div className="mx-auto flex h-14 w-full max-w-lg items-center justify-between gap-3">
               <div className="flex shrink-0 items-center">{brandSlot}</div>
-              <Button unstyled
+              <Button variant="plain"
                 type="button"
                 aria-label="Закрыть меню"
-                className="inline-flex size-10 shrink-0 items-center justify-center rounded-md border border-[var(--border)] bg-white text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                className="inline-flex shrink-0 items-center justify-center rounded-md border border-[var(--border)] bg-white text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
                 onClick={onClose}
               >
-                <X className="size-5" strokeWidth={1.75} aria-hidden />
+                <X className="" strokeWidth={1.75} aria-hidden />
               </Button>
             </div>
           </div>
@@ -137,7 +137,7 @@ function MobileLinkGroup({
   onNavigate: () => void;
 }) {
   return (
-    <nav aria-label="Типы недвижимости" className="overflow-hidden rounded-[14px] border border-[var(--mobile-menu-border-02)] bg-white">
+    <nav aria-label="Типы недвижимости" className="overflow-hidden rounded-emphasis border border-[var(--mobile-menu-border-secondary)] bg-white">
       {links.map((link, index) => (
         <MobileRowLink
           key={link.href}
@@ -165,21 +165,21 @@ function MobileActionGroup({
   onAction: (action: Extract<SiteMobileMenuActionDto, { kind: "action" }>) => void;
 }) {
   return (
-    <nav aria-label="Сервисы и разделы" className="overflow-hidden rounded-[14px] border border-[var(--mobile-menu-border-02)] bg-white">
+    <nav aria-label="Сервисы и разделы" className="overflow-hidden rounded-emphasis border border-[var(--mobile-menu-border-secondary)] bg-white">
       {actions.map((action, index) => {
         if ("kind" in action && action.kind === "action") {
           return (
-            <Button unstyled
+            <Button variant="plain"
               key={`${action.actionId}-${action.label}`}
               type="button"
-              className={`flex min-h-11 w-full items-center justify-between gap-3 px-4 text-left text-[13.5px] font-medium tracking-[-0.01em] text-[var(--mobile-menu-content-01)] transition hover:bg-[var(--surface-card-soft)] hover:text-[var(--accent)] ${index > 0 ? "border-t border-[var(--mobile-menu-border-03)]" : ""}`}
+              className={`flex min-h-11 w-full items-center justify-between gap-3 px-4 text-left text-support font-medium tracking-[-0.01em] text-[var(--mobile-menu-content-primary)] transition hover:bg-[var(--surface-card-soft)] hover:text-[var(--accent)] ${index > 0 ? "border-t border-[var(--mobile-menu-border-tertiary)]" : ""}`}
               onClick={() => {
                 onAction(action);
                 onNavigate();
               }}
             >
               <span>{action.label}</span>
-              <ChevronRight className="size-4 shrink-0 text-[var(--mobile-menu-content-02)]" strokeWidth={1.75} aria-hidden />
+              <ChevronRight className="shrink-0 text-[var(--mobile-menu-content-secondary)]" strokeWidth={1.75} aria-hidden />
             </Button>
           );
         }
@@ -217,11 +217,11 @@ function MobileRowLink({
   onNavigate: () => void;
   bordered: boolean;
 }) {
-  const className = `flex min-h-11 items-center justify-between gap-3 px-4 text-[13.5px] font-medium tracking-[-0.01em] text-[var(--mobile-menu-content-01)] transition hover:bg-[var(--surface-card-soft)] hover:text-[var(--accent)] ${bordered ? "border-t border-[var(--mobile-menu-border-03)]" : ""}`;
+  const className = `flex min-h-11 items-center justify-between gap-3 px-4 text-support font-medium tracking-[-0.01em] text-[var(--mobile-menu-content-primary)] transition hover:bg-[var(--surface-card-soft)] hover:text-[var(--accent)] ${bordered ? "border-t border-[var(--mobile-menu-border-tertiary)]" : ""}`;
   const content = (
     <>
       <span>{label}</span>
-      <ChevronRight className="size-4 shrink-0 text-[var(--mobile-menu-content-02)]" strokeWidth={1.75} aria-hidden />
+      <ChevronRight className="size-4 shrink-0 text-[var(--mobile-menu-content-secondary)]" strokeWidth={1.75} aria-hidden />
     </>
   );
 

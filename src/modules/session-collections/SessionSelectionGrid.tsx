@@ -30,7 +30,7 @@ export function SessionSelectionGrid({ items }: Props) {
             className={item.unavailable ? "relative opacity-70" : "relative"}
           >
             {item.unavailable ? (
-              <span className="absolute left-4 top-4 z-30 rounded-md bg-white/94 px-2 py-1 text-[11px] font-semibold text-[var(--accent)] shadow-[var(--session-selection-grid-shadow-01)]">
+              <span className="absolute left-4 top-4 z-30 rounded-md bg-white/94 px-2 py-1 text-caption font-semibold text-[var(--accent)] shadow-[var(--session-selection-grid-shadow-primary)]">
                 {unavailableLabel}
               </span>
             ) : null}
