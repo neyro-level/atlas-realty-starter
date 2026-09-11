@@ -88,6 +88,14 @@
       ]
     },
     {
+      "name": "ams-realty-overlay-trigger",
+      "type": "registry:component",
+      "title": "AMS Realty typed overlay trigger",
+      "description": "Neutral typed request and property-chat context with accessible polymorphic triggers.",
+      "registryDependencies": ["ams-realty-primitives"],
+      "files": [{ "path": "src/components/shared/site-overlay-context.tsx", "type": "registry:component" }]
+    },
+    {
       "name": "ams-realty-request-form",
       "type": "registry:block",
       "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives"],
@@ -123,7 +131,7 @@
       "type": "registry:block",
       "title": "AMS Realty new-building detail views",
       "description": "Neutral unified residential-complex detail composition and supporting sections.",
-      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives", "ams-realty-media-gallery", "ams-realty-request-form"],
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives", "ams-realty-media-gallery", "ams-realty-overlay-trigger"],
       "files": [
         { "path": "src/contracts/new-building.ts", "type": "registry:lib" },
         { "path": "src/views/NewBuildingDecisionSidebarView.tsx", "type": "registry:block" },
@@ -139,7 +147,7 @@
       "type": "registry:block",
       "title": "AMS Realty new-building conversion views",
       "description": "Neutral quick actions, mobile commercial content, expert proof and sticky conversion controls.",
-      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives", "ams-realty-request-form"],
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives", "ams-realty-overlay-trigger"],
       "files": [
         { "path": "src/contracts/new-building.ts", "type": "registry:lib" },
         { "path": "src/views/NewBuildingConversionViews.tsx", "type": "registry:block" },
