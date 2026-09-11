@@ -157,7 +157,7 @@ export function AgencyInlineLeadForm({
           required={requireName}
           autoComplete="name"
           placeholder={requireName ? "Имя" : "Ваше Имя"}
-          className="min-h-[58px] rounded-lg border border-[var(--agency-inline-lead-form-border-01)] bg-white px-5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-01)] focus:border-[var(--accent)]"
+          className="min-h-[58px] rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-white px-5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
         />
 
         <label className="sr-only" htmlFor={`${formType}-phone`}>
@@ -166,7 +166,7 @@ export function AgencyInlineLeadForm({
         <div className="relative">
           <span className="pointer-events-none absolute left-5 top-1/2 flex -translate-y-1/2 items-center gap-1 text-base font-semibold text-[var(--text-primary)]">
             <span aria-hidden>🇷🇺</span>
-            <span className="text-xs text-[var(--agency-inline-lead-form-content-02)]" aria-hidden>
+            <span className="text-xs text-[var(--agency-inline-lead-form-content-secondary)]" aria-hidden>
               ▼
             </span>
           </span>
@@ -182,7 +182,7 @@ export function AgencyInlineLeadForm({
             onFocus={onPhoneFocus}
             aria-invalid={Boolean(errorMessage)}
             aria-describedby={errorMessage ? errorId : undefined}
-            className="min-h-[58px] w-full rounded-lg border border-[var(--agency-inline-lead-form-border-01)] bg-white px-5 pl-[78px] text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-01)] focus:border-[var(--accent)]"
+            className="min-h-[58px] w-full rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-white px-5 pl-[78px] text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
           />
         </div>
 
@@ -196,7 +196,7 @@ export function AgencyInlineLeadForm({
       </div>
 
       <label
-        className={`mx-auto mt-5 flex max-w-[620px] items-start gap-3 text-xs leading-5 text-[var(--agency-inline-lead-form-content-03)] ${
+        className={`mx-auto mt-5 flex max-w-[620px] items-start gap-3 text-xs leading-5 text-[var(--agency-inline-lead-form-content-tertiary)] ${
           centerConsent ? "justify-center text-center" : ""
         }`}
       >

@@ -27,7 +27,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
               {title}
             </h2>
             {lead ? (
-              <p className="mx-auto max-w-[640px] text-[16px] leading-7 text-[var(--agency-process-section-content-01)] md:text-[18px]">
+              <p className="mx-auto max-w-[640px] text-[16px] leading-7 text-[var(--agency-process-section-content-primary)] md:text-[18px]">
                 {lead}
               </p>
             ) : null}
@@ -60,7 +60,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
                         ))
                       : step.title}
                   </h3>
-                  <p className="mt-4 max-w-[420px] text-[15px] leading-7 text-[var(--agency-process-section-content-02)] md:text-[16px]">
+                  <p className="mt-4 max-w-[420px] text-[15px] leading-7 text-[var(--agency-process-section-content-secondary)] md:text-[16px]">
                     {step.text}
                   </p>
                 </article>

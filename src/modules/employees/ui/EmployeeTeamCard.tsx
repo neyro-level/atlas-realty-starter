@@ -33,7 +33,7 @@ export function EmployeeTeamCard({
       summary={employee.publicSummary}
       imageSrc={imageSrc}
       imageAlt={employee.photoUrl ? employee.fullName : ""}
-      imageClassName={employee.photoUrl ? "object-cover object-top" : "bg-[var(--employee-team-card-surface-01)] object-contain object-bottom"}
+      imageClassName={employee.photoUrl ? "object-cover object-top" : "bg-[var(--employee-team-card-surface-primary)] object-contain object-bottom"}
       profileLabel="Открыть профиль"
       phoneAction={showsPhoneAction ? <EmployeePhoneAction phone={employee.phone} slug={employee.slug} compact /> : null}
       linkRenderer={EmployeeLink}
