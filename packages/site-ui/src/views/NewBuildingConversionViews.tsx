@@ -1,4 +1,4 @@
-import type { NewBuildingDetailDto } from "@starter/site-contracts";
+import type { NewBuildingDetailViewModel } from "../contracts/new-building";
 import type { LucideIcon } from "lucide-react";
 import { BadgePercent, Building2, CalendarDays, CheckCircle2, Handshake, Home, Layers3, Scale, SearchCheck } from "lucide-react";
 import type { ReactNode } from "react";
@@ -8,7 +8,7 @@ import { Separator } from "../components/ui/separator";
 import { RequestModalButton, type RequestOverlayDetail } from "../components/shared/site-overlay-context";
 import type { SiteImageRenderer, SiteLinkRenderer } from "../lib/adapters";
 
-type DetailProps = { detail: NewBuildingDetailDto };
+type DetailProps = { detail: NewBuildingDetailViewModel };
 
 export type NewBuildingQuickSelectionItem = {
   id: string;

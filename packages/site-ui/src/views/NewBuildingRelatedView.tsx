@@ -1,7 +1,7 @@
-import type { NewBuildingDto } from "@starter/site-contracts";
+import type { NewBuildingSummaryViewModel } from "../contracts/new-building";
 import { Fragment, type ReactNode } from "react";
 
-export function NewBuildingRelatedView({ related, contained = false, renderCard }: { related: NewBuildingDto[]; contained?: boolean; renderCard: (item: NewBuildingDto) => ReactNode }) {
+export function NewBuildingRelatedView({ related, contained = false, renderCard }: { related: NewBuildingSummaryViewModel[]; contained?: boolean; renderCard: (item: NewBuildingSummaryViewModel) => ReactNode }) {
   if (related.length === 0) return null;
   const frameClassName = contained ? "" : "mx-auto max-w-site-frame px-5";
   const gridClassName = contained ? "mt-5 grid gap-5 sm:grid-cols-2 xl:grid-cols-3" : "mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-4";

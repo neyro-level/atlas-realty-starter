@@ -1,6 +1,6 @@
 "use client";
 
-import type { NewBuildingDto } from "@starter/site-contracts";
+import type { NewBuildingSummaryViewModel } from "../contracts/new-building";
 import { ArrowRight, Building2, MapPin } from "lucide-react";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { Button } from "../components/ui/button";
@@ -9,7 +9,7 @@ import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "../co
 import { Separator } from "../components/ui/separator";
 import type { SiteImageRenderer, SiteLinkRenderer } from "../lib/adapters";
 
-export function NewBuildingMobileCarouselView({ items, imageRenderer: Image, linkRenderer: Link, favoriteActions = {} }: { items: readonly NewBuildingDto[]; imageRenderer: SiteImageRenderer; linkRenderer: SiteLinkRenderer; favoriteActions?: Record<string, ReactNode> }) {
+export function NewBuildingMobileCarouselView({ items, imageRenderer: Image, linkRenderer: Link, favoriteActions = {} }: { items: readonly NewBuildingSummaryViewModel[]; imageRenderer: SiteImageRenderer; linkRenderer: SiteLinkRenderer; favoriteActions?: Record<string, ReactNode> }) {
   const [api, setApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [snapCount, setSnapCount] = useState(items.length);

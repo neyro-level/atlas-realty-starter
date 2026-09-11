@@ -11,6 +11,7 @@ export function NewBuildingLayoutsSection({ complex, contained = false }: { comp
       detail={toNewBuildingDetailDto(complex)}
       contained={contained}
       cityPrepositional={siteProfile.city.prepositional}
+      expert={{ ...siteProfile.expert, ratingLabel: null }}
       imageRenderer={Image}
       requestAction={
         <RequestCta

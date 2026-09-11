@@ -15,7 +15,7 @@ export type CatalogHeroViewProps = {
   action?: ReactNode;
   /** `lg+` (default) — CTA только от desktop; `always` — CTA виден и на mobile/tablet. */
   actionVisibility?: "lg+" | "always";
-  imageSrc?: string;
+  imageSrc: string;
   imagePosition?: string;
   focusImageBottomDesktop?: boolean;
   /** Увеличить высоту широкого hero, чтобы показать больше вертикального кадра без боковых пустот. */
@@ -26,23 +26,18 @@ export type CatalogHeroViewProps = {
   unoptimized?: boolean;
 };
 
-export const CATALOG_HERO_DESCRIPTION =
-  "Покупайте недвижимость без рисков и скрытых проблем. Бесплатно подберем вариант, проверим документы, поможем с оформлением ипотеки и торгом.";
-
-export const CATALOG_HERO_IMAGE = "/images/agency-home-secondary-hero.webp";
-
 export function CatalogHeroView({
   title,
   variant = "default",
   titleLines,
   titleSize = "auto",
   titleLinesDesktop = "stack",
-  description = CATALOG_HERO_DESCRIPTION,
+  description,
   descriptionLines,
   descriptionVisibility = "lg+",
   action,
   actionVisibility = "lg+",
-  imageSrc = CATALOG_HERO_IMAGE,
+  imageSrc,
   imagePosition = "center",
   focusImageBottomDesktop = false,
   expandedDesktop = false,
@@ -117,7 +112,7 @@ export function CatalogHeroView({
                       {line}
                     </span>
                   ))
-                : protectShortEnding(description)}
+                : protectShortEnding(description ?? "")}
             </p>
           ) : null}
           {action ? (

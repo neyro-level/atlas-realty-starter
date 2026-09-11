@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "../components/ui/button";
-import type { NewBuildingMediaDto } from "@starter/site-contracts";
+import type { NewBuildingMediaViewModel } from "../contracts/new-building";
 import type { SiteImageRenderer } from "../lib/adapters";
 import { useState } from "react";
 import { Building2, Camera, ExternalLink, MapPin, Play } from "lucide-react";
@@ -9,7 +9,7 @@ import { MediaGallery } from "./MediaGallery";
 
 export type NewBuildingGalleryViewProps = {
   address: string;
-  images: NewBuildingMediaDto[];
+  images: NewBuildingMediaViewModel[];
   latitude: number | null;
   longitude: number | null;
   name: string;

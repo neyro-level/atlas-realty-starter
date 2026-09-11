@@ -126,6 +126,7 @@ export { NewBuildingHeroView } from "./views/NewBuildingHeroView";
 export { NewBuildingRelatedView } from "./views/NewBuildingRelatedView";
 export { NewBuildingAboutView, NewBuildingLocationView, NewBuildingPurchaseTermsView, NewBuildingSelectionView } from "./views/NewBuildingDetailSectionsView";
 export { NewBuildingDecisionSidebarView } from "./views/NewBuildingDecisionSidebarView";
+export type { NewBuildingDetailViewModel, NewBuildingExpertViewModel, NewBuildingMediaViewModel, NewBuildingSummaryViewModel } from "./contracts/new-building";
 export { NewBuildingDetailPageView } from "./views/NewBuildingDetailPageView";
 export { NewBuildingCatalogWhyAgencyView, NewBuildingMobileCommercialView, NewBuildingMobileWhyAgencyView, NewBuildingPurchaseProcessView, NewBuildingQuickSelectionsView, type NewBuildingQuickSelectionItem } from "./views/NewBuildingConversionViews";
 export { NewBuildingMobileCarouselView } from "./views/NewBuildingMobileCarouselView";

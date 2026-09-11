@@ -9,6 +9,7 @@ import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";
 import { RequestCta } from "./RequestCta";
 import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
+import { siteProfile } from "@/project/site-profile";
 
 export function NewBuildingDecisionSidebar({ complex }: { complex: NewBuilding }) {
   const { openPropertyChat } = useSiteOverlay();
@@ -57,6 +58,7 @@ export function NewBuildingDecisionSidebar({ complex }: { complex: NewBuilding }
   return (
     <NewBuildingDecisionSidebarView
       detail={detail}
+      expert={{ ...siteProfile.expert, ratingLabel: null }}
       question={question}
       copied={copied}
       imageRenderer={Image}

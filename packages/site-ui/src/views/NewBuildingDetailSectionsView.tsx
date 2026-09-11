@@ -1,10 +1,10 @@
-import type { NewBuildingDetailDto } from "@starter/site-contracts";
+import type { NewBuildingDetailViewModel, NewBuildingExpertViewModel } from "../contracts/new-building";
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { BadgeCheck, Banknote, Building2, Bus, GraduationCap, Landmark, MapPin } from "lucide-react";
 import type { SiteImageRenderer } from "../lib/adapters";
 
-type NewBuildingSectionProps = { detail: NewBuildingDetailDto; contained?: boolean };
+type NewBuildingSectionProps = { detail: NewBuildingDetailViewModel; contained?: boolean };
 
 function sectionFrame(contained: boolean) {
   return {
@@ -84,13 +84,13 @@ export function NewBuildingPurchaseTermsView({ detail, contained = false }: NewB
   );
 }
 
-export function NewBuildingSelectionView({ detail: _detail, contained = false, cityPrepositional, imageRenderer: Image, requestAction }: NewBuildingSectionProps & { cityPrepositional: string; imageRenderer: SiteImageRenderer; requestAction: ReactNode }) {
+export function NewBuildingSelectionView({ detail: _detail, contained = false, cityPrepositional, expert, imageRenderer: Image, requestAction }: NewBuildingSectionProps & { cityPrepositional: string; expert: NewBuildingExpertViewModel; imageRenderer: SiteImageRenderer; requestAction: ReactNode }) {
   const frame = sectionFrame(contained);
   return (
     <section className={frame.section}><div className={frame.frame}><div className="group overflow-hidden rounded-lg border border-[var(--new-building-detail-sections-border-01)] bg-[var(--new-building-detail-sections-surface-01)] shadow-[var(--new-building-detail-sections-shadow-02)] transition duration-200 hover:border-[var(--input)] hover:shadow-[var(--new-building-detail-sections-shadow-03)]">
       <div className="grid md:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_340px]">
         <div className="relative flex min-h-[300px] flex-col justify-center p-6 md:p-7 lg:min-h-[326px] lg:p-8"><span className="mb-7 block h-1 w-14 rounded-full bg-[var(--accent)]" aria-hidden /><h2 className="max-w-[520px] text-[28px] font-extrabold leading-[1.06] text-[var(--text-primary)] md:text-[34px] lg:text-[36px]"><span className="block">Бесплатный подбор</span><span className="block">новостроек в {cityPrepositional}</span></h2><p className="mt-5 max-w-[500px] text-[14px] font-normal leading-[1.62] text-[var(--text-secondary)] md:text-[15px]">Сравним условия всех застройщиков и найдём для вас акции, о которых не пишут в рекламе.</p>{requestAction}</div>
-        <div className="relative min-h-[230px] overflow-hidden border-t border-[var(--new-building-detail-sections-border-01)] bg-[linear-gradient(145deg,var(--new-building-detail-sections-color-01)_0%,var(--new-building-detail-sections-color-02)_54%,var(--surface)_100%)] md:min-h-full md:border-l md:border-t-0"><Image src="/images/catalog-buyer-expert.webp" alt="Эксперт агентства недвижимости помогает выбрать квартиру в новостройке" fill quality={95} sizes="(max-width: 768px) calc(100vw - 40px), 340px" className="object-cover object-[50%_50%] transition duration-500 group-hover:scale-[1.025]" /><div className="absolute inset-0 bg-[linear-gradient(180deg,var(--new-building-detail-sections-effect-01)_40%,var(--new-building-detail-sections-effect-02)_100%)]" /></div>
+        <div className="relative min-h-[230px] overflow-hidden border-t border-[var(--new-building-detail-sections-border-01)] bg-[var(--surface-card-soft)] md:min-h-full md:border-l md:border-t-0"><Image src={expert.portrait} alt={`${expert.name}, ${expert.role}`} fill quality={95} sizes="(max-width: 768px) calc(100vw - 40px), 340px" className="object-cover object-[50%_50%] transition duration-500 group-hover:scale-[1.025]" /><div className="absolute inset-0 bg-[linear-gradient(180deg,var(--new-building-detail-sections-effect-01)_40%,var(--new-building-detail-sections-effect-02)_100%)]" /></div>
       </div>
     </div></div></section>
   );
