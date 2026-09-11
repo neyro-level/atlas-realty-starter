@@ -27,7 +27,7 @@ export function LeadgenConstructionProjectShowcase({
         {examples.map((project) => (
           <article
             key={project.id}
-            className="group flex min-w-0 flex-col overflow-hidden rounded-[8px] border border-[var(--border)] bg-white shadow-[var(--leadgen-construction-project-showcase-shadow-01)] transition duration-300 hover:-translate-y-0.5 hover:border-[var(--leadgen-construction-project-showcase-border-01)] hover:shadow-[var(--leadgen-construction-project-showcase-shadow-02)] max-md:w-[82vw] max-md:max-w-[360px] max-md:shrink-0 max-md:snap-start"
+            className="group flex min-w-0 flex-col overflow-hidden rounded-[8px] border border-[var(--border)] bg-white shadow-[var(--leadgen-construction-project-showcase-shadow-primary)] transition duration-300 hover:-translate-y-0.5 hover:border-[var(--leadgen-construction-project-showcase-border-primary)] hover:shadow-[var(--leadgen-construction-project-showcase-shadow-secondary)] max-md:w-[82vw] max-md:max-w-[360px] max-md:shrink-0 max-md:snap-start"
           >
             <div className="relative aspect-[16/10] overflow-hidden bg-[var(--surface-muted)]">
               <Image
@@ -38,12 +38,12 @@ export function LeadgenConstructionProjectShowcase({
                 sizes="(max-width: 768px) 82vw, (max-width: 1024px) 31vw, 370px"
                 className="object-cover transition duration-500 group-hover:scale-[1.025]"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--leadgen-construction-project-showcase-effect-01)_44%,var(--leadgen-construction-project-showcase-effect-02)_100%)]" aria-hidden />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--leadgen-construction-project-showcase-effect-primary)_44%,var(--leadgen-construction-project-showcase-effect-secondary)_100%)]" aria-hidden />
               <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3">
-                <span className="rounded-[6px] bg-white/90 px-2.5 py-1.5 text-[11px] font-medium leading-none text-[var(--text-secondary)] shadow-[var(--leadgen-construction-project-showcase-shadow-03)] backdrop-blur-sm">
+                <span className="rounded-[6px] bg-white/90 px-2.5 py-1.5 text-[11px] font-medium leading-none text-[var(--text-secondary)] shadow-[var(--leadgen-construction-project-showcase-shadow-tertiary)] backdrop-blur-sm">
                   {project.buildTime}
                 </span>
-                <span className="rounded-[6px] bg-[var(--accent)]/92 px-2.5 py-1.5 text-[11px] font-semibold leading-none text-white shadow-[var(--leadgen-construction-project-showcase-shadow-04)] backdrop-blur-sm">
+                <span className="rounded-[6px] bg-[var(--accent)]/92 px-2.5 py-1.5 text-[11px] font-semibold leading-none text-white shadow-[var(--leadgen-construction-project-showcase-shadow-subtle)] backdrop-blur-sm">
                   Краснодар
                 </span>
               </div>
@@ -54,14 +54,14 @@ export function LeadgenConstructionProjectShowcase({
               <h3 className="mt-2 text-[22px] font-semibold leading-tight text-[var(--text-primary)]">{project.material}</h3>
 
               <div className="mt-5 grid grid-cols-2 gap-3">
-                <div className="rounded-[8px] bg-[var(--leadgen-construction-project-showcase-surface-01)] p-3">
+                <div className="rounded-[8px] bg-[var(--leadgen-construction-project-showcase-surface-primary)] p-3">
                   <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase leading-none text-[var(--text-muted)]">
                     <Ruler className="size-3.5" aria-hidden />
                     Площадь
                   </span>
                   <p className="mt-2 text-[19px] font-semibold leading-none text-[var(--text-primary)]">{project.area}</p>
                 </div>
-                <div className="rounded-[8px] bg-[var(--leadgen-construction-project-showcase-surface-01)] p-3">
+                <div className="rounded-[8px] bg-[var(--leadgen-construction-project-showcase-surface-primary)] p-3">
                   <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase leading-none text-[var(--text-muted)]">
                     <Clock3 className="size-3.5" aria-hidden />
                     Срок
@@ -81,7 +81,7 @@ export function LeadgenConstructionProjectShowcase({
 
       <div className="mt-9 flex flex-col items-center">
         <LeadgenRequestButton
-          className="inline-flex min-h-14 w-full items-center justify-center rounded-[6px] bg-[var(--accent)] px-7 text-center text-sm font-semibold text-white shadow-[var(--leadgen-construction-project-showcase-shadow-05)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-hover)] hover:shadow-[var(--leadgen-construction-project-showcase-shadow-06)] sm:w-auto"
+          className="inline-flex min-h-14 w-full items-center justify-center rounded-[6px] bg-[var(--accent)] px-7 text-center text-sm font-semibold text-white shadow-[var(--leadgen-construction-project-showcase-shadow-muted)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-hover)] hover:shadow-[var(--leadgen-construction-project-showcase-shadow-strong)] sm:w-auto"
           mode="quiz"
           title={modalTitle}
           submitLabel={submitLabel}

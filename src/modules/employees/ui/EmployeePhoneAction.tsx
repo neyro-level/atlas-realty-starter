@@ -9,7 +9,7 @@ import { buildTelHref } from "@/shared/lib/tel";
 export function EmployeePhoneAction({ phone, slug, compact = false }: { phone: string | null; slug: string; compact?: boolean }) {
   const [visible, setVisible] = useState(false);
   const className = `inline-flex w-full items-center justify-center gap-2 rounded-lg font-semibold transition ${compact ? "min-h-10 px-3 text-[13px]" : "min-h-11 px-4 text-sm"} ${
-    compact ? "border border-[var(--employee-phone-action-border-01)] bg-white text-[var(--text-primary)] hover:border-[var(--accent)]" : "bg-[var(--surface-dark)] text-white hover:bg-[var(--employee-phone-action-surface-01)]"
+    compact ? "border border-[var(--employee-phone-action-border-primary)] bg-white text-[var(--text-primary)] hover:border-[var(--accent)]" : "bg-[var(--surface-dark)] text-white hover:bg-[var(--employee-phone-action-surface-primary)]"
   }`;
 
   if (!phone) {

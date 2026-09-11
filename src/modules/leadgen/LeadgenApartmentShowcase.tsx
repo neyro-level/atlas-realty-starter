@@ -33,8 +33,8 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             overflow: hidden;
             border: 1px solid var(--border);
             border-radius: 8px;
-            background: var(--leadgen-apartment-showcase-color-01);
-            box-shadow: 0 1px 2px var(--leadgen-apartment-showcase-effect-01), 0 18px 42px var(--leadgen-apartment-showcase-effect-02);
+            background: var(--leadgen-apartment-showcase-visual-primary);
+            box-shadow: 0 1px 2px var(--leadgen-apartment-showcase-effect-primary), 0 18px 42px var(--leadgen-apartment-showcase-effect-secondary);
             transition:
               transform 0.25s ease,
               border-color 0.25s ease,
@@ -55,8 +55,8 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
 
           .leadgen-catalog-card:hover {
             transform: translateY(-3px);
-            border-color: var(--leadgen-apartment-showcase-effect-03);
-            box-shadow: 0 1px 2px var(--leadgen-apartment-showcase-effect-04), 0 24px 56px var(--leadgen-apartment-showcase-effect-05);
+            border-color: var(--leadgen-apartment-showcase-effect-tertiary);
+            box-shadow: 0 1px 2px var(--leadgen-apartment-showcase-effect-subtle), 0 24px 56px var(--leadgen-apartment-showcase-effect-muted);
           }
 
           .leadgen-catalog-card__visual {
@@ -92,7 +92,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             min-width: 0;
             align-items: center;
             gap: 8px;
-            color: var(--leadgen-apartment-showcase-color-02);
+            color: var(--leadgen-apartment-showcase-visual-secondary);
             font-size: 12px;
             font-weight: 500;
             line-height: 1.35;
@@ -121,7 +121,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             font-weight: 600;
             line-height: 1.35;
             padding: 0 14px;
-            box-shadow: 0 10px 22px var(--leadgen-apartment-showcase-effect-06);
+            box-shadow: 0 10px 22px var(--leadgen-apartment-showcase-effect-strong);
             transition:
               background-color 0.2s ease,
               color 0.2s ease,
@@ -134,7 +134,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
           .leadgen-catalog-card__quick-cta:focus-visible {
             background: var(--accent-hover);
             color: var(--surface);
-            box-shadow: 0 14px 30px var(--leadgen-apartment-showcase-effect-03);
+            box-shadow: 0 14px 30px var(--leadgen-apartment-showcase-effect-tertiary);
             transform: translateY(-1px);
           }
 
@@ -184,7 +184,7 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             }
 
             .leadgen-catalog-card {
-              box-shadow: 0 1px 2px var(--leadgen-apartment-showcase-effect-01), 0 14px 34px var(--leadgen-apartment-showcase-effect-07);
+              box-shadow: 0 1px 2px var(--leadgen-apartment-showcase-effect-primary), 0 14px 34px var(--leadgen-apartment-showcase-effect-inverse);
             }
 
             .leadgen-catalog-card:hover {

@@ -12,9 +12,9 @@ export function LegalServicesPromoBanner({ placement }: Props) {
   const isCatalog = placement === "catalog";
   const source = `${placement}:legal-banner`;
   const content = (
-    <div className="group overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--legal-services-promo-banner-surface-01)] shadow-[var(--legal-services-promo-banner-shadow-01)] transition duration-300 hover:border-[var(--legal-services-promo-banner-border-01)] hover:shadow-[var(--legal-services-promo-banner-shadow-02)]">
+    <div className="group overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--legal-services-promo-banner-surface-primary)] shadow-[var(--legal-services-promo-banner-shadow-primary)] transition duration-300 hover:border-[var(--legal-services-promo-banner-border-primary)] hover:shadow-[var(--legal-services-promo-banner-shadow-secondary)]">
       <div className="grid md:grid-cols-[minmax(280px,0.88fr)_minmax(0,1.12fr)]">
-        <div className="relative min-h-[240px] overflow-hidden bg-[var(--legal-services-promo-banner-surface-02)] sm:min-h-[290px] md:min-h-[360px]">
+        <div className="relative min-h-[240px] overflow-hidden bg-[var(--legal-services-promo-banner-surface-secondary)] sm:min-h-[290px] md:min-h-[360px]">
           <Image
             src={LEGAL_SERVICE_IMAGE}
             alt="Юрист агентства недвижимости проверяет документы по сделке с недвижимостью"
@@ -22,7 +22,7 @@ export function LegalServicesPromoBanner({ placement }: Props) {
             sizes="(min-width: 1280px) 520px, (min-width: 768px) 42vw, 100vw"
             className="object-cover object-center transition duration-700 group-hover:scale-[1.018]"
           />
-          <div className="absolute inset-y-0 right-0 hidden w-24 bg-gradient-to-l from-[var(--legal-services-promo-banner-surface-01)] to-transparent md:block" aria-hidden />
+          <div className="absolute inset-y-0 right-0 hidden w-24 bg-gradient-to-l from-[var(--legal-services-promo-banner-surface-primary)] to-transparent md:block" aria-hidden />
         </div>
 
         <div className="flex flex-col justify-center px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
@@ -38,7 +38,7 @@ export function LegalServicesPromoBanner({ placement }: Props) {
               Проверим документы до задатка и выхода на сделку
             </h2>
           )}
-          <p className="mt-4 max-w-[640px] text-[15px] leading-6 text-[var(--legal-services-promo-banner-content-01)] sm:text-base sm:leading-7">
+          <p className="mt-4 max-w-[640px] text-[15px] leading-6 text-[var(--legal-services-promo-banner-content-primary)] sm:text-base sm:leading-7">
             Разберём документы старого образца, наследство, регистрацию права и ситуации, в которых вопрос приходится решать через суд.
           </p>
 
@@ -52,7 +52,7 @@ export function LegalServicesPromoBanner({ placement }: Props) {
             <RequestModalButton
               type="button" variant="plain"
               request={{ title: "Получить консультацию юриста по недвижимости", subtitle: "Оставьте контакты. Юрист уточнит вашу ситуацию и подскажет следующий шаг.", source, formType: "legal_consultation", submitLabel: "Получить консультацию" }}
-              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[var(--legal-services-promo-banner-border-02)] bg-white px-6 text-center text-sm font-semibold text-[var(--surface-dark)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[var(--legal-services-promo-banner-border-secondary)] bg-white px-6 text-center text-sm font-semibold text-[var(--surface-dark)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
             >
               Получить консультацию
             </RequestModalButton>

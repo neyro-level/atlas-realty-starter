@@ -30,8 +30,8 @@ export function LeadgenCurrentDateBadge({ className = "mt-6" }: LeadgenCurrentDa
   }, []);
 
   return (
-    <div className={`${className} inline-flex items-center gap-2 rounded-[6px] border border-[var(--leadgen-current-date-badge-border-01)] bg-[var(--leadgen-current-date-badge-surface-01)] px-3 py-2 shadow-[var(--leadgen-current-date-badge-shadow-01)]`}>
-      <span className="grid size-6 shrink-0 place-items-center rounded-[4px] bg-white text-[var(--accent)] shadow-[var(--leadgen-current-date-badge-shadow-02)]">
+    <div className={`${className} inline-flex items-center gap-2 rounded-[6px] border border-[var(--leadgen-current-date-badge-border-primary)] bg-[var(--leadgen-current-date-badge-surface-primary)] px-3 py-2 shadow-[var(--leadgen-current-date-badge-shadow-primary)]`}>
+      <span className="grid size-6 shrink-0 place-items-center rounded-[4px] bg-white text-[var(--accent)] shadow-[var(--leadgen-current-date-badge-shadow-secondary)]">
         <CalendarDays className="size-3.5" aria-hidden />
       </span>
       <span className="grid gap-0.5">
