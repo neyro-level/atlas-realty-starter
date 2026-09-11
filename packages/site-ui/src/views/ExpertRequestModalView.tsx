@@ -62,15 +62,15 @@ export function ExpertRequestModalView({
         aria-labelledby="expert-request-title"
         className="z-[81] w-[min(calc(100vw-16px),452px)] max-w-[452px] gap-0 overflow-hidden rounded-lg border-0 bg-white p-0 shadow-[var(--shadow-dialog)]"
       >
-        <Button unstyled
+        <Button
           variant="ghost"
           size="icon"
           type="button"
           aria-label="Закрыть форму"
           onClick={onClose}
-          className="absolute right-4 top-4 z-10 flex size-9 items-center justify-center rounded-lg text-[var(--text-primary)] transition hover:bg-white/80"
+          className="absolute right-4 top-4 z-10 flex items-center justify-center rounded-lg text-[var(--text-primary)] transition hover:bg-white/80"
         >
-          <X className="size-5" aria-hidden />
+          <X className="" aria-hidden />
         </Button>
 
         <div className="bg-[linear-gradient(180deg,var(--accent-soft)_0%,var(--surface-card-soft)_66%,var(--surface)_100%)] px-6 pb-6 pt-14">
@@ -97,7 +97,7 @@ export function ExpertRequestModalView({
           <label className="sr-only" htmlFor="expert-request-website">
             Сайт
           </label>
-          <Input unstyled
+          <Input
             id="expert-request-website"
             name="website"
             type="text"
@@ -131,7 +131,7 @@ export function ExpertRequestModalView({
                   ▼
                 </span>
               </span>
-              <Input unstyled
+              <Input
                 id="expert-request-phone"
                 ref={phoneRef}
                 name="phone"
@@ -165,12 +165,12 @@ export function ExpertRequestModalView({
             </div>
           ) : null}
 
-          <Button unstyled
+          <Button variant="plain"
             type="submit"
             disabled={isPending}
             className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--text-primary)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--expert-request-modal-surface-02)] disabled:cursor-wait disabled:opacity-70"
           >
-            {isPending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+            {isPending ? <Loader2 className="animate-spin" aria-hidden /> : null}
             {isPending ? "Отправляем" : "Позвоните мне"}
           </Button>
         </form>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input } from "@ams/realty-ui";
+import { Button, Checkbox, Input } from "@ams/realty-ui";
 
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -285,8 +285,8 @@ export function LeadgenQuizModal({
         aria-describedby="leadgen-quiz-description"
         ref={panelRef}
       >
-        <Button unstyled className="request-modal__close" type="button" aria-label="Закрыть квиз" onClick={closeModal}>
-          <X className="size-5" aria-hidden />
+        <Button variant="plain" className="request-modal__close" type="button" aria-label="Закрыть квиз" onClick={closeModal}>
+          <X className="" aria-hidden />
         </Button>
         <p className="sr-only" id="leadgen-quiz-description">{quiz.title}</p>
 
@@ -523,7 +523,7 @@ export function LeadgenQuizModal({
               Заявка отправлена
             </h2>
             <p className="request-modal__subtitle">{quiz.successText}</p>
-            <Button unstyled className="site-primary-action request-modal__submit" type="button" onClick={closeModal}>
+            <Button variant="plain" className="site-primary-action request-modal__submit" type="button" onClick={closeModal}>
               Хорошо
             </Button>
           </div>
@@ -578,7 +578,7 @@ export function LeadgenQuizModal({
                     {currentStep.options.map((option) => {
                       const isSelected = selectedAnswer === option;
                       return (
-                        <Button unstyled
+                        <Button variant="plain"
                           key={option}
                           type="button"
                           data-quiz-option
@@ -615,16 +615,16 @@ export function LeadgenQuizModal({
                     <div className="flex items-center justify-between gap-3 pt-1">
                       <p className="text-xs font-semibold text-[var(--leadgen-quiz-modal-content-05)]">Шаг: {stepIndex + 1}/{totalSteps}</p>
                       <div className="flex items-center gap-2">
-                        <Button unstyled
+                        <Button variant="plain"
                           type="button"
                           className="inline-flex min-h-12 w-[52px] items-center justify-center rounded-[6px] border border-[var(--border)] bg-white text-[var(--accent)] transition hover:border-[var(--leadgen-quiz-modal-border-01)] hover:bg-[var(--leadgen-quiz-modal-surface-02)] disabled:cursor-not-allowed disabled:opacity-45"
                           aria-label="Вернуться к предыдущему вопросу"
                           onClick={goBack}
                           disabled={stepIndex === 0}
                         >
-                          <ChevronLeft className="size-5" aria-hidden />
+                          <ChevronLeft className="" aria-hidden />
                         </Button>
-                        <Button unstyled
+                        <Button variant="plain"
                           type="button"
                           className="inline-flex min-h-12 min-w-[130px] items-center justify-center rounded-[6px] bg-[var(--accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-45"
                           onClick={goNext}
@@ -706,14 +706,13 @@ export function LeadgenQuizModal({
                 </div>
 
                 <label className="request-modal__consent">
-                  <Input unstyled
+                  <Checkbox
                     className="request-modal__checkbox"
-                    type="checkbox"
                     checked={consent}
                     aria-invalid={Boolean(errors.consent)}
                     aria-describedby={errors.consent ? "leadgen-quiz-consent-error" : undefined}
-                    onChange={(event) => {
-                      setConsent(event.target.checked);
+                    onCheckedChange={(checked) => {
+                      setConsent(checked === true);
                       if (errors.consent) setErrors((current) => ({ ...current, consent: undefined }));
                     }}
                   />
@@ -726,15 +725,15 @@ export function LeadgenQuizModal({
                 <div className="leadgen-quiz-final-actions flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <p className="text-xs font-semibold text-[var(--leadgen-quiz-modal-content-05)]">Шаг: {totalSteps}/{totalSteps}</p>
                   <div className="flex items-center gap-2">
-                    <Button unstyled
+                    <Button variant="plain"
                       type="button"
                       className="leadgen-quiz-final-back inline-flex min-h-12 items-center justify-center rounded-[6px] border border-[var(--border)] bg-white text-[var(--accent)] transition hover:border-[var(--leadgen-quiz-modal-border-01)] hover:bg-[var(--leadgen-quiz-modal-surface-02)]"
                       aria-label="Вернуться к предыдущему вопросу"
                       onClick={goBack}
                     >
-                      <ChevronLeft className="size-5" aria-hidden />
+                      <ChevronLeft className="" aria-hidden />
                     </Button>
-                    <Button unstyled
+                    <Button variant="plain"
                       className="leadgen-quiz-final-submit inline-flex min-h-12 items-center justify-center rounded-[6px] bg-[var(--accent)] px-6 text-sm font-bold text-white shadow-[var(--leadgen-quiz-modal-shadow-03)] transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
                       type="submit"
                       disabled={isPending}

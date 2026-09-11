@@ -1,6 +1,7 @@
 "use client";
 
 import { Input } from "../components/ui/input";
+import { Checkbox } from "../components/ui/checkbox";
 import { Button } from "../components/ui/button";
 import { Check, Phone, Share2 } from "lucide-react";
 import { type FormEvent, type ReactNode, useRef } from "react";
@@ -140,7 +141,7 @@ export function PropertySidebarView({
         </div>
         <div className="flex flex-wrap gap-2">
           {QUICK_QUESTIONS.map((item) => (
-            <Button unstyled
+            <Button variant="plain"
               type="button"
               key={item}
               onClick={() => {
@@ -177,18 +178,17 @@ export function PropertySidebarView({
       </div>
 
       <label className="flex items-start gap-3 text-[11px] leading-5 text-[var(--text-muted)]">
-        <Input unstyled
-          type="checkbox"
+        <Checkbox
           checked={consent}
-          onChange={(event) => onConsentChange(event.target.checked)}
-          className="mt-0.5 size-4 shrink-0 accent-[var(--text-primary)]"
+          onCheckedChange={(checked) => onConsentChange(checked === true)}
+          className="mt-0.5"
         />
         <span>{consentContent}</span>
       </label>
 
       {result ? <p className={`text-sm font-semibold ${result.ok ? "text-[var(--property-sidebar-content-02)]" : "text-[var(--accent)]"}`}>{result.message}</p> : null}
 
-      <Button unstyled
+      <Button variant="plain"
         type="submit"
         disabled={pending}
         className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--surface-dark)] px-4 text-sm font-semibold text-white transition hover:bg-[var(--property-sidebar-surface-02)] disabled:cursor-wait disabled:opacity-70"
@@ -204,15 +204,15 @@ export function PropertySidebarView({
         <div className="grid grid-cols-3 items-center gap-2">
           {favoriteAction}
           {compareAction}
-          <Button unstyled
+          <Button variant="plain"
             type="button"
             data-analytics-event="share_click"
             onClick={onCopyLink}
-            className="mx-auto flex size-9 items-center justify-center rounded-lg border border-transparent bg-white text-[var(--text-primary)] transition hover:bg-[var(--background)]"
+            className="mx-auto flex items-center justify-center rounded-lg border border-transparent bg-white text-[var(--text-primary)] transition hover:bg-[var(--background)]"
             aria-label="Скопировать ссылку на объект"
             title={copied ? "Ссылка скопирована" : "Скопировать ссылку"}
           >
-            {copied ? <Check className="size-4 text-[var(--property-sidebar-content-02)]" aria-hidden /> : <Share2 className="size-4" aria-hidden />}
+            {copied ? <Check className="text-[var(--property-sidebar-content-02)]" aria-hidden /> : <Share2 className="" aria-hidden />}
           </Button>
         </div>
       ) : null}
@@ -234,14 +234,14 @@ export function PropertySidebarView({
               {phoneLabel}
             </a>
           ) : (
-            <Button unstyled
+            <Button variant="plain"
               type="button"
               data-analytics-event="phone_reveal"
               data-analytics-context="property_sidebar"
               onClick={onRevealPhone}
               className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold text-white transition hover:bg-[var(--property-sidebar-surface-02)]"
             >
-              <Phone className="size-4" aria-hidden />
+              <Phone className="" aria-hidden />
               Показать телефон
             </Button>
           )}

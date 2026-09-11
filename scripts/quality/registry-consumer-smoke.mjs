@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 
 const registryRoot = path.resolve("public/r");
-const entryName = "ams-realty-new-building";
+const entryNames = ["ams-realty-new-building", "ams-realty-shell"];
 const installedItems = new Map();
 
 async function loadItem(name) {
@@ -13,7 +13,7 @@ async function loadItem(name) {
   for (const dependency of item.registryDependencies ?? []) await loadItem(dependency);
 }
 
-await loadItem(entryName);
+for (const entryName of entryNames) await loadItem(entryName);
 
 const consumerRoot = await mkdtemp(path.join(tmpdir(), "ams-registry-consumer-"));
 const installedFiles = new Map();
@@ -48,6 +48,7 @@ try {
     "ams-realty-new-building-catalog",
     "ams-realty-new-building-detail",
     "ams-realty-new-building-conversion",
+    "ams-realty-shell",
   ];
   const forbidden = [/@starter\//, /\/images\//, /АТЛАС/i, /Краснодар/i, />4\.9</];
   for (const name of domainItems) {

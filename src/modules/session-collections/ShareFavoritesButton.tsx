@@ -103,7 +103,7 @@ export function ShareFavoritesButton({ items }: Props) {
 
   return (
     <div className="flex shrink-0 flex-col items-end gap-1.5">
-      <Button unstyled
+      <Button variant="plain"
         type="button"
         data-analytics-event="share_click"
         onClick={handleShareClick}
@@ -111,9 +111,9 @@ export function ShareFavoritesButton({ items }: Props) {
         className={textButtonClass}
       >
         {shareUrl ? (
-          <Copy className="size-3.5 shrink-0 translate-y-[0.05em]" aria-hidden />
+          <Copy className="shrink-0 translate-y-[0.05em]" aria-hidden />
         ) : (
-          <Share2 className="size-3.5 shrink-0 translate-y-[0.05em]" aria-hidden />
+          <Share2 className="shrink-0 translate-y-[0.05em]" aria-hidden />
         )}
         {state === "loading" ? "…" : "Поделиться"}
       </Button>

@@ -8,7 +8,10 @@
       "type": "registry:theme",
       "title": "AMS Realty foundation",
       "description": "Neutral semantic colors, typography, spacing, radii, shadows and breakpoints for AMS realty sites.",
-      "files": [{ "path": "src/theme.css", "type": "registry:theme" }]
+      "files": [
+        { "path": "src/theme.css", "type": "registry:theme" },
+        { "path": "src/styles/shell.css", "type": "registry:style" }
+      ]
     },
     {
       "name": "ams-realty-primitives",
@@ -102,7 +105,8 @@
       "files": [
         { "path": "src/components/shared/site-overlay-context.tsx", "type": "registry:block" },
         { "path": "src/views/RequestModalView.tsx", "type": "registry:block" },
-        { "path": "src/views/ExpertRequestModalView.tsx", "type": "registry:block" }
+        { "path": "src/views/ExpertRequestModalView.tsx", "type": "registry:block" },
+        { "path": "src/styles/request-modal.css", "type": "registry:style" }
       ]
     },
     {
@@ -112,6 +116,24 @@
       "files": [
         { "path": "src/views/CorporateFormSectionViews.tsx", "type": "registry:block" },
         { "path": "src/views/HomePreFooterView.tsx", "type": "registry:block" }
+      ]
+    },
+    {
+      "name": "ams-realty-shell",
+      "type": "registry:block",
+      "title": "AMS Realty site shell",
+      "description": "Neutral responsive header, navigation and footer views with explicit styles and typed data inputs.",
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives", "ams-realty-overlay-trigger"],
+      "files": [
+        { "path": "src/contracts/site-shell.ts", "type": "registry:lib" },
+        { "path": "src/views/site-header.types.ts", "type": "registry:lib" },
+        { "path": "src/views/CitySwitcherView.tsx", "type": "registry:block" },
+        { "path": "src/views/DesktopSiteNavView.tsx", "type": "registry:block" },
+        { "path": "src/views/MobileMenuView.tsx", "type": "registry:block" },
+        { "path": "src/views/PhoneRevealView.tsx", "type": "registry:block" },
+        { "path": "src/views/SiteHeaderView.tsx", "type": "registry:block" },
+        { "path": "src/views/SiteFooterView.tsx", "type": "registry:block" },
+        { "path": "src/styles/site-footer.css", "type": "registry:style" }
       ]
     },
     {

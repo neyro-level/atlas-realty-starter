@@ -65,15 +65,15 @@ export function PropertyChatView({
               Напишите сообщение ответственному специалисту
             </h2>
           </div>
-          <Button unstyled
+          <Button
             variant="outline"
             size="icon"
             type="button"
             aria-label="Закрыть чат"
             onClick={onClose}
-            className="flex size-10 shrink-0 items-center justify-center rounded-md border border-[var(--border)] text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            className="flex shrink-0 items-center justify-center rounded-md border border-[var(--border)] text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
           >
-            <X className="size-5" aria-hidden />
+            <X className="" aria-hidden />
           </Button>
         </div>
 
@@ -145,12 +145,12 @@ export function PropertyChatView({
 
           {resultMessage ? <div className="rounded-md border border-[var(--property-chat-border-01)] bg-[var(--property-chat-surface-01)] px-3 py-2 text-sm font-semibold text-[var(--error)]">{resultMessage}</div> : null}
 
-          <Button unstyled
+          <Button variant="plain"
             type="submit"
             disabled={isPending}
             className="mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[var(--accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70"
           >
-            {isPending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : <Send className="size-4" aria-hidden />}
+            {isPending ? <Loader2 className="animate-spin" aria-hidden /> : <Send className="" aria-hidden />}
             {isPending ? "Отправляем" : "Отправить сообщение"}
           </Button>
         </form>

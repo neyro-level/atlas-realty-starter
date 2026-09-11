@@ -77,7 +77,7 @@ export function PropertyGalleryView({
                 allowFullScreen
                 className="h-full w-full border-0"
               />
-              {safeVideoUrls.length > 1 ? <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2 rounded-[15px] bg-[var(--surface-dark)]/80 p-1.5 backdrop-blur-sm">{safeVideoUrls.map((url, index) => <Button unstyled key={url} type="button" onClick={() => setActiveVideoIndex(index)} className={`min-h-9 rounded-[10px] px-3 text-xs font-semibold transition ${index === activeVideoIndex ? "bg-white text-[var(--text-primary)]" : "text-white hover:bg-white/15"}`}>{videoProviderLabel(url)}</Button>)}</div> : null}
+              {safeVideoUrls.length > 1 ? <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2 rounded-[15px] bg-[var(--surface-dark)]/80 p-1.5 backdrop-blur-sm">{safeVideoUrls.map((url, index) => <Button variant="plain" key={url} type="button" onClick={() => setActiveVideoIndex(index)} className={`min-h-9 rounded-[10px] px-3 text-xs font-semibold transition ${index === activeVideoIndex ? "bg-white text-[var(--text-primary)]" : "text-white hover:bg-white/15"}`}>{videoProviderLabel(url)}</Button>)}</div> : null}
             </div>
           ) : (
             <MediaPlaceholder title="Видео объекта не загружено" />

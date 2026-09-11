@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input } from "@ams/realty-ui";
+import { Button, Checkbox, Input } from "@ams/realty-ui";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState, useTransition } from "react";
 import { createLeadAction, type CreateLeadActionResult } from "@/modules/leads";
@@ -186,7 +186,7 @@ export function AgencyInlineLeadForm({
           />
         </div>
 
-        <Button unstyled
+        <Button variant="plain"
           type="submit"
           disabled={isPending}
           className="min-h-[58px] rounded-lg bg-[var(--accent)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70 xl:whitespace-nowrap"
@@ -200,11 +200,10 @@ export function AgencyInlineLeadForm({
           centerConsent ? "justify-center text-center" : ""
         }`}
       >
-        <Input unstyled
+        <Checkbox
           name="consent"
-          type="checkbox"
-          className="mt-0.5 size-4 shrink-0 accent-[var(--accent)]"
-          onChange={() => setClientError(null)}
+          className="mt-0.5"
+          onCheckedChange={() => setClientError(null)}
         />
         <span><PrivacyConsentText className="font-semibold" buttonAgreement={buttonAgreementConsent} /></span>
       </label>

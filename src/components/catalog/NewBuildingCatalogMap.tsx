@@ -121,7 +121,7 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
             const selected = complex.slug === selectedSlug;
             const mapped = complex.location.latitude !== null && complex.location.longitude !== null;
             return (
-              <Button unstyled
+              <Button variant="plain"
                 key={complex.slug}
                 type="button"
                 onClick={() => selectComplex(complex)}

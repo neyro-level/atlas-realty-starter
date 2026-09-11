@@ -2,6 +2,7 @@
 
 import { Select } from "../components/ui/select";
 import { Input } from "../components/ui/input";
+import { Checkbox } from "../components/ui/checkbox";
 import { Button } from "../components/ui/button";
 import { ArrowUpDown, Check, ChevronDown, Search, SlidersHorizontal } from "lucide-react";
 import type { CatalogFacetsDto } from "@starter/site-contracts";
@@ -55,13 +56,12 @@ export function CatalogMobileFilterView({ mode = "default", draft, setDraft, fac
       <div className="mt-4 space-y-2.5 lg:hidden" data-new-building-mobile-filter>
         <SearchField draft={draft} setDraft={setDraft} />
         <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] gap-2">
-          <Button
-            unstyled
+          <Button variant="plain"
             type="button"
             onClick={() => setFiltersSheetOpen(true)}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-white px-3 text-[13px] font-semibold text-[var(--text-primary)]"
           >
-            <SlidersHorizontal className="size-4" aria-hidden />
+            <SlidersHorizontal className="" aria-hidden />
             Фильтры
           </Button>
           <ApplyButton label={applyLabel} onClick={onApply} />
@@ -81,7 +81,7 @@ export function CatalogMobileFilterView({ mode = "default", draft, setDraft, fac
                   {SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </Select>
               </label>
-              <Button unstyled type="button" onClick={onClear} className="inline-flex min-h-10 w-full items-center justify-center rounded-lg text-[13px] font-semibold text-[var(--accent)]">Очистить</Button>
+              <Button variant="plain" type="button" onClick={onClear} className="inline-flex min-h-10 w-full items-center justify-center rounded-lg text-[13px] font-semibold text-[var(--accent)]">Очистить</Button>
               <ApplyButton label={applyLabel} onClick={onApply} />
             </div>
           </SheetContent>
@@ -103,8 +103,8 @@ export function CatalogMobileFilterView({ mode = "default", draft, setDraft, fac
     <Sheet open={typeOpen} onOpenChange={setTypeOpen}>
       <SheetContent side="bottom" className="inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-2xl border-0 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[var(--catalog-mobile-filter-shadow-01)] lg:hidden" showClose>
         <SheetHeader className="mb-3"><SheetTitle className="text-[15px] font-semibold">Тип недвижимости</SheetTitle></SheetHeader>
-        <ul className="space-y-0.5">{MOBILE_TYPE_VIEW_OPTIONS.map((option) => { const checked = draft.types.includes(option.id); return <li key={option.id}><Button unstyled type="button" onClick={() => onToggleType(option.id)} className="flex min-h-11 w-full items-center justify-between gap-3 rounded-lg px-2 text-left text-[13px] font-medium text-[var(--text-primary)]"><span>{option.label}</span><span className={`inline-flex size-5 items-center justify-center rounded border ${checked ? "border-[var(--accent)] bg-[var(--accent)] text-white" : "border-[var(--input)] bg-white"}`}>{checked ? <Check className="size-3.5" aria-hidden /> : null}</span></Button></li>; })}</ul>
-        <Button unstyled type="button" onClick={() => setTypeOpen(false)} className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[var(--surface-dark)] text-[13px] font-semibold text-white">Готово</Button>
+        <ul className="space-y-0.5">{MOBILE_TYPE_VIEW_OPTIONS.map((option) => { const checked = draft.types.includes(option.id); return <li key={option.id}><Button variant="plain" type="button" onClick={() => onToggleType(option.id)} className="flex min-h-11 w-full items-center justify-between gap-3 rounded-lg px-2 text-left text-[13px] font-medium text-[var(--text-primary)]"><span>{option.label}</span><span className={`inline-flex size-5 items-center justify-center rounded border ${checked ? "border-[var(--accent)] bg-[var(--accent)] text-white" : "border-[var(--input)] bg-white"}`}>{checked ? <Check className="" aria-hidden /> : null}</span></Button></li>; })}</ul>
+        <Button variant="plain" type="button" onClick={() => setTypeOpen(false)} className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[var(--surface-dark)] text-[13px] font-semibold text-white">Готово</Button>
       </SheetContent>
     </Sheet>
   </div>;
@@ -115,7 +115,7 @@ function SearchField({ draft, setDraft }: { draft: MobileFilterDraftViewDto; set
 }
 
 function ApplyButton({ label, onClick }: { label: string; onClick: () => void }) {
-  return <Button unstyled type="button" onClick={onClick} className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[var(--surface-dark)] px-4 text-[13px] font-semibold text-white transition hover:bg-[var(--catalog-mobile-filter-surface-01)]">{label}</Button>;
+  return <Button variant="plain" type="button" onClick={onClick} className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[var(--surface-dark)] px-4 text-[13px] font-semibold text-white transition hover:bg-[var(--catalog-mobile-filter-surface-01)]">{label}</Button>;
 }
 
 function MobileFilterFields({ draft, setDraft, facets, typeSummary, sortLabel, sortOpen, setSortOpen, sortRef, advancedOpen, setAdvancedOpen, showAdvancedAlways, onOpenType, onToggleRoom, onClear }: {
@@ -124,18 +124,18 @@ function MobileFilterFields({ draft, setDraft, facets, typeSummary, sortLabel, s
   const advancedVisible = showAdvancedAlways || advancedOpen;
   return <>
     <label className="flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] px-3"><Search className="size-4 shrink-0 text-[var(--text-muted)]" aria-hidden /><span className="sr-only">Поиск по каталогу</span><Input unstyled value={draft.q} onChange={(event) => setDraft((current) => ({ ...current, q: event.target.value }))} placeholder="Поиск ЖК, улицы, района" className="min-w-0 flex-1 bg-transparent text-[13px] font-medium outline-none placeholder:text-[var(--text-muted)]" /></label>
-    <Button unstyled type="button" onClick={onOpenType} className="flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] px-3 text-left text-[13px] font-medium text-[var(--text-primary)]"><span className="min-w-0 truncate">{typeSummary}</span><ChevronDown className="size-4 shrink-0 text-[var(--text-muted)]" aria-hidden /></Button>
-    <div className="grid grid-cols-[minmax(0,1.5fr)_repeat(4,minmax(0,1fr))] gap-1.5">{ROOM_CHIPS.map((chip) => { const active = draft.rooms.includes(chip.id); return <Button unstyled key={chip.id} type="button" onClick={() => onToggleRoom(chip.id)} className={`min-h-11 w-full rounded-lg border px-3 py-2 text-center text-[12px] font-semibold transition ${active ? "border-[var(--surface-dark)] bg-[var(--surface-dark)] text-white" : "border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] text-[var(--text-secondary)]"}`}>{chip.label}</Button>; })}</div>
+    <Button variant="plain" type="button" onClick={onOpenType} className="flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] px-3 text-left text-[13px] font-medium text-[var(--text-primary)]"><span className="min-w-0 truncate">{typeSummary}</span><ChevronDown className="shrink-0 text-[var(--text-muted)]" aria-hidden /></Button>
+    <div className="grid grid-cols-[minmax(0,1.5fr)_repeat(4,minmax(0,1fr))] gap-1.5">{ROOM_CHIPS.map((chip) => { const active = draft.rooms.includes(chip.id); return <Button variant="plain" key={chip.id} type="button" onClick={() => onToggleRoom(chip.id)} className={`min-h-11 w-full rounded-lg border px-3 py-2 text-center text-[12px] font-semibold transition ${active ? "border-[var(--surface-dark)] bg-[var(--surface-dark)] text-white" : "border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] text-[var(--text-secondary)]"}`}>{chip.label}</Button>; })}</div>
     <div className="grid grid-cols-1 gap-2"><RangeField from={draft.priceFrom} to={draft.priceTo} onFrom={(value) => setDraft((current) => ({ ...current, priceFrom: value }))} onTo={(value) => setDraft((current) => ({ ...current, priceTo: value }))} fromPlaceholder="от 1,5 млн" toPlaceholder="до 50 млн" inputMode="decimal" numericOnly={false} /><RangeField from={draft.areaFrom} to={draft.areaTo} onFrom={(value) => setDraft((current) => ({ ...current, areaFrom: value }))} onTo={(value) => setDraft((current) => ({ ...current, areaTo: value }))} fromPlaceholder="от 20 м²" toPlaceholder="до 250 м²" /></div>
     {advancedVisible ? <div className="space-y-2 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-03)] p-3">
       <SmallSelect title="Район" value={draft.district} options={facets.districts} onChange={(district) => setDraft((current) => ({ ...current, district }))} />
-      <label className="flex min-h-10 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] px-3 text-[13px] font-medium text-[var(--text-secondary)]"><Input unstyled type="checkbox" checked={draft.exclusive} onChange={(event) => setDraft((current) => ({ ...current, exclusive: event.target.checked }))} className="size-4 accent-[var(--accent)]" />Только эксклюзивы</label>
+      <label className="flex min-h-10 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] px-3 text-[13px] font-medium text-[var(--text-secondary)]"><Checkbox checked={draft.exclusive} onCheckedChange={(checked) => setDraft((current) => ({ ...current, exclusive: checked === true }))} />Только эксклюзивы</label>
       <SmallSelect title="Тип дома" value={draft.buildingType} options={facets.buildingTypes} onChange={(buildingType) => setDraft((current) => ({ ...current, buildingType }))} />
       <SmallSelect title="Ремонт" value={draft.renovation} options={facets.renovations} onChange={(renovation) => setDraft((current) => ({ ...current, renovation }))} />
-      <Button unstyled type="button" onClick={onClear} className="inline-flex min-h-10 w-full items-center justify-center rounded-lg text-[13px] font-semibold text-[var(--accent)]">Очистить</Button>
+      <Button variant="plain" type="button" onClick={onClear} className="inline-flex min-h-10 w-full items-center justify-center rounded-lg text-[13px] font-semibold text-[var(--accent)]">Очистить</Button>
     </div> : null}
-    <div className="flex items-center justify-between gap-2 pt-0.5"><div ref={sortRef} className="relative min-w-0"><Button unstyled type="button" onClick={() => setSortOpen(!sortOpen)} className="inline-flex min-h-9 max-w-full items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] px-2.5 text-[12px] font-semibold text-[var(--text-secondary)]" aria-expanded={sortOpen}><ArrowUpDown className="size-3.5 shrink-0 text-[var(--text-muted)]" aria-hidden /><span className="truncate">{sortLabel}</span><ChevronDown className={`size-3.5 shrink-0 text-[var(--text-muted)] transition ${sortOpen ? "rotate-180" : ""}`} aria-hidden /></Button>{sortOpen ? <div className="absolute left-0 top-[calc(100%+6px)] z-20 min-w-[200px] overflow-hidden rounded-lg border border-[var(--border)] bg-white py-1 shadow-[var(--catalog-mobile-filter-shadow-02)]">{SORT_OPTIONS.map((option) => { const active = draft.sort === option.value; return <Button unstyled key={option.value} type="button" onClick={() => { setDraft((current) => ({ ...current, sort: option.value })); setSortOpen(false); }} className={`flex min-h-10 w-full items-center justify-between gap-3 px-3 text-left text-[13px] font-medium ${active ? "bg-[var(--surface-card-soft)] text-[var(--text-primary)]" : "text-[var(--text-secondary)]"}`}><span>{option.label}</span>{active ? <Check className="size-3.5 text-[var(--accent)]" aria-hidden /> : null}</Button>; })}</div> : null}</div>
-      {showAdvancedAlways ? null : <Button unstyled type="button" onClick={() => setAdvancedOpen((open) => !open)} className={`inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2.5 text-[12px] font-semibold ${advancedOpen ? "border border-[var(--surface-dark)] bg-[var(--surface-dark)] text-white" : "border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] text-[var(--text-secondary)]"}`} aria-expanded={advancedOpen}><SlidersHorizontal className="size-3.5" aria-hidden />Фильтры</Button>}
+    <div className="flex items-center justify-between gap-2 pt-0.5"><div ref={sortRef} className="relative min-w-0"><Button variant="plain" type="button" onClick={() => setSortOpen(!sortOpen)} className="inline-flex min-h-9 max-w-full items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] px-2.5 text-[12px] font-semibold text-[var(--text-secondary)]" aria-expanded={sortOpen}><ArrowUpDown className="shrink-0 text-[var(--text-muted)]" aria-hidden /><span className="truncate">{sortLabel}</span><ChevronDown className={`size-3.5 shrink-0 text-[var(--text-muted)] transition ${sortOpen ? "rotate-180" : ""}`} aria-hidden /></Button>{sortOpen ? <div className="absolute left-0 top-[calc(100%+6px)] z-20 min-w-[200px] overflow-hidden rounded-lg border border-[var(--border)] bg-white py-1 shadow-[var(--catalog-mobile-filter-shadow-02)]">{SORT_OPTIONS.map((option) => { const active = draft.sort === option.value; return <Button variant="plain" key={option.value} type="button" onClick={() => { setDraft((current) => ({ ...current, sort: option.value })); setSortOpen(false); }} className={`flex min-h-10 w-full items-center justify-between gap-3 px-3 text-left text-[13px] font-medium ${active ? "bg-[var(--surface-card-soft)] text-[var(--text-primary)]" : "text-[var(--text-secondary)]"}`}><span>{option.label}</span>{active ? <Check className="text-[var(--accent)]" aria-hidden /> : null}</Button>; })}</div> : null}</div>
+      {showAdvancedAlways ? null : <Button variant="plain" type="button" onClick={() => setAdvancedOpen((open) => !open)} className={`inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2.5 text-[12px] font-semibold ${advancedOpen ? "border border-[var(--surface-dark)] bg-[var(--surface-dark)] text-white" : "border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] text-[var(--text-secondary)]"}`} aria-expanded={advancedOpen}><SlidersHorizontal className="" aria-hidden />Фильтры</Button>}
     </div>
   </>;
 }

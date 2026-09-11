@@ -46,7 +46,7 @@ export function LeadgenPrivacyModal({
 
   return (
     <>
-      <Button unstyled
+      <Button variant="plain"
         ref={openButtonRef}
         type="button"
         className={`cursor-pointer border-0 bg-transparent p-0 font-[inherit] ${className}`}

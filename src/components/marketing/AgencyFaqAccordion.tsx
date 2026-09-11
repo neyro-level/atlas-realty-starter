@@ -31,7 +31,7 @@ export function AgencyFaqAccordion({ items }: AgencyFaqAccordionProps) {
             itemProp="mainEntity"
             itemType="https://schema.org/Question"
           >
-            <Button unstyled
+            <Button variant="plain"
               type="button"
               id={triggerId}
               aria-expanded={isOpen}

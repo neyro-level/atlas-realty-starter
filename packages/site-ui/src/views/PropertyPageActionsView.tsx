@@ -49,17 +49,17 @@ export function PropertyPageActionsView({
           <Phone className="size-4" aria-hidden />{phone}
         </a>
       ) : (
-        <Button unstyled type="button" data-analytics-event="phone_reveal" data-analytics-context="property_page_actions" onClick={onRevealPhone} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold text-white transition hover:bg-[var(--property-page-actions-surface-01)]">
-          <Phone className="size-4" aria-hidden />Показать телефон
+        <Button variant="plain" type="button" data-analytics-event="phone_reveal" data-analytics-context="property_page_actions" onClick={onRevealPhone} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold text-white transition hover:bg-[var(--property-page-actions-surface-01)]">
+          <Phone className="" aria-hidden />Показать телефон
         </Button>
       )}
 
-      <Button unstyled type="button" onClick={onOpenChat} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-[var(--border)] bg-white px-5 text-sm font-bold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]">
-        <MessageCircle className="size-4" aria-hidden />Написать сообщение
+      <Button variant="plain" type="button" onClick={onOpenChat} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-[var(--border)] bg-white px-5 text-sm font-bold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]">
+        <MessageCircle className="" aria-hidden />Написать сообщение
       </Button>
 
-      <RequestModalButton type="button" unstyled request={{ title: "Предложить свою цену", subtitle: "Укажите ваш номер телефона, специалист свяжется с вами", source: priceOfferSource, formType: "property_price_offer" }} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--accent-hover)]">
-        <Tags className="size-4" aria-hidden />Предложить свою цену
+      <RequestModalButton type="button" variant="plain" request={{ title: "Предложить свою цену", subtitle: "Укажите ваш номер телефона, специалист свяжется с вами", source: priceOfferSource, formType: "property_price_offer" }} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--accent-hover)]">
+        <Tags className="" aria-hidden />Предложить свою цену
       </RequestModalButton>
     </div>
   );

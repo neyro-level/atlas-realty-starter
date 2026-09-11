@@ -107,15 +107,15 @@ export function LeadgenPromoHeader({ content = kvartiryPromoContent }: LeadgenPr
             Заказать звонок
           </LeadgenRequestButton>
 
-          <Button unstyled
+          <Button variant="plain"
             type="button"
             aria-label={menuOpen ? "Закрыть меню лендинга" : "Открыть меню лендинга"}
             aria-expanded={menuOpen}
             aria-controls="leadgen-mobile-menu"
-            className="inline-flex size-11 items-center justify-center rounded-[10px] border border-[var(--leadgen-promo-header-border-01)] bg-white text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)] lg:hidden"
+            className="inline-flex items-center justify-center rounded-[10px] border border-[var(--leadgen-promo-header-border-01)] bg-white text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)] lg:hidden"
             onClick={() => setMenuOpen((current) => !current)}
           >
-            {menuOpen ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
+            {menuOpen ? <X className="" aria-hidden /> : <Menu className="" aria-hidden />}
           </Button>
         </div>
       </div>

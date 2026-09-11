@@ -85,7 +85,7 @@ export function NewBuildingGalleryView({
 
       <div className="grid min-h-0 grid-cols-3 gap-2" role="tablist" aria-label="Медиа жилого комплекса">
         {TABS.map(({ key, label, icon: Icon }) => (
-          <Button unstyled
+          <Button variant="plain"
             type="button"
             key={key}
             role="tab"
@@ -97,7 +97,7 @@ export function NewBuildingGalleryView({
                 : "border-[var(--border)] bg-[var(--surface-card-soft)] text-[var(--text-secondary)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
             }`}
           >
-            <Icon className="size-4 shrink-0" aria-hidden />
+            <Icon className="shrink-0" aria-hidden />
             <span className="truncate">{label}</span>
           </Button>
         ))}

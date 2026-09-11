@@ -24,7 +24,7 @@ export function EmployeePhoneAction({ phone, slug, compact = false }: { phone: s
     );
   }
   return (
-    <Button unstyled
+    <Button variant="plain"
       type="button"
       data-analytics-event="phone_reveal"
       data-analytics-context="employee"
@@ -32,7 +32,7 @@ export function EmployeePhoneAction({ phone, slug, compact = false }: { phone: s
       onClick={() => setVisible(true)}
       className={className}
     >
-      <Phone className="size-4" aria-hidden />
+      <Phone className="" aria-hidden />
       Показать телефон
     </Button>
   );

@@ -41,8 +41,7 @@ export function RequestCta({
 }: RequestCtaProps) {
   const { openRequest } = useSiteOverlay();
   return (
-    <Button
-      unstyled
+    <Button variant="plain"
       type="button"
       onClick={() => openRequest({
         title: modalTitle ?? label,

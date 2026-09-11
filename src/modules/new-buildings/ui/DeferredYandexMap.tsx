@@ -23,7 +23,7 @@ export function DeferredYandexMap({ widgetUrl, yandexUrl, title }: DeferredYande
           className="h-full min-h-[260px] w-full border-0 md:min-h-[300px] lg:min-h-[380px]"
         />
       ) : (
-        <Button unstyled
+        <Button variant="plain"
           type="button"
           onClick={() => setActive(true)}
           className="grid h-full min-h-[260px] w-full place-items-center bg-[linear-gradient(135deg,var(--background),var(--deferred-yandex-map-color-01))] p-6 text-center md:min-h-[300px] lg:min-h-[380px]"

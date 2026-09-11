@@ -101,12 +101,12 @@ function DesktopNavItemView({
         <SmartLink item={item} linkRenderer={linkRenderer} onNavigate={onNavigate} className={`inline-flex min-h-10 items-center pl-3 pr-1 text-[13px] font-semibold ${compact ? "pl-2.5" : ""}`}>
           {item.label}
         </SmartLink>
-        <Button unstyled
+        <Button variant="plain"
           type="button"
           aria-expanded={isOpen}
           aria-controls={panelId}
           aria-label={`Открыть подразделы: ${item.label}`}
-          className="inline-flex size-9 items-center justify-center outline-none transition focus-visible:ring-2 focus-visible:ring-[var(--accent)]/30"
+          className="inline-flex items-center justify-center outline-none transition focus-visible:ring-2 focus-visible:ring-[var(--accent)]/30"
           onClick={onToggle}
         >
           <ChevronDown className={`size-4 transition ${isOpen ? "rotate-180" : ""}`} aria-hidden />

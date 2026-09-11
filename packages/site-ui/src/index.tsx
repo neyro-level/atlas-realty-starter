@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import type { SiteIdentity } from "@starter/site-contracts";
 
 export type { SiteImageRenderer, SiteImageRendererProps, SiteLinkRenderer, SiteLinkRendererProps } from "./lib/adapters";
+export type { PublicContactViewDto, SiteFooterColumnViewDto, SiteFooterMetaViewDto, SiteHeaderNavItemViewDto, SiteNavLinkViewDto, SiteSocialLinkViewDto } from "./contracts/site-shell";
 export { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/ui/accordion";
 export { AspectRatio } from "./components/ui/aspect-ratio";
 export { Badge, badgeVariants } from "./components/ui/badge";

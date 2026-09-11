@@ -183,21 +183,21 @@ export function PropertyCardView({
 
           {images.length > 1 ? (
             <>
-              <Button unstyled
+              <Button variant="plain"
                 type="button"
                 onClick={showPrevious}
-                className="absolute left-2.5 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg bg-[var(--surface-dark)]/28 text-white opacity-60 backdrop-blur-sm transition active:opacity-90 lg:left-3 lg:size-9 lg:bg-[var(--surface-dark)]/62 lg:opacity-0 lg:group-hover:opacity-100"
+                className="absolute left-2.5 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-lg bg-[var(--surface-dark)]/28 text-white opacity-60 backdrop-blur-sm transition active:opacity-90 lg:left-3 lg:bg-[var(--surface-dark)]/62 lg:opacity-0 lg:group-hover:opacity-100"
                 aria-label="Предыдущее фото"
               >
-                <ChevronLeft className="size-5 lg:size-5" aria-hidden />
+                <ChevronLeft className="" aria-hidden />
               </Button>
-              <Button unstyled
+              <Button variant="plain"
                 type="button"
                 onClick={showNext}
-                className="absolute right-2.5 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg bg-[var(--surface-dark)]/28 text-white opacity-60 backdrop-blur-sm transition active:opacity-90 lg:right-3 lg:size-9 lg:bg-[var(--surface-dark)]/62 lg:opacity-0 lg:group-hover:opacity-100"
+                className="absolute right-2.5 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-lg bg-[var(--surface-dark)]/28 text-white opacity-60 backdrop-blur-sm transition active:opacity-90 lg:right-3 lg:bg-[var(--surface-dark)]/62 lg:opacity-0 lg:group-hover:opacity-100"
                 aria-label="Следующее фото"
               >
-                <ChevronRight className="size-5 lg:size-5" aria-hidden />
+                <ChevronRight className="" aria-hidden />
               </Button>
               <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1" aria-hidden>
                 {images.map((_, index) => (
@@ -252,7 +252,7 @@ export function PropertyCardView({
                 {phone}
               </a>
             ) : (
-              <Button unstyled
+              <Button variant="plain"
                 type="button"
                 data-analytics-event="phone_reveal"
                 data-analytics-context="catalog_property_card"
@@ -263,16 +263,16 @@ export function PropertyCardView({
                 }}
                 className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold text-white transition hover:bg-[var(--property-card-surface-01)] lg:text-sm sm:min-w-[190px]"
               >
-                <Phone className="size-[17.6px] lg:size-4" aria-hidden />
+                <Phone className="" aria-hidden />
                 Показать телефон
               </Button>
             )}
-            <Button unstyled
+            <Button variant="plain"
               type="button"
               onClick={openPropertyChat}
               className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] px-5 text-center text-[15.4px] font-semibold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)] lg:text-sm sm:min-w-[130px]"
             >
-              <MessageCircle className="size-[17.6px] lg:size-4" aria-hidden />
+              <MessageCircle className="" aria-hidden />
               Написать
             </Button>
           </div>
@@ -366,21 +366,21 @@ export function PropertyCardView({
 
           {images.length > 1 ? (
             <>
-              <Button unstyled
+              <Button variant="plain"
                 type="button"
                 onClick={showPrevious}
-                className="absolute left-2.5 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg bg-[var(--surface-dark)]/28 text-white opacity-60 backdrop-blur-sm transition active:opacity-90 lg:left-3 lg:size-9 lg:bg-[var(--surface-dark)]/62 lg:opacity-0 lg:group-hover:opacity-100"
+                className="absolute left-2.5 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-lg bg-[var(--surface-dark)]/28 text-white opacity-60 backdrop-blur-sm transition active:opacity-90 lg:left-3 lg:bg-[var(--surface-dark)]/62 lg:opacity-0 lg:group-hover:opacity-100"
                 aria-label="Предыдущее фото"
               >
-                <ChevronLeft className="size-5" aria-hidden />
+                <ChevronLeft className="" aria-hidden />
               </Button>
-              <Button unstyled
+              <Button variant="plain"
                 type="button"
                 onClick={showNext}
-                className="absolute right-2.5 top-1/2 z-20 flex size-10 -translate-y-1/2 items-center justify-center rounded-lg bg-[var(--surface-dark)]/28 text-white opacity-60 backdrop-blur-sm transition active:opacity-90 lg:right-3 lg:size-9 lg:bg-[var(--surface-dark)]/62 lg:opacity-0 lg:group-hover:opacity-100"
+                className="absolute right-2.5 top-1/2 z-20 flex -translate-y-1/2 items-center justify-center rounded-lg bg-[var(--surface-dark)]/28 text-white opacity-60 backdrop-blur-sm transition active:opacity-90 lg:right-3 lg:bg-[var(--surface-dark)]/62 lg:opacity-0 lg:group-hover:opacity-100"
                 aria-label="Следующее фото"
               >
-                <ChevronRight className="size-5" aria-hidden />
+                <ChevronRight className="" aria-hidden />
               </Button>
 
               <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/35 via-black/10 to-transparent px-2.5 pb-2.5 pt-10 lg:hidden" />
@@ -426,13 +426,13 @@ export function PropertyCardView({
               >
                 <Phone className="size-[18.7px]" strokeWidth={1.85} aria-hidden />
               </a>
-              <Button unstyled
+              <Button variant="plain"
                 type="button"
                 onClick={openPropertyChat}
                 aria-label="Открыть чат"
-                className="inline-flex size-10 items-center justify-center rounded-lg bg-[var(--surface-card-soft)] text-[var(--text-secondary)] transition hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
+                className="inline-flex items-center justify-center rounded-lg bg-[var(--surface-card-soft)] text-[var(--text-secondary)] transition hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
               >
-                <MessageCircle className="size-[18.7px]" strokeWidth={1.85} aria-hidden />
+                <MessageCircle className="" strokeWidth={1.85} aria-hidden />
               </Button>
             </div>
           </div>
@@ -482,7 +482,7 @@ export function PropertyCardView({
               {phone}
             </a>
           ) : (
-            <Button unstyled
+            <Button variant="plain"
               type="button"
                 data-analytics-event="phone_reveal"
                 data-analytics-context="catalog_property_card"
@@ -493,16 +493,16 @@ export function PropertyCardView({
                 }}
                 className="relative z-20 inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-3 text-center text-sm font-bold text-white transition hover:bg-[var(--accent-hover)]"
               >
-              <Phone className="size-4" aria-hidden />
+              <Phone className="" aria-hidden />
               Показать телефон
             </Button>
           )}
-          <Button unstyled
+          <Button variant="plain"
             type="button"
             onClick={openPropertyChat}
             className="relative z-20 inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-white px-3 text-center text-sm font-bold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
           >
-            <MessageCircle className="size-4" aria-hidden />
+            <MessageCircle className="" aria-hidden />
             Написать
           </Button>
         </div>

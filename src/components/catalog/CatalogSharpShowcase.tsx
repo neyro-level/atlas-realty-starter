@@ -1,4 +1,4 @@
-import { Input, Select } from "@ams/realty-ui";
+import { Checkbox, Input, Select } from "@ams/realty-ui";
 import Link from "next/link";
 import {
   CatalogEmptyStateView,
@@ -234,7 +234,7 @@ function CatalogFilterForm({
         </label>
         {activeFilter === "flat" ? (
           <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[var(--border)] bg-white px-3 text-sm font-semibold text-[var(--text-secondary)]">
-            <Input unstyled name="studio" type="checkbox" value="1" defaultChecked={query.studio === true} className="size-4 accent-[var(--accent)]" />
+            <Checkbox name="studio" value="1" defaultChecked={query.studio === true} />
             Студия
           </label>
         ) : null}
@@ -246,12 +246,10 @@ function CatalogFilterForm({
           {!isLand ? <CatalogRangePairView from="floor_from" to="floor_to" label={isHouse ? "Этажность" : "Этаж"} fromValue={query.floorFrom} toValue={query.floorTo} /> : null}
           {activeFilter === "all" ? select("category", query.category, [...TYPE_FILTER_OPTIONS], "Тип объекта") : null}
           <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[var(--border)] bg-white px-3 text-sm font-semibold text-[var(--text-secondary)]">
-            <Input unstyled
+            <Checkbox
               name="exclusive"
-              type="checkbox"
               value="1"
               defaultChecked={query.exclusive === true}
-              className="size-4 accent-[var(--accent)]"
             />
             Только эксклюзивы
           </label>
@@ -301,7 +299,7 @@ function CheckboxGroup({ items }: { items: Array<[string, string, boolean | unde
     <div className="grid gap-2 rounded-lg border border-[var(--border)] bg-white p-3 text-sm font-semibold text-[var(--text-secondary)]">
       {items.map(([name, label, checked]) => (
         <label key={name} className="flex items-center gap-2">
-          <Input unstyled name={name} type="checkbox" value="1" defaultChecked={checked} className="size-4 accent-[var(--accent)]" />
+          <Checkbox name={name} value="1" defaultChecked={checked} />
           {label}
         </label>
       ))}

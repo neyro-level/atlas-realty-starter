@@ -2,6 +2,7 @@
 
 import { Textarea } from "../components/ui/textarea";
 import { Input } from "../components/ui/input";
+import { Checkbox } from "../components/ui/checkbox";
 import { Check, Loader2, ShieldCheck, Star } from "lucide-react";
 import type { FormEvent, ReactNode } from "react";
 import { Button } from "../components/ui/button";
@@ -54,7 +55,7 @@ export function EmployeeReviewDialogView({
             <Check className="size-6" aria-hidden />
             <h3 className="mt-3 text-lg font-semibold">Спасибо за ваш отзыв</h3>
             <p className="mt-2 text-sm leading-6">{result.message}</p>
-            <Button unstyled type="button" onClick={() => onOpenChange(false)} className="mt-5 inline-flex min-h-11 rounded-lg bg-[var(--employee-review-dialog-surface-02)] px-4 text-sm font-semibold text-white hover:bg-[var(--employee-review-dialog-surface-03)]">
+            <Button variant="plain" type="button" onClick={() => onOpenChange(false)} className="mt-5 inline-flex min-h-11 rounded-lg bg-[var(--employee-review-dialog-surface-02)] px-4 text-sm font-semibold text-white hover:bg-[var(--employee-review-dialog-surface-03)]">
               Понятно
             </Button>
           </div>
@@ -65,7 +66,7 @@ export function EmployeeReviewDialogView({
               <span className="text-sm font-medium text-[var(--text-primary)]">Ваша оценка</span>
               <div className="mt-2 flex gap-1" aria-label={`Оценка ${rating} из 5`}>
                 {Array.from({ length: 5 }, (_, index) => index + 1).map((value) => (
-                  <Button unstyled key={value} type="button" onClick={() => onRatingChange(value)} className="p-1" aria-label={`${value} из 5`}>
+                  <Button variant="plain" key={value} type="button" onClick={() => onRatingChange(value)} className="p-1" aria-label={`${value} из 5`}>
                     <Star className={`size-7 ${value <= rating ? "fill-[var(--accent)] text-[var(--accent)]" : "text-[var(--employee-review-dialog-content-02)]"}`} aria-hidden />
                   </Button>
                 ))}
@@ -97,13 +98,13 @@ export function EmployeeReviewDialogView({
               {result?.fieldErrors?.text ? <span className="text-xs text-[var(--accent)]">{result.fieldErrors.text}</span> : null}
             </label>
             <label className="flex gap-3 text-xs leading-5 text-[var(--employee-review-dialog-content-05)]">
-              <Input unstyled name="consent" type="checkbox" className="mt-1 size-4 shrink-0 accent-[var(--accent)]" />
+              <Checkbox name="consent" className="mt-1" />
               <span>{consentContent}</span>
             </label>
             {result?.fieldErrors?.consent ? <span className="text-xs text-[var(--accent)]">{result.fieldErrors.consent}</span> : null}
             {result && !result.ok && !result.fieldErrors ? <p className="text-sm text-[var(--accent)]">{result.message}</p> : null}
-            <Button unstyled type="submit" disabled={pending} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-sm font-semibold text-white hover:bg-[var(--employee-review-dialog-surface-04)] disabled:opacity-60">
-              {pending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+            <Button variant="plain" type="submit" disabled={pending} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-sm font-semibold text-white hover:bg-[var(--employee-review-dialog-surface-04)] disabled:opacity-60">
+              {pending ? <Loader2 className="animate-spin" aria-hidden /> : null}
               {pending ? "Отправляем..." : "Отправить отзыв"}
             </Button>
           </form>

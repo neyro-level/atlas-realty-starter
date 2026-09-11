@@ -35,7 +35,7 @@ export function PhoneRevealView({
     }
 
     return (
-      <Button unstyled
+      <Button variant="plain"
         type="button"
         data-analytics-event="phone_reveal"
         data-analytics-context={analyticsContext}
@@ -43,7 +43,7 @@ export function PhoneRevealView({
         className={className}
         aria-label={revealLabel}
       >
-        <Phone className="size-[15px] shrink-0 text-[var(--phone-reveal-content-01)]" strokeWidth={1.75} aria-hidden />
+        <Phone className="shrink-0 text-[var(--phone-reveal-content-01)]" strokeWidth={1.75} aria-hidden />
         <span>Позвонить</span>
       </Button>
     );
@@ -64,7 +64,7 @@ export function PhoneRevealView({
   }
 
   return (
-    <Button unstyled
+    <Button variant="plain"
       type="button"
       data-analytics-event="phone_reveal"
       data-analytics-context={analyticsContext}
@@ -72,7 +72,7 @@ export function PhoneRevealView({
       className={interactiveClassName}
       aria-label={revealLabel}
     >
-      <Phone className="size-[18px] text-[var(--text-muted)]" aria-hidden />
+      <Phone className="text-[var(--text-muted)]" aria-hidden />
       <span className="whitespace-nowrap text-[var(--phone-reveal-content-02)] tabular-nums" aria-hidden>
         +7...Показать
       </span>

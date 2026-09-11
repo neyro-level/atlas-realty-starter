@@ -157,7 +157,7 @@ export function MortgageCalculatorView() {
               <p>Демонстрационная ставка <span className="font-medium text-white">{program.rate}%</span></p>
               <p className="mt-1">Сумма кредита {formatCurrency(loan)} ₽</p>
             </div>
-            <Button unstyled
+            <Button variant="plain"
               type="button"
               onClick={openMortgageRequest}
               className="mt-auto min-h-11 rounded-xl bg-[var(--accent)] px-5 text-[14px] font-semibold text-white transition hover:bg-[var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"

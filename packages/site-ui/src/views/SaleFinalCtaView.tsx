@@ -16,8 +16,7 @@ export function SaleFinalCtaView() {
           </p>
 
           <RequestModalButton
-            type="button"
-            unstyled
+            type="button" variant="plain"
             request={{ title: "Получите план продаж объекта недвижимости.", subtitle: "Оценка, фотосъёмка, реклама, переговоры и регистрация уже включены в эту сумму.", source: "corporate:prodazha-nedvizhimosti:final", formType: "corporate_prodazha_nedvizhimosti_city" }}
             className="mt-8 inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[var(--accent)] px-6 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto sm:min-w-[260px]"
           >

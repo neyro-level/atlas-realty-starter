@@ -49,7 +49,7 @@ export function LawyerServicesGallery() {
 
       <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-black/35 px-3 py-2 backdrop-blur-sm">
         {IMAGES.map((image, index) => (
-          <Button unstyled
+          <Button variant="plain"
             key={image.src}
             type="button"
             onClick={() => {
@@ -61,7 +61,7 @@ export function LawyerServicesGallery() {
             aria-current={index === activeIndex ? "true" : undefined}
           />
         ))}
-        <Button unstyled
+        <Button variant="plain"
           type="button"
           onClick={() => setIsPaused((current) => !current)}
           aria-pressed={isPaused}

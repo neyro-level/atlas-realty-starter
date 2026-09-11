@@ -1,6 +1,7 @@
-import type { SiteHeaderNavItemDto, SiteNavLinkDto } from "@starter/site-contracts";
+import type { SiteHeaderNavItemViewDto, SiteNavLinkViewDto } from "../contracts/site-shell";
 
-export type { SiteHeaderNavItemDto, SiteNavLinkDto };
+export type SiteHeaderNavItemDto = SiteHeaderNavItemViewDto;
+export type SiteNavLinkDto = SiteNavLinkViewDto;
 
 export type SiteCityOptionViewDto = {
   slug: string;

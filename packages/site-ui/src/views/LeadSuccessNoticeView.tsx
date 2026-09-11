@@ -23,9 +23,9 @@ export function LeadSuccessNoticeView({ onClose, closeButtonRef }: LeadSuccessNo
           type="button"
           onClick={onClose}
           aria-label="Закрыть уведомление"
-          className="absolute right-4 top-4 grid size-9 place-items-center rounded-lg text-[var(--lead-success-notice-content-01)] transition hover:bg-[var(--lead-success-notice-surface-01)] hover:text-[var(--text-primary)]"
+          className="absolute right-4 top-4 grid place-items-center rounded-lg text-[var(--lead-success-notice-content-01)] transition hover:bg-[var(--lead-success-notice-surface-01)] hover:text-[var(--text-primary)]"
         >
-          <X className="size-5" aria-hidden />
+          <X className="" aria-hidden />
         </Button>
         <span className="mx-auto grid size-14 place-items-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]">
           <Check className="size-7" strokeWidth={2} aria-hidden />

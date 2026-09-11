@@ -29,7 +29,7 @@ export function NewBuildingQuickSelectionsView({ items, linkRenderer: Link }: { 
           const content = <QuickSelectionContent item={item} />;
           const className = `grid min-h-[124px] min-w-0 grid-rows-[36px_minmax(0,1fr)] gap-4 rounded-lg border bg-[var(--surface-card-soft)] p-3.5 text-left shadow-[var(--catalog-controls-shadow-01)] transition hover:border-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 md:min-h-[132px] md:p-4 ${item.active ? "border-[var(--accent)] ring-1 ring-[var(--accent)]/10" : "border-[var(--border)]"}`;
           if (item.href) return <Link key={item.id} href={item.href} scroll={false} ariaCurrent={item.active ? "true" : undefined} className={className}>{content}</Link>;
-          if (item.request) return <RequestModalButton key={item.id} type="button" unstyled request={item.request} className={className}>{content}</RequestModalButton>;
+          if (item.request) return <RequestModalButton key={item.id} type="button" variant="plain" request={item.request} className={className}>{content}</RequestModalButton>;
           return null;
         })}
       </div>

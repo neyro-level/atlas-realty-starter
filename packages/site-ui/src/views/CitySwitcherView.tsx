@@ -22,7 +22,7 @@ export function CitySwitcherView({ open, variant, options, linkRenderer: LinkRen
   if (variant === "mobile") {
     return (
       <div className="relative">
-        <Button unstyled
+        <Button variant="plain"
           type="button"
           id={triggerId}
           aria-haspopup="menu"
@@ -79,7 +79,7 @@ export function CitySwitcherView({ open, variant, options, linkRenderer: LinkRen
 
   return (
     <div className="relative">
-      <Button unstyled
+      <Button variant="plain"
         type="button"
         id={triggerId}
         aria-haspopup="menu"

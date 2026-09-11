@@ -84,7 +84,7 @@ export function PropertyDescriptionView({ paragraphs }: { paragraphs?: string[] 
         ))}
       </div>
       {shouldCollapse ? (
-        <Button unstyled type="button" onClick={() => setExpanded((current) => !current)} className="justify-self-start text-sm font-semibold leading-5 text-[var(--accent)] transition hover:text-[var(--accent-hover)]" aria-expanded={expanded}>
+        <Button variant="plain" type="button" onClick={() => setExpanded((current) => !current)} className="justify-self-start text-sm font-semibold leading-5 text-[var(--accent)] transition hover:text-[var(--accent-hover)]" aria-expanded={expanded}>
           {expanded ? "Свернуть" : "Подробнее"}
         </Button>
       ) : null}

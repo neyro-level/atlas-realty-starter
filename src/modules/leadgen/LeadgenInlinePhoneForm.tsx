@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input } from "@ams/realty-ui";
+import { Button, Checkbox, Input } from "@ams/realty-ui";
 import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState, useTransition } from "react";
 import { createLeadAction, type CreateLeadActionResult } from "@/modules/leads";
@@ -184,7 +184,7 @@ export function LeadgenInlinePhoneForm({
         />
       </div>
 
-      <Button unstyled
+      <Button variant="plain"
         type="submit"
         disabled={isPending}
         className="mt-3 min-h-[52px] w-full rounded-[6px] bg-[var(--accent)] px-4 text-[15px] font-semibold text-white shadow-[var(--leadgen-inline-phone-form-shadow-02)] transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70 sm:min-h-[50px] sm:text-[14px]"
@@ -193,14 +193,13 @@ export function LeadgenInlinePhoneForm({
       </Button>
 
       <label className="mx-auto mt-3 flex w-full items-center justify-center gap-1 whitespace-nowrap text-center text-[9px] font-medium leading-none text-[var(--leadgen-inline-phone-form-content-03)] sm:text-[9px]">
-        <Input unstyled
-          type="checkbox"
+        <Checkbox
           checked={consent}
-          onChange={(event) => {
-            setConsent(event.target.checked);
+          onCheckedChange={(checked) => {
+            setConsent(checked === true);
             setClientError(null);
           }}
-          className="size-3.5 shrink-0 accent-[var(--accent)] sm:size-3.5"
+          className="size-3.5"
           aria-invalid={errorMessage === "Необходимо согласие на обработку персональных данных."}
         />
         <span className="min-w-0 whitespace-nowrap"><PrivacyConsentText /></span>

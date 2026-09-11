@@ -38,11 +38,11 @@ export function LegalDocumentModalView({
             size="icon"
             type="button"
             autoFocus
-            className="absolute right-4 top-4 grid size-9 place-items-center rounded-[6px] border border-[var(--border)] bg-white text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            className="absolute right-4 top-4 grid place-items-center rounded-[6px] border border-[var(--border)] bg-white text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
             aria-label={closeLabel}
             onClick={onClose}
           >
-            <X className="size-4" aria-hidden />
+            <X className="" aria-hidden />
           </Button>
         </div>
 

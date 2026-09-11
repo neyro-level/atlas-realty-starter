@@ -35,7 +35,7 @@ export function ContactsMapFrame({ src, title }: ContactsMapFrameProps) {
         referrerPolicy="no-referrer-when-downgrade"
       />
       {!active ? (
-        <Button unstyled
+        <Button variant="plain"
           type="button"
           data-analytics-event="map_open"
           data-analytics-context="contacts_map"

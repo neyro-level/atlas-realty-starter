@@ -67,11 +67,11 @@ export function SiteHeaderView(props: SiteHeaderViewProps) {
             <div className="flex h-full items-center gap-3 lg:hidden">
               {sessionCollectionPage ? (
                 <Button asChild variant="secondary" size="sm" className="min-h-9 flex-1 gap-1.5 rounded-lg bg-[var(--surface-muted)] px-3 text-[12px] text-[var(--text-secondary)] hover:bg-[var(--border)] hover:text-[var(--accent)]">
-                  <LinkRenderer href={catalogHref}><Building2 className="size-3.5 shrink-0" aria-hidden /><span className="truncate">Вся недвижимость</span></LinkRenderer>
+                  <LinkRenderer href={catalogHref}><Building2 className="shrink-0" aria-hidden /><span className="truncate">Вся недвижимость</span></LinkRenderer>
                 </Button>
               ) : stickyCollectionAction}
               <Button type="button" variant="secondary" size="sm" onClick={onOpenFilters} className="min-h-9 flex-1 gap-1.5 rounded-lg bg-[var(--surface-muted)] px-3 text-[12px] text-[var(--text-secondary)] hover:bg-[var(--border)]">
-                <SlidersHorizontal className="size-3.5 shrink-0" aria-hidden />Фильтры
+                <SlidersHorizontal className="shrink-0" aria-hidden />Фильтры
               </Button>
             </div>
           ) : null}
@@ -88,8 +88,8 @@ export function SiteHeaderView(props: SiteHeaderViewProps) {
                   {compareAction}{favoritesAction}
                   <Button asChild className="ml-2 min-h-10 px-4 text-sm"><LinkRenderer href="/prodazha-nedvizhimosti">Продать квартиру</LinkRenderer></Button>
                 </div>
-                <Button type="button" variant="outline" size="icon" aria-label={mobileOpen ? "Закрыть меню" : "Открыть меню"} aria-expanded={mobileOpen} aria-controls="site-mobile-menu" className="size-11 bg-white text-[var(--foreground)] lg:hidden" onClick={onToggleMobile}>
-                  {mobileOpen ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
+                <Button type="button" variant="outline" size="icon" aria-label={mobileOpen ? "Закрыть меню" : "Открыть меню"} aria-expanded={mobileOpen} aria-controls="site-mobile-menu" className="bg-white text-[var(--foreground)] lg:hidden" onClick={onToggleMobile}>
+                  {mobileOpen ? <X className="" aria-hidden /> : <Menu className="" aria-hidden />}
                 </Button>
               </div>
             </div>

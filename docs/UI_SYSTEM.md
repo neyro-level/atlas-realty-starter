@@ -18,6 +18,10 @@ The canonical token groups are `surface`, `content`, `border`, `action`, `status
 
 The private AMS registry owns ShadCN Button, Card, Badge, Dialog, Carousel, Aspect Ratio, Scroll Area, Skeleton, Tabs, Form, Field, Input, Textarea, Select and Checkbox plus neutral realty gallery, catalog cards, filters, request forms and CTA blocks. Registry items use the `ams-realty-*` namespace and never contain client branding, domains, legal data or city-specific copy.
 
+`ams-realty-shell` owns the neutral Container, Section, SectionHeader, responsive Header, navigation and Footer contract, including its explicit shell stylesheet. Site identity, contact values, links and brand assets enter only through typed props. Buttons use semantic variants, Checkbox is the only binary form control, and Button controls inherit the canonical icon size unless a non-button composition owns the icon.
+
+Global shell CSS contains only shared surface/link utilities. Request modal and footer styles are owned by `request-modal.css` and `site-footer.css` and are shipped by their corresponding Registry items; page code must not rely on their incidental global presence.
+
 `ams-realty-new-building` is the umbrella Registry item for the complete residential-complex presentation module. It installs the separate `catalog`, `detail` and `conversion` items, their neutral view models and every required Registry dependency. Atlas wrappers provide brand, city, expert identity and portrait, optional verified rating, Next adapters, Payload-derived DTOs and typed request context. `pnpm ui:registry:consumer` builds the items and verifies their clean dependency closure without relying on the Atlas application.
 
 New UI follows `reuse -> variant -> create`. Application components do not import Radix directly and do not recreate native controls when an admitted primitive or semantic variant exists.

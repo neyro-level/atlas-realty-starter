@@ -50,8 +50,7 @@ export function LegalServicesPromoBanner({ placement }: Props) {
               Перейти к юридическим услугам
             </Link>
             <RequestModalButton
-              type="button"
-              unstyled
+              type="button" variant="plain"
               request={{ title: "Получить консультацию юриста по недвижимости", subtitle: "Оставьте контакты. Юрист уточнит вашу ситуацию и подскажет следующий шаг.", source, formType: "legal_consultation", submitLabel: "Получить консультацию" }}
               className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[var(--legal-services-promo-banner-border-02)] bg-white px-6 text-center text-sm font-semibold text-[var(--surface-dark)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
             >

@@ -230,9 +230,9 @@ function CorporatePrimaryCta({
   }
 
   return (
-    <RequestModalButton type="button" unstyled request={getPrimaryCtaRequest(page)} className={className}>
+    <RequestModalButton type="button" variant="plain" request={getPrimaryCtaRequest(page)} className={className}>
       {page.primaryCta.label}
-      {showIcon ? <ArrowRight className="size-4" aria-hidden /> : null}
+      {showIcon ? <ArrowRight className="" aria-hidden /> : null}
     </RequestModalButton>
   );
 }

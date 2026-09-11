@@ -265,7 +265,7 @@ function LeadgenApartmentCard({ apartment, formPrefix }: { apartment: PromoApart
         {images.length > 1 ? (
           <div className="leadgen-catalog-card__dots" aria-label="Фотографии квартиры">
             {images.map((image, index) => (
-              <Button unstyled
+              <Button variant="plain"
                 key={image}
                 type="button"
                 className={`leadgen-catalog-card__dot ${index === activeImage ? "is-active" : ""}`}
