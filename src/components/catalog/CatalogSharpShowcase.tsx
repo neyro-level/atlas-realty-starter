@@ -147,7 +147,7 @@ export function CatalogSharpShowcase({
           ) : complexes.length ? (
             <>
               <NewBuildingMobileCarousel complexes={complexes} />
-              <div className={isListView ? "mt-4 hidden divide-y divide-[var(--catalog-sharp-showcase-border-01)] border-y border-[var(--catalog-sharp-showcase-border-01)] md:block" : "mt-5 hidden gap-x-5 gap-y-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}>
+              <div className={isListView ? "mt-4 hidden divide-y divide-[var(--catalog-sharp-showcase-border-divider)] border-y border-[var(--catalog-sharp-showcase-border-divider)] md:block" : "mt-5 hidden gap-x-5 gap-y-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}>
                 {complexes.map((complex, index) => (
                   <CatalogResidentialComplexCard key={complex.slug} complex={complex} variant={activeView} priority={index === 0} />
                 ))}
@@ -157,7 +157,7 @@ export function CatalogSharpShowcase({
             <CatalogEmptyStateView message="По выбранному запросу жилые комплексы не найдены. Оставьте заявку, и специалист агентства недвижимости уточнит подходящие варианты вручную." linkRenderer={CatalogLinkAdapter} />
           )
         ) : catalog.listings.length ? (
-          <div className={isListView ? "mt-4 divide-y divide-[var(--catalog-sharp-showcase-border-01)] border-y border-[var(--catalog-sharp-showcase-border-01)] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
+          <div className={isListView ? "mt-4 divide-y divide-[var(--catalog-sharp-showcase-border-divider)] border-y border-[var(--catalog-sharp-showcase-border-divider)] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
             <CatalogLoadMore
               key={buildSearchParams(applied).toString()}
               basePath={basePath}
