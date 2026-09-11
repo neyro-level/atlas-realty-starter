@@ -12,6 +12,7 @@ export const mediaAssetSchema = z.object({
 
 export const newBuildingSchema = z
   .object({
+    sourceId: z.uuid().nullable().optional(),
     slug: z.string().regex(/^[a-z0-9-]+$/),
     status: z.enum(["draft", "published", "archived"]),
     updatedAt: isoDateSchema,

@@ -26,6 +26,16 @@ describe('Stage 3 transactional lead outbox', () => {
     expect((await payload.count({ collection: 'payload-jobs', overrideAccess: true })).totalDocs).toBe(1)
   })
 
+  it('links a detail request to its existing complex and keeps a catalog request general', async () => {
+    const payload = await getTestPayload()
+    const complex = await payload.create({ collection: 'residential-complexes', overrideAccess: true, data: { name: 'ЖК Опера', slug: 'zhk-opera', status: 'published' } })
+    const linked = await createPublicLead({ ...command('lead:complex:12345678'), complexId: String(complex.id), formType: 'complex', sourcePage: '/zhk-opera' })
+    const catalog = await createPublicLead({ ...command('lead:catalog:12345678'), sourcePage: '/novostroyki' })
+
+    expect(await payload.findByID({ collection: 'leads', id: linked.leadId, depth: 0, overrideAccess: true })).toMatchObject({ complex: String(complex.id), sourcePage: '/zhk-opera' })
+    expect(await payload.findByID({ collection: 'leads', id: catalog.leadId, depth: 0, overrideAccess: true })).toMatchObject({ complex: null, sourcePage: '/novostroyki' })
+  })
+
   it('keeps the lead when a channel is unavailable and recovers a retryable delivery', async () => {
     const payload = await getTestPayload()
     const created = await createPublicLead(command('lead:unavailable:12345678'), { testDeliveryMode: 'unavailable' })

@@ -18,6 +18,8 @@ export type RequestModalDetail = {
   submitLabel?: string;
   showSubtitle?: boolean;
   propertyId?: string;
+  complexId?: string;
+  complexName?: string;
   agentId?: string;
   propertyTitle?: string;
   propertyAddress?: string;
@@ -228,6 +230,7 @@ export function RequestModal({ detail, onClosed }: { detail?: RequestModalDetail
       const response = await createLeadAction({
         submissionId,
         propertyId: leadContext.propertyId || null,
+        complexId: leadContext.complexId || null,
         agentId: leadContext.agentId || null,
         sourcePage: pathname || "/",
         source,
@@ -238,10 +241,10 @@ export function RequestModal({ detail, onClosed }: { detail?: RequestModalDetail
         consent,
         website,
         formRenderedAt: startedAt,
-        payload: leadContext.propertyTitle || leadContext.propertyAddress || leadContext.propertyObjectCode
+        payload: leadContext.propertyTitle || leadContext.propertyAddress || leadContext.propertyObjectCode || leadContext.complexName
           ? {
               objectContext: {
-                title: leadContext.propertyTitle || null,
+                title: leadContext.propertyTitle || leadContext.complexName || null,
                 address: leadContext.propertyAddress || null,
                 objectCode: leadContext.propertyObjectCode || null,
                 path: leadContext.propertyPath || pathname || "/",
@@ -251,7 +254,7 @@ export function RequestModal({ detail, onClosed }: { detail?: RequestModalDetail
       });
 
       setResult(response);
-      trackEvent(response.ok ? "lead_submit_success" : "lead_submit_error", { form_type: formType }, { announceLeadSuccess: !response.ok });
+      trackEvent(response.ok ? "lead_submit_success" : "lead_submit_error", { form_type: formType, source }, { announceLeadSuccess: !response.ok });
       if (response.ok) {
         setSubmitted(true);
       }

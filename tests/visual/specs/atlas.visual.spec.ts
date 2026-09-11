@@ -9,6 +9,7 @@ test.beforeEach(async ({ context }) => {
 const routes = [
   ['home', '/'],
   ['catalog', '/nedvizhimost'],
+  ['new-buildings', '/novostroyki'],
   ['property', '/obekty/svetlaya-kvartira-v-centre'],
   ['complex', '/aura'],
   ['contacts', '/kontakty'],

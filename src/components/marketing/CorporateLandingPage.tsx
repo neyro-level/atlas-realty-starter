@@ -8,6 +8,9 @@ import { AboutCompanyFinalCtaSection } from "@/components/marketing/AboutCompany
 import { AboutCompanyTeamSection } from "@/components/marketing/AboutCompanyTeamSection";
 import { CatalogBuyerServicesSection } from "@/components/marketing/CatalogBuyerServicesSection";
 import { CatalogHeroBlock } from "@/components/marketing/CatalogHeroBlock";
+import { NewBuildingCatalogConversion } from "@/components/marketing/NewBuildingCatalogConversion";
+import { NewBuildingCatalogLeadSection } from "@/components/marketing/NewBuildingCatalogLeadSection";
+import { NewBuildingMobileConversionBar } from "@/components/marketing/NewBuildingMobileConversionBar";
 import { CareersQuizButton, CareersQuizModal } from "@/components/marketing/CareersQuiz";
 import { MortgageConsultationSection } from "@/components/marketing/MortgageConsultationSection";
 import { LawyerPageSections } from "@/components/marketing/LawyerPageSections";
@@ -43,7 +46,8 @@ type CorporateLandingPageProps = {
 export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showcaseQuery, showcase, complexes, relatedArticles }: CorporateLandingPageProps) {
   const hasCatalogHero = CATALOG_HERO_SLUGS.has(page.slug);
   const isMainCatalogIndex = page.slug === "nedvizhimost";
-  const hasBuyerServices = Boolean(page.showcase && showcase && !isMainCatalogIndex);
+  const hasNewBuildingConversionFlow = page.slug === "novostroyki";
+  const hasBuyerServices = Boolean(page.showcase && showcase && !isMainCatalogIndex && !hasNewBuildingConversionFlow);
   const catalogFaqItems = getCatalogFaqItems(page.slug);
   const hasSecondaryCatalogIntro = SECONDARY_CATALOG_SLUGS.has(page.slug);
   const hasMortgagePage = page.slug === "ipoteka";
@@ -72,7 +76,7 @@ export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showca
     <CorporateLandingView
       page={pageDto}
       breadcrumbs={<Breadcrumbs items={buildCorporateBreadcrumbs(page)} />}
-      catalogHero={<CatalogHeroBlock title={page.heroTitle} titleLines={page.heroTitleLines} titleSize={page.heroTitleSize} description={usesPageHeroDescription ? page.heroDescription : undefined} descriptionVisibility={showsHeroContentOnMobile ? "always" : undefined} imageSrc={page.heroImage?.src} imagePosition={page.heroImage?.position} expandedDesktop={page.heroExpandedDesktop} focusImageBottomDesktop={page.heroFocusImageBottomDesktop} actionVisibility={showsHeroContentOnMobile ? "always" : undefined} action={<CorporatePrimaryCta page={page} className="inline-flex min-h-12 w-full max-w-full shrink-0 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-sm font-semibold whitespace-nowrap text-white transition hover:bg-[var(--accent-hover)] sm:w-auto sm:min-w-[252px] sm:px-6" showIcon={false} />} />}
+      catalogHero={<CatalogHeroBlock title={page.heroTitle} variant={hasNewBuildingConversionFlow ? "new-building" : "default"} titleLines={page.heroTitleLines} titleSize={page.heroTitleSize} description={hasNewBuildingConversionFlow || usesPageHeroDescription ? page.heroDescription : undefined} descriptionVisibility={showsHeroContentOnMobile || hasNewBuildingConversionFlow ? "always" : undefined} imageSrc={page.heroImage?.src} imagePosition={page.heroImage?.position} expandedDesktop={page.heroExpandedDesktop} focusImageBottomDesktop={page.heroFocusImageBottomDesktop} actionVisibility={showsHeroContentOnMobile ? "always" : "lg+"} action={<CorporatePrimaryCta page={page} className="inline-flex min-h-12 w-full max-w-full shrink-0 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-sm font-semibold whitespace-nowrap text-white transition hover:bg-[var(--accent-hover)] sm:w-auto sm:min-w-[252px] sm:px-6" showIcon={false} />} />}
       primaryAction={<CorporatePrimaryCta page={page} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--accent-hover)] sm:w-fit" />}
       bodyBeforeRelated={<>
         {page.slug === "o-kompanii" ? <><AboutCompanyDirectorSection /><AboutCompanyTeamSection /><AboutCompanyFinalCtaSection /></> : null}
@@ -82,8 +86,8 @@ export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showca
       </>}
       secondaryBreadcrumbs={<Breadcrumbs items={buildCorporateBreadcrumbs(page)} />}
       bodyAfterRelated={hasMortgagePage ? <><MortgageProgramsView cityPrepositional={siteProfile.city.prepositional} /><MortgageCalculatorView /><MortgageBrokerSupportView imageRenderer={CorporateImage} /><MortgageConsultationSection /></> : null}
-      showcase={page.showcase && showcase ? <><CatalogSharpShowcase catalog={showcase} complexes={complexes} query={showcaseQuery ?? { limit: showcaseLimit }} paginationQuery={visitorQuery} initialFilter={page.showcase.initialFilter} sectionId="page-showcase" basePath={`/${page.slug}`} headline={hasSecondaryCatalogIntro ? page.heroTitle : undefined} heading={page.showcase.heading} description={page.showcase.description} emptyMessage={page.showcase.emptyMessage} servicePromo={isMainCatalogIndex ? "legal" : "mortgage"} />{hasBuyerServices ? <CatalogBuyerServicesSection sourcePage={`/${page.slug}`} /> : null}</> : null}
-      afterShowcase={isMainCatalogIndex ? <PropertyPurchaseFlowBlocks sourcePage={`/${page.slug}`} leadTitle={getCatalogLeadTitle(page.slug)} /> : null}
+      showcase={page.showcase && showcase ? <><CatalogSharpShowcase catalog={showcase} complexes={complexes} query={showcaseQuery ?? { limit: showcaseLimit }} paginationQuery={visitorQuery} initialFilter={page.showcase.initialFilter} sectionId="page-showcase" basePath={`/${page.slug}`} headline={hasSecondaryCatalogIntro ? page.heroTitle : undefined} heading={page.showcase.heading} description={page.showcase.description} emptyMessage={page.showcase.emptyMessage} servicePromo={isMainCatalogIndex ? "legal" : "mortgage"} mode={hasNewBuildingConversionFlow ? "new-buildings" : "default"} defaultView={hasNewBuildingConversionFlow ? "list" : "grid"} />{hasNewBuildingConversionFlow ? <NewBuildingCatalogConversion /> : null}{hasBuyerServices ? <CatalogBuyerServicesSection sourcePage={`/${page.slug}`} /> : null}</> : null}
+      afterShowcase={isMainCatalogIndex ? <PropertyPurchaseFlowBlocks sourcePage={`/${page.slug}`} leadTitle={getCatalogLeadTitle(page.slug)} /> : hasNewBuildingConversionFlow ? <><NewBuildingCatalogLeadSection /><NewBuildingMobileConversionBar /></> : null}
       footerContent={catalogFaqItems ? <><JsonLd data={faqPageSchema(faqItemsToSchema(catalogFaqItems))} /><RealEstateFaqSection items={catalogFaqItems} />{isMainCatalogIndex ? <PopularSearchesSection /> : null}</> : null}
       linkRenderer={CorporateLink}
       imageRenderer={CorporateImage}

@@ -1,6 +1,5 @@
 import { Input, Select } from "@ams/realty-ui";
 import Link from "next/link";
-import { Map } from "lucide-react";
 import {
   CatalogEmptyStateView,
   CatalogAdvancedFilterView,
@@ -19,16 +18,14 @@ import {
   type CatalogSnapshot,
   type CatalogView,
 } from "@/lib/catalog";
-import type { NewBuilding } from "@/modules/new-buildings";
+import { filterNewBuildings, type NewBuilding } from "@/modules/new-buildings";
 import { tenant } from "@/project/tenant";
 import { hasClearableCatalogFilters, listClearableFilterEntries } from "./catalog-filter-clear";
 import { CatalogAutoSubmitForm } from "./CatalogAutoSubmitForm";
 import { CatalogLoadMore } from "./CatalogLoadMore";
 import { CatalogMobileFilter } from "./CatalogMobileFilter";
-import {
-  CatalogNewBuildingSelectionCard,
-  NEW_BUILDING_SELECTION_CARD_INDEX,
-} from "./CatalogNewBuildingSelectionCard";
+import { NewBuildingMobileCarousel } from "./NewBuildingMobileCarousel";
+import { NewBuildingQuickSelections } from "./NewBuildingQuickSelections";
 import { CatalogResidentialComplexCard } from "./CatalogResidentialComplexCard";
 import { NewBuildingCatalogMap } from "./NewBuildingCatalogMap";
 import {
@@ -56,6 +53,8 @@ type Props = {
   description?: string;
   emptyMessage?: string;
   servicePromo?: "mortgage" | "legal";
+  mode?: "default" | "new-buildings";
+  defaultView?: CatalogView;
 };
 
 function CatalogLinkAdapter({ href, children, ariaLabel, ariaCurrent, scroll, ...props }: SiteLinkRendererProps) {
@@ -74,21 +73,23 @@ export function CatalogSharpShowcase({
   heading = "Актуальные предложения",
   emptyMessage = "По выбранным параметрам объектов не найдено. Измените фильтры или оставьте заявку на ручной подбор.",
   servicePromo = "mortgage",
+  mode = "default",
+  defaultView = "grid",
 }: Props) {
-  const applied = normalizeUiQuery({ ...query, ...catalog.appliedQuery });
+  const applied = normalizeUiQuery({ ...query, ...catalog.appliedQuery }, defaultView);
   const activeFilter = toFilterId(applied.category) ?? initialFilter;
   const isComplexMode = activeFilter === "new_building";
-  const activeView: CatalogView = isComplexMode ? applied.view ?? "grid" : applied.view === "list" ? "list" : "grid";
+  const activeView: CatalogView = isComplexMode ? applied.view ?? defaultView : applied.view === "list" ? "list" : "grid";
   const isListView = activeView === "list";
   const isMapView = activeView === "map";
-  const complexes = isComplexMode ? filterResidentialComplexes(availableComplexes, applied.q) : [];
+  const complexes = isComplexMode ? filterNewBuildings(availableComplexes, applied) : [];
   const activeSort = applied.sort === "price_asc" || applied.sort === "price_desc" ? applied.sort : "newest";
   const sectionFilter = initialFilter;
   const active = isComplexMode
     ? activeResidentialComplexChips(applied)
     : activeFilterChips(applied, sectionFilter);
   const canClearFilters = isComplexMode
-    ? Boolean(applied.q?.trim())
+    ? Boolean(applied.q?.trim() || applied.priceFrom || applied.priceTo)
     : hasClearableCatalogFilters(applied, sectionFilter);
   const filterFormKey = buildSearchParams(applied).toString() || "base";
 
@@ -99,11 +100,20 @@ export function CatalogSharpShowcase({
 
   const tabs = TYPE_TABS.map(([id, label]) => ({ id, label, href: categoryTabHref(basePath, applied, id), active: activeFilter === id }));
   const mobileControls = <>
-    <CatalogMobileFilter basePath={basePath} query={applied} catalog={catalog} sectionFilter={sectionFilter} complexSearchIndex={availableComplexes.map((complex) => [complex.name, complex.shortName, complex.location.district, complex.location.address, complex.developer.name].filter(Boolean).join(" "))} />
-    {isComplexMode ? <div className="mt-3 lg:hidden"><Link href={catalogHref(basePath, applied, { view: isMapView ? "grid" : "map" })} scroll={false} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-white px-4 text-sm font-bold text-[var(--text-primary)]"><Map className="size-4" aria-hidden />{isMapView ? "Вернуться к плитке" : "Посмотреть на карте"}</Link></div> : null}
+    <CatalogMobileFilter
+      basePath={basePath}
+      query={applied}
+      catalog={catalog}
+      sectionFilter={sectionFilter}
+      mode={mode}
+      complexFilterIndex={availableComplexes.map((complex) => ({
+        search: [complex.name, complex.shortName, complex.location.district, complex.location.address, complex.developer.name].filter(Boolean).join(" "),
+        priceFrom: complex.facts.priceFrom,
+      }))}
+    />
   </>;
   const desktopFilter = isComplexMode
-    ? <ResidentialComplexFilterForm key={filterFormKey} basePath={basePath} query={applied} />
+    ? <ResidentialComplexFilterForm key={filterFormKey} basePath={basePath} query={applied} defaultView={defaultView} />
     : <CatalogFilterForm key={filterFormKey} basePath={basePath} query={applied} catalog={catalog} activeFilter={activeFilter} canClearFilters={canClearFilters} />;
   const sorting = isComplexMode ? undefined : <div className="hidden lg:block"><CatalogSortTabsView items={SORT_TABS.map(([id, label]) => ({ id, label, href: catalogHref(basePath, applied, { sort: id }), active: activeSort === id }))} linkRenderer={CatalogLinkAdapter} /></div>;
   const viewItems = ([
@@ -128,23 +138,21 @@ export function CatalogSharpShowcase({
       total={resultTotal}
       sorting={sorting}
       views={views}
+      beforeControls={mode === "new-buildings" ? <NewBuildingQuickSelections basePath={basePath} query={applied} complexes={availableComplexes} /> : undefined}
       linkRenderer={CatalogLinkAdapter}
     >
         {isComplexMode ? (
           isMapView ? (
             <NewBuildingCatalogMap complexes={complexes} />
           ) : complexes.length ? (
-            <div className={isListView ? "mt-4 divide-y divide-[var(--catalog-sharp-showcase-border-01)] border-y border-[var(--catalog-sharp-showcase-border-01)] max-md:!mt-5 max-md:!grid max-md:!grid-cols-1 max-md:!gap-x-5 max-md:!gap-y-7 max-md:!border-0 max-md:!divide-y-0" : "mt-5 grid gap-x-5 gap-y-7 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4"}>
-              {complexes.map((complex, index) => (
-                <FragmentWithNewBuildingSelectionCard
-                  key={complex.slug}
-                  complex={complex}
-                  variant={activeView}
-                  showSelectionCard={index === NEW_BUILDING_SELECTION_CARD_INDEX}
-                  priority={index === 0}
-                />
-              ))}
-            </div>
+            <>
+              <NewBuildingMobileCarousel complexes={complexes} />
+              <div className={isListView ? "mt-4 hidden divide-y divide-[var(--catalog-sharp-showcase-border-01)] border-y border-[var(--catalog-sharp-showcase-border-01)] md:block" : "mt-5 hidden gap-x-5 gap-y-10 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"}>
+                {complexes.map((complex, index) => (
+                  <CatalogResidentialComplexCard key={complex.slug} complex={complex} variant={activeView} priority={index === 0} />
+                ))}
+              </div>
+            </>
           ) : (
             <CatalogEmptyStateView message="По выбранному запросу жилые комплексы не найдены. Оставьте заявку, и специалист агентства недвижимости уточнит подходящие варианты вручную." linkRenderer={CatalogLinkAdapter} />
           )
@@ -168,42 +176,20 @@ export function CatalogSharpShowcase({
   );
 }
 
-function FragmentWithNewBuildingSelectionCard({
-  complex,
-  variant,
-  showSelectionCard,
-  priority = false,
-}: {
-  complex: NewBuilding;
-  variant: CatalogView;
-  showSelectionCard: boolean;
-  priority?: boolean;
-}) {
-  return (
-    <>
-      {showSelectionCard ? (
-        <CatalogNewBuildingSelectionCard
-          variant={variant}
-          source="catalog:new-building-selection-card"
-          formType="catalog_new_building_selection_request"
-        />
-      ) : null}
-      <CatalogResidentialComplexCard complex={complex} variant={variant} priority={priority} />
-    </>
-  );
-}
-
-function ResidentialComplexFilterForm({ basePath, query }: { basePath: string; query: CatalogQuery }) {
+function ResidentialComplexFilterForm({ basePath, query, defaultView }: { basePath: string; query: CatalogQuery; defaultView: CatalogView }) {
   return (
     <CatalogAutoSubmitForm action={basePath} className="mt-5">
       <Input unstyled type="hidden" name="city" value={query.city ?? tenant.cityEn} />
       <Input unstyled type="hidden" name="deal_type" value={query.dealType ?? "sale"} />
       <Input unstyled type="hidden" name="category" value="new_building" />
       <Input unstyled type="hidden" name="limit" value={query.limit ?? PAGE_SIZE} />
-      <Input unstyled type="hidden" name="view" value={query.view ?? "grid"} />
+      <Input unstyled type="hidden" name="view" value={query.view ?? defaultView} />
       <Input unstyled type="hidden" name="sort" value={query.sort ?? "newest"} />
 
-      <div className="lg:max-w-[520px]"><CatalogSearchFieldView defaultValue={query.q} placeholder="Название ЖК, район или застройщик" /></div>
+      <div className="grid gap-2 lg:max-w-[820px] lg:grid-cols-[minmax(280px,1.35fr)_minmax(300px,1fr)]">
+        <CatalogSearchFieldView defaultValue={query.q} placeholder="Название ЖК, район или застройщик" />
+        <CatalogRangePairView from="price_from" to="price_to" label="Цена" fromValue={query.priceFrom} toValue={query.priceTo} />
+      </div>
     </CatalogAutoSubmitForm>
   );
 }
@@ -367,11 +353,11 @@ function buildPortableTabQuery(query: CatalogQuery): CatalogQuery {
   };
 }
 
-function normalizeUiQuery(query: CatalogQuery): CatalogQuery {
+function normalizeUiQuery(query: CatalogQuery, defaultView: CatalogView = "grid"): CatalogQuery {
   return {
     ...query,
     sort: query.sort === "price_asc" || query.sort === "price_desc" ? query.sort : "newest",
-    view: query.view === "list" || query.view === "map" ? query.view : "grid",
+    view: query.view === "grid" || query.view === "list" || query.view === "map" ? query.view : defaultView,
     limit: query.limit ?? PAGE_SIZE,
   };
 }
@@ -395,31 +381,12 @@ function pluralizeComplexes(value: number) {
   return "жилых комплексов";
 }
 
-function filterResidentialComplexes(complexes: readonly NewBuilding[], query?: string) {
-  const needle = query?.trim().toLowerCase();
-  if (!needle) return [...complexes];
-
-  return complexes.filter((complex) => {
-    const haystack = [
-      complex.name,
-      complex.shortName,
-      complex.location.city,
-      complex.location.district,
-      complex.location.address,
-      complex.developer.name,
-      complex.facts.completionLabel,
-      complex.facts.formats.join(" "),
-    ]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase();
-
-    return haystack.includes(needle);
-  });
-}
-
 function activeResidentialComplexChips(query: CatalogQuery) {
-  return query.q ? [`Поиск: ${query.q}`] : [];
+  const chips: string[] = [];
+  if (query.q) chips.push(`Поиск: ${query.q}`);
+  if (query.priceFrom) chips.push(`Цена от: ${query.priceFrom.toLocaleString("ru-RU")} ₽`);
+  if (query.priceTo) chips.push(`Цена до: ${query.priceTo.toLocaleString("ru-RU")} ₽`);
+  return chips;
 }
 
 function pluralizeObjects(value: number) {

@@ -3,6 +3,7 @@ import type { SiteImageRenderer } from "../lib/adapters";
 
 export type CatalogHeroViewProps = {
   title: string;
+  variant?: "default" | "new-building";
   titleLines?: string[];
   titleSize?: "auto" | "standard";
   /** `stack` (default) — строки всегда; `inline` — на lg+ одна строка (для длинных H1 вроде /sotrudniki). */
@@ -32,6 +33,7 @@ export const CATALOG_HERO_IMAGE = "/images/agency-home-secondary-hero.webp";
 
 export function CatalogHeroView({
   title,
+  variant = "default",
   titleLines,
   titleSize = "auto",
   titleLinesDesktop = "stack",
@@ -48,6 +50,7 @@ export function CatalogHeroView({
   imageRenderer: ImageRenderer,
   unoptimized = false,
 }: CatalogHeroViewProps) {
+  const isNewBuildingHero = variant === "new-building";
   const hasTitleLines = Boolean(titleLines?.length);
   const hasDescriptionLines = Boolean(descriptionLines?.length);
   const hasControlledLines = hasTitleLines || hasDescriptionLines;
@@ -55,7 +58,9 @@ export function CatalogHeroView({
   const isLongTitle = hasControlledLines || title.length > 48;
   const descriptionVisibleAlways = descriptionVisibility === "always";
   const actionVisibleAlways = actionVisibility === "always";
-  const titleClassName = titleSize === "standard"
+  const titleClassName = isNewBuildingHero
+    ? "text-[34px] font-extrabold leading-[1.04] text-white sm:text-[38px] md:text-[42px] lg:text-[46px]"
+    : titleSize === "standard"
     ? "text-[34px] font-extrabold leading-[1.08] text-white md:text-[42px] lg:text-[46px]"
     : isLongTitle
     ? `text-[28px] font-extrabold leading-[1.08] text-white sm:text-[32px] md:max-w-[980px] md:text-[40px] lg:text-[44px]${
@@ -64,17 +69,21 @@ export function CatalogHeroView({
     : "text-[34px] font-extrabold leading-[1.08] text-white lg:whitespace-nowrap md:text-[42px] lg:text-[46px]";
   const contentClassName = hasControlledLines ? "max-w-[980px]" : "max-w-[780px]";
   const descriptionMaxWidth = hasControlledLines ? "max-w-[980px]" : "max-w-[760px]";
-  const descriptionClassName = descriptionVisibleAlways
+  const descriptionClassName = isNewBuildingHero
+    ? "mt-4 w-fit max-w-[620px] rounded-lg border border-white/20 bg-black/30 px-4 py-3 text-[0.95rem] font-medium leading-6 text-white/92 shadow-[var(--catalog-hero-shadow-01)] backdrop-blur-md [text-wrap:pretty] sm:text-[1rem] sm:leading-7 md:mt-5 md:px-5 md:py-4 md:text-[1.08rem] lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none"
+    : descriptionVisibleAlways
     ? `mt-3 ${descriptionMaxWidth} text-[0.95rem] font-medium leading-6 text-white/84 [text-wrap:pretty] sm:mt-4 sm:text-[1rem] sm:leading-7 md:mt-5 md:text-[1.08rem]`
     : `mt-5 hidden ${descriptionMaxWidth} text-[1rem] font-medium leading-7 text-white/84 [text-wrap:pretty] lg:block md:text-[1.08rem]`;
   const desktopHeightClassName = expandedDesktop ? "lg:min-h-[460px]" : "lg:min-h-[390px]";
-  const shellClassName = elevateContent
+  const shellClassName = isNewBuildingHero
+    ? `relative z-10 flex min-h-[340px] flex-col justify-end p-5 pb-6 sm:min-h-[360px] sm:p-6 sm:pb-7 md:min-h-[280px] md:p-8 md:pb-9 ${desktopHeightClassName} lg:p-12`
+    : elevateContent
     ? `relative z-10 flex min-h-[220px] flex-col justify-end p-5 pb-6 sm:min-h-[240px] sm:pb-7 md:min-h-[260px] md:p-8 md:pb-10 ${desktopHeightClassName} lg:p-12 lg:pb-16`
     : `relative z-10 flex min-h-[220px] flex-col justify-end p-5 sm:min-h-[240px] md:min-h-[260px] md:p-8 ${desktopHeightClassName} lg:p-12`;
   const titleLineClassName = collapseTitleLinesOnDesktop ? "block lg:inline" : "block lg:whitespace-nowrap";
 
   return (
-    <div className={`relative min-h-[220px] overflow-hidden rounded-xl bg-[var(--surface-dark)] text-white shadow-[var(--catalog-hero-shadow-01)] sm:min-h-[240px] md:min-h-[260px] ${desktopHeightClassName}`}>
+    <div className={`relative overflow-hidden rounded-lg bg-[var(--surface-dark)] text-white shadow-[var(--catalog-hero-shadow-01)] ${isNewBuildingHero ? `min-h-[340px] sm:min-h-[360px] md:min-h-[280px] ${desktopHeightClassName}` : `min-h-[220px] sm:min-h-[240px] md:min-h-[260px] ${desktopHeightClassName}`}`}>
       <ImageRenderer
         src={imageSrc}
         alt=""
@@ -83,11 +92,11 @@ export function CatalogHeroView({
         // Dev: skip /_next/image cache so public/ swaps show up without rebuild.
         unoptimized={unoptimized}
         sizes="(max-width: 1440px) calc(100vw - 40px), 1380px"
-        className={`object-cover brightness-[1.08] contrast-[1.02] ${focusImageBottomDesktop ? "lg:object-bottom" : ""}`}
+        className={`object-cover ${isNewBuildingHero ? "brightness-[0.88] contrast-[1.04] saturate-[0.94]" : "brightness-[1.08] contrast-[1.02]"} ${focusImageBottomDesktop ? "lg:object-bottom" : ""}`}
         style={{ objectPosition: focusImageBottomDesktop ? undefined : imagePosition }}
       />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--catalog-hero-effect-01)_0%,var(--catalog-hero-effect-02)_38%,var(--catalog-hero-effect-03)_72%,var(--catalog-hero-effect-04)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(0deg,var(--catalog-hero-effect-05)_0%,var(--catalog-hero-effect-06)_54%,var(--catalog-hero-effect-07)_100%)]" />
+      <div className={isNewBuildingHero ? "absolute inset-0 bg-[linear-gradient(90deg,var(--catalog-hero-effect-01)_0%,var(--catalog-hero-effect-02)_50%,var(--catalog-hero-effect-04)_100%)]" : "absolute inset-0 bg-[linear-gradient(90deg,var(--catalog-hero-effect-01)_0%,var(--catalog-hero-effect-02)_38%,var(--catalog-hero-effect-03)_72%,var(--catalog-hero-effect-04)_100%)]"} />
+      <div className={isNewBuildingHero ? "absolute inset-0 bg-[linear-gradient(0deg,var(--catalog-hero-effect-05)_0%,var(--catalog-hero-effect-06)_64%,var(--catalog-hero-effect-07)_100%)]" : "absolute inset-0 bg-[linear-gradient(0deg,var(--catalog-hero-effect-05)_0%,var(--catalog-hero-effect-06)_54%,var(--catalog-hero-effect-07)_100%)]"} />
       <div className={shellClassName}>
         <div className={contentClassName}>
           <h1 className={titleClassName}>

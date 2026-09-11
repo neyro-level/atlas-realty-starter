@@ -28,7 +28,8 @@ const SORT_OPTIONS = [
   { value: "newest", label: "Сначала новые" }, { value: "price_asc", label: "Сначала дешевле" }, { value: "price_desc", label: "Сначала дороже" },
 ] as const;
 
-export function CatalogMobileFilterView({ draft, setDraft, facets, typeSummary, sortLabel, sortOpen, setSortOpen, sortRef, advancedOpen, setAdvancedOpen, filtersSheetOpen, setFiltersSheetOpen, typeOpen, setTypeOpen, onToggleType, onToggleRoom, onClear, onApply, applyLabel }: {
+export function CatalogMobileFilterView({ mode = "default", draft, setDraft, facets, typeSummary, sortLabel, sortOpen, setSortOpen, sortRef, advancedOpen, setAdvancedOpen, filtersSheetOpen, setFiltersSheetOpen, typeOpen, setTypeOpen, onToggleType, onToggleRoom, onClear, onApply, applyLabel }: {
+  mode?: "default" | "new-buildings";
   draft: MobileFilterDraftViewDto;
   setDraft: Dispatch<SetStateAction<MobileFilterDraftViewDto>>;
   facets: CatalogFacetsDto;
@@ -49,6 +50,46 @@ export function CatalogMobileFilterView({ draft, setDraft, facets, typeSummary, 
   onApply: () => void;
   applyLabel: string;
 }) {
+  if (mode === "new-buildings") {
+    return (
+      <div className="mt-4 space-y-2.5 lg:hidden" data-new-building-mobile-filter>
+        <SearchField draft={draft} setDraft={setDraft} />
+        <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] gap-2">
+          <Button
+            unstyled
+            type="button"
+            onClick={() => setFiltersSheetOpen(true)}
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-white px-3 text-[13px] font-semibold text-[var(--text-primary)]"
+          >
+            <SlidersHorizontal className="size-4" aria-hidden />
+            Фильтры
+          </Button>
+          <ApplyButton label={applyLabel} onClick={onApply} />
+        </div>
+        <Sheet open={filtersSheetOpen} onOpenChange={setFiltersSheetOpen}>
+          <SheetContent side="bottom" className="inset-x-0 bottom-0 max-h-[85dvh] overflow-y-auto rounded-t-2xl border-0 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-[var(--catalog-mobile-filter-shadow-01)] lg:hidden" showClose>
+            <SheetHeader className="mb-4"><SheetTitle className="text-[15px] font-semibold">Фильтры новостроек</SheetTitle></SheetHeader>
+            <div className="space-y-3">
+              <SearchField draft={draft} setDraft={setDraft} />
+              <div>
+                <p className="mb-1.5 text-[11px] font-semibold uppercase text-[var(--text-muted)]">Цена</p>
+                <RangeField from={draft.priceFrom} to={draft.priceTo} onFrom={(value) => setDraft((current) => ({ ...current, priceFrom: value }))} onTo={(value) => setDraft((current) => ({ ...current, priceTo: value }))} fromPlaceholder="от 3 млн" toPlaceholder="до 12 млн" inputMode="decimal" numericOnly={false} />
+              </div>
+              <label className="block text-[11px] font-semibold uppercase text-[var(--text-muted)]">
+                Порядок
+                <Select unstyled value={draft.sort} onChange={(event) => setDraft((current) => ({ ...current, sort: event.target.value }))} className="mt-1.5 min-h-11 w-full rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] px-3 text-[13px] font-medium normal-case text-[var(--text-primary)]">
+                  {SORT_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </Select>
+              </label>
+              <Button unstyled type="button" onClick={onClear} className="inline-flex min-h-10 w-full items-center justify-center rounded-lg text-[13px] font-semibold text-[var(--accent)]">Очистить</Button>
+              <ApplyButton label={applyLabel} onClick={onApply} />
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+    );
+  }
+
   const fields = (showAdvancedAlways: boolean) => <MobileFilterFields draft={draft} setDraft={setDraft} facets={facets} typeSummary={typeSummary} sortLabel={sortLabel} sortOpen={sortOpen} setSortOpen={setSortOpen} sortRef={sortRef} advancedOpen={advancedOpen} setAdvancedOpen={setAdvancedOpen} showAdvancedAlways={showAdvancedAlways} onOpenType={() => setTypeOpen(true)} onToggleRoom={onToggleRoom} onClear={onClear} />;
   return <div className="mt-4 space-y-2.5 lg:hidden">
     {fields(false)}
@@ -67,6 +108,10 @@ export function CatalogMobileFilterView({ draft, setDraft, facets, typeSummary, 
       </SheetContent>
     </Sheet>
   </div>;
+}
+
+function SearchField({ draft, setDraft }: { draft: MobileFilterDraftViewDto; setDraft: Dispatch<SetStateAction<MobileFilterDraftViewDto>> }) {
+  return <label className="flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-02)] px-3"><Search className="size-4 shrink-0 text-[var(--text-muted)]" aria-hidden /><span className="sr-only">Поиск по новостройкам</span><Input unstyled value={draft.q} onChange={(event) => setDraft((current) => ({ ...current, q: event.target.value }))} placeholder="Название ЖК, район или застройщик" className="min-w-0 flex-1 bg-transparent text-[13px] font-medium outline-none placeholder:text-[var(--text-muted)]" /></label>;
 }
 
 function ApplyButton({ label, onClick }: { label: string; onClick: () => void }) {

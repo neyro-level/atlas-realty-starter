@@ -17,6 +17,7 @@ export function NewBuildingLayoutsSection({ complex, contained = false }: { comp
           label="Получить подборку"
           complexName={complex.name}
           slug={complex.slug}
+          complexId={complex.sourceId}
           variant="primary"
           modalTitle={`Получить подборку новостроек в ${siteProfile.city.prepositional}`}
           showIcon={false}

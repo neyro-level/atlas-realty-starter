@@ -233,6 +233,7 @@ export type NewBuildingLayoutDto = {
 };
 
 export type NewBuildingDetailDto = {
+  sourceId: string | null;
   slug: string;
   name: string;
   shortName: string;
@@ -265,6 +266,7 @@ export type NewBuildingDetailDto = {
     intro: string;
     items: Array<{ title: string; text: string; timeLabel: string | null }>;
   };
+  whyAgency: Array<{ title: string; text: string }>;
   related: NewBuildingDto[];
 };
 
@@ -573,6 +575,8 @@ export type NewBuildingDto = {
   priceFrom: number | null;
   completion: string;
   image: string | null;
+  developerName?: string;
+  floorsLabel?: string | null;
 };
 
 export type SeoDocumentDto = {

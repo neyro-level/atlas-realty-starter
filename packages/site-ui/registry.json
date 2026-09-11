@@ -100,6 +100,18 @@
         { "path": "src/views/CorporateFormSectionViews.tsx", "type": "registry:block" },
         { "path": "src/views/HomePreFooterView.tsx", "type": "registry:block" }
       ]
+    },
+    {
+      "name": "ams-realty-new-building",
+      "type": "registry:block",
+      "title": "AMS Realty new-building conversion views",
+      "description": "Responsive catalog and detail conversion views for residential-complex modules.",
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives", "ams-realty-request-form"],
+      "files": [
+        { "path": "src/views/NewBuildingConversionViews.tsx", "type": "registry:block" },
+        { "path": "src/views/NewBuildingMobileCarouselView.tsx", "type": "registry:block" },
+        { "path": "src/views/NewBuildingStickyConversionView.tsx", "type": "registry:block" }
+      ]
     }
   ]
 }

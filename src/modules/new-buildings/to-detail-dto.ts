@@ -4,6 +4,7 @@ import type { NewBuilding } from "./schema";
 
 export function toNewBuildingDetailDto(complex: NewBuilding, related: NewBuilding[] = []): NewBuildingDetailDto {
   return {
+    sourceId: complex.sourceId ?? null,
     slug: complex.slug,
     name: complex.name,
     shortName: complex.shortName,
@@ -30,6 +31,7 @@ export function toNewBuildingDetailDto(complex: NewBuilding, related: NewBuildin
     layouts: complex.layouts.map((layout) => ({ ...layout, image: layout.image ? resolveNewBuildingMedia(layout.image) : null })),
     purchaseOptions: complex.purchaseOptions,
     location: complex.infrastructure,
+    whyAgency: complex.whyAgency,
     related: related.map(toNewBuildingCardDto),
   };
 }
@@ -44,6 +46,8 @@ export function toNewBuildingCardDto(complex: NewBuilding): NewBuildingDto {
     priceFrom: complex.facts.priceFrom,
     completion: complex.facts.completionLabel ?? "Уточняется",
     image: image.src,
+    developerName: complex.developer.name,
+    floorsLabel: complex.facts.floorsLabel,
   };
 }
 
