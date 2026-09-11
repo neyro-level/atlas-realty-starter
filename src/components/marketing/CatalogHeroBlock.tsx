@@ -11,7 +11,7 @@ export const CATALOG_HERO_DESCRIPTION =
 
 export const CATALOG_HERO_IMAGE = "/images/agency-home-secondary-hero.webp";
 
-type CatalogHeroBlockProps = Omit<CatalogHeroViewProps, "imageRenderer" | "unoptimized">;
+type CatalogHeroBlockProps = Omit<CatalogHeroViewProps, "imageRenderer" | "unoptimized" | "imageSrc"> & { imageSrc?: string };
 
 function CatalogHeroImage({ alt, ...props }: SiteImageRendererProps) {
   return <Image alt={alt} {...(props as Omit<ImageProps, "alt">)} />;

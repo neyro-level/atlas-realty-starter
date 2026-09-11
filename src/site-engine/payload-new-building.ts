@@ -25,6 +25,7 @@ export function toNewBuilding(complex: PublicComplex): NewBuilding {
   const hero = media[0] ?? null
   const positioning = complex.description || `${complex.name} — жилой комплекс в Краснодаре. Поможем уточнить доступные квартиры и условия покупки.`
   return {
+    sourceId: complex.id,
     about: {
       intro: positioning,
       features: [

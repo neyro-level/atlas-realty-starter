@@ -18,6 +18,7 @@ export function CatalogShowcaseView({
   resultLabel,
   tabs,
   mobileControls,
+  beforeControls,
   desktopFilter,
   activeFilters,
   clearHref,
@@ -34,6 +35,7 @@ export function CatalogShowcaseView({
   resultLabel: string;
   tabs: CatalogTabViewDto[];
   mobileControls: ReactNode;
+  beforeControls?: ReactNode;
   desktopFilter: ReactNode;
   activeFilters: string[];
   clearHref?: string;
@@ -48,6 +50,7 @@ export function CatalogShowcaseView({
     <section id={sectionId} className={headline ? "bg-white pb-10 pt-6 lg:pb-14 lg:pt-8" : "bg-white pt-4 pb-10 md:pt-5 lg:py-14"} aria-label={heading || "Каталог недвижимости"}>
       <div className="mx-auto max-w-site-frame px-5">
         {headline ? <div className="mb-7 rounded-lg border border-[var(--catalog-controls-border-01)] bg-[var(--surface-card-soft)] px-5 py-5 md:px-6 md:py-6"><h1 className="max-w-[920px] text-[20px] font-extrabold leading-[1.18] text-[var(--text-primary)] md:text-[24px] lg:text-[26px]">{headline}</h1></div> : null}
+        {beforeControls}
         <div className="rounded-lg bg-white p-4 shadow-[var(--catalog-controls-shadow-01)] lg:p-5">
           <div className="flex flex-wrap items-end justify-between gap-3"><p className="text-xl font-extrabold leading-tight text-[var(--text-primary)] md:text-2xl">Найдено: <span className="tabular-nums">{resultLabel}</span></p></div>
           <nav className="mt-6 hidden gap-2 overflow-x-auto pb-1 lg:flex" aria-label="Типы недвижимости">

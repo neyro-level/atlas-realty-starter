@@ -16,9 +16,13 @@ The root and package `components.json` files must keep the same ShadCN style, Re
 
 The private AMS registry owns ShadCN Button, Card, Badge, Dialog, Carousel, Aspect Ratio, Scroll Area, Skeleton, Tabs, Form, Field, Input, Textarea, Select and Checkbox plus neutral realty gallery, catalog cards, filters, request forms and CTA blocks. Registry items use the `ams-realty-*` namespace and never contain client branding, domains, legal data or city-specific copy.
 
+`ams-realty-new-building` is the umbrella Registry item for the complete residential-complex presentation module. It installs the separate `catalog`, `detail` and `conversion` items, their neutral view models and every required Registry dependency. Atlas wrappers provide brand, city, expert identity and portrait, optional verified rating, Next adapters, Payload-derived DTOs and typed request context. `pnpm ui:registry:consumer` builds the items and verifies their clean dependency closure without relying on the Atlas application.
+
 New UI follows `reuse -> variant -> create`. Application components do not import Radix directly and do not recreate native controls when an admitted primitive or semantic variant exists.
 
 `MediaGallery` is the only gallery API used by property and residential-complex pages. It wraps Embla through ShadCN Carousel and `yet-another-react-lightbox` with thumbnails, counter, zoom and fullscreen. The wrapper owns focus restore, keyboard and touch behavior, scroll locking, preload limits, empty/single states and Atlas token styling; application code must not import the lightbox directly.
+
+The `/novostroyki` mobile showcase uses one large complex card with the edge of the next card visible. Each card has one image and one horizontal swipe owner; nested image swiping and autoplay are forbidden. Tablet and desktop keep the normal list/grid/map showcase, with list as the route default.
 
 ## Visual and media gates
 

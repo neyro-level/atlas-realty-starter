@@ -11,12 +11,14 @@ export function NewBuildingLayoutsSection({ complex, contained = false }: { comp
       detail={toNewBuildingDetailDto(complex)}
       contained={contained}
       cityPrepositional={siteProfile.city.prepositional}
+      expert={{ ...siteProfile.expert, ratingLabel: null }}
       imageRenderer={Image}
       requestAction={
         <RequestCta
           label="Получить подборку"
           complexName={complex.name}
           slug={complex.slug}
+          complexId={complex.sourceId}
           variant="primary"
           modalTitle={`Получить подборку новостроек в ${siteProfile.city.prepositional}`}
           showIcon={false}

@@ -17,6 +17,7 @@ export async function createLeadAction(data: LeadFormData): Promise<CreateLeadAc
   }
 
   const propertyId = parsed.data.propertyId && isUuid(parsed.data.propertyId) ? parsed.data.propertyId : undefined;
+  const complexId = parsed.data.complexId && isUuid(parsed.data.complexId) ? parsed.data.complexId : undefined;
   const startedAt = parsed.data.formRenderedAt && parsed.data.formRenderedAt <= Date.now() - 2_000
     ? parsed.data.formRenderedAt
     : Date.now() - 3_000;
@@ -27,12 +28,13 @@ export async function createLeadAction(data: LeadFormData): Promise<CreateLeadAc
       consent: true,
       email: parsed.data.email || undefined,
       formStartedAt: new Date(startedAt).toISOString(),
-      formType: propertyId ? "property" : "general",
+      formType: complexId ? "complex" : propertyId ? "property" : "general",
       idempotencyKey: parsed.data.submissionId ?? randomUUID(),
       message: parsed.data.message || undefined,
       name: parsed.data.name || undefined,
       phone: parsed.data.phone,
       propertyId,
+      complexId,
       sourcePage: parsed.data.sourcePage,
     });
     return { ok: true, message: "Ваша заявка зафиксирована. Мы свяжемся с вами в ближайшее время." };

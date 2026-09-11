@@ -11,6 +11,11 @@ type RequestCtaProps = {
   variant?: "primary" | "secondary" | "dark-secondary";
   className?: string;
   modalTitle?: string;
+  modalSubtitle?: string;
+  source?: string;
+  formType?: string;
+  submitLabel?: string;
+  complexId?: string | null;
   showIcon?: boolean;
 };
 
@@ -27,6 +32,11 @@ export function RequestCta({
   variant = "primary",
   className = "",
   modalTitle,
+  modalSubtitle,
+  source,
+  formType,
+  submitLabel,
+  complexId,
   showIcon = true,
 }: RequestCtaProps) {
   const { openRequest } = useSiteOverlay();
@@ -36,14 +46,18 @@ export function RequestCta({
       type="button"
       onClick={() => openRequest({
         title: modalTitle ?? label,
-        subtitle: `Уточним задачу по ${complexName}: бюджет, планировку и способ покупки, затем запросим актуальные предложения.`,
-        source: `new_building:${slug}`,
-        formType: "new_building_request",
+        subtitle: modalSubtitle ?? `Уточним задачу по ${complexName}: бюджет, планировку и способ покупки, затем запросим актуальные предложения.`,
+        source: source ?? `new_building:${slug}`,
+        formType: formType ?? "new_building_request",
+        submitLabel,
+        showSubtitle: true,
+        complexId: complexId ?? undefined,
+        complexName,
       })}
       className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--request-cta-focus-01)] ${variants[variant]} ${className}`}
     >
       {label}
-      {showIcon ? <ArrowRight className="size-4 shrink-0" aria-hidden /> : null}
+      {showIcon ? <ArrowRight data-icon="inline-end" aria-hidden /> : null}
     </Button>
   );
 }

@@ -1,4 +1,5 @@
 export { resolveNewBuildingMedia } from "./format";
+export { filterNewBuildings } from "./filter";
 export {
   getNewBuilding,
   isSalesLeaderNewBuilding,

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { redactDeliveryError, retryDelay } from '@/core/data-access/system/leads/delivery'
 import { deliverToAmsLeads } from '@/project/leads/channels'
 import { isAllowedLeadSourcePagePath } from '@/modules/leads/source-page-policy'
+import { leadSchema } from '@/modules/leads/schema'
 import { LEAD_BODY_LIMIT_BYTES, assertMinimumFillTime, idempotencyKeySchema, normalizeLeadPhone, publicLeadSchema, readBoundedJSON } from '@/shared/types/public-lead'
 
 describe('Stage 3 public lead contract', () => {
@@ -38,6 +39,14 @@ describe('Stage 3 public lead contract', () => {
     expect(() => publicLeadSchema.parse({ consent: false, formStartedAt: new Date().toISOString(), formType: 'general', phone: '+79991234567', sourcePage: '/' })).toThrow()
     expect(() => publicLeadSchema.parse({ company: 'bot', consent: true, formStartedAt: new Date().toISOString(), formType: 'general', phone: '+79991234567', sourcePage: '/' })).toThrow()
     expect(() => publicLeadSchema.parse({ consent: true, formStartedAt: new Date().toISOString(), formType: 'general', phone: '+79991234567', sourcePage: '//evil.test' })).toThrow()
+  })
+
+  it('requires a real complex id only for complex-scoped public leads', () => {
+    const base = { consent: true as const, formStartedAt: new Date().toISOString(), phone: '+7 999 123-45-67', sourcePage: '/zhk-opera' }
+    expect(publicLeadSchema.parse({ ...base, complexId: '123e4567-e89b-42d3-a456-426614174000', formType: 'complex' }).complexId).toBe('123e4567-e89b-42d3-a456-426614174000')
+    expect(() => publicLeadSchema.parse({ ...base, formType: 'complex' })).toThrow(/complexId is required/)
+    expect(publicLeadSchema.parse({ ...base, formType: 'general', sourcePage: '/novostroyki' }).complexId).toBeUndefined()
+    expect(leadSchema.parse({ complexId: '123e4567-e89b-42d3-a456-426614174000', consent: true, phone: '+7 999 123-45-67', sourcePage: '/zhk-opera' }).complexId).toBe('123e4567-e89b-42d3-a456-426614174000')
   })
 
   it('enforces idempotency, minimum fill time and body limit', async () => {

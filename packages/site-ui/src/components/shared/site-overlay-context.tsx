@@ -12,6 +12,8 @@ export type RequestOverlayDetail = {
   submitLabel?: string;
   showSubtitle?: boolean;
   propertyId?: string;
+  complexId?: string;
+  complexName?: string;
   agentId?: string;
   propertyTitle?: string;
   propertyAddress?: string;

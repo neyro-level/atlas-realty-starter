@@ -20,9 +20,18 @@ const SORT_OPTIONS = [
   { value: "price_desc", label: "Сначала дороже" },
 ] as const;
 
-type Props = { basePath: string; query: CatalogQuery; catalog: CatalogSnapshot; sectionFilter: string; complexSearchIndex?: readonly string[] };
+type ComplexFilterIndexItem = { search: string; priceFrom: number | null };
 
-export function CatalogMobileFilter({ basePath, query, catalog, sectionFilter, complexSearchIndex = [] }: Props) {
+type Props = {
+  basePath: string;
+  query: CatalogQuery;
+  catalog: CatalogSnapshot;
+  sectionFilter: string;
+  mode?: "default" | "new-buildings";
+  complexFilterIndex?: readonly ComplexFilterIndexItem[];
+};
+
+export function CatalogMobileFilter({ basePath, query, catalog, sectionFilter, mode = "default", complexFilterIndex = [] }: Props) {
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [draft, setDraft] = useState<MobileFilterDraft>(() => createMobileFilterDraft(query, sectionFilter));
@@ -30,15 +39,15 @@ export function CatalogMobileFilter({ basePath, query, catalog, sectionFilter, c
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [filtersSheetOpen, setFiltersSheetOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
-  const [previewTotal, setPreviewTotal] = useState(catalog.total);
+  const [previewTotal, setPreviewTotal] = useState(mode === "new-buildings" ? complexFilterIndex.length : catalog.total);
   const [counting, setCounting] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
-  const querySyncKey = useMemo(() => JSON.stringify({ query, sectionFilter, total: catalog.total }), [query, sectionFilter, catalog.total]);
+  const querySyncKey = useMemo(() => JSON.stringify({ query, sectionFilter, total: catalog.total, mode, complexes: complexFilterIndex.length }), [query, sectionFilter, catalog.total, mode, complexFilterIndex.length]);
   const [appliedQuerySyncKey, setAppliedQuerySyncKey] = useState(querySyncKey);
   if (appliedQuerySyncKey !== querySyncKey) {
     setAppliedQuerySyncKey(querySyncKey);
     setDraft(createMobileFilterDraft(query, sectionFilter));
-    setPreviewTotal(catalog.total);
+    setPreviewTotal(mode === "new-buildings" ? complexFilterIndex.length : catalog.total);
   }
 
   useEffect(() => {
@@ -60,8 +69,13 @@ export function CatalogMobileFilter({ basePath, query, catalog, sectionFilter, c
     const { path, query: nextQuery } = resolveMobileApplyTarget(draft);
     let cancelled = false;
     if (path === "/novostroyki") {
-      const needle = draft.q.trim().toLowerCase();
-      const total = needle ? complexSearchIndex.filter((value) => value.toLowerCase().includes(needle)).length : complexSearchIndex.length;
+      const needle = nextQuery.q?.trim().toLocaleLowerCase("ru-RU");
+      const total = complexFilterIndex.filter((item) => {
+        if (needle && !item.search.toLocaleLowerCase("ru-RU").includes(needle)) return false;
+        if (nextQuery.priceFrom && (item.priceFrom === null || item.priceFrom < nextQuery.priceFrom)) return false;
+        if (nextQuery.priceTo && (item.priceFrom === null || item.priceFrom > nextQuery.priceTo)) return false;
+        return true;
+      }).length;
       queueMicrotask(() => { if (!cancelled) setPreviewTotal(total); });
       return () => { cancelled = true; };
     }
@@ -77,7 +91,7 @@ export function CatalogMobileFilter({ basePath, query, catalog, sectionFilter, c
       finally { if (!cancelled) setCounting(false); }
     }, 350);
     return () => { cancelled = true; window.clearTimeout(timer); };
-  }, [complexSearchIndex, draft]);
+  }, [complexFilterIndex, draft]);
 
   function toggleType(id: MobileTypeId) {
     setDraft((current) => { const selected = new Set(current.types); if (selected.has(id)) selected.delete(id); else selected.add(id); return { ...current, types: Array.from(selected) as MobileTypeId[] }; });
@@ -86,19 +100,20 @@ export function CatalogMobileFilter({ basePath, query, catalog, sectionFilter, c
     setDraft((current) => { const selected = new Set(current.rooms); if (selected.has(id)) selected.delete(id); else selected.add(id); return { ...current, rooms: Array.from(selected) as MobileFilterDraft["rooms"] }; });
   }
   function applyFilters() {
-    const { path, query: nextQuery } = resolveMobileApplyTarget({ ...draft, view: "grid", sort: draft.sort === "price_asc" || draft.sort === "price_desc" ? draft.sort : "newest" });
+    const { path, query: nextQuery } = resolveMobileApplyTarget({ ...draft, view: mode === "new-buildings" ? "list" : "grid", sort: draft.sort === "price_asc" || draft.sort === "price_desc" ? draft.sort : "newest" });
     const params = buildRouteParams(nextQuery);
     startTransition(() => router.push(params ? `${path}?${params}` : path, { scroll: false }));
     setTypeOpen(false); setSortOpen(false); setFiltersSheetOpen(false);
   }
   function clearDraft() {
     startTransition(() => router.push(basePath, { scroll: false }));
-    setTypeOpen(false); setAdvancedOpen(false); setSortOpen(false);
+    setTypeOpen(false); setAdvancedOpen(false); setSortOpen(false); setFiltersSheetOpen(false);
   }
 
   const typeSummary = useMemo(() => formatMobileTypeSummary(draft.types), [draft.types]);
   const sortLabel = SORT_OPTIONS.find((option) => option.value === draft.sort)?.label ?? "Сначала новые";
   return <CatalogMobileFilterView
+    mode={mode}
     draft={draft}
     setDraft={setDraft}
     facets={catalog.facets}
@@ -129,4 +144,4 @@ function addQueryParams(params: URLSearchParams, query: CatalogQuery) {
   if (query.buildingType) params.set("building_type", query.buildingType); if (query.renovation) params.set("renovation", query.renovation); if (query.sort) params.set("sort", query.sort);
 }
 function buildApiParams(query: CatalogQuery) { const params = new URLSearchParams(); addQueryParams(params, query); params.set("limit", "1"); return params.toString(); }
-function buildRouteParams(query: CatalogQuery) { const params = new URLSearchParams(); addQueryParams(params, query); params.set("view", "grid"); if (query.limit) params.set("limit", String(query.limit)); return params.toString(); }
+function buildRouteParams(query: CatalogQuery) { const params = new URLSearchParams(); addQueryParams(params, query); params.set("view", query.view === "list" ? "list" : "grid"); if (query.limit) params.set("limit", String(query.limit)); return params.toString(); }

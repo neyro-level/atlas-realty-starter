@@ -1,6 +1,6 @@
 # Project
 
-Last reconciled with SourceCraft `main` commit `783e22af25e8343d1362d0ff62a41b6657699ca7` on 2026-09-08.
+Last reconciled with SourceCraft `main` base `5797b782bd3126772ac4a22dbdf804c0744c6b84` and the active new-buildings work stream on 2026-09-11.
 
 ## Identity and lifecycle
 
@@ -67,6 +67,7 @@ The versioned headless API remains supported for external consumers; “headless
 - Streaming allowlisted YRL parsers for secondary and new-build feeds, source isolation, manual-field protection and suspicious-feed deactivation guard.
 - Public catalog/property/complex/agent/content DTOs, bounded filters, SEO/Redirects plugins, sitemap and cache revalidation.
 - Public website: home, catalog/detail, new buildings, employees, journal, corporate/service/legal pages, reviews, favorites/comparison, leadgen and thank-you flows.
+- New-buildings module: one Payload-backed detail template for every residential complex; search and real `priceFrom` bounds on `/novostroyki`; compact mobile/tablet conversion flow, single-level Embla card carousel, map switch, universal purchase scenarios and complex-scoped lead relation.
 - Lead intake with bounded validation, consent, anti-spam checks, idempotency and transactional delivery records.
 - Payload Jobs for import, delivery, recovery and PII retention.
 - Optional persistent S3 storage; required by the protected production runtime.
@@ -104,6 +105,7 @@ Lead PII retention default is 365 days and the baseline consent text version is 
 - Public UI was later integrated through SourceCraft PR `!51`; the current exact-head live production proof is not recorded in this repository.
 - On 2026-09-08, local PostgreSQL 18.6 had all eight committed migrations applied and the Payload-backed UI returned HTTP 200 for the home page, catalog, property and residential-complex routes.
 - The local product catalog contains 20 unique Krasnodar residential complexes and 60 properties: 30 secondary apartments split 10/10/10 by room count, 10 houses, 10 land plots and 10 commercial properties. On 2026-09-08 the catalog was rebuilt from current partner listings with 60 unique addresses and 346 property images whose checksums do not repeat across properties; together with residential complexes the clean local media set contains 547 referenced files. Public DTOs contain no import provenance.
+- The new-buildings presentation upgrade does not change the Payload schema, migrations or the 20-record residential-complex source set. Detail submissions carry the existing Payload complex ID through the Public Lead contract; catalog submissions remain general and are distinguished only by internal analytics source/form type.
 - Atlas remains non-indexable by owner decision while the approved partner catalog is used as a product demonstration dataset.
 - The Yandex Maps JavaScript API integration and fallback are implemented; a real production key is still an external secret gate.
 - Before claiming current full-stack production readiness, run the exact-head Merge Gate, package/release flow and live smoke from `OPERATIONS.md` against an isolated client or validation contour.

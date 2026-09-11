@@ -26,9 +26,14 @@
         "@radix-ui/react-slot@1.3.3",
         "@radix-ui/react-tabs@1.1.21",
         "class-variance-authority@0.7.1",
-        "lucide-react@1.38.0"
+        "clsx@2.1.1",
+        "embla-carousel-react@8.6.0",
+        "lucide-react@1.38.0",
+        "tailwind-merge@3.6.0"
       ],
       "files": [
+        { "path": "src/lib/adapters.tsx", "type": "registry:lib" },
+        { "path": "src/lib/utils.ts", "type": "registry:lib" },
         { "path": "src/components/ui/accordion.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/aspect-ratio.tsx", "type": "registry:ui" },
         { "path": "src/components/ui/badge.tsx", "type": "registry:ui" },
@@ -83,6 +88,14 @@
       ]
     },
     {
+      "name": "ams-realty-overlay-trigger",
+      "type": "registry:component",
+      "title": "AMS Realty typed overlay trigger",
+      "description": "Neutral typed request and property-chat context with accessible polymorphic triggers.",
+      "registryDependencies": ["ams-realty-primitives"],
+      "files": [{ "path": "src/components/shared/site-overlay-context.tsx", "type": "registry:component" }]
+    },
+    {
       "name": "ams-realty-request-form",
       "type": "registry:block",
       "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives"],
@@ -100,6 +113,54 @@
         { "path": "src/views/CorporateFormSectionViews.tsx", "type": "registry:block" },
         { "path": "src/views/HomePreFooterView.tsx", "type": "registry:block" }
       ]
+    },
+    {
+      "name": "ams-realty-new-building-catalog",
+      "type": "registry:block",
+      "title": "AMS Realty new-building catalog views",
+      "description": "Neutral responsive hero and single-level mobile carousel for residential-complex catalogs.",
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives"],
+      "files": [
+        { "path": "src/contracts/new-building.ts", "type": "registry:lib" },
+        { "path": "src/views/CatalogHeroView.tsx", "type": "registry:block" },
+        { "path": "src/views/NewBuildingMobileCarouselView.tsx", "type": "registry:block" }
+      ]
+    },
+    {
+      "name": "ams-realty-new-building-detail",
+      "type": "registry:block",
+      "title": "AMS Realty new-building detail views",
+      "description": "Neutral unified residential-complex detail composition and supporting sections.",
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives", "ams-realty-media-gallery", "ams-realty-overlay-trigger"],
+      "files": [
+        { "path": "src/contracts/new-building.ts", "type": "registry:lib" },
+        { "path": "src/views/NewBuildingDecisionSidebarView.tsx", "type": "registry:block" },
+        { "path": "src/views/NewBuildingDetailPageView.tsx", "type": "registry:block" },
+        { "path": "src/views/NewBuildingDetailSectionsView.tsx", "type": "registry:block" },
+        { "path": "src/views/NewBuildingGalleryView.tsx", "type": "registry:block" },
+        { "path": "src/views/NewBuildingHeroView.tsx", "type": "registry:block" },
+        { "path": "src/views/NewBuildingRelatedView.tsx", "type": "registry:block" }
+      ]
+    },
+    {
+      "name": "ams-realty-new-building-conversion",
+      "type": "registry:block",
+      "title": "AMS Realty new-building conversion views",
+      "description": "Neutral quick actions, mobile commercial content, expert proof and sticky conversion controls.",
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives", "ams-realty-overlay-trigger"],
+      "files": [
+        { "path": "src/contracts/new-building.ts", "type": "registry:lib" },
+        { "path": "src/views/NewBuildingConversionViews.tsx", "type": "registry:block" },
+        { "path": "src/views/NewBuildingStickyConversionView.tsx", "type": "registry:block" }
+      ]
+    },
+    {
+      "name": "ams-realty-new-building",
+      "type": "registry:block",
+      "title": "AMS Realty new-building module",
+      "description": "Umbrella install for the complete neutral residential-complex catalog and detail presentation module.",
+      "registryDependencies": ["ams-realty-new-building-catalog", "ams-realty-new-building-detail", "ams-realty-new-building-conversion"],
+      "files": []
     }
   ]
 }

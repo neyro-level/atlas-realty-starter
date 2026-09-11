@@ -1,5 +1,7 @@
 import { JsonLd } from "@/shared/ui/JsonLd";
 import { NewBuildingDetailPageView } from "@ams/realty-ui";
+import { Fragment } from "react";
+import { NewBuildingMobileConversionBar } from "@/components/marketing/NewBuildingMobileConversionBar";
 import { resolveNewBuildingMedia, type ResolvedNewBuildingMedia } from "../format";
 import { getRelatedNewBuildings } from "../registry";
 import { newBuildingBreadcrumbSchema, newBuildingSchema } from "../seo";
@@ -15,6 +17,8 @@ import { NewBuildingGallery } from "./NewBuildingGallery";
 import { NewBuildingHero } from "./NewBuildingHero";
 import { NewBuildingLayoutsSection } from "./NewBuildingLayoutsSection";
 import { NewBuildingLocationSection } from "./NewBuildingLocationSection";
+import { NewBuildingMobileCommercialSection } from "./NewBuildingMobileCommercialSection";
+import { NewBuildingMobileWhyAtlasSection } from "./NewBuildingMobileWhyAtlasSection";
 import { NewBuildingPurchaseTermsSection } from "./NewBuildingPurchaseTermsSection";
 import { NewBuildingRelatedSection } from "./NewBuildingRelatedSection";
 
@@ -36,8 +40,9 @@ export function NewBuildingPage({ complex }: { complex: NewBuilding }) {
               )}
           </>
         }
-        sidebar={<NewBuildingDecisionSidebar complex={complex} />}
+        sidebar={<div className="hidden lg:block"><NewBuildingDecisionSidebar complex={complex} /></div>}
       />
+      <NewBuildingMobileConversionBar complexName={complex.name} complexSlug={complex.slug} complexId={complex.sourceId} />
     </>;
 }
 
@@ -53,24 +58,26 @@ function renderNewBuildingDetailSection(
   switch (section) {
     case "gallery":
       return (
-        <NewBuildingGallery
-          key={section}
-          address={context.address}
-          images={context.gallery}
-          latitude={context.complex.location.latitude}
-          longitude={context.complex.location.longitude}
-          name={context.complex.name}
-          videoUrl={context.complex.media.videoUrl}
-        />
+        <Fragment key={section}>
+          <NewBuildingGallery
+            address={context.address}
+            images={context.gallery}
+            latitude={context.complex.location.latitude}
+            longitude={context.complex.location.longitude}
+            name={context.complex.name}
+            videoUrl={context.complex.media.videoUrl}
+          />
+          <div data-new-building-mobile-sticky-trigger><NewBuildingMobileCommercialSection complex={context.complex} /></div>
+        </Fragment>
       );
     case "about":
-      return <NewBuildingAboutSection key={section} complex={context.complex} contained />;
+      return <Fragment key={section}><NewBuildingAboutSection complex={context.complex} contained /><div className="lg:hidden"><NewBuildingLocationSection complex={context.complex} contained /></div></Fragment>;
     case "purchaseTerms":
       return <NewBuildingPurchaseTermsSection key={section} complex={context.complex} contained />;
     case "selectionBanner":
-      return <NewBuildingLayoutsSection key={section} complex={context.complex} contained />;
+      return <Fragment key={section}><div className="hidden lg:block"><NewBuildingLayoutsSection complex={context.complex} contained /></div><NewBuildingMobileWhyAtlasSection complex={context.complex} /></Fragment>;
     case "location":
-      return <NewBuildingLocationSection key={section} complex={context.complex} contained />;
+      return <div key={section} className="hidden lg:block"><NewBuildingLocationSection complex={context.complex} contained /></div>;
     case "related":
       return <NewBuildingRelatedSection key={section} related={context.related} contained />;
   }

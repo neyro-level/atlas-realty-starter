@@ -1,10 +1,10 @@
-import type { NewBuildingDetailDto } from "@starter/site-contracts";
+import type { NewBuildingDetailViewModel, NewBuildingExpertViewModel } from "../contracts/new-building";
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { BadgeCheck, Banknote, Building2, Bus, GraduationCap, Landmark, MapPin } from "lucide-react";
 import type { SiteImageRenderer } from "../lib/adapters";
 
-type NewBuildingSectionProps = { detail: NewBuildingDetailDto; contained?: boolean };
+type NewBuildingSectionProps = { detail: NewBuildingDetailViewModel; contained?: boolean };
 
 function sectionFrame(contained: boolean) {
   return {
@@ -28,18 +28,18 @@ export function NewBuildingAboutView({ detail, contained = false }: NewBuildingS
         <div className="rounded-lg border border-[var(--border)] bg-white p-5 shadow-[var(--new-building-detail-sections-shadow-01)] md:p-6 lg:p-7">
           <div className="max-w-[780px]">
             <h2 className="text-[22px] font-semibold leading-tight text-[var(--text-primary)] md:text-[24px]">О проекте</h2>
-            <p className="mt-4 text-[24px] font-extrabold leading-[1.12] text-[var(--text-primary)] md:text-[30px]">{detail.name}</p>
-            <p className="mt-4 flex items-start gap-2.5 text-sm font-semibold leading-6 text-[var(--text-secondary)]">
+            <p className="mt-4 hidden text-[24px] font-extrabold leading-[1.12] text-[var(--text-primary)] lg:block lg:text-[30px]">{detail.name}</p>
+            <p className="mt-4 hidden items-start gap-2.5 text-sm font-semibold leading-6 text-[var(--text-secondary)] lg:flex">
               <MapPin className="mt-1 size-4 shrink-0 text-[var(--accent)]" aria-hidden />{detail.address}
             </p>
             <p className="mt-5 text-[14px] font-normal leading-[1.62] text-[var(--text-secondary)] md:text-[15px]">{detail.about.intro}</p>
           </div>
           {projectSummary.length > 0 ? (
-            <dl className="mt-7 grid gap-2 border-y border-[var(--border)] py-4 sm:grid-cols-2 xl:grid-cols-4">
+            <dl className="mt-7 hidden gap-2 border-y border-[var(--border)] py-4 sm:grid-cols-2 lg:grid xl:grid-cols-4">
               {projectSummary.map((item) => <div key={item.label} className="rounded-lg bg-[var(--surface-card-soft)] px-4 py-3"><dt className="text-[11px] font-semibold uppercase leading-4 text-[var(--text-muted)]">{item.label}</dt><dd className="mt-1 text-sm font-semibold leading-5 text-[var(--text-primary)]">{item.value}</dd></div>)}
             </dl>
           ) : null}
-          <div className="mt-7">
+          <div className="mt-7 hidden lg:block">
             <p className="text-xs font-semibold leading-5 text-[var(--text-primary)]">Преимущества</p>
             <ol className="mt-4 grid gap-3 md:grid-cols-2">
               {detail.about.features.slice(0, 4).map((feature, index) => (
@@ -57,31 +57,40 @@ export function NewBuildingAboutView({ detail, contained = false }: NewBuildingS
 }
 
 export function NewBuildingPurchaseTermsView({ detail, contained = false }: NewBuildingSectionProps) {
-  const terms = detail.purchaseOptions.slice(0, 2);
-  if (terms.length === 0) return null;
+  const mobileTerms = [
+    { title: "Ипотека", value: "Условия банка", text: "Сравним применимые программы и поможем подготовить заявку. Решение принимает банк." },
+    { title: "Материнский капитал", value: "Проверим возможность", text: "Уточним, можно ли использовать сертификат для выбранной квартиры и схемы покупки." },
+    { title: "Полная оплата", value: "Без кредита", text: "Проверим актуальную цену, порядок расчётов и документы до бронирования." },
+  ];
+  const desktopTerms = detail.purchaseOptions.slice(0, 2);
   const icons: LucideIcon[] = [Landmark, BadgeCheck, Building2, Banknote];
   const frame = sectionFrame(contained);
-  const gridClassName = contained ? "mt-5 grid gap-3 md:grid-cols-2" : "mt-7 grid gap-3 md:grid-cols-2 xl:grid-cols-4";
   return (
     <section className={frame.section}><div className={frame.frame}><div className="rounded-lg border border-[var(--border)] bg-white p-5 shadow-[var(--new-building-detail-sections-shadow-01)] md:p-6 lg:p-7">
       <div className="max-w-[780px]"><h2 className="text-[21px] font-semibold leading-[1.18] text-[var(--text-primary)] md:text-[25px]">Способы покупки в {detail.name}</h2></div>
-      <div className={gridClassName}>{terms.map((term, index) => { const Icon = icons[index % icons.length]; return (
+      <div className="mt-5 grid gap-3 md:grid-cols-3 lg:hidden">{mobileTerms.map((term, index) => { const Icon = icons[index % icons.length]; return (
+        <article key={term.title} className="grid min-h-[168px] grid-rows-[auto_1fr] rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] p-4">
+          <div className="flex items-start justify-between gap-3"><span className="grid size-9 place-items-center rounded-lg bg-[var(--surface-muted)] text-[12px] font-extrabold text-[var(--accent)] tabular-nums">{String(index + 1).padStart(2, "0")}</span><span className="grid size-9 place-items-center rounded-lg bg-white text-[var(--accent)]"><Icon aria-hidden="true" size={17} strokeWidth={1.9} /></span></div>
+          <div className="mt-4"><p className="text-sm font-semibold leading-5 text-[var(--accent)]">{term.value}</p><h3 className="mt-2 text-sm font-semibold leading-5 text-[var(--text-primary)]">{term.title}</h3><p className="mt-1.5 text-xs leading-5 text-[var(--new-building-detail-sections-content-01)]">{term.text}</p></div>
+        </article>
+      ); })}</div>
+      {desktopTerms.length > 0 ? <div className={contained ? "mt-5 hidden gap-3 lg:grid lg:grid-cols-2" : "mt-7 hidden gap-3 lg:grid lg:grid-cols-2 xl:grid-cols-4"}>{desktopTerms.map((term, index) => { const Icon = icons[index % icons.length]; return (
         <article key={term.title} className="grid min-h-[178px] grid-rows-[auto_1fr_auto] rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] p-4">
           <div className="flex items-start justify-between gap-3"><span className="grid size-9 place-items-center rounded-lg bg-[var(--surface-muted)] text-[12px] font-extrabold text-[var(--accent)] tabular-nums">{String(index + 1).padStart(2, "0")}</span><span className="grid size-9 place-items-center rounded-lg bg-white text-[var(--accent)]"><Icon aria-hidden="true" size={17} strokeWidth={1.9} /></span></div>
           <div className="mt-4"><p className="text-sm font-semibold leading-5 text-[var(--accent)]">{term.value ?? term.title}</p><h3 className="mt-2 text-sm font-semibold leading-5 text-[var(--text-primary)]">{term.title}</h3><p className="mt-1.5 text-xs leading-5 text-[var(--new-building-detail-sections-content-01)]">{term.text}</p></div>
         </article>
-      ); })}</div>
+      ); })}</div> : null}
     </div></div></section>
   );
 }
 
-export function NewBuildingSelectionView({ detail: _detail, contained = false, cityPrepositional, imageRenderer: Image, requestAction }: NewBuildingSectionProps & { cityPrepositional: string; imageRenderer: SiteImageRenderer; requestAction: ReactNode }) {
+export function NewBuildingSelectionView({ detail: _detail, contained = false, cityPrepositional, expert, imageRenderer: Image, requestAction }: NewBuildingSectionProps & { cityPrepositional: string; expert: NewBuildingExpertViewModel; imageRenderer: SiteImageRenderer; requestAction: ReactNode }) {
   const frame = sectionFrame(contained);
   return (
     <section className={frame.section}><div className={frame.frame}><div className="group overflow-hidden rounded-lg border border-[var(--new-building-detail-sections-border-01)] bg-[var(--new-building-detail-sections-surface-01)] shadow-[var(--new-building-detail-sections-shadow-02)] transition duration-200 hover:border-[var(--input)] hover:shadow-[var(--new-building-detail-sections-shadow-03)]">
       <div className="grid md:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_340px]">
         <div className="relative flex min-h-[300px] flex-col justify-center p-6 md:p-7 lg:min-h-[326px] lg:p-8"><span className="mb-7 block h-1 w-14 rounded-full bg-[var(--accent)]" aria-hidden /><h2 className="max-w-[520px] text-[28px] font-extrabold leading-[1.06] text-[var(--text-primary)] md:text-[34px] lg:text-[36px]"><span className="block">Бесплатный подбор</span><span className="block">новостроек в {cityPrepositional}</span></h2><p className="mt-5 max-w-[500px] text-[14px] font-normal leading-[1.62] text-[var(--text-secondary)] md:text-[15px]">Сравним условия всех застройщиков и найдём для вас акции, о которых не пишут в рекламе.</p>{requestAction}</div>
-        <div className="relative min-h-[230px] overflow-hidden border-t border-[var(--new-building-detail-sections-border-01)] bg-[linear-gradient(145deg,var(--new-building-detail-sections-color-01)_0%,var(--new-building-detail-sections-color-02)_54%,var(--surface)_100%)] md:min-h-full md:border-l md:border-t-0"><Image src="/images/catalog-buyer-expert.webp" alt="Эксперт агентства недвижимости помогает выбрать квартиру в новостройке" fill quality={95} sizes="(max-width: 768px) calc(100vw - 40px), 340px" className="object-cover object-[50%_50%] transition duration-500 group-hover:scale-[1.025]" /><div className="absolute inset-0 bg-[linear-gradient(180deg,var(--new-building-detail-sections-effect-01)_40%,var(--new-building-detail-sections-effect-02)_100%)]" /></div>
+        <div className="relative min-h-[230px] overflow-hidden border-t border-[var(--new-building-detail-sections-border-01)] bg-[var(--surface-card-soft)] md:min-h-full md:border-l md:border-t-0"><Image src={expert.portrait} alt={`${expert.name}, ${expert.role}`} fill quality={95} sizes="(max-width: 768px) calc(100vw - 40px), 340px" className="object-cover object-[50%_50%] transition duration-500 group-hover:scale-[1.025]" /><div className="absolute inset-0 bg-[linear-gradient(180deg,var(--new-building-detail-sections-effect-01)_40%,var(--new-building-detail-sections-effect-02)_100%)]" /></div>
       </div>
     </div></div></section>
   );
@@ -94,7 +103,10 @@ export function NewBuildingLocationView({ detail, contained = false, map }: NewB
       <div className="max-w-[780px]"><h2 className="text-[21px] font-semibold leading-[1.18] text-[var(--text-primary)] md:text-[25px]">Адрес жилого комплекса</h2><p className="mt-4 flex items-start gap-2.5 text-sm font-semibold leading-6 text-[var(--text-secondary)]"><MapPin className="mt-0.5 size-4 shrink-0 text-[var(--accent)]" aria-hidden />{detail.address}</p></div>
       <div className="mt-5 overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] lg:grid lg:grid-cols-[minmax(0,1fr)_260px]">
         {map}
-        <div className="grid content-start gap-2 border-t border-[var(--border)] p-3 lg:border-l lg:border-t-0">{detail.location.items.slice(0, 6).map((item) => { const Icon = getInfrastructureIcon(item.title); return (
+        <div className="grid content-start gap-2 border-t border-[var(--border)] p-3 lg:hidden">{detail.location.items.slice(0, 3).map((item) => { const Icon = getInfrastructureIcon(item.title); return (
+          <article key={`${item.title}-${item.timeLabel}`} className="rounded-lg border border-[var(--border)] bg-white p-3"><div className="flex items-center gap-3"><span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent)]"><Icon className="size-4" aria-hidden /></span><h3 className="min-w-0 flex-1 text-sm font-semibold leading-5 text-[var(--text-primary)]">{item.title}</h3>{item.timeLabel ? <span className="shrink-0 rounded-md bg-[var(--surface-card-soft)] px-2 py-1 text-[11px] font-semibold text-[var(--text-secondary)]">{item.timeLabel}</span> : null}</div></article>
+        ); })}</div>
+        <div className="hidden content-start gap-2 border-l border-[var(--border)] p-3 lg:grid">{detail.location.items.slice(0, 6).map((item) => { const Icon = getInfrastructureIcon(item.title); return (
           <article key={`${item.title}-${item.timeLabel}`} className="rounded-lg border border-[var(--border)] bg-white p-3"><div className="flex items-start gap-3"><span className="grid size-9 shrink-0 place-items-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent)]"><Icon className="size-4" aria-hidden /></span><div className="min-w-0"><div className="flex items-start justify-between gap-2"><h3 className="text-sm font-semibold leading-5 text-[var(--text-primary)]">{item.title}</h3>{item.timeLabel ? <span className="shrink-0 rounded-md bg-[var(--surface-card-soft)] px-2 py-1 text-[11px] font-semibold text-[var(--text-secondary)]">{item.timeLabel}</span> : null}</div><p className="mt-1 text-xs leading-5 text-[var(--new-building-detail-sections-content-01)]">{item.text}</p></div></div></article>
         ); })}</div>
       </div>

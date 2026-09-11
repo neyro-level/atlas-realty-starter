@@ -10,6 +10,7 @@ const complexSlug = process.env.VISUAL_COMPLEX_SLUG ?? 'domrf-50184'
 const routes = [
   ['home', '/'],
   ['catalog', '/nedvizhimost'],
+  ['new-buildings', '/novostroyki'],
   ['property', `/obekty/${propertySlug}`],
   ['complex', `/${complexSlug}`],
   ['contacts', '/kontakty'],

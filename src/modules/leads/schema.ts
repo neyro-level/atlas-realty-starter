@@ -24,6 +24,7 @@ const sourcePageSchema = z.string().trim().min(1).max(200).transform((value, ctx
 export const leadSchema = z.object({
   submissionId: z.uuid().optional(),
   propertyId: z.string().trim().regex(cuidLikeRegex, "propertyId has invalid format").optional().nullable(),
+  complexId: z.uuid("complexId has invalid format").optional().nullable(),
   agentId: z.string().trim().regex(cuidLikeRegex, "agentId has invalid format").optional().nullable(),
   sourcePage: sourcePageSchema,
   source: z.string().trim().regex(slugLikeRegex, "source has invalid format").default("page_showcase"),

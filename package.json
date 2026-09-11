@@ -12,6 +12,7 @@
     "visual:baseline": "node scripts/capture-visual-baseline.mjs",
     "ui:registry:build": "shadcn build registry.json --output public/r",
     "ui:registry:check": "shadcn registry validate",
+    "ui:registry:consumer": "pnpm ui:registry:build && node scripts/quality/registry-consumer-smoke.mjs",
     "ui:check": "node scripts/quality/ui-system.mjs && pnpm ui:registry:check",
     "db:backup:check": "node scripts/verify-backup-restore.mjs",
     "db:migrate:native:check": "node scripts/run-native-integration.mjs --migrate",
