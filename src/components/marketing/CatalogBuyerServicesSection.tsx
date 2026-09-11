@@ -59,7 +59,7 @@ export function CatalogBuyerServicesSection({ sourcePage }: CatalogBuyerServices
     >
       <div className="mx-auto max-w-site-frame px-5">
         <div className="mb-12 md:mb-14 lg:mb-16">
-          <h2 className="max-w-none text-heading-large font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-display-medium lg:whitespace-nowrap lg:text-[clamp(32px,3.05vw,42px)]">
+          <h2 className="max-w-none text-heading-large font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-display-medium lg:text-[clamp(32px,3.05vw,42px)]">
             Подключите сервисы <span className="text-[var(--accent)]">агентства недвижимости</span> там, где они нужны
           </h2>
         </div>
