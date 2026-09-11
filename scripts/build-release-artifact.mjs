@@ -37,6 +37,14 @@ function git(args) {
 }
 
 function canonicalRepository() {
+  const configured = process.env.SOURCECRAFT_REPOSITORY?.trim()
+  if (configured) {
+    if (!/^[^/\s]+\/[^/\s.]+$/u.test(configured)) {
+      throw new Error('SOURCECRAFT_REPOSITORY must be a SourceCraft org/repository slug.')
+    }
+    return configured
+  }
+
   const remote = git(['remote', 'get-url', 'origin'])
   const match = remote.match(/(?:sourcecraft\.dev[/:])([^/]+\/[^/.]+)(?:\.git)?$/u)
   if (!match) throw new Error('origin must be a SourceCraft repository.')
