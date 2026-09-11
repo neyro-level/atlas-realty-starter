@@ -73,7 +73,30 @@
       "name": "ams-realty-property-card",
       "type": "registry:component",
       "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives"],
-      "files": [{ "path": "src/views/PropertyCardView.tsx", "type": "registry:component" }]
+      "files": [
+        { "path": "src/contracts/property.ts", "type": "registry:lib" },
+        { "path": "src/views/property-card-support.tsx", "type": "registry:lib" },
+        { "path": "src/views/PropertyCardView.tsx", "type": "registry:component" }
+      ]
+    },
+    {
+      "name": "ams-realty-property-detail",
+      "type": "registry:block",
+      "title": "AMS Realty property detail",
+      "description": "Neutral property gallery, facts, actions, sidebar, related cards and viewing request views.",
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives", "ams-realty-media-gallery", "ams-realty-overlay-trigger"],
+      "files": [
+        { "path": "src/contracts/property.ts", "type": "registry:lib" },
+        { "path": "src/views/PropertyChatView.tsx", "type": "registry:block" },
+        { "path": "src/views/PropertyDetailPageView.tsx", "type": "registry:block" },
+        { "path": "src/views/PropertyDetailSectionsView.tsx", "type": "registry:block" },
+        { "path": "src/views/PropertyGalleryView.tsx", "type": "registry:block" },
+        { "path": "src/views/PropertyMobileTopBarView.tsx", "type": "registry:block" },
+        { "path": "src/views/PropertyPageActionsView.tsx", "type": "registry:block" },
+        { "path": "src/views/PropertyRelatedView.tsx", "type": "registry:block" },
+        { "path": "src/views/PropertySidebarView.tsx", "type": "registry:block" },
+        { "path": "src/views/PropertyViewingRequestView.tsx", "type": "registry:block" }
+      ]
     },
     {
       "name": "ams-realty-residential-complex-card",
@@ -86,9 +109,37 @@
       "type": "registry:block",
       "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives"],
       "files": [
+        { "path": "src/contracts/catalog.ts", "type": "registry:lib" },
         { "path": "src/views/CatalogControlsView.tsx", "type": "registry:block" },
         { "path": "src/views/CatalogMobileFilterView.tsx", "type": "registry:block" }
       ]
+    },
+    {
+      "name": "ams-realty-catalog-map",
+      "type": "registry:block",
+      "title": "AMS Realty catalog map frame",
+      "description": "Neutral responsive map/list composition with explicit loading and action slots.",
+      "registryDependencies": ["ams-realty-foundation", "ams-realty-primitives"],
+      "files": [{ "path": "src/views/CatalogMapFrameView.tsx", "type": "registry:block" }]
+    },
+    {
+      "name": "ams-realty-catalog",
+      "type": "registry:block",
+      "title": "AMS Realty catalog",
+      "description": "Installable catalog composition for property and residential-complex discovery.",
+      "registryDependencies": ["ams-realty-catalog-filters", "ams-realty-catalog-map", "ams-realty-property-card", "ams-realty-residential-complex-card"],
+      "files": [
+        { "path": "src/views/CatalogHeroView.tsx", "type": "registry:block" },
+        { "path": "src/views/CatalogMortgageHelpCardView.tsx", "type": "registry:block" },
+        { "path": "src/views/CatalogNewBuildingSelectionCardView.tsx", "type": "registry:block" }
+      ]
+    },
+    {
+      "name": "ams-realty-property",
+      "type": "registry:block",
+      "title": "AMS Realty property presentation",
+      "description": "Umbrella install for property cards and the complete property detail presentation.",
+      "registryDependencies": ["ams-realty-property-card", "ams-realty-property-detail"]
     },
     {
       "name": "ams-realty-overlay-trigger",

@@ -1,7 +1,7 @@
 import { Select } from "../components/ui/select";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import type { CatalogFacetsDto, CatalogQueryDto, CatalogViewDto } from "@starter/site-contracts";
+import type { CatalogFacetsDto, CatalogQueryDto, CatalogViewDto } from "../contracts/catalog";
 import { ArrowDown, Grid2X2, List, Loader2, Map, Search, SlidersHorizontal, X } from "lucide-react";
 import type { ReactNode } from "react";
 import type { SiteLinkRenderer } from "../lib/adapters";
@@ -49,9 +49,9 @@ export function CatalogShowcaseView({
   return (
     <section id={sectionId} className={headline ? "bg-white pb-10 pt-6 lg:pb-14 lg:pt-8" : "bg-white pt-4 pb-10 md:pt-5 lg:py-14"} aria-label={heading || "Каталог недвижимости"}>
       <div className="mx-auto max-w-site-frame px-5">
-        {headline ? <div className="mb-7 rounded-lg border border-[var(--catalog-controls-border-01)] bg-[var(--surface-card-soft)] px-5 py-5 md:px-6 md:py-6"><h1 className="max-w-[920px] text-[20px] font-extrabold leading-[1.18] text-[var(--text-primary)] md:text-[24px] lg:text-[26px]">{headline}</h1></div> : null}
+        {headline ? <div className="mb-7 rounded-lg border border-[var(--catalog-controls-border-headline)] bg-[var(--surface-card-soft)] px-5 py-5 md:px-6 md:py-6"><h1 className="max-w-[920px] text-[20px] font-extrabold leading-[1.18] text-[var(--text-primary)] md:text-[24px] lg:text-[26px]">{headline}</h1></div> : null}
         {beforeControls}
-        <div className="rounded-lg bg-white p-4 shadow-[var(--catalog-controls-shadow-01)] lg:p-5">
+        <div className="rounded-lg bg-white p-4 shadow-[var(--catalog-controls-shadow-panel)] lg:p-5">
           <div className="flex flex-wrap items-end justify-between gap-3"><p className="text-xl font-extrabold leading-tight text-[var(--text-primary)] md:text-2xl">Найдено: <span className="tabular-nums">{resultLabel}</span></p></div>
           <nav className="mt-6 hidden gap-2 overflow-x-auto pb-1 lg:flex" aria-label="Типы недвижимости">
             {tabs.map((tab) => <Link key={tab.id} href={tab.href} ariaCurrent={tab.active ? "page" : undefined} className={`shrink-0 rounded-md border px-4 py-2 text-sm font-bold transition ${tab.active ? "border-[var(--surface-dark)] bg-[var(--surface-dark)] text-white" : "border-[var(--border)] bg-white text-[var(--text-secondary)] hover:border-[var(--accent)] hover:text-[var(--accent)]"}`}>{tab.label}</Link>)}
@@ -89,8 +89,8 @@ export function CatalogEmptyStateView({ message, contactHref = "/kontakty", link
 
 export function CatalogLoadMoreView({ variant, loading, error, hasMore, onLoadMore, pages, linkRenderer: Link }: { variant: CatalogViewDto; loading: boolean; error: string | null; hasMore: boolean; onLoadMore: () => void; pages: CatalogPaginationItemDto[]; linkRenderer: SiteLinkRenderer }) {
   return <>
-    {hasMore ? <div className={variant === "list" ? "flex justify-center py-8" : "col-span-full mt-4 flex justify-center"}><div className="flex flex-col items-center text-center"><Button variant="plain" type="button" onClick={onLoadMore} disabled={loading} className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-7 text-sm font-extrabold text-white shadow-[var(--catalog-controls-shadow-02)] transition hover:-translate-y-0.5 hover:bg-[var(--accent)] hover:shadow-[var(--catalog-controls-shadow-03)] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 sm:min-w-[220px]">{loading ? <><Loader2 className="animate-spin" aria-hidden />Загружаем...</> : <>Показать ещё<ArrowDown className="transition group-hover:translate-y-0.5" aria-hidden /></>}</Button>{error ? <p className="mt-3 text-sm font-semibold text-[var(--accent)]">{error}</p> : null}</div></div> : null}
-    {pages.length ? <nav className="col-span-full mt-6 flex flex-wrap justify-center gap-2" aria-label="Страницы каталога">{pages.map((item) => item.href ? <Link key={item.key} href={item.href} ariaCurrent={item.current ? "page" : undefined} className={`grid min-h-11 place-items-center rounded-lg border px-3 text-sm font-bold ${item.current ? "border-[var(--surface-dark)] bg-[var(--surface-dark)] text-white" : "border-[var(--catalog-controls-border-02)] bg-white text-[var(--surface-dark)]"}`}>{item.label}</Link> : <span key={item.key} className="grid min-h-11 min-w-11 place-items-center text-sm text-[var(--catalog-controls-content-01)]">{item.label}</span>)}</nav> : null}
+    {hasMore ? <div className={variant === "list" ? "flex justify-center py-8" : "col-span-full mt-4 flex justify-center"}><div className="flex flex-col items-center text-center"><Button variant="plain" type="button" onClick={onLoadMore} disabled={loading} className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-7 text-sm font-extrabold text-white shadow-[var(--catalog-controls-shadow-action)] transition hover:-translate-y-0.5 hover:bg-[var(--accent)] hover:shadow-[var(--catalog-controls-shadow-action-hover)] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 sm:min-w-[220px]">{loading ? <><Loader2 className="animate-spin" aria-hidden />Загружаем...</> : <>Показать ещё<ArrowDown className="transition group-hover:translate-y-0.5" aria-hidden /></>}</Button>{error ? <p className="mt-3 text-sm font-semibold text-[var(--accent)]">{error}</p> : null}</div></div> : null}
+    {pages.length ? <nav className="col-span-full mt-6 flex flex-wrap justify-center gap-2" aria-label="Страницы каталога">{pages.map((item) => item.href ? <Link key={item.key} href={item.href} ariaCurrent={item.current ? "page" : undefined} className={`grid min-h-11 place-items-center rounded-lg border px-3 text-sm font-bold ${item.current ? "border-[var(--surface-dark)] bg-[var(--surface-dark)] text-white" : "border-[var(--catalog-controls-border-pagination)] bg-white text-[var(--surface-dark)]"}`}>{item.label}</Link> : <span key={item.key} className="grid min-h-11 min-w-11 place-items-center text-sm text-[var(--catalog-controls-content-pagination)]">{item.label}</span>)}</nav> : null}
   </>;
 }
 

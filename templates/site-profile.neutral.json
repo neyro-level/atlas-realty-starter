@@ -34,6 +34,9 @@
     "favicon": "/favicon.ico",
     "socialPreview": "/images/brand/social-preview.jpg"
   },
+  "media": {
+    "catalogMortgageService": "/images/content/mortgage-service.webp"
+  },
   "seo": {
     "title": "Недвижимость в городе | БРЕНД",
     "description": "Каталог недвижимости и сопровождение сделки."

@@ -45,11 +45,11 @@ export function PropertyPageActionsView({
       </div>
 
       {phoneVisible ? (
-        <a href={phoneHref} data-analytics-context="property_page_actions" className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold tabular-nums text-white transition hover:bg-[var(--property-page-actions-surface-01)]">
+        <a href={phoneHref} data-analytics-context="property_page_actions" className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold tabular-nums text-white transition hover:bg-[var(--property-page-actions-surface-hover)]">
           <Phone className="size-4" aria-hidden />{phone}
         </a>
       ) : (
-        <Button variant="plain" type="button" data-analytics-event="phone_reveal" data-analytics-context="property_page_actions" onClick={onRevealPhone} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold text-white transition hover:bg-[var(--property-page-actions-surface-01)]">
+        <Button variant="plain" type="button" data-analytics-event="phone_reveal" data-analytics-context="property_page_actions" onClick={onRevealPhone} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-[var(--surface-dark)] px-5 text-sm font-bold text-white transition hover:bg-[var(--property-page-actions-surface-hover)]">
           <Phone className="" aria-hidden />Показать телефон
         </Button>
       )}

@@ -3,6 +3,8 @@ import type { SiteIdentity } from "@starter/site-contracts";
 
 export type { SiteImageRenderer, SiteImageRendererProps, SiteLinkRenderer, SiteLinkRendererProps } from "./lib/adapters";
 export type { PublicContactViewDto, SiteFooterColumnViewDto, SiteFooterMetaViewDto, SiteHeaderNavItemViewDto, SiteNavLinkViewDto, SiteSocialLinkViewDto } from "./contracts/site-shell";
+export type { PropertyCardViewDto, PropertyDetailRowDto, PropertyDetailSummaryItemDto, PropertyRelatedItemDto, PropertyViewingDateDto, PublicFormResultDto, SessionCollectionGroupDto, SessionCollectionItemDto } from "./contracts/property";
+export type { CatalogFacetsDto, CatalogQueryDto, CatalogViewDto } from "./contracts/catalog";
 export { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/ui/accordion";
 export { AspectRatio } from "./components/ui/aspect-ratio";
 export { Badge, badgeVariants } from "./components/ui/badge";
@@ -17,6 +19,7 @@ export {
 } from "./components/ui/breadcrumb";
 export { Button, buttonVariants } from "./components/ui/button";
 export { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./components/ui/card";
+export { CatalogMapFrameView } from "./views/CatalogMapFrameView";
 export { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "./components/ui/carousel";
 export { Checkbox } from "./components/ui/checkbox";
 export {

@@ -1,4 +1,4 @@
-import type { PropertyRelatedItemDto } from "@starter/site-contracts";
+import type { PropertyRelatedItemDto } from "../contracts/property";
 import { Building2, MapPin } from "lucide-react";
 import type { SiteImageRenderer, SiteLinkRenderer } from "../lib/adapters";
 
@@ -25,7 +25,7 @@ export function PropertyRelatedView({
             href={item.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="group grid overflow-hidden rounded-lg border border-[var(--border)] bg-white transition hover:-translate-y-0.5 hover:border-[var(--input)] hover:shadow-[var(--property-related-shadow-01)]"
+            className="group grid overflow-hidden rounded-lg border border-[var(--border)] bg-white transition hover:-translate-y-0.5 hover:border-[var(--input)] hover:shadow-[var(--property-related-shadow-card)]"
           >
             <div className="relative aspect-[4/3] bg-[var(--surface-muted)]">
               {item.image ? (

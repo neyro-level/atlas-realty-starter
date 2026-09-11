@@ -27,7 +27,7 @@ export function NewBuildingQuickSelectionsView({ items, linkRenderer: Link }: { 
       <div className="mt-5 grid grid-cols-2 gap-2.5 md:grid-cols-4">
         {items.map((item) => {
           const content = <QuickSelectionContent item={item} />;
-          const className = `grid min-h-[124px] min-w-0 grid-rows-[36px_minmax(0,1fr)] gap-4 rounded-lg border bg-[var(--surface-card-soft)] p-3.5 text-left shadow-[var(--catalog-controls-shadow-01)] transition hover:border-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 md:min-h-[132px] md:p-4 ${item.active ? "border-[var(--accent)] ring-1 ring-[var(--accent)]/10" : "border-[var(--border)]"}`;
+          const className = `grid min-h-[124px] min-w-0 grid-rows-[36px_minmax(0,1fr)] gap-4 rounded-lg border bg-[var(--surface-card-soft)] p-3.5 text-left shadow-[var(--catalog-controls-shadow-panel)] transition hover:border-[var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:ring-offset-2 md:min-h-[132px] md:p-4 ${item.active ? "border-[var(--accent)] ring-1 ring-[var(--accent)]/10" : "border-[var(--border)]"}`;
           if (item.href) return <Link key={item.id} href={item.href} scroll={false} ariaCurrent={item.active ? "true" : undefined} className={className}>{content}</Link>;
           if (item.request) return <RequestModalButton key={item.id} type="button" variant="plain" request={item.request} className={className}>{content}</RequestModalButton>;
           return null;
@@ -122,7 +122,7 @@ export function NewBuildingCatalogWhyAgencyView({ brand, benefits, expertName, e
           </div>
           <div className="relative min-h-[360px] overflow-hidden border-t border-[var(--border)] bg-[var(--surface-muted)] sm:min-h-[460px] lg:min-h-full lg:border-l lg:border-t-0">
             <Image src={portrait} alt={`${expertName}, ${expertRole}`} fill quality={95} sizes="(max-width: 1023px) calc(100vw - 40px), 42vw" className="object-cover object-[50%_10%] sm:object-[50%_20%] lg:object-[50%_30%]" />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_52%,var(--catalog-hero-effect-02)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_52%,var(--catalog-hero-overlay-horizontal-default)_100%)]" />
             <div className="absolute inset-x-5 bottom-5 rounded-lg border border-white/50 bg-white/95 px-4 py-3 shadow-[var(--new-building-section-shadow-raised)] backdrop-blur sm:inset-x-6 sm:bottom-6 sm:px-5 sm:py-4"><p className="text-[15px] font-bold leading-5">{expertName}</p><p className="mt-1 text-[12px] leading-5 text-[var(--text-secondary)] sm:text-[13px]">{expertRole}</p></div>
           </div>
         </Card>

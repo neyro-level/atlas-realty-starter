@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 
 const registryRoot = path.resolve("public/r");
-const entryNames = ["ams-realty-new-building", "ams-realty-shell"];
+const entryNames = ["ams-realty-new-building", "ams-realty-shell", "ams-realty-catalog", "ams-realty-property"];
 const installedItems = new Map();
 
 async function loadItem(name) {
@@ -49,6 +49,10 @@ try {
     "ams-realty-new-building-detail",
     "ams-realty-new-building-conversion",
     "ams-realty-shell",
+    "ams-realty-catalog",
+    "ams-realty-catalog-map",
+    "ams-realty-property-card",
+    "ams-realty-property-detail",
   ];
   const forbidden = [/@starter\//, /\/images\//, /АТЛАС/i, /Краснодар/i, />4\.9</];
   for (const name of domainItems) {

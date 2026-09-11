@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "../components/ui/button";
-import type { PropertyDetailRowDto, PropertyDetailSummaryItemDto } from "@starter/site-contracts";
+import type { PropertyDetailRowDto, PropertyDetailSummaryItemDto } from "../contracts/property";
 import { BedDouble, Building, Building2, MapPin, Ruler } from "lucide-react";
 import { useState } from "react";
 import { Card } from "../components/ui/card";
@@ -28,7 +28,7 @@ export function PropertyDetailSummaryView({
   items: PropertyDetailSummaryItemDto[];
 }) {
   return (
-    <Card className="grid gap-4 rounded-lg border-[var(--border)] bg-white p-5 shadow-[var(--property-detail-sections-shadow-01)] md:p-6" aria-labelledby="object-page-title">
+    <Card className="grid gap-4 rounded-lg border-[var(--border)] bg-white p-5 shadow-[var(--property-detail-sections-shadow-subtle)] md:p-6" aria-labelledby="object-page-title">
       <div className="grid gap-2">
         {exclusive ? (
           <span data-exclusive-badge className="inline-flex min-h-7 w-fit items-center rounded-md bg-[var(--accent)] px-2.5 text-xs font-bold leading-none text-white">
@@ -74,7 +74,7 @@ export function PropertyDescriptionView({ paragraphs }: { paragraphs?: string[] 
   const visibleParagraphs = shouldCollapse && !expanded ? paragraphs.slice(0, 2) : paragraphs;
 
   return (
-    <Card className="grid gap-4 rounded-lg border-[var(--border)] bg-white p-5 shadow-[var(--property-detail-sections-shadow-01)] md:p-6" aria-labelledby="object-description-title">
+    <Card className="grid gap-4 rounded-lg border-[var(--border)] bg-white p-5 shadow-[var(--property-detail-sections-shadow-subtle)] md:p-6" aria-labelledby="object-description-title">
       <h2 id="object-description-title" className="scroll-mt-[130px] text-[22px] font-semibold leading-tight text-[var(--text-primary)]">Описание</h2>
       <div className="grid w-full gap-2 text-[13px] font-normal leading-[1.55] text-[var(--text-secondary)] md:text-sm md:leading-[1.55]">
         {visibleParagraphs.map((paragraph, index) => (
@@ -94,7 +94,7 @@ export function PropertyDescriptionView({ paragraphs }: { paragraphs?: string[] 
 
 export function PropertyDetailsView({ title, rows }: { title: string; rows: PropertyDetailRowDto[] }) {
   return (
-    <Card className="grid gap-4 rounded-lg border-[var(--border)] bg-white p-5 shadow-[var(--property-detail-sections-shadow-01)] md:p-6" aria-labelledby="object-details-title">
+    <Card className="grid gap-4 rounded-lg border-[var(--border)] bg-white p-5 shadow-[var(--property-detail-sections-shadow-subtle)] md:p-6" aria-labelledby="object-details-title">
       <h2 id="object-details-title" className="scroll-mt-[130px] text-[22px] font-semibold leading-tight text-[var(--text-primary)]">{title}</h2>
       <div className="grid gap-x-10 gap-y-2 md:grid-cols-2">
         {rows.map((row) => (
@@ -111,7 +111,7 @@ export function PropertyDetailsView({ title, rows }: { title: string; rows: Prop
 
 export function PropertyBuildingView({ description }: { description: string }) {
   return (
-    <Card className="grid gap-3.5 rounded-lg border-[var(--border)] bg-white p-5 shadow-[var(--property-detail-sections-shadow-01)] md:p-6" aria-labelledby="object-building-title">
+    <Card className="grid gap-3.5 rounded-lg border-[var(--border)] bg-white p-5 shadow-[var(--property-detail-sections-shadow-subtle)] md:p-6" aria-labelledby="object-building-title">
       <h2 id="object-building-title" className="scroll-mt-[130px] text-[22px] font-semibold leading-tight text-[var(--text-primary)]">Дом и район</h2>
       <p className="text-[13px] font-normal leading-6 text-[var(--text-secondary)] md:text-sm">{description}</p>
     </Card>

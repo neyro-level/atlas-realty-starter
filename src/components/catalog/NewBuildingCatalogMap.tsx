@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@ams/realty-ui";
+import { Button, CatalogMapFrameView } from "@ams/realty-ui";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type HTMLAttributes } from "react";
 import { ExternalLink, MapPin } from "lucide-react";
 import { formatPrice } from "@/lib/catalog";
 import { newBuildingHref, type NewBuilding } from "@/modules/new-buildings";
@@ -107,14 +107,10 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
   const selectedComplex = complexes.find((complex) => complex.slug === selectedSlug) ?? complexes[0];
 
   return (
-    <div
-      data-testid="new-building-catalog-map"
-      data-map-status={status}
-      data-map-points={mappableComplexes.length}
-      data-map-review-required={reviewRequiredCount}
-      className="mt-5 flex flex-col overflow-hidden rounded-xl border border-[var(--border)] bg-white lg:grid lg:h-[640px] lg:grid-cols-[340px_minmax(0,1fr)]"
-    >
-      <aside className="order-2 border-t border-[var(--border)] bg-white p-3 lg:order-1 lg:overflow-y-auto lg:border-r lg:border-t-0 lg:p-4">
+    <CatalogMapFrameView
+      testId="new-building-catalog-map"
+      rootProps={{ "data-map-status": status, "data-map-points": mappableComplexes.length, "data-map-review-required": reviewRequiredCount } as HTMLAttributes<HTMLDivElement>}
+      sidebar={
         <div data-testid="new-building-map-list" className="flex gap-3 overflow-x-auto px-0.5 pb-2 pt-0.5 lg:grid lg:gap-3 lg:overflow-visible">
           {reviewRequiredCount > 0 ? <p className="sr-only">Объекты без координат требуют ручной проверки: {reviewRequiredCount}</p> : null}
           {complexes.map((complex) => {
@@ -141,22 +137,15 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
             );
           })}
         </div>
-      </aside>
-
-      <div className="order-1 relative min-h-[420px] bg-[var(--surface-muted)] lg:order-2 lg:min-h-0">
-        <div ref={mapElementRef} data-testid="new-building-map-canvas" className="absolute inset-0" aria-label={`Карта жилых комплексов ${siteProfile.city.genitive}`} />
-        {status !== "ready" ? (
-          <div className="absolute inset-0 grid place-items-center p-6 text-center text-sm font-semibold text-[var(--new-building-map-content-strong)]">
-            {status === "loading" ? "Загружаем карту жилых комплексов..." : "Карта временно недоступна. Выберите ЖК из списка слева."}
-          </div>
-        ) : null}
-        {selectedComplex ? (
+      }
+      canvas={<div ref={mapElementRef} data-testid="new-building-map-canvas" className="absolute inset-0" aria-label={`Карта жилых комплексов ${siteProfile.city.genitive}`} />}
+      statusMessage={status === "ready" ? null : status === "loading" ? "Загружаем карту жилых комплексов..." : "Карта временно недоступна. Выберите ЖК из списка слева."}
+      action={selectedComplex ? (
           <Link href={newBuildingHref(selectedComplex)} className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-3 text-xs font-bold text-[var(--text-primary)] shadow-[var(--new-building-map-shadow-floating)] transition hover:text-[var(--accent)]">
             Открыть выбранный ЖК
             <ExternalLink className="size-3.5" aria-hidden />
           </Link>
         ) : null}
-      </div>
-    </div>
+    />
   );
 }

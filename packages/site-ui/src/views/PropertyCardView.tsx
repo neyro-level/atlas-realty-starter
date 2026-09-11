@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "../components/ui/button";
-import type { PropertyCardDto } from "@starter/site-contracts";
+import type { PropertyCardDto } from "../contracts/property";
 import { useMemo, useRef, useState, type MouseEvent, type ReactNode, type TouchEvent } from "react";
 import {
   Building2,
@@ -144,7 +144,7 @@ export function PropertyCardView({
   if (isList) {
     return (
       <article
-        className="group relative grid cursor-pointer gap-5 bg-transparent p-4 transition duration-300 hover:relative hover:z-10 hover:rounded-lg hover:bg-[var(--surface-card-soft)] hover:shadow-[var(--property-card-shadow-01)] md:grid-cols-[300px_minmax(0,1fr)_230px] md:px-0 md:py-6"
+        className="group relative grid cursor-pointer gap-5 bg-transparent p-4 transition duration-300 hover:relative hover:z-10 hover:rounded-lg hover:bg-[var(--surface-card-soft)] hover:shadow-[var(--property-card-shadow-raised)] md:grid-cols-[300px_minmax(0,1fr)_230px] md:px-0 md:py-6"
       >
         <LinkRenderer
           href={path}
@@ -209,7 +209,7 @@ export function PropertyCardView({
                   />
                 ))}
               </div>
-              <span className="absolute bottom-3 right-3 z-20 inline-flex min-h-7 items-center gap-1 rounded-full bg-[var(--surface-dark)]/72 px-2.5 text-[10px] font-bold tabular-nums text-white shadow-[var(--property-card-shadow-02)] backdrop-blur-sm">
+              <span className="absolute bottom-3 right-3 z-20 inline-flex min-h-7 items-center gap-1 rounded-full bg-[var(--surface-dark)]/72 px-2.5 text-[10px] font-bold tabular-nums text-white shadow-[var(--property-card-shadow-counter)] backdrop-blur-sm">
                 <ImageIcon className="size-3.5" aria-hidden />
                 {activeImage + 1}/{images.length}
               </span>
@@ -246,7 +246,7 @@ export function PropertyCardView({
                 onClick={stop}
                 data-analytics-context="catalog_property_card"
                 data-analytics-item={listing.slug}
-                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold tabular-nums text-white transition hover:bg-[var(--property-card-surface-01)] lg:text-sm sm:min-w-[190px]"
+                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold tabular-nums text-white transition hover:bg-[var(--property-card-surface-action-hover)] lg:text-sm sm:min-w-[190px]"
               >
                 <Phone className="size-[17.6px] lg:size-4" aria-hidden />
                 {phone}
@@ -261,7 +261,7 @@ export function PropertyCardView({
                   stop(event);
                   setPhoneVisible(true);
                 }}
-                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold text-white transition hover:bg-[var(--property-card-surface-01)] lg:text-sm sm:min-w-[190px]"
+                className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-[15.4px] font-semibold text-white transition hover:bg-[var(--property-card-surface-action-hover)] lg:text-sm sm:min-w-[190px]"
               >
                 <Phone className="" aria-hidden />
                 Показать телефон
@@ -311,8 +311,8 @@ export function PropertyCardView({
     <article
       className={`group relative cursor-pointer rounded-lg bg-white/0 transition duration-300 ${
         isList
-          ? "grid overflow-hidden border border-[var(--border)] bg-white shadow-none hover:-translate-y-0.5 hover:shadow-[var(--property-card-shadow-03)] md:grid-cols-[320px_minmax(0,1fr)_210px]"
-          : "-m-2 overflow-visible border border-transparent p-2 shadow-[var(--property-card-shadow-04)] transition-shadow lg:shadow-none hover:-translate-y-0.5 hover:border-[var(--border)] hover:bg-white hover:shadow-[var(--property-card-shadow-05)]"
+          ? "grid overflow-hidden border border-[var(--border)] bg-white shadow-none hover:-translate-y-0.5 hover:shadow-[var(--property-card-shadow-list-hover)] md:grid-cols-[320px_minmax(0,1fr)_210px]"
+          : "-m-2 overflow-visible border border-transparent p-2 shadow-[var(--property-card-shadow-grid-rest)] transition-shadow lg:shadow-none hover:-translate-y-0.5 hover:border-[var(--border)] hover:bg-white hover:shadow-[var(--property-card-shadow-grid-hover)]"
       }`}
     >
       <LinkRenderer
@@ -327,7 +327,7 @@ export function PropertyCardView({
 
       <div className={isList ? "p-3 md:pr-0" : ""}>
         <div
-          className={`relative z-20 touch-pan-y select-none overflow-hidden rounded-lg bg-[var(--surface-muted)] ${isList ? "aspect-[16/10] md:h-full md:min-h-[214px]" : "aspect-[3/2] shadow-[var(--property-card-shadow-06)] transition duration-300 group-hover:shadow-[var(--property-card-shadow-07)]"}`}
+          className={`relative z-20 touch-pan-y select-none overflow-hidden rounded-lg bg-[var(--surface-muted)] ${isList ? "aspect-[16/10] md:h-full md:min-h-[214px]" : "aspect-[3/2] shadow-[var(--property-card-shadow-media-rest)] transition duration-300 group-hover:shadow-[var(--property-card-shadow-media-hover)]"}`}
           onTouchStart={onGalleryTouchStart}
           onTouchEnd={onGalleryTouchEnd}
         >
@@ -400,7 +400,7 @@ export function PropertyCardView({
                 ))}
               </div>
 
-              <span className="absolute bottom-2.5 right-2.5 z-20 inline-flex min-h-6 items-center gap-1 rounded-md bg-[var(--surface-dark)]/66 px-2 text-[10px] font-bold tabular-nums text-white shadow-[var(--property-card-shadow-08)] backdrop-blur-sm">
+              <span className="absolute bottom-2.5 right-2.5 z-20 inline-flex min-h-6 items-center gap-1 rounded-md bg-[var(--surface-dark)]/66 px-2 text-[10px] font-bold tabular-nums text-white shadow-[var(--property-card-shadow-badge)] backdrop-blur-sm">
                 <ImageIcon className="size-3" aria-hidden />
                 {activeImage + 1}/{images.length}
               </span>
@@ -517,7 +517,7 @@ function CatalogBadgeStack({ imageBadge, className }: { imageBadge?: string; cla
   return (
     <div data-catalog-badge-stack className={`absolute z-10 flex flex-col items-start gap-1.5 ${className}`}>
       {imageBadge ? (
-        <span data-sales-leader-badge className="inline-flex min-h-6 items-center rounded-md bg-[var(--accent)] px-2.5 text-[10px] font-bold leading-none text-white shadow-[var(--property-card-shadow-09)]">
+        <span data-sales-leader-badge className="inline-flex min-h-6 items-center rounded-md bg-[var(--accent)] px-2.5 text-[10px] font-bold leading-none text-white shadow-[var(--property-card-shadow-sales-badge)]">
           {imageBadge}
         </span>
       ) : null}
@@ -530,7 +530,7 @@ function ExclusiveBadge() {
     <span
       data-exclusive-badge
       data-exclusive-placement="price"
-      className="inline-flex min-h-6 shrink-0 items-center rounded-md bg-[var(--accent)] px-2 text-[9px] font-bold leading-none text-white shadow-[var(--property-card-shadow-09)] sm:text-[10px]"
+      className="inline-flex min-h-6 shrink-0 items-center rounded-md bg-[var(--accent)] px-2 text-[9px] font-bold leading-none text-white shadow-[var(--property-card-shadow-sales-badge)] sm:text-[10px]"
     >
       Эксклюзив
     </span>

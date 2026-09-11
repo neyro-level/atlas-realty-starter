@@ -7,6 +7,7 @@ import {
   type SiteImageRendererProps,
 } from "@ams/realty-ui";
 import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
+import { siteProfile } from "@/project/site-profile";
 
 export const CATALOG_MORTGAGE_HELP_CARD_INDEX = 8;
 
@@ -44,6 +45,15 @@ export function CatalogMortgageHelpCard({
       source={source}
       formType={formType}
       imageRenderer={MortgageImageAdapter}
+      content={{
+        imageSrc: siteProfile.media.catalogMortgageService,
+        imageAlt: "Планировка, документы, ключи и калькулятор для ипотечного сервиса",
+        eyebrow: "Бесплатная услуга",
+        contextLabel: "Ипотечный центр агентства недвижимости",
+        title: <>Поможем получить одобрение ипотеки по выгодной ставке</>,
+        subtitle: <>Разберем ситуацию, подберем программу и подготовим документы к подаче в банк</>,
+        buttonLabel: "Помощь с ипотекой",
+      }}
       onRequest={openRequest}
     />
   );

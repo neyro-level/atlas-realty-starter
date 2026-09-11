@@ -43,6 +43,9 @@ export type SiteProfile = SiteIdentity & {
     favicon: string;
     socialPreview: string;
   };
+  media: {
+    catalogMortgageService: string;
+  };
   seo: {
     title: string;
     description: string;

@@ -132,11 +132,11 @@ export function PropertySidebarView({
               onChange={(event) => onMessageChange(event.target.value)}
               autoFocus={!desktopVariant}
               placeholder="Здесь можно написать сообщение"
-              className="min-w-[170px] flex-1 bg-transparent text-xs font-medium leading-5 text-[var(--text-primary)] outline-none placeholder:text-[var(--property-sidebar-content-01)]"
+              className="min-w-[170px] flex-1 bg-transparent text-xs font-medium leading-5 text-[var(--text-primary)] outline-none placeholder:text-[var(--property-sidebar-content-muted)]"
             />
           </label>
           {formattedOfferValue ? (
-            <p className="mt-2 border-t border-[var(--property-sidebar-border-01)] pt-2 text-xs font-medium leading-5 text-[var(--text-primary)]">{`Предлагаю ${formattedOfferValue} за этот объект.`}</p>
+            <p className="mt-2 border-t border-[var(--property-sidebar-border-panel)] pt-2 text-xs font-medium leading-5 text-[var(--text-primary)]">{`Предлагаю ${formattedOfferValue} за этот объект.`}</p>
           ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
@@ -148,7 +148,7 @@ export function PropertySidebarView({
                 onQuickQuestion(item);
                 focusQuestionArea();
               }}
-              className="inline-flex min-h-7 items-center rounded-lg bg-[var(--background)] px-2.5 text-[11px] font-bold text-[var(--text-primary)] transition hover:bg-[var(--property-sidebar-surface-01)] hover:text-[var(--accent)]"
+              className="inline-flex min-h-7 items-center rounded-lg bg-[var(--background)] px-2.5 text-[11px] font-bold text-[var(--text-primary)] transition hover:bg-[var(--property-sidebar-surface-chip-hover)] hover:text-[var(--accent)]"
             >
               {item}
             </Button>
@@ -186,12 +186,12 @@ export function PropertySidebarView({
         <span>{consentContent}</span>
       </label>
 
-      {result ? <p className={`text-sm font-semibold ${result.ok ? "text-[var(--property-sidebar-content-02)]" : "text-[var(--accent)]"}`}>{result.message}</p> : null}
+      {result ? <p className={`text-sm font-semibold ${result.ok ? "text-[var(--property-sidebar-content-success)]" : "text-[var(--accent)]"}`}>{result.message}</p> : null}
 
       <Button variant="plain"
         type="submit"
         disabled={pending}
-        className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--surface-dark)] px-4 text-sm font-semibold text-white transition hover:bg-[var(--property-sidebar-surface-02)] disabled:cursor-wait disabled:opacity-70"
+        className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--surface-dark)] px-4 text-sm font-semibold text-white transition hover:bg-[var(--property-sidebar-surface-action-hover)] disabled:cursor-wait disabled:opacity-70"
       >
         {pending ? "Отправляем..." : "Отправить сообщение"}
       </Button>
@@ -199,7 +199,7 @@ export function PropertySidebarView({
   );
 
   const panel = (
-    <div className="grid gap-4 rounded-lg border border-[var(--border)] bg-white p-4 shadow-[var(--property-sidebar-shadow-01)]">
+    <div className="grid gap-4 rounded-lg border border-[var(--border)] bg-white p-4 shadow-[var(--property-sidebar-shadow-panel)]">
       {desktopVariant ? (
         <div className="grid grid-cols-3 items-center gap-2">
           {favoriteAction}
@@ -212,7 +212,7 @@ export function PropertySidebarView({
             aria-label="Скопировать ссылку на объект"
             title={copied ? "Ссылка скопирована" : "Скопировать ссылку"}
           >
-            {copied ? <Check className="text-[var(--property-sidebar-content-02)]" aria-hidden /> : <Share2 className="" aria-hidden />}
+            {copied ? <Check className="text-[var(--property-sidebar-content-success)]" aria-hidden /> : <Share2 className="" aria-hidden />}
           </Button>
         </div>
       ) : null}
@@ -228,7 +228,7 @@ export function PropertySidebarView({
             <a
               href={phoneHref}
               data-analytics-context="property_sidebar"
-              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold tabular-nums text-white transition hover:bg-[var(--property-sidebar-surface-02)]"
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold tabular-nums text-white transition hover:bg-[var(--property-sidebar-surface-action-hover)]"
             >
               <Phone className="size-4" aria-hidden />
               {phoneLabel}
@@ -239,7 +239,7 @@ export function PropertySidebarView({
               data-analytics-event="phone_reveal"
               data-analytics-context="property_sidebar"
               onClick={onRevealPhone}
-              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold text-white transition hover:bg-[var(--property-sidebar-surface-02)]"
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-dark)] px-4 text-xs font-bold text-white transition hover:bg-[var(--property-sidebar-surface-action-hover)]"
             >
               <Phone className="" aria-hidden />
               Показать телефон

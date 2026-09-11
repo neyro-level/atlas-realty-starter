@@ -24,6 +24,8 @@ Global shell CSS contains only shared surface/link utilities. Request modal and 
 
 `ams-realty-new-building` is the umbrella Registry item for the complete residential-complex presentation module. It installs the separate `catalog`, `detail` and `conversion` items, their neutral view models and every required Registry dependency. Atlas wrappers provide brand, city, expert identity and portrait, optional verified rating, Next adapters, Payload-derived DTOs and typed request context. `pnpm ui:registry:consumer` builds the items and verifies their clean dependency closure without relying on the Atlas application.
 
+`ams-realty-catalog`, `ams-realty-catalog-map` and `ams-realty-property` are neutral umbrella items for discovery, map composition, property cards and detail pages. Their contracts are presentation DTOs owned by Registry source; Atlas adapters remain responsible for translating `SiteEngine` DTOs. Catalog, property, session-collection and residential-complex views use semantic tokens and do not import `home.css` or Payload documents.
+
 New UI follows `reuse -> variant -> create`. Application components do not import Radix directly and do not recreate native controls when an admitted primitive or semantic variant exists.
 
 `MediaGallery` is the only gallery API used by property and residential-complex pages. It wraps Embla through ShadCN Carousel and `yet-another-react-lightbox` with thumbnails, counter, zoom and fullscreen. The wrapper owns focus restore, keyboard and touch behavior, scroll locking, preload limits, empty/single states and Atlas token styling; application code must not import the lightbox directly.

@@ -65,7 +65,7 @@ export function CatalogHeroView({
   const contentClassName = hasControlledLines ? "max-w-[980px]" : "max-w-[780px]";
   const descriptionMaxWidth = hasControlledLines ? "max-w-[980px]" : "max-w-[760px]";
   const descriptionClassName = isNewBuildingHero
-    ? "mt-4 w-fit max-w-[620px] rounded-lg border border-white/20 bg-black/30 px-4 py-3 text-[0.95rem] font-medium leading-6 text-white/92 shadow-[var(--catalog-hero-shadow-01)] backdrop-blur-md [text-wrap:pretty] sm:text-[1rem] sm:leading-7 md:mt-5 md:px-5 md:py-4 md:text-[1.08rem] lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none"
+    ? "mt-4 w-fit max-w-[620px] rounded-lg border border-white/20 bg-black/30 px-4 py-3 text-[0.95rem] font-medium leading-6 text-white/92 shadow-[var(--catalog-hero-shadow-panel)] backdrop-blur-md [text-wrap:pretty] sm:text-[1rem] sm:leading-7 md:mt-5 md:px-5 md:py-4 md:text-[1.08rem] lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none"
     : descriptionVisibleAlways
     ? `mt-3 ${descriptionMaxWidth} text-[0.95rem] font-medium leading-6 text-white/84 [text-wrap:pretty] sm:mt-4 sm:text-[1rem] sm:leading-7 md:mt-5 md:text-[1.08rem]`
     : `mt-5 hidden ${descriptionMaxWidth} text-[1rem] font-medium leading-7 text-white/84 [text-wrap:pretty] lg:block md:text-[1.08rem]`;
@@ -78,7 +78,7 @@ export function CatalogHeroView({
   const titleLineClassName = collapseTitleLinesOnDesktop ? "block lg:inline" : "block lg:whitespace-nowrap";
 
   return (
-    <div className={`relative overflow-hidden rounded-lg bg-[var(--surface-dark)] text-white shadow-[var(--catalog-hero-shadow-01)] ${isNewBuildingHero ? `min-h-[340px] sm:min-h-[360px] md:min-h-[280px] ${desktopHeightClassName}` : `min-h-[220px] sm:min-h-[240px] md:min-h-[260px] ${desktopHeightClassName}`}`}>
+    <div className={`relative overflow-hidden rounded-lg bg-[var(--surface-dark)] text-white shadow-[var(--catalog-hero-shadow-panel)] ${isNewBuildingHero ? `min-h-[340px] sm:min-h-[360px] md:min-h-[280px] ${desktopHeightClassName}` : `min-h-[220px] sm:min-h-[240px] md:min-h-[260px] ${desktopHeightClassName}`}`}>
       <ImageRenderer
         src={imageSrc}
         alt=""
@@ -90,8 +90,8 @@ export function CatalogHeroView({
         className={`object-cover ${isNewBuildingHero ? "brightness-[0.88] contrast-[1.04] saturate-[0.94]" : "brightness-[1.08] contrast-[1.02]"} ${focusImageBottomDesktop ? "lg:object-bottom" : ""}`}
         style={{ objectPosition: focusImageBottomDesktop ? undefined : imagePosition }}
       />
-      <div className={isNewBuildingHero ? "absolute inset-0 bg-[linear-gradient(90deg,var(--catalog-hero-effect-01)_0%,var(--catalog-hero-effect-02)_50%,var(--catalog-hero-effect-04)_100%)]" : "absolute inset-0 bg-[linear-gradient(90deg,var(--catalog-hero-effect-01)_0%,var(--catalog-hero-effect-02)_38%,var(--catalog-hero-effect-03)_72%,var(--catalog-hero-effect-04)_100%)]"} />
-      <div className={isNewBuildingHero ? "absolute inset-0 bg-[linear-gradient(0deg,var(--catalog-hero-effect-05)_0%,var(--catalog-hero-effect-06)_64%,var(--catalog-hero-effect-07)_100%)]" : "absolute inset-0 bg-[linear-gradient(0deg,var(--catalog-hero-effect-05)_0%,var(--catalog-hero-effect-06)_54%,var(--catalog-hero-effect-07)_100%)]"} />
+      <div className={isNewBuildingHero ? "absolute inset-0 bg-[linear-gradient(90deg,var(--catalog-hero-overlay-horizontal-strong)_0%,var(--catalog-hero-overlay-horizontal-default)_50%,var(--catalog-hero-overlay-horizontal-transparent)_100%)]" : "absolute inset-0 bg-[linear-gradient(90deg,var(--catalog-hero-overlay-horizontal-strong)_0%,var(--catalog-hero-overlay-horizontal-default)_38%,var(--catalog-hero-overlay-horizontal-soft)_72%,var(--catalog-hero-overlay-horizontal-transparent)_100%)]"} />
+      <div className={isNewBuildingHero ? "absolute inset-0 bg-[linear-gradient(0deg,var(--catalog-hero-overlay-vertical-strong)_0%,var(--catalog-hero-overlay-vertical-soft)_64%,var(--catalog-hero-overlay-vertical-transparent)_100%)]" : "absolute inset-0 bg-[linear-gradient(0deg,var(--catalog-hero-overlay-vertical-strong)_0%,var(--catalog-hero-overlay-vertical-soft)_54%,var(--catalog-hero-overlay-vertical-transparent)_100%)]"} />
       <div className={shellClassName}>
         <div className={contentClassName}>
           <h1 className={titleClassName}>

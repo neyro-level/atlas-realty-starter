@@ -36,7 +36,7 @@ export function NewBuildingMobileCarouselView({ items, imageRenderer: Image, lin
         <CarouselContent>
           {items.map((item, index) => (
             <CarouselItem key={item.id} className="basis-[calc(100%-28px)]">
-              <Card className="relative flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-[var(--property-card-shadow-01)]">
+              <Card className="relative flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-[var(--property-card-shadow-raised)]">
                 <Link href={`/${item.slug}`} ariaLabel={`Открыть страницу ${item.title}`} className="absolute inset-0 z-10 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]">
                   <span className="sr-only">Открыть {item.title}</span>
                 </Link>

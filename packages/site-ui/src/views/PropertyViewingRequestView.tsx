@@ -3,7 +3,7 @@
 import { Input } from "../components/ui/input";
 import { Checkbox } from "../components/ui/checkbox";
 import { Button } from "../components/ui/button";
-import type { PropertyViewingDateDto, PublicFormResultDto } from "@starter/site-contracts";
+import type { PropertyViewingDateDto, PublicFormResultDto } from "../contracts/property";
 import { CalendarDays } from "lucide-react";
 import type { FormEvent, ReactNode } from "react";
 
@@ -43,7 +43,7 @@ export function PropertyViewingRequestView({
   onConsentChange: (checked: boolean) => void;
 }) {
   return (
-    <section className="rounded-lg border border-[var(--border)] bg-white p-5 shadow-[var(--property-viewing-request-shadow-01)] md:p-6" aria-labelledby="property-viewing-title">
+    <section className="rounded-lg border border-[var(--border)] bg-white p-5 shadow-[var(--property-viewing-request-shadow-subtle)] md:p-6" aria-labelledby="property-viewing-title">
       <div className="grid gap-5">
         <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
           <div>
@@ -62,7 +62,7 @@ export function PropertyViewingRequestView({
               {dates.map((date) => {
                 const selected = date.value === selectedDate;
                 return (
-                  <Button variant="plain" key={date.value} type="button" data-visual-dynamic onClick={() => onSelectDate(date.value)} className={`grid min-h-[76px] min-w-[102px] snap-start content-start rounded-lg border px-3 py-2.5 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] sm:min-w-0 md:min-h-[80px] ${selected ? "border-[var(--text-primary)] bg-[var(--text-primary)] text-white" : "border-transparent bg-[var(--background)] text-[var(--text-primary)] hover:border-[var(--input)] hover:bg-[var(--property-viewing-request-surface-01)]"}`} aria-pressed={selected}>
+                  <Button variant="plain" key={date.value} type="button" data-visual-dynamic onClick={() => onSelectDate(date.value)} className={`grid min-h-[76px] min-w-[102px] snap-start content-start rounded-lg border px-3 py-2.5 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] sm:min-w-0 md:min-h-[80px] ${selected ? "border-[var(--text-primary)] bg-[var(--text-primary)] text-white" : "border-transparent bg-[var(--background)] text-[var(--text-primary)] hover:border-[var(--input)] hover:bg-[var(--property-viewing-request-surface-selected)]"}`} aria-pressed={selected}>
                     <span className="truncate text-[13px] font-semibold leading-5 md:text-sm">{date.label}</span>
                     <span className={`mt-1 text-xs leading-5 ${selected ? "text-white/82" : "text-[var(--text-secondary)]"}`}>{date.dateLabel}</span>
                   </Button>
@@ -81,7 +81,7 @@ export function PropertyViewingRequestView({
             <Checkbox checked={consent} onCheckedChange={(checked) => onConsentChange(checked === true)} className="mt-1" />
             <span>{consentContent}</span>
           </label>
-          {result ? <p className={`text-sm font-semibold ${result.ok ? "text-[var(--property-viewing-request-content-01)]" : "text-[var(--accent)]"}`}>{result.message}</p> : null}
+          {result ? <p className={`text-sm font-semibold ${result.ok ? "text-[var(--property-viewing-request-content-success)]" : "text-[var(--accent)]"}`}>{result.message}</p> : null}
         </form>
       </div>
     </section>
