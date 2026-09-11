@@ -73,7 +73,7 @@ workflows:
       - name: exact-main-artifact
         checkout:
           fetch_depth: 0
-          remove_credentials: true
+          remove_credentials: false
         env:
           EXPECTED_COMMIT_SHA: ${{ inputs.expected_commit_sha }}
           CONFIRM_RELEASE: ${{ inputs.confirm_release }}
@@ -83,7 +83,9 @@ workflows:
             script:
               - test "$CONFIRM_RELEASE" = "release"
               - test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT_SHA"
-              - test "$(git branch -r --contains HEAD | grep -c 'origin/main')" -gt 0
+              - git fetch origin main --depth=1
+              - test "$(git rev-parse FETCH_HEAD)" = "$EXPECTED_COMMIT_SHA"
+              - git remote set-url origin disabled://sourcecraft
               - corepack enable
               - corepack prepare pnpm@11.24.0 --activate
               - pnpm install --frozen-lockfile
