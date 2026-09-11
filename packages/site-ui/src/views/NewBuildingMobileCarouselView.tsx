@@ -8,6 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../compone
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "../components/ui/carousel";
 import { Separator } from "../components/ui/separator";
 import type { SiteImageRenderer, SiteLinkRenderer } from "../lib/adapters";
+import { formatRublePrice } from "../lib/realty-format";
 
 export function NewBuildingMobileCarouselView({ items, imageRenderer: Image, linkRenderer: Link, favoriteActions = {} }: { items: readonly NewBuildingSummaryViewModel[]; imageRenderer: SiteImageRenderer; linkRenderer: SiteLinkRenderer; favoriteActions?: Record<string, ReactNode> }) {
   const [api, setApi] = useState<CarouselApi>();
@@ -45,7 +46,7 @@ export function NewBuildingMobileCarouselView({ items, imageRenderer: Image, lin
                   <div className="absolute right-3 top-3 z-20">{favoriteActions[item.id]}</div>
                 </div>
                 <CardHeader className="p-5 pb-0">
-                  <p className="text-[1.42rem] font-extrabold leading-none tabular-nums">{formatPrice(item.priceFrom)}</p>
+                  <p className="text-[1.42rem] font-extrabold leading-none tabular-nums">{item.priceFrom === null ? "Цена уточняется" : `от ${formatRublePrice(item.priceFrom)}`}</p>
                   <CardTitle className="mt-3 text-heading-compact font-extrabold leading-[1.18]">{item.title}</CardTitle>
                   <p className="mt-2 flex items-start gap-1.5 text-sm font-medium leading-5 text-[var(--text-secondary)]"><MapPin className="mt-0.5 size-4 shrink-0 text-[var(--accent)]" aria-hidden />{item.address}</p>
                 </CardHeader>
@@ -66,9 +67,4 @@ export function NewBuildingMobileCarouselView({ items, imageRenderer: Image, lin
 
 function Fact({ label, value }: { label: string; value: string }) {
   return <div className="min-w-0"><dt className="text-overline font-semibold uppercase text-[var(--text-muted)]">{label}</dt><dd className="mt-1.5 text-sm font-medium leading-5 text-[var(--text-secondary)]">{value}</dd></div>;
-}
-
-function formatPrice(value: number | null) {
-  if (value === null) return "Цена уточняется";
-  return `от ${new Intl.NumberFormat("ru-RU").format(value)} ₽`;
 }

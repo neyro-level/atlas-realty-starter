@@ -1,4 +1,12 @@
 export type SiteEngineMode = "fixture" | "payload";
+export {
+  CatalogPageDtoSchema,
+  CatalogQueryDtoSchema,
+  NewBuildingDtoSchema,
+  PropertyCardDtoSchema,
+  PropertyCategorySchema,
+  PropertyDetailDtoSchema,
+} from "./public-dto-schemas";
 
 export type SiteIdentity = {
   brand: string;

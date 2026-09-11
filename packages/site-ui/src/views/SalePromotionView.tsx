@@ -29,7 +29,7 @@ export function SalePromotionView({ cityGenitive, cityPrepositional }: { cityGen
         <div className="max-w-225">
           <h2
             id="sale-promotion-title"
-            className="text-section-small font-semibold leading-[1.24] tracking-[-0.03em] text-[var(--text-primary)] text-balance sm:text-[length:var(--site-type-section)] sm:leading-[1.2]"
+            className="text-section-title font-semibold leading-section-title text-[var(--text-primary)] text-balance"
           >
             Ищем покупателя сами, а не ждём звонков
           </h2>

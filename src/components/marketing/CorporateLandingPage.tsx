@@ -28,10 +28,11 @@ import { getCatalogFaqItems } from "@/components/marketing/catalog-faq-registry"
 import type { CatalogQuery, CatalogSnapshot } from "@/lib/catalog";
 import type { ArticleSummary } from "@/entities/article/model";
 import type { CorporatePageConfig } from "@/project/corporate-pages";
-import { faqPageSchema } from "@/shared/lib/seo/schema";
+import { breadcrumbSchema, catalogItemListSchema, faqPageSchema } from "@/shared/lib/seo/schema";
 import { JsonLd } from "@/shared/ui/JsonLd";
 import { careersComparison, careersFinalCta, careersTraining, careersWorkSystem } from "@/project/careers-page";
-import type { NewBuilding } from "@/modules/new-buildings";
+import { filterNewBuildings, type NewBuilding } from "@/modules/new-buildings";
+import { getPropertyPath } from "@/project/site-config";
 
 type CorporateLandingPageProps = {
   page: CorporatePageConfig;
@@ -71,9 +72,38 @@ export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showca
     hasSecondaryCatalogIntro,
     usesCatalogHero,
   };
+  const structuredCatalogItems = hasNewBuildingConversionFlow
+    ? filterNewBuildings(complexes, showcaseQuery ?? {}).map((item) => ({
+        name: item.name,
+        path: `/${item.slug}`,
+        image: item.media.hero?.src,
+      }))
+    : (showcase?.listings ?? []).map((item) => ({
+        name: item.title,
+        path: getPropertyPath(item.slug),
+        image: item.image,
+      }));
+  const catalogPath = visitorQuery.page && visitorQuery.page > 1
+    ? `/${page.slug}?page=${visitorQuery.page}`
+    : `/${page.slug}`;
+  const showCatalogStructuredData = Boolean(
+    page.showcase &&
+    structuredCatalogItems.length &&
+    !hasNonPaginationCatalogQuery(visitorQuery),
+  );
 
   return (
-    <CorporateLandingView
+    <>
+      {showCatalogStructuredData ? <>
+        <JsonLd data={breadcrumbSchema([{ name: "Главная", url: "/" }, { name: page.heroTitle, url: catalogPath }])} />
+        <JsonLd data={catalogItemListSchema({
+          name: page.heroTitle,
+          path: catalogPath,
+          items: structuredCatalogItems,
+          startPosition: ((visitorQuery.page ?? 1) - 1) * showcaseLimit + 1,
+        })} />
+      </> : null}
+      <CorporateLandingView
       page={pageDto}
       breadcrumbs={<Breadcrumbs items={buildCorporateBreadcrumbs(page)} />}
       catalogHero={<CatalogHeroBlock title={page.heroTitle} variant={hasNewBuildingConversionFlow ? "new-building" : "default"} titleLines={page.heroTitleLines} titleSize={page.heroTitleSize} description={hasNewBuildingConversionFlow || usesPageHeroDescription ? page.heroDescription : undefined} descriptionVisibility={showsHeroContentOnMobile || hasNewBuildingConversionFlow ? "always" : undefined} imageSrc={page.heroImage?.src} imagePosition={page.heroImage?.position} expandedDesktop={page.heroExpandedDesktop} focusImageBottomDesktop={page.heroFocusImageBottomDesktop} actionVisibility={showsHeroContentOnMobile ? "always" : "lg+"} action={<CorporatePrimaryCta page={page} className="inline-flex min-h-12 w-full max-w-full shrink-0 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-sm font-semibold whitespace-nowrap text-white transition hover:bg-[var(--accent-hover)] sm:w-auto sm:min-w-63 sm:px-6" showIcon={false} />} />}
@@ -91,7 +121,8 @@ export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showca
       footerContent={catalogFaqItems ? <><JsonLd data={faqPageSchema(faqItemsToSchema(catalogFaqItems))} /><RealEstateFaqSection items={catalogFaqItems} />{isMainCatalogIndex ? <PopularSearchesSection /> : null}</> : null}
       linkRenderer={CorporateLink}
       imageRenderer={CorporateImage}
-    />
+      />
+    </>
   );
 }
 
@@ -146,6 +177,10 @@ const CATALOG_LEAD_TITLES: Record<string, string> = {
 
 function getCatalogLeadTitle(slug: string) {
   return CATALOG_LEAD_TITLES[slug] ?? CATALOG_LEAD_TITLES["nedvizhimost"];
+}
+
+function hasNonPaginationCatalogQuery(query: CatalogQuery) {
+  return Object.entries(query).some(([key, value]) => key !== "page" && value !== undefined);
 }
 
 function buildCorporateBreadcrumbs(page: CorporatePageConfig): BreadcrumbItem[] {

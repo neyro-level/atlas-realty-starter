@@ -23,10 +23,10 @@ export function JournalHubView({ page, cityPrepositional, linkRenderer: LinkRend
         <JournalBreadcrumbs items={[{ label: "Главная", href: "/" }, { label: "Журнал агентства" }]} linkRenderer={LinkRenderer} />
         <Card className="border-0 p-5 md:p-6" aria-labelledby="journal-title">
           <div className="grid gap-4 lg:grid-cols-[max-content_minmax(0,1fr)] lg:items-center">
-            <h1 id="journal-title" className="whitespace-nowrap text-section-prominent font-semibold leading-tight md:text-display-small">Журнал агентства</h1>
+            <h1 id="journal-title" className="whitespace-nowrap text-editorial-title font-semibold leading-editorial-title">Журнал агентства</h1>
             <form action="/journal" className="relative w-full" role="search">
               <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[var(--text-muted)]" aria-hidden />
-              <Input type="search" name="q" defaultValue={page.query} placeholder="Что вас интересует?" className="h-12 w-full rounded-lg border-[var(--border)] bg-[var(--journal-surface)] pl-11 pr-4 text-sm font-medium focus:bg-white" />
+              <Input type="search" name="q" defaultValue={page.query} placeholder="Что вас интересует?" className="h-12 w-full rounded-lg border-[var(--border)] bg-[var(--journal-surface)] pl-11 pr-4 text-body font-medium focus:bg-white" />
             </form>
           </div>
           <nav className="mt-5 flex w-full max-w-full gap-2 overflow-x-auto" aria-label="Рубрики журнала">

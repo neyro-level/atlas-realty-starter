@@ -87,7 +87,7 @@ export function MortgageCalculatorView() {
         <div>
           <h2
             id="mortgage-calculator-title"
-            className="text-section-small font-semibold leading-[1.1] tracking-[-0.03em] text-[var(--text-primary)] sm:text-[length:var(--site-type-section)]"
+            className="text-section-title font-semibold leading-section-title text-[var(--text-primary)]"
           >
             Ипотечный калькулятор
           </h2>
@@ -186,7 +186,7 @@ function CurrencyField({
   className?: string;
 }) {
   return (
-    <label htmlFor={id} className={`grid gap-1.5 text-support font-medium text-[var(--text-secondary)] ${className ?? ""}`}>
+    <label htmlFor={id} className={`grid gap-1.5 text-support font-medium text-[var(--text-secondary)] ${className ?? ''}`}>
       {label}
       <span className="relative">
         <Input variant="plain"

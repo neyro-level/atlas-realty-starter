@@ -49,7 +49,7 @@ export function MortgageProgramsView({ cityPrepositional }: { cityPrepositional:
         <div className="pb-7 sm:pb-9">
           <h2
             id="mortgage-programs-title"
-            className="text-section-small font-semibold leading-[1.1] tracking-[-0.03em] text-[var(--text-primary)] sm:text-[length:var(--site-type-section)] sm:whitespace-nowrap"
+            className="text-section-title font-semibold leading-section-title text-[var(--text-primary)] sm:whitespace-nowrap"
           >
             Ипотечные программы в {cityPrepositional}
           </h2>

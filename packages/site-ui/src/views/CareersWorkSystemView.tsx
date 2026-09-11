@@ -27,7 +27,7 @@ export function CareersWorkSystemView({ content: careersWorkSystem }: { content:
       <div className="mx-auto max-w-site-frame px-5">
         <h2
           id="careers-work-system-title"
-          className="text-section-large font-semibold leading-[1.12] text-[var(--text-primary)] sm:text-section-expanded"
+          className="text-section-title font-semibold leading-section-title text-[var(--text-primary)]"
         >
           {careersWorkSystem.title}
         </h2>
@@ -71,7 +71,9 @@ export function CareersWorkSystemView({ content: careersWorkSystem }: { content:
                   <li
                     key={step.title}
                     className={`grid grid-cols-[44px_minmax(0,1fr)_28px] items-center gap-4 py-4 ${
-                      index > 0 ? "border-t border-[var(--careers-work-system-border-secondary)]" : ""
+                      index > 0
+                        ? 'border-t border-[var(--careers-work-system-border-secondary)]'
+                        : ''
                     }`}
                   >
                     <span className="flex size-11 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-[var(--accent)]">

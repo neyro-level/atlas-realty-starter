@@ -33,7 +33,7 @@ export function AgencyFaqSection({
           ) : null}
           <h2
             id={titleId}
-            className={`max-w-230 text-heading-large font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-display-medium lg:text-display-large ${titleClassName}`}
+            className={`max-w-230 text-section-title font-extrabold leading-section-title text-[var(--text-primary)] ${titleClassName}`}
           >
             {title}
           </h2>

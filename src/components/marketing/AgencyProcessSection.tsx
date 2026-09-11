@@ -22,7 +22,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
           <div className="mx-auto mb-10 grid max-w-205 gap-5 text-center md:mb-12 lg:mb-14">
             <h2
               id={titleId}
-              className="text-heading-large font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-display-medium lg:text-display-large"
+              className="text-section-title font-extrabold leading-section-title text-[var(--text-primary)]"
             >
               {title}
             </h2>
@@ -42,7 +42,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
                 <article
                   key={`${number}-${step.title}`}
                   className={`relative flex flex-col border-[var(--border)] p-6 md:p-8 lg:min-h-75 lg:p-8 xl:p-10 ${
-                    isLast ? "" : "border-b lg:border-b-0 lg:border-r"
+                    isLast ? '' : 'border-b lg:border-b-0 lg:border-r'
                   }`}
                 >
                   <span

@@ -31,7 +31,7 @@ export function SalePricingPrinciplesView() {
         <div className="max-w-225">
           <h2
             id="sale-pricing-principles-title"
-            className="text-section-small font-semibold leading-[1.24] tracking-[-0.03em] text-[var(--text-primary)] text-balance sm:text-[length:var(--site-type-section)] sm:leading-[1.2]"
+            className="text-section-title font-semibold leading-section-title text-[var(--text-primary)] text-balance"
           >
             Называем реальную цену, чтобы продать выгодно и без долгого ожидания
           </h2>

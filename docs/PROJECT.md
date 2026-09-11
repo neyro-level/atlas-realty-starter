@@ -33,7 +33,7 @@ This project uses the compact document set required by the active Realty Platfor
 | Security, roles and PII                          | `../SECURITY.md`                                                                                                                      |
 | Local runtime, CI, deploy, rollback and recovery | `OPERATIONS.md`                                                                                                                       |
 | Versions and compatibility check                 | `VERSION_MATRIX.md`                                                                                                                   |
-| UI system, registry and media rules              | `UI_SYSTEM.md`                                                                                                                        |
+| UI system, components and media rules            | `UI_SYSTEM.md`                                                                                                                        |
 | Difficult boundary decisions                     | `adr/`                                                                                                                                |
 
 ## Full-stack boundary
@@ -51,6 +51,7 @@ Next.js route
 ```
 
 - `packages/site-contracts` owns public presentation DTOs and the `SiteEngine` interface.
+- Catalog, property-detail and new-building DTOs are runtime-validated with strict Zod schemas at the SiteEngine boundary before presentation code receives them.
 - `packages/site-ui` owns reusable presentation components and views; it cannot import Payload, PostgreSQL or project secrets.
 - `packages/site-fixtures` provides deterministic, database-free fixture data.
 - `src/site-engine` adapts the public UI to either Payload (`SITE_ENGINE=payload`, default) or fixtures (`SITE_ENGINE=fixture`).
@@ -67,6 +68,7 @@ The versioned headless API remains supported for external consumers; “headless
 - Streaming allowlisted YRL parsers for secondary and new-build feeds, source isolation, manual-field protection and suspicious-feed deactivation guard.
 - Public catalog/property/complex/agent/content DTOs, bounded filters, SEO/Redirects plugins, sitemap and cache revalidation.
 - Public website: home, catalog/detail, new buildings, employees, journal, corporate/service/legal pages, reviews, favorites/comparison, leadgen and thank-you flows.
+- Canonical unfiltered catalog pages emit server-rendered `BreadcrumbList` and paginated `ItemList` structured data; filtered URLs remain noindex and do not emit a conflicting catalog list.
 - New-buildings module: one Payload-backed detail template for every residential complex; search and real `priceFrom` bounds on `/novostroyki`; compact mobile/tablet conversion flow, single-level Embla card carousel, map switch, universal purchase scenarios and complex-scoped lead relation.
 - Lead intake with bounded validation, consent, anti-spam checks, idempotency and transactional delivery records.
 - Payload Jobs for import, delivery, recovery and PII retention.
@@ -106,7 +108,7 @@ Lead PII retention default is 365 days and the baseline consent text version is 
 - On 2026-09-08, local PostgreSQL 18.6 had all eight committed migrations applied and the Payload-backed UI returned HTTP 200 for the home page, catalog, property and residential-complex routes.
 - The local product catalog contains 20 unique Krasnodar residential complexes and 60 properties: 30 secondary apartments split 10/10/10 by room count, 10 houses, 10 land plots and 10 commercial properties. On 2026-09-08 the catalog was rebuilt from current partner listings with 60 unique addresses and 346 property images whose checksums do not repeat across properties; together with residential complexes the clean local media set contains 547 referenced files. Public DTOs contain no import provenance.
 - The new-buildings presentation upgrade does not change the Payload schema, migrations or the 20-record residential-complex source set. Detail submissions carry the existing Payload complex ID through the Public Lead contract; catalog submissions remain general and are distinguished only by internal analytics source/form type.
-- The UI Constitution 3.1 migration is complete in source: all tracked UI-debt baselines are zero, numbered component tokens and compatibility aliases are absent, and neutral Registry views receive Atlas copy, media and identity through typed properties. Final exact-head build, visual, database and live release evidence remains required before production conformance is claimed.
+- The structural UI Constitution 3.1 migration is complete in source: numbered component tokens, compatibility aliases, raw-color debt and the dedicated structural UI-debt baseline are zero, and neutral shared views receive Atlas copy, media and identity through typed properties. Typography roles are enforced across commercial and journal pages; the separately tracked legacy utility/CSS baseline remains non-zero and may only decrease. Final exact-head build, visual, database and live release evidence remains required before production conformance is claimed.
 - Atlas remains non-indexable by owner decision while the approved partner catalog is used as a product demonstration dataset.
 - The Yandex Maps JavaScript API integration and fallback are implemented; a real production key is still an external secret gate.
 - Before claiming current full-stack production readiness, run the exact-head Merge Gate, package/release flow and live smoke from `OPERATIONS.md` against an isolated client or validation contour.

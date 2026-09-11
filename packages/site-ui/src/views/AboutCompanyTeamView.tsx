@@ -8,7 +8,7 @@ export function AboutCompanyTeamView({ photos, imageRenderer: ImageRenderer }: {
   return (
     <section className="bg-[var(--about-company-team-surface-primary)] py-12 sm:py-16 lg:py-18" aria-labelledby="about-team-title">
       <div className="mx-auto max-w-site-frame px-5">
-        <h2 id="about-team-title" className="text-section-prominent font-semibold leading-[1.1] text-[var(--text-primary)] sm:text-section-wide">Команда агентства недвижимости в работе</h2>
+        <h2 id="about-team-title" className="text-section-title font-semibold leading-section-title text-[var(--text-primary)]">Команда агентства недвижимости в работе</h2>
         <p className="mt-4 max-w-205 text-body-large leading-7 text-[var(--about-company-team-content-primary)] lg:max-w-none lg:whitespace-nowrap">Агент ведёт клиента на каждом этапе, а юрист и ипотечный брокер подключаются там, где это необходимо.</p>
         <div className="mt-9 grid gap-5 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.42fr)_minmax(320px,0.58fr)]">
           <TeamPhoto photo={featuredPhoto} imageRenderer={ImageRenderer} className="h-85 sm:col-span-2 sm:h-105 lg:col-span-1 lg:h-135" sizes="(max-width: 1024px) 100vw, 860px" />

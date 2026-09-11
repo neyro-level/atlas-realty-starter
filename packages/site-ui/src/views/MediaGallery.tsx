@@ -2,17 +2,15 @@
 
 import { Button } from "../components/ui/button";
 import { ChevronLeft, ChevronRight, Images } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import Lightbox, { type SlideImage } from "yet-another-react-lightbox";
-import Counter from "yet-another-react-lightbox/plugins/counter";
-import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
-import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
-import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import type { SlideImage } from "yet-another-react-lightbox";
 
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "../components/ui/carousel";
 import { Skeleton } from "../components/ui/skeleton";
 import type { SiteImageRenderer } from "../lib/adapters";
 import { cn } from "../lib/utils";
+
+const MediaLightbox = lazy(() => import("./MediaLightbox").then((module) => ({ default: module.MediaLightbox })));
 
 export type MediaGalleryImage = SlideImage & { alt: string };
 
@@ -43,6 +41,7 @@ export function MediaGallery({
   const [api, setApi] = useState<CarouselApi>();
   const [index, setIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxRequested, setLightboxRequested] = useState(false);
   const openerRef = useRef<HTMLButtonElement | null>(null);
   const hasMany = safeImages.length > 1;
 
@@ -59,6 +58,7 @@ export function MediaGallery({
   const openAt = useCallback((nextIndex: number, trigger: HTMLButtonElement) => {
     openerRef.current = trigger;
     setIndex(nextIndex);
+    setLightboxRequested(true);
     setLightboxOpen(true);
   }, []);
 
@@ -88,19 +88,19 @@ export function MediaGallery({
         {hasMany ? <><Button variant="plain" type="button" onClick={() => api?.scrollPrev()} className={cn("absolute left-3 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg transition lg:left-5", controlClass)} aria-label="Предыдущее фото"><ChevronLeft className="" aria-hidden /></Button><Button variant="plain" type="button" onClick={() => api?.scrollNext()} className={cn("absolute right-3 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg transition lg:right-5", controlClass)} aria-label="Следующее фото"><ChevronRight className="" aria-hidden /></Button></> : null}
       </Carousel>
 
-      <Lightbox
-        open={lightboxOpen}
-        close={() => setLightboxOpen(false)}
-        index={index}
-        slides={safeImages}
-        plugins={[Counter, Fullscreen, Thumbnails, Zoom]}
-        className="ams-realty-media-lightbox"
-        carousel={{ finite: !hasMany, preload: 2 }}
-        thumbnails={{ hidden: !hasMany, showToggle: hasMany }}
-        zoom={{ maxZoomPixelRatio: 3, pinchZoomV4: true, scrollToZoom: true }}
-        labels={{ Previous: "Предыдущее фото", Next: "Следующее фото", Close: "Закрыть", Thumbnails: "Миниатюры", "Show thumbnails": "Показать миниатюры", "Hide thumbnails": "Скрыть миниатюры", "Enter Fullscreen": "На весь экран", "Exit Fullscreen": "Выйти из полноэкранного режима", "Zoom in": "Увеличить", "Zoom out": "Уменьшить" }}
-        on={{ view: ({ index: viewedIndex }) => { setIndex(viewedIndex); api?.scrollTo(viewedIndex); }, exited: () => openerRef.current?.focus() }}
-      />
+      {lightboxRequested ? (
+        <Suspense fallback={null}>
+          <MediaLightbox
+            open={lightboxOpen}
+            index={index}
+            slides={safeImages}
+            hasMany={hasMany}
+            onClose={() => setLightboxOpen(false)}
+            onView={(viewedIndex) => { setIndex(viewedIndex); api?.scrollTo(viewedIndex); }}
+            onExited={() => openerRef.current?.focus()}
+          />
+        </Suspense>
+      ) : null}
     </>
   );
 }

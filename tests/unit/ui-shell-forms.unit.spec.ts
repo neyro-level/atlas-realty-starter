@@ -15,12 +15,14 @@ describe("UI shell and form contracts", () => {
     expect(form).not.toMatch(/<Input\b[^>]{0,400}type=["']checkbox["']/s);
   });
 
-  it("ships request and footer styles with their owning Registry items", () => {
-    const registry = readFileSync("packages/site-ui/registry.json", "utf8");
+  it("ships request and footer styles with the internal UI entrypoint", () => {
+    const entrypoint = readFileSync("packages/site-ui/src/index.tsx", "utf8");
+    const styles = readFileSync("packages/site-ui/src/styles.css", "utf8");
     const common = readFileSync("packages/site-ui/src/styles/shell.css", "utf8");
-    expect(registry).toContain("ams-realty-shell");
-    expect(registry).toContain("src/styles/request-modal.css");
-    expect(registry).toContain("src/styles/site-footer.css");
+    expect(entrypoint).toContain('export { RequestModalView } from "./views/RequestModalView"');
+    expect(entrypoint).toContain('export { SiteFooterView } from "./views/SiteFooterView"');
+    expect(styles).toContain('@import "./styles/request-modal.css"');
+    expect(styles).toContain('@import "./styles/site-footer.css"');
     expect(common).not.toContain(".request-modal__panel");
     expect(common).not.toContain(".site-footer");
   });

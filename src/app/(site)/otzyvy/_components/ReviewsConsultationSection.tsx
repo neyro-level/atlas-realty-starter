@@ -11,7 +11,7 @@ export function ReviewsConsultationSection() {
         <div className="w-full rounded-2xl border border-[var(--reviews-consultation-section-border-primary)] bg-white px-5 py-9 text-center shadow-[var(--reviews-consultation-section-shadow-primary)] sm:px-10 sm:py-12 lg:px-16 lg:py-14">
           <h2
             id="reviews-consultation-title"
-            className="mx-auto max-w-225 text-section-small font-semibold leading-[1.13] tracking-[-0.035em] text-[var(--reviews-consultation-section-content-primary)] sm:text-section-wide"
+            className="mx-auto max-w-225 text-section-title font-semibold leading-section-title text-[var(--reviews-consultation-section-content-primary)]"
           >
             Оставьте заявку — специалист ответит на вопросы и подскажет следующий шаг
           </h2>

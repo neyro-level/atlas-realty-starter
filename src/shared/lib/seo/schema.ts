@@ -92,6 +92,38 @@ export function breadcrumbSchema(items: Array<{ name: string; url: string }>) {
   };
 }
 
+export function catalogItemListSchema(input: {
+  name: string;
+  path: string;
+  items: Array<{ name: string; path: string; image?: string | null }>;
+  startPosition?: number;
+}) {
+  const startPosition = input.startPosition ?? 1;
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: input.name,
+    url: absoluteUrl(input.path),
+    numberOfItems: input.items.length,
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+    itemListElement: input.items.map((item, index) => ({
+      "@type": "ListItem",
+      position: startPosition + index,
+      url: absoluteUrl(item.path),
+      item: {
+        "@type": "Thing",
+        name: item.name,
+        url: absoluteUrl(item.path),
+        image: item.image ? schemaMediaUrl(item.image) : undefined,
+      },
+    })),
+  };
+}
+
+function schemaMediaUrl(value: string) {
+  return /^https?:\/\//i.test(value) ? value : absoluteUrl(value);
+}
+
 export function articleSchema(article: ArticleSummary, editorialMeta?: ArticleEditorialMeta | null) {
   return {
     "@context": "https://schema.org",

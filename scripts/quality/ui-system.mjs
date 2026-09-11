@@ -20,7 +20,6 @@ const debt = {
   inputCheckbox: 0,
   spaceUtilities: 0,
   manualButtonIconSize: 0,
-  registryWorkspaceImports: 0,
   sharedProjectAssets: 0,
   sharedBusinessClaims: 0,
 };
@@ -38,10 +37,9 @@ for (const field of comparedFields) {
 if (rootConfig.tailwind?.baseColor !== packageConfig.tailwind?.baseColor) {
   errors.push("components.json mismatch: tailwind.baseColor");
 }
-if (JSON.stringify(rootConfig.registries) !== JSON.stringify(packageConfig.registries)) {
-  errors.push("components.json mismatch: registries");
+if (rootConfig.registries || packageConfig.registries) {
+  errors.push("custom UI registries are not part of the Atlas component architecture");
 }
-
 async function collect(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const files = [];
@@ -118,19 +116,6 @@ for (const file of files) {
 
 debt.arbitraryTypography = repeatedDebt(arbitraryTypographyUses);
 debt.arbitraryLayout = repeatedDebt(arbitraryLayoutUses);
-
-const registry = JSON.parse(await readFile("packages/site-ui/registry.json", "utf8"));
-const inspectedRegistryFiles = new Set();
-for (const item of registry.items ?? []) {
-  if (!item.name?.startsWith("ams-realty-")) errors.push(`registry item must use ams-realty-* namespace: ${item.name}`);
-  if (identityLeak.test(JSON.stringify(item))) errors.push(`client identity inside neutral registry item: ${item.name}`);
-  for (const file of item.files ?? []) {
-    if (inspectedRegistryFiles.has(file.path)) continue;
-    inspectedRegistryFiles.add(file.path);
-    const registrySource = await readFile(join("packages/site-ui", file.path), "utf8");
-    debt.registryWorkspaceImports += registrySource.match(/@starter\//g)?.length ?? 0;
-  }
-}
 
 if (process.argv.includes("--self-test")) {
   const fixture = '<Input type="checkbox" /><Button unstyled><Star className="size-4" /></Button><div className="space-y-4 text-[13px] max-w-[760px]">var(--demo-color-01)</div><img src="/images/project.webp" /><p>Гарантия, консультация бесплатно</p>';

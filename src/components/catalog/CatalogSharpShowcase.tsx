@@ -1,4 +1,4 @@
-import { Checkbox, Input, Select } from "@ams/realty-ui";
+import { Checkbox, formatRussianCount, Input, Select } from "@ams/realty-ui";
 import Link from "next/link";
 import {
   CatalogEmptyStateView,
@@ -95,8 +95,8 @@ export function CatalogSharpShowcase({
 
   const resultTotal = isComplexMode ? complexes.length : catalog.total;
   const resultLabel = isComplexMode
-    ? `${resultTotal.toLocaleString("ru-RU")} ${pluralizeComplexes(resultTotal)}`
-    : `${resultTotal.toLocaleString("ru-RU")} ${pluralizeObjects(resultTotal)}`;
+    ? formatRussianCount(resultTotal, ["жилой комплекс", "жилых комплекса", "жилых комплексов"])
+    : formatRussianCount(resultTotal, ["объект", "объекта", "объектов"]);
 
   const tabs = TYPE_TABS.map(([id, label]) => ({ id, label, href: categoryTabHref(basePath, applied, id), active: activeFilter === id }));
   const mobileControls = <>
@@ -370,30 +370,12 @@ function formatRoomsValue(value: CatalogQuery["rooms"]) {
   return value ? String(value) : "";
 }
 
-function pluralizeComplexes(value: number) {
-  const mod10 = value % 10;
-  const mod100 = value % 100;
-
-  if (mod10 === 1 && mod100 !== 11) return "жилой комплекс";
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "жилых комплекса";
-  return "жилых комплексов";
-}
-
 function activeResidentialComplexChips(query: CatalogQuery) {
   const chips: string[] = [];
   if (query.q) chips.push(`Поиск: ${query.q}`);
   if (query.priceFrom) chips.push(`Цена от: ${query.priceFrom.toLocaleString("ru-RU")} ₽`);
   if (query.priceTo) chips.push(`Цена до: ${query.priceTo.toLocaleString("ru-RU")} ₽`);
   return chips;
-}
-
-function pluralizeObjects(value: number) {
-  const mod10 = value % 10;
-  const mod100 = value % 100;
-
-  if (mod10 === 1 && mod100 !== 11) return "объект";
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "объекта";
-  return "объектов";
 }
 
 function activeFilterChips(query: CatalogQuery, sectionFilter: FilterId = "all") {

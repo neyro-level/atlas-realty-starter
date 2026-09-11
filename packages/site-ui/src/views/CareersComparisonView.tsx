@@ -12,7 +12,7 @@ export function CareersComparisonView({ content: careersComparison }: { content:
         <div className="w-full">
           <h2
             id="careers-comparison-title"
-            className="text-section-large font-semibold leading-[1.12] text-[var(--text-primary)] sm:text-section-expanded lg:whitespace-nowrap"
+            className="text-section-title font-semibold leading-section-title text-[var(--text-primary)] lg:whitespace-nowrap"
           >
             {careersComparison.title}
           </h2>
@@ -69,11 +69,11 @@ function ComparisonPanel({
     <article
       className={`rounded-2xl p-5 sm:p-7 lg:p-8 ${
         isBrand
-          ? "bg-[var(--careers-comparison-surface-secondary)] text-white shadow-[var(--careers-comparison-shadow-secondary)]"
-          : "border border-[var(--border)] bg-white text-[var(--text-primary)]"
+          ? 'bg-[var(--careers-comparison-surface-secondary)] text-white shadow-[var(--careers-comparison-shadow-secondary)]'
+          : 'border border-[var(--border)] bg-white text-[var(--text-primary)]'
       }`}
     >
-      <h3 className={`text-heading-small font-semibold leading-7 ${isBrand ? "text-white" : "text-[var(--text-secondary)]"}`}>
+      <h3 className={`text-heading-small font-semibold leading-7 ${isBrand ? 'text-white' : 'text-[var(--text-secondary)]'}`}>
         {label}
       </h3>
       <ul className="mt-6 grid gap-4">
@@ -81,12 +81,14 @@ function ComparisonPanel({
           <li
             key={item}
             className={`grid grid-cols-[22px_minmax(0,1fr)] items-start gap-3 text-body-compact leading-6 ${
-              isBrand ? "text-white/82" : "text-[var(--careers-comparison-content-primary)]"
+              isBrand ? 'text-white/82' : 'text-[var(--careers-comparison-content-primary)]'
             }`}
           >
             <span
               className={`mt-0.5 flex size-[22px] items-center justify-center rounded-full ${
-                isBrand ? "bg-white/12 text-white" : "bg-[var(--careers-comparison-surface-tertiary)] text-[var(--text-muted)]"
+                isBrand
+                  ? 'bg-white/12 text-white'
+                  : 'bg-[var(--careers-comparison-surface-tertiary)] text-[var(--text-muted)]'
               }`}
             >
               {isBrand ? (

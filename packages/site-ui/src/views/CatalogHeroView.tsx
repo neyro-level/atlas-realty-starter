@@ -54,14 +54,14 @@ export function CatalogHeroView({
   const descriptionVisibleAlways = descriptionVisibility === "always";
   const actionVisibleAlways = actionVisibility === "always";
   const titleClassName = isNewBuildingHero
-    ? "text-display-small font-extrabold leading-[1.04] text-white sm:text-display-medium md:text-display-large lg:text-display-extra-large"
-    : titleSize === "standard"
-    ? "text-display-small font-extrabold leading-[1.08] text-white md:text-display-large lg:text-display-extra-large"
-    : isLongTitle
-    ? `text-section-prominent font-extrabold leading-[1.08] text-white sm:text-heading-extra-large md:max-w-245 md:text-[40px] lg:text-[44px]${
-        collapseTitleLinesOnDesktop ? " lg:max-w-none lg:whitespace-nowrap" : ""
-      }`
-    : "text-display-small font-extrabold leading-[1.08] text-white lg:whitespace-nowrap md:text-display-large lg:text-display-extra-large";
+    ? 'text-page-title font-extrabold leading-page-title text-white'
+    : titleSize === 'standard'
+      ? 'text-page-title font-extrabold leading-page-title text-white'
+      : isLongTitle
+        ? `text-page-title font-extrabold leading-page-title text-white md:max-w-245${
+            collapseTitleLinesOnDesktop ? ' lg:max-w-none lg:whitespace-nowrap' : ''
+          }`
+        : 'text-page-title font-extrabold leading-page-title text-white lg:whitespace-nowrap'
   const contentClassName = hasControlledLines ? "max-w-245" : "max-w-195";
   const descriptionMaxWidth = hasControlledLines ? "max-w-245" : "max-w-190";
   const descriptionClassName = isNewBuildingHero

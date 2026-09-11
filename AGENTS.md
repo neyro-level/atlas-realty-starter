@@ -43,7 +43,7 @@
 - Local runtime, CI, deploy, rollback, backup and incident response: `docs/OPERATIONS.md`.
 - One-minute local start and project orientation: `docs/LOCAL_START.md`.
 - Exact human-readable stack baseline: `docs/VERSION_MATRIX.md`.
-- UI tokens, ShadCN registry, galleries and static-media rules: `docs/UI_SYSTEM.md`.
+- UI tokens, internal components, galleries and static-media rules: `docs/UI_SYSTEM.md`.
 - Long-lived deviations and boundary changes: `docs/adr/`.
 
 Do not create parallel `PRODUCT`, `ARCHITECTURE`, `DATA_MODEL`, `MASTER_PLAN` or deploy documents while the map above covers their role. Extend the mapped source of truth instead.

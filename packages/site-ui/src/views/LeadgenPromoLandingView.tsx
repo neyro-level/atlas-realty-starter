@@ -65,7 +65,7 @@ export function LeadgenPromoLandingView({
       >
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_24%,var(--leadgen-promo-landing-effect-strong)_0%,var(--leadgen-promo-landing-effect-inverse)_38%)]" aria-hidden />
         <div
-          className={`relative mx-auto flex w-full max-w-290 items-center px-5 pb-24 pt-28 sm:px-8 sm:pb-28 sm:pt-29.5 lg:pb-36 lg:pt-35.5 ${isPromoNovostroy2 ? "min-h-170 sm:min-h-190" : "min-h-165 sm:min-h-185"}`}
+          className={`relative mx-auto flex w-full max-w-290 items-center px-5 pb-24 pt-28 sm:px-8 sm:pb-28 sm:pt-29.5 lg:pb-36 lg:pt-35.5 ${isPromoNovostroy2 ? 'min-h-170 sm:min-h-190' : 'min-h-165 sm:min-h-185'}`}
         >
           <div className="mx-auto w-full max-w-280 text-center">
             <p className="relative inline-flex max-w-full overflow-hidden rounded-md border border-white/14 bg-white/[0.07] px-3.5 py-2.5 text-support font-semibold text-white/92 shadow-[var(--leadgen-promo-landing-shadow-secondary)] backdrop-blur-lg min-[380px]:text-sm sm:px-4 sm:text-body-compact">
@@ -75,7 +75,7 @@ export function LeadgenPromoLandingView({
                 {content.hero.eyebrow}
               </span>
             </p>
-            <h1 className="mx-auto mt-6 max-w-270 text-section-base font-extrabold leading-[1.08] tracking-[0] text-white [text-wrap:balance] min-[390px]:text-section-prominent sm:text-display-small lg:text-[41px] xl:text-[45px]">
+            <h1 className="mx-auto mt-6 max-w-270 text-page-title font-extrabold leading-page-title text-white [text-wrap:balance]">
               {renderHeroTitle(content.hero.h1, content.hero.h1Accent)}
             </h1>
             {content.hero.subtitle ? (
@@ -110,7 +110,7 @@ export function LeadgenPromoLandingView({
       ) : (
         <section className="pointer-events-none relative z-20 mx-auto -mt-32 w-full max-w-305 px-5 pb-14 pt-10 sm:-mt-44 sm:px-8 sm:pb-16 sm:pt-14 lg:-mt-52 lg:pt-16">
           <div className="mx-auto max-w-190 text-center text-white">
-            <h2 className="mx-auto max-w-180 text-section-small font-semibold leading-tight text-white sm:text-heading-large">
+            <h2 className="mx-auto max-w-180 text-section-title font-semibold leading-section-title text-white">
               {content.afterRequestTitle}
             </h2>
           </div>
@@ -142,16 +142,16 @@ export function LeadgenPromoLandingView({
         <section
           id="closed-base"
           data-layout={content.baseSection.preview ? "preview" : "service-panel"}
-          className={`mx-auto grid w-full max-w-290 scroll-mt-28 gap-8 px-5 py-14 sm:gap-10 sm:px-8 sm:py-16 lg:py-20 ${content.baseSection.preview ? "xl:grid-cols-[minmax(0,1fr)_430px] xl:items-center" : "lg:grid-cols-[minmax(250px,0.72fr)_minmax(0,1.28fr)] lg:items-start lg:gap-14 xl:gap-20"}`}
+          className={`mx-auto grid w-full max-w-290 scroll-mt-28 gap-8 px-5 py-14 sm:gap-10 sm:px-8 sm:py-16 lg:py-20 ${content.baseSection.preview ? 'xl:grid-cols-[minmax(0,1fr)_430px] xl:items-center' : 'lg:grid-cols-[minmax(250px,0.72fr)_minmax(0,1.28fr)] lg:items-start lg:gap-14 xl:gap-20'}`}
         >
           <div className={content.baseSection.preview ? "max-w-172.5" : "max-w-115 lg:sticky lg:top-28"}>
-            <h2 className="text-section-prominent font-bold leading-[1.08] text-[var(--text-primary)] min-[420px]:text-heading-hero-small sm:text-display-large">
+            <h2 className="text-section-title font-bold leading-section-title text-[var(--text-primary)]">
               <span className="block">{content.baseSection.title}</span>
               {content.baseSection.accentTitle ? (
                 <span className="block text-[var(--accent)]">{content.baseSection.accentTitle}</span>
               ) : null}
             </h2>
-            <p className={`${content.baseSection.preview ? "mt-8 font-semibold text-[var(--text-primary)]" : "mt-5 text-[var(--leadgen-promo-landing-content-tertiary)]"} text-body-emphasis leading-7`}>
+            <p className={`${content.baseSection.preview ? 'mt-8 font-semibold text-[var(--text-primary)]' : 'mt-5 text-[var(--leadgen-promo-landing-content-tertiary)]'} text-body-emphasis leading-7`}>
               {content.baseSection.subtitle}
             </p>
             {content.baseSection.badge ? (
@@ -181,7 +181,7 @@ export function LeadgenPromoLandingView({
                         </span>
                       </div>
                       {item.title ? <h3 className="text-sm font-semibold leading-5 text-[var(--text-primary)]">{item.title}</h3> : null}
-                      <p className={`${item.title ? "mt-2" : ""} text-support font-medium leading-6 text-[var(--leadgen-promo-landing-content-muted)]`}>{item.text}</p>
+                      <p className={`${item.title ? 'mt-2' : ''} text-support font-medium leading-6 text-[var(--leadgen-promo-landing-content-muted)]`}>{item.text}</p>
                       <div className="absolute inset-x-0 bottom-0 h-0.5 bg-[var(--accent)] opacity-0 transition group-hover:opacity-100" aria-hidden />
                     </div>
                   );
@@ -212,7 +212,7 @@ export function LeadgenPromoLandingView({
                     </span>
                     <div>
                       {item.title ? <h3 className="text-body-compact font-semibold leading-6 text-[var(--leadgen-promo-landing-content-strong)] sm:text-base">{item.title}</h3> : null}
-                      <p className={`${item.title ? "mt-1.5" : "font-semibold"} text-body leading-6 text-[var(--leadgen-promo-landing-content-inverse)] sm:text-body-compact`}>{item.text}</p>
+                      <p className={`${item.title ? 'mt-1.5' : 'font-semibold'} text-body leading-6 text-[var(--leadgen-promo-landing-content-inverse)] sm:text-body-compact`}>{item.text}</p>
                     </div>
                   </article>
                 );
@@ -225,7 +225,7 @@ export function LeadgenPromoLandingView({
       {!compact && content.constructionExamples?.length ? (
         <section id="examples" className="mx-auto w-full max-w-290 scroll-mt-28 px-5 py-14 sm:px-8 sm:py-16 lg:py-20">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <h2 className="max-w-195 whitespace-pre-line text-section-prominent font-bold leading-[1.08] text-[var(--text-primary)] min-[420px]:text-heading-hero-small sm:text-display-large">
+            <h2 className="max-w-195 whitespace-pre-line text-section-title font-bold leading-section-title text-[var(--text-primary)]">
               {content.examplesTitle}
             </h2>
             <CurrentDateBadge className="mt-0 shrink-0 self-start sm:self-auto" />
@@ -280,7 +280,7 @@ export function LeadgenPromoLandingView({
       {!compact && shouldRenderStandardExamples ? (
         <section id="examples" className="mx-auto w-full max-w-290 scroll-mt-28 px-5 py-14 sm:px-8 sm:py-16">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <h2 className="max-w-205 whitespace-pre-line text-section-prominent font-bold leading-[1.08] text-[var(--text-primary)] min-[420px]:text-heading-hero-small sm:text-display-large">
+            <h2 className="max-w-205 whitespace-pre-line text-section-title font-bold leading-section-title text-[var(--text-primary)]">
               {content.examplesTitle}
             </h2>
             <CurrentDateBadge className="mt-0 shrink-0 self-start sm:self-auto" />

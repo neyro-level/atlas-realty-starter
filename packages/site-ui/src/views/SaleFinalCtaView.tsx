@@ -7,7 +7,7 @@ export function SaleFinalCtaView({ microtext }: { microtext: string }) {
         <div className="rounded-xl bg-[var(--text-primary)] px-6 py-12 text-center text-white sm:px-10 sm:py-16 lg:px-16 lg:py-20">
           <h2
             id="sale-final-cta-title"
-            className="mx-auto max-w-205 text-section-small font-semibold leading-[1.24] tracking-[-0.03em] text-balance sm:text-[length:var(--site-type-section)] sm:leading-[1.2]"
+            className="mx-auto max-w-205 text-section-title font-semibold leading-section-title text-balance"
           >
             Работаем за фиксированную комиссию без скрытых платежей
           </h2>

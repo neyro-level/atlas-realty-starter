@@ -59,7 +59,7 @@ export function CatalogBuyerServicesSection({ sourcePage }: CatalogBuyerServices
     >
       <div className="mx-auto max-w-site-frame px-5">
         <div className="mb-12 md:mb-14 lg:mb-16">
-          <h2 className="max-w-none text-heading-large font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-display-medium lg:text-[clamp(32px,3.05vw,42px)]">
+          <h2 className="max-w-none text-section-title font-extrabold leading-section-title text-[var(--text-primary)]">
             Подключите сервисы <span className="text-[var(--accent)]">агентства недвижимости</span> там, где они нужны
           </h2>
         </div>
@@ -147,7 +147,7 @@ function ServiceVisual({
             fill
             quality={95}
             sizes="(max-width: 768px) calc(100vw - 40px), (max-width: 1280px) 520px, 520px"
-            className={`object-cover ${imagePosition ?? "object-center"} transition duration-500 group-hover:scale-[1.025]`}
+            className={`object-cover ${imagePosition ?? 'object-center'} transition duration-500 group-hover:scale-[1.025]`}
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--catalog-buyer-services-section-effect-primary)_46%,var(--catalog-buyer-services-section-effect-secondary)_100%)]" />
         </>

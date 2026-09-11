@@ -12,7 +12,7 @@ export function CareersTrainingView({ content: careersTraining, imageRenderer: I
       <div className="mx-auto max-w-site-frame px-5">
         <h2
           id="careers-training-title"
-          className="text-section-large font-semibold leading-[1.12] text-[var(--text-primary)] sm:text-section-expanded"
+          className="text-section-title font-semibold leading-section-title text-[var(--text-primary)]"
         >
           {careersTraining.title}
         </h2>
@@ -59,7 +59,7 @@ export function CareersTrainingView({ content: careersTraining, imageRenderer: I
                 {careersTraining.support.map((line, index) => (
                   <p
                     key={line}
-                    className={`text-body font-medium leading-6 ${index > 0 ? "mt-2 text-white/76" : ""}`}
+                    className={`text-body font-medium leading-6 ${index > 0 ? 'mt-2 text-white/76' : ''}`}
                   >
                     {line}
                   </p>

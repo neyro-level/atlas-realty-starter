@@ -69,6 +69,17 @@
   --site-type-feature-leading: 1.08;
   --site-type-section: clamp(24px, 1.8vw, 30px);
   --site-type-section-leading: 1.1;
+  --site-type-editorial-title: clamp(28px, 3vw, 38px);
+  --site-type-editorial-title-leading: 1.14;
+  --site-type-editorial-heading: clamp(22px, 1.8vw, 25px);
+  --site-type-editorial-heading-leading: 1.2;
+  --site-type-editorial-body: 16px;
+  --site-type-editorial-body-leading: 1.75;
+  --site-type-heading-leading: 1.2;
+  --site-type-card-leading: 1.3;
+  --site-type-body-leading: 1.7;
+  --site-type-support-leading: 1.55;
+  --site-type-overline-tracking: 0.14em;
   --site-type-card-lg: 21px;
   --site-type-card: 16px;
   --site-type-body-lg: 16px;
@@ -757,6 +768,11 @@
 }
 
 @theme inline {
+  --text-page-title: var(--site-type-display);
+  --text-section-title: var(--site-type-section);
+  --text-editorial-title: var(--site-type-editorial-title);
+  --text-editorial-heading: var(--site-type-editorial-heading);
+  --text-editorial-body: var(--site-type-editorial-body);
   --text-micro-tight: var(--site-type-micro-tight);
   --text-micro: var(--site-type-micro);
   --text-overline: var(--site-type-overline);
@@ -789,6 +805,16 @@
   --text-section-wide: var(--site-type-section-wide);
   --text-section-expanded: var(--site-type-section-expanded);
   --text-card-fluid: var(--site-type-card-fluid);
+  --leading-page-title: var(--site-type-display-leading);
+  --leading-section-title: var(--site-type-section-leading);
+  --leading-editorial-title: var(--site-type-editorial-title-leading);
+  --leading-editorial-heading: var(--site-type-editorial-heading-leading);
+  --leading-editorial-body: var(--site-type-editorial-body-leading);
+  --leading-heading: var(--site-type-heading-leading);
+  --leading-card: var(--site-type-card-leading);
+  --leading-body: var(--site-type-body-leading);
+  --leading-support: var(--site-type-support-leading);
+  --tracking-overline: var(--site-type-overline-tracking);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

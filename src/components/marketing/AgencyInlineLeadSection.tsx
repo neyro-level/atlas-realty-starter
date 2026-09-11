@@ -52,7 +52,7 @@ export function AgencyInlineLeadSection({
             <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--agency-inline-lead-section-effect-primary)_42%,var(--agency-inline-lead-section-effect-secondary)_100%)]" />
             <div className="absolute bottom-0 left-0 right-0 p-6 text-white md:p-8">
               <p className="text-section-small font-extrabold leading-tight">{expertName}</p>
-              <p className="mt-2 text-sm font-semibold text-white/78">{expertCaption}</p>
+              <p className="mt-2 text-body font-semibold text-white/78">{expertCaption}</p>
             </div>
           </div>
 
@@ -62,7 +62,7 @@ export function AgencyInlineLeadSection({
             </p>
             <h2
               id={titleId}
-              className="max-w-190 text-section-large font-extrabold leading-[1.14] text-[var(--text-primary)] [text-wrap:balance] md:text-heading-extra-large lg:text-display-base"
+              className="max-w-190 text-section-small font-extrabold leading-[1.1] text-[var(--text-primary)] [text-wrap:balance] sm:text-[length:var(--site-type-section)]"
             >
               {title}
             </h2>

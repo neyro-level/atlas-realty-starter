@@ -19,7 +19,7 @@ export function MortgageBrokerSupportView({ imageRenderer: ImageRenderer, imageS
         <div>
           <h2
             id="mortgage-broker-support-title"
-            className="max-w-[19ch] text-section-small font-semibold leading-[1.1] tracking-[-0.03em] text-[var(--text-primary)] sm:text-[length:var(--site-type-section)] lg:max-w-none lg:whitespace-nowrap"
+            className="max-w-[19ch] text-section-title font-semibold leading-section-title text-[var(--text-primary)] lg:max-w-none lg:whitespace-nowrap"
           >
             Что сделает для вас наш ипотечный брокер!
           </h2>

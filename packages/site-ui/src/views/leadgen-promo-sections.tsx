@@ -12,7 +12,7 @@ export function CompactBenefitsSection({ content }: { content: LeadgenPromoConte
         <div className="grid bg-[var(--leadgen-promo-landing-surface-muted)] px-6 py-7 sm:px-8 lg:grid-cols-[270px_minmax(0,1fr)] lg:gap-8 lg:px-10 lg:py-9">
           <div className="border-b border-[var(--leadgen-promo-landing-border-hover)] pb-6 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-8">
             <p className="text-caption font-bold uppercase tracking-[0.18em] text-[var(--accent)]">Результат опроса</p>
-            <h2 className="mt-3 text-section-base font-semibold leading-[1.12] text-[var(--text-primary)] sm:text-heading-large">
+            <h2 className="mt-3 text-section-title font-semibold leading-section-title text-[var(--text-primary)]">
               {content.afterRequestTitle}
             </h2>
           </div>
@@ -213,8 +213,8 @@ export function LeadgenFinalQuizCta({ content, city, imageRenderer: ImageRendere
 
     return (
       <section id="final-cta" className="scroll-mt-28 bg-[var(--leadgen-promo-landing-surface-strong)] px-5 py-12 sm:px-8 sm:py-20 lg:py-24">
-        <div className={`mx-auto grid w-full max-w-290 overflow-hidden rounded-sm border border-[var(--leadgen-promo-landing-border-primary)] bg-[var(--leadgen-promo-landing-surface-hover)] shadow-[var(--leadgen-promo-landing-shadow-floating)] ${showsExpertPortrait ? "lg:grid-cols-[minmax(360px,0.82fr)_minmax(500px,1.18fr)]" : "lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.86fr)]"}`}>
-          <div className={`relative overflow-hidden ${showsExpertPortrait ? "aspect-[4/5] min-h-0 bg-[radial-gradient(circle_at_50%_28%,var(--leadgen-promo-landing-visual-secondary)_0%,var(--leadgen-promo-landing-visual-tertiary)_72%,var(--leadgen-promo-landing-visual-subtle)_100%)] sm:aspect-auto sm:min-h-95 lg:min-h-120" : "min-h-70 bg-[var(--leadgen-promo-landing-surface-active)] sm:min-h-95 lg:min-h-120"}`}>
+        <div className={`mx-auto grid w-full max-w-290 overflow-hidden rounded-sm border border-[var(--leadgen-promo-landing-border-primary)] bg-[var(--leadgen-promo-landing-surface-hover)] shadow-[var(--leadgen-promo-landing-shadow-floating)] ${showsExpertPortrait ? 'lg:grid-cols-[minmax(360px,0.82fr)_minmax(500px,1.18fr)]' : 'lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.86fr)]'}`}>
+          <div className={`relative overflow-hidden ${showsExpertPortrait ? 'aspect-[4/5] min-h-0 bg-[radial-gradient(circle_at_50%_28%,var(--leadgen-promo-landing-visual-secondary)_0%,var(--leadgen-promo-landing-visual-tertiary)_72%,var(--leadgen-promo-landing-visual-subtle)_100%)] sm:aspect-auto sm:min-h-95 lg:min-h-120' : 'min-h-70 bg-[var(--leadgen-promo-landing-surface-active)] sm:min-h-95 lg:min-h-120'}`}>
             <ImageRenderer
               src={content.finalCta.image}
               alt={content.finalCta.imageAlt}
@@ -269,7 +269,7 @@ export function LeadgenFinalQuizCta({ content, city, imageRenderer: ImageRendere
 
           <div className="grid content-center bg-white px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12">
             <div className={showsExpertPortrait ? "max-w-145" : "max-w-130"}>
-              <h2 className={`text-section-small font-semibold leading-[1.18] text-[var(--text-primary)] min-[420px]:text-section-large sm:text-heading-hero-small ${showsExpertPortrait ? "lg:text-heading-hero-small" : "lg:text-display-small"}`}>
+              <h2 className="text-section-title font-semibold leading-section-title text-[var(--text-primary)]">
                 {content.finalCta.title}
               </h2>
               {content.finalCta.bullets.length ? (
@@ -373,7 +373,7 @@ export function LeadgenFinalQuizCta({ content, city, imageRenderer: ImageRendere
         </div>
 
         <div className="grid content-center px-6 py-9 sm:px-10 lg:px-14 lg:py-12">
-          <h2 className="text-section-small font-semibold leading-[1.16] text-[var(--leadgen-promo-landing-content-floating)] min-[420px]:text-section-prominent sm:text-heading-extra-large lg:text-display-small">
+          <h2 className="text-section-title font-semibold leading-section-title text-[var(--leadgen-promo-landing-content-floating)]">
             Пройдите тест за одну минуту и получите подборку квартир из{" "}
             <span className="text-[var(--accent)]">закрытой базы</span> по Вашим параметрам
           </h2>

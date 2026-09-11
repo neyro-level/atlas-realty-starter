@@ -78,7 +78,7 @@ export function PopularSearchesSection() {
               </p>
               <h2
                 id="section-popular-searches-title"
-                className="text-section-prominent font-extrabold leading-[1.14] text-[var(--text-primary)] md:text-display-small lg:text-display-base"
+                className="text-section-title font-extrabold leading-section-title text-[var(--text-primary)]"
               >
                 Часто ищут
               </h2>

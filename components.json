@@ -16,13 +16,5 @@
     "ui": "@ams/realty-ui/components/ui",
     "lib": "@ams/realty-ui/lib",
     "hooks": "@ams/realty-ui/hooks"
-  },
-  "registries": {
-    "@ams": {
-      "url": "https://ui.ams24.ru/r/{name}.json",
-      "headers": {
-        "Authorization": "Bearer ${AMS_UI_REGISTRY_TOKEN}"
-      }
-    }
   }
 }

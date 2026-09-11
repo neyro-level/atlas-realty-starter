@@ -2,6 +2,7 @@ import "server-only";
 import type { SiteEngine, SiteEngineMode } from "@starter/site-contracts";
 import { runtimeConfig } from "@/project/env";
 import { siteIdentity } from "@/project/site-identity";
+import { withValidatedSiteEngine } from "./validated-engine";
 
 export function getSiteEngineMode(): SiteEngineMode {
   return runtimeConfig.siteEngine as SiteEngineMode;
@@ -16,12 +17,12 @@ export async function getSiteEngine(): Promise<SiteEngine> {
     const fixture = createFixtureEngine({
       articles: journalFallbackArticles,
     });
-    return {
+    return withValidatedSiteEngine({
       ...fixture,
       async getShell() {
         return { ...(await fixture.getShell()), identity: siteIdentity };
       },
-    };
+    });
   }
-  return (await import("./payload-engine")).payloadSiteEngine;
+  return withValidatedSiteEngine((await import("./payload-engine")).payloadSiteEngine);
 }

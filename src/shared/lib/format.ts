@@ -1,14 +1,4 @@
-export function formatPrice(price: number | null | undefined, fallback = "Цена по запросу"): string {
-  if (price === null || price === undefined) {
-    return fallback;
-  }
-
-  return new Intl.NumberFormat("ru-RU", {
-    style: "currency",
-    currency: "RUB",
-    maximumFractionDigits: 0,
-  }).format(price);
-}
+export { formatRublePrice as formatPrice } from "@ams/realty-ui";
 
 export function formatDateTime(value: Date | string | null | undefined): string {
   if (!value) return "нет данных";

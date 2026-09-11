@@ -30,29 +30,29 @@ export function LegalServicesPromoBanner({ placement }: Props) {
             Юридический отдел агентства недвижимости
           </p>
           {isCatalog ? (
-            <h3 className="mt-4 max-w-170 text-section-large font-extrabold leading-[1.08] tracking-[-0.025em] text-[var(--text-primary)] sm:text-heading-extra-large lg:text-display-medium">
+            <h3 className="mt-4 max-w-170 text-section-small font-extrabold leading-[1.1] text-[var(--text-primary)] sm:text-[length:var(--site-type-section)]">
               Проверим документы до задатка и выхода на сделку
             </h3>
           ) : (
-            <h2 className="mt-4 max-w-170 text-section-large font-extrabold leading-[1.08] tracking-[-0.025em] text-[var(--text-primary)] sm:text-heading-extra-large lg:text-display-medium">
+            <h2 className="mt-4 max-w-170 text-section-small font-extrabold leading-[1.1] text-[var(--text-primary)] sm:text-[length:var(--site-type-section)]">
               Проверим документы до задатка и выхода на сделку
             </h2>
           )}
-          <p className="mt-4 max-w-160 text-body-compact leading-6 text-[var(--legal-services-promo-banner-content-primary)] sm:text-base sm:leading-7">
+          <p className="mt-4 max-w-160 text-body-compact leading-6 text-[var(--legal-services-promo-banner-content-primary)] sm:text-body-large sm:leading-7">
             Разберём документы старого образца, наследство, регистрацию права и ситуации, в которых вопрос приходится решать через суд.
           </p>
 
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             <Link
               href="/yurist"
-              className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[var(--surface-dark)] px-6 text-center text-sm font-semibold text-white transition hover:bg-[var(--accent)]"
+              className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[var(--surface-dark)] px-6 text-center text-body font-semibold text-white transition hover:bg-[var(--accent)]"
             >
               Перейти к юридическим услугам
             </Link>
             <RequestModalButton
               type="button" variant="plain"
               request={{ title: "Получить консультацию юриста по недвижимости", subtitle: "Оставьте контакты. Юрист уточнит вашу ситуацию и подскажет следующий шаг.", source, formType: "legal_consultation", submitLabel: "Получить консультацию" }}
-              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[var(--legal-services-promo-banner-border-secondary)] bg-white px-6 text-center text-sm font-semibold text-[var(--surface-dark)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[var(--legal-services-promo-banner-border-secondary)] bg-white px-6 text-center text-body font-semibold text-[var(--surface-dark)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
             >
               Получить консультацию
             </RequestModalButton>

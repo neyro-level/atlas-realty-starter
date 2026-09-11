@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Separator } from "../components/ui/separator";
 import { RequestModalButton, type RequestOverlayDetail } from "../components/shared/site-overlay-context";
 import type { SiteImageRenderer, SiteLinkRenderer } from "../lib/adapters";
+import { formatCompactRublePrice } from "../lib/realty-format";
 
 type DetailProps = { detail: NewBuildingDetailViewModel };
 
@@ -52,7 +53,7 @@ export function NewBuildingMobileCommercialView({ detail, primaryAction, mortgag
           <div className="flex items-start justify-between gap-4">
             <div className="grid gap-1">
               <p className="text-caption font-bold uppercase text-[var(--text-muted)]">Стоимость квартир от</p>
-              <p className="text-heading-large font-extrabold leading-none tabular-nums text-[var(--text-primary)] md:text-display-small">{formatPrice(detail.priceFrom)}</p>
+              <p className="text-heading-large font-extrabold leading-none tabular-nums text-[var(--text-primary)] md:text-display-small">{formatCompactRublePrice(detail.priceFrom, "уточняется")}</p>
             </div>
             <Badge variant="soft" className="max-w-37.5 whitespace-normal text-center">Ипотека: условия банка</Badge>
           </div>
@@ -151,10 +152,4 @@ function Fact({ icon: Icon, label, value }: { icon: LucideIcon; label: string; v
 function QuickSelectionContent({ item }: { item: NewBuildingQuickSelectionItem }) {
   const Icon = item.icon;
   return <><span className="flex size-9 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--accent-soft)] text-[var(--accent)]"><Icon className="size-[18px]" aria-hidden /></span><span className="flex min-w-0 flex-col justify-end"><strong className="block text-body font-extrabold leading-[1.15]">{item.title}</strong><span className="mt-1 block text-caption font-medium leading-4 text-[var(--text-secondary)]">{item.description}</span></span></>;
-}
-
-function formatPrice(value: number | null) {
-  if (value === null) return "уточняется";
-  if (value >= 1_000_000) return `${new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 1 }).format(value / 1_000_000)} млн ₽`;
-  return `${new Intl.NumberFormat("ru-RU").format(value)} ₽`;
 }

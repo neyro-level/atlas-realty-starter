@@ -1,4 +1,5 @@
 import type { PropertyCardDto } from "../contracts/property";
+import { formatRealtyNumber, formatRublePrice } from "../lib/realty-format";
 import type { PropertyCardViewProps } from "./PropertyCardView";
 
 export function buildPropertyCardTitle(listing: PropertyCardDto, cardKind: NonNullable<PropertyCardViewProps["cardKind"]>) {
@@ -7,7 +8,7 @@ export function buildPropertyCardTitle(listing: PropertyCardDto, cardKind: NonNu
   }
 
   if (listing.categoryKey === "construction") {
-    const area = listing.area ? `${formatNumber(listing.area)} м²` : null;
+    const area = listing.area ? `${formatRealtyNumber(listing.area)} м²` : null;
     return area && !listing.title.includes(area) ? `${listing.title}, ${area}` : listing.title;
   }
 
@@ -40,7 +41,7 @@ export function buildPropertyCardListTitle(listing: PropertyCardDto, cardKind: N
   if (listing.categoryKey === "construction") {
     const facts = [
       listing.title,
-      listing.area ? `${formatNumber(listing.area)} м²` : null,
+      listing.area ? `${formatRealtyNumber(listing.area)} м²` : null,
       listing.rooms ? `${listing.rooms} комнаты` : null,
       listing.floorsTotal ? `${listing.floorsTotal} этаж` : null,
     ].filter(Boolean) as string[];
@@ -60,7 +61,7 @@ export function buildPropertyCardListTitle(listing: PropertyCardDto, cardKind: N
 
   const parts = [
     `${listing.rooms ? `${listing.rooms}-комн. ` : ""}${type}`,
-    listing.area ? `${formatNumber(listing.area)} м²` : null,
+    listing.area ? `${formatRealtyNumber(listing.area)} м²` : null,
     listing.floor ? `${listing.floor}/${listing.floorsTotal ?? "-"} эт.` : null,
   ].filter(Boolean) as string[];
 
@@ -104,30 +105,14 @@ export function cleanPropertyCardDisplayAddress(address: string) {
   return withoutCountry.join(", ") || address;
 }
 
-function formatNumber(value: number) {
-  return new Intl.NumberFormat("ru-RU", {
-    maximumFractionDigits: 1,
-  }).format(value);
-}
-
 export function formatCardPrice(listing: PropertyCardDto, cardKind: NonNullable<PropertyCardViewProps["cardKind"]>) {
-  const price = formatPrice(listing.price);
+  const price = formatRublePrice(listing.price);
 
   if ((cardKind === "construction" || cardKind === "new-building") && listing.price) {
     return `от ${price}`;
   }
 
   return price;
-}
-
-function formatPrice(price: number | null | undefined, fallback = "Цена по запросу") {
-  if (price === null || price === undefined) return fallback;
-
-  return new Intl.NumberFormat("ru-RU", {
-    style: "currency",
-    currency: "RUB",
-    maximumFractionDigits: 0,
-  }).format(price);
 }
 
 export function formatListingDate(value?: string | null) {

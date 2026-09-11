@@ -12,7 +12,7 @@ export function CareersFinalCtaView({ content: careersFinalCta, quizButton }: { 
         <div className="w-full rounded-2xl border border-[var(--border)] bg-white px-5 py-10 text-center sm:px-10 sm:py-12 lg:px-16 lg:py-14">
           <h2
             id="careers-final-cta-title"
-            className="text-section-large font-semibold leading-[1.12] text-[var(--text-primary)] sm:text-section-expanded"
+            className="text-section-title font-semibold leading-section-title text-[var(--text-primary)]"
           >
             {careersFinalCta.title}
           </h2>
