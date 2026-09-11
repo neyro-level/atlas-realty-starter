@@ -22,6 +22,8 @@ The private AMS registry owns ShadCN Button, Card, Badge, Dialog, Carousel, Aspe
 
 Global shell CSS contains only shared surface/link utilities. Request modal and footer styles are owned by `request-modal.css` and `site-footer.css` and are shipped by their corresponding Registry items; page code must not rely on their incidental global presence.
 
+Home, leadgen promo and journal styles are route-owned imports (`home-page.css`, `promo.css`, `journal.css`) instead of global `styles.css` dependencies. Their component tokens use named roles, and Atlas copy/media remain in application wrappers or page data rather than Registry manifests.
+
 `ams-realty-new-building` is the umbrella Registry item for the complete residential-complex presentation module. It installs the separate `catalog`, `detail` and `conversion` items, their neutral view models and every required Registry dependency. Atlas wrappers provide brand, city, expert identity and portrait, optional verified rating, Next adapters, Payload-derived DTOs and typed request context. `pnpm ui:registry:consumer` builds the items and verifies their clean dependency closure without relying on the Atlas application.
 
 `ams-realty-catalog`, `ams-realty-catalog-map` and `ams-realty-property` are neutral umbrella items for discovery, map composition, property cards and detail pages. Their contracts are presentation DTOs owned by Registry source; Atlas adapters remain responsible for translating `SiteEngine` DTOs. Catalog, property, session-collection and residential-complex views use semantic tokens and do not import `home.css` or Payload documents.

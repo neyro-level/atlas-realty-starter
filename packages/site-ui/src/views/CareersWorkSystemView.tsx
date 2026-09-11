@@ -33,14 +33,14 @@ export function CareersWorkSystemView({ content: careersWorkSystem }: { content:
         </h2>
 
         <div className="mt-9 grid gap-5 lg:mt-12 lg:grid-cols-[minmax(0,1.08fr)_minmax(420px,0.92fr)] lg:gap-8">
-          <div className="rounded-2xl bg-[var(--careers-work-system-surface-01)] p-5 sm:p-7 lg:p-9">
+          <div className="rounded-2xl bg-[var(--careers-work-system-surface-primary)] p-5 sm:p-7 lg:p-9">
             <div className="max-w-[700px] space-y-5 text-[16px] leading-7 text-[var(--text-secondary)] sm:text-[17px] sm:leading-8">
               {careersWorkSystem.intro.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
 
-            <div className="mt-8 border-t border-[var(--careers-work-system-border-01)] pt-7 sm:mt-10 sm:pt-9">
+            <div className="mt-8 border-t border-[var(--careers-work-system-border-primary)] pt-7 sm:mt-10 sm:pt-9">
               <h3 className="max-w-[700px] text-[19px] font-semibold leading-7 text-[var(--text-primary)] sm:text-[21px] sm:leading-8">
                 {careersWorkSystem.principles.title}
               </h3>
@@ -71,7 +71,7 @@ export function CareersWorkSystemView({ content: careersWorkSystem }: { content:
                   <li
                     key={step.title}
                     className={`grid grid-cols-[44px_minmax(0,1fr)_28px] items-center gap-4 py-4 ${
-                      index > 0 ? "border-t border-[var(--careers-work-system-border-02)]" : ""
+                      index > 0 ? "border-t border-[var(--careers-work-system-border-secondary)]" : ""
                     }`}
                   >
                     <span className="flex size-11 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-[var(--accent)]">
@@ -81,12 +81,12 @@ export function CareersWorkSystemView({ content: careersWorkSystem }: { content:
                       <p className="text-[16px] font-semibold leading-6 text-[var(--text-primary)]">
                         {step.title}
                       </p>
-                      <p className="mt-1 text-[14px] leading-5 text-[var(--careers-work-system-content-01)]">
+                      <p className="mt-1 text-[14px] leading-5 text-[var(--careers-work-system-content-primary)]">
                         {step.description}
                       </p>
                     </div>
                     <span
-                      className="text-right text-[11px] font-semibold tabular-nums text-[var(--careers-work-system-content-02)]"
+                      className="text-right text-[11px] font-semibold tabular-nums text-[var(--careers-work-system-content-secondary)]"
                       aria-hidden
                     >
                       {String(index + 1).padStart(2, "0")}

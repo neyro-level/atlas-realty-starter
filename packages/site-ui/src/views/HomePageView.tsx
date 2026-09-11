@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import "../styles/home-page.css";
 
 type HomePageViewProps = {
   hero: ReactNode;

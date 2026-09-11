@@ -1,4 +1,5 @@
 import type { JournalCategoryPageDto } from "@starter/site-contracts";
+import "../styles/journal.css";
 import { ChevronLeft, MessageCircle } from "lucide-react";
 import type { ReactNode } from "react";
 import { Badge } from "../components/ui/badge";

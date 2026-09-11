@@ -1,4 +1,5 @@
 import type { JournalHubPageDto } from "@starter/site-contracts";
+import "../styles/journal.css";
 import { Building2, Search } from "lucide-react";
 import type { ReactNode } from "react";
 import { Badge } from "../components/ui/badge";

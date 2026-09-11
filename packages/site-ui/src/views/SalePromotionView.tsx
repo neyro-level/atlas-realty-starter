@@ -24,7 +24,7 @@ function getPromotionChannels(cityGenitive: string, cityPrepositional: string) {
 export function SalePromotionView({ cityGenitive, cityPrepositional }: { cityGenitive: string; cityPrepositional: string }) {
   const promotionChannels = getPromotionChannels(cityGenitive, cityPrepositional);
   return (
-    <section className="bg-[var(--sale-promotion-surface-01)] py-14 sm:py-16 lg:py-[88px]" aria-labelledby="sale-promotion-title">
+    <section className="bg-[var(--sale-promotion-surface-primary)] py-14 sm:py-16 lg:py-[88px]" aria-labelledby="sale-promotion-title">
       <div className="mx-auto max-w-site-frame px-5">
         <div className="max-w-[900px]">
           <h2

@@ -5,7 +5,7 @@ export type CareersFinalCtaContent = { title: string; description: readonly stri
 export function CareersFinalCtaView({ content: careersFinalCta, quizButton }: { content: CareersFinalCtaContent; quizButton: ReactNode }) {
   return (
     <section
-      className="bg-[var(--careers-final-cta-surface-01)] py-12 sm:py-16 lg:py-[88px]"
+      className="bg-[var(--careers-final-cta-surface-primary)] py-12 sm:py-16 lg:py-[88px]"
       aria-labelledby="careers-final-cta-title"
     >
       <div className="mx-auto max-w-site-frame px-5">
@@ -16,13 +16,13 @@ export function CareersFinalCtaView({ content: careersFinalCta, quizButton }: { 
           >
             {careersFinalCta.title}
           </h2>
-          <div className="mx-auto mt-4 max-w-[820px] text-[15px] leading-7 text-[var(--careers-final-cta-content-01)] sm:text-[16px]">
+          <div className="mx-auto mt-4 max-w-[820px] text-[15px] leading-7 text-[var(--careers-final-cta-content-primary)] sm:text-[16px]">
             {careersFinalCta.description.map((line) => (
               <p key={line}>{line}</p>
             ))}
           </div>
 
-          <div className="mx-auto mt-8 max-w-[760px] border-t border-[var(--careers-final-cta-border-01)] pt-8">
+          <div className="mx-auto mt-8 max-w-[760px] border-t border-[var(--careers-final-cta-border-primary)] pt-8">
             <h3 className="text-[21px] font-semibold leading-8 text-[var(--text-primary)] sm:text-[24px]">
               {careersFinalCta.selection.title}
             </h3>
@@ -50,7 +50,7 @@ export function CareersFinalCtaView({ content: careersFinalCta, quizButton }: { 
             </p>
           </div>
 
-          <div className="mx-auto mt-7 max-w-[820px] border-t border-[var(--careers-final-cta-border-01)] pt-6 text-[14px] leading-6 text-[var(--careers-final-cta-content-01)]">
+          <div className="mx-auto mt-7 max-w-[820px] border-t border-[var(--careers-final-cta-border-primary)] pt-6 text-[14px] leading-6 text-[var(--careers-final-cta-content-primary)]">
             {careersFinalCta.disclaimer.map((line) => (
               <p key={line}>{line}</p>
             ))}

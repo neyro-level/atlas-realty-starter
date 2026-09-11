@@ -10,6 +10,7 @@
       "description": "Neutral semantic colors, typography, spacing, radii, shadows and breakpoints for AMS realty sites.",
       "files": [
         { "path": "src/theme.css", "type": "registry:theme" },
+        { "path": "src/styles.d.ts", "type": "registry:lib" },
         { "path": "src/styles/shell.css", "type": "registry:style" }
       ]
     },

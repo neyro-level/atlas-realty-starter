@@ -22,7 +22,7 @@ for (const token of requiredTokens) {
   if (!declarations.has(token)) errors.push(`required semantic token is missing: --${token}`);
 }
 
-const numberedPattern = /^(?:new-building|property|compare-table|session-collection|catalog-(?!buyer-services))[a-z0-9-]*-(?:color|surface|content|border|shadow|effect|icon)-\d{2}$/;
+const numberedPattern = /^(?:new-building|property|compare-table|session-collection|catalog-(?!buyer-services)|leadgen|journal|agency|corporate|sale|lawyer|careers|about|employee|legal|mortgage|home)[a-z0-9-]*-(?:color|surface|content|border|shadow|effect|icon)-\d{2}$/;
 for (const name of declarations) {
   if (numberedPattern.test(name)) errors.push(`numbered new-building token remains: --${name}`);
 }
@@ -42,7 +42,7 @@ console.log(JSON.stringify({
   declaredTokens: declarations.size,
   compatibilityAliases: compatibility.length,
   unresolvedTokens: 0,
-  migratedDomains: ["new-buildings", "catalog", "property", "session-collections"],
+  migratedDomains: ["new-buildings", "catalog", "property", "session-collections", "home", "leadgen", "journal", "marketing"],
 }, null, 2));
 
 async function collect(directory) {

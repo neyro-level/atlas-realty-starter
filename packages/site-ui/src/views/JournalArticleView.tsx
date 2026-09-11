@@ -1,4 +1,5 @@
 import type { JournalArticlePageDto } from "@starter/site-contracts";
+import "../styles/journal.css";
 import { CalendarDays, Clock3 } from "lucide-react";
 import type { ReactNode } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../components/ui/accordion";

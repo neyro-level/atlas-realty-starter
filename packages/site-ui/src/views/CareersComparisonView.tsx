@@ -5,7 +5,7 @@ export type CareersComparisonContent = { title: string; description: string; mar
 export function CareersComparisonView({ content: careersComparison }: { content: CareersComparisonContent }) {
   return (
     <section
-      className="bg-[var(--careers-comparison-surface-01)] py-12 sm:py-16 lg:py-[88px]"
+      className="bg-[var(--careers-comparison-surface-primary)] py-12 sm:py-16 lg:py-[88px]"
       aria-labelledby="careers-comparison-title"
     >
       <div className="mx-auto max-w-site-frame px-5">
@@ -16,7 +16,7 @@ export function CareersComparisonView({ content: careersComparison }: { content:
           >
             {careersComparison.title}
           </h2>
-          <p className="mt-4 text-[15px] leading-7 text-[var(--careers-comparison-content-01)] sm:text-[16px]">
+          <p className="mt-4 text-[15px] leading-7 text-[var(--careers-comparison-content-primary)] sm:text-[16px]">
             {careersComparison.description}
           </p>
         </div>
@@ -29,10 +29,10 @@ export function CareersComparisonView({ content: careersComparison }: { content:
           />
 
           <div className="flex min-h-12 items-center justify-center" aria-hidden>
-            <span className="hidden size-12 items-center justify-center rounded-full border border-[var(--careers-comparison-border-01)] bg-white text-[12px] font-semibold uppercase text-[var(--text-muted)] lg:flex">
+            <span className="hidden size-12 items-center justify-center rounded-full border border-[var(--careers-comparison-border-primary)] bg-white text-[12px] font-semibold uppercase text-[var(--text-muted)] lg:flex">
               vs
             </span>
-            <span className="flex size-10 items-center justify-center rounded-full bg-white text-[var(--accent)] shadow-[var(--careers-comparison-shadow-01)] lg:hidden">
+            <span className="flex size-10 items-center justify-center rounded-full bg-white text-[var(--accent)] shadow-[var(--careers-comparison-shadow-primary)] lg:hidden">
               <ArrowDown className="size-4" strokeWidth={1.8} />
             </span>
           </div>
@@ -44,7 +44,7 @@ export function CareersComparisonView({ content: careersComparison }: { content:
           />
         </div>
 
-        <div className="mx-auto mt-10 max-w-[980px] border-t border-[var(--careers-comparison-border-02)] pt-8 text-center sm:mt-12 sm:pt-10">
+        <div className="mx-auto mt-10 max-w-[980px] border-t border-[var(--careers-comparison-border-secondary)] pt-8 text-center sm:mt-12 sm:pt-10">
           <p className="text-[20px] font-semibold leading-8 text-[var(--text-primary)] sm:text-[clamp(21px,1.7vw,26px)] sm:leading-[1.4]">
             {careersComparison.conclusion}
           </p>
@@ -69,7 +69,7 @@ function ComparisonPanel({
     <article
       className={`rounded-2xl p-5 sm:p-7 lg:p-8 ${
         isBrand
-          ? "bg-[var(--careers-comparison-surface-02)] text-white shadow-[var(--careers-comparison-shadow-02)]"
+          ? "bg-[var(--careers-comparison-surface-secondary)] text-white shadow-[var(--careers-comparison-shadow-secondary)]"
           : "border border-[var(--border)] bg-white text-[var(--text-primary)]"
       }`}
     >
@@ -81,12 +81,12 @@ function ComparisonPanel({
           <li
             key={item}
             className={`grid grid-cols-[22px_minmax(0,1fr)] items-start gap-3 text-[15px] leading-6 ${
-              isBrand ? "text-white/82" : "text-[var(--careers-comparison-content-01)]"
+              isBrand ? "text-white/82" : "text-[var(--careers-comparison-content-primary)]"
             }`}
           >
             <span
               className={`mt-0.5 flex size-[22px] items-center justify-center rounded-full ${
-                isBrand ? "bg-white/12 text-white" : "bg-[var(--careers-comparison-surface-03)] text-[var(--text-muted)]"
+                isBrand ? "bg-white/12 text-white" : "bg-[var(--careers-comparison-surface-tertiary)] text-[var(--text-muted)]"
               }`}
             >
               {isBrand ? (
