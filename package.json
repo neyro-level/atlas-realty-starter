@@ -17,6 +17,7 @@
     "ui:shadcn": "node scripts/quality/shadcn-safe.mjs",
     "ui:shadcn:info": "node scripts/quality/shadcn-safe.mjs info --json",
     "ui:check": "node scripts/quality/ui-system.mjs && pnpm ui:registry:check",
+    "ui:check:self-test": "node scripts/quality/ui-system.mjs --self-test",
     "db:backup:check": "node scripts/verify-backup-restore.mjs",
     "db:migrate:native:check": "node scripts/run-native-integration.mjs --migrate",
     "db:migrate:roles-check": "node scripts/run-native-integration.mjs --roles-check",
