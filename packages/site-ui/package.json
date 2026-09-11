@@ -1,6 +1,7 @@
 {
   "name": "@ams/realty-ui",
   "version": "0.1.0",
+  "description": "Atlas development mirror of components admitted to the canonical AMS UI Registry",
   "private": true,
   "type": "module",
   "scripts": {

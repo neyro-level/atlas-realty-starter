@@ -4,9 +4,9 @@ This document implements AMS UI Development Constitution 3.1 for the public Atla
 
 ## Ownership
 
-`packages/site-ui` (`@ams/realty-ui`) owns neutral reusable presentation primitives and views. Application routes compose those views but do not create a second design system. Payload, database access, secrets, project identity and project-specific fetching are forbidden inside the package. Atlas identity and theme values belong to the Project Design System and `SiteProfile`.
+The private SourceCraft repository `integrator-p/ams-ui-registry` is the canonical distribution source for admitted reusable components. `packages/site-ui` (`@ams/realty-ui`) is Atlas's private development mirror and composition package; it is not published to npm. Application routes compose those views but do not create a second design system. Payload, database access, secrets, project identity and project-specific fetching are forbidden inside the package. Atlas identity and theme values belong to the Project Design System and `SiteProfile`.
 
-The root and package `components.json` files must keep the same ShadCN style, React Server Components mode, TypeScript mode, base color and icon library. `registry.json` and `packages/site-ui/registry.json` are validated with `pnpm ui:registry:check`.
+The root and package `components.json` files keep the same ShadCN style, React Server Components mode, TypeScript mode, base color, icon library and authenticated `@ams` namespace. The namespace resolves `https://ui.ams24.ru/r/{name}.json` and reads its bearer credential only from `AMS_UI_REGISTRY_TOKEN`. `registry.json` and `packages/site-ui/registry.json` are validated with `pnpm ui:registry:check`; `pnpm ui:shadcn:info` provides a Windows-safe CLI entry when a checkout name begins with a numbered dot prefix.
 
 ## Tokens
 
