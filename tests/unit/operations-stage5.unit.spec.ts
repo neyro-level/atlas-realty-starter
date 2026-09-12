@@ -76,6 +76,11 @@ describe('Stage 5 operations contract', () => {
     expect(installer).toContain('-xzf - -C "${release_dir}" < "${ARCHIVE}"')
     expect(installer).not.toContain('chown -R "${APP_USER}:${APP_USER}" "${release_dir}"')
     expect(read('deploy/bootstrap-server.sh')).toContain('-mindepth 1 -xdev ! -type l -exec chown root:"${APP_USER}"')
+    expect(read('deploy/bootstrap-server.sh')).toContain('DEPLOYMENT_PROFILE="${DEPLOYMENT_PROFILE:-CLIENT_PRODUCTION}"')
+    expect(read('deploy/bootstrap-server.sh')).toContain('ENABLE_LOGICAL_BACKUP="${ENABLE_LOGICAL_BACKUP:-false}"')
+    expect(read('deploy/bootstrap-server.sh')).not.toMatch(/apt-get install[^\n]*postgresql-18(?:\s|$)/)
+    expect(installer).toContain('source "${MIGRATION_ENV_FILE}"')
+    expect(installer).toContain('MIGRATION_DATABASE_URL')
   })
 
   it('uses one private worker for all queues and schedules', () => {

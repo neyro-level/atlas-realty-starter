@@ -8,6 +8,8 @@
 
 Local PostgreSQL is the development default and may support a reference demo for cost control. It is not the default production topology for a client clone.
 
+`deploy/bootstrap-server.sh` defaults to `DEPLOYMENT_PROFILE=CLIENT_PRODUCTION` and installs only the PostgreSQL client tools needed to reach the external `DATABASE_URL`; it never provisions a database server. An owner-approved Atlas-style demo is bootstrapped explicitly with `DEPLOYMENT_PROFILE=REFERENCE_DEMO`. Encrypted logical backup services are opt-in through `ENABLE_LOGICAL_BACKUP=true`; provider backups remain the client-production baseline unless the criticality, contract or owner decision requires both layers.
+
 ## Local Windows runtime
 
 On the prepared owner workstation, the normal entry point is `pnpm dev:start`. It performs the safe database, migration, demo-data and HTTP checks below automatically. Use `pnpm dev:open` when the default browser should also open. The manual sequence remains the first-time setup and recovery path.
@@ -88,6 +90,7 @@ Database rollback is not automatic. Every migration must be reviewed for backwar
 
 - The application host receives `DATABASE_URL`; it does not install or own PostgreSQL by default.
 - Runtime, migrator and owner/admin database roles remain separate. The runtime role has no DDL privileges.
+- `runtime.env` contains the runtime-role `DATABASE_URL`; root-only `migration.env` contains `MIGRATION_DATABASE_URL`. Owner/admin credentials are never installed into either service environment.
 - Provider automatic backups require documented retention and a tested restore procedure. An additional encrypted logical dump is required only for a critical client, contractual requirement, uniquely valuable database or explicit owner decision.
 - New client projects use an isolated Managed PostgreSQL database in the same or a nearby Timeweb region and prefer a private/protected connection.
 
@@ -133,9 +136,9 @@ The public UI was integrated afterwards. The historical proof still documents th
 
 The retained Timeweb Managed PostgreSQL validation cluster reported automatic daily backups with seven retained copies.
 
-On 2026-09-05, `pnpm db:backup:check` created a logical custom-format dump after six migrations, restored it into a temporary managed database and verified the same six migration records; the temporary database was then deleted. The repository now contains eight migrations, so a concrete current release must repeat restore proof when its production/validation database is provisioned or when backup architecture changes.
+On 2026-09-05, `pnpm db:backup:check` created a logical custom-format dump after six migrations, restored it into a temporary managed database and verified the same six migration records; the temporary database was then deleted. The repository has advanced since that evidence, so a concrete release must compare the restored migration count with the current committed migration index and repeat restore proof when its production/validation database is provisioned or backup architecture changes.
 
-Atlas production also runs `atlas-realty-backup.timer` daily. It creates a PostgreSQL custom-format dump, encrypts it with an age recipient before upload, and stores it in the private backup S3 bucket. The base64-encoded decryption identity and bucket name live only in root-readable `backup.env`; S3 credentials come from the runtime secret file. Configure a 30-day bucket lifecycle and run `/usr/local/sbin/verify-atlas-backup-restore` after provisioning or any backup change. The restore check uses only the fixed local database `atlas_realty_restore_check`, verifies the exact migration count, 60 published product-demo properties and 20 published residential complexes, then removes the validation database. Archived replacement records may remain in production history and are intentionally excluded from the public-count assertion.
+Atlas reference/demo runs `atlas-realty-backup.timer` daily as an explicit `ENABLE_LOGICAL_BACKUP=true` exception. It creates a PostgreSQL custom-format dump, encrypts it with an age recipient before upload, and stores it in the private backup S3 bucket. The base64-encoded decryption identity and bucket name live only in root-readable `backup.env`; S3 credentials come from the runtime secret file. Configure a 30-day bucket lifecycle and run `/usr/local/sbin/verify-atlas-backup-restore` after provisioning or any backup change. The restore check uses only the fixed local database `atlas_realty_restore_check`, verifies the exact migration count, 60 published product-demo properties and 20 published residential complexes, then removes the validation database. Archived replacement records may remain in production history and are intentionally excluded from the public-count assertion.
 
 ## Incident checklist
 

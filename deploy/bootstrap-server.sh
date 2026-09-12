@@ -7,6 +7,17 @@ APP_USER="atlas-realty"
 APP_RELEASE_USER="atlas-realty-release"
 APP_ROOT="/opt/ams-platform/atlas-realty"
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+DEPLOYMENT_PROFILE="${DEPLOYMENT_PROFILE:-CLIENT_PRODUCTION}"
+ENABLE_LOGICAL_BACKUP="${ENABLE_LOGICAL_BACKUP:-false}"
+
+case "${DEPLOYMENT_PROFILE}" in
+  REFERENCE_DEMO|CLIENT_PRODUCTION) ;;
+  *) echo "DEPLOYMENT_PROFILE must be REFERENCE_DEMO or CLIENT_PRODUCTION." >&2; exit 1 ;;
+esac
+if [[ "${ENABLE_LOGICAL_BACKUP}" != "true" && "${ENABLE_LOGICAL_BACKUP}" != "false" ]]; then
+  echo "ENABLE_LOGICAL_BACKUP must be true or false." >&2
+  exit 1
+fi
 
 if [[ "${EUID}" -ne 0 ]]; then
   echo "Run as root." >&2
@@ -79,16 +90,20 @@ fi
 
 install -m 0644 "${SCRIPT_DIR}/atlas-realty.service" /etc/systemd/system/atlas-realty.service
 install -m 0644 "${SCRIPT_DIR}/atlas-realty-worker.service" /etc/systemd/system/atlas-realty-worker.service
-install -m 0750 "${SCRIPT_DIR}/atlas-realty-backup.sh" /usr/local/sbin/atlas-realty-backup
-install -m 0750 "${SCRIPT_DIR}/verify-atlas-backup-restore.sh" /usr/local/sbin/verify-atlas-backup-restore
-install -m 0644 "${SCRIPT_DIR}/atlas-realty-backup.service" /etc/systemd/system/atlas-realty-backup.service
-install -m 0644 "${SCRIPT_DIR}/atlas-realty-backup.timer" /etc/systemd/system/atlas-realty-backup.timer
+if [[ "${ENABLE_LOGICAL_BACKUP}" == "true" ]]; then
+  install -m 0750 "${SCRIPT_DIR}/atlas-realty-backup.sh" /usr/local/sbin/atlas-realty-backup
+  install -m 0750 "${SCRIPT_DIR}/verify-atlas-backup-restore.sh" /usr/local/sbin/verify-atlas-backup-restore
+  install -m 0644 "${SCRIPT_DIR}/atlas-realty-backup.service" /etc/systemd/system/atlas-realty-backup.service
+  install -m 0644 "${SCRIPT_DIR}/atlas-realty-backup.timer" /etc/systemd/system/atlas-realty-backup.timer
+fi
 install -m 0644 "${SCRIPT_DIR}/nginx-internal.conf" /etc/nginx/sites-available/atlas-realty.conf
 ln -sfn /etc/nginx/sites-available/atlas-realty.conf /etc/nginx/sites-enabled/atlas-realty.conf
 systemctl daemon-reload
 systemctl enable atlas-realty.service
 systemctl enable atlas-realty-worker.service
-systemctl enable --now atlas-realty-backup.timer
+if [[ "${ENABLE_LOGICAL_BACKUP}" == "true" ]]; then
+  systemctl enable --now atlas-realty-backup.timer
+fi
 nginx -t
 systemctl enable --now nginx
 systemctl reload nginx
@@ -97,3 +112,4 @@ systemctl reload nginx
 PATH="${runtime_root}/bin:${node_root}/bin:/usr/local/bin:/usr/bin:/bin" \
   COREPACK_HOME="${runtime_root}/corepack" \
   "${runtime_root}/bin/pnpm" --version
+printf 'deployment_profile=%s logical_backup=%s\n' "${DEPLOYMENT_PROFILE}" "${ENABLE_LOGICAL_BACKUP}"
