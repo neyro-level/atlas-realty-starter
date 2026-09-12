@@ -87,6 +87,7 @@ for (const file of sourceFiles) {
   }
   if (/(?:payload|context\.payload)\.db\b|adapter\.pool\b/.test(source) &&
       !path.startsWith('src/core/data-access/ingest/') &&
+      !path.startsWith('src/core/data-access/optimized-read/') &&
       !path.startsWith('src/payload/migrations') ) {
     violations.push({ file: path, rule: 'raw-database-outside-ingest-gateway' })
   }

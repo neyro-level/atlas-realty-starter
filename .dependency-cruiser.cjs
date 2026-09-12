@@ -12,7 +12,7 @@ module.exports = {
       severity: 'error',
       comment: 'Reusable presentation consumes shared DTO/contracts, never Payload or client config.',
       from: { path: '^packages/(site-ui|site-contracts)/src/' },
-      to: { path: '^src/(payload(?:\\.config\\.ts|/)|project/)' },
+      to: { path: '^(?:payload$|@payloadcms/|pg$|src/(?:payload(?:\\.config\\.ts|/)|project/|core/data-access/))' },
     },
     {
       name: 'no-core-to-project-or-app',
@@ -27,6 +27,13 @@ module.exports = {
       comment: 'UI consumes DTOs and never Payload runtime or database modules.',
       from: { path: '^src/ui/' },
       to: { path: '^src/(payload(?:\\.config\\.ts|/)|core/data-access/)' },
+    },
+    {
+      name: 'no-public-or-user-to-privileged-gateways',
+      severity: 'error',
+      comment: 'Public and user reads cannot reach system or ingest capabilities.',
+      from: { path: '^src/core/data-access/(?:public|user)/' },
+      to: { path: '^src/core/data-access/(?:system|ingest)/' },
     },
     {
       name: 'no-production-to-tests',

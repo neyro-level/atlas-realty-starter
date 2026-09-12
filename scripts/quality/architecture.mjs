@@ -22,6 +22,16 @@ for (const violation of cruise.summary?.violations ?? []) {
 }
 
 for (const [source, module] of modules) {
+  if (/^(?:src|packages)\//.test(source)) {
+    const sourceText = readFileSync(resolve(root, source), 'utf8')
+    const rawDatabaseUse = /(?:\b(?:payload|context\.payload)\.db\b|\badapter\.pool\b|\b(?:sql|execute)\s*`)/.test(sourceText)
+    const approvedRawDatabasePath = source.startsWith('src/core/data-access/ingest/') ||
+      source.startsWith('src/core/data-access/optimized-read/') ||
+      source.startsWith('src/payload/migrations-v2/')
+    if (rawDatabaseUse && !approvedRawDatabasePath) {
+      violations.push({ from: source, rule: 'raw-database-approved-boundaries-only', to: 'database' })
+    }
+  }
   const sourceModule = moduleName(source)
   for (const dependency of module.dependencies ?? []) {
     const target = normalize(dependency.resolved)
