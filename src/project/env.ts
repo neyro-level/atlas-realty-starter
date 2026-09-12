@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { isRuntimeReferenceName } from '@/shared/security/runtime-reference'
 
 type EnvironmentSource = Readonly<Record<string, string | undefined>>
 type RuntimeEnvironment = 'development' | 'local' | 'production' | 'staging' | 'test'
@@ -87,7 +88,7 @@ function readAmsLeadsConfig(env: z.infer<typeof environmentSchema>, required: bo
 export const runtimeConfig = buildRuntimeConfig(process.env)
 
 export function resolveRuntimeReference(name: string) {
-  if (!/^[A-Z][A-Z0-9_]{1,127}$/.test(name)) throw new Error('Invalid runtime environment reference')
+  if (!isRuntimeReferenceName(name)) throw new Error('Invalid runtime environment reference')
   return process.env[name]
 }
 

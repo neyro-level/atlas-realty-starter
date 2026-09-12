@@ -30,6 +30,9 @@ export type PublicProperty = {
   status: 'active' | 'reserved' | 'sold'
   title: string
   totalAreaCm2: number
+  totalAreaM2: number
+  livingAreaM2?: number
+  kitchenAreaM2?: number
   updatedAt: string
 }
 

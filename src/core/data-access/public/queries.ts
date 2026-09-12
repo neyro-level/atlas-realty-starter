@@ -5,6 +5,7 @@ import type { Payload, Where } from 'payload'
 
 import { createPublicGatewayContext } from '@/core/access/public-gateway'
 import { PUBLIC_CACHE_TAGS } from '@/core/cache/public-cache'
+import { publicAgentWhere, publicCatalogStatsWhere, publicComplexWhere, publicLayoutWhere, publicPageWhere, publicPostWhere, publicPropertyWhere, withPublicPredicate } from '@/core/data-access/public/predicates'
 import type { PublicCatalogQuery } from '@/core/query/public-api'
 import { publicAgentSelect, publicCatalogStatsSelect, publicComplexSelect, publicLayoutSelect, publicPageSelect, publicPostSelect, publicPropertyDetailSelect, publicPropertySelect, publicRedirectSelect } from '@/core/query/public-selects'
 import type { Agent, Layout, Page, Post, Property, Redirect, ResidentialComplex } from '@/payload-types'
@@ -39,7 +40,7 @@ const context = () => createPublicGatewayContext()
 const cacheFor = <T>(key: string[], tags: string[], loader: () => Promise<T>) =>
   unstable_cache(loader, key, { revalidate: 300, tags })()
 
-type PropertyView = Pick<Property, 'addressPublic' | 'agent' | 'category' | 'dealStatus' | 'dealType' | 'description' | 'district' | 'floor' | 'floorsTotal' | 'id' | 'market' | 'meta' | 'photos' | 'priceMinorUnits' | 'pricePerMeterMinorUnits' | 'rooms' | 'slug' | 'status' | 'title' | 'totalAreaCm2' | 'updatedAt'>
+type PropertyView = Pick<Property, 'addressPublic' | 'agent' | 'category' | 'dealStatus' | 'dealType' | 'description' | 'district' | 'floor' | 'floorsTotal' | 'id' | 'kitchenAreaCm2' | 'livingAreaCm2' | 'market' | 'meta' | 'photos' | 'priceMinorUnits' | 'pricePerMeterMinorUnits' | 'rooms' | 'slug' | 'status' | 'title' | 'totalAreaCm2' | 'updatedAt'>
 type PropertyDetailView = PropertyView & Pick<Property, 'building' | 'complex' | 'latitude' | 'longitude' | 'mortgageAvailable' | 'videoUrl'>
 type ComplexView = Pick<ResidentialComplex, 'address' | 'availablePropertyCount' | 'classLabel' | 'completionLabel' | 'description' | 'developer' | 'district' | 'floorsLabel' | 'id' | 'latitude' | 'longitude' | 'meta' | 'name' | 'photos' | 'priceFromMinorUnits' | 'readiness' | 'slug' | 'updatedAt'>
 type LayoutView = Pick<Layout, 'availableUnitCount' | 'building' | 'id' | 'kitchenAreaCm2' | 'layoutImage' | 'livingAreaCm2' | 'name' | 'priceFromMinorUnits' | 'rooms' | 'slug' | 'totalAreaCm2' | 'unitCount'>
@@ -125,13 +126,13 @@ async function queryPublicCatalog(payload: Payload, query: PublicCatalogQuery, o
     pagination: true,
     select: publicPropertySelect,
     sort: catalogSort(query.sort),
-    where: propertyWhere(query, true),
+    where: withPublicPredicate(publicPropertyWhere(), propertyWhere(query, true)),
   })
   return { docs: result.docs.map((property) => toPublicProperty(property, options)), limit: result.limit, page: result.page ?? query.page, totalDocs: result.totalDocs, totalPages: result.totalPages }
 }
 
 async function queryPublicPropertyBySlug(payload: Payload, slug: string, options: PublicQueryOptions): Promise<PublicPropertyDetails | null> {
-  const result = await payload.find({ collection: 'properties', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicPropertyDetailSelect, where: { slug: { equals: slug } } })
+  const result = await payload.find({ collection: 'properties', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicPropertyDetailSelect, where: withPublicPredicate(publicPropertyWhere(), { slug: { equals: slug } }) })
   const property = result.docs[0]
   if (!property) return null
   const alternatives = await payload.find({
@@ -143,7 +144,7 @@ async function queryPublicPropertyBySlug(payload: Payload, slug: string, options
     pagination: false,
     select: publicPropertySelect,
     sort: '-publishedAt',
-    where: { and: [{ id: { not_equals: property.id } }, { market: { equals: property.market } }, { category: { equals: property.category } }, { status: { in: ['active', 'reserved'] } }] },
+    where: withPublicPredicate(publicPropertyWhere(), { id: { not_equals: property.id } }, { market: { equals: property.market } }, { category: { equals: property.category } }, { status: { in: ['active', 'reserved'] } }),
   })
   return {
     ...toPublicProperty(property, options),
@@ -162,47 +163,47 @@ async function queryPublicComplexes(payload: Payload, query: Pick<PublicCatalogQ
   const and: Where[] = []
   if (query.district) and.push({ district: { equals: query.district } })
   if (query.q) and.push({ or: [{ address: { like: query.q } }, { name: { like: query.q } }] })
-  const result = await payload.find({ collection: 'residential-complexes', context: context(), depth: 1, limit: query.limit, overrideAccess: false, page: query.page, pagination: true, select: publicComplexSelect, sort: 'name', where: and.length ? { and } : {} })
+  const result = await payload.find({ collection: 'residential-complexes', context: context(), depth: 1, limit: query.limit, overrideAccess: false, page: query.page, pagination: true, select: publicComplexSelect, sort: 'name', where: withPublicPredicate(publicComplexWhere(), ...and) })
   return { docs: result.docs.map((complex) => toPublicComplex(complex, options)), limit: result.limit, page: result.page ?? query.page, totalDocs: result.totalDocs, totalPages: result.totalPages }
 }
 
 async function queryPublicComplexBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
-  const result = await payload.find({ collection: 'residential-complexes', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicComplexSelect, where: { slug: { equals: slug } } })
+  const result = await payload.find({ collection: 'residential-complexes', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicComplexSelect, where: withPublicPredicate(publicComplexWhere(), { slug: { equals: slug } }) })
   return result.docs[0] ? toPublicComplex(result.docs[0], options) : null
 }
 
 async function queryPublicLayoutsForComplex(payload: Payload, complexId: string, options: PublicQueryOptions): Promise<PublicLayout[]> {
-  const result = await payload.find({ collection: 'layouts', context: context(), depth: 1, limit: 500, overrideAccess: false, pagination: false, select: publicLayoutSelect, sort: 'totalAreaCm2', where: { complex: { equals: complexId } } })
+  const result = await payload.find({ collection: 'layouts', context: context(), depth: 1, limit: 500, overrideAccess: false, pagination: false, select: publicLayoutSelect, sort: 'totalAreaCm2', where: withPublicPredicate(publicLayoutWhere(), { complex: { equals: complexId } }) })
   return result.docs.map((layout) => toPublicLayout(layout, options))
 }
 
 async function queryPublicAgentBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
-  const result = await payload.find({ collection: 'agents', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicAgentSelect, where: { slug: { equals: slug } } })
+  const result = await payload.find({ collection: 'agents', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicAgentSelect, where: withPublicPredicate(publicAgentWhere(), { slug: { equals: slug } }) })
   return result.docs[0] ? toPublicAgent(result.docs[0], options) : null
 }
 
 async function queryPublicAgents(payload: Payload, options: PublicQueryOptions): Promise<PublicAgent[]> {
-  const result = await payload.find({ collection: 'agents', context: context(), depth: 1, limit: 200, overrideAccess: false, pagination: false, select: publicAgentSelect, sort: 'name' })
+  const result = await payload.find({ collection: 'agents', context: context(), depth: 1, limit: 200, overrideAccess: false, pagination: false, select: publicAgentSelect, sort: 'name', where: publicAgentWhere() })
   return result.docs.map((agent) => toPublicAgent(agent, options))
 }
 
 async function queryPublicPageBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
-  const result = await payload.find({ collection: 'pages', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicPageSelect, where: { slug: { equals: slug } } })
+  const result = await payload.find({ collection: 'pages', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicPageSelect, where: withPublicPredicate(publicPageWhere(), { slug: { equals: slug } }) })
   return result.docs[0] ? toPublicContent(result.docs[0], 'pages', options) : null
 }
 
 async function queryPublicPostBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
-  const result = await payload.find({ collection: 'posts', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicPostSelect, where: { slug: { equals: slug } } })
+  const result = await payload.find({ collection: 'posts', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicPostSelect, where: withPublicPredicate(publicPostWhere(), { slug: { equals: slug } }) })
   return result.docs[0] ? toPublicContent(result.docs[0], 'posts', options) : null
 }
 
 async function queryPublicPosts(payload: Payload, options: PublicQueryOptions): Promise<PublicContentDocument[]> {
-  const result = await payload.find({ collection: 'posts', context: context(), depth: 1, limit: 200, overrideAccess: false, pagination: false, select: publicPostSelect, sort: '-publishedAt' })
+  const result = await payload.find({ collection: 'posts', context: context(), depth: 1, limit: 200, overrideAccess: false, pagination: false, select: publicPostSelect, sort: '-publishedAt', where: publicPostWhere() })
   return result.docs.map((post) => toPublicContent(post, 'posts', options))
 }
 
 async function queryPublicFacets(payload: Payload): Promise<PublicFacets> {
-  const result = await payload.find({ collection: 'catalog-stats', context: context(), depth: 0, limit: 1, overrideAccess: false, pagination: false, select: publicCatalogStatsSelect, where: { scope: { equals: 'default' } } })
+  const result = await payload.find({ collection: 'catalog-stats', context: context(), depth: 0, limit: 1, overrideAccess: false, pagination: false, select: publicCatalogStatsSelect, where: publicCatalogStatsWhere() })
   const stats = result.docs[0]
   return stats ? {
     categories: facetEntries(stats.categories) as PublicFacets['categories'],
@@ -256,7 +257,9 @@ function toPublicProperty(property: PropertyView, options: PublicQueryOptions): 
     priceMinorUnits: property.priceMinorUnits, pricePerMeterMinorUnits: property.pricePerMeterMinorUnits ?? undefined,
     rooms: property.rooms ?? undefined, seo: toPublicSEO(property.meta, `properties/${property.slug}`, property.title, options, property.status === 'sold'),
     slug: property.slug, status: property.status as PublicProperty['status'], title: property.title,
-    totalAreaCm2: property.totalAreaCm2, updatedAt: property.updatedAt,
+    kitchenAreaM2: property.kitchenAreaCm2 == null ? undefined : property.kitchenAreaCm2 / 10_000,
+    livingAreaM2: property.livingAreaCm2 == null ? undefined : property.livingAreaCm2 / 10_000,
+    totalAreaCm2: property.totalAreaCm2, totalAreaM2: property.totalAreaCm2 / 10_000, updatedAt: property.updatedAt,
   }
 }
 

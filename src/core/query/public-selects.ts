@@ -1,7 +1,7 @@
 export const publicPropertySelect = {
   addressPublic: true, agent: true, category: true, dealStatus: true, dealType: true, description: true, district: true,
   floor: true, floorsTotal: true, id: true, market: true, meta: true, photos: true, priceMinorUnits: true,
-  pricePerMeterMinorUnits: true, rooms: true, slug: true, status: true, title: true, totalAreaCm2: true, updatedAt: true,
+  kitchenAreaCm2: true, livingAreaCm2: true, pricePerMeterMinorUnits: true, rooms: true, slug: true, status: true, title: true, totalAreaCm2: true, updatedAt: true,
 } as const
 
 export const publicPropertyDetailSelect = { ...publicPropertySelect, building: true, complex: true, latitude: true, longitude: true, mortgageAvailable: true, videoUrl: true } as const

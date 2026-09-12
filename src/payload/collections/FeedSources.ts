@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { adminRead, ownerOnly } from '../access/standard'
 import { validateFeedFieldOwnership } from '@/core/data-access/ingest/import-policy'
+import { validateRuntimeReferenceName } from '@/shared/security/runtime-reference'
 
 export const FeedSources = {
   slug: 'feed-sources',
@@ -13,8 +14,8 @@ export const FeedSources = {
     { name: 'title', type: 'text', required: true },
     { name: 'market', type: 'select', required: true, options: ['secondary', 'newbuild'] },
     { name: 'parser', type: 'select', required: true, options: ['yrl-secondary', 'yrl-newbuild'] },
-    { name: 'feedUrlRef', type: 'text', required: true, admin: { description: 'Имя переменной окружения; URL в БД не хранится.' } },
-    { name: 'credentialRef', type: 'text', admin: { description: 'Имя переменной окружения; секрет в БД не хранится.' } },
+    { name: 'feedUrlRef', type: 'text', required: true, validate: validateRuntimeReferenceName, admin: { description: 'Имя переменной окружения; URL в БД не хранится.' } },
+    { name: 'credentialRef', type: 'text', validate: validateRuntimeReferenceName, admin: { description: 'Имя переменной окружения; секрет в БД не хранится.' } },
     { name: 'isEnabled', type: 'checkbox', defaultValue: false, index: true },
     { name: 'priority', type: 'number', defaultValue: 100, min: 0, required: true },
     { name: 'fieldOwnership', type: 'json', defaultValue: {}, validate: validateFeedFieldOwnership, admin: { description: 'Явный владелец импортируемого поля: ключ вида complex.name или building.address, значение — code источника.' } },
