@@ -19,7 +19,7 @@ The word “headless” applies only to the external API contract. It does not d
 
 1. `AGENTS.md`
 2. `docs/PROJECT.md`
-3. the relevant part of the global AMS Realty Platform Core 3.0 contract; the tracked 2.1 document is historical implementation evidence only
+3. the relevant part of the tracked AMS Realty Platform Core 4.0 contract
 4. `docs/VERSION_MATRIX.md`
 5. `SECURITY.md` or `docs/OPERATIONS.md` by scope
 6. `package.json`, migrations, tests and runtime configuration

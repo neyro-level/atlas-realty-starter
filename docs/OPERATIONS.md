@@ -1,5 +1,13 @@
 # Operations
 
+## Deployment profiles
+
+- `LOCAL_DEV`: Windows workstation, native local PostgreSQL 18 and local media or development S3.
+- `REFERENCE_DEMO`: an explicitly approved low-cost demonstration contour. It may use locally managed PostgreSQL when the owner accepts its backup, patching and recovery burden.
+- `CLIENT_PRODUCTION`: Timeweb Cloud application, Timeweb Managed PostgreSQL over a protected connection, Timeweb S3 and external secret storage. This is the default for every new client clone unless the owner records a deliberate deviation.
+
+Local PostgreSQL is the development default and may support a reference demo for cost control. It is not the default production topology for a client clone.
+
 ## Local Windows runtime
 
 On the prepared owner workstation, the normal entry point is `pnpm dev:start`. It performs the safe database, migration, demo-data and HTTP checks below automatically. Use `pnpm dev:open` when the default browser should also open. The manual sequence remains the first-time setup and recovery path.
@@ -76,12 +84,19 @@ Database rollback is not automatic. Every migration must be reviewed for backwar
 - Scale evidence: `pnpm benchmark:import:50k`, `pnpm benchmark:public:50k` against the dedicated resettable test database only.
 - Backup/restore: `pnpm db:backup:check` against an explicitly isolated validation database.
 
-## Atlas production contour
+## Client production baseline
+
+- The application host receives `DATABASE_URL`; it does not install or own PostgreSQL by default.
+- Runtime, migrator and owner/admin database roles remain separate. The runtime role has no DDL privileges.
+- Provider automatic backups require documented retention and a tested restore procedure. An additional encrypted logical dump is required only for a critical client, contractual requirement, uniquely valuable database or explicit owner decision.
+- New client projects use an isolated Managed PostgreSQL database in the same or a nearby Timeweb region and prefer a private/protected connection.
+
+## Atlas reference/demo operational exception
 
 - Domain: `https://atlas.ams24.ru`; app root: `/opt/ams-platform/atlas-realty`; web port: `127.0.0.1:3010`.
 - Services: `atlas-realty.service` and `atlas-realty-worker.service` on AMS Main Server.
 - Secret scope: Doppler project `atlas-realty`, config `prd`; a config-scoped service token is used only during provisioning and is not stored on the server.
-- Database: isolated local PostgreSQL 18 database `atlas_realty_prod` with separate owner, migrator and runtime roles. Existing `seo_monitor_*` databases and roles are out of scope.
+- Database: isolated locally managed PostgreSQL 18 database `atlas_realty_prod` with separate owner, migrator and runtime roles. This is an owner-approved reference/demo exception and must not be copied as the client-production baseline. Existing `seo_monitor_*` databases and roles are out of scope.
 - Runtime uses `atlas_runtime`; release migrations use `atlas_migrator` through a root-only migration environment file.
 - Media uses a private Timeweb S3 bucket. Public product reads go through the Public Gateway; anonymous raw Payload business APIs remain denied by collection access rules.
 - Leads use the transactional outbox and `ams-leads` adapter to the local AMS Leads API. Delivery credentials never enter Git or application logs.

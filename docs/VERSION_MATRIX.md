@@ -14,7 +14,7 @@
 | saxes                                    | 6.0.0          |
 | server-only                              | 0.0.1          |
 
-All direct dependencies are pinned exactly in `package.json` and `pnpm-lock.yaml`. Payload packages must stay on one exact version. Major upgrades are separate HEAVY tasks.
+All direct dependencies are pinned exactly in `package.json` and `pnpm-lock.yaml`. Payload packages must stay on one exact version. Major upgrades are separate RISKY tasks.
 
 ## Compatibility check
 
@@ -25,4 +25,4 @@ Rechecked on 2026-09-06 against the official [Payload installation requirements]
 - The official stable npm tag remains 3.88.0; Payload 4 is prerelease/canary and is not part of this baseline.
 - [GHSA-jg8r-5jh2-v2xj](https://github.com/advisories/GHSA-jg8r-5jh2-v2xj) still lists `<= 3.88.0` as affected with no patched version. The mandatory owner-only unlock mitigation is documented in `SECURITY.md` and enforced by project guards/tests.
 
-Compatibility evidence does not authorize an automatic dependency update. Any Next/Payload upgrade requires official-doc verification, generated-artifact checks, targeted security/runtime tests and a HEAVY gate.
+Compatibility evidence does not authorize an automatic dependency update. Any Next/Payload upgrade requires official-doc verification, generated-artifact checks, targeted security/runtime tests and a RISKY gate.

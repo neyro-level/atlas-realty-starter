@@ -1,6 +1,6 @@
 # Project
 
-Last reconciled with SourceCraft `main` base `5797b782bd3126772ac4a22dbdf804c0744c6b84` and the active new-buildings work stream on 2026-09-11.
+This document describes the current starter contract. Exact implementation state is the current SourceCraft commit.
 
 ## Identity and lifecycle
 
@@ -24,17 +24,17 @@ The starter itself does not become a client production system. A concrete clone 
 
 ## Canonical document mapping
 
-This project uses the compact document set required by the active Realty Platform Core 3.0 and does not duplicate it with parallel files.
+This project uses the compact document set required by Realty Platform Core 4.0 and does not duplicate it with parallel files.
 
-| Canonical role                                   | Source of truth                                                                                                                       |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Product, profile, modules and current state      | this file                                                                                                                             |
-| Architecture and data model                      | global Realty Platform Core 3.0 plus actual `src/core`, `src/payload` and migrations; the tracked 2.1 standard is historical evidence |
-| Security, roles and PII                          | `../SECURITY.md`                                                                                                                      |
-| Local runtime, CI, deploy, rollback and recovery | `OPERATIONS.md`                                                                                                                       |
-| Versions and compatibility check                 | `VERSION_MATRIX.md`                                                                                                                   |
-| UI system, components and media rules            | `UI_SYSTEM.md`                                                                                                                        |
-| Difficult boundary decisions                     | `adr/`                                                                                                                                |
+| Canonical role                                   | Source of truth                                                  |
+| ------------------------------------------------ | ---------------------------------------------------------------- |
+| Product, profile, modules and current state      | this file                                                        |
+| Architecture and data model                      | `AMS_REALTY_PLATFORM_CORE_STANDARD_4.0_SOLO_AI.md` plus code and migrations |
+| Security, roles and PII                          | `../SECURITY.md`                                                 |
+| Local runtime, CI, deploy, rollback and recovery | `OPERATIONS.md`                                                  |
+| Versions and compatibility check                 | `VERSION_MATRIX.md`                                              |
+| UI system, components and media rules            | `UI_SYSTEM.md`                                                   |
+| Difficult boundary decisions                     | `adr/`                                                           |
 
 ## Full-stack boundary
 
@@ -101,20 +101,9 @@ Credentials, feed URLs and chat identifiers do not belong in Git. The production
 
 Lead PII retention default is 365 days and the baseline consent text version is `152-fz-v1`. A concrete clone must confirm its legal basis, consent text, owner and retention before production. The scheduled retention task removes contact PII after the period. Secrets live only in deployment secret storage and PII must not enter logs or analytics.
 
-## Current evidence and open gates
+## Current state and release gates
 
-- Backend Standard 2.1 staging validation was completed for historical release `f7835daf1327741f6391627518cc4db31239c156` before the public UI boundary changed.
-- Public UI was later integrated through SourceCraft PR `!51`; the current exact-head live production proof is not recorded in this repository.
-- On 2026-09-08, local PostgreSQL 18.6 had all eight committed migrations applied and the Payload-backed UI returned HTTP 200 for the home page, catalog, property and residential-complex routes.
-- The local product catalog contains 20 unique Krasnodar residential complexes and 60 properties: 30 secondary apartments split 10/10/10 by room count, 10 houses, 10 land plots and 10 commercial properties. On 2026-09-08 the catalog was rebuilt from current partner listings with 60 unique addresses and 346 property images whose checksums do not repeat across properties; together with residential complexes the clean local media set contains 547 referenced files. Public DTOs contain no import provenance.
-- The new-buildings presentation upgrade does not change the Payload schema, migrations or the 20-record residential-complex source set. Detail submissions carry the existing Payload complex ID through the Public Lead contract; catalog submissions remain general and are distinguished only by internal analytics source/form type.
-- The structural UI Constitution 3.1 migration is complete in source: numbered component tokens, compatibility aliases, raw-color debt and the dedicated structural UI-debt baseline are zero, and neutral shared views receive Atlas copy, media and identity through typed properties. Typography roles are enforced across commercial and journal pages; the separately tracked legacy utility/CSS baseline remains non-zero and may only decrease. Final exact-head build, visual, database and live release evidence remains required before production conformance is claimed.
-- Atlas remains non-indexable by owner decision while the approved partner catalog is used as a product demonstration dataset.
-- The Yandex Maps JavaScript API integration and fallback are implemented; a real production key is still an external secret gate.
-- Before claiming current full-stack production readiness, run the exact-head Merge Gate, package/release flow and live smoke from `OPERATIONS.md` against an isolated client or validation contour.
-
-## Standard 2.1 status
-
-The core backend safeguards remain the intended contract: sole Payload schema ownership, bounded Public Gateway DTOs, denied anonymous raw business REST, typed System Gateway, isolated Ingest Gateway, protected private fields, safe import/deactivation, centralized outbound HTTP, transactional leads/outbox, append-only migrations and risk-routed checks.
-
-This document does not repeat the former 18-item `PASS` claim for the current full-stack HEAD. That claim belonged to the historical headless release and must be re-attested for the exact release SHA after the presentation-boundary change.
+- The public site, Payload Admin, catalog, new-buildings module, leads/outbox, jobs, S3 integration and immutable release path are implemented.
+- Atlas remains non-indexable while demonstration content is present or source rights are not approved.
+- The current Core 4.0 remediation must re-attest migrations, import safety, layout/unit separation, prepared catalog aggregates, public DTO isolation and the 50k capacity target.
+- Production readiness is asserted only for an exact merged `main` SHA after the RISKY SourceCraft gate, release artifact verification and live smoke from `OPERATIONS.md`.

@@ -23,5 +23,5 @@ Payload-backed public reads continue through the Public Gateway, explicit access
 - `/` and approved public routes are real site pages and must be tested as such.
 - Public UI integration does not authorize raw Payload REST, direct Local API calls from presentation code or a second backend.
 - Atlas is the concrete Krasnodar product identity; reusable UI remains separated so the platform architecture can evolve without coupling presentation to Payload.
-- The historical headless production validation cannot be presented as exact-head live proof for the full-stack boundary.
+- A production validation from before the public UI boundary cannot be presented as exact-head live proof for the current full-stack system.
 - Changes to `site-contracts`, Public Gateway wiring or backend imports in `site-ui` are architecture-sensitive and require targeted checks.
