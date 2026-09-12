@@ -16,8 +16,8 @@ describe('Stage 1 database import', () => {
   it('is idempotent, source-isolated and preserves manual fields', async () => {
     const payload = await getTestPayload()
     const { superAdmin } = await seedPrivilegedUsers()
-    const firstSource = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'first', title: 'First', market: 'secondary', parser: 'yrl-secondary', feedUrlRef: 'FIRST_FEED_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
-    const secondSource = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'second', title: 'Second', market: 'secondary', parser: 'yrl-secondary', feedUrlRef: 'SECOND_FEED_URL', isEnabled: true, priority: 20, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const firstSource = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'first', title: 'First', market: 'secondary', parser: 'yrl-secondary', publicationMode: 'review', feedUrlRef: 'FIRST_FEED_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const secondSource = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'second', title: 'Second', market: 'secondary', parser: 'yrl-secondary', publicationMode: 'review', feedUrlRef: 'SECOND_FEED_URL', isEnabled: true, priority: 20, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
     const firstRun = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'first-run', source: firstSource.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
     const secondRun = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'second-run', source: secondSource.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
     const seenAt = new Date().toISOString()
@@ -54,7 +54,7 @@ describe('Stage 1 database import', () => {
     const payload = await getTestPayload()
     const { superAdmin } = await seedPrivilegedUsers()
     await payload.create({ collection: 'agents', overrideAccess: false, user: superAdmin, data: { name: 'Manual agent', slug: 'manual-agent', origin: 'manual', phone: '+7 999 000-00-00', status: 'active', isPublished: true } })
-    const source = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'newbuild', title: 'Newbuild', market: 'newbuild', parser: 'yrl-newbuild', feedUrlRef: 'NEWBUILD_FEED_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const source = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'newbuild', title: 'Newbuild', market: 'newbuild', parser: 'yrl-newbuild', publicationMode: 'review', feedUrlRef: 'NEWBUILD_FEED_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
     const run = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'newbuild-run', source: source.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
     const newbuild: NormalizedOffer = { ...offer('Newbuild property'), market: 'newbuild', agent: { name: 'Feed agent', phone: '+7 (999) 000-00-00' }, newbuild: { yandexBuildingId: 'complex-1', yandexHouseId: 'house-1', complexName: 'ЖК Тест', buildingName: 'Корпус 1', developerName: 'Тест Девелопмент', readiness: 'construction' }, photos: ['https://img.example.test/newbuild.jpg'] }
 
@@ -69,14 +69,27 @@ describe('Stage 1 database import', () => {
     expect(agents.docs).toHaveLength(2)
     expect(agents.docs.find((agent) => agent.origin === 'manual')?.name).toBe('Manual agent')
     expect(agents.docs.find((agent) => agent.origin === 'feed')?.normalizedPhone).toBe('+79990000000')
+    const feedAgent = agents.docs.find((agent) => agent.origin === 'feed')!
+    await payload.update({ collection: 'agents', id: feedAgent.id, overrideAccess: false, user: superAdmin, data: { email: 'manual@example.test', name: 'Manual feed agent', phone: '+7 918 111-22-33' } })
+    await upsertPropertyBatch(payload, { allowedImageHosts: ['img.example.test'], feedSourceId: source.id, importRunId: run.id, offers: [{ ...newbuild, agent: { name: 'Changed feed agent', phone: '+7 (999) 000-00-00', email: 'feed@example.test' } }], seenAt: new Date().toISOString() })
+    const preservedAgent = await payload.findByID({ collection: 'agents', id: feedAgent.id, overrideAccess: true })
+    expect(preservedAgent).toMatchObject({ email: 'manual@example.test', name: 'Manual feed agent', phone: '+7 918 111-22-33' })
+    expect(preservedAgent.importOwnership).toMatchObject({ manualFields: expect.arrayContaining(['email', 'name', 'phone']) })
     expect((await payload.count({ collection: 'residential-complexes', overrideAccess: true })).totalDocs).toBe(1)
     expect((await payload.count({ collection: 'buildings', overrideAccess: true })).totalDocs).toBe(1)
   })
 
+  it('rejects fractional money at the Payload boundary', async () => {
+    const payload = await getTestPayload()
+    const { superAdmin } = await seedPrivilegedUsers()
+    const data = { title: 'Fractional price', slug: 'fractional-price', origin: 'manual', status: 'active', isPublished: false, market: 'secondary', dealType: 'sale', category: 'apartment', priceMinorUnits: 100.5, currency: 'RUB', totalAreaCm2: 10_000 } as const
+    await expect(payload.create({ collection: 'properties', overrideAccess: false, user: superAdmin, data })).rejects.toThrow(/Price Minor Units/)
+  })
+
   it('deduplicates layouts within a source and isolates them across sources', async () => {
     const payload = await getTestPayload()
-    const firstSource = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'layouts-first', title: 'First', market: 'newbuild', parser: 'yrl-newbuild', feedUrlRef: 'FIRST_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
-    const secondSource = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'layouts-second', title: 'Second', market: 'newbuild', parser: 'yrl-newbuild', feedUrlRef: 'SECOND_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const firstSource = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'layouts-first', title: 'First', market: 'newbuild', parser: 'yrl-newbuild', publicationMode: 'review', feedUrlRef: 'FIRST_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const secondSource = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'layouts-second', title: 'Second', market: 'newbuild', parser: 'yrl-newbuild', publicationMode: 'review', feedUrlRef: 'SECOND_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
     const firstRun = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'layouts-first-run', source: firstSource.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
     const secondRun = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'layouts-second-run', source: secondSource.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
     const base: NormalizedOffer = { ...offer('Unit one'), externalId: 'unit-1', market: 'newbuild', rooms: 2, layout: { externalId: 'layout-42' }, newbuild: { yandexBuildingId: 'complex-layout', yandexHouseId: 'house-layout', complexName: 'Layout complex', buildingName: 'Layout house', readiness: 'construction' } }
@@ -91,7 +104,7 @@ describe('Stage 1 database import', () => {
 
   it('marks ambiguous newbuild units for review without creating a layout', async () => {
     const payload = await getTestPayload()
-    const source = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'ambiguous-layout', title: 'Ambiguous', market: 'newbuild', parser: 'yrl-newbuild', feedUrlRef: 'AMBIGUOUS_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const source = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'ambiguous-layout', title: 'Ambiguous', market: 'newbuild', parser: 'yrl-newbuild', publicationMode: 'review', feedUrlRef: 'AMBIGUOUS_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
     const run = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'ambiguous-layout-run', source: source.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
     const ambiguous: NormalizedOffer = { ...offer('Ambiguous unit'), market: 'newbuild', rooms: 2, newbuild: { yandexBuildingId: 'ambiguous-complex', yandexHouseId: 'ambiguous-house', complexName: 'Ambiguous complex', buildingName: 'Ambiguous house', readiness: 'construction' } }
     await upsertPropertyBatch(payload, { feedSourceId: source.id, importRunId: run.id, offers: [ambiguous], seenAt: new Date().toISOString() })
@@ -104,8 +117,8 @@ describe('Stage 1 database import', () => {
   it('preserves shared newbuild entities by manual and source priority rules', async () => {
     const payload = await getTestPayload()
     const { superAdmin } = await seedPrivilegedUsers()
-    const primary = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'primary', title: 'Primary', market: 'newbuild', parser: 'yrl-newbuild', feedUrlRef: 'PRIMARY_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
-    const secondary = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'secondary', title: 'Secondary', market: 'newbuild', parser: 'yrl-newbuild', feedUrlRef: 'SECONDARY_URL', isEnabled: true, priority: 20, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const primary = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'primary', title: 'Primary', market: 'newbuild', parser: 'yrl-newbuild', publicationMode: 'review', feedUrlRef: 'PRIMARY_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const secondary = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'secondary', title: 'Secondary', market: 'newbuild', parser: 'yrl-newbuild', publicationMode: 'review', feedUrlRef: 'SECONDARY_URL', isEnabled: true, priority: 20, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
     const primaryRun = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'primary-run', source: primary.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
     const secondaryRun = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'secondary-run', source: secondary.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
     const base: NormalizedOffer = { ...offer('Primary property'), externalId: 'primary-property', market: 'newbuild', newbuild: { yandexBuildingId: 'shared-complex', yandexHouseId: 'shared-house', complexName: 'Primary complex', buildingName: 'Primary building', readiness: 'construction' } }

@@ -8,9 +8,10 @@ import type { AddressFormat, FeedParser, FeedRunMode, NormalizedOffer } from '@/
 
 import { evaluateDeactivation } from './import-policy'
 import { deactivateMissingProperties, upsertPropertyBatch } from './property-import'
+import { shouldPublishImportedRecords } from './publication-policy'
 
 type Client = { query<T extends Record<string, unknown> = Record<string, unknown>>(sql: string, values?: unknown[]): Promise<{ rows: T[] }>; release(): void }
-type Source = { code: string; feed_url_ref: string; is_enabled: boolean; last_offer_count: number | null; market: 'secondary' | 'newbuild'; max_offers_limit: number; min_offers_threshold_percent: number; parser: string }
+type Source = { code: string; feed_url_ref: string; is_enabled: boolean; last_offer_count: number | null; market: 'secondary' | 'newbuild'; max_offers_limit: number; min_offers_threshold_percent: number; parser: string; publication_mode: 'automatic' | 'review' }
 type ImportIssue = { code: string; message: string }
 const MAX_STORED_ISSUES = 1000
 
@@ -42,7 +43,7 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
   let source: Source
   let runId: string
   try {
-    const result = await client.query<Source>('SELECT code, feed_url_ref, is_enabled, last_offer_count, market, max_offers_limit, min_offers_threshold_percent, parser FROM feed_sources WHERE id = $1', [input.sourceId])
+    const result = await client.query<Source>('SELECT code, feed_url_ref, is_enabled, last_offer_count, market, max_offers_limit, min_offers_threshold_percent, parser, publication_mode FROM feed_sources WHERE id = $1', [input.sourceId])
     source = result.rows[0]!
     if (!source?.is_enabled) throw new Error('Feed source is disabled or missing')
     if (source.parser !== `yrl-${source.market}`) throw new Error('Feed parser does not match configured market')
@@ -111,12 +112,21 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
   const status: 'success' | 'suspicious' = safety.allowed ? 'success' : 'suspicious'
   for (const reason of safety.reasons) issues.add({ code: reason, message: 'Safety condition prevented deactivation' })
   await finishRun(payload, runId, { ...totals, deactivated }, issues.samples, issues.totalCount, status, safety.allowed, formats, startedAt)
+  if (shouldPublishImportedRecords({ mode: source.publication_mode, runStatus: status })) await publishValidatedImport(payload, input.sourceId, runId)
   try {
     await dependencies.requestPublicRevalidation(['public:catalog', 'public:sitemap'])
   } catch {
     payload.logger.warn('public cache revalidation request failed; TTL fallback remains active')
   }
   return { ...totals, deactivated, runId, status }
+}
+
+async function publishValidatedImport(payload: Payload, sourceId: string, runId: string) {
+  const client = await (payload.db as unknown as PostgresAdapter).pool.connect() as unknown as Client
+  try {
+    await client.query(`UPDATE properties SET is_published=true, published_at=coalesce(published_at, now()), updated_at=now()
+      WHERE feed_source_id=$1 AND last_import_run_id=$2 AND needs_review=false AND status IN ('active','reserved')`, [sourceId, runId])
+  } finally { client.release() }
 }
 
 async function finishRun(payload: Payload, runId: string, totals: { created: number; unchanged: number; updated: number; total: number; deactivated?: number }, issues: ImportIssue[], issueCount: number, status: 'failed' | 'success' | 'suspicious', deactivationAllowed: boolean, formats: Set<AddressFormat>, startedAt: string) {

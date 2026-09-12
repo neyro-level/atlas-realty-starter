@@ -7,6 +7,7 @@ import { collectionCacheHooks } from '@/core/cache/public-cache'
 
 const sourceManagedAccess = { create: ownerFieldOnly, update: ownerFieldOnly }
 const privateAccess = { create: ownerFieldOnly, read: ownerFieldOnly, update: ownerFieldOnly }
+const integerMinorUnits = (value: unknown) => value == null || (typeof value === 'number' && Number.isSafeInteger(value)) || 'Сумма должна быть целым числом в минимальных денежных единицах.'
 
 const trackManualFields: CollectionBeforeChangeHook = ({ data, operation, originalDoc, req }) => {
   if (operation !== 'update' || req.context?.ingest === true || !req.user) return data
@@ -46,7 +47,7 @@ export const Properties = {
     { name: 'lastSeenAt', type: 'date', index: true, access: sourceManagedAccess },
     { name: 'lastImportRun', type: 'relationship', relationTo: 'import-runs', access: sourceManagedAccess },
     { name: 'manualFields', type: 'json', defaultValue: [], admin: { readOnly: true }, access: sourceManagedAccess },
-    { name: 'needsReview', type: 'checkbox', defaultValue: false, index: true },
+    { name: 'needsReview', type: 'checkbox', defaultValue: false, index: true, access: sourceManagedAccess },
     { name: 'duplicateOf', type: 'relationship', relationTo: 'properties' },
     { name: 'duplicateCandidates', type: 'relationship', relationTo: 'properties', hasMany: true },
 
@@ -62,9 +63,9 @@ export const Properties = {
     { name: 'dealStatus', type: 'select', index: true, options: ['available', 'reserved', 'sold'] },
     { name: 'isApartments', type: 'checkbox', defaultValue: false, index: true },
 
-    { name: 'priceMinorUnits', type: 'number', required: true, min: 0, index: true },
+    { name: 'priceMinorUnits', type: 'number', required: true, min: 0, index: true, validate: integerMinorUnits },
     { name: 'currency', type: 'select', defaultValue: 'RUB', required: true, options: ['RUB'] },
-    { name: 'pricePerMeterMinorUnits', type: 'number', min: 0, index: true },
+    { name: 'pricePerMeterMinorUnits', type: 'number', min: 0, index: true, validate: integerMinorUnits },
     { name: 'isPriceNegotiable', type: 'checkbox', defaultValue: false },
     { name: 'mortgageAvailable', type: 'checkbox', defaultValue: false },
 

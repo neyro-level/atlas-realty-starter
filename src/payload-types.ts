@@ -442,7 +442,10 @@ export interface FeedSource {
     | null;
   minOffersThresholdPercent: number;
   maxOffersLimit: number;
-  schedule?: string | null;
+  /**
+   * review — новые объекты остаются скрытыми; automatic — валидные объекты публикуются только после успешного полного импорта.
+   */
+  publicationMode: 'review' | 'automatic';
   lastSuccessfulRunAt?: string | null;
   lastOfferCount?: number | null;
   updatedAt: string;
@@ -568,6 +571,15 @@ export interface Agent {
   photo?: (string | null) | Media;
   status: 'active' | 'inactive';
   isPublished?: boolean | null;
+  importOwnership?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   importHash?: string | null;
   lastSeenAt?: string | null;
   meta?: {
@@ -1310,6 +1322,7 @@ export interface AgentsSelect<T extends boolean = true> {
   photo?: T;
   status?: T;
   isPublished?: T;
+  importOwnership?: T;
   importHash?: T;
   lastSeenAt?: T;
   meta?:
@@ -1341,7 +1354,7 @@ export interface FeedSourcesSelect<T extends boolean = true> {
   fieldOwnership?: T;
   minOffersThresholdPercent?: T;
   maxOffersLimit?: T;
-  schedule?: T;
+  publicationMode?: T;
   lastSuccessfulRunAt?: T;
   lastOfferCount?: T;
   updatedAt?: T;

@@ -7,6 +7,8 @@ import * as migration_20260905_103148_standard_21_leads_outbox from './20260905_
 import * as migration_20260905_213045_security_shared_entity_ownership from './20260905_213045_security_shared_entity_ownership';
 import * as migration_20260906_213128_atlas_complex_display_fields from './20260906_213128_atlas_complex_display_fields';
 import * as migration_20260912_102719_core4_layout_unit_expand from './20260912_102719_core4_layout_unit_expand';
+import * as migration_20260912_110758_core4_import_ownership_publication_expand from './20260912_110758_core4_import_ownership_publication_expand';
+import * as migration_20260912_110854_core4_remove_dead_feed_schedule from './20260912_110854_core4_remove_dead_feed_schedule';
 
 export const migrations = [
   {
@@ -52,6 +54,16 @@ export const migrations = [
   {
     up: migration_20260912_102719_core4_layout_unit_expand.up,
     down: migration_20260912_102719_core4_layout_unit_expand.down,
-    name: '20260912_102719_core4_layout_unit_expand'
+    name: '20260912_102719_core4_layout_unit_expand',
+  },
+  {
+    up: migration_20260912_110758_core4_import_ownership_publication_expand.up,
+    down: migration_20260912_110758_core4_import_ownership_publication_expand.down,
+    name: '20260912_110758_core4_import_ownership_publication_expand',
+  },
+  {
+    up: migration_20260912_110854_core4_remove_dead_feed_schedule.up,
+    down: migration_20260912_110854_core4_remove_dead_feed_schedule.down,
+    name: '20260912_110854_core4_remove_dead_feed_schedule'
   },
 ];

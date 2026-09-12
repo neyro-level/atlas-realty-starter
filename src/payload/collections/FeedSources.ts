@@ -20,7 +20,7 @@ export const FeedSources = {
     { name: 'fieldOwnership', type: 'json', defaultValue: {}, validate: validateFeedFieldOwnership, admin: { description: 'Явный владелец импортируемого поля: ключ вида complex.name или building.address, значение — code источника.' } },
     { name: 'minOffersThresholdPercent', type: 'number', defaultValue: 70, min: 0, max: 100, required: true },
     { name: 'maxOffersLimit', type: 'number', defaultValue: 50000, min: 1, required: true },
-    { name: 'schedule', type: 'text' },
+    { name: 'publicationMode', type: 'select', defaultValue: 'review', required: true, options: ['review', 'automatic'], admin: { description: 'review — новые объекты остаются скрытыми; automatic — валидные объекты публикуются только после успешного полного импорта.' } },
     { name: 'lastSuccessfulRunAt', type: 'date', index: true },
     { name: 'lastOfferCount', type: 'number', min: 0 },
   ],

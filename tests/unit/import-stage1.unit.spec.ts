@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 
 import { applyFieldOwnership, evaluateDeactivation, mergeSharedEntityFields, validateFeedFieldOwnership } from '@/core/data-access/ingest/import-policy'
 import { resolveLayoutIdentity } from '@/core/data-access/ingest/layout-identity'
+import { shouldPublishImportedRecords } from '@/core/data-access/ingest/publication-policy'
 import { createIssueCollector } from '@/core/data-access/ingest/run-feed-import'
 import { getFeedParser } from '@/project/ingest/registry'
 import type { NormalizedOffer } from '@/shared/types/feed-import'
@@ -94,5 +95,12 @@ describe('Stage 1 import contracts', () => {
     expect(resolveLayoutIdentity(input)).toEqual(resolveLayoutIdentity(input))
     expect(resolveLayoutIdentity(input)?.identityKey).not.toBe(resolveLayoutIdentity({ ...input, buildingExternalId: 'house-2' })?.identityKey)
     expect(resolveLayoutIdentity({ buildingExternalId: 'house-1', rooms: 2, totalAreaCm2: 520_000 })).toBeNull()
+  })
+
+  it('publishes only successful automatic imports', () => {
+    expect(shouldPublishImportedRecords({ mode: 'automatic', runStatus: 'success' })).toBe(true)
+    expect(shouldPublishImportedRecords({ mode: 'review', runStatus: 'success' })).toBe(false)
+    expect(shouldPublishImportedRecords({ mode: 'automatic', runStatus: 'suspicious' })).toBe(false)
+    expect(shouldPublishImportedRecords({ mode: 'automatic', runStatus: 'failed' })).toBe(false)
   })
 })

@@ -147,9 +147,14 @@ async function resolveOfferRelations(client: Client, feedSourceId: string, offer
     if (offer.agent && agentIdentity) {
       agentId = agentCache.get(agentIdentity) ?? null
       if (!agentId) {
-        const agent = await client.query<{ id: string }>(`INSERT INTO agents (name, slug, origin, feed_source_id, external_id, normalized_phone, phone, email, status, is_published, import_hash, last_seen_at, updated_at, created_at)
-          VALUES ($1,$2,'feed',$3,$4,$5,$6,$7,'active',false,$8,$9,now(),now())
-          ON CONFLICT (feed_source_id, external_id) DO UPDATE SET name=EXCLUDED.name, normalized_phone=EXCLUDED.normalized_phone, phone=EXCLUDED.phone, email=EXCLUDED.email, import_hash=EXCLUDED.import_hash, last_seen_at=EXCLUDED.last_seen_at, status='active', updated_at=now()
+        const agent = await client.query<{ id: string }>(`INSERT INTO agents (name, slug, origin, feed_source_id, external_id, normalized_phone, phone, email, status, is_published, import_ownership, import_hash, last_seen_at, updated_at, created_at)
+          VALUES ($1,$2,'feed',$3,$4,$5,$6,$7,'active',false,'{"fields":{},"manualFields":[]}'::jsonb,$8,$9,now(),now())
+          ON CONFLICT (feed_source_id, external_id) DO UPDATE SET
+            name=CASE WHEN agents.import_ownership->'manualFields' ? 'name' THEN agents.name ELSE EXCLUDED.name END,
+            normalized_phone=EXCLUDED.normalized_phone,
+            phone=CASE WHEN agents.import_ownership->'manualFields' ? 'phone' THEN agents.phone ELSE EXCLUDED.phone END,
+            email=CASE WHEN agents.import_ownership->'manualFields' ? 'email' THEN agents.email ELSE EXCLUDED.email END,
+            import_hash=EXCLUDED.import_hash, last_seen_at=EXCLUDED.last_seen_at, status='active', updated_at=now()
           RETURNING id`, [offer.agent.name ?? 'Агент', stableSlug('agent', feedSourceId, agentIdentity), feedSourceId, agentIdentity, normalizePhone(offer.agent.phone), offer.agent.phone ?? null, offer.agent.email ?? null, stableHash(offer.agent), seenAt])
         agentId = agent.rows[0]!.id
         agentCache.set(agentIdentity, agentId)
