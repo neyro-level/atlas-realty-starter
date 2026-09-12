@@ -6,10 +6,11 @@ import type { Payload } from 'payload'
 import { isAllowedExternalImageURL } from '@/shared/security/media-url'
 import { normalizedOfferHash, normalizedOfferSchema, type NormalizedOffer } from '@/shared/types/feed-import'
 import { mergeSharedEntityFields } from './import-policy'
+import { resolveLayoutIdentity } from './layout-identity'
 
 const MAX_BATCH = 1000
 type Client = { query<T extends Record<string, unknown> = Record<string, unknown>>(sql: string, values?: unknown[]): Promise<{ rowCount: number | null; rows: T[] }>; release(): void }
-type OfferRelations = { agentId: string | null; buildingId: string | null; complexId: string | null }
+type OfferRelations = { agentId: string | null; buildingId: string | null; complexId: string | null; layoutId: string | null; layoutNeedsReview: boolean }
 type SourcePolicy = { code: string; explicitOwners: Record<string, string>; priority: number }
 
 export type ImportBatchResult = { created: number; unchanged: number; updated: number }
@@ -41,7 +42,7 @@ export async function upsertPropertyBatch(payload: Payload, input: { allowedImag
     const relations = await resolveOfferRelations(client, input.feedSourceId, offers, input.seenAt, sourcePolicy)
     const values: unknown[] = []
     const rows = offers.map((offer) => {
-      const relation = relations.get(offer.externalId) ?? { agentId: null, buildingId: null, complexId: null }
+      const relation = relations.get(offer.externalId) ?? { agentId: null, buildingId: null, complexId: null, layoutId: null, layoutNeedsReview: false }
       const start = values.length
       values.push(
         input.feedSourceId, offer.externalId, normalizedOfferHash(offer), input.seenAt, input.importRunId,
@@ -52,18 +53,20 @@ export async function upsertPropertyBatch(payload: Payload, input: { allowedImag
         offer.address.subLocalityName ?? null, offer.address.street ?? null, offer.address.houseNumber ?? null,
         offer.address.addressPublic, offer.address.latitude ?? null, offer.address.longitude ?? null, offer.title,
         offer.description ?? null, relation.agentId, relation.complexId, relation.buildingId, offer.newbuild?.developerName ?? null,
+        relation.layoutNeedsReview, relation.layoutId,
       )
       const parameter = (offset: number) => `$${start + offset}`
-      return `(${parameter(1)},${parameter(2)},'feed',${parameter(3)},${parameter(4)},${parameter(4)},${parameter(5)},'[]'::jsonb,false,'active',false,${parameter(6)},${parameter(7)},${parameter(8)},${parameter(9)},${parameter(10)},${parameter(11)},'RUB',${parameter(12)},${parameter(13)},${parameter(14)},${parameter(15)},${parameter(16)},${parameter(17)},${parameter(18)},${parameter(19)},${parameter(20)},${parameter(21)},${parameter(22)},${parameter(23)},${parameter(24)},${parameter(25)},${parameter(26)},${parameter(27)},${parameter(28)},${parameter(29)},${parameter(30)},${parameter(31)},${parameter(32)},${parameter(33)},now(),now())`
+      return `(${parameter(1)},${parameter(2)},'feed',${parameter(3)},${parameter(4)},${parameter(4)},${parameter(5)},'[]'::jsonb,${parameter(34)},'active',false,${parameter(6)},${parameter(7)},${parameter(8)},${parameter(9)},${parameter(10)},${parameter(11)},'RUB',${parameter(12)},${parameter(13)},${parameter(14)},${parameter(15)},${parameter(16)},${parameter(17)},${parameter(18)},${parameter(19)},${parameter(20)},${parameter(21)},${parameter(22)},${parameter(23)},${parameter(24)},${parameter(25)},${parameter(26)},${parameter(27)},${parameter(28)},${parameter(29)},${parameter(30)},${parameter(31)},${parameter(32)},${parameter(35)},${parameter(33)},now(),now())`
     })
     const imported = await client.query<{ external_id: string; id: string }>(`INSERT INTO properties (
         feed_source_id, external_id, origin, import_hash, first_seen_at, last_seen_at, last_import_run_id, manual_fields, needs_review,
         status, is_published, slug, market, deal_type, category, deal_status, price_minor_units, currency, price_per_meter_minor_units,
         total_area_cm2, living_area_cm2, kitchen_area_cm2, rooms, floor, floors_total, region, district, locality_name, sub_locality_name,
-        street, house_number, address_public, latitude, longitude, title, description, agent_id, complex_id, building_id, developer_name, updated_at, created_at
+        street, house_number, address_public, latitude, longitude, title, description, agent_id, complex_id, building_id, layout_id, developer_name, updated_at, created_at
       ) VALUES ${rows.join(',')}
       ON CONFLICT (feed_source_id, external_id) DO UPDATE SET
         import_hash = EXCLUDED.import_hash, last_seen_at = EXCLUDED.last_seen_at, last_import_run_id = EXCLUDED.last_import_run_id, status = 'active',
+        needs_review = properties.needs_review OR EXCLUDED.needs_review,
         market = CASE WHEN properties.manual_fields ? 'market' THEN properties.market ELSE EXCLUDED.market END,
         deal_type = CASE WHEN properties.manual_fields ? 'dealType' THEN properties.deal_type ELSE EXCLUDED.deal_type END,
         category = CASE WHEN properties.manual_fields ? 'category' THEN properties.category ELSE EXCLUDED.category END,
@@ -90,6 +93,7 @@ export async function upsertPropertyBatch(payload: Payload, input: { allowedImag
         agent_id = CASE WHEN properties.manual_fields ? 'agent' THEN properties.agent_id ELSE EXCLUDED.agent_id END,
         complex_id = CASE WHEN properties.manual_fields ? 'complex' THEN properties.complex_id ELSE EXCLUDED.complex_id END,
         building_id = CASE WHEN properties.manual_fields ? 'building' THEN properties.building_id ELSE EXCLUDED.building_id END,
+        layout_id = CASE WHEN properties.manual_fields ? 'layout' THEN properties.layout_id ELSE EXCLUDED.layout_id END,
         developer_name = CASE WHEN properties.manual_fields ? 'developerName' THEN properties.developer_name ELSE EXCLUDED.developer_name END,
         updated_at = CASE WHEN properties.import_hash IS DISTINCT FROM EXCLUDED.import_hash OR properties.status <> 'active' THEN now() ELSE properties.updated_at END
       RETURNING id, external_id`,
@@ -136,6 +140,7 @@ async function resolveOfferRelations(client: Client, feedSourceId: string, offer
   const agentCache = new Map<string, string>()
   const complexCache = new Map<string, string>()
   const buildingCache = new Map<string, string>()
+  const layoutCache = new Map<string, string>()
   for (const offer of offers) {
     let agentId: string | null = null
     const agentIdentity = offer.agent?.externalId ?? normalizePhone(offer.agent?.phone)
@@ -153,6 +158,8 @@ async function resolveOfferRelations(client: Client, feedSourceId: string, offer
 
     let complexId: string | null = null
     let buildingId: string | null = null
+    let layoutId: string | null = null
+    let layoutNeedsReview = false
     if (offer.newbuild) {
       const newbuild = offer.newbuild
       let developerId: string | null = null
@@ -199,8 +206,30 @@ async function resolveOfferRelations(client: Client, feedSourceId: string, offer
         if (!currentBuilding) await client.query('UPDATE buildings SET import_ownership=$2::jsonb WHERE id=$1', [buildingId, JSON.stringify(mergedBuilding.ownership)])
         buildingCache.set(buildingKey, buildingId)
       }
+      const identity = resolveLayoutIdentity({ buildingExternalId: newbuild.yandexHouseId, explicitExternalId: offer.layout?.externalId, kitchenAreaCm2: offer.kitchenAreaCm2, layoutImageURL: offer.layout?.imageURL, livingAreaCm2: offer.livingAreaCm2, rooms: offer.rooms, totalAreaCm2: offer.totalAreaCm2 })
+      if (!identity) layoutNeedsReview = true
+      else {
+        layoutId = layoutCache.get(identity.identityKey) ?? null
+        if (!layoutId) {
+          const layout = await client.query<{ id: string }>(`INSERT INTO layouts (
+              feed_source_id, external_id, identity_key, complex_id, building_id, import_ownership, name, slug,
+              rooms, total_area_cm2, living_area_cm2, kitchen_area_cm2, needs_review, status, updated_at, created_at
+            ) VALUES ($1,$2,$3,$4,$5,'{"fields":{},"manualFields":[]}'::jsonb,$6,$7,$8,$9,$10,$11,false,'draft',now(),now())
+            ON CONFLICT (feed_source_id, identity_key) DO UPDATE SET
+              building_id=EXCLUDED.building_id,
+              name=CASE WHEN layouts.import_ownership->'manualFields' ? 'name' THEN layouts.name ELSE EXCLUDED.name END,
+              rooms=CASE WHEN layouts.import_ownership->'manualFields' ? 'rooms' THEN layouts.rooms ELSE EXCLUDED.rooms END,
+              total_area_cm2=CASE WHEN layouts.import_ownership->'manualFields' ? 'totalAreaCm2' THEN layouts.total_area_cm2 ELSE EXCLUDED.total_area_cm2 END,
+              living_area_cm2=CASE WHEN layouts.import_ownership->'manualFields' ? 'livingAreaCm2' THEN layouts.living_area_cm2 ELSE EXCLUDED.living_area_cm2 END,
+              kitchen_area_cm2=CASE WHEN layouts.import_ownership->'manualFields' ? 'kitchenAreaCm2' THEN layouts.kitchen_area_cm2 ELSE EXCLUDED.kitchen_area_cm2 END,
+              updated_at=now()
+            RETURNING id`, [feedSourceId, identity.externalId, identity.identityKey, complexId, buildingId, layoutName(offer.rooms, offer.totalAreaCm2), stableSlug('layout', feedSourceId, identity.identityKey), offer.rooms ?? null, offer.totalAreaCm2, offer.livingAreaCm2 ?? null, offer.kitchenAreaCm2 ?? null])
+          layoutId = layout.rows[0]!.id
+          layoutCache.set(identity.identityKey, layoutId)
+        }
+      }
     }
-    result.set(offer.externalId, { agentId, buildingId, complexId })
+    result.set(offer.externalId, { agentId, buildingId, complexId, layoutId, layoutNeedsReview })
   }
   return result
 }
@@ -217,6 +246,11 @@ function stableHash(value: unknown) {
 
 function stableSlug(prefix: string, ...parts: string[]) {
   return `${prefix}-${stableHash(parts).slice(0, 24)}`
+}
+
+function layoutName(rooms: number | undefined, totalAreaCm2: number) {
+  const roomLabel = rooms == null ? 'Планировка' : rooms === 0 ? 'Студия' : `${rooms}-комнатная`
+  return `${roomLabel}, ${(totalAreaCm2 / 10_000).toLocaleString('ru-RU', { maximumFractionDigits: 2 })} м²`
 }
 
 export async function deactivateMissingProperties(payload: Payload, input: { feedSourceId: string; snapshotStartedAt: string }) {

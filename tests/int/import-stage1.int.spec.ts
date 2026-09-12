@@ -73,6 +73,34 @@ describe('Stage 1 database import', () => {
     expect((await payload.count({ collection: 'buildings', overrideAccess: true })).totalDocs).toBe(1)
   })
 
+  it('deduplicates layouts within a source and isolates them across sources', async () => {
+    const payload = await getTestPayload()
+    const firstSource = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'layouts-first', title: 'First', market: 'newbuild', parser: 'yrl-newbuild', feedUrlRef: 'FIRST_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const secondSource = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'layouts-second', title: 'Second', market: 'newbuild', parser: 'yrl-newbuild', feedUrlRef: 'SECOND_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const firstRun = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'layouts-first-run', source: firstSource.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
+    const secondRun = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'layouts-second-run', source: secondSource.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
+    const base: NormalizedOffer = { ...offer('Unit one'), externalId: 'unit-1', market: 'newbuild', rooms: 2, layout: { externalId: 'layout-42' }, newbuild: { yandexBuildingId: 'complex-layout', yandexHouseId: 'house-layout', complexName: 'Layout complex', buildingName: 'Layout house', readiness: 'construction' } }
+    await upsertPropertyBatch(payload, { feedSourceId: firstSource.id, importRunId: firstRun.id, offers: [base, { ...base, externalId: 'unit-2', title: 'Unit two' }], seenAt: new Date().toISOString() })
+    await upsertPropertyBatch(payload, { feedSourceId: firstSource.id, importRunId: firstRun.id, offers: [base], seenAt: new Date().toISOString() })
+    await upsertPropertyBatch(payload, { feedSourceId: secondSource.id, importRunId: secondRun.id, offers: [{ ...base, externalId: 'unit-3' }], seenAt: new Date().toISOString() })
+    expect((await payload.count({ collection: 'layouts', overrideAccess: true })).totalDocs).toBe(2)
+    const firstUnits = await payload.find({ collection: 'properties', overrideAccess: true, depth: 0, limit: 10, where: { feedSource: { equals: firstSource.id } } })
+    expect(firstUnits.docs).toHaveLength(2)
+    expect(new Set(firstUnits.docs.map((unit) => unit.layout)).size).toBe(1)
+  })
+
+  it('marks ambiguous newbuild units for review without creating a layout', async () => {
+    const payload = await getTestPayload()
+    const source = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'ambiguous-layout', title: 'Ambiguous', market: 'newbuild', parser: 'yrl-newbuild', feedUrlRef: 'AMBIGUOUS_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const run = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'ambiguous-layout-run', source: source.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
+    const ambiguous: NormalizedOffer = { ...offer('Ambiguous unit'), market: 'newbuild', rooms: 2, newbuild: { yandexBuildingId: 'ambiguous-complex', yandexHouseId: 'ambiguous-house', complexName: 'Ambiguous complex', buildingName: 'Ambiguous house', readiness: 'construction' } }
+    await upsertPropertyBatch(payload, { feedSourceId: source.id, importRunId: run.id, offers: [ambiguous], seenAt: new Date().toISOString() })
+    const property = (await payload.find({ collection: 'properties', overrideAccess: true, depth: 0, limit: 1, where: { feedSource: { equals: source.id } } })).docs[0]
+    expect(property?.layout).toBeNull()
+    expect(property?.needsReview).toBe(true)
+    expect((await payload.count({ collection: 'layouts', overrideAccess: true })).totalDocs).toBe(0)
+  })
+
   it('preserves shared newbuild entities by manual and source priority rules', async () => {
     const payload = await getTestPayload()
     const { superAdmin } = await seedPrivilegedUsers()

@@ -6,6 +6,7 @@ import * as migration_20260905_093617_standard_21_public_catalog from './2026090
 import * as migration_20260905_103148_standard_21_leads_outbox from './20260905_103148_standard_21_leads_outbox';
 import * as migration_20260905_213045_security_shared_entity_ownership from './20260905_213045_security_shared_entity_ownership';
 import * as migration_20260906_213128_atlas_complex_display_fields from './20260906_213128_atlas_complex_display_fields';
+import * as migration_20260912_102719_core4_layout_unit_expand from './20260912_102719_core4_layout_unit_expand';
 
 export const migrations = [
   {
@@ -46,6 +47,11 @@ export const migrations = [
   {
     up: migration_20260906_213128_atlas_complex_display_fields.up,
     down: migration_20260906_213128_atlas_complex_display_fields.down,
-    name: '20260906_213128_atlas_complex_display_fields'
+    name: '20260906_213128_atlas_complex_display_fields',
+  },
+  {
+    up: migration_20260912_102719_core4_layout_unit_expand.up,
+    down: migration_20260912_102719_core4_layout_unit_expand.down,
+    name: '20260912_102719_core4_layout_unit_expand'
   },
 ];

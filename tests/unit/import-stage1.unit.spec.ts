@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
 import { applyFieldOwnership, evaluateDeactivation, mergeSharedEntityFields, validateFeedFieldOwnership } from '@/core/data-access/ingest/import-policy'
+import { resolveLayoutIdentity } from '@/core/data-access/ingest/layout-identity'
 import { createIssueCollector } from '@/core/data-access/ingest/run-feed-import'
 import { getFeedParser } from '@/project/ingest/registry'
 import type { NormalizedOffer } from '@/shared/types/feed-import'
@@ -85,5 +86,13 @@ describe('Stage 1 import contracts', () => {
     expect(reserved.fields.name).toBe('')
     const explicit = mergeSharedEntityFields({ current: { name: 'Secondary name' }, explicitOwners: { 'complex.name': 'primary' }, incoming: { name: 'Owner name' }, ownership: { fields: { name: { priority: 1, sourceCode: 'secondary' } }, manualFields: [] }, prefix: 'complex', sourceCode: 'primary', sourcePriority: 20 })
     expect(explicit.fields.name).toBe('Owner name')
+  })
+
+  it('uses conservative stable layout identities', () => {
+    expect(resolveLayoutIdentity({ buildingExternalId: 'house-1', explicitExternalId: ' plan-42 ', totalAreaCm2: 500_000 })).toEqual({ externalId: 'plan-42', identityKey: 'external:plan-42', kind: 'explicit' })
+    const input = { buildingExternalId: 'house-1', kitchenAreaCm2: 90_000, layoutImageURL: 'https://img.example.test/layout.png', livingAreaCm2: 310_000, rooms: 2, totalAreaCm2: 520_000 }
+    expect(resolveLayoutIdentity(input)).toEqual(resolveLayoutIdentity(input))
+    expect(resolveLayoutIdentity(input)?.identityKey).not.toBe(resolveLayoutIdentity({ ...input, buildingExternalId: 'house-2' })?.identityKey)
+    expect(resolveLayoutIdentity({ buildingExternalId: 'house-1', rooms: 2, totalAreaCm2: 520_000 })).toBeNull()
   })
 })

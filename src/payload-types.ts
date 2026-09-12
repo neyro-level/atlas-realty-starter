@@ -73,6 +73,7 @@ export interface Config {
     posts: Post;
     leads: Lead;
     'lead-deliveries': LeadDelivery;
+    layouts: Layout;
     properties: Property;
     'residential-complexes': ResidentialComplex;
     buildings: Building;
@@ -96,6 +97,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
     'lead-deliveries': LeadDeliveriesSelect<false> | LeadDeliveriesSelect<true>;
+    layouts: LayoutsSelect<false> | LayoutsSelect<true>;
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
     'residential-complexes': ResidentialComplexesSelect<false> | ResidentialComplexesSelect<true>;
     buildings: BuildingsSelect<false> | BuildingsSelect<true>;
@@ -359,6 +361,7 @@ export interface Property {
   layoutImage?: (string | null) | Media;
   complex?: (string | null) | ResidentialComplex;
   building?: (string | null) | Building;
+  layout?: (string | null) | Layout;
   buildingType?: string | null;
   builtYear?: number | null;
   readyQuarter?: string | null;
@@ -617,6 +620,42 @@ export interface Building {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "layouts".
+ */
+export interface Layout {
+  id: string;
+  feedSource: string | FeedSource;
+  externalId?: string | null;
+  identityKey: string;
+  complex: string | ResidentialComplex;
+  building?: (string | null) | Building;
+  importOwnership?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  name: string;
+  slug: string;
+  rooms?: number | null;
+  totalAreaCm2: number;
+  livingAreaCm2?: number | null;
+  kitchenAreaCm2?: number | null;
+  layoutImage?: (string | null) | Media;
+  needsReview: boolean;
+  status: 'draft' | 'published' | 'hidden';
+  unitCount?: number | null;
+  availableUnitCount?: number | null;
+  priceFromMinorUnits?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  deletedAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "lead-deliveries".
  */
 export interface LeadDelivery {
@@ -842,6 +881,10 @@ export interface PayloadLockedDocument {
         value: string | LeadDelivery;
       } | null)
     | ({
+        relationTo: 'layouts';
+        value: string | Layout;
+      } | null)
+    | ({
         relationTo: 'properties';
         value: string | Property;
       } | null)
@@ -1055,6 +1098,33 @@ export interface LeadDeliveriesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "layouts_select".
+ */
+export interface LayoutsSelect<T extends boolean = true> {
+  feedSource?: T;
+  externalId?: T;
+  identityKey?: T;
+  complex?: T;
+  building?: T;
+  importOwnership?: T;
+  name?: T;
+  slug?: T;
+  rooms?: T;
+  totalAreaCm2?: T;
+  livingAreaCm2?: T;
+  kitchenAreaCm2?: T;
+  layoutImage?: T;
+  needsReview?: T;
+  status?: T;
+  unitCount?: T;
+  availableUnitCount?: T;
+  priceFromMinorUnits?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  deletedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "properties_select".
  */
 export interface PropertiesSelect<T extends boolean = true> {
@@ -1094,6 +1164,7 @@ export interface PropertiesSelect<T extends boolean = true> {
   layoutImage?: T;
   complex?: T;
   building?: T;
+  layout?: T;
   buildingType?: T;
   builtYear?: T;
   readyQuarter?: T;

@@ -6,8 +6,8 @@ import type { Payload, Where } from 'payload'
 import { createPublicGatewayContext } from '@/core/access/public-gateway'
 import { PUBLIC_CACHE_TAGS } from '@/core/cache/public-cache'
 import type { PublicCatalogQuery } from '@/core/query/public-api'
-import { publicAgentSelect, publicComplexSelect, publicPageSelect, publicPostSelect, publicPropertyDetailSelect, publicPropertySelect, publicRedirectSelect } from '@/core/query/public-selects'
-import type { Agent, Page, Post, Property, Redirect, ResidentialComplex } from '@/payload-types'
+import { publicAgentSelect, publicComplexSelect, publicLayoutSelect, publicPageSelect, publicPostSelect, publicPropertyDetailSelect, publicPropertySelect, publicRedirectSelect } from '@/core/query/public-selects'
+import type { Agent, Layout, Page, Post, Property, Redirect, ResidentialComplex } from '@/payload-types'
 import type {
   PaginatedPublicResult,
   PublicAgent,
@@ -15,6 +15,7 @@ import type {
   PublicConfig,
   PublicContentDocument,
   PublicFacets,
+  PublicLayout,
   PublicMediaView,
   PublicProperty,
   PublicPropertyDetails,
@@ -28,6 +29,7 @@ export type {
   PublicConfig,
   PublicContentDocument,
   PublicFacets,
+  PublicLayout,
   PublicProperty,
   PublicPropertyDetails,
   PublicRedirect,
@@ -40,6 +42,7 @@ const cacheFor = <T>(key: string[], tags: string[], loader: () => Promise<T>) =>
 type PropertyView = Pick<Property, 'addressPublic' | 'agent' | 'category' | 'dealStatus' | 'dealType' | 'description' | 'district' | 'floor' | 'floorsTotal' | 'id' | 'market' | 'meta' | 'photos' | 'priceMinorUnits' | 'pricePerMeterMinorUnits' | 'rooms' | 'slug' | 'status' | 'title' | 'totalAreaCm2' | 'updatedAt'>
 type PropertyDetailView = PropertyView & Pick<Property, 'building' | 'complex' | 'latitude' | 'longitude' | 'mortgageAvailable' | 'videoUrl'>
 type ComplexView = Pick<ResidentialComplex, 'address' | 'availablePropertyCount' | 'classLabel' | 'completionLabel' | 'description' | 'developer' | 'district' | 'floorsLabel' | 'id' | 'latitude' | 'longitude' | 'meta' | 'name' | 'photos' | 'priceFromMinorUnits' | 'readiness' | 'slug' | 'updatedAt'>
+type LayoutView = Pick<Layout, 'availableUnitCount' | 'building' | 'id' | 'kitchenAreaCm2' | 'layoutImage' | 'livingAreaCm2' | 'name' | 'priceFromMinorUnits' | 'rooms' | 'slug' | 'totalAreaCm2' | 'unitCount'>
 type AgentView = Pick<Agent, 'bio' | 'email' | 'id' | 'meta' | 'name' | 'phone' | 'photo' | 'position' | 'slug'>
 type ContentView = Pick<Page, 'content' | 'id' | 'meta' | 'slug' | 'title' | 'updatedAt'> & { excerpt?: Post['excerpt']; publishedAt?: Post['publishedAt'] }
 type RedirectView = Pick<Redirect, 'from' | 'id' | 'to' | 'type'>
@@ -59,6 +62,10 @@ export function getPublicComplexes(payload: Payload, query: Pick<PublicCatalogQu
 
 export function getPublicComplexBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
   return queryPublicComplexBySlug(payload, slug, options)
+}
+
+export function getPublicLayoutsForComplex(payload: Payload, complexId: string, options: PublicQueryOptions) {
+  return queryPublicLayoutsForComplex(payload, complexId, options)
 }
 
 export function getPublicAgentBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
@@ -164,6 +171,11 @@ async function queryPublicComplexBySlug(payload: Payload, slug: string, options:
   return result.docs[0] ? toPublicComplex(result.docs[0], options) : null
 }
 
+async function queryPublicLayoutsForComplex(payload: Payload, complexId: string, options: PublicQueryOptions): Promise<PublicLayout[]> {
+  const result = await payload.find({ collection: 'layouts', context: context(), depth: 1, limit: 500, overrideAccess: false, pagination: false, select: publicLayoutSelect, sort: 'totalAreaCm2', where: { complex: { equals: complexId } } })
+  return result.docs.map((layout) => toPublicLayout(layout, options))
+}
+
 async function queryPublicAgentBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
   const result = await payload.find({ collection: 'agents', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicAgentSelect, where: { slug: { equals: slug } } })
   return result.docs[0] ? toPublicAgent(result.docs[0], options) : null
@@ -257,6 +269,23 @@ function toPublicProperty(property: PropertyView, options: PublicQueryOptions): 
     rooms: property.rooms ?? undefined, seo: toPublicSEO(property.meta, `properties/${property.slug}`, property.title, options, property.status === 'sold'),
     slug: property.slug, status: property.status as PublicProperty['status'], title: property.title,
     totalAreaCm2: property.totalAreaCm2, updatedAt: property.updatedAt,
+  }
+}
+
+function toPublicLayout(layout: LayoutView, options: PublicQueryOptions): PublicLayout {
+  return {
+    availableUnitCount: layout.availableUnitCount ?? 0,
+    buildingId: relationId(layout.building),
+    id: layout.id,
+    image: singleMedia(layout.layoutImage, layout.name, options),
+    kitchenAreaM2: layout.kitchenAreaCm2 == null ? undefined : layout.kitchenAreaCm2 / 10_000,
+    livingAreaM2: layout.livingAreaCm2 == null ? undefined : layout.livingAreaCm2 / 10_000,
+    name: layout.name,
+    priceFromMinorUnits: layout.priceFromMinorUnits ?? undefined,
+    rooms: layout.rooms ?? undefined,
+    slug: layout.slug,
+    totalAreaM2: layout.totalAreaCm2 / 10_000,
+    unitCount: layout.unitCount ?? 0,
   }
 }
 

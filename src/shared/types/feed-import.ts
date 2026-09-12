@@ -36,6 +36,7 @@ export const normalizedOfferSchema = z.object({
     longitude: z.number().min(-180).max(180).optional(),
   }),
   agent: z.object({ externalId: optionalText, name: optionalText, phone: optionalText, email: z.email().optional() }).optional(),
+  layout: z.object({ externalId: optionalText, imageURL: z.url({ protocol: /^https$/ }).optional() }).optional(),
   newbuild: z.object({
     yandexBuildingId: z.string().trim().min(1).max(256),
     yandexHouseId: z.string().trim().min(1).max(256),

@@ -46,6 +46,7 @@ function normalize(raw: RawOffer, market: 'secondary' | 'newbuild'): NormalizedO
       latitude: amount(raw, 'location.latitude'), longitude: amount(raw, 'location.longitude'),
     },
     agent: value(raw, 'sales-agent.phone') || value(raw, 'sales-agent.name') ? { externalId: value(raw, 'sales-agent.id'), name: value(raw, 'sales-agent.name'), phone: value(raw, 'sales-agent.phone'), email: value(raw, 'sales-agent.email') } : undefined,
+    layout: value(raw, 'layout-id') || value(raw, 'plan-id') || value(raw, 'layout-image') || value(raw, 'plan-image') ? { externalId: value(raw, 'layout-id') ?? value(raw, 'plan-id'), imageURL: value(raw, 'layout-image') ?? value(raw, 'plan-image') } : undefined,
     newbuild: market === 'newbuild' ? {
       yandexBuildingId: value(raw, 'yandex-building-id') ?? value(raw, 'building-id'),
       yandexHouseId: value(raw, 'yandex-house-id') ?? value(raw, 'house-id'),

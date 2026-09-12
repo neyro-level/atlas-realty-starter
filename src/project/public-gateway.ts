@@ -8,6 +8,7 @@ import {
   getPublicCatalog as queryPublicCatalog,
   getPublicComplexBySlug as queryPublicComplexBySlug,
   getPublicComplexes as queryPublicComplexes,
+  getPublicLayoutsForComplex as queryPublicLayoutsForComplex,
   getPublicConfig as queryPublicConfig,
   getPublicFacets as queryPublicFacets,
   getPublicPageBySlug as queryPublicPageBySlug,
@@ -38,6 +39,10 @@ export async function getPublicComplexes(query: Pick<PublicCatalogQuery, 'distri
 
 export async function getPublicComplexBySlug(slug: string) {
   return queryPublicComplexBySlug(await payload(), slug, options)
+}
+
+export async function getPublicLayoutsForComplex(complexId: string) {
+  return queryPublicLayoutsForComplex(await payload(), complexId, options)
 }
 
 export async function getPublicAgentBySlug(slug: string) {

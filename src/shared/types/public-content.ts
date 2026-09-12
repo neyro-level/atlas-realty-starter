@@ -65,6 +65,21 @@ export type PublicComplex = {
   updatedAt: string
 }
 
+export type PublicLayout = {
+  availableUnitCount: number
+  buildingId?: string
+  id: string
+  image?: PublicMediaView
+  kitchenAreaM2?: number
+  livingAreaM2?: number
+  name: string
+  priceFromMinorUnits?: number
+  rooms?: number
+  slug: string
+  totalAreaM2: number
+  unitCount: number
+}
+
 export type PublicAgent = {
   bio: string
   email?: string

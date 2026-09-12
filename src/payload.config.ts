@@ -20,6 +20,7 @@ import { ImportIssues } from './payload/collections/ImportIssues'
 import { ImportRuns } from './payload/collections/ImportRuns'
 import { LeadDeliveries } from './payload/collections/LeadDeliveries'
 import { Leads } from './payload/collections/Leads'
+import { Layouts } from './payload/collections/Layouts'
 import { Media } from './payload/collections/Media'
 import { Pages } from './payload/collections/Pages'
 import { Posts } from './payload/collections/Posts'
@@ -63,6 +64,7 @@ export default buildConfig({
     Posts,
     Leads,
     LeadDeliveries,
+    Layouts,
     Properties,
     ResidentialComplexes,
     Buildings,

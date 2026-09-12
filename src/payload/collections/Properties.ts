@@ -79,6 +79,7 @@ export const Properties = {
 
     { name: 'complex', type: 'relationship', relationTo: 'residential-complexes', index: true },
     { name: 'building', type: 'relationship', relationTo: 'buildings', index: true },
+    { name: 'layout', type: 'relationship', relationTo: 'layouts', index: true },
     { name: 'buildingType', type: 'text', index: true },
     { name: 'builtYear', type: 'number', min: 1700, index: true },
     { name: 'readyQuarter', type: 'text' },
