@@ -31,6 +31,7 @@ export async function resetFoundationState() {
   const payload = await getTestPayload()
   const collections = [
     'payload-jobs',
+    'catalog-stats',
     'import-issues',
     'import-runs',
     'properties',

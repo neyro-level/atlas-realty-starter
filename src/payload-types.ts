@@ -77,6 +77,7 @@ export interface Config {
     properties: Property;
     'residential-complexes': ResidentialComplex;
     buildings: Building;
+    'catalog-stats': CatalogStat;
     developers: Developer;
     agents: Agent;
     'feed-sources': FeedSource;
@@ -101,6 +102,7 @@ export interface Config {
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
     'residential-complexes': ResidentialComplexesSelect<false> | ResidentialComplexesSelect<true>;
     buildings: BuildingsSelect<false> | BuildingsSelect<true>;
+    'catalog-stats': CatalogStatsSelect<false> | CatalogStatsSelect<true>;
     developers: DevelopersSelect<false> | DevelopersSelect<true>;
     agents: AgentsSelect<false> | AgentsSelect<true>;
     'feed-sources': FeedSourcesSelect<false> | FeedSourcesSelect<true>;
@@ -689,6 +691,62 @@ export interface LeadDelivery {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "catalog-stats".
+ */
+export interface CatalogStat {
+  id: string;
+  scope: string;
+  categories?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  districts?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  markets?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  rooms?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  totals?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  sourceImportRun?: (string | null) | ImportRun;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "import-issues".
  */
 export interface ImportIssue {
@@ -907,6 +965,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'buildings';
         value: string | Building;
+      } | null)
+    | ({
+        relationTo: 'catalog-stats';
+        value: string | CatalogStat;
       } | null)
     | ({
         relationTo: 'developers';
@@ -1289,6 +1351,21 @@ export interface BuildingsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   deletedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "catalog-stats_select".
+ */
+export interface CatalogStatsSelect<T extends boolean = true> {
+  scope?: T;
+  categories?: T;
+  districts?: T;
+  markets?: T;
+  rooms?: T;
+  totals?: T;
+  sourceImportRun?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

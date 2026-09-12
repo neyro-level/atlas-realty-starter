@@ -9,6 +9,7 @@ import * as migration_20260906_213128_atlas_complex_display_fields from './20260
 import * as migration_20260912_102719_core4_layout_unit_expand from './20260912_102719_core4_layout_unit_expand';
 import * as migration_20260912_110758_core4_import_ownership_publication_expand from './20260912_110758_core4_import_ownership_publication_expand';
 import * as migration_20260912_110854_core4_remove_dead_feed_schedule from './20260912_110854_core4_remove_dead_feed_schedule';
+import * as migration_20260912_112509_core4_catalog_read_model from './20260912_112509_core4_catalog_read_model';
 
 export const migrations = [
   {
@@ -64,6 +65,11 @@ export const migrations = [
   {
     up: migration_20260912_110854_core4_remove_dead_feed_schedule.up,
     down: migration_20260912_110854_core4_remove_dead_feed_schedule.down,
-    name: '20260912_110854_core4_remove_dead_feed_schedule'
+    name: '20260912_110854_core4_remove_dead_feed_schedule',
+  },
+  {
+    up: migration_20260912_112509_core4_catalog_read_model.up,
+    down: migration_20260912_112509_core4_catalog_read_model.down,
+    name: '20260912_112509_core4_catalog_read_model'
   },
 ];

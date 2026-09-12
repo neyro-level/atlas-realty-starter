@@ -11,3 +11,4 @@ export const publicAgentSelect = { bio: true, email: true, id: true, meta: true,
 export const publicPageSelect = { content: true, id: true, meta: true, slug: true, title: true, updatedAt: true } as const
 export const publicPostSelect = { content: true, excerpt: true, id: true, meta: true, publishedAt: true, slug: true, title: true, updatedAt: true } as const
 export const publicRedirectSelect = { from: true, to: true, type: true } as const
+export const publicCatalogStatsSelect = { categories: true, districts: true, markets: true, rooms: true } as const

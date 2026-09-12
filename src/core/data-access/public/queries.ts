@@ -6,7 +6,7 @@ import type { Payload, Where } from 'payload'
 import { createPublicGatewayContext } from '@/core/access/public-gateway'
 import { PUBLIC_CACHE_TAGS } from '@/core/cache/public-cache'
 import type { PublicCatalogQuery } from '@/core/query/public-api'
-import { publicAgentSelect, publicComplexSelect, publicLayoutSelect, publicPageSelect, publicPostSelect, publicPropertyDetailSelect, publicPropertySelect, publicRedirectSelect } from '@/core/query/public-selects'
+import { publicAgentSelect, publicCatalogStatsSelect, publicComplexSelect, publicLayoutSelect, publicPageSelect, publicPostSelect, publicPropertyDetailSelect, publicPropertySelect, publicRedirectSelect } from '@/core/query/public-selects'
 import type { Agent, Layout, Page, Post, Property, Redirect, ResidentialComplex } from '@/payload-types'
 import type {
   PaginatedPublicResult,
@@ -202,26 +202,14 @@ async function queryPublicPosts(payload: Payload, options: PublicQueryOptions): 
 }
 
 async function queryPublicFacets(payload: Payload): Promise<PublicFacets> {
-  const categories = new Map<string, number>()
-  const districts = new Map<string, number>()
-  const markets = new Map<string, number>()
-  const rooms = new Map<number, number>()
-  for (let page = 1; page <= 10; page++) {
-    const result = await payload.find({ collection: 'properties', context: context(), depth: 0, limit: 5_000, overrideAccess: false, page, pagination: true, select: { category: true, district: true, market: true, rooms: true }, where: { status: { in: ['active', 'reserved'] } } })
-    for (const property of result.docs) {
-      increment(categories, property.category)
-      if (property.district) increment(districts, property.district)
-      increment(markets, property.market)
-      if (property.rooms !== null && property.rooms !== undefined) increment(rooms, property.rooms)
-    }
-    if (!result.hasNextPage) break
-  }
-  return {
-    categories: [...categories].sort(([a], [b]) => a.localeCompare(b)).map(([value, count]) => ({ count, value: value as PublicProperty['category'] })),
-    districts: [...districts].sort(([a], [b]) => a.localeCompare(b)).map(([value, count]) => ({ count, value })),
-    markets: [...markets].sort(([a], [b]) => a.localeCompare(b)).map(([value, count]) => ({ count, value: value as PublicProperty['market'] })),
-    rooms: [...rooms].sort(([a], [b]) => a - b).map(([value, count]) => ({ count, value })),
-  }
+  const result = await payload.find({ collection: 'catalog-stats', context: context(), depth: 0, limit: 1, overrideAccess: false, pagination: false, select: publicCatalogStatsSelect, where: { scope: { equals: 'default' } } })
+  const stats = result.docs[0]
+  return stats ? {
+    categories: facetEntries(stats.categories) as PublicFacets['categories'],
+    districts: facetEntries(stats.districts) as PublicFacets['districts'],
+    markets: facetEntries(stats.markets) as PublicFacets['markets'],
+    rooms: facetEntries(stats.rooms) as PublicFacets['rooms'],
+  } : { categories: [], districts: [], markets: [], rooms: [] }
 }
 
 async function queryPublicRedirect(payload: Payload, from: string): Promise<PublicRedirect | null> {
@@ -387,6 +375,7 @@ function redirectDestination(redirect: RedirectView) {
   return `/${prefix[reference.relationTo]}/${String(reference.value.slug)}`
 }
 
-function increment<K>(map: Map<K, number>, key: K) {
-  map.set(key, (map.get(key) ?? 0) + 1)
+function facetEntries(value: unknown): Array<{ count: number; value: number | string }> {
+  if (!Array.isArray(value)) return []
+  return value.flatMap((entry) => entry && typeof entry === 'object' && 'count' in entry && 'value' in entry && typeof entry.count === 'number' && (typeof entry.value === 'number' || typeof entry.value === 'string') ? [{ count: entry.count, value: entry.value }] : [])
 }

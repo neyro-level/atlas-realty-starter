@@ -14,6 +14,7 @@ import { recoverLeadDeliveriesTask } from './core/data-access/system/jobs/recove
 import { createImportFeedTask } from './core/data-access/ingest/import-feed-task'
 import { Agents } from './payload/collections/Agents'
 import { Buildings } from './payload/collections/Buildings'
+import { CatalogStats } from './payload/collections/CatalogStats'
 import { Developers } from './payload/collections/Developers'
 import { FeedSources } from './payload/collections/FeedSources'
 import { ImportIssues } from './payload/collections/ImportIssues'
@@ -68,6 +69,7 @@ export default buildConfig({
     Properties,
     ResidentialComplexes,
     Buildings,
+    CatalogStats,
     Developers,
     Agents,
     FeedSources,

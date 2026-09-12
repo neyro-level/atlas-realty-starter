@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { deactivateMissingProperties, upsertPropertyBatch } from '@/core/data-access/ingest/property-import'
+import { postProcessSuccessfulImport } from '@/core/data-access/ingest/post-import'
 import type { NormalizedOffer } from '@/shared/types/feed-import'
 import { getTestPayload, resetFoundationState, seedPrivilegedUsers } from '../helpers/payload'
 
@@ -112,6 +113,21 @@ describe('Stage 1 database import', () => {
     expect(property?.layout).toBeNull()
     expect(property?.needsReview).toBe(true)
     expect((await payload.count({ collection: 'layouts', overrideAccess: true })).totalDocs).toBe(0)
+  })
+
+  it('publishes and prepares aggregates only in the successful post-import stage', async () => {
+    const payload = await getTestPayload()
+    const source = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'aggregate-source', title: 'Aggregate', market: 'newbuild', parser: 'yrl-newbuild', publicationMode: 'automatic', feedUrlRef: 'AGGREGATE_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const run = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'aggregate-run', source: source.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
+    const unit: NormalizedOffer = { ...offer('Published unit'), externalId: 'published-unit', market: 'newbuild', rooms: 1, layout: { externalId: 'published-layout' }, newbuild: { yandexBuildingId: 'published-complex', yandexHouseId: 'published-house', complexName: 'Published complex', buildingName: 'Published house', readiness: 'construction' } }
+    await upsertPropertyBatch(payload, { feedSourceId: source.id, importRunId: run.id, offers: [unit], seenAt: new Date().toISOString() })
+    expect((await payload.find({ collection: 'properties', overrideAccess: true, limit: 1 })).docs[0]?.isPublished).toBe(false)
+    await postProcessSuccessfulImport(payload, { publicationMode: 'automatic', runId: run.id, sourceId: source.id })
+    expect((await payload.find({ collection: 'properties', overrideAccess: true, limit: 1 })).docs[0]?.isPublished).toBe(true)
+    expect((await payload.find({ collection: 'residential-complexes', overrideAccess: true, limit: 1 })).docs[0]).toMatchObject({ availablePropertyCount: 1, propertyCount: 1, status: 'published' })
+    expect((await payload.find({ collection: 'layouts', overrideAccess: true, limit: 1 })).docs[0]).toMatchObject({ availableUnitCount: 1, status: 'published', unitCount: 1 })
+    const stats = (await payload.find({ collection: 'catalog-stats', overrideAccess: true, limit: 1 })).docs[0]
+    expect(stats?.categories).toEqual([{ count: 1, value: 'apartment' }])
   })
 
   it('preserves shared newbuild entities by manual and source priority rules', async () => {
