@@ -81,10 +81,13 @@ Database rollback is not automatic. Every migration must be reviewed for backwar
 ## Validation commands
 
 - Stage migrations: `pnpm db:migrate:stage1-check`, `pnpm db:migrate:stage2-check`, `pnpm db:migrate:stage3-check`.
+- Core 4.0 migrations: `pnpm db:migrate:native:check` proves an empty schema; `pnpm db:migrate:core4-upgrade-check` reconstructs the pre-Core4 boundary, migrates it forward and verifies preserved data.
 - Critical integration: `pnpm test:int`.
 - Critical browser flows: `pnpm test:e2e`; production-shaped: `pnpm test:e2e:production`.
 - Scale evidence: `pnpm benchmark:import:50k`, `pnpm benchmark:public:50k` against the dedicated resettable test database only.
 - Backup/restore: `pnpm db:backup:check` against an explicitly isolated validation database.
+
+Core 4.0 local baseline on 2026-09-12, Windows 11 with native PostgreSQL 18 and the pinned runtime: 50,000 records imported in 40.7–52.0 seconds (962–1,227 records/second); post-import publication/read-model processing took 18.6–20.0 seconds. The public proof measured catalog 349 ms, common filtered/sorted catalog 143 ms, property detail 87 ms, complex detail 17 ms, prepared facets 12 ms and a 10,000-row sitemap chunk 2.6 seconds. Query-plan review used the existing `isPublished` index for catalog, filtered and sitemap paths; no additional composite index was justified by this baseline.
 
 ## Client production baseline
 

@@ -31,6 +31,8 @@
 - User-context Local API sets `overrideAccess: false`; update/delete also set `overrideLock: false`.
 - `overrideAccess: true` is allowed only in the typed System Gateway. Raw DB/SQL is allowed only in the Ingest Gateway, migrations and documented maintenance.
 - Production schema uses append-only `migrations-v2`; `push` stays false.
+- New-build inventory remains in `properties`; `layouts` is the first-class grouping/read model and never a second inventory collection.
+- Catalog facets are read from the Payload-owned `catalog-stats` record rebuilt only after a successful import; public requests never scan the full property catalog to derive facets.
 - Product identity is Atlas for Krasnodar at `atlas.ams24.ru`; legal and public contact data are defined in `src/project/site-identity.ts`.
 - Atlas must remain non-indexable while demonstration content is present or source rights are unverified.
 - External legacy runtime/database are validation inputs only and are never changed without a separate release command.

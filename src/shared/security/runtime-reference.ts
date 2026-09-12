@@ -1,6 +1,7 @@
 const runtimeReferencePattern = /^[A-Z][A-Z0-9_]{1,127}$/
 
 export function validateRuntimeReferenceName(value: unknown) {
+  if (value == null || value === '') return true
   return typeof value === 'string' && runtimeReferencePattern.test(value) || 'Укажите только имя переменной окружения в UPPER_SNAKE_CASE.'
 }
 

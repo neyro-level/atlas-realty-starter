@@ -25,6 +25,7 @@
     "benchmark:import:50k": "node scripts/run-native-integration.mjs --stage1-performance",
     "benchmark:public:50k": "node scripts/run-native-integration.mjs --stage2-performance",
     "db:migrate:production-check": "node scripts/run-native-integration.mjs --production-migrate",
+    "db:migrate:core4-upgrade-check": "node scripts/run-native-integration.mjs --core4-upgrade-check",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "dev:start": "node scripts/local-dev.mjs start",
     "dev:open": "node scripts/local-dev.mjs start --open",
