@@ -64,7 +64,7 @@
     "verify:payload-upgrade": "pnpm generate:types && pnpm generate:importmap && pnpm lint && pnpm typecheck && pnpm architecture:check && pnpm security:check && pnpm build && pnpm test:int && pnpm test:e2e",
     "verify:schema": "pnpm generate:types && pnpm generate:importmap && node scripts/quality/schema-contract.mjs",
     "verify:daily": "pnpm verify && pnpm test:int && pnpm build",
-    "verify:release": "pnpm verify:schema && pnpm verify && pnpm build && pnpm build:public-env:check && pnpm test:int && pnpm test:e2e:production && pnpm db:migrate:production-check",
+    "verify:release": "pnpm verify:schema && pnpm verify && cross-env NEXT_PUBLIC_SITE_URL=https://atlas.ams24.ru NEXT_PUBLIC_INDEXABLE=false pnpm build && cross-env NEXT_PUBLIC_SITE_URL=https://atlas.ams24.ru NEXT_PUBLIC_INDEXABLE=false pnpm build:public-env:check && pnpm test:int && pnpm test:e2e:production && pnpm db:migrate:production-check",
     "architecture:check": "node scripts/quality/architecture.mjs",
     "security:check": "node scripts/quality/security.mjs && node scripts/quality/local-api-access.mjs",
     "test:int": "node scripts/run-native-integration.mjs",
