@@ -63,6 +63,7 @@ if (process.argv.includes('--production-migrate')) {
 }
 if (process.argv.includes('--e2e-production')) {
   childEnvironment.APP_RUNTIME = 'production'
+  childEnvironment.REVALIDATE_SECRET = 'e2e-revalidate-secret-value-32chars'
 }
 
 function run(command) {
