@@ -12,6 +12,8 @@ Report vulnerabilities privately to the repository owner. Do not put secrets, cr
 - Raw database access is limited to `core/data-access/ingest`, append-only migrations and reviewed maintenance.
 - User-context Local API uses `overrideAccess: false`; update/delete also use `overrideLock: false`.
 - Outbound requests use the central HTTPS-only client with exact hostname allowlists and private-address rejection.
+- Feed URLs and optional credentials are stored only as validated `UPPER_SNAKE_CASE` runtime-reference names; literal URLs, tokens and credential values are rejected at the Payload boundary.
+- Failed, partial, undersized or malformed feed runs cannot deactivate the existing catalog; duplicate batches roll back atomically and same-source concurrent upserts remain idempotent under database uniqueness.
 - Payload is the only backend, auth, Admin, schema and migration owner.
 
 ## Authentication and authorization

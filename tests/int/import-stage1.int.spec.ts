@@ -156,4 +156,21 @@ describe('Stage 1 database import', () => {
     await upsertPropertyBatch(payload, { feedSourceId: primary.id, importRunId: primaryRun.id, offers: [{ ...base, newbuild: { ...base.newbuild!, complexName: 'Changed primary complex' } }], seenAt: new Date().toISOString() })
     expect((await payload.findByID({ collection: 'residential-complexes', id: complexes.docs[0]!.id, overrideAccess: true })).name).toBe('Manual complex')
   })
+
+  it('keeps duplicate and concurrent same-source batches atomic and idempotent', async () => {
+    const payload = await getTestPayload()
+    const source = await payload.create({ collection: 'feed-sources', overrideAccess: true, data: { code: 'concurrent', title: 'Concurrent', market: 'secondary', parser: 'yrl-secondary', publicationMode: 'review', feedUrlRef: 'CONCURRENT_URL', isEnabled: true, priority: 10, minOffersThresholdPercent: 70, maxOffersLimit: 50000 } })
+    const firstRun = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'concurrent-first', source: source.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
+    const secondRun = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'concurrent-second', source: source.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
+    const duplicate = { ...offer('Duplicate'), externalId: 'duplicate-id' }
+
+    await expect(upsertPropertyBatch(payload, { feedSourceId: source.id, importRunId: firstRun.id, offers: [duplicate, duplicate], seenAt: new Date().toISOString() })).rejects.toThrow()
+    expect((await payload.count({ collection: 'properties', overrideAccess: true })).totalDocs).toBe(0)
+
+    await Promise.all([
+      upsertPropertyBatch(payload, { feedSourceId: source.id, importRunId: firstRun.id, offers: [duplicate], seenAt: new Date().toISOString() }),
+      upsertPropertyBatch(payload, { feedSourceId: source.id, importRunId: secondRun.id, offers: [duplicate], seenAt: new Date().toISOString() }),
+    ])
+    expect((await payload.count({ collection: 'properties', overrideAccess: true, where: { feedSource: { equals: source.id } } })).totalDocs).toBe(1)
+  })
 })

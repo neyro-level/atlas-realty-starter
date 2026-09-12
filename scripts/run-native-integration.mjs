@@ -63,6 +63,7 @@ if (process.argv.includes('--production-migrate')) {
 }
 if (process.argv.includes('--e2e-production')) {
   childEnvironment.APP_RUNTIME = 'production'
+  childEnvironment.REVALIDATE_SECRET = 'e2e-revalidate-secret-value-32chars'
 }
 
 function run(command) {
@@ -330,6 +331,43 @@ if (process.argv.includes('--stage2-performance')) {
   run('pnpm payload migrate')
   run('node --no-deprecation --import=tsx/esm scripts/fixtures/benchmark-property-import.mts')
   run('node --no-deprecation --import=tsx/esm scripts/fixtures/benchmark-public-catalog.mts')
+  process.exit(0)
+}
+
+if (process.argv.includes('--core4-upgrade-check')) {
+  run('pnpm payload migrate')
+  const batches = new pg.Client({ connectionString: testURL.toString() })
+  await batches.connect()
+  try {
+    await batches.query(`UPDATE payload_migrations SET batch = CASE
+      WHEN name LIKE '20260912_%_core4_%' THEN 2
+      ELSE 1
+    END`)
+  } finally { await batches.end() }
+  run('pnpm payload migrate:down')
+  const fixture = new pg.Client({ connectionString: testURL.toString() })
+  await fixture.connect()
+  try {
+    await fixture.query(`INSERT INTO properties (title, slug, origin, status, is_published, market, deal_type, category, price_minor_units, currency, total_area_cm2, manual_fields, needs_review, updated_at, created_at)
+      VALUES ('Pre Core4 property', 'pre-core4-property', 'manual', 'active', false, 'secondary', 'sale', 'apartment', 10000, 'RUB', 500000, '[]'::jsonb, false, now(), now())`)
+    await fixture.query(`INSERT INTO agents (name, slug, origin, status, is_published, updated_at, created_at)
+      VALUES ('Pre Core4 agent', 'pre-core4-agent', 'manual', 'active', false, now(), now())`)
+  } finally { await fixture.end() }
+  run('pnpm payload migrate')
+  const verification = new pg.Client({ connectionString: testURL.toString() })
+  await verification.connect()
+  try {
+    const proof = await verification.query(`SELECT
+      (SELECT count(*)::int FROM properties WHERE slug='pre-core4-property') property_count,
+      (SELECT count(*)::int FROM agents WHERE slug='pre-core4-agent') agent_count,
+      to_regclass('public.layouts') layouts,
+      to_regclass('public.catalog_stats') catalog_stats,
+      EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='feed_sources' AND column_name='publication_mode') publication_mode,
+      EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='feed_sources' AND column_name='schedule') schedule`)
+    const row = proof.rows[0]
+    if (row.property_count !== 1 || row.agent_count !== 1 || !row.layouts || !row.catalog_stats || !row.publication_mode || row.schedule) throw new Error('Core4 upgrade proof failed')
+  } finally { await verification.end() }
+  console.log(JSON.stringify({ core4ExistingDatabaseUpgrade: 'PASS', preservedAgents: 1, preservedProperties: 1 }))
   process.exit(0)
 }
 

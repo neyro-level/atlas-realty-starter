@@ -63,9 +63,10 @@ The versioned headless API remains supported for external consumers; “headless
 
 - Payload Admin with `owner` and `editor` roles.
 - PostgreSQL adapter, strict environment parsing and append-only `src/payload/migrations-v2`.
-- Collections: users, media, pages, posts, properties, residential complexes, buildings, developers, agents, feed sources, import runs/issues, leads and lead deliveries.
+- Collections: users, media, pages, posts, properties, layouts, residential complexes, buildings, developers, agents, feed sources, import runs/issues, prepared catalog stats, leads and lead deliveries.
 - Global: site settings.
-- Streaming allowlisted YRL parsers for secondary and new-build feeds, source isolation, manual-field protection and suspicious-feed deactivation guard.
+- Streaming allowlisted YRL parsers for secondary and new-build feeds, source isolation, manual-field protection, explicit review/automatic publication modes and suspicious-feed deactivation guard.
+- Post-import processing publishes only successful automatic imports, recalculates complex/layout aggregates and atomically replaces the prepared catalog facet record.
 - Public catalog/property/complex/agent/content DTOs, bounded filters, SEO/Redirects plugins, sitemap and cache revalidation.
 - Public website: home, catalog/detail, new buildings, employees, journal, corporate/service/legal pages, reviews, favorites/comparison, leadgen and thank-you flows.
 - Canonical unfiltered catalog pages emit server-rendered `BreadcrumbList` and paginated `ItemList` structured data; filtered URLs remain noindex and do not emit a conflicting catalog list.
@@ -105,5 +106,5 @@ Lead PII retention default is 365 days and the baseline consent text version is 
 
 - The public site, Payload Admin, catalog, new-buildings module, leads/outbox, jobs, S3 integration and immutable release path are implemented.
 - Atlas remains non-indexable while demonstration content is present or source rights are not approved.
-- The current Core 4.0 remediation must re-attest migrations, import safety, layout/unit separation, prepared catalog aggregates, public DTO isolation and the 50k capacity target.
+- Core 4.0 remediation is implemented and re-attested: clean and existing-database migrations, import safety, layout/unit separation, prepared catalog aggregates, public DTO isolation and the 50k capacity target are covered by the repository checks.
 - Production readiness is asserted only for an exact merged `main` SHA after the RISKY SourceCraft gate, release artifact verification and live smoke from `OPERATIONS.md`.

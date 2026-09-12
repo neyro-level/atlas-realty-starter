@@ -58,15 +58,13 @@ export async function up({ db, payload: _payload, req: _req }: MigrateUpArgs): P
 
 export async function down({ db, payload: _payload, req: _req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
-   ALTER TABLE "layouts" DISABLE ROW LEVEL SECURITY;
+   ALTER TABLE "properties" DROP CONSTRAINT IF EXISTS "properties_layout_id_layouts_id_fk";
+  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT IF EXISTS "payload_locked_documents_rels_layouts_fk";
+  DROP INDEX IF EXISTS "properties_layout_idx";
+  DROP INDEX IF EXISTS "payload_locked_documents_rels_layouts_id_idx";
+  ALTER TABLE "properties" DROP COLUMN IF EXISTS "layout_id";
+  ALTER TABLE "payload_locked_documents_rels" DROP COLUMN IF EXISTS "layouts_id";
+  ALTER TABLE "layouts" DISABLE ROW LEVEL SECURITY;
   DROP TABLE "layouts" CASCADE;
-  ALTER TABLE "properties" DROP CONSTRAINT "properties_layout_id_layouts_id_fk";
-  
-  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_layouts_fk";
-  
-  DROP INDEX "properties_layout_idx";
-  DROP INDEX "payload_locked_documents_rels_layouts_id_idx";
-  ALTER TABLE "properties" DROP COLUMN "layout_id";
-  ALTER TABLE "payload_locked_documents_rels" DROP COLUMN "layouts_id";
   DROP TYPE "public"."enum_layouts_status";`)
 }

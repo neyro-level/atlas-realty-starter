@@ -7,6 +7,7 @@ import { applyFieldOwnership, evaluateDeactivation, mergeSharedEntityFields, val
 import { resolveLayoutIdentity } from '@/core/data-access/ingest/layout-identity'
 import { shouldPublishImportedRecords } from '@/core/data-access/ingest/publication-policy'
 import { createIssueCollector } from '@/core/data-access/ingest/run-feed-import'
+import { safeHTTPSStream } from '@/core/security/outbound-http/client'
 import { getFeedParser } from '@/project/ingest/registry'
 import type { NormalizedOffer } from '@/shared/types/feed-import'
 
@@ -48,6 +49,29 @@ describe('Stage 1 import contracts', () => {
       allowed: false,
       reasons: ['stream-incomplete', 'below-safety-threshold', 'mixed-address-formats'],
     })
+  })
+
+  it('blocks deactivation for zero and abnormally small snapshots', () => {
+    expect(evaluateDeactivation({ enabled: true, lastOfferCount: 100, maxOffersLimit: 1000, minOffersThresholdPercent: 70, offerCount: 0, streamCompleted: true, criticalIssueCount: 0, addressFormats: new Set() }).allowed).toBe(false)
+    expect(evaluateDeactivation({ enabled: true, lastOfferCount: 100, maxOffersLimit: 1000, minOffersThresholdPercent: 70, offerCount: 1, streamCompleted: true, criticalIssueCount: 0, addressFormats: new Set(['structured']) })).toMatchObject({ allowed: false, reasons: ['below-safety-threshold'] })
+  })
+
+  it('rejects malformed, partial and oversized offer payloads before deactivation', async () => {
+    await expect(collect(getFeedParser('yrl-secondary'), '<realty-feed><offer internal-id="partial"><price>1')).rejects.toThrow()
+    const oversized = `<realty-feed><offer internal-id="large"><name>${'x'.repeat(512)}</name></offer></realty-feed>`
+    const parse = async () => {
+      for await (const _record of getFeedParser('yrl-secondary').parse(chunks(oversized), { ...context(), maxOfferBytes: 128 })) { /* no records */ }
+    }
+    await expect(parse()).rejects.toThrow(/size|large|limit/i)
+  })
+
+  it('keeps download timeout, size and redirect/host guards on the streaming path', async () => {
+    await expect(safeHTTPSStream('https://not-allowed.example/feed.xml', { allowHosts: [] })).rejects.toThrow(/allowlisted/)
+    const clientSource = readFileSync(fileURLToPath(new URL('../../src/core/security/outbound-http/client.ts', import.meta.url)), 'utf8')
+    expect(clientSource).toContain('req.setTimeout(options.timeoutMs ?? DEFAULT_TIMEOUT_MS')
+    expect(clientSource).toContain('redirectCount > (options.maxRedirects ?? 3)')
+    expect(clientSource).toContain("new URL(response.headers.location, url)")
+    expect(clientSource).toContain('received > maxBytes')
   })
 
   it('preserves manual and higher-priority source-owned fields', () => {

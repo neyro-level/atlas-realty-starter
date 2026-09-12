@@ -3,6 +3,7 @@ import { performance } from 'node:perf_hooks'
 import { getPayload } from 'payload'
 
 import { upsertPropertyBatch } from '../../src/core/data-access/ingest/property-import.ts'
+import { postProcessSuccessfulImport } from '../../src/core/data-access/ingest/post-import.ts'
 import config from '../../src/payload.config.ts'
 import type { NormalizedOffer } from '../../src/shared/types/feed-import.ts'
 
@@ -10,7 +11,7 @@ const payload = await getPayload({ config })
 const source = await payload.create({
   collection: 'feed-sources',
   overrideAccess: true,
-  data: { code: 'benchmark-50k', title: 'Benchmark 50k', market: 'secondary', parser: 'yrl-secondary', feedUrlRef: 'BENCHMARK_FEED_URL', isEnabled: true, priority: 100, minOffersThresholdPercent: 70, maxOffersLimit: 50_000 },
+  data: { code: 'benchmark-50k', title: 'Benchmark 50k', market: 'secondary', parser: 'yrl-secondary', publicationMode: 'automatic', feedUrlRef: 'BENCHMARK_FEED_URL', isEnabled: true, priority: 100, minOffersThresholdPercent: 70, maxOffersLimit: 50_000 },
 })
 const run = await payload.create({ collection: 'import-runs', overrideAccess: true, data: { correlationId: 'benchmark-50k', source: source.id, mode: 'full_snapshot', status: 'running', startedAt: new Date().toISOString() } })
 const seenAt = new Date().toISOString()
@@ -24,7 +25,8 @@ for (let offset = 0; offset < 50_000; offset += 500) {
       externalId: `benchmark-${sequence}`,
       market: 'secondary', category: 'apartment', dealType: 'sale', dealStatus: 'available',
       title: `Benchmark property ${sequence}`, priceMinorUnits: 500_000_000 + sequence, currency: 'RUB', totalAreaCm2: 5_000_000 + sequence,
-      address: { format: 'structured', addressPublic: `Краснодар, Тестовая, ${sequence}`, localityName: 'Краснодар', street: 'Тестовая', houseNumber: String(sequence) },
+      rooms: sequence % 3 + 1,
+      address: { format: 'structured', addressPublic: `Краснодар, Тестовая, ${sequence}`, district: `Benchmark district ${sequence % 2}`, localityName: 'Краснодар', street: 'Тестовая', houseNumber: String(sequence) },
       photos: [],
     }
   })
@@ -32,7 +34,10 @@ for (let offset = 0; offset < 50_000; offset += 500) {
 }
 
 const elapsedMs = Math.round(performance.now() - started)
+const postProcessStarted = performance.now()
+await postProcessSuccessfulImport(payload, { publicationMode: 'automatic', runId: run.id, sourceId: source.id })
+const postProcessMs = Math.round(performance.now() - postProcessStarted)
 const count = await payload.count({ collection: 'properties', overrideAccess: true })
 if (created !== 50_000 || count.totalDocs !== 50_000) throw new Error(`50k import mismatch: created=${created}, count=${count.totalDocs}`)
-console.log(JSON.stringify({ imported: count.totalDocs, elapsedMs, offersPerSecond: Math.round(50_000 / (elapsedMs / 1000)), stage1Performance: 'PASS' }))
+console.log(JSON.stringify({ imported: count.totalDocs, elapsedMs, postProcessMs, offersPerSecond: Math.round(50_000 / (elapsedMs / 1000)), stage1Performance: 'PASS' }))
 process.exit(0)
