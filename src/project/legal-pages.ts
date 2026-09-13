@@ -1,4 +1,5 @@
 import { legalOperatorAddress, siteIdentity } from "@/project/site-identity";
+import { routes } from "@/project/routes";
 import type { LegalDocumentDto } from "@starter/site-contracts";
 
 export type LegalDocumentId =
@@ -343,7 +344,7 @@ export const legalDocuments: LegalDocumentConfig[] = [
 ];
 
 export const legalPageSlugs = legalDocuments.map((document) => document.slug);
-export const legalPagePaths = ["/legal", ...legalPageSlugs.map((slug) => `/${slug}`)];
+export const legalPagePaths = ["/legal", ...legalPageSlugs.map(routes.rootPage)];
 export const legalDocumentMap = Object.fromEntries(
   legalDocuments.map((document) => [document.slug, document]),
 ) as Record<LegalDocumentSlug, LegalDocumentConfig>;

@@ -2,6 +2,7 @@ import 'server-only'
 
 import type { PublicComplex } from '@/shared/types/public-content'
 import { getPublicComplexBySlug, getPublicComplexes } from '@/project/public-gateway'
+import { routes } from '@/project/routes'
 import type { NewBuilding, NewBuildingMediaAsset } from '@/modules/new-buildings'
 
 export async function getPayloadNewBuilding(slug: string): Promise<NewBuilding | null> {
@@ -102,7 +103,7 @@ export function toNewBuilding(complex: PublicComplex): NewBuilding {
     ],
     relatedSlugs: [],
     seo: {
-      canonical: `/${complex.slug}`,
+      canonical: routes.residentialComplex(complex.slug),
       description: complex.seo.description ?? positioning.slice(0, 200),
       h1: complex.name,
       title: complex.seo.title,

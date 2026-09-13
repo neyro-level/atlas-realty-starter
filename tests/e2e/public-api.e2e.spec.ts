@@ -41,7 +41,7 @@ test.describe.serial('Headless public API', () => {
     })
     await payload.create({ collection: 'pages', data: { _status: 'published', slug: 'public-page', title: 'Public Page' }, draft: false, overrideAccess: false, user: superAdmin })
     await payload.create({ collection: 'posts', data: { _status: 'published', slug: 'public-post', title: 'Public Post' }, draft: false, overrideAccess: false, user: superAdmin })
-    await payload.create({ collection: 'redirects', data: { from: '/old-property', isEnabled: true, to: { type: 'custom', url: '/properties/public-property' }, type: '301' }, overrideAccess: false, user: superAdmin })
+    await payload.create({ collection: 'redirects', data: { from: '/old-property', isEnabled: true, to: { type: 'custom', url: '/obekty/public-property' }, type: '301' }, overrideAccess: false, user: superAdmin })
   })
 
   test('serves catalog to property without leaking private fields', async ({ request }) => {
@@ -74,13 +74,13 @@ test.describe.serial('Headless public API', () => {
   test('resolves redirect, config, content and sitemap DTOs', async ({ request }) => {
     const redirect = await request.get('/api/public/v1/redirects?from=%2Fold-property')
     expect(redirect.status()).toBe(200)
-    await expect(redirect.json()).resolves.toMatchObject({ data: { destination: '/properties/public-property', permanent: true, statusCode: 301 } })
+    await expect(redirect.json()).resolves.toMatchObject({ data: { destination: '/obekty/public-property', permanent: true, statusCode: 301 } })
     await expect((await request.get('/api/public/v1/config')).json()).resolves.toMatchObject({ data: { apiVersion: 'v1', headless: true } })
     expect((await request.get('/api/public/v1/pages/public-page')).status()).toBe(200)
     expect((await request.get('/api/public/v1/posts/public-post')).status()).toBe(200)
     expect((await request.get('/api/public/v1/agents/public-agent')).status()).toBe(200)
     const sitemap = await request.get('/api/public/v1/sitemap?type=properties&page=0')
-    await expect(sitemap.json()).resolves.toMatchObject({ data: [{ url: '/properties/public-property' }] })
+    await expect(sitemap.json()).resolves.toMatchObject({ data: [{ url: '/obekty/public-property' }] })
   })
 
   test('keeps raw anonymous Payload REST closed', async ({ request }) => {
@@ -93,7 +93,7 @@ test.describe.serial('Headless public API', () => {
     const idempotencyKey = 'e2e:public-lead:12345678'
     const body = {
       company: '', consent: true, formStartedAt: new Date(Date.now() - 3_000).toISOString(), formType: 'property',
-      message: 'Please call', name: 'Public lead', phone: '8 (999) 123-45-67', propertyId, sourcePage: '/properties/public-property',
+      message: 'Please call', name: 'Public lead', phone: '8 (999) 123-45-67', propertyId, sourcePage: '/obekty/public-property',
     }
     const created = await request.post('/api/public/v1/leads', { data: body, headers: { 'Idempotency-Key': idempotencyKey } })
     expect(created.status()).toBe(201)

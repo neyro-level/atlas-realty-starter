@@ -1,5 +1,6 @@
 import type { CatalogPreset } from "./presets";
 import { getCatalogPreset } from "./presets";
+import { LEGACY_ROUTE_REDIRECTS } from "@/project/routes";
 
 export type RobotsDirective = {
   index: boolean;
@@ -101,8 +102,9 @@ function toDate(value: string | Date | undefined | null) {
 }
 
 export function getSitemapCorporatePagePaths(paths: string[]) {
+  const redirectOnlyPaths = new Set(Object.keys(LEGACY_ROUTE_REDIRECTS));
   return paths.filter((path) => {
-    if (path === "/agents") {
+    if (redirectOnlyPaths.has(path)) {
       return false;
     }
 

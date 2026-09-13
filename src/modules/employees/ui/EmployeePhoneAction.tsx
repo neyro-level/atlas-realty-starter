@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Phone } from "lucide-react";
 import { useState } from "react";
 import { buildTelHref } from "@/shared/lib/tel";
+import { routes } from "@/project/routes";
 
 export function EmployeePhoneAction({ phone, slug, compact = false }: { phone: string | null; slug: string; compact?: boolean }) {
   const [visible, setVisible] = useState(false);
@@ -13,7 +14,7 @@ export function EmployeePhoneAction({ phone, slug, compact = false }: { phone: s
   }`;
 
   if (!phone) {
-    return <Link href={`/sotrudniki/${slug}#svyazatsya`} className={className}>Оставить заявку</Link>;
+    return <Link href={`${routes.employee(slug)}#svyazatsya`} className={className}>Оставить заявку</Link>;
   }
   if (visible) {
     return (

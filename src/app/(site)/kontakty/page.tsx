@@ -4,6 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import type { ContactsPageDto } from "@starter/site-contracts";
 import { ContactsPageView, type SiteImageRendererProps } from "@ams/realty-ui";
 import { siteConfig } from "@/project/site-config";
+import { routes } from "@/project/routes";
 import { getSiteEngine } from "@/site-engine";
 import { ContactsMapFrame } from "./ContactsMapFrame";
 import { OfficeNavigatorRouteLink } from "./OfficeNavigatorRouteLink";
@@ -14,11 +15,11 @@ const officeService = "Покупка, продажа и консультаци�
 export const metadata: Metadata = {
   title: "Офисы в Краснодаре",
   description: "Офисы агентства недвижимости в Краснодаре: адреса, телефон, график работы и запись на встречу.",
-  alternates: { canonical: "/kontakty" },
+  alternates: { canonical: routes.contacts() },
   openGraph: {
     title: "Офисы в Краснодаре",
     description: "Офисы агентства недвижимости в Краснодаре: адреса, телефон, график работы и запись на встречу.",
-    url: "/kontakty",
+    url: routes.contacts(),
     siteName: siteConfig.clientFullName,
     type: "website",
   },

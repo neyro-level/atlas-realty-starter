@@ -1,5 +1,6 @@
 import { siteIdentity } from "@/project/site-identity";
 import { siteProfile } from "@/project/site-profile";
+import { routes } from "@/project/routes";
 
 export const siteConfig = {
   clientSlug: "atlas",
@@ -66,4 +67,4 @@ export const featuresConfig = {
 
 export function getSiteUrl() { return siteIdentity.domain; }
 export function isIndexable() { return siteIdentity.indexable; }
-export function getPropertyPath(slug: string) { return `${featuresConfig.propertyRoute}/${slug}`; }
+export function getPropertyPath(slug: string) { return routes.property(slug); }

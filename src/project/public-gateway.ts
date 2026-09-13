@@ -21,8 +21,9 @@ import type { PublicCatalogQuery } from '@/core/query/public-api'
 import config from '@/payload.config'
 
 import { runtimeConfig } from './env'
+import { routes } from './routes'
 
-const options = { siteURL: runtimeConfig.siteURL }
+const options = { routes, siteURL: runtimeConfig.siteURL }
 const payload = () => getPayload({ config })
 
 export async function getPublicCatalog(query: PublicCatalogQuery) {
@@ -74,5 +75,5 @@ export async function getPublicFacets() {
 }
 
 export async function resolvePublicRedirect(from: string) {
-  return queryPublicRedirect(await payload(), from)
+  return queryPublicRedirect(await payload(), from, options)
 }
