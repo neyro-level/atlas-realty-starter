@@ -14,8 +14,9 @@ import {
 } from '@/project/public-gateway'
 import { getSitemapChunk, getSitemapIndex } from '@/core/data-access/public/sitemap'
 import { catalogQuerySchema, redirectQuerySchema, searchParamsRecord, slugSchema } from '@/core/query/public-api'
-import { createPublicLead } from '@/project/leads/create-public-lead'
 import { createLeadClientFingerprint } from '@/project/leads/client-fingerprint'
+import { createPublicLead } from '@/project/leads/create-public-lead'
+import { sitemapPathFor } from '@/project/routes'
 import { idempotencyKeySchema, publicLeadSchema, readBoundedJSON } from '@/shared/types/public-lead'
 
 const sitemapSchema = z.object({ page: z.coerce.number().int().min(0).max(10_000).default(0), type: z.enum(['agents', 'complexes', 'pages', 'posts', 'properties']).optional() })
@@ -41,7 +42,7 @@ export async function GET(request: Request, context: { params: Promise<{ segment
     if (segments.length === 1 && segments[0] === 'redirects') return entity(await resolvePublicRedirect(redirectQuerySchema.parse(query).from))
     if (segments.length === 1 && segments[0] === 'sitemap') {
       const parsed = sitemapSchema.parse(query)
-      return ok(parsed.type ? await getSitemapChunk(parsed.type, parsed.page) : await getSitemapIndex())
+      return ok(parsed.type ? await getSitemapChunk(parsed.type, parsed.page, sitemapPathFor) : await getSitemapIndex())
     }
     return notFound()
   } catch (error) {

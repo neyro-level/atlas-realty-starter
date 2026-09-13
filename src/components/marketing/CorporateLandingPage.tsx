@@ -33,6 +33,7 @@ import { JsonLd } from "@/shared/ui/JsonLd";
 import { careersComparison, careersFinalCta, careersTraining, careersWorkSystem } from "@/project/careers-page";
 import { filterNewBuildings, type NewBuilding } from "@/modules/new-buildings";
 import { getPropertyPath } from "@/project/site-config";
+import { routes } from "@/project/routes";
 
 type CorporateLandingPageProps = {
   page: CorporatePageConfig;
@@ -75,7 +76,7 @@ export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showca
   const structuredCatalogItems = hasNewBuildingConversionFlow
     ? filterNewBuildings(complexes, showcaseQuery ?? {}).map((item) => ({
         name: item.name,
-        path: `/${item.slug}`,
+        path: routes.residentialComplex(item.slug),
         image: item.media.hero?.src,
       }))
     : (showcase?.listings ?? []).map((item) => ({
@@ -83,9 +84,10 @@ export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showca
         path: getPropertyPath(item.slug),
         image: item.image,
       }));
+  const pagePath = routes.rootPage(page.slug);
   const catalogPath = visitorQuery.page && visitorQuery.page > 1
-    ? `/${page.slug}?page=${visitorQuery.page}`
-    : `/${page.slug}`;
+    ? `${pagePath}?page=${visitorQuery.page}`
+    : pagePath;
   const showCatalogStructuredData = Boolean(
     page.showcase &&
     structuredCatalogItems.length &&
@@ -95,7 +97,7 @@ export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showca
   return (
     <>
       {showCatalogStructuredData ? <>
-        <JsonLd data={breadcrumbSchema([{ name: "Главная", url: "/" }, { name: page.heroTitle, url: catalogPath }])} />
+        <JsonLd data={breadcrumbSchema([{ name: "Главная", url: routes.home() }, { name: page.heroTitle, url: catalogPath }])} />
         <JsonLd data={catalogItemListSchema({
           name: page.heroTitle,
           path: catalogPath,
@@ -116,8 +118,8 @@ export function CorporateLandingPage({ page, visitorQuery, showcaseLimit, showca
       </>}
       secondaryBreadcrumbs={<Breadcrumbs items={buildCorporateBreadcrumbs(page)} />}
       bodyAfterRelated={hasMortgagePage ? <><MortgageProgramsView cityPrepositional={siteProfile.city.prepositional} /><MortgageCalculatorView /><MortgageBrokerSupportView imageRenderer={CorporateImage} imageSrc="/images/mortgage-broker-support.webp" /><MortgageConsultationSection /></> : null}
-      showcase={page.showcase && showcase ? <><CatalogSharpShowcase catalog={showcase} complexes={complexes} query={showcaseQuery ?? { limit: showcaseLimit }} paginationQuery={visitorQuery} initialFilter={page.showcase.initialFilter} sectionId="page-showcase" basePath={`/${page.slug}`} headline={hasSecondaryCatalogIntro ? page.heroTitle : undefined} heading={page.showcase.heading} description={page.showcase.description} emptyMessage={page.showcase.emptyMessage} servicePromo={isMainCatalogIndex ? "legal" : "mortgage"} mode={hasNewBuildingConversionFlow ? "new-buildings" : "default"} defaultView={hasNewBuildingConversionFlow ? "list" : "grid"} />{hasNewBuildingConversionFlow ? <NewBuildingCatalogConversion /> : null}{hasBuyerServices ? <CatalogBuyerServicesSection sourcePage={`/${page.slug}`} /> : null}</> : null}
-      afterShowcase={isMainCatalogIndex ? <PropertyPurchaseFlowBlocks sourcePage={`/${page.slug}`} leadTitle={getCatalogLeadTitle(page.slug)} /> : hasNewBuildingConversionFlow ? <><NewBuildingCatalogLeadSection /><NewBuildingMobileConversionBar /></> : null}
+      showcase={page.showcase && showcase ? <><CatalogSharpShowcase catalog={showcase} complexes={complexes} query={showcaseQuery ?? { limit: showcaseLimit }} paginationQuery={visitorQuery} initialFilter={page.showcase.initialFilter} sectionId="page-showcase" basePath={pagePath} headline={hasSecondaryCatalogIntro ? page.heroTitle : undefined} heading={page.showcase.heading} description={page.showcase.description} emptyMessage={page.showcase.emptyMessage} servicePromo={isMainCatalogIndex ? "legal" : "mortgage"} mode={hasNewBuildingConversionFlow ? "new-buildings" : "default"} defaultView={hasNewBuildingConversionFlow ? "list" : "grid"} />{hasNewBuildingConversionFlow ? <NewBuildingCatalogConversion /> : null}{hasBuyerServices ? <CatalogBuyerServicesSection sourcePage={pagePath} /> : null}</> : null}
+      afterShowcase={isMainCatalogIndex ? <PropertyPurchaseFlowBlocks sourcePage={pagePath} leadTitle={getCatalogLeadTitle(page.slug)} /> : hasNewBuildingConversionFlow ? <><NewBuildingCatalogLeadSection /><NewBuildingMobileConversionBar /></> : null}
       footerContent={catalogFaqItems ? <><JsonLd data={faqPageSchema(faqItemsToSchema(catalogFaqItems))} /><RealEstateFaqSection items={catalogFaqItems} />{isMainCatalogIndex ? <PopularSearchesSection /> : null}</> : null}
       linkRenderer={CorporateLink}
       imageRenderer={CorporateImage}

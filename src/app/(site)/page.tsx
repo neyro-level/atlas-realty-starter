@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { HomePage } from "@/components/home/HomePage";
 import { siteConfig } from "@/project/site-config";
 import { defaultSocialPreview, defaultSocialPreviewPath } from "@/project/social-preview";
+import { routes } from "@/project/routes";
 import { getSiteEngine } from "@/site-engine";
 
 export const revalidate = 300;
@@ -13,13 +14,13 @@ export const metadata: Metadata = {
   description:
     "АТЛАС — современное агентство недвижимости в Краснодаре. Помогаем купить, продать и проверить объект, подобрать ипотеку и уверенно пройти сделку.",
   alternates: {
-    canonical: "/",
+    canonical: routes.home(),
   },
   openGraph: {
     title: "АТЛАС — агентство недвижимости в Краснодаре",
     description:
       "Проверенная недвижимость в Краснодаре: квартиры, дома, новостройки, ипотека и сопровождение сделки.",
-    url: "/",
+    url: routes.home(),
     siteName: siteConfig.clientFullName,
     type: "website",
     images: [defaultSocialPreview],

@@ -10,6 +10,7 @@ import { getSiteEngine } from "@/site-engine";
 import { resolvePublicEmployeePhone } from "@/modules/employees/phone-policy";
 import { buildSeoMetadata } from "@/modules/seo/metadata";
 import { getSiteUrl } from "@/project/site-config";
+import { routes } from "@/project/routes";
 import { tenant } from "@/project/tenant.config";
 import { breadcrumbSchema } from "@/shared/lib/seo/schema";
 import { JsonLd } from "@/shared/ui/JsonLd";
@@ -23,7 +24,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const params = await searchParams;
   const noIndex = hasDirectoryQueryState(params);
   return buildSeoMetadata({
-    path: "/sotrudniki",
+    path: routes.employees(),
     title: `Команда специалистов агентства «${tenant.brand}»`,
     description: `Специалисты по недвижимости, юристы, ипотечные брокеры и руководство агентства ${tenant.brand} в ${EMPLOYEES_CITY_IN}.`,
     noIndex,
@@ -81,14 +82,14 @@ export default async function EmployeesPage({ searchParams }: Props) {
 
   return (
     <>
-      <JsonLd data={breadcrumbSchema([{ name: "Главная", url: "/" }, { name: "Сотрудники", url: "/sotrudniki" }])} />
+      <JsonLd data={breadcrumbSchema([{ name: "Главная", url: routes.home() }, { name: "Сотрудники", url: routes.employees() }])} />
       <JsonLd
         data={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
           name: EMPLOYEES_HERO_TITLE,
           description: EMPLOYEES_HERO_DESCRIPTION,
-          url: `${host}/sotrudniki`,
+          url: `${host}${routes.employees()}`,
           mainEntity: {
             "@type": "ItemList",
             numberOfItems: result.total,
@@ -96,7 +97,7 @@ export default async function EmployeesPage({ searchParams }: Props) {
               "@type": "ListItem",
               position: (result.page - 1) * result.pageSize + index + 1,
               name: employee.fullName,
-              url: `${host}/sotrudniki/${employee.slug}`,
+              url: `${host}${routes.employee(employee.slug)}`,
             })),
           },
         }}
@@ -104,7 +105,7 @@ export default async function EmployeesPage({ searchParams }: Props) {
 
       <EmployeesDirectoryView
         page={pageDto}
-        breadcrumbs={<Breadcrumbs items={[{ label: "Главная", href: "/" }, { label: "Компания" }, { label: "Сотрудники" }]} />}
+        breadcrumbs={<Breadcrumbs items={[{ label: "Главная", href: routes.home() }, { label: "Компания" }, { label: "Сотрудники" }]} />}
         hero={<CatalogHeroBlock title={EMPLOYEES_HERO_TITLE} titleLines={pageDto.titleLines} titleLinesDesktop="inline" elevateContent description={EMPLOYEES_HERO_DESCRIPTION} descriptionVisibility="always" imageSrc={EMPLOYEES_HERO_IMAGE} />}
         employeeCards={employees.map((employee) => <EmployeeTeamCard key={employee.id} employee={employee} />)}
         linkRenderer={EmployeeDirectoryLink}

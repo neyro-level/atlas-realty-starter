@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { EmployeeCardView } from "@starter/site-ui";
 import type { ReactNode } from "react";
+import { routes } from "@/project/routes";
 import type { EmployeeListItem } from "../types";
 import { EMPLOYEE_PORTRAIT_PLACEHOLDER } from "../photo-policy";
 import { EmployeePhoneAction } from "./EmployeePhoneAction";
@@ -21,7 +22,7 @@ export function EmployeeTeamCard({
   employee: EmployeeListItem;
   showPhoneAction?: boolean;
 }) {
-  const profileHref = `/sotrudniki/${employee.slug}`;
+  const profileHref = routes.employee(employee.slug);
   const showsPhoneAction = showPhoneAction ?? employee.teamSection !== "office";
   const imageSrc = employee.photoUrl || EMPLOYEE_PORTRAIT_PLACEHOLDER;
 

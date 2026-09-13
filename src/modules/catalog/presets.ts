@@ -1,4 +1,5 @@
 import type { CatalogQuery } from "@/lib/catalog";
+import { routes } from "@/project/routes";
 import { tenant } from "@/project/tenant.config";
 
 export type CatalogPresetMode =
@@ -64,7 +65,7 @@ function preset(
   forceEmpty = false,
 ): CatalogPreset {
   return {
-    path: `/${slug}`,
+    path: routes.rootPage(slug),
     slug,
     navLabel,
     h1,

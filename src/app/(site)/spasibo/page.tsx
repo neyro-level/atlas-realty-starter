@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@starter/site-ui";
+import { routes } from "@/project/routes";
 
 export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Спасибо за заявку",
   description: "Страница подтверждения отправки заявки в контуре агентства недвижимости.",
-  alternates: { canonical: "/spasibo" },
+  alternates: { canonical: routes.thankYou() },
   robots: { index: false, follow: false },
 };
 
@@ -35,9 +36,9 @@ export default function ThanksPage() {
         </div>
 
         <div className="mx-auto mt-8 flex max-w-5xl flex-col gap-3 px-5 sm:flex-row sm:flex-wrap">
-          <Button asChild size="lg"><Link href="/nedvizhimost">Открыть недвижимость Краснодара</Link></Button>
-          <Button asChild size="lg" variant="outline"><Link href="/kvartiry">Открыть маршрут квартир</Link></Button>
-          <Button asChild size="lg" variant="outline"><Link href="/kontakty">Контакты агентства</Link></Button>
+          <Button asChild size="lg"><Link href={routes.rootPage("nedvizhimost")}>Открыть недвижимость Краснодара</Link></Button>
+          <Button asChild size="lg" variant="outline"><Link href={routes.rootPage("kvartiry")}>Открыть маршрут квартир</Link></Button>
+          <Button asChild size="lg" variant="outline"><Link href={routes.contacts()}>Контакты агентства</Link></Button>
         </div>
       </section>
     </main>
