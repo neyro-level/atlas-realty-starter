@@ -1,6 +1,6 @@
 import type { ListingCard } from "@/lib/catalog";
 import { routes } from "@/project/routes";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 import type { NewBuilding } from "./schema";
 import { resolveNewBuildingMedia } from "./format";
 

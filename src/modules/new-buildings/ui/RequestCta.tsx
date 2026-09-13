@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { Button } from "@ams/realty-ui";
+import { Button } from "@starter/site-ui";
 import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
 
 type RequestCtaProps = {

@@ -22,6 +22,13 @@ module.exports = {
       to: { path: '^src/(project|app)/' },
     },
     {
+      name: 'no-legacy-tenant-facades',
+      severity: 'error',
+      comment: 'Tenant identity is owned only by src/project/tenant.config.ts.',
+      from: {},
+      to: { path: '^src/project/(?:tenant|site-identity|site-profile)\\.ts$' },
+    },
+    {
       name: 'no-ui-to-payload',
       severity: 'error',
       comment: 'UI consumes DTOs and never Payload runtime or database modules.',

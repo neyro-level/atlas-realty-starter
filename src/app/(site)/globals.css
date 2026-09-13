@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@import "@ams/realty-ui/theme.css";
+@import "@starter/site-ui/theme.css";
 @import "../styles/base.css";
-@import "@ams/realty-ui/styles.css";
+@import "@starter/site-ui/styles.css";
 
 @source "../../../../packages/site-ui/src";

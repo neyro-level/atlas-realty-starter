@@ -1,4 +1,4 @@
-import { NewBuildingLocationView } from "@ams/realty-ui";
+import { NewBuildingLocationView } from "@starter/site-ui";
 import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";
 import { DeferredYandexMap } from "./DeferredYandexMap";

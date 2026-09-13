@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 import { siteConfig } from "@/project/site-config";
 
 type BrandMarkProps = {

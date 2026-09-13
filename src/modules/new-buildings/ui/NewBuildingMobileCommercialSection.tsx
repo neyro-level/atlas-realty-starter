@@ -1,4 +1,4 @@
-import { NewBuildingMobileCommercialView } from "@ams/realty-ui";
+import { NewBuildingMobileCommercialView } from "@starter/site-ui";
 import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";
 import { RequestCta } from "./RequestCta";

@@ -1,5 +1,5 @@
 import Image, { type ImageProps } from "next/image";
-import { LeadgenPromoLandingView, type LeadgenPromoLandingAdapters, type SiteImageRendererProps } from "@ams/realty-ui";
+import { LeadgenPromoLandingView, type LeadgenPromoLandingAdapters, type SiteImageRendererProps } from "@starter/site-ui";
 import { LeadgenApartmentShowcase } from "./LeadgenApartmentShowcase";
 import { LeadgenConstructionProjectShowcase } from "./LeadgenConstructionProjectShowcase";
 import { LeadgenCurrentDateBadge } from "./LeadgenCurrentDateBadge";
@@ -11,7 +11,7 @@ import { LeadgenRequestButton } from "./LeadgenRequestButton";
 import { LeadgenSimpleRequestModal } from "./LeadgenSimpleRequestModal";
 import { kvartiryPromoContent, type LeadgenPromoContent } from "./kvartiry-promo-content";
 import { siteConfig } from "@/project/site-config";
-import { siteProfile } from "@/project/site-profile";
+import { siteProfile } from "@/project/tenant.config";
 
 const adapters: LeadgenPromoLandingAdapters = {
   PromoHeader: LeadgenPromoHeader,

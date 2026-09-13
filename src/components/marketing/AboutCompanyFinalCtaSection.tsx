@@ -1,5 +1,5 @@
 import { AgencyInlineLeadForm } from "@/components/marketing/AgencyInlineLeadForm";
-import { AboutCompanyFinalCtaView } from "@ams/realty-ui";
+import { AboutCompanyFinalCtaView } from "@starter/site-ui";
 
 export function AboutCompanyFinalCtaSection() {
   return <AboutCompanyFinalCtaView form={<AgencyInlineLeadForm

@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { ArticleEditorialLinksView } from "@ams/realty-ui";
+import { ArticleEditorialLinksView } from "@starter/site-ui";
 
 describe("ArticleEditorialFooterLinks", () => {
   it("renders contextual service links below the article CTA", () => {

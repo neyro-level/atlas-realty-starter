@@ -10,7 +10,7 @@ import { formatPrice } from '@/lib/catalog'
 import { resolvePropertyRobotsState } from '@/modules/catalog/seo'
 import { truncateSeoText } from '@/modules/seo/metadata'
 import { getPropertyPath, isIndexable, siteConfig } from '@/project/site-config'
-import { tenant } from '@/project/tenant'
+import { tenant } from '@/project/tenant.config'
 import { splitBlurredAddress } from '@/shared/lib/property-address-blur'
 import { getSiteEngine } from '@/site-engine'
 

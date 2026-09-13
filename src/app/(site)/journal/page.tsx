@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
-import { JournalHubView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@ams/realty-ui";
-import { siteProfile } from "@/project/site-profile";
+import { JournalHubView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui";
 import { routes } from "@/project/routes";
+import { siteProfile } from "@/project/tenant.config";
 import { CatalogPropertyCard } from "@/components/catalog/CatalogPropertyCard";
 import { isSalesLeaderNewBuilding } from "@/modules/new-buildings";
 import { buildSeoMetadata } from "@/modules/seo/metadata";

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { RequestModalButton } from "@ams/realty-ui";
+import { RequestModalButton } from "@starter/site-ui";
 
 const LEGAL_SERVICE_IMAGE = "/images/corporate/yurist/services/legal-work-review.webp";
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Button } from "@ams/realty-ui";
+import { Button } from "@starter/site-ui";
 import { routes } from "@/project/routes";
 
 export const revalidate = 300;

@@ -4,7 +4,7 @@ This document implements AMS UI Development Constitution 3.1 for the public Atla
 
 ## Ownership
 
-`packages/site-ui` (`@ams/realty-ui`) is Atlas's internal component and composition library. It is part of this repository and is not published to npm or installed from a remote Registry. Application routes compose its views but do not create a second design system. Payload, database access, secrets, project identity and project-specific fetching are forbidden inside the package. Atlas identity and theme values belong to the Project Design System and `SiteProfile`.
+`packages/site-ui` (`@starter/site-ui`) is Atlas's internal component and composition library. It is part of this repository and is not published to npm or installed from a remote Registry. Application routes compose its views but do not create a second design system. Payload, database access, secrets, project identity and project-specific fetching are forbidden inside the package. Atlas identity and theme values belong to the Project Design System and `SiteProfile`.
 
 The root and package `components.json` files keep the same local ShadCN style, React Server Components mode, TypeScript mode, base color and Lucide icon library. New primitives are added into `packages/site-ui` and then admitted through its public exports. `pnpm ui:shadcn:info` provides a Windows-safe CLI entry when a checkout name begins with a numbered dot prefix.
 
@@ -52,6 +52,6 @@ The `/novostroyki` mobile showcase uses one large complex card with the edge of 
 - `pnpm images:optimize` converts only oversized PNG files to high-quality WebP, updates tracked references and removes proven duplicates.
 - Logos, UI graphics, social previews and small fallbacks may stay in Git. Property and ЖК photography belongs to Payload Media and persistent local/S3 storage.
 
-The active identity lives in `src/project/site-profile.ts`. Project themes override neutral semantic tokens without changing component APIs. `templates/site-profile.neutral.json` and `pnpm template:profile` provide a neutral starting profile for a new city. The neutral preset contains no Atlas theme or Краснодар coordinates; map activation requires reviewed coordinates. The generator also emits a brand asset manifest and deployment checklist into `.ams-client/`. One client still receives its own repository, database, S3 bucket and deployment contour.
+The active identity lives in `src/project/tenant.config.ts`; `pnpm init:tenant` replaces its managed values together with the root package name, README tenant block and local `.env`. Project themes override neutral semantic tokens without changing component APIs. `templates/site-profile.neutral.json` and `pnpm template:profile` remain the reviewed design-profile path for a new city. The neutral preset contains no Atlas theme or Краснодар coordinates; map activation requires reviewed coordinates. One client still receives its own repository, database, S3 bucket and deployment contour.
 
 `RequestForm` is the canonical React Hook Form + Zod entry point for inline leads. Overlay triggers use the shared typed context instead of DOM events or `data-*` dispatch attributes. All lead entry points retain the same server action, phone normalization, consent, honeypot, idempotency and server-error contract.

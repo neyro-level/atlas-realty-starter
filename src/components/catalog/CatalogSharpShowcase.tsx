@@ -1,4 +1,4 @@
-import { Checkbox, formatRussianCount, Input, Select } from "@ams/realty-ui";
+import { Checkbox, formatRussianCount, Input, Select } from "@starter/site-ui";
 import Link from "next/link";
 import {
   CatalogEmptyStateView,
@@ -10,7 +10,7 @@ import {
   CatalogSortTabsView,
   CatalogViewSwitchView,
   type SiteLinkRendererProps,
-} from "@ams/realty-ui";
+} from "@starter/site-ui";
 import {
   buildSearchParams,
   CATALOG_PAGE_SIZE,
@@ -19,7 +19,7 @@ import {
   type CatalogView,
 } from "@/lib/catalog";
 import { filterNewBuildings, type NewBuilding } from "@/modules/new-buildings";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 import { hasClearableCatalogFilters, listClearableFilterEntries } from "./catalog-filter-clear";
 import { CatalogAutoSubmitForm } from "./CatalogAutoSubmitForm";
 import { CatalogLoadMore } from "./CatalogLoadMore";

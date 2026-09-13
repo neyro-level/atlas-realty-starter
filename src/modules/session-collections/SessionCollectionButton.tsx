@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@ams/realty-ui";
+import { Button } from "@starter/site-ui";
 
 import { Heart, ListPlus } from "lucide-react";
 import type { MouseEvent } from "react";

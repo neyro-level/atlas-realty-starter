@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Checkbox, Input } from "@ams/realty-ui";
+import { Button, Checkbox, Input } from "@starter/site-ui";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState, useTransition } from "react";
 import { createLeadAction, type CreateLeadActionResult } from "@/modules/leads";

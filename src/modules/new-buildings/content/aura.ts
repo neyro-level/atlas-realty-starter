@@ -1,5 +1,5 @@
 import { defineNewBuilding } from "../define-new-building";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 
 export const aura = defineNewBuilding({
   "slug": "aura",

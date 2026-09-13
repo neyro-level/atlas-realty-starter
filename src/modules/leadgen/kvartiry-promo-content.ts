@@ -1,5 +1,5 @@
-import { siteIdentity } from "@/project/site-identity";
-import { tenant } from "@/project/tenant";
+import { siteIdentity } from "@/project/tenant.config";
+import { tenant } from "@/project/tenant.config";
 import type { LeadgenPromoApartmentDto, LeadgenPromoConstructionExampleDto, LeadgenPromoContentDto, LeadgenPromoNewBuildingExampleDto, LeadgenQuizStepDto } from "@starter/site-contracts";
 
 export type LeadgenPromoApartment = LeadgenPromoApartmentDto;

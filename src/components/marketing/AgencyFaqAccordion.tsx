@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@ams/realty-ui";
+import { Button } from "@starter/site-ui";
 import { useId, useState } from "react";
 import { faqItemToPlainAnswer, type AgencyFaqItem } from "@/components/marketing/agency-faq-content";
 

@@ -1,5 +1,5 @@
-import { formatRussianCount } from "@ams/realty-ui";
-import { tenant } from "@/project/tenant";
+import { formatRussianCount } from "@starter/site-ui";
+import { tenant } from "@/project/tenant.config";
 
 /** Neutral share packaging for `/izbrannoe/s/[token]` (messenger OG + Web Share). */
 export function buildSavedSelectionShareTitle() {

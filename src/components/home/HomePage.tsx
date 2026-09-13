@@ -8,7 +8,7 @@ import { HomeWhyChoose } from "@/components/home/HomeWhyChoose";
 import { LegalServicesPromoBanner } from "@/components/marketing/LegalServicesPromoBanner";
 import { PropertyPurchaseLeadSection } from "@/components/marketing/PropertyPurchaseLeadSection";
 import type { HomePageDto } from "@starter/site-contracts";
-import { HomePageView } from "@ams/realty-ui";
+import { HomePageView } from "@starter/site-ui";
 
 export function HomePage({ data }: { data: HomePageDto }) {
   return <HomePageView hero={<HomeHero featured={data.featured} />} services={<HomeServicesStrip />} newBuildings={<HomeNewBuildings />} interests={<HomeLatestFlats flatListings={data.latestFlats} countryListings={data.latestCountry} />} legalServices={<LegalServicesPromoBanner placement="home" />} director={<HomeWhyChoose />} purchaseLead={<PropertyPurchaseLeadSection sourcePage="/" />} articles={<HomeArticlesPreview articles={data.articles} />} preFooter={<HomePreFooter />} />;

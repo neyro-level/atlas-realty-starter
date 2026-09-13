@@ -14,34 +14,34 @@ import type {
 const updatedAt = "2026-09-03T12:00:00.000Z";
 
 export const fixtureIdentity: SiteIdentity = {
-  brand: "АТЛАС",
-  legalName: "ИП Скрицкая Юлия Викторовна",
-  projectName: "АТЛАС — агентство недвижимости в Краснодаре",
-  tagline: "Навигация в мире недвижимости",
+  brand: "СТАРТЕР",
+  legalName: null,
+  projectName: "Демонстрационный сайт недвижимости",
+  tagline: "Детерминированные тестовые данные",
   city: {
-    nominative: "Краснодар",
-    genitive: "Краснодара",
-    prepositional: "Краснодаре",
-    slug: "krasnodar",
+    nominative: "Демо-город",
+    genitive: "Демо-города",
+    prepositional: "Демо-городе",
+    slug: "demo-city",
   },
   domain: "http://localhost:3000",
   indexable: false,
   expert: {
-    name: "Чирков Андрей Александрович",
-    role: "Основатель и директор агентства недвижимости",
-    portrait: "/images/people/andrey-chirkov-director.webp",
+    name: "Тестовый эксперт",
+    role: "Специалист по недвижимости",
+    portrait: "/images/brand/atlas-mark.svg",
   },
   contacts: {
-    phone: "+7 (918) 320-99-96",
-    email: "integrator-p@yandex.ru",
-    address: "г. Краснодар, ул. Игнатова, 4/3, офис 10",
-    hours: "Ежедневно, 9:00–20:00 (МСК)",
+    phone: null,
+    email: null,
+    address: "Демонстрационный адрес",
+    hours: null,
   },
   social: { telegram: null, max: null, vk: null },
   legal: {
-    name: "ИП Скрицкая Юлия Викторовна",
-    inn: "231295699557",
-    registrationNumber: "323237500365055",
+    name: null,
+    inn: null,
+    registrationNumber: null,
   },
 };
 
@@ -342,13 +342,13 @@ export const fixtureOffices: PublicOfficeDto[] = [
     id: "office-1",
     title: "Главный офис",
     address: fixtureIdentity.contacts.address!,
-    mapUrl: "https://yandex.ru/map-widget/v1/?text=%D0%B3.%20%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%B4%D0%B0%D1%80%2C%20%D1%83%D0%BB.%20%D0%98%D0%B3%D0%BD%D0%B0%D1%82%D0%BE%D0%B2%D0%B0%2C%204%2F3%2C%20%D0%BE%D1%84%D0%B8%D1%81%2010",
+    mapUrl: "https://yandex.ru/map-widget/v1/?text=demo-city",
     photoUrl: null,
   },
 ];
 
 export const fixtureSeoDocuments: SeoDocumentDto[] = [
-  { path: "/", title: "АТЛАС — агентство недвижимости", description: "Стартовый сайт агентства недвижимости «АТЛАС».", h1: "Недвижимость с понятным сопровождением", indexable: false },
+  { path: "/", title: "Демонстрационное агентство недвижимости", description: "Стартовый сайт агентства недвижимости.", h1: "Недвижимость с понятным сопровождением", indexable: false },
   { path: "/nedvizhimost", title: "Каталог недвижимости", description: "Демонстрационный каталог объектов.", h1: "Каталог недвижимости", indexable: false },
   { path: "/kontakty", title: "Контакты", description: "Контакты агентства недвижимости.", h1: "Контакты", indexable: false },
 ];

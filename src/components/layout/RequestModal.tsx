@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { RequestModalView } from "@ams/realty-ui";
+import { RequestModalView } from "@starter/site-ui";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useTransition, type FormEvent } from "react";
 import { createLeadAction, type CreateLeadActionResult } from "@/modules/leads";

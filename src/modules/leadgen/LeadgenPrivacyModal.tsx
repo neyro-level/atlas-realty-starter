@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@ams/realty-ui";
+import { Button } from "@starter/site-ui";
 
-import { LegalDocumentModalView } from "@ams/realty-ui";
+import { LegalDocumentModalView } from "@starter/site-ui";
 import { useEffect, useRef, useState } from "react";
 import { getLegalPage } from "@/project/legal-pages";
 

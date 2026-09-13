@@ -5,9 +5,9 @@ import {
   CatalogMortgageHelpCardView,
   type CatalogView,
   type SiteImageRendererProps,
-} from "@ams/realty-ui";
+} from "@starter/site-ui";
 import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
-import { siteProfile } from "@/project/site-profile";
+import { siteProfile } from "@/project/tenant.config";
 
 export const CATALOG_MORTGAGE_HELP_CARD_INDEX = 8;
 

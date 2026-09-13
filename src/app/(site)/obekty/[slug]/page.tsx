@@ -8,7 +8,7 @@ import {
   PropertyDetailSummaryView,
   PropertyRelatedView,
   type SiteLinkRendererProps,
-} from '@ams/realty-ui'
+} from '@starter/site-ui'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 

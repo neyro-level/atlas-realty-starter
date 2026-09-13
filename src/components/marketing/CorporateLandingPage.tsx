@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image, { type ImageProps } from "next/image";
 import { ArrowRight } from "lucide-react";
 import type { CorporateLandingPageDto } from "@starter/site-contracts";
-import { CareersComparisonView, CareersFinalCtaView, CareersTrainingView, CareersWorkSystemView, CorporateLandingView, MortgageBrokerSupportView, MortgageCalculatorView, MortgageProgramsView, RequestModalButton, SaleFinalCtaView, SalePricingPrinciplesView, SalePromotionView, SaleReportingView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@ams/realty-ui";
+import { CareersComparisonView, CareersFinalCtaView, CareersTrainingView, CareersWorkSystemView, CorporateLandingView, MortgageBrokerSupportView, MortgageCalculatorView, MortgageProgramsView, RequestModalButton, SaleFinalCtaView, SalePricingPrinciplesView, SalePromotionView, SaleReportingView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui";
 import { AboutCompanyDirectorSection } from "@/components/marketing/AboutCompanyDirectorSection";
 import { AboutCompanyFinalCtaSection } from "@/components/marketing/AboutCompanyFinalCtaSection";
 import { AboutCompanyTeamSection } from "@/components/marketing/AboutCompanyTeamSection";
@@ -14,7 +14,7 @@ import { NewBuildingMobileConversionBar } from "@/components/marketing/NewBuildi
 import { CareersQuizButton, CareersQuizModal } from "@/components/marketing/CareersQuiz";
 import { MortgageConsultationSection } from "@/components/marketing/MortgageConsultationSection";
 import { LawyerPageSections } from "@/components/marketing/LawyerPageSections";
-import { siteProfile } from "@/project/site-profile";
+import { siteProfile } from "@/project/tenant.config";
 import { Breadcrumbs, type BreadcrumbItem } from "@/components/layout/Breadcrumbs";
 import { CatalogSharpShowcase } from "@/components/catalog/CatalogSharpShowcase";
 import { RealEstateFaqSection } from "@/components/marketing/RealEstateFaqSection";

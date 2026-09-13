@@ -1,6 +1,6 @@
 import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
-import { HomeHeroView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@ams/realty-ui";
+import { HomeHeroView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui";
 import type { HomePageDto } from "@starter/site-contracts";
 import { HOME_HERO_BRIEF, HOME_HERO_FEATURED_IMAGE } from "@/project/home-page";
 

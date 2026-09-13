@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { RequestModalButton, ReviewsPageView } from "@ams/realty-ui";
+import { RequestModalButton, ReviewsPageView } from "@starter/site-ui";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { CatalogHeroBlock } from "@/components/marketing/CatalogHeroBlock";
 import { getEmployeeDirectory, getPublishedEmployeeReviews, type EmployeeReviewDirectoryResult } from "@/modules/employees";

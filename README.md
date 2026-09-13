@@ -1,8 +1,10 @@
+<!-- BEGIN TENANT_README -->
 # АТЛАС — недвижимость в Краснодаре
 
 Самостоятельный демонстрационный продукт для рынка недвижимости Краснодара на Next.js, Payload CMS и PostgreSQL.
 
 Production-домен: `https://atlas.ams24.ru`. Оператор: ИП Скрицкая Юлия Викторовна. Каталог наполнен разрешённым партнёрским набором для продуктовой демонстрации и остаётся закрытым от индексации до отдельного решения владельца.
+<!-- END TENANT_README -->
 
 ## Runtime map
 
@@ -45,6 +47,7 @@ See `docs/LOCAL_START.md` for the one-minute project runbook and `docs/OPERATION
 - `pnpm owner:bootstrap` — one-time first-owner creation.
 - `pnpm jobs:run:all` — private all-queue worker command used by production service.
 - `pnpm ui:check` — design-token, ShadCN registry and static-image guard.
+- `pnpm init:tenant -- --help` — show the one-command tenant initialization contract; actual overwrite requires explicit `--force`.
 - `pnpm template:profile -- --input <profile.json>` — generate a reviewed city profile, brand asset manifest and deployment checklist in `.ams-client/` without overwriting the active profile.
 - `pnpm atlas:content:verify-live` — verify the 20/60 Payload catalog, galleries and map input on local or live Atlas.
 

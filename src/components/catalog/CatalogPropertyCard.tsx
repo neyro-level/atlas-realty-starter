@@ -10,7 +10,7 @@ import {
   type PropertyCardCollectionActionProps,
   type SiteImageRendererProps,
   type SiteLinkRendererProps,
-} from "@ams/realty-ui";
+} from "@starter/site-ui";
 import { type CatalogView, type ListingCard } from "@/lib/catalog";
 import { useSiteContacts } from "@/components/layout/SiteContactsProvider";
 import { shouldOptimizeCatalogImage } from "@/modules/media/image-optimization";
@@ -18,7 +18,7 @@ import { isNewBuildingListingId } from "@/modules/new-buildings";
 import { SessionCollectionButton } from "@/modules/session-collections/SessionCollectionButton";
 import { toSessionListingItem } from "@/modules/session-collections/adapter";
 import { getPropertyPath } from "@/project/site-config";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 import { splitBlurredAddress, shouldBlurPropertyAddress } from "@/shared/lib/property-address-blur";
 import { buildTelHref } from "@/shared/lib/tel";
 import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";

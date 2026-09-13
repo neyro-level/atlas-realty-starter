@@ -3,7 +3,7 @@ import { newBuildingSlugs } from "@/modules/new-buildings";
 import { corporatePageSlugs } from "@/project/corporate-pages";
 import { legalDocuments } from "@/project/legal-pages";
 import { featuresConfig } from "@/project/site-config";
-import { siteIdentity } from "@/project/site-identity";
+import { siteIdentity } from "@/project/tenant.config";
 
 const canonicalOrigin = new URL(siteIdentity.domain).origin;
 const exactAllowedSourcePagePaths = new Set<string>([

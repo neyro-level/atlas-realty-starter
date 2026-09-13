@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { PropertySidebarView } from "@ams/realty-ui";
+import { PropertySidebarView } from "@starter/site-ui";
 import { type FormEvent, useState, useTransition } from "react";
 import { SessionCollectionButton, type SessionListingItem } from "@/modules/session-collections";
 import { trackEvent } from "@/modules/analytics";

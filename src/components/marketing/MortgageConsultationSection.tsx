@@ -1,5 +1,5 @@
 import { AgencyInlineLeadForm } from "@/components/marketing/AgencyInlineLeadForm";
-import { MortgageConsultationView } from "@ams/realty-ui";
+import { MortgageConsultationView } from "@starter/site-ui";
 
 const FORM_TYPE = "mortgage_consultation";
 

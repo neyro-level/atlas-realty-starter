@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@ams/realty-ui";
+import { Button } from "@starter/site-ui";
 
 import type { ReactNode } from "react";
 

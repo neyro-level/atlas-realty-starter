@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { HomeCarouselScrollHintView, HomeNewBuildingsView, type SiteLinkRendererProps } from "@ams/realty-ui";
+import { HomeCarouselScrollHintView, HomeNewBuildingsView, type SiteLinkRendererProps } from "@starter/site-ui";
 import { buildSearchParams } from "@/lib/catalog";
 import { CatalogNewBuildingSelectionCard } from "@/components/catalog/CatalogNewBuildingSelectionCard";
 import { CatalogResidentialComplexCard } from "@/components/catalog/CatalogResidentialComplexCard";
 import { publishedNewBuildings } from "@/modules/new-buildings";
-import { tenant } from "@/project/tenant";
-import { siteProfile } from "@/project/site-profile";
+import { tenant } from "@/project/tenant.config";
+import { siteProfile } from "@/project/tenant.config";
 import { getSiteEngineMode } from "@/site-engine";
 
 const ALL_NEW_BUILDINGS_HREF = `/nedvizhimost?${buildSearchParams({ city: tenant.cityEn, dealType: "sale", category: "new_building" }).toString()}`;

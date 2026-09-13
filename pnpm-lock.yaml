@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@ams/realty-ui':
-        specifier: workspace:*
-        version: link:packages/site-ui
       '@fontsource/manrope':
         specifier: 5.3.0
         version: 5.3.0
@@ -47,6 +44,9 @@ importers:
       '@starter/site-fixtures':
         specifier: workspace:*
         version: link:packages/site-fixtures
+      '@starter/site-ui':
+        specifier: workspace:*
+        version: link:packages/site-ui
       cross-env:
         specifier: 7.0.3
         version: 7.0.3

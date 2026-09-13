@@ -1,7 +1,7 @@
 import "server-only";
 import type { SiteEngine, SiteEngineMode } from "@starter/site-contracts";
 import { runtimeConfig } from "@/project/env";
-import { siteIdentity } from "@/project/site-identity";
+import { siteIdentity } from "@/project/tenant.config";
 import { withValidatedSiteEngine } from "./validated-engine";
 
 export function getSiteEngineMode(): SiteEngineMode {

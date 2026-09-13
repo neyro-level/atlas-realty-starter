@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { sameOriginFetch } from "@/core/security/outbound-http/browser";
-import { CatalogMobileFilterView, type MobileRoomId, type MobileTypeId } from "@ams/realty-ui";
+import { CatalogMobileFilterView, type MobileRoomId, type MobileTypeId } from "@starter/site-ui";
 import type { CatalogQuery, CatalogSnapshot } from "@/lib/catalog";
 import { consumeOpenCatalogFiltersIntent, OPEN_CATALOG_FILTERS_EVENT } from "./catalog-sticky-chrome";
 import {

@@ -1,6 +1,6 @@
 import Image, { type ImageProps } from "next/image";
-import { NewBuildingCatalogWhyAgencyView, NewBuildingPurchaseProcessView, type SiteImageRendererProps } from "@ams/realty-ui";
-import { siteProfile } from "@/project/site-profile";
+import { NewBuildingCatalogWhyAgencyView, NewBuildingPurchaseProcessView, type SiteImageRendererProps } from "@starter/site-ui";
+import { siteProfile } from "@/project/tenant.config";
 
 const BENEFITS = [
   "Сравним квартиры разных застройщиков.",

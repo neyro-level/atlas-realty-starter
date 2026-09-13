@@ -1,5 +1,5 @@
 import { matchesCatalogSearchHaystack } from "@/lib/catalog-search";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 import type {
   CatalogCategoryDto,
   CatalogDealTypeDto,

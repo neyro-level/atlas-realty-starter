@@ -1,4 +1,4 @@
-/* Journal-owned styles: portable with @ams/realty-ui. */
+/* Journal-owned styles: portable with @starter/site-ui. */
 .journal-article-gallery { margin: 0 0 2rem; }
 .journal-article-gallery__head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
 .journal-article-gallery__eyebrow { margin:0; color:var(--accent); font-size:var(--site-type-caption); font-weight:800; letter-spacing:var(--site-type-overline-tracking); text-transform:uppercase; }

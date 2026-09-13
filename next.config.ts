@@ -4,6 +4,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { SECURITY_HEADERS } from './src/core/security/headers'
+import { readHostAllowlist } from './src/project/env-hosts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -16,24 +17,24 @@ const configuredRemotePatterns = [
   process.env.NEXT_PUBLIC_NEW_BUILDINGS_MEDIA_BASE_URL,
   process.env.NEXT_PUBLIC_SITE_MEDIA_BASE_URL,
 ].filter((value): value is string => Boolean(value)).map(toRemotePattern)
+const configuredImageHostPatterns = readHostAllowlist(process.env.EXTERNAL_IMAGE_HOSTS).map((hostname) => ({
+  protocol: 'https' as const,
+  hostname,
+  pathname: '/**',
+}))
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ['127.0.0.1', 'localhost'],
   experimental: { cpus: 1 },
   output: 'standalone',
-  transpilePackages: ['@starter/site-contracts', '@starter/site-fixtures', '@ams/realty-ui'],
+  transpilePackages: ['@starter/site-contracts', '@starter/site-fixtures', '@starter/site-ui'],
   async headers() {
     return [{ headers: securityHeaders, source: '/:path*' }]
   },
   images: {
     localPatterns: [{ pathname: '/api/media/file/**' }, { pathname: '/images/**' }, { pathname: '/og/**' }],
     qualities: [75, 95],
-    remotePatterns: [
-      { protocol: 'https', hostname: 'is.vladis.ru', pathname: '/api/upload/**' },
-      { protocol: 'https', hostname: 'static.tildacdn.com', pathname: '/**' },
-      { protocol: 'https', hostname: 'optim.tildacdn.com', pathname: '/**' },
-      ...configuredRemotePatterns,
-    ],
+    remotePatterns: [...configuredImageHostPatterns, ...configuredRemotePatterns],
   },
   poweredByHeader: false,
   turbopack: { root: path.resolve(dirname) },

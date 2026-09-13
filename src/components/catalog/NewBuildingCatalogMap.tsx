@@ -1,14 +1,14 @@
 "use client";
 
-import { Button, CatalogMapFrameView } from "@ams/realty-ui";
+import { Button, CatalogMapFrameView } from "@starter/site-ui";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type HTMLAttributes } from "react";
 import { ExternalLink, MapPin } from "lucide-react";
 import { formatPrice } from "@/lib/catalog";
 import { newBuildingHref, type NewBuilding } from "@/modules/new-buildings";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 import { clientEnv } from "@/project/public-env";
-import { siteProfile } from "@/project/site-profile";
+import { siteProfile } from "@/project/tenant.config";
 import { getMappableNewBuildings } from "./new-building-catalog-map-model";
 
 type YandexMap = {
