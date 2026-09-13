@@ -1,6 +1,6 @@
 import { permanentRedirect } from "next/navigation";
-import { routes } from "@/project/routes";
+import { LEGACY_ROUTE_REDIRECTS } from "@/project/routes";
 
 export default function LegacyArticlesPage() {
-  permanentRedirect(routes.journal());
+  permanentRedirect(LEGACY_ROUTE_REDIRECTS.articles.to());
 }

@@ -7,10 +7,11 @@ import { createPublicGatewayContext } from '@/core/access/public-gateway'
 import { PUBLIC_CACHE_TAGS } from '@/core/cache/public-cache'
 import { publicAgentWhere, publicComplexWhere, publicPageWhere, publicPostWhere, publicPropertyWhere, withPublicPredicate } from '@/core/data-access/public/predicates'
 import config from '@/payload.config'
-export const SITEMAP_PAGE_SIZE = 45_000
+import { sitemapPathFor } from '@/core/routing/public-routes'
+
+export const SITEMAP_PAGE_SIZE = 10_000
 export type SitemapType = 'agents' | 'complexes' | 'pages' | 'posts' | 'properties'
 export type SitemapDocument = { lastModified: string; url: string }
-export type SitemapPathBuilder = (type: SitemapType, slug: string) => string
 
 const collectionFor: Record<SitemapType, 'agents' | 'pages' | 'posts' | 'properties' | 'residential-complexes'> = {
   agents: 'agents', complexes: 'residential-complexes', pages: 'pages', posts: 'posts', properties: 'properties',
@@ -21,8 +22,8 @@ export function getSitemapIndex() {
   return unstable_cache(querySitemapIndex, ['sitemap-index'], { revalidate: 300, tags: [PUBLIC_CACHE_TAGS.sitemap] })()
 }
 
-export function getSitemapChunk(type: SitemapType, page: number, pathFor: SitemapPathBuilder) {
-  return querySitemapChunk(type, page, pathFor)
+export function getSitemapChunk(type: SitemapType, page: number) {
+  return querySitemapChunk(type, page)
 }
 
 async function querySitemapIndex() {
@@ -34,25 +35,25 @@ async function querySitemapIndex() {
   return { entries, pageSize: SITEMAP_PAGE_SIZE }
 }
 
-async function querySitemapChunk(type: SitemapType, page: number, pathFor: SitemapPathBuilder): Promise<SitemapDocument[]> {
+async function querySitemapChunk(type: SitemapType, page: number): Promise<SitemapDocument[]> {
   const payload = await getPayload({ config })
   const common = { context: createPublicGatewayContext(), depth: 0, limit: SITEMAP_PAGE_SIZE, overrideAccess: false as const, page: page + 1, pagination: true as const, select: { slug: true, updatedAt: true } as const, sort: 'id' }
   if (type === 'complexes') {
     const result = await payload.find({ ...common, collection: 'residential-complexes', where: publicComplexWhere() })
-    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: pathFor(type, doc.slug) }))
+    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: sitemapPathFor('complexes', doc.slug) }))
   }
   if (type === 'properties') {
     const result = await payload.find({ ...common, collection: 'properties', where: withPublicPredicate(publicPropertyWhere(), { status: { in: ['active', 'reserved'] } }) })
-    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: pathFor(type, doc.slug) }))
+    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: sitemapPathFor('properties', doc.slug) }))
   }
   if (type === 'agents') {
     const result = await payload.find({ ...common, collection: 'agents', where: publicAgentWhere() })
-    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: pathFor(type, doc.slug) }))
+    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: sitemapPathFor('agents', doc.slug) }))
   }
   if (type === 'pages') {
     const result = await payload.find({ ...common, collection: 'pages', where: publicPageWhere() })
-    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: pathFor(type, doc.slug) }))
+    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: sitemapPathFor('pages', doc.slug) }))
   }
   const result = await payload.find({ ...common, collection: 'posts', where: publicPostWhere() })
-  return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: pathFor(type, doc.slug) }))
+  return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: sitemapPathFor('posts', doc.slug) }))
 }

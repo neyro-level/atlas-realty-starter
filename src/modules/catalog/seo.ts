@@ -102,7 +102,10 @@ function toDate(value: string | Date | undefined | null) {
 }
 
 export function getSitemapCorporatePagePaths(paths: string[]) {
-  const redirectOnlyPaths = new Set(Object.keys(LEGACY_ROUTE_REDIRECTS));
+  const redirectOnlyPaths = new Set([
+    LEGACY_ROUTE_REDIRECTS.agents.from(),
+    LEGACY_ROUTE_REDIRECTS.articles.from(),
+  ]);
   return paths.filter((path) => {
     if (redirectOnlyPaths.has(path)) {
       return false;

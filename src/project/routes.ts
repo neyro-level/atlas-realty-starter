@@ -1,48 +1,13 @@
-export type SitemapEntityType = 'agents' | 'complexes' | 'pages' | 'posts' | 'properties'
+import { publicRoutes } from '@/core/routing/public-routes'
 
-export const routes = {
-  home: () => '/',
-  rootPage: (slug: string) => `/${slug}`,
-  property: (slug: string) => `/obekty/${slug}`,
-  residentialComplex: (slug: string) => `/${slug}`,
-  employees: () => '/sotrudniki',
-  employee: (slug: string) => `/sotrudniki/${slug}`,
-  journal: () => '/journal',
-  article: (slug: string) => `/journal/${slug}`,
-  journalCategory: (slug: string) => `/journal/category/${slug}`,
-  contacts: () => '/kontakty',
-  favorites: () => '/izbrannoe',
-  comparison: () => '/sravnenie',
-  thankYou: () => '/spasibo',
-  legal: () => '/legal',
-  htmlSitemap: () => '/sitemap',
-  htmlSitemapListing: (kind: 'objects' | 'reserve', page: number) => `/sitemap/${kind}/${page}`,
-  xmlSitemap: () => '/sitemap.xml',
-  xmlSitemapChunk: (type: SitemapEntityType, page: number) => `/sitemaps/${type}/${page}`,
-  legacyAgents: () => '/agents',
-  legacyAgent: (slug: string) => `/agents/${slug}`,
-  legacyArticles: () => '/articles',
-  legacyArticle: (slug: string) => `/articles/${slug}`,
-} as const
-
-export function sitemapPathFor(type: SitemapEntityType, slug: string) {
-  switch (type) {
-    case 'agents':
-      return routes.employee(slug)
-    case 'complexes':
-      return routes.residentialComplex(slug)
-    case 'pages':
-      return routes.rootPage(slug)
-    case 'posts':
-      return routes.article(slug)
-    case 'properties':
-      return routes.property(slug)
-  }
-}
+export { sitemapPathFor, type SitemapEntityType } from '@/core/routing/public-routes'
+export const routes = publicRoutes
 
 export const LEGACY_ROUTE_REDIRECTS = {
-  [routes.legacyAgents()]: routes.employees(),
-  [routes.legacyArticles()]: routes.journal(),
+  agents: { from: routes.legacyAgents, to: routes.employees },
+  agent: { from: routes.legacyAgent, to: routes.employee },
+  articles: { from: routes.legacyArticles, to: routes.journal },
+  article: { from: routes.legacyArticle, to: routes.article },
 } as const
 
 export const APP_ROUTE_TEMPLATES = [

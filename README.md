@@ -1,9 +1,9 @@
 <!-- BEGIN TENANT_README -->
-# АТЛАС — недвижимость в Краснодаре
+# AMS Realty Platform Starter
 
-Самостоятельный демонстрационный продукт для рынка недвижимости Краснодара на Next.js, Payload CMS и PostgreSQL.
+Самостоятельный full-stack шаблон сайта и каталога недвижимости на Next.js, Payload CMS и PostgreSQL.
 
-Production-домен: `https://atlas.ams24.ru`. Оператор: ИП Скрицкая Юлия Викторовна. Каталог наполнен разрешённым партнёрским набором для продуктовой демонстрации и остаётся закрытым от индексации до отдельного решения владельца.
+Текущий демонстрационный профиль задаётся только в `src/project/tenant.config.ts`. Демонстрационные данные и непроверенные права на источники всегда означают `NEXT_PUBLIC_INDEXABLE=false`.
 <!-- END TENANT_README -->
 
 ## Runtime map
@@ -34,7 +34,7 @@ For the prepared Windows workstation:
 pnpm dev:start
 ```
 
-The command reads only the project `.env.local`, verifies PostgreSQL 18, migrations, 60 demo properties (30 apartments, 10 houses, 10 land plots and 10 commercial properties), 20 residential complexes and matching media records/files, then reuses or starts Atlas at `http://127.0.0.1:3000/`.
+The command reads only the project `.env.local`, verifies PostgreSQL 18, migrations, the configured demo dataset and matching media records/files, then reuses or starts the site at `http://127.0.0.1:3000/`.
 
 Use `pnpm dev:open` to also open the site, `pnpm dev:status` for a safe summary and `pnpm dev:stop` to stop only the process started by this launcher.
 
@@ -49,6 +49,15 @@ See `docs/LOCAL_START.md` for the one-minute project runbook and `docs/OPERATION
 - `pnpm ui:check` — design-token, ShadCN registry and static-image guard.
 - `pnpm init:tenant -- --help` — show the one-command tenant initialization contract; actual overwrite requires explicit `--force`.
 - `pnpm template:profile -- --input <profile.json>` — generate a reviewed city profile, brand asset manifest and deployment checklist in `.ams-client/` without overwriting the active profile.
-- `pnpm atlas:content:verify-live` — verify the 20/60 Payload catalog, galleries and map input on local or live Atlas.
+- `pnpm atlas:content:verify-live` — legacy-named verification command for the currently configured demo dataset; rename it during a client clone.
 
 Production release is never performed from a feature branch.
+
+## What to replace when cloning
+
+1. Run `pnpm init:tenant -- --help`, review the input and initialize the tenant explicitly.
+2. Replace brand/city/domain/contact/legal/map/lead values only through `src/project/tenant.config.ts` and protected environment variables.
+3. Replace demo content, media and feed sources; verify ownership and publication rights.
+4. Create isolated PostgreSQL, S3, Doppler and server scopes; never reuse another client's credentials.
+5. Rename tenant-specific operational commands after their replacement exists, then update this README and `docs/PROJECT.md`.
+6. Keep indexing disabled until the production-readiness checklist in `docs/PROJECT.md` is complete.

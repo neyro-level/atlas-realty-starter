@@ -2,9 +2,9 @@
 
 import type { MouseEvent, ReactNode } from "react";
 import {
-  buildYandexMapsRouteUrl,
-  buildYandexNavigatorRouteUrl,
-} from "@/shared/lib/yandex-navigator";
+  buildYandexMapsRouteURL,
+  buildYandexNavigatorRouteURL,
+} from "@/core/integrations/maps/navigation";
 
 type OfficeNavigatorRouteLinkProps = {
   address: string;
@@ -17,8 +17,8 @@ type OfficeNavigatorRouteLinkProps = {
  * route-from-current-location if the app does not take focus.
  */
 export function OfficeNavigatorRouteLink({ address, className, children }: OfficeNavigatorRouteLinkProps) {
-  const mapsRouteUrl = buildYandexMapsRouteUrl(address);
-  const navigatorUrl = buildYandexNavigatorRouteUrl(address);
+  const mapsRouteUrl = buildYandexMapsRouteURL(address);
+  const navigatorUrl = buildYandexNavigatorRouteURL(address);
 
   const openNavigator = (event: MouseEvent<HTMLAnchorElement>) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {

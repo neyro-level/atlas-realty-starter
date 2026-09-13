@@ -342,7 +342,7 @@ export const fixtureOffices: PublicOfficeDto[] = [
     id: "office-1",
     title: "Главный офис",
     address: fixtureIdentity.contacts.address!,
-    mapUrl: "https://yandex.ru/map-widget/v1/?text=demo-city",
+    mapUrl: "",
     photoUrl: null,
   },
 ];

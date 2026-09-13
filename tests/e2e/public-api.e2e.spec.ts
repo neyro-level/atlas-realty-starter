@@ -86,7 +86,7 @@ test.describe.serial('Headless public API', () => {
   test('keeps raw anonymous Payload REST closed', async ({ request }) => {
     expect((await request.get('/api/properties')).status()).toBe(403)
     expect((await request.post('/api/internal/revalidate', { data: { tags: ['public:catalog:list'] } })).status()).toBe(401)
-    expect((await request.post('/api/internal/revalidate', { data: { tags: ['public:catalog:list'] }, headers: { 'x-revalidate-secret': 'e2e-revalidate-secret-value-32chars' } })).status()).toBe(200)
+    expect((await request.post('/api/internal/revalidate', { data: { tags: ['public:catalog:list'] }, headers: { 'x-revalidate-secret': 'f36c8091b47a25de6c18f903a74b52ed19c830f6a27b45de' } })).status()).toBe(200)
   })
 
   test('accepts an idempotent property lead without exposing PII', async ({ request }) => {

@@ -10,8 +10,8 @@ import { MediaGallery } from "../property/MediaGallery";
 export type NewBuildingGalleryViewProps = {
   address: string;
   images: NewBuildingMediaViewModel[];
-  latitude: number | null;
-  longitude: number | null;
+  mapUrl: string;
+  mapWidgetUrl: string;
   name: string;
   videoUrl?: string | null;
   imageRenderer: SiteImageRenderer;
@@ -28,16 +28,14 @@ const TABS: Array<{ key: TabKey; label: string; icon: typeof Camera }> = [
 export function NewBuildingGalleryView({
   address,
   images,
-  latitude,
-  longitude,
+  mapUrl,
+  mapWidgetUrl,
   name,
   videoUrl,
   imageRenderer: Image,
 }: NewBuildingGalleryViewProps) {
   const [activeTab, setActiveTab] = useState<TabKey>("photos");
   const vkEmbedSrc = buildVkEmbedSrc(videoUrl);
-  const yandexUrl = buildYandexMapsUrl({ address, latitude, longitude, name });
-  const hasCoordinates = latitude !== null && longitude !== null;
 
   return (
     <div className="grid h-98 grid-rows-[minmax(0,1fr)_44px] gap-2 md:h-127.5 lg:h-160">
@@ -73,12 +71,8 @@ export function NewBuildingGalleryView({
           <MapPanel
             address={address}
             name={name}
-            widgetUrl={
-              hasCoordinates
-                ? buildYandexWidgetUrl({ latitude: latitude as number, longitude: longitude as number })
-                : buildYandexSearchWidgetUrl({ address, name })
-            }
-            yandexUrl={yandexUrl}
+            widgetUrl={mapWidgetUrl}
+            yandexUrl={mapUrl}
           />
         ) : null}
       </div>
@@ -249,47 +243,4 @@ function safeVkNumber(value: string | null) {
 
 function safeVkHash(value: string | null) {
   return value && /^[a-z0-9_-]+$/i.test(value) ? value : null;
-}
-
-function buildYandexWidgetUrl({
-  latitude,
-  longitude,
-}: {
-  latitude: number;
-  longitude: number;
-}) {
-  const url = new URL("https://yandex.ru/map-widget/v1/");
-  url.searchParams.set("ll", `${longitude},${latitude}`);
-  url.searchParams.set("pt", `${longitude},${latitude},pm2rdm`);
-  url.searchParams.set("z", "16");
-  return url.toString();
-}
-
-function buildYandexSearchWidgetUrl({ address, name }: { address: string; name: string }) {
-  const url = new URL("https://yandex.ru/map-widget/v1/");
-  url.searchParams.set("text", `${name}, ${address}`);
-  url.searchParams.set("z", "16");
-  return url.toString();
-}
-
-function buildYandexMapsUrl({
-  address,
-  latitude,
-  longitude,
-  name,
-}: {
-  address: string;
-  latitude: number | null;
-  longitude: number | null;
-  name: string;
-}) {
-  const url = new URL("https://yandex.ru/maps/");
-  if (latitude !== null && longitude !== null) {
-    url.searchParams.set("ll", `${longitude},${latitude}`);
-    url.searchParams.set("pt", `${longitude},${latitude},pm2rdm`);
-    url.searchParams.set("z", "16");
-  } else {
-    url.searchParams.set("text", `${name}, ${address}`);
-  }
-  return url.toString();
 }

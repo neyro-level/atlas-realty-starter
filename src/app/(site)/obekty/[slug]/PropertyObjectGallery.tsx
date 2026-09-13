@@ -5,14 +5,15 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { shouldOptimizeCatalogImage } from "@/modules/media/image-optimization";
 import { siteProfile } from "@/project/tenant.config";
+import { buildYandexMapWidgetURL } from "@/core/integrations/maps/navigation";
 
-type PropertyObjectGalleryProps = Omit<PropertyGalleryViewProps, "cityNominative" | "imageRenderer" | "shouldOptimizeImage">;
+type PropertyObjectGalleryProps = Omit<PropertyGalleryViewProps, "mapEmbedUrl" | "imageRenderer" | "shouldOptimizeImage">;
 
 export function PropertyObjectGallery(props: PropertyObjectGalleryProps) {
   return (
     <PropertyGalleryView
       {...props}
-      cityNominative={siteProfile.city.nominative}
+      mapEmbedUrl={buildYandexMapWidgetURL(`${siteProfile.city.nominative}, ${props.address}`)}
       imageRenderer={PropertyGalleryImage}
       shouldOptimizeImage={shouldOptimizeCatalogImage}
     />

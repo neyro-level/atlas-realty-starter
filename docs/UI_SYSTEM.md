@@ -1,10 +1,10 @@
 # UI system
 
-This document implements AMS UI Development Constitution 3.1 for the public Atlas product. The active layering is `Project Design System -> Tailwind theme -> shadcn primitives -> shared UI -> realty domain UI -> page composition`. Payload Admin stays CMS-native.
+This document implements AMS UI Development Constitution 3.1 for a public real-estate product. The active layering is `Project Design System -> Tailwind theme -> shadcn primitives -> shared UI -> realty domain UI -> page composition`. Payload Admin stays CMS-native.
 
 ## Ownership
 
-`packages/site-ui` (`@starter/site-ui`) is Atlas's internal component and composition library. It is part of this repository and is not published to npm or installed from a remote Registry. Application routes compose its views but do not create a second design system. Payload, database access, secrets, project identity and project-specific fetching are forbidden inside the package. Atlas identity and theme values belong to the Project Design System and `SiteProfile`.
+`packages/site-ui` (`@starter/site-ui`) is the starter's internal component and view library. It is part of this repository and is not published to npm or installed from a remote Registry. Application routes compose its views but do not create a second design system. Payload, database access, secrets, project identity and project-specific fetching are forbidden inside the package. Tenant identity and theme values belong to the Project Design System and `SiteProfile`.
 
 The root and package `components.json` files keep the same local ShadCN style, React Server Components mode, TypeScript mode, base color and Lucide icon library. New primitives are added into `packages/site-ui` and then admitted through its public exports. `pnpm ui:shadcn:info` provides a Windows-safe CLI entry when a checkout name begins with a numbered dot prefix.
 
@@ -28,17 +28,17 @@ The shell layer owns the neutral Container, Section, SectionHeader, responsive H
 
 Global shell CSS contains only shared surface/link utilities. Request modal and footer styles are owned by `request-modal.css` and `site-footer.css`; page code must not rely on their incidental global presence.
 
-Home, leadgen promo and journal styles are route-owned imports (`home-page.css`, `promo.css`, `journal.css`) instead of global `styles.css` dependencies. Their component tokens use named roles, and Atlas copy/media remain in application wrappers or page data rather than shared components.
+Home, leadgen promo and journal styles are route-owned imports (`home-page.css`, `promo.css`, `journal.css`) instead of global `styles.css` dependencies. Their component tokens use named roles, and tenant copy/media remain in application wrappers or page data rather than shared components.
 
-The new-buildings domain in `packages/site-ui` contains the catalog, detail and conversion views behind one public package API. Atlas wrappers provide brand, city, expert identity and portrait, optional verified rating, Next adapters, Payload-derived DTOs and typed request context.
+The new-buildings domain in `packages/site-ui` contains the catalog, detail and conversion views behind one public package API. Application wrappers provide brand, city, expert identity and portrait, optional verified rating, Next adapters, Payload-derived DTOs and typed request context.
 
-Catalog, map, property-card and property-detail views are neutral modules of the internal package. Their contracts are presentation DTOs; Atlas adapters remain responsible for translating `SiteEngine` DTOs. Catalog, property, session-collection and residential-complex views use semantic tokens and do not import `home.css` or Payload documents.
+Catalog, map, property-card and property-detail views are neutral modules of the internal package. Their contracts are presentation DTOs; application adapters remain responsible for translating `SiteEngine` DTOs. Catalog, property, session-collection and residential-complex views use semantic tokens and do not import `home.css` or Payload documents.
 
 `packages/site-ui/src/lib/realty-format.ts` is the single presentation formatter for ruble prices, compact prices, areas, floor labels and Russian count forms. Shared and application views use this module instead of creating local `Intl` or pluralization implementations. Server DTO adapters remain independent from the UI package.
 
 New UI follows `reuse -> variant -> create`. Application components do not import Radix directly and do not recreate native controls when an admitted primitive or semantic variant exists.
 
-`MediaGallery` is the only gallery API used by property and residential-complex pages. It wraps Embla through ShadCN Carousel and `yet-another-react-lightbox` with thumbnails, counter, zoom and fullscreen. The wrapper owns focus restore, keyboard and touch behavior, scroll locking, preload limits, empty/single states and Atlas token styling; application code must not import the lightbox directly.
+`MediaGallery` is the only gallery API used by property and residential-complex pages. It wraps Embla through ShadCN Carousel and `yet-another-react-lightbox` with thumbnails, counter, zoom and fullscreen. The wrapper owns focus restore, keyboard and touch behavior, scroll locking, preload limits, empty/single states and project-token styling; application code must not import the lightbox directly.
 
 The carousel and its first visible image stay in the initial page path. Fullscreen lightbox code and plugins load only after the visitor opens a photo, so routes do not pay that client-JavaScript cost during the first render.
 
@@ -52,6 +52,6 @@ The `/novostroyki` mobile showcase uses one large complex card with the edge of 
 - `pnpm images:optimize` converts only oversized PNG files to high-quality WebP, updates tracked references and removes proven duplicates.
 - Logos, UI graphics, social previews and small fallbacks may stay in Git. Property and ЖК photography belongs to Payload Media and persistent local/S3 storage.
 
-The active identity lives in `src/project/tenant.config.ts`; `pnpm init:tenant` replaces its managed values together with the root package name, README tenant block and local `.env`. Project themes override neutral semantic tokens without changing component APIs. `templates/site-profile.neutral.json` and `pnpm template:profile` remain the reviewed design-profile path for a new city. The neutral preset contains no Atlas theme or Краснодар coordinates; map activation requires reviewed coordinates. One client still receives its own repository, database, S3 bucket and deployment contour.
+The active identity lives in `src/project/tenant.config.ts`; `pnpm init:tenant` replaces its managed values together with the root package name, README tenant block and local `.env`. Project themes override neutral semantic tokens without changing component APIs. `templates/site-profile.neutral.json` and `pnpm template:profile` remain the reviewed design-profile path for a new city. The neutral preset contains no tenant theme or coordinates; map activation requires reviewed coordinates. One client still receives its own repository, database, S3 bucket and deployment contour.
 
 `RequestForm` is the canonical React Hook Form + Zod entry point for inline leads. Overlay triggers use the shared typed context instead of DOM events or `data-*` dispatch attributes. All lead entry points retain the same server action, phone normalization, consent, honeypot, idempotency and server-error contract.

@@ -1,8 +1,8 @@
 import { permanentRedirect } from "next/navigation";
-import { routes } from "@/project/routes";
+import { LEGACY_ROUTE_REDIRECTS } from "@/project/routes";
 
 export const dynamic = "force-dynamic";
 
 export default async function AgentPage({ params }: { params: Promise<{ slug: string }> }) {
-  permanentRedirect(routes.employee((await params).slug));
+  permanentRedirect(LEGACY_ROUTE_REDIRECTS.agent.to((await params).slug));
 }

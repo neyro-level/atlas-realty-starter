@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { YANDEX_METRIKA_SCRIPT_URL, yandexMetrikaWatchURL } from "@/core/integrations/analytics/yandex-metrika";
 import { trackEvent, trackInternalPageView, trackPageView } from "./client";
 import { YANDEX_METRIKA_INIT_OPTIONS } from "./metrika-goals";
 import type { AnalyticsMode } from "./types";
@@ -13,7 +14,7 @@ export function AnalyticsProvider({ counterId }: { counterId?: string }) {
   const previousInternalUrl = useRef<string | null>(null);
   const numericCounterId = parseCounterId(counterId);
   const noscriptImageSrc = numericCounterId
-    ? `https://mc.yandex.ru/watch/${numericCounterId}`
+    ? yandexMetrikaWatchURL(numericCounterId)
     : null;
 
   const syncTrackedUrl = () => {
@@ -185,7 +186,7 @@ function loadYandexScript() {
   if (document.querySelector('script[data-agency-metrika="true"]')) return;
   const script = document.createElement("script");
   script.async = true;
-  script.src = "https://mc.yandex.ru/metrika/tag.js";
+  script.src = YANDEX_METRIKA_SCRIPT_URL;
   script.dataset.agencyMetrika = "true";
   document.head.appendChild(script);
 }

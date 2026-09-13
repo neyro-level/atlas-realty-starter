@@ -6,6 +6,7 @@ import type {
 } from '@starter/site-contracts'
 
 import type { CatalogQuery } from '@/lib/catalog'
+import { buildYandexMapSearchURL } from '@/core/integrations/maps/navigation'
 import { formatPrice } from '@/lib/catalog'
 import { resolvePropertyRobotsState } from '@/modules/catalog/seo'
 import { truncateSeoText } from '@/modules/seo/metadata'
@@ -291,7 +292,7 @@ export function buildViewingDateOptions() {
 }
 
 export function buildYandexMapUrl(address: string) {
-  return `https://yandex.ru/maps/?text=${encodeURIComponent(`Краснодар, ${address}`)}`
+  return buildYandexMapSearchURL(address, tenant.cityRu)
 }
 
 export function buildBuildingDescription(listing: PropertyListing) {

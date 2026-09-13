@@ -4,7 +4,7 @@ This document describes the current starter contract. Exact implementation state
 
 ## Identity and lifecycle
 
-- Product: Atlas Realty Starter, an independent Krasnodar reference product and reusable city starter.
+- Product: AMS Realty Platform Starter, a reusable city real-estate product foundation.
 - Mode: CONFORMANT STARTER / BUILD MODE.
 - Profile: full-stack real-estate website and catalog up to about 50,000 active properties.
 - Data, auth, Admin, schema and migrations owner: Payload CMS.
@@ -76,9 +76,9 @@ The versioned headless API remains supported for external consumers; “headless
 - Payload Jobs for import, delivery, recovery and PII retention.
 - Optional persistent S3 storage; required by the protected production runtime.
 
-## Atlas publication boundary
+## Clone replacement and publication boundary
 
-Atlas is the concrete Krasnodar product at `atlas.ams24.ru`. Before enabling indexing it must verify:
+Before a clone can enable indexing or enter MAINTENANCE MODE, replace and verify:
 
 - the current legal texts and operator details against the AMS policy source;
 - production domain, contacts, office map and indexability;
@@ -106,6 +106,15 @@ Lead PII retention default is 365 days and the baseline consent text version is 
 ## Current state and release gates
 
 - The public site, Payload Admin, catalog, new-buildings module, leads/outbox, jobs, S3 integration and immutable release path are implemented.
-- Atlas remains non-indexable while demonstration content is present or source rights are not approved.
+- The configured clone remains non-indexable while demonstration content is present, source rights are not approved or any production-readiness item remains open.
 - Core 4.0 remediation is implemented and re-attested: clean and existing-database migrations, import safety, layout/unit separation, prepared catalog aggregates, public DTO isolation and the 50k capacity target are covered by the repository checks.
 - Production readiness is asserted only for an exact merged `main` SHA after the RISKY SourceCraft gate, release artifact verification and live smoke from `OPERATIONS.md`.
+
+### Production-readiness checklist
+
+- [ ] Tenant config contains approved brand, city grammar, domain, contacts, legal operator, map center and lead channels.
+- [ ] Demo content/media are removed or licensed; feed ownership and publication rules are documented.
+- [ ] PostgreSQL, S3, Doppler and server scopes are isolated for this client; backups and rollback are proven.
+- [ ] Lead destination, outbound allowlist, consent version, retention owner and delivery recovery are verified.
+- [ ] Public environment values are inlined into the exact production artifact; indexing remains false until approval.
+- [ ] Exact merged `main` SHA passes review, RISKY gate, migrations on the release database copy, production E2E and live smoke.

@@ -18,8 +18,8 @@ export type PropertyGalleryViewProps = {
   videoUrls?: string[];
   imageAlt: string;
   address: string;
+  mapEmbedUrl: string;
   mapUrl: string;
-  cityNominative: string;
   imageRenderer: SiteImageRenderer;
   shouldOptimizeImage?: (src: string) => boolean;
 };
@@ -37,8 +37,8 @@ export function PropertyGalleryView({
   videoUrls,
   imageAlt,
   address,
+  mapEmbedUrl,
   mapUrl,
-  cityNominative,
   imageRenderer: ImageRenderer,
   shouldOptimizeImage = () => false,
 }: PropertyGalleryViewProps) {
@@ -87,7 +87,7 @@ export function PropertyGalleryView({
         {activeTab === "map" ? (
           <div className="relative h-full w-full">
             <iframe
-              src={`https://yandex.ru/map-widget/v1/?text=${encodeURIComponent(`${cityNominative}, ${address}`)}&z=16`}
+              src={mapEmbedUrl}
               title={`Расположение: ${address}`}
               allowFullScreen
               className="h-full w-full border-0"

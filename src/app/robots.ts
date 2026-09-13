@@ -1,25 +1,27 @@
 import type { MetadataRoute } from 'next'
 
-import { runtimeConfig } from '@/project/env'
-import { routes } from '@/project/routes'
-import { isIndexable } from '@/project/site-config'
+import { publicRoutes } from '@/core/routing/public-routes'
+import { getSiteUrl, isIndexable } from '@/project/site-config'
 
-export default async function robots(): Promise<MetadataRoute.Robots> {
-  return buildRobots({ indexable: isIndexable(), siteURL: runtimeConfig.siteURL })
+export function buildRobots(siteURL: string, indexable: boolean): MetadataRoute.Robots
+export function buildRobots(options: { indexable: boolean; siteURL: string }): MetadataRoute.Robots
+export function buildRobots(
+  siteURLOrOptions: string | { indexable: boolean; siteURL: string },
+  indexableValue?: boolean,
+): MetadataRoute.Robots {
+  const { indexable, siteURL } = typeof siteURLOrOptions === 'string'
+    ? { indexable: indexableValue ?? false, siteURL: siteURLOrOptions }
+    : siteURLOrOptions
+  const origin = siteURL.replace(/\/$/u, '')
+  return {
+    host: origin,
+    rules: indexable
+      ? [{ allow: '/', userAgent: '*' }]
+      : [{ disallow: '/', userAgent: '*' }],
+    ...(indexable ? { sitemap: `${origin}${publicRoutes.xmlSitemap()}` } : {}),
+  }
 }
 
-export function buildRobots({ indexable, siteURL }: { indexable: boolean; siteURL: string }): MetadataRoute.Robots {
-  const host = siteURL.replace(/\/$/u, '')
-  if (!indexable) {
-    return {
-      host,
-      rules: [{ disallow: '/', userAgent: '*' }],
-    }
-  }
-
-  return {
-    host,
-    rules: [{ allow: '/', userAgent: '*' }],
-    sitemap: `${host}${routes.xmlSitemap()}`,
-  }
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  return buildRobots(getSiteUrl(), isIndexable())
 }

@@ -33,8 +33,8 @@
 - Production schema uses append-only `migrations-v2`; `push` stays false.
 - New-build inventory remains in `properties`; `layouts` is the first-class grouping/read model and never a second inventory collection.
 - Catalog facets are read from the Payload-owned `catalog-stats` record rebuilt only after a successful import; public requests never scan the full property catalog to derive facets.
-- Product identity is Atlas for Krasnodar at `atlas.ams24.ru`; brand, city forms, domain, contacts, legal data, map defaults and lead channels are owned by `src/project/tenant.config.ts`.
-- Atlas must remain non-indexable while demonstration content is present or source rights are unverified.
+- Brand, city forms, domain, contacts, legal data, map defaults and lead channels have one owner: `src/project/tenant.config.ts`; reusable packages and infrastructure code remain tenant-neutral.
+- Every clone remains non-indexable while demonstration content is present, source rights are unverified or the production-readiness checklist is incomplete.
 - External legacy runtime/database are validation inputs only and are never changed without a separate release command.
 
 ## Documentation map
