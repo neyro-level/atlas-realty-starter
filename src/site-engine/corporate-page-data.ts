@@ -21,7 +21,7 @@ export type CorporatePageData = {
 
 export async function loadCorporatePageData(page: CorporatePageConfig, searchParams: CatalogSearchParams): Promise<CorporatePageData> {
   const visitorQuery = parseCatalogSearchParams(searchParams);
-  const showcaseLimit = page.showcase?.query.limit ?? CATALOG_PAGE_SIZE;
+  const showcaseLimit = visitorQuery.limit ?? page.showcase?.query.limit ?? CATALOG_PAGE_SIZE;
   const showcaseQuery = page.showcase
     ? withLocalFullCatalogQuery({ ...visitorQuery, ...page.showcase.query, limit: showcaseLimit })
     : null;

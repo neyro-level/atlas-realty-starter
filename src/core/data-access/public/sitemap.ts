@@ -7,6 +7,7 @@ import { createPublicGatewayContext } from '@/core/access/public-gateway'
 import { PUBLIC_CACHE_TAGS } from '@/core/cache/public-cache'
 import { publicAgentWhere, publicComplexWhere, publicPageWhere, publicPostWhere, publicPropertyWhere, withPublicPredicate } from '@/core/data-access/public/predicates'
 import config from '@/payload.config'
+import { sitemapPathFor } from '@/core/routing/public-routes'
 
 export const SITEMAP_PAGE_SIZE = 10_000
 export type SitemapType = 'agents' | 'complexes' | 'pages' | 'posts' | 'properties'
@@ -39,20 +40,20 @@ async function querySitemapChunk(type: SitemapType, page: number): Promise<Sitem
   const common = { context: createPublicGatewayContext(), depth: 0, limit: SITEMAP_PAGE_SIZE, overrideAccess: false as const, page: page + 1, pagination: true as const, select: { slug: true, updatedAt: true } as const, sort: 'id' }
   if (type === 'complexes') {
     const result = await payload.find({ ...common, collection: 'residential-complexes', where: publicComplexWhere() })
-    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: `/complexes/${doc.slug}` }))
+    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: sitemapPathFor('complexes', doc.slug) }))
   }
   if (type === 'properties') {
     const result = await payload.find({ ...common, collection: 'properties', where: withPublicPredicate(publicPropertyWhere(), { status: { in: ['active', 'reserved'] } }) })
-    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: `/properties/${doc.slug}` }))
+    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: sitemapPathFor('properties', doc.slug) }))
   }
   if (type === 'agents') {
     const result = await payload.find({ ...common, collection: 'agents', where: publicAgentWhere() })
-    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: `/agents/${doc.slug}` }))
+    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: sitemapPathFor('agents', doc.slug) }))
   }
   if (type === 'pages') {
     const result = await payload.find({ ...common, collection: 'pages', where: publicPageWhere() })
-    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: `/pages/${doc.slug}` }))
+    return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: sitemapPathFor('pages', doc.slug) }))
   }
   const result = await payload.find({ ...common, collection: 'posts', where: publicPostWhere() })
-  return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: `/posts/${doc.slug}` }))
+  return result.docs.map((doc) => ({ lastModified: doc.updatedAt, url: sitemapPathFor('posts', doc.slug) }))
 }

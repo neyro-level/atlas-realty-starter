@@ -16,6 +16,8 @@ if (result.status !== 0 && !result.stdout) {
 const cruise = JSON.parse(result.stdout)
 const modules = new Map(cruise.modules.map((module) => [normalize(module.source), module]))
 const violations = []
+const tenantConfigPath = 'src/project/tenant.config.ts'
+const protectedTenantValues = ['atlas.ams24.ru', '+7 (918) 320-99-96', 'ИП Скрицкая Юлия Викторовна', '231295699557']
 
 for (const violation of cruise.summary?.violations ?? []) {
   violations.push({ from: normalize(violation.from), rule: violation.rule?.name ?? 'dependency-cruiser', to: normalize(violation.to) })
@@ -30,6 +32,27 @@ for (const [source, module] of modules) {
       source.startsWith('src/payload/migrations-v2/')
     if (rawDatabaseUse && !approvedRawDatabasePath) {
       violations.push({ from: source, rule: 'raw-database-approved-boundaries-only', to: 'database' })
+    }
+    const hasPayloadOperation = /\b(?:payload|req\.payload|context\.payload)\.(?:find|findByID|findGlobal|create|update|delete|count|auth|jobs)\b/.test(sourceText)
+    if (hasPayloadOperation && !source.startsWith('src/core/data-access/')) {
+      violations.push({ from: source, rule: 'payload-operations-through-gateways-only', to: 'payload' })
+    }
+    if (/overrideAccess\s*:\s*true/.test(sourceText) && !source.startsWith('src/core/data-access/system/')) {
+      violations.push({ from: source, rule: 'privileged-payload-access-system-gateway-only', to: 'overrideAccess' })
+    }
+    if (source.includes('/leads/adapters/') && /\bfetch\s*\(/.test(sourceText)) {
+      violations.push({ from: source, rule: 'lead-adapters-use-outbound-http-client', to: 'fetch' })
+    }
+    if (source !== tenantConfigPath) {
+      for (const value of protectedTenantValues) {
+        if (sourceText.includes(value)) violations.push({ from: source, rule: 'tenant-identity-single-source', to: tenantConfigPath })
+      }
+    }
+    const providerURL = /['"`](https:\/\/(?:api-maps\.yandex\.ru|yastatic\.net|mc\.yandex\.ru|yandex\.ru|[^/'"`]+\.maps\.yandex\.net)[^'"`]*)['"`]/g
+    const providerBoundary = source.startsWith('src/core/integrations/') || source.startsWith('src/core/security/outbound-http/')
+    const contentOrTest = source.includes('/content/') || isTestPath(source)
+    if (!providerBoundary && !contentOrTest && providerURL.test(sourceText)) {
+      violations.push({ from: source, rule: 'external-provider-urls-in-integrations-only', to: 'src/core/integrations' })
     }
   }
   const sourceModule = moduleName(source)
@@ -53,6 +76,15 @@ for (const [source, module] of modules) {
       violations.push({ from: source, rule: 'no-production-to-tests', to: target })
     }
   }
+}
+
+const routeRegistryPath = resolve(root, 'src/project/routes.ts')
+if (!readFileSync(resolve(root, 'src/core/data-access/public/sitemap.ts'), 'utf8').includes('sitemapPathFor')) {
+  violations.push({ from: 'src/core/data-access/public/sitemap.ts', rule: 'sitemap-uses-route-registry', to: 'src/project/routes.ts' })
+}
+const routeRegistry = readFileSync(routeRegistryPath, 'utf8')
+for (const match of routeRegistry.matchAll(/appEntry:\s*['"]([^'"]+)['"]/g)) {
+  if (!readFileSafe(resolve(root, match[1]))) violations.push({ from: 'src/project/routes.ts', rule: 'registered-route-entry-exists', to: match[1] })
 }
 
 const clientFiles = [...modules.keys()].filter(isClientModule)
@@ -137,4 +169,8 @@ function isTestPath(path) {
 
 function normalize(path) {
   return String(path ?? '').replaceAll('\\', '/')
+}
+
+function readFileSafe(path) {
+  try { readFileSync(path); return true } catch { return false }
 }
