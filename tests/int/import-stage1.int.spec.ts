@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
+import type { PostgresAdapter } from '@payloadcms/db-postgres'
 
 import { deactivateMissingProperties, upsertPropertyBatch } from '@/core/data-access/ingest/property-import'
 import { postProcessSuccessfulImport } from '@/core/data-access/ingest/post-import'
@@ -13,6 +14,28 @@ const offer = (title: string): NormalizedOffer => ({
 
 describe('Stage 1 database import', () => {
   beforeEach(resetFoundationState)
+
+  it('uses the catalog indexes for representative public filters and import lookup', async () => {
+    const payload = await getTestPayload()
+    const client = await (payload.db as unknown as PostgresAdapter).pool.connect()
+    try {
+      await client.query('SET enable_seqscan = off')
+      await client.query('SET enable_sort = off')
+      const plans = await Promise.all([
+        client.query("EXPLAIN (FORMAT JSON) SELECT id FROM properties WHERE is_published=true AND status IN ('active','reserved') AND deal_type='sale' AND category='apartment' ORDER BY price_minor_units LIMIT 24"),
+        client.query("EXPLAIN (FORMAT JSON) SELECT id FROM properties WHERE is_published=true AND status IN ('active','reserved') AND district='Центральный' ORDER BY published_at DESC LIMIT 24"),
+        client.query("EXPLAIN (FORMAT JSON) SELECT id FROM properties WHERE import_hash='hash'"),
+      ])
+      const planText = plans.map((result) => JSON.stringify(result.rows)).join('\n')
+      expect(planText).toContain('properties_public_deal_category_price_idx')
+      expect(planText).toContain('properties_public_district_published_idx')
+      expect(planText).toContain('properties_import_hash_idx')
+    } finally {
+      await client.query('RESET enable_seqscan')
+      await client.query('RESET enable_sort')
+      client.release()
+    }
+  })
 
   it('is idempotent, source-isolated and preserves manual fields', async () => {
     const payload = await getTestPayload()
@@ -36,7 +59,7 @@ describe('Stage 1 database import', () => {
     expect(after.needsReview).toBe(true)
     expect(after.duplicateCandidates).toHaveLength(1)
     expect((await payload.count({ collection: 'properties', overrideAccess: true })).totalDocs).toBe(2)
-    expect(await deactivateMissingProperties(payload, { feedSourceId: firstSource.id, snapshotStartedAt: new Date(Date.now() + 1_000).toISOString() })).toBe(1)
+    expect((await deactivateMissingProperties(payload, { feedSourceId: firstSource.id, snapshotStartedAt: new Date(Date.now() + 1_000).toISOString() })).count).toBe(1)
     const statuses = await payload.find({ collection: 'properties', overrideAccess: true, depth: 0, limit: 10, sort: 'feedSource' })
     expect(statuses.docs.find((property) => property.feedSource === firstSource.id)?.status).toBe('removed')
     expect(statuses.docs.find((property) => property.feedSource === secondSource.id)?.status).toBe('active')

@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { applyFieldOwnership, evaluateDeactivation, mergeSharedEntityFields, validateFeedFieldOwnership } from '@/core/data-access/ingest/import-policy'
 import { resolveLayoutIdentity } from '@/core/data-access/ingest/layout-identity'
 import { shouldPublishImportedRecords } from '@/core/data-access/ingest/publication-policy'
-import { createIssueCollector } from '@/core/data-access/ingest/run-feed-import'
+import { buildImportRevalidationTags, createIssueCollector } from '@/core/data-access/ingest/run-feed-import'
 import { safeHTTPSStream } from '@/core/security/outbound-http/client'
 import { getFeedParser } from '@/project/ingest/registry'
 import type { NormalizedOffer } from '@/shared/types/feed-import'
@@ -126,5 +126,17 @@ describe('Stage 1 import contracts', () => {
     expect(shouldPublishImportedRecords({ mode: 'review', runStatus: 'success' })).toBe(false)
     expect(shouldPublishImportedRecords({ mode: 'automatic', runStatus: 'suspicious' })).toBe(false)
     expect(shouldPublishImportedRecords({ mode: 'automatic', runStatus: 'failed' })).toBe(false)
+  })
+
+  it('aggregates a 1000-object import into one bounded cache invalidation payload', () => {
+    const tags = buildImportRevalidationTags(Array.from({ length: 1_000 }, (_, index) => `listing-${index}`))
+    expect(tags).toHaveLength(104)
+    expect(tags.slice(0, 4)).toEqual([
+      'public:catalog:list',
+      'public:catalog:facets',
+      'public:catalog:property',
+      'public:sitemap',
+    ])
+    expect(new Set(tags).size).toBe(tags.length)
   })
 })

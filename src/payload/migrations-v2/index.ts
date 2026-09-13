@@ -11,6 +11,7 @@ import * as migration_20260912_110758_core4_import_ownership_publication_expand 
 import * as migration_20260912_110854_core4_remove_dead_feed_schedule from './20260912_110854_core4_remove_dead_feed_schedule';
 import * as migration_20260912_112509_core4_catalog_read_model from './20260912_112509_core4_catalog_read_model';
 import * as migration_20260913_155948_epic3_lead_reliability from './20260913_155948_epic3_lead_reliability';
+import * as migration_20260913_165921_epic5_cache_indexes from './20260913_165921_epic5_cache_indexes';
 
 export const migrations = [
   {
@@ -76,6 +77,11 @@ export const migrations = [
   {
     up: migration_20260913_155948_epic3_lead_reliability.up,
     down: migration_20260913_155948_epic3_lead_reliability.down,
-    name: '20260913_155948_epic3_lead_reliability'
+    name: '20260913_155948_epic3_lead_reliability',
+  },
+  {
+    up: migration_20260913_165921_epic5_cache_indexes.up,
+    down: migration_20260913_165921_epic5_cache_indexes.down,
+    name: '20260913_165921_epic5_cache_indexes'
   },
 ];

@@ -2,10 +2,10 @@ import { timingSafeEqual } from 'node:crypto'
 
 import { z } from 'zod'
 
-import { invalidatePublicCache, publicCacheTagValues } from '@/core/cache/public-cache'
+import { invalidatePublicCache, isPublicCacheTag } from '@/core/cache/public-cache'
 import { runtimeConfig } from '@/project/env'
 
-const requestSchema = z.object({ tags: z.array(z.enum(publicCacheTagValues as [string, ...string[]])).min(1).max(10) })
+const requestSchema = z.object({ tags: z.array(z.string().max(192).refine(isPublicCacheTag)).min(1).max(110) })
 
 export async function POST(request: Request) {
   const length = Number(request.headers.get('content-length') ?? '0')

@@ -1,7 +1,7 @@
 import type { PostgresAdapter } from '@payloadcms/db-postgres'
 import type { Payload } from 'payload'
 
-import type { PublicCacheTag } from '@/core/cache/public-cache'
+import { propertyCacheTag, PUBLIC_CACHE_TAGS, type PublicCacheTag } from '@/core/cache/public-cache'
 import { safeHTTPSStream } from '@/core/security/outbound-http/client'
 import { isAllowedExternalImageURL } from '@/shared/security/media-url'
 import type { AddressFormat, FeedParser, FeedRunMode, NormalizedOffer } from '@/shared/types/feed-import'
@@ -14,6 +14,12 @@ type Client = { query<T extends Record<string, unknown> = Record<string, unknown
 type Source = { code: string; feed_url_ref: string; is_enabled: boolean; last_offer_count: number | null; market: 'secondary' | 'newbuild'; max_offers_limit: number; min_offers_threshold_percent: number; parser: string; publication_mode: 'automatic' | 'review' }
 type ImportIssue = { code: string; message: string }
 const MAX_STORED_ISSUES = 1000
+const MAX_EXACT_PROPERTY_REVALIDATIONS = 100
+
+export function buildImportRevalidationTags(changedSlugs: Iterable<string>): PublicCacheTag[] {
+  const exact = [...new Set(changedSlugs)].sort().slice(0, MAX_EXACT_PROPERTY_REVALIDATIONS).map(propertyCacheTag)
+  return [PUBLIC_CACHE_TAGS.catalogList, PUBLIC_CACHE_TAGS.catalogFacets, PUBLIC_CACHE_TAGS.propertyDetails, PUBLIC_CACHE_TAGS.sitemap, ...exact]
+}
 
 export function createIssueCollector(limit = MAX_STORED_ISSUES) {
   const samples: ImportIssue[] = []
@@ -55,6 +61,7 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
   const formats = new Set<AddressFormat>()
   const issues = createIssueCollector()
   const totals = { created: 0, unchanged: 0, updated: 0, total: 0 }
+  const changedSlugs = new Set<string>()
   const feedURL = dependencies.resolveRuntimeReference(source.feed_url_ref)
   if (!feedURL) {
     issues.add({ code: 'feed-reference-missing', message: 'Feed URL reference is not configured' })
@@ -93,11 +100,13 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
       batch.push(offer)
       if (batch.length === 500) {
         const result = await upsertPropertyBatch(payload, { allowedImageHosts: dependencies.externalImageHosts, feedSourceId: input.sourceId, importRunId: runId, offers: batch, seenAt: startedAt })
+        result.changedSlugs.forEach((slug) => changedSlugs.add(slug))
         totals.created += result.created; totals.updated += result.updated; totals.unchanged += result.unchanged; batch = []
       }
     }
     if (batch.length) {
       const result = await upsertPropertyBatch(payload, { allowedImageHosts: dependencies.externalImageHosts, feedSourceId: input.sourceId, importRunId: runId, offers: batch, seenAt: startedAt })
+      result.changedSlugs.forEach((slug) => changedSlugs.add(slug))
       totals.created += result.created; totals.updated += result.updated; totals.unchanged += result.unchanged
     }
     streamCompleted = true
@@ -108,7 +117,11 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
   }
 
   const safety = evaluateDeactivation({ enabled: source.is_enabled, lastOfferCount: source.last_offer_count == null ? null : Number(source.last_offer_count), maxOffersLimit: Number(source.max_offers_limit), minOffersThresholdPercent: Number(source.min_offers_threshold_percent), offerCount: totals.total, streamCompleted, criticalIssueCount: issues.criticalCount, addressFormats: formats })
-  const deactivated = input.mode === 'full_snapshot' && safety.allowed ? await deactivateMissingProperties(payload, { feedSourceId: input.sourceId, snapshotStartedAt: startedAt }) : 0
+  const deactivation = input.mode === 'full_snapshot' && safety.allowed
+    ? await deactivateMissingProperties(payload, { feedSourceId: input.sourceId, snapshotStartedAt: startedAt })
+    : { changedSlugs: [], count: 0 }
+  deactivation.changedSlugs.forEach((slug) => changedSlugs.add(slug))
+  const deactivated = deactivation.count
   const status: 'success' | 'suspicious' = safety.allowed ? 'success' : 'suspicious'
   for (const reason of safety.reasons) issues.add({ code: reason, message: 'Safety condition prevented deactivation' })
   if (status === 'success') {
@@ -122,7 +135,7 @@ export async function runFeedImport(payload: Payload, input: { mode: FeedRunMode
   }
   await finishRun(payload, runId, { ...totals, deactivated }, issues.samples, issues.totalCount, status, safety.allowed, formats, startedAt)
   try {
-    await dependencies.requestPublicRevalidation(['public:catalog', 'public:sitemap'])
+    await dependencies.requestPublicRevalidation(buildImportRevalidationTags(changedSlugs))
   } catch {
     payload.logger.warn('public cache revalidation request failed; TTL fallback remains active')
   }

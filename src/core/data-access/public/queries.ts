@@ -4,6 +4,7 @@ import { unstable_cache } from 'next/cache'
 import type { Payload, Where } from 'payload'
 
 import { createPublicGatewayContext } from '@/core/access/public-gateway'
+import { boundedCatalogCacheKey } from '@/core/cache/catalog-cache-key'
 import { PUBLIC_CACHE_TAGS } from '@/core/cache/public-cache'
 import { publicAgentWhere, publicCatalogStatsWhere, publicComplexWhere, publicLayoutWhere, publicPageWhere, publicPostWhere, publicPropertyWhere, withPublicPredicate } from '@/core/data-access/public/predicates'
 import type { PublicCatalogQuery } from '@/core/query/public-api'
@@ -50,7 +51,9 @@ type RedirectView = Pick<Redirect, 'from' | 'id' | 'to' | 'type'>
 export type PublicQueryOptions = { siteURL: string }
 
 export function getPublicCatalog(payload: Payload, query: PublicCatalogQuery, options: PublicQueryOptions) {
-  return queryPublicCatalog(payload, query, options)
+  const boundedKey = boundedCatalogCacheKey(query)
+  if (boundedKey === null) return queryPublicCatalog(payload, query, options)
+  return cacheFor(['catalog-bounded', boundedKey, options.siteURL], [PUBLIC_CACHE_TAGS.catalogList], () => queryPublicCatalog(payload, query, options))
 }
 
 export function getPublicPropertyBySlug(payload: Payload, slug: string, options: PublicQueryOptions) {
@@ -108,7 +111,7 @@ export function getPublicConfig(payload: Payload): Promise<PublicConfig> {
 }
 
 export function getPublicFacets(payload: Payload) {
-  return cacheFor(['facets'], [PUBLIC_CACHE_TAGS.catalog], () => queryPublicFacets(payload))
+  return cacheFor(['facets'], [PUBLIC_CACHE_TAGS.catalogFacets], () => queryPublicFacets(payload))
 }
 
 export function resolvePublicRedirect(payload: Payload, from: string) {

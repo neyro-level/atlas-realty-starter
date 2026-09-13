@@ -13,7 +13,7 @@ type Client = { query<T extends Record<string, unknown> = Record<string, unknown
 type OfferRelations = { agentId: string | null; buildingId: string | null; complexId: string | null; layoutId: string | null; layoutNeedsReview: boolean }
 type SourcePolicy = { code: string; explicitOwners: Record<string, string>; priority: number }
 
-export type ImportBatchResult = { created: number; unchanged: number; updated: number }
+export type ImportBatchResult = { changedSlugs: string[]; created: number; unchanged: number; updated: number }
 
 export async function upsertPropertyBatch(payload: Payload, input: { allowedImageHosts?: readonly string[]; feedSourceId: string; importRunId: string; offers: NormalizedOffer[]; seenAt: string }): Promise<ImportBatchResult> {
   if (!input.offers.length || input.offers.length > MAX_BATCH) throw new Error(`Import batch must contain 1-${MAX_BATCH} offers`)
@@ -131,7 +131,14 @@ export async function upsertPropertyBatch(payload: Payload, input: { allowedImag
     FROM (SELECT left_id parent_id, right_id properties_id FROM pairs UNION SELECT right_id, left_id FROM pairs) relation
     WHERE NOT EXISTS (SELECT 1 FROM properties_rels existing WHERE existing.parent_id=relation.parent_id AND existing.path='duplicateCandidates' AND existing.properties_id=relation.properties_id)`, [importedPropertyIds])
     await client.query('COMMIT')
-    return { created, unchanged, updated }
+    return {
+      changedSlugs: offers
+        .filter((offer) => previous.get(offer.externalId) !== normalizedOfferHash(offer))
+        .map((offer) => stableSlug('feed', input.feedSourceId, offer.externalId)),
+      created,
+      unchanged,
+      updated,
+    }
   } catch (error) { await client.query('ROLLBACK'); throw error } finally { client.release() }
 }
 
@@ -264,8 +271,8 @@ export async function deactivateMissingProperties(payload: Payload, input: { fee
     await client.query('BEGIN')
     const source = await client.query<{ is_enabled: boolean }>('SELECT is_enabled FROM feed_sources WHERE id = $1 FOR UPDATE', [input.feedSourceId])
     if (!source.rows[0]?.is_enabled) throw new Error('Feed source was disabled before deactivation')
-    const result = await client.query("UPDATE properties SET status = 'removed', is_published = false, updated_at = now() WHERE feed_source_id = $1 AND status <> 'removed' AND last_seen_at < $2::timestamptz", [input.feedSourceId, input.snapshotStartedAt])
+    const result = await client.query<{ slug: string }>("UPDATE properties SET status = 'removed', is_published = false, updated_at = now() WHERE feed_source_id = $1 AND status <> 'removed' AND last_seen_at < $2::timestamptz RETURNING slug", [input.feedSourceId, input.snapshotStartedAt])
     await client.query('COMMIT')
-    return result.rowCount ?? 0
+    return { changedSlugs: result.rows.map((row) => row.slug), count: result.rowCount ?? 0 }
   } catch (error) { await client.query('ROLLBACK'); throw error } finally { client.release() }
 }
