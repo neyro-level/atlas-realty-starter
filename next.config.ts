@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 
 import { SECURITY_HEADERS } from './src/core/security/headers'
 import { readHostAllowlist } from './src/project/env-hosts'
+import { LEGACY_ROUTE_REDIRECTS } from './src/project/routes'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -30,6 +31,14 @@ const nextConfig: NextConfig = {
   transpilePackages: ['@starter/site-contracts', '@starter/site-fixtures', '@starter/site-ui'],
   async headers() {
     return [{ headers: securityHeaders, source: '/:path*' }]
+  },
+  async redirects() {
+    return [
+      { destination: LEGACY_ROUTE_REDIRECTS.agents.to(), permanent: true, source: LEGACY_ROUTE_REDIRECTS.agents.from() },
+      { destination: LEGACY_ROUTE_REDIRECTS.agent.to(':slug'), permanent: true, source: LEGACY_ROUTE_REDIRECTS.agent.from(':slug') },
+      { destination: LEGACY_ROUTE_REDIRECTS.articles.to(), permanent: true, source: LEGACY_ROUTE_REDIRECTS.articles.from() },
+      { destination: LEGACY_ROUTE_REDIRECTS.article.to(':slug'), permanent: true, source: LEGACY_ROUTE_REDIRECTS.article.from(':slug') },
+    ]
   },
   images: {
     localPatterns: [{ pathname: '/api/media/file/**' }, { pathname: '/images/**' }, { pathname: '/og/**' }],

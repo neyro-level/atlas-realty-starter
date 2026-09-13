@@ -89,6 +89,19 @@ test.describe.serial('Headless public API', () => {
     expect((await request.post('/api/internal/revalidate', { data: { tags: ['public:catalog:list'] }, headers: { 'x-revalidate-secret': 'f36c8091b47a25de6c18f903a74b52ed19c830f6a27b45de' } })).status()).toBe(200)
   })
 
+  test('serves legacy aliases as permanent HTTP redirects', async ({ request }) => {
+    for (const [source, destination] of [
+      ['/agents', '/sotrudniki'],
+      ['/agents/ivan', '/sotrudniki/ivan'],
+      ['/articles', '/journal'],
+      ['/articles/guide', '/journal/guide'],
+    ]) {
+      const response = await request.get(source, { maxRedirects: 0 })
+      expect(response.status()).toBe(308)
+      expect(response.headers().location).toBe(destination)
+    }
+  })
+
   test('accepts an idempotent property lead without exposing PII', async ({ request }) => {
     const idempotencyKey = 'e2e:public-lead:12345678'
     const body = {
