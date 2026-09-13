@@ -19,8 +19,8 @@ describe("UI shell and form contracts", () => {
     const entrypoint = readFileSync("packages/site-ui/src/index.tsx", "utf8");
     const styles = readFileSync("packages/site-ui/src/styles.css", "utf8");
     const common = readFileSync("packages/site-ui/src/styles/shell.css", "utf8");
-    expect(entrypoint).toContain('export { RequestModalView } from "./views/RequestModalView"');
-    expect(entrypoint).toContain('export { SiteFooterView } from "./views/SiteFooterView"');
+    expect(entrypoint).toContain('export { RequestModalView } from "./views/site-shell/RequestModalView"');
+    expect(entrypoint).toContain('export { SiteFooterView } from "./views/site-shell/SiteFooterView"');
     expect(styles).toContain('@import "./styles/request-modal.css"');
     expect(styles).toContain('@import "./styles/site-footer.css"');
     expect(common).not.toContain(".request-modal__panel");

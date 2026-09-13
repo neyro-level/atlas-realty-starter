@@ -26,7 +26,7 @@ export function AgencyFaqAccordion({ items }: AgencyFaqAccordionProps) {
         return (
           <article
             key={item.question}
-            className="overflow-hidden border-b border-[var(--border)] bg-white last:border-b-0"
+            className="overflow-hidden border-b border-[var(--border)] bg-[var(--surface-card)] last:border-b-0"
             itemScope
             itemProp="mainEntity"
             itemType="https://schema.org/Question"
@@ -37,7 +37,7 @@ export function AgencyFaqAccordion({ items }: AgencyFaqAccordionProps) {
               aria-expanded={isOpen}
               aria-controls={panelId}
               onClick={() => setOpenIndex(isOpen ? null : index)}
-              className="group grid min-h-17.5 w-full grid-cols-[1fr_auto] items-center gap-3 bg-white px-4 py-5 text-left transition duration-200 hover:bg-[var(--surface-card-soft)] sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:gap-5 md:min-h-19.5 md:px-6 md:py-5"
+              className="group grid min-h-17.5 w-full grid-cols-[1fr_auto] items-center gap-3 bg-[var(--surface-card)] px-4 py-5 text-left transition duration-200 hover:bg-[var(--surface-card-soft)] sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:gap-5 md:min-h-19.5 md:px-6 md:py-5"
             >
               <span className="col-span-2 font-mono text-caption font-semibold leading-5 tracking-[0.12em] text-[var(--agency-faq-accordion-content-primary)] tabular-nums sm:col-span-1">
                 {String(index + 1).padStart(2, "0")}

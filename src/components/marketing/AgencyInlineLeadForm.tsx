@@ -157,7 +157,7 @@ export function AgencyInlineLeadForm({
           required={requireName}
           autoComplete="name"
           placeholder={requireName ? "Имя" : "Ваше Имя"}
-          className="min-h-14.5 rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-white px-5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
+          className="min-h-14.5 rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-[var(--surface-card)] px-5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
         />
 
         <label className="sr-only" htmlFor={`${formType}-phone`}>
@@ -182,7 +182,7 @@ export function AgencyInlineLeadForm({
             onFocus={onPhoneFocus}
             aria-invalid={Boolean(errorMessage)}
             aria-describedby={errorMessage ? errorId : undefined}
-            className="min-h-14.5 w-full rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-white px-5 pl-19.5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
+            className="min-h-14.5 w-full rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-[var(--surface-card)] px-5 pl-19.5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
           />
         </div>
 

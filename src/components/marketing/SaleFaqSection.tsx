@@ -7,7 +7,7 @@ export function SaleFaqSection() {
   return (
     <>
       <JsonLd data={faqPageSchema(faqItemsToSchema(salePropertyFaqItems))} />
-      <section className="bg-white py-14 sm:py-16 lg:py-22" aria-labelledby="sale-faq-title">
+      <section className="bg-[var(--surface-card)] py-14 sm:py-16 lg:py-22" aria-labelledby="sale-faq-title">
         <div className="mx-auto max-w-site-frame px-5">
           <div className="mb-8 max-w-225 sm:mb-10">
             <p className="mb-3 text-caption font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">

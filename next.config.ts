@@ -25,7 +25,7 @@ const configuredImageHostPatterns = readHostAllowlist(process.env.EXTERNAL_IMAGE
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ['127.0.0.1', 'localhost'],
-  experimental: { cpus: 1 },
+  experimental: { cpus: 1, optimizePackageImports: ['@starter/site-ui'] },
   output: 'standalone',
   transpilePackages: ['@starter/site-contracts', '@starter/site-fixtures', '@starter/site-ui'],
   async headers() {

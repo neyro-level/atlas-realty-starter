@@ -38,9 +38,9 @@ const commercialHeadingFiles = files.filter((file) => {
   )
 })
 const journalPageTitleFiles = [
-  'packages/site-ui/src/views/JournalHubView.tsx',
-  'packages/site-ui/src/views/JournalCategoryView.tsx',
-  'packages/site-ui/src/views/JournalArticleView.tsx',
+  'packages/site-ui/src/views/journal/JournalHubView.tsx',
+  'packages/site-ui/src/views/journal/JournalCategoryView.tsx',
+  'packages/site-ui/src/views/journal/JournalArticleView.tsx',
 ]
 const forbiddenHeadingSize =
   /\b(?:text-(?:xs|sm|base|lg|xl|[2-9]xl)|text-\[(?![^\]]*var\()[^\]]+\]|text-display-(?:small|base|medium|large|extra-large)|text-section-(?:base|large|prominent|wide|expanded)|(?:sm|md|lg|xl|min-\[[^\]]+\]):text-(?:display|section)-(?:small|base|medium|large|extra-large|prominent|wide|expanded))\b/
@@ -97,7 +97,7 @@ for (const file of commercialHeadingFiles) {
 for (const file of journalPageTitleFiles) {
   errors.push(...findHeadingViolations(file, await readFile(file, 'utf8'), 'journal'))
 }
-const articleDocument = 'packages/site-ui/src/views/ArticleDocumentView.tsx'
+const articleDocument = 'packages/site-ui/src/views/journal/ArticleDocumentView.tsx'
 const articleDocumentSource = await readFile(articleDocument, 'utf8')
 if (
   !/<h2\b[^>]*className="[^"]*text-editorial-heading[^"]*leading-editorial-heading[^"]*"/.test(

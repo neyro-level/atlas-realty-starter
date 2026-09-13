@@ -37,9 +37,9 @@ export function AgencyInlineLeadSection({
   const titleId = `${id}-title`;
 
   return (
-    <section id={id} className="bg-white" aria-labelledby={titleId}>
+    <section id={id} className="bg-[var(--surface-card)]" aria-labelledby={titleId}>
       <div className="mx-auto max-w-site-frame px-5 pb-20 pt-8 md:pb-24 md:pt-10 lg:pt-14">
-        <div className="grid overflow-hidden rounded-lg border border-[var(--border)] bg-white shadow-[var(--agency-inline-lead-section-shadow-primary)] lg:grid-cols-[0.34fr_0.66fr]">
+        <div className="grid overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface-card)] shadow-[var(--agency-inline-lead-section-shadow-primary)] lg:grid-cols-[0.34fr_0.66fr]">
           <div className="relative min-h-90 bg-[var(--agency-inline-lead-section-surface-primary)] md:min-h-125 lg:min-h-130">
             <Image
               src={expertImageSrc}

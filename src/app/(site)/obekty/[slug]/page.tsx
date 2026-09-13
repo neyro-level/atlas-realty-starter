@@ -3,12 +3,12 @@ import {
   HouseProjectPreviewView,
   PropertyBuildingView,
   PropertyDescriptionView,
-  PropertyDetailPageView,
   PropertyDetailsView,
   PropertyDetailSummaryView,
   PropertyRelatedView,
   type SiteLinkRendererProps,
 } from '@starter/site-ui'
+import { PropertyDetailPageView } from '@/components/property/PropertyDetailPageView'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 

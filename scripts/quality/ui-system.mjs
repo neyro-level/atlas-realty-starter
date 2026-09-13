@@ -71,6 +71,7 @@ const inputCheckbox = /<Input\b[^>]{0,400}type=["']checkbox["']/gs;
 const spaceUtility = /\bspace-[xy]-[a-z0-9.\[\]-]+/g;
 const projectAsset = /["']\/images\/[^"']+["']/g;
 const businessClaim = /(?:бесплат|гарант|перезвонит\s+в\s+течение\s+\d+\s+минут|рейтинг\s*[:=]?\s*["']?\d[.,]\d)/gi;
+const hardcodedWhiteBackground = /\bbg-white\b/g;
 const buttonBlock = /<(?:Button|RequestModalButton)\b[\s\S]{0,900}?<\/(?:Button|RequestModalButton)>/g;
 const manuallySizedIcon = /<[A-Z][A-Za-z0-9]*\b[^>]*className=["'][^"']*\bsize-/;
 
@@ -78,6 +79,17 @@ for (const file of files) {
   const normalized = file.replaceAll("\\", "/");
   if (normalized.endsWith("payload-types.ts")) continue;
   const source = await readFile(file, "utf8");
+  if ((normalized.startsWith("packages/site-ui/src/") || normalized.startsWith("src/components/")) && hardcodedWhiteBackground.test(source)) {
+    errors.push(`hardcoded white background outside theme: ${normalized}`);
+  }
+  hardcodedWhiteBackground.lastIndex = 0;
+  if (normalized.startsWith("packages/site-ui/src/views/") && /(?:PageView|LandingView)\.tsx$/.test(normalized)) {
+    errors.push(`whole-page composition inside shared UI: ${normalized}`);
+  }
+  if (normalized === "packages/site-ui/src/index.tsx" && /export\s+(?:async\s+)?(?:function|const|class)\b/.test(source)) {
+    errors.push("site-ui root barrel must contain re-exports only");
+  }
+  if (normalized.startsWith("src/components/ui/")) errors.push(`duplicate UI primitive outside site-ui package: ${normalized}`);
   if (normalized !== themePath && rawHex.test(source)) errors.push(`raw color outside theme: ${normalized}`);
   if (normalized !== themePath) debt.rawColorsOutsideTheme += source.match(rawColor)?.length ?? 0;
   debt.paletteTokens += source.match(paletteToken)?.length ?? 0;
@@ -111,6 +123,12 @@ for (const file of files) {
   }
   if (normalized.startsWith("packages/site-ui/src/") && identityLeak.test(source)) {
     errors.push(`client identity inside neutral shared UI: ${normalized}`);
+  }
+}
+
+for (const [alias, value] of Object.entries(rootConfig.aliases ?? {})) {
+  if ((alias === "components" || alias === "ui" || alias === "lib" || alias === "hooks") && !String(value).startsWith("@starter/site-ui/")) {
+    errors.push(`root shadcn alias must target site-ui package: ${alias}`);
   }
 }
 

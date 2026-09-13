@@ -52,7 +52,7 @@ export function RouteStatusState({
         <section className="w-full max-w-180 text-center">
           <div className="grid gap-7">
             {eyebrow ? (
-              <Badge variant="soft" className="min-h-9 gap-2 rounded-md bg-white/80 px-3 uppercase tracking-[0.14em] backdrop-blur-[2px]">
+              <Badge variant="soft" className="min-h-9 gap-2 rounded-md bg-[var(--surface-card)]/80 px-3 uppercase tracking-[0.14em] backdrop-blur-[2px]">
                 <SearchX aria-hidden />
                 {eyebrow}
               </Badge>
