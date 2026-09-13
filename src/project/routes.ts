@@ -1,6 +1,6 @@
-import { publicRoutes } from '@/core/routing/public-routes'
+import { publicRoutes } from '../core/routing/public-routes'
 
-export { sitemapPathFor, type SitemapEntityType } from '@/core/routing/public-routes'
+export { sitemapPathFor, type SitemapEntityType } from '../core/routing/public-routes'
 export const routes = publicRoutes
 
 export const LEGACY_ROUTE_REDIRECTS = {
@@ -28,8 +28,4 @@ export const APP_ROUTE_TEMPLATES = [
   { id: 'html-sitemap-listing', pattern: '/sitemap/:kind/:page', appEntry: 'src/app/(site)/sitemap/objects/[page]/page.tsx' },
   { id: 'xml-sitemap', pattern: '/sitemap.xml', appEntry: 'src/app/sitemap.xml/route.ts' },
   { id: 'xml-sitemap-chunk', pattern: '/sitemaps/:type/:page', appEntry: 'src/app/sitemaps/[type]/[page]/route.ts' },
-  { id: 'legacy-agents', pattern: '/agents', appEntry: 'src/app/(site)/agents/page.tsx' },
-  { id: 'legacy-agent', pattern: '/agents/:slug', appEntry: 'src/app/(site)/agents/[slug]/page.tsx' },
-  { id: 'legacy-articles', pattern: '/articles', appEntry: 'src/app/(site)/articles/page.tsx' },
-  { id: 'legacy-article', pattern: '/articles/:slug', appEntry: 'src/app/(site)/articles/[slug]/page.tsx' },
 ] as const
