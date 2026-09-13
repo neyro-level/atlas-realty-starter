@@ -35,6 +35,6 @@ export const ResidentialComplexes = {
     { name: 'availablePropertyCount', type: 'number', defaultValue: 0, min: 0, admin: { readOnly: true } },
     { name: 'status', type: 'select', defaultValue: 'draft', required: true, index: true, options: ['draft', 'published', 'hidden'] },
   ],
-  hooks: { ...collectionCacheHooks(['public:catalog', 'public:sitemap']), beforeChange: [trackSharedEntityManualFields(importManagedFields)], beforeValidate: [formatPageSlug] },
+  hooks: { ...collectionCacheHooks(['public:catalog:list', 'public:catalog:facets', 'public:sitemap']), beforeChange: [trackSharedEntityManualFields(importManagedFields)], beforeValidate: [formatPageSlug] },
   trash: true,
 } satisfies CollectionConfig

@@ -47,7 +47,7 @@ export const Layouts = {
     { name: 'priceFromMinorUnits', type: 'number', min: 0, admin: { readOnly: true }, access: sourceManagedAccess },
   ],
   hooks: {
-    ...collectionCacheHooks(['public:catalog', 'public:sitemap']),
+    ...collectionCacheHooks(['public:catalog:list', 'public:catalog:facets', 'public:sitemap']),
     beforeChange: [trackSharedEntityManualFields(importManagedFields)],
     beforeValidate: [formatPageSlug],
   },

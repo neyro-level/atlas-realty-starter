@@ -36,13 +36,16 @@ export const Properties = {
   indexes: [
     { fields: ['feedSource', 'externalId'], unique: true },
     { fields: ['market', 'status', 'isPublished', 'priceMinorUnits'] },
+    { fields: ['isPublished', 'status', 'dealType', 'category', 'priceMinorUnits'] },
+    { fields: ['isPublished', 'status', 'district', 'publishedAt'] },
+    { fields: ['isPublished', 'status', 'totalAreaCm2'] },
     { fields: ['complex', 'building', 'status'] },
   ],
   fields: [
     { name: 'feedSource', type: 'relationship', relationTo: 'feed-sources', index: true, access: sourceManagedAccess },
     { name: 'externalId', type: 'text', index: true, access: sourceManagedAccess },
     { name: 'origin', type: 'select', defaultValue: 'manual', required: true, index: true, options: ['manual', 'feed'], access: sourceManagedAccess },
-    { name: 'importHash', type: 'text', access: sourceManagedAccess },
+    { name: 'importHash', type: 'text', index: true, access: sourceManagedAccess },
     { name: 'firstSeenAt', type: 'date', index: true, access: sourceManagedAccess },
     { name: 'lastSeenAt', type: 'date', index: true, access: sourceManagedAccess },
     { name: 'lastImportRun', type: 'relationship', relationTo: 'import-runs', access: sourceManagedAccess },
@@ -116,6 +119,6 @@ export const Properties = {
     { name: 'videoUrl', type: 'text', validate: validateSafeVideoURL },
     { name: 'agent', type: 'relationship', relationTo: 'agents', index: true },
   ],
-  hooks: { ...collectionCacheHooks(['public:catalog', 'public:sitemap']), beforeChange: [trackManualFields], beforeValidate: [formatPageSlug] },
+  hooks: { ...collectionCacheHooks(['public:catalog:list', 'public:catalog:facets', 'public:catalog:property', 'public:sitemap']), beforeChange: [trackManualFields], beforeValidate: [formatPageSlug] },
   trash: true,
 } satisfies CollectionConfig
