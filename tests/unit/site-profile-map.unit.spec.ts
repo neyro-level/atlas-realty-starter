@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { getMappableNewBuildings } from "@/components/catalog/new-building-catalog-map-model";
-import { siteProfile } from "@/project/site-profile";
+import { siteProfile } from "@/project/tenant.config";
 
 describe("Atlas map profile", () => {
   it("uses the Krasnodar identity and center", () => {

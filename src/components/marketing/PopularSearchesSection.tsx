@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 
 type PopularSearchLink = {
   label: string;

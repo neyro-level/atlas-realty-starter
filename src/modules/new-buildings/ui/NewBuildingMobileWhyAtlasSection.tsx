@@ -1,5 +1,5 @@
-import { NewBuildingMobileWhyAgencyView } from "@ams/realty-ui";
-import { siteProfile } from "@/project/site-profile";
+import { NewBuildingMobileWhyAgencyView } from "@starter/site-ui";
+import { siteProfile } from "@/project/tenant.config";
 import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";
 import { RequestCta } from "./RequestCta";

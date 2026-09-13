@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { contactsConfig } from "@/project/site-config";
+import { ruContent } from "@/project/content/ru";
 
 type PrivacyConsentTextProps = {
   className?: string;
@@ -10,14 +11,14 @@ export function PrivacyConsentText({ className, buttonAgreement = false }: Priva
   if (buttonAgreement) {
     return (
       <>
-        Нажимая кнопку, вы соглашаетесь с{" "}
+        {ruContent.privacy.buttonPrefix}{" "}
         <Link
           href={contactsConfig.privacyUrl}
           target="_blank"
           rel="noreferrer"
           className={`underline underline-offset-2 ${className ?? ""}`}
         >
-          политикой конфиденциальности
+          {ruContent.privacy.policyLabel}
         </Link>
       </>
     );
@@ -25,14 +26,14 @@ export function PrivacyConsentText({ className, buttonAgreement = false }: Priva
 
   return (
     <>
-      Даю согласие на обработку{" "}
+      {ruContent.privacy.consentPrefix}{" "}
       <Link
         href={contactsConfig.privacyUrl}
         target="_blank"
         rel="noreferrer"
         className={`text-[var(--accent)] underline underline-offset-2 ${className ?? ""}`}
       >
-        персональных данных
+        {ruContent.privacy.personalDataLabel}
       </Link>
       .
     </>

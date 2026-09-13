@@ -1,5 +1,5 @@
 import { toTranslitSlug } from "@/shared/lib/slugify";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 
 export const PUBLIC_PROPERTY_CITY_SLUG = tenant.cityEn;
 export const PUBLIC_PROPERTY_CITY_SCOPE = tenant.cityScope;

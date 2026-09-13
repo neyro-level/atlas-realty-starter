@@ -2,9 +2,9 @@ import type { ListingCard } from "@/lib/catalog";
 import type { ArticleEditorialMeta } from "@/entities/article/editorial";
 import type { ArticleSummary } from "@/entities/article/model";
 import { contactsConfig, getPropertyPath, siteConfig } from "@/project/site-config";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 import { absoluteUrl } from "@/project/seo-config";
-import { siteIdentity } from "@/project/site-identity";
+import { siteIdentity } from "@/project/tenant.config";
 import type { PublicSiteContacts } from "@/shared/types/public-site-contacts";
 
 export function organizationSchema(contacts?: PublicSiteContacts) {

@@ -1,11 +1,12 @@
-import { siteIdentity } from "@/project/site-identity";
-import { siteProfile } from "@/project/site-profile";
+import { siteIdentity, tenant } from "@/project/tenant.config";
+import { siteProfile } from "@/project/tenant.config";
+import { ruContent } from "@/project/content/ru";
 
 export const siteConfig = {
-  clientSlug: "atlas",
+  clientSlug: tenant.slug,
   clientName: siteIdentity.brand,
   clientFullName: siteIdentity.brand,
-  legalName: siteIdentity.legal.name ?? "Требует настройки перед публикацией",
+  legalName: siteIdentity.legal.name ?? ruContent.common.legalNameMissing,
   projectName: siteIdentity.projectName,
   tagline: siteIdentity.tagline,
   city: siteIdentity.city.nominative,
@@ -18,7 +19,7 @@ export const siteConfig = {
   favicon: siteProfile.logo.favicon,
   copyright: `© 2026 ${siteIdentity.legal.name ?? siteIdentity.brand}. Все права защищены.`,
   registry: siteIdentity.legal.inn ? `ИНН ${siteIdentity.legal.inn}` : "",
-  disclaimer: "Информация на сайте носит справочный характер и не является публичной офертой.",
+  disclaimer: ruContent.common.publicOfferDisclaimer,
 } as const;
 
 export type SocialLink = { label: string; shortLabel: string; href?: string };
@@ -31,9 +32,9 @@ export const contactsConfig = {
   phoneHref: phone ? `tel:${phone.replace(/[^+\d]/gu, "")}` : "",
   email,
   emailHref: email ? `mailto:${email}` : "",
-  hours: siteIdentity.contacts.hours ?? "Время работы настраивается",
+  hours: siteIdentity.contacts.hours ?? ruContent.common.officeHoursMissing,
   callbackHref: phone ? `tel:${phone.replace(/[^+\d]/gu, "")}` : "",
-  callbackLabel: "Оставить заявку",
+  callbackLabel: ruContent.common.callback,
   privacyUrl: "/politika-konfidencialnosti",
   socials: {
     telegram: { label: "Telegram", shortLabel: "TG", href: siteIdentity.social.telegram ?? undefined },

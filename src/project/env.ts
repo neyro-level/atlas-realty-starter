@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { isRuntimeReferenceName } from '@/shared/security/runtime-reference'
+import { readHostAllowlist } from './env-hosts'
 
 type EnvironmentSource = Readonly<Record<string, string | undefined>>
 type RuntimeEnvironment = 'development' | 'local' | 'production' | 'staging' | 'test'
@@ -37,11 +38,6 @@ const environmentSchema = z.object({
   S3_SECRET_ACCESS_KEY: z.string().optional(),
   SITE_ENGINE: z.enum(['fixture', 'payload']).optional(),
 })
-
-const hostnameSchema = z.string().regex(
-  /^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
-  'Outbound allowlist entries must be exact hostnames',
-)
 
 const knownSecretPlaceholders = ['change-me', 'changeme', 'payload-secret', 'test-foundation-secret']
 
@@ -145,11 +141,6 @@ function readDatabasePoolMax(value: string | undefined, environment: RuntimeEnvi
     throw new Error('DATABASE_POOL_MAX must be an integer between 1 and 20')
   }
   return maximum
-}
-
-function readHostAllowlist(value: string | undefined) {
-  if (!value) return []
-  return [...new Set(value.split(',').map((host) => hostnameSchema.parse(host.trim().toLowerCase())).filter(Boolean))]
 }
 
 function readS3Config(env: z.infer<typeof environmentSchema>, required: boolean): S3RuntimeConfig | null {

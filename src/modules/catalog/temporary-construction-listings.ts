@@ -1,6 +1,6 @@
 import type { CatalogQuery, CatalogSnapshot, ListingCard } from "@/lib/catalog";
 import { applyFallbackFilters, buildCategories } from "@/lib/catalog";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 
 export const DEFAULT_CONSTRUCTION_PROJECT_IMAGE = "/images/construction-project-default.jpg";
 

@@ -21,7 +21,7 @@ import {
   getPublicPosts,
   getPublicPropertyBySlug,
 } from '@/project/public-gateway'
-import { siteIdentity } from '@/project/site-identity'
+import { siteIdentity } from '@/project/tenant.config'
 import type { PublicContentDocument, PublicProperty, PublicPropertyDetails } from '@/shared/types/public-content'
 
 export const payloadSiteEngine: SiteEngine = {

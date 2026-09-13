@@ -1,5 +1,5 @@
 import type { SessionListingItem } from "./types";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 
 export const SHARE_SELECTION_MAX_ITEMS = 50;
 

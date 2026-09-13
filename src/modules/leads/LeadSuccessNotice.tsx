@@ -1,6 +1,6 @@
 "use client";
 
-import { LeadSuccessNoticeView } from "@ams/realty-ui";
+import { LeadSuccessNoticeView } from "@starter/site-ui";
 import { useEffect, useRef, useState } from "react";
 import { PUBLIC_LEAD_SUCCESS_EVENT } from "@/modules/analytics";
 

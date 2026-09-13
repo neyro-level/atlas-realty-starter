@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LegalHubView } from "@ams/realty-ui";
+import { LegalHubView } from "@starter/site-ui";
 import { legalDocuments, toLegalDocumentDto } from "@/project/legal-pages";
 
 function LegalLink({ href, children, className, title, rel, target, ariaLabel }: {

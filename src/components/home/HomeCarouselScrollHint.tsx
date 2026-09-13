@@ -1,1 +1,1 @@
-export { HomeCarouselScrollHintView as HomeCarouselScrollHint } from "@ams/realty-ui";
+export { HomeCarouselScrollHintView as HomeCarouselScrollHint } from "@starter/site-ui";

@@ -1,7 +1,7 @@
 import type { ListingCard, ListingCategoryKey } from "@/lib/catalog";
 import { isNewBuildingListingId } from "@/modules/new-buildings";
 import { getPropertyPath } from "@/project/site-config";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 import type { SessionListingItem } from "./types";
 
 const LISTING_CATEGORY_KEYS = new Set<ListingCategoryKey>([

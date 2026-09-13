@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { buildRuntimeConfig } from '@/project/env'
+import { readHostAllowlist } from '@/project/env-hosts'
 
 const strongSecret = 'b2076f81a29d4cfcb8875d98c94589d2bbf1f13ee4d2417f'
 const core = {
@@ -46,5 +47,11 @@ describe('runtime environment contract', () => {
     const local = buildRuntimeConfig({ APP_ENV: 'development' })
     expect(local.s3).toBeNull()
     expect(local.databasePoolMax).toBe(10)
+  })
+
+  it('accepts only exact, deduplicated image hostnames and defaults to none', () => {
+    expect(readHostAllowlist(undefined)).toEqual([])
+    expect(readHostAllowlist('cdn.example.test,CDN.example.test')).toEqual(['cdn.example.test'])
+    expect(() => readHostAllowlist('https://cdn.example.test/assets')).toThrow(/exact hostnames/)
   })
 })

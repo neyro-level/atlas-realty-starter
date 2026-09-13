@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { EmployeeDirectoryPageDto } from "@starter/site-contracts";
-import { EmployeesDirectoryView, type SiteLinkRendererProps } from "@ams/realty-ui";
+import { EmployeesDirectoryView, type SiteLinkRendererProps } from "@starter/site-ui";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { CatalogHeroBlock } from "@/components/marketing/CatalogHeroBlock";
 import { EmployeeTeamCard } from "@/modules/employees/ui/EmployeeTeamCard";
@@ -10,7 +10,7 @@ import { getSiteEngine } from "@/site-engine";
 import { resolvePublicEmployeePhone } from "@/modules/employees/phone-policy";
 import { buildSeoMetadata } from "@/modules/seo/metadata";
 import { getSiteUrl } from "@/project/site-config";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 import { breadcrumbSchema } from "@/shared/lib/seo/schema";
 import { JsonLd } from "@/shared/ui/JsonLd";
 import { getPublicSiteContacts } from "@/site-engine/site-contacts";

@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { NewBuildingSelectionView } from "@ams/realty-ui";
+import { NewBuildingSelectionView } from "@starter/site-ui";
 import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";
 import { RequestCta } from "./RequestCta";
-import { siteProfile } from "@/project/site-profile";
+import { siteProfile } from "@/project/tenant.config";
 
 export function NewBuildingLayoutsSection({ complex, contained = false }: { complex: NewBuilding; contained?: boolean }) {
   return (

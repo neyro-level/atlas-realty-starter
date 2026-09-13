@@ -1,6 +1,6 @@
 "use client";
 
-import { SiteOverlayProvider as UiSiteOverlayProvider, useSiteOverlay } from "@ams/realty-ui";
+import { SiteOverlayProvider as UiSiteOverlayProvider, useSiteOverlay } from "@starter/site-ui";
 import { trackEvent } from "@/modules/analytics";
 
 export { useSiteOverlay };

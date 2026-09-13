@@ -1,4 +1,4 @@
-import { legalOperatorAddress, siteIdentity } from "@/project/site-identity";
+import { legalOperatorAddress, siteIdentity } from "@/project/tenant.config";
 import type { LegalDocumentDto } from "@starter/site-contracts";
 
 export type LegalDocumentId =

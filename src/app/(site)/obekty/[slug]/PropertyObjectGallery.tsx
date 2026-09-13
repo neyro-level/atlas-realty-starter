@@ -1,10 +1,10 @@
 "use client";
 
-import { PropertyGalleryView, type PropertyGalleryViewProps, type SiteImageRendererProps } from "@ams/realty-ui";
+import { PropertyGalleryView, type PropertyGalleryViewProps, type SiteImageRendererProps } from "@starter/site-ui";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { shouldOptimizeCatalogImage } from "@/modules/media/image-optimization";
-import { siteProfile } from "@/project/site-profile";
+import { siteProfile } from "@/project/tenant.config";
 
 type PropertyObjectGalleryProps = Omit<PropertyGalleryViewProps, "cityNominative" | "imageRenderer" | "shouldOptimizeImage">;
 

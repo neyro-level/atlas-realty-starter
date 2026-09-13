@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@ams/realty-ui";
+import { Button } from "@starter/site-ui";
 
 import { Copy, Share2 } from "lucide-react";
 import { useMemo, useState } from "react";

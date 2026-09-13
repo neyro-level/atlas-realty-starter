@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SiteFooterView } from "@ams/realty-ui";
+import { SiteFooterView } from "@starter/site-ui";
 import { BrandMark } from "@/components/layout/BrandMark";
 import {
   FOOTER_COLUMNS,
@@ -7,7 +7,7 @@ import {
   FOOTER_META,
 } from "@/lib/site-shell";
 import type { PublicSiteContacts } from "@/shared/types/public-site-contacts";
-import { siteIdentity } from "@/project/site-identity";
+import { siteIdentity } from "@/project/tenant.config";
 
 function FooterLink({ href, children, className, title, rel, target, ariaLabel }: {
   href: string;

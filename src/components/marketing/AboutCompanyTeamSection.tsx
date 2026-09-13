@@ -1,5 +1,5 @@
 import Image, { type ImageProps } from "next/image";
-import { AboutCompanyTeamView, type SiteImageRendererProps } from "@ams/realty-ui";
+import { AboutCompanyTeamView, type SiteImageRendererProps } from "@starter/site-ui";
 import { ABOUT_COMPANY_MEDIA } from "@/project/site-media";
 
 const TEAM_GALLERY = [

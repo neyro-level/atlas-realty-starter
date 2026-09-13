@@ -1,5 +1,5 @@
 import type { ListingCard } from "@/lib/catalog";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 import type { NewBuilding } from "./schema";
 import { resolveNewBuildingMedia } from "./format";
 

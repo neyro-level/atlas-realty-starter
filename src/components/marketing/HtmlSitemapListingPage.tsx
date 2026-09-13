@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HtmlSitemapListingView, type SiteLinkRendererProps } from "@ams/realty-ui";
+import { HtmlSitemapListingView, type SiteLinkRendererProps } from "@starter/site-ui";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import type { SitemapListingKind, SitemapListingPageData } from "@/site-engine/sitemap-page-data";
 

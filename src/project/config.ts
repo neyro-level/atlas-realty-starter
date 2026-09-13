@@ -1,10 +1,12 @@
+import { tenant, tenantConfig } from './tenant.config'
+
 export const projectConfig = {
-  adminTitleSuffix: 'АТЛАС',
-  appName: 'АТЛАС',
-  brandName: 'АТЛАС',
-  companyName: 'ИП Скрицкая Юлия Викторовна',
+  adminTitleSuffix: tenantConfig.brand,
+  appName: tenantConfig.brand,
+  brandName: tenantConfig.brand,
+  companyName: tenantConfig.legal.name,
   foundationStack: 'Next.js 16 + Payload CMS 3',
-  packageName: 'atlas-realty-starter',
-  projectName: 'АТЛАС — недвижимость в Краснодаре',
-  repositorySlug: 'atlas-realty-starter',
+  packageName: `${tenant.slug}-realty-starter`,
+  projectName: tenantConfig.projectName,
+  repositorySlug: `${tenant.slug}-realty-starter`,
 } as const

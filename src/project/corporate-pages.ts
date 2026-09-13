@@ -3,7 +3,7 @@ import type { CorporateHeroCardDto, CorporateHeroIconKeyDto, CorporateRelatedSer
 import { CATALOG_PAGE_SIZE, MAIN_CATALOG_PAGE_SIZE } from "@/lib/catalog";
 import { catalogPresets, type CatalogPreset } from "@/modules/catalog/presets";
 import { ABOUT_COMPANY_MEDIA, CAREERS_MEDIA, SELL_APARTMENT_MEDIA } from "@/project/site-media";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 export type CorporateHeroIconKey = CorporateHeroIconKeyDto;
 export type CorporateHeroCard = CorporateHeroCardDto;
 export type CorporateRelatedServiceLink = CorporateRelatedServiceDto;

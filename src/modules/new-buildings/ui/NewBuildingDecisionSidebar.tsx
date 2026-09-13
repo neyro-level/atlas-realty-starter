@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { NewBuildingDecisionSidebarView } from "@ams/realty-ui";
+import { NewBuildingDecisionSidebarView } from "@starter/site-ui";
 import { useState } from "react";
 import { SessionCollectionButton, type SessionListingItem } from "@/modules/session-collections";
 import { resolveNewBuildingMedia } from "../format";
@@ -9,7 +9,7 @@ import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";
 import { RequestCta } from "./RequestCta";
 import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
-import { siteProfile } from "@/project/site-profile";
+import { siteProfile } from "@/project/tenant.config";
 
 export function NewBuildingDecisionSidebar({ complex }: { complex: NewBuilding }) {
   const { openPropertyChat } = useSiteOverlay();

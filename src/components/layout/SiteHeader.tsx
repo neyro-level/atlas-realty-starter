@@ -8,7 +8,7 @@ import {
   type SiteCityOptionViewDto,
   type SiteHeaderNavItemDto,
   type SiteLinkRendererProps,
-} from "@ams/realty-ui";
+} from "@starter/site-ui";
 import {
   ALL_REALTY_CATALOG_PATH,
   isCatalogShowcasePath,
@@ -22,7 +22,7 @@ import { MobileMenuOverlay } from "@/components/layout/MobileMenuOverlay";
 import { HEADER_NAV } from "@/lib/site-shell";
 import { SessionCollectionNavLink } from "@/modules/session-collections";
 import { citySwitcherConfig } from "@/project/site-config";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 import type { PublicSiteContacts } from "@/shared/types/public-site-contacts";
 
 function SiteLinkAdapter({ href, children, ariaLabel, ...props }: SiteLinkRendererProps) {

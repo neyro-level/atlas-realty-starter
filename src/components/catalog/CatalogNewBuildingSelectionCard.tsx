@@ -1,7 +1,7 @@
 "use client";
 
-import { CatalogNewBuildingSelectionCardView, type CatalogView } from "@ams/realty-ui";
-import { siteProfile } from "@/project/site-profile";
+import { CatalogNewBuildingSelectionCardView, type CatalogView } from "@starter/site-ui";
+import { siteProfile } from "@/project/tenant.config";
 import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
 
 type Props = {

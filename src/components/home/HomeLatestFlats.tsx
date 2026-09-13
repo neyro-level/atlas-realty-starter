@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { HomeCarouselScrollHintView, HomeInterestView, type SiteLinkRendererProps } from "@ams/realty-ui";
+import { HomeCarouselScrollHintView, HomeInterestView, type SiteLinkRendererProps } from "@starter/site-ui";
 import { buildSearchParams, type CatalogQuery, type ListingCard } from "@/lib/catalog";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 import { CatalogPropertyCard } from "@/components/catalog/CatalogPropertyCard";
 
 const MODE_HREFS = {

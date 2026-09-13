@@ -1,6 +1,6 @@
 import type { CatalogQuery } from "@/lib/catalog";
 import { CATALOG_PAGE_SIZE } from "@/lib/catalog";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 
 export type MobileTypeId =
   | "flat"

@@ -1,5 +1,5 @@
 import type { ArticleSummary } from "./model";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 
 export type EditorialLink = {
   label: string;

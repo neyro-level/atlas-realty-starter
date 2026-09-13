@@ -3,7 +3,7 @@ import {
   CatalogHeroView,
   type CatalogHeroViewProps,
   type SiteImageRendererProps,
-} from "@ams/realty-ui";
+} from "@starter/site-ui";
 import { IS_DEVELOPMENT } from "@/shared/lib/is-development";
 
 export const CATALOG_HERO_DESCRIPTION =

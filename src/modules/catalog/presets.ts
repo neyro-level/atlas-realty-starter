@@ -1,5 +1,5 @@
 import type { CatalogQuery } from "@/lib/catalog";
-import { tenant } from "@/project/tenant";
+import { tenant } from "@/project/tenant.config";
 
 export type CatalogPresetMode =
   | "all"

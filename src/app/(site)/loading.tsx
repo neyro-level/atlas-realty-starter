@@ -1,4 +1,4 @@
-import { Skeleton } from "@ams/realty-ui";
+import { Skeleton } from "@starter/site-ui";
 
 export default function SiteLoading() {
   return (

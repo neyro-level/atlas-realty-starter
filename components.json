@@ -11,10 +11,10 @@
     "cssVariables": true
   },
   "aliases": {
-    "components": "@ams/realty-ui/components",
-    "utils": "@ams/realty-ui/lib/utils",
-    "ui": "@ams/realty-ui/components/ui",
-    "lib": "@ams/realty-ui/lib",
-    "hooks": "@ams/realty-ui/hooks"
+    "components": "@starter/site-ui/components",
+    "utils": "@starter/site-ui/lib/utils",
+    "ui": "@starter/site-ui/components/ui",
+    "lib": "@starter/site-ui/lib",
+    "hooks": "@starter/site-ui/hooks"
   }
 }

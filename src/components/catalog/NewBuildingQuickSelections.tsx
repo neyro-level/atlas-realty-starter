@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BadgePercent, Map, Sparkles, WalletCards } from "lucide-react";
-import { NewBuildingQuickSelectionsView, type NewBuildingQuickSelectionItem, type SiteLinkRendererProps } from "@ams/realty-ui";
+import { NewBuildingQuickSelectionsView, type NewBuildingQuickSelectionItem, type SiteLinkRendererProps } from "@starter/site-ui";
 import type { CatalogQuery } from "@/lib/catalog";
 import { filterNewBuildings, type NewBuilding } from "@/modules/new-buildings";
 import { buildNewBuildingQuickSelectionModel } from "./new-building-quick-selections-model";
