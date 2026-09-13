@@ -13,3 +13,7 @@ export function getMappableNewBuildings(complexes: NewBuilding[]): MappableNewBu
     complex.location.latitude !== null && complex.location.longitude !== null
   ));
 }
+
+export function canInitializeCatalogMap(apiKey: string | null | undefined, pointCount: number): apiKey is string {
+  return Boolean(apiKey && pointCount > 0);
+}

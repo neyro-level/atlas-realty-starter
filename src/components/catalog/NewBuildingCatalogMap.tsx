@@ -4,29 +4,12 @@ import { Button, CatalogMapFrameView } from "@starter/site-ui";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type HTMLAttributes } from "react";
 import { ExternalLink, MapPin } from "lucide-react";
+import { createYandexMapAdapter } from "@/core/integrations/maps/yandex-maps";
+import type { MapAdapter } from "@/core/integrations/maps/types";
 import { formatPrice } from "@/lib/catalog";
 import { newBuildingHref, type NewBuilding } from "@/modules/new-buildings";
-import { getMappableNewBuildings } from "./new-building-catalog-map-model";
+import { canInitializeCatalogMap, getMappableNewBuildings } from "./new-building-catalog-map-model";
 
-type YandexMap = {
-  destroy: () => void;
-  setCenter: (coordinates: [number, number], zoom?: number) => void;
-  geoObjects: { add: (placemark: YandexPlacemark) => void };
-};
-type YandexPlacemark = { events: { add: (event: "click", callback: () => void) => void } };
-type YandexMapsApi = {
-  ready: (callback: () => void) => void;
-  Map: new (element: HTMLElement, state: { center: [number, number]; zoom: number }, options?: Record<string, unknown>) => YandexMap;
-  Placemark: new (coordinates: [number, number], properties: Record<string, unknown>, options?: Record<string, unknown>) => YandexPlacemark;
-};
-
-declare global {
-  interface Window {
-    ymaps?: YandexMapsApi;
-  }
-}
-
-const MAP_SCRIPT_ID = "agency-yandex-maps-api";
 export type NewBuildingMapPublicConfig = {
   apiKey: string | null | undefined;
   center: readonly [number, number];
@@ -37,7 +20,7 @@ export type NewBuildingMapPublicConfig = {
 
 export function NewBuildingCatalogMap({ complexes, config }: { complexes: NewBuilding[]; config: NewBuildingMapPublicConfig }) {
   const mapElementRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<YandexMap | null>(null);
+  const mapRef = useRef<MapAdapter | null>(null);
   const mappableComplexes = useMemo(() => getMappableNewBuildings(complexes), [complexes]);
   const reviewRequiredCount = complexes.length - mappableComplexes.length;
   const [selectedSlug, setSelectedSlug] = useState(complexes[0]?.slug ?? null);
@@ -46,57 +29,26 @@ export function NewBuildingCatalogMap({ complexes, config }: { complexes: NewBui
   useEffect(() => {
     const element = mapElementRef.current;
     const apiKey = config.apiKey;
-    if (!element || !apiKey || !mappableComplexes.length) {
+    if (!element || !canInitializeCatalogMap(apiKey, mappableComplexes.length)) {
       setStatus("unavailable");
       return;
     }
 
     let cancelled = false;
-    const availabilityTimer = window.setTimeout(() => {
-      if (!cancelled) setStatus("unavailable");
-    }, 12_000);
-    const initMap = () => {
-      const ymaps = window.ymaps;
-      if (!ymaps || cancelled) return;
-
-      ymaps.ready(() => {
-        if (cancelled || !mapElementRef.current) return;
-        const map = new ymaps.Map(mapElementRef.current, { center: [...config.center], zoom: config.catalogZoom }, { suppressMapOpenBlock: true });
-        window.clearTimeout(availabilityTimer);
-        mapRef.current = map;
-
-        mappableComplexes.forEach((complex) => {
-          const placemark = new ymaps.Placemark(
-            [complex.location.latitude, complex.location.longitude],
-            { balloonContentHeader: complex.name, balloonContentBody: complex.location.address ?? complex.location.district ?? config.cityName },
-            { preset: "islands#redHomeIcon" },
-          );
-          placemark.events.add("click", () => setSelectedSlug(complex.slug));
-          map.geoObjects.add(placemark);
-        });
-
-        setStatus("ready");
-      });
-    };
-
-    if (window.ymaps) {
-      initMap();
-    } else {
-      const script = document.getElementById(MAP_SCRIPT_ID) as HTMLScriptElement | null;
-      const mapScript = script ?? document.createElement("script");
-      if (!script) {
-        mapScript.id = MAP_SCRIPT_ID;
-        mapScript.async = true;
-        mapScript.src = `https://api-maps.yandex.ru/2.1/?apikey=${encodeURIComponent(apiKey)}&lang=ru_RU`;
-        document.head.appendChild(mapScript);
-      }
-      mapScript.addEventListener("load", initMap, { once: true });
-      mapScript.addEventListener("error", () => setStatus("unavailable"), { once: true });
-    }
+    const adapter = createYandexMapAdapter({ apiKey, onPointClick: setSelectedSlug });
+    mapRef.current = adapter;
+    adapter.addPoints(mappableComplexes.map((complex) => ({
+      body: complex.location.address ?? complex.location.district ?? config.cityName,
+      coordinates: [complex.location.latitude, complex.location.longitude],
+      id: complex.slug,
+      title: complex.name,
+    })));
+    void adapter.init(element, config.center, config.catalogZoom)
+      .then(() => { if (!cancelled) setStatus("ready"); })
+      .catch(() => { if (!cancelled) setStatus("unavailable"); });
 
     return () => {
       cancelled = true;
-      window.clearTimeout(availabilityTimer);
       mapRef.current?.destroy();
       mapRef.current = null;
     };
@@ -144,7 +96,7 @@ export function NewBuildingCatalogMap({ complexes, config }: { complexes: NewBui
         </div>
       }
       canvas={<div ref={mapElementRef} data-testid="new-building-map-canvas" className="absolute inset-0" aria-label={`Карта жилых комплексов ${config.cityGenitive}`} />}
-      statusMessage={status === "ready" ? null : status === "loading" ? "Загружаем карту жилых комплексов..." : "Карта временно недоступна. Выберите ЖК из списка слева."}
+      statusMessage={status === "ready" ? null : <p role="status" aria-live="polite">{status === "loading" ? "Загружаем карту жилых комплексов..." : "Карта временно недоступна. Выберите ЖК из списка слева."}</p>}
       action={selectedComplex ? (
           <Link href={newBuildingHref(selectedComplex)} className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-[var(--surface-card)] px-3 text-xs font-bold text-[var(--text-primary)] shadow-[var(--new-building-map-shadow-floating)] transition hover:text-[var(--accent)]">
             Открыть выбранный ЖК
