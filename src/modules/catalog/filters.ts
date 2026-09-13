@@ -4,7 +4,7 @@ import { normalizeCommercialType } from "./commercial-types";
 export type CatalogSearchParams = Record<string, string | string[] | undefined> | URLSearchParams;
 export const MAX_CATALOG_SEARCH_QUERY_LENGTH = 120;
 export const MAX_CATALOG_PAGE = 200;
-export const MAX_CATALOG_LIMIT = 100;
+export const CATALOG_ALLOWED_LIMITS = [1, 16, 20, 24, 50] as const;
 
 export function parseCatalogSearchParams(searchParams: CatalogSearchParams): CatalogQuery {
   return {
@@ -37,9 +37,15 @@ export function parseCatalogSearchParams(searchParams: CatalogSearchParams): Cat
     entranceType: normalizeTextValue(value(searchParams, "entrance_type")),
     sort: sortValue(searchParams),
     view: viewValue(searchParams),
-    limit: numberValue(searchParams, "limit", MAX_CATALOG_LIMIT),
+    limit: catalogLimitValue(searchParams),
     page: numberValue(searchParams, "page", MAX_CATALOG_PAGE),
   };
+}
+
+export function resolveCatalogLimit(value: number | undefined) {
+  return value !== undefined && CATALOG_ALLOWED_LIMITS.includes(value as (typeof CATALOG_ALLOWED_LIMITS)[number])
+    ? value
+    : undefined;
 }
 
 export function isCatalogSearchQueryTooLong(value: string | null | undefined) {
@@ -84,6 +90,10 @@ function numberValue(searchParams: CatalogSearchParams, key: string, max?: numbe
   }
 
   return max ? Math.min(parsed, max) : parsed;
+}
+
+function catalogLimitValue(searchParams: CatalogSearchParams) {
+  return resolveCatalogLimit(numberValue(searchParams, "limit"));
 }
 
 function roomsValue(searchParams: CatalogSearchParams, key: string) {

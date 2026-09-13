@@ -41,20 +41,22 @@ export function CatalogLoadMore({
 }: Props) {
   const initialPage = query.page ?? 1;
   const [listings, setListings] = useState(initialListings);
-  const [page, setPage] = useState(initialPage);
+  const [urlPage, setUrlPage] = useState(initialPage);
+  const [loadedThroughPage, setLoadedThroughPage] = useState(initialPage);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [effectiveVariant, setEffectiveVariant] = useState<CatalogView>("grid");
   const totalPages = Math.max(1, Math.ceil(total / (query.limit ?? PAGE_SIZE)));
-  const hasMore = page < totalPages;
-  const paginationPages = buildCatalogPaginationWindow(page, totalPages);
-  const nextQuery = { ...query, page: page + 1, limit: query.limit ?? PAGE_SIZE };
+  const hasMore = loadedThroughPage < totalPages;
+  const paginationPages = buildCatalogPaginationWindow(urlPage, totalPages);
+  const nextPage = loadedThroughPage + 1;
+  const nextQuery = { ...query, page: nextPage, limit: query.limit ?? PAGE_SIZE };
   const paginationItems: CatalogPaginationItemDto[] = totalPages > 1 ? [
-    ...(page > 1 ? [{ key: "previous", label: "Назад", href: buildCatalogPageHref(basePath, paginationQuery, page - 1) }] : []),
+    ...(urlPage > 1 ? [{ key: "previous", label: "Назад", href: buildCatalogPageHref(basePath, paginationQuery, urlPage - 1) }] : []),
     ...paginationPages.map((item, index) => item === "ellipsis"
       ? { key: `ellipsis-${index}`, label: "…" }
-      : { key: String(item), label: String(item), href: buildCatalogPageHref(basePath, paginationQuery, item), current: item === page }),
-    ...(page < totalPages ? [{ key: "next", label: "Далее", href: buildCatalogPageHref(basePath, paginationQuery, page + 1) }] : []),
+      : { key: String(item), label: String(item), href: buildCatalogPageHref(basePath, paginationQuery, item), current: item === urlPage }),
+    ...(urlPage < totalPages ? [{ key: "next", label: "Далее", href: buildCatalogPageHref(basePath, paginationQuery, urlPage + 1) }] : []),
   ] : [];
 
   useEffect(() => {
@@ -83,7 +85,10 @@ export function CatalogLoadMore({
         });
         return [...current, ...nextListings];
       });
-      setPage((current) => current + 1);
+      const nextHref = buildCatalogPageHref(basePath, paginationQuery, nextPage);
+      window.history.replaceState(window.history.state, "", nextHref);
+      setUrlPage(nextPage);
+      setLoadedThroughPage(nextPage);
     } catch {
       setError("Не удалось загрузить следующую подборку. Попробуйте ещё раз.");
     } finally {

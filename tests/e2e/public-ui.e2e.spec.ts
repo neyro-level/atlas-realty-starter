@@ -36,6 +36,15 @@ test.describe('Public site UI', () => {
     await expect(page.getByText(title)).toBeVisible()
   })
 
+  test('keeps load-more URL and numbered pagination on the same page', async ({ page }) => {
+    await page.goto('/nedvizhimost?limit=1', { waitUntil: 'domcontentloaded' })
+    const loadMore = page.getByRole('button', { name: 'Показать ещё' })
+    await expect(loadMore).toBeVisible()
+    await loadMore.click()
+    await expect(page).toHaveURL(/limit=1.*page=2/)
+    await expect(page.getByRole('link', { name: 'Далее' })).toHaveAttribute('href', /limit=1.*page=3/)
+  })
+
   test('opens, validates and completes the shared request modal on mobile', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/', { waitUntil: 'domcontentloaded' })
