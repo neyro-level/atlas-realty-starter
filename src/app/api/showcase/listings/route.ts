@@ -5,9 +5,10 @@ import { getSiteEngine } from "@/site-engine";
 
 export async function GET(request: Request) {
   const query = parseCatalogSearchParams(new URL(request.url).searchParams);
+  const limit = query.limit ?? CATALOG_PAGE_SIZE;
   const catalog = await (await getSiteEngine()).getCatalog({
     ...query,
-    limit: Math.min(query.limit ?? CATALOG_PAGE_SIZE, 50),
+    limit,
   });
 
   return NextResponse.json({
@@ -15,7 +16,7 @@ export async function GET(request: Request) {
     meta: {
       total: catalog.total,
       page: query.page ?? 1,
-      limit: query.limit ?? CATALOG_PAGE_SIZE,
+      limit,
     },
   });
 }

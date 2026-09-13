@@ -12,7 +12,7 @@ export function hasCatalogQueryFilters(searchParams: Record<string, string | str
 }
 
 export function buildCatalogPageHref(basePath: string, query: CatalogQuery, page: number) {
-  const params = buildSearchParams({ ...query, limit: undefined, page: page > 1 ? page : undefined });
+  const params = buildSearchParams({ ...query, page: page > 1 ? page : undefined });
   const search = params.toString();
   return search ? `${basePath}?${search}` : basePath;
 }
