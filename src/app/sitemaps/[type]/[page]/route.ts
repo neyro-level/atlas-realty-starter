@@ -1,7 +1,6 @@
 import { getSitemapChunk, type SitemapType } from '@/core/data-access/public/sitemap'
 import { renderSitemapChunk, sitemapXMLResponse } from '@/modules/seo/sitemap-xml'
 import { getSiteUrl, isIndexable } from '@/project/site-config'
-
 const sitemapTypes = new Set<SitemapType>(['agents', 'complexes', 'pages', 'posts', 'properties'])
 
 export async function GET(_request: Request, context: { params: Promise<{ page: string; type: string }> }) {

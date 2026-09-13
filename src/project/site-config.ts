@@ -1,6 +1,7 @@
 import { siteIdentity, tenant } from "@/project/tenant.config";
 import { siteProfile } from "@/project/tenant.config";
 import { ruContent } from "@/project/content/ru";
+import { routes } from "@/project/routes";
 
 export const siteConfig = {
   clientSlug: tenant.slug,
@@ -67,4 +68,4 @@ export const featuresConfig = {
 
 export function getSiteUrl() { return siteIdentity.domain; }
 export function isIndexable() { return siteIdentity.indexable; }
-export function getPropertyPath(slug: string) { return `${featuresConfig.propertyRoute}/${slug}`; }
+export function getPropertyPath(slug: string) { return routes.property(slug); }

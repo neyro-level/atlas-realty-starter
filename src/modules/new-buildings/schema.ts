@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { routes } from "@/project/routes";
 
 const isoDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Ожидается дата YYYY-MM-DD");
 const optionalUrlSchema = z.string().url().nullable();
@@ -121,7 +122,7 @@ export const newBuildingSchema = z
     relatedSlugs: z.array(z.string().regex(/^[a-z0-9-]+$/)).max(3),
   })
   .superRefine((value, context) => {
-    if (value.seo.canonical !== `/${value.slug}`) {
+    if (value.seo.canonical !== routes.residentialComplex(value.slug)) {
       context.addIssue({
         code: "custom",
         path: ["seo", "canonical"],

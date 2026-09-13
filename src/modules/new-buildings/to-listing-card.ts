@@ -1,4 +1,5 @@
 import type { ListingCard } from "@/lib/catalog";
+import { routes } from "@/project/routes";
 import { tenant } from "@/project/tenant.config";
 import type { NewBuilding } from "./schema";
 import { resolveNewBuildingMedia } from "./format";
@@ -61,7 +62,7 @@ export function newBuildingToListingCard(complex: NewBuilding): ListingCard {
 }
 
 export function newBuildingHref(complex: Pick<NewBuilding, "slug"> | { slug: string }) {
-  return `/${complex.slug}`;
+  return routes.residentialComplex(complex.slug);
 }
 
 function formatComplexName(name: string) {

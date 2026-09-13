@@ -2,6 +2,7 @@ import type { ListingCard } from "@/lib/catalog";
 import type { ArticleEditorialMeta } from "@/entities/article/editorial";
 import type { ArticleSummary } from "@/entities/article/model";
 import { contactsConfig, getPropertyPath, siteConfig } from "@/project/site-config";
+import { routes } from "@/project/routes";
 import { tenant } from "@/project/tenant.config";
 import { absoluteUrl } from "@/project/seo-config";
 import { siteIdentity } from "@/project/tenant.config";
@@ -144,7 +145,7 @@ export function articleSchema(article: ArticleSummary, editorialMeta?: ArticleEd
     },
     articleSection: editorialMeta?.topicLabel,
     keywords: editorialMeta?.keywords,
-    mainEntityOfPage: absoluteUrl(`/journal/${article.slug}`),
+    mainEntityOfPage: absoluteUrl(routes.article(article.slug)),
   };
 }
 

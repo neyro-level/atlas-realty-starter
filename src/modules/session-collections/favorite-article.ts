@@ -1,4 +1,5 @@
 import { buyerHelpArticleCoverImage, journalArticlePlaceholderImage } from "@/entities/article/journal-fallback";
+import { routes } from "@/project/routes";
 import type { SessionListingItem } from "./types";
 
 /** Default editorial article seeded into every favorites session. */
@@ -26,7 +27,7 @@ export function createArticleSessionItem(input: {
   return {
     id: `article:${input.slug}`,
     slug: input.slug,
-    path: `/journal/${input.slug}`,
+    path: routes.article(input.slug),
     title: input.title,
     price: null,
     address: input.excerpt?.trim() || "Журнал «АТЛАС»",

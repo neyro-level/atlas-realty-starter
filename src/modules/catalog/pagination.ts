@@ -17,6 +17,18 @@ export function buildCatalogPageHref(basePath: string, query: CatalogQuery, page
   return search ? `${basePath}?${search}` : basePath;
 }
 
+export function buildCatalogPaginationMetadata(basePath: string, page: number, totalPages: number) {
+  if (totalPages <= 1) return undefined
+  return {
+    previous: page > 1 ? buildCatalogPageHref(basePath, {}, page - 1) : undefined,
+    next: page < totalPages ? buildCatalogPageHref(basePath, {}, page + 1) : undefined,
+  }
+}
+
+export function shouldNoIndexCatalogPage(page: number) {
+  return page > 50
+}
+
 export function buildCatalogPaginationWindow(page: number, totalPages: number): Array<number | "ellipsis"> {
   const visible = [...new Set([1, totalPages, page - 2, page - 1, page, page + 1, page + 2])]
     .filter((item) => item >= 1 && item <= totalPages)

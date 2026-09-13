@@ -48,7 +48,16 @@ type LayoutView = Pick<Layout, 'availableUnitCount' | 'building' | 'id' | 'kitch
 type AgentView = Pick<Agent, 'bio' | 'email' | 'id' | 'meta' | 'name' | 'phone' | 'photo' | 'position' | 'slug'>
 type ContentView = Pick<Page, 'content' | 'id' | 'meta' | 'slug' | 'title' | 'updatedAt'> & { excerpt?: Post['excerpt']; publishedAt?: Post['publishedAt'] }
 type RedirectView = Pick<Redirect, 'from' | 'id' | 'to' | 'type'>
-export type PublicQueryOptions = { siteURL: string }
+export type PublicQueryOptions = {
+  siteURL: string
+  routes: {
+    article: (slug: string) => string
+    employee: (slug: string) => string
+    property: (slug: string) => string
+    residentialComplex: (slug: string) => string
+    rootPage: (slug: string) => string
+  }
+}
 
 export function getPublicCatalog(payload: Payload, query: PublicCatalogQuery, options: PublicQueryOptions) {
   const boundedKey = boundedCatalogCacheKey(query)
@@ -114,8 +123,8 @@ export function getPublicFacets(payload: Payload) {
   return cacheFor(['facets'], [PUBLIC_CACHE_TAGS.catalogFacets], () => queryPublicFacets(payload))
 }
 
-export function resolvePublicRedirect(payload: Payload, from: string) {
-  return queryPublicRedirect(payload, from)
+export function resolvePublicRedirect(payload: Payload, from: string, options: PublicQueryOptions) {
+  return queryPublicRedirect(payload, from, options)
 }
 
 async function queryPublicCatalog(payload: Payload, query: PublicCatalogQuery, options: PublicQueryOptions): Promise<PaginatedPublicResult<PublicProperty>> {
@@ -216,11 +225,11 @@ async function queryPublicFacets(payload: Payload): Promise<PublicFacets> {
   } : { categories: [], districts: [], markets: [], rooms: [] }
 }
 
-async function queryPublicRedirect(payload: Payload, from: string): Promise<PublicRedirect | null> {
+async function queryPublicRedirect(payload: Payload, from: string, options: PublicQueryOptions): Promise<PublicRedirect | null> {
   const result = await payload.find({ collection: 'redirects', context: context(), depth: 1, limit: 1, overrideAccess: false, select: publicRedirectSelect, where: { from: { equals: from } } })
   const redirect = result.docs[0]
   if (!redirect) return null
-  const destination = redirectDestination(redirect)
+  const destination = redirectDestination(redirect, options.routes)
   if (!destination) return null
   const statusCode = Number(redirect.type) as PublicRedirect['statusCode']
   return { destination, permanent: statusCode === 301 || statusCode === 308, statusCode }
@@ -258,7 +267,7 @@ function toPublicProperty(property: PropertyView, options: PublicQueryOptions): 
     district: property.district ?? undefined, floor: property.floor ?? undefined, floorsTotal: property.floorsTotal ?? undefined,
     id: property.id, images: arrayMedia(property.photos, property.title, options), market: property.market,
     priceMinorUnits: property.priceMinorUnits, pricePerMeterMinorUnits: property.pricePerMeterMinorUnits ?? undefined,
-    rooms: property.rooms ?? undefined, seo: toPublicSEO(property.meta, `properties/${property.slug}`, property.title, options, property.status === 'sold'),
+    rooms: property.rooms ?? undefined, seo: toPublicSEO(property.meta, options.routes.property(property.slug), property.title, options, property.status === 'sold'),
     slug: property.slug, status: property.status as PublicProperty['status'], title: property.title,
     kitchenAreaM2: property.kitchenAreaCm2 == null ? undefined : property.kitchenAreaCm2 / 10_000,
     livingAreaM2: property.livingAreaCm2 == null ? undefined : property.livingAreaCm2 / 10_000,
@@ -291,7 +300,7 @@ function toPublicComplex(complex: ComplexView, options: PublicQueryOptions): Pub
     district: complex.district ?? undefined, floorsLabel: complex.floorsLabel ?? undefined, id: complex.id,
     images: arrayMedia(complex.photos, complex.name, options), latitude: complex.latitude ?? undefined, longitude: complex.longitude ?? undefined,
     name: complex.name, priceFromMinorUnits: complex.priceFromMinorUnits ?? undefined,
-    readiness: complex.readiness ?? undefined, seo: toPublicSEO(complex.meta, `complexes/${complex.slug}`, complex.name, options), slug: complex.slug,
+    readiness: complex.readiness ?? undefined, seo: toPublicSEO(complex.meta, options.routes.residentialComplex(complex.slug), complex.name, options), slug: complex.slug,
     updatedAt: complex.updatedAt,
   }
 }
@@ -299,7 +308,7 @@ function toPublicComplex(complex: ComplexView, options: PublicQueryOptions): Pub
 function toPublicAgent(agent: AgentView, options: PublicQueryOptions): PublicAgent {
   return {
     bio: agent.bio ?? '', email: agent.email ?? undefined, id: agent.id, image: singleMedia(agent.photo, agent.name, options), name: agent.name,
-    phone: agent.phone ?? undefined, position: agent.position ?? undefined, seo: toPublicSEO(agent.meta, `agents/${agent.slug}`, agent.name, options), slug: agent.slug,
+    phone: agent.phone ?? undefined, position: agent.position ?? undefined, seo: toPublicSEO(agent.meta, options.routes.employee(agent.slug), agent.name, options), slug: agent.slug,
   }
 }
 
@@ -309,7 +318,7 @@ function toPublicContent(document: ContentView, collection: 'pages' | 'posts', o
     excerpt: 'excerpt' in document ? document.excerpt ?? undefined : undefined,
     id: document.id,
     publishedAt: 'publishedAt' in document ? document.publishedAt ?? undefined : undefined,
-    seo: toPublicSEO(document.meta, `${collection}/${document.slug}`, document.title, options),
+    seo: toPublicSEO(document.meta, collection === 'posts' ? options.routes.article(document.slug) : options.routes.rootPage(document.slug), document.title, options),
     slug: document.slug,
     title: document.title,
     updatedAt: document.updatedAt,
@@ -317,7 +326,9 @@ function toPublicContent(document: ContentView, collection: 'pages' | 'posts', o
 }
 
 function toPublicSEO(meta: Property['meta'], path: string, fallbackTitle: string, options: PublicQueryOptions, forceNoindex = false): PublicSEO {
-  const canonical = meta?.canonical || `${options.siteURL.replace(/\/$/, '')}/${path}`
+  const canonical = meta?.canonical
+    ? new URL(meta.canonical, options.siteURL).toString()
+    : new URL(path, `${options.siteURL.replace(/\/$/, '')}/`).toString()
   return {
     canonical,
     description: meta?.description ?? undefined,
@@ -338,7 +349,7 @@ function propertyStructuredData(property: PropertyDetailView, options: PublicQue
       availability: property.status === 'sold' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
       price: property.priceMinorUnits / 100,
       priceCurrency: 'RUB',
-      url: `${options.siteURL.replace(/\/$/, '')}/properties/${property.slug}`,
+      url: new URL(options.routes.property(property.slug), `${options.siteURL.replace(/\/$/, '')}/`).toString(),
     },
   }
 }
@@ -373,12 +384,16 @@ function relationId(value: unknown) {
   return undefined
 }
 
-function redirectDestination(redirect: RedirectView) {
+function redirectDestination(redirect: RedirectView, routes: PublicQueryOptions['routes']) {
   if (redirect.to?.type === 'custom') return redirect.to.url ?? undefined
   const reference = redirect.to?.reference
   if (!reference || typeof reference.value !== 'object' || !('slug' in reference.value)) return undefined
-  const prefix: Record<typeof reference.relationTo, string> = { agents: 'agents', pages: 'pages', posts: 'posts', properties: 'properties', 'residential-complexes': 'complexes' }
-  return `/${prefix[reference.relationTo]}/${String(reference.value.slug)}`
+  const slug = String(reference.value.slug)
+  if (reference.relationTo === 'agents') return routes.employee(slug)
+  if (reference.relationTo === 'pages') return routes.rootPage(slug)
+  if (reference.relationTo === 'posts') return routes.article(slug)
+  if (reference.relationTo === 'properties') return routes.property(slug)
+  return routes.residentialComplex(slug)
 }
 
 function facetEntries(value: unknown): Array<{ count: number; value: number | string }> {
