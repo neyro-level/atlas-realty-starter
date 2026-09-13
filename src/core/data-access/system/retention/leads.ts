@@ -44,6 +44,16 @@ export async function applyLeadRetentionPolicy(
 
     for (const lead of result.docs) {
       await payload.update({
+        collection: 'lead-deliveries',
+        context: systemContext('lead-retention'),
+        data: { lastError: null },
+        depth: 0,
+        overrideAccess: true,
+        overrideLock: true,
+        req,
+        where: { lead: { equals: lead.id } },
+      })
+      await payload.update({
         collection: 'leads',
         context: systemContext('lead-retention'),
         data: {
@@ -53,6 +63,7 @@ export async function applyLeadRetentionPolicy(
           normalizedPhone: 'retained-' + lead.id,
           personalDataPurgedAt: new Date().toISOString(),
           phone: 'retained-' + lead.id,
+          requestFingerprint: null,
         },
         id: lead.id,
         overrideAccess: true,

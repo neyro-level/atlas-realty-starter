@@ -24,7 +24,7 @@ test.describe.serial('Payload native Admin and public site foundation', () => {
     const healthResponse = await page.request.get('/healthz')
     expect(healthResponse.status()).toBe(200)
     expect(healthResponse.headers()['content-security-policy']).toContain("frame-ancestors 'none'")
-    await expect(healthResponse.json()).resolves.toEqual({ status: 'ok' })
+    await expect(healthResponse.json()).resolves.toMatchObject({ leadDeliveries: { dead: 0, failed: 0, stuckProcessing: 0 }, status: 'ok' })
 
     const graphQLResponse = await page.request.post('/api/graphql', { data: { query: '{ __typename }' } })
     expect(graphQLResponse.status()).toBe(404)

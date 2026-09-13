@@ -25,7 +25,7 @@ export const publicLeadSchema = z.object({
 
 export const idempotencyKeySchema = z.string().trim().min(16).max(128).regex(/^[A-Za-z0-9._:-]+$/)
 
-export type PublicLeadCommand = z.infer<typeof publicLeadSchema> & { idempotencyKey: string }
+export type PublicLeadCommand = z.infer<typeof publicLeadSchema> & { idempotencyKey: string; requestFingerprint?: string }
 
 export function normalizeLeadPhone(value: string) {
   const digits = value.replace(/\D/g, '')

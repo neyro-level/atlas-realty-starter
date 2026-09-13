@@ -25,9 +25,10 @@ Report vulnerabilities privately to the repository owner. Do not put secrets, cr
 
 ## Public input and PII
 
-- Lead intake uses a bounded JSON body, Zod validation, a honeypot, minimum fill time, explicit consent and an idempotency key.
+- Lead intake uses a bounded JSON body, Zod validation, a honeypot, minimum fill time, explicit consent, canonical `sourcePage`, an idempotency key and bounded rate limits by normalized phone plus a one-way HMAC client fingerprint. Raw client IP is never stored.
 - Lead and required delivery records commit in one Payload transaction before success is returned.
-- Delivery retries are limited to network/timeout/429/5xx outcomes with bounded exponential backoff. Permanent or exhausted failures become `dead` and remain visible to owners.
+- Delivery workers claim records atomically, reclaim locks older than ten minutes and always leave `processing` in a `finally` path. Network/timeout/408/425/429/5xx outcomes retry with tenant-owned bounds; other 4xx and exhausted failures become `dead`.
+- The versioned lead-channel port lives in `src/core/ports/lead-channel.ts`. Project adapters use the central HTTPS client, exact `LEAD_OUTBOUND_HOSTS`, HMAC signatures and `Idempotency-Key`; HTTP delivery never runs inside the lead/outbox transaction.
 - Stored delivery errors are bounded and stripped of URLs, email addresses and phone-like values.
 - Analytics and logs must not receive lead contacts, owner contacts, private property fields, credentials or raw authorization data.
 
@@ -35,7 +36,7 @@ Report vulnerabilities privately to the repository owner. Do not put secrets, cr
 
 Exact CORS/CSRF origins come from `NEXT_PUBLIC_SITE_URL`. Auth cookies are HttpOnly by Payload, SameSite=Lax and Secure in staging/production. CSP is enforced. Nginx rate-limits login and, when enabled, lead intake.
 
-Required protected-runtime secrets are `DATABASE_URL`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL` and `REVALIDATE_SECRET`. Persistent S3 configuration is also required for production media. Optional module values are required only when that module is active.
+Required protected-runtime secrets are `DATABASE_URL`, `PAYLOAD_SECRET`, `NEXT_PUBLIC_SITE_URL` and `REVALIDATE_SECRET`. Lead delivery additionally requires the AMS Leads values and an exact `LEAD_OUTBOUND_HOSTS` match. Persistent S3 configuration is also required for production media.
 
 ## Dependency advisory
 

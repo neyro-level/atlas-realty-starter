@@ -93,7 +93,7 @@ test.describe.serial('Headless public API', () => {
     const idempotencyKey = 'e2e:public-lead:12345678'
     const body = {
       company: '', consent: true, formStartedAt: new Date(Date.now() - 3_000).toISOString(), formType: 'property',
-      message: 'Please call', name: 'Public lead', phone: '8 (999) 123-45-67', propertyId, sourcePage: '/properties/public-property',
+      message: 'Please call', name: 'Public lead', phone: '8 (999) 123-45-67', propertyId, sourcePage: '/obekty/public-property',
     }
     const created = await request.post('/api/public/v1/leads', { data: body, headers: { 'Idempotency-Key': idempotencyKey } })
     expect(created.status()).toBe(201)

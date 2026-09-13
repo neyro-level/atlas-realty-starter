@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { redactDeliveryError, retryDelay } from '@/core/data-access/system/leads/delivery'
-import { deliverToAmsLeads } from '@/project/leads/channels'
+import { createHTTPWebhookAdapter } from '@/project/leads/adapters/http-webhook'
 import { isAllowedLeadSourcePagePath } from '@/modules/leads/source-page-policy'
 import { leadSchema } from '@/modules/leads/schema'
 import { LEAD_BODY_LIMIT_BYTES, assertMinimumFillTime, idempotencyKeySchema, normalizeLeadPhone, publicLeadSchema, readBoundedJSON } from '@/shared/types/public-lead'
@@ -18,19 +18,19 @@ describe('Stage 3 public lead contract', () => {
       attempt: 1, deliveryId: 'delivery-1', idempotencyKey: 'lead:atlas:12345678', leadId: 'lead-1',
       lead: { name: 'Анна', phone: '+79991234567', sourcePage: '/nedvizhimost' },
     }
-    const config = { apiURL: 'https://leads.example.test/v1/leads', projectId: 'atlas', siteKey: 'atlas-site-key' }
-    let request: Request | undefined
-    const okFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
-      request = new Request(input, init)
-      return new Response(null, { status: 202 })
-    }
-    await expect(deliverToAmsLeads(attempt, config, 'https://atlas.ams24.ru', okFetch)).resolves.toEqual({ ok: true })
-    expect(request?.headers.get('idempotency-key')).toBe(attempt.idempotencyKey)
-    const body = await request?.json()
-    expect(body).toMatchObject({ project: 'atlas', siteLeadId: 'lead-1', phone: '+79991234567', source: 'https://atlas.ams24.ru/nedvizhimost' })
-    expect(body).not.toHaveProperty('deliveryId')
-    await expect(deliverToAmsLeads(attempt, config, 'https://atlas.ams24.ru', async () => new Response(null, { status: 503 }))).resolves.toMatchObject({ kind: 'retryable' })
-    await expect(deliverToAmsLeads(attempt, config, 'https://atlas.ams24.ru', async () => new Response(null, { status: 401 }))).resolves.toMatchObject({ kind: 'permanent' })
+    const calls: Array<{ body?: Buffer | string; headers?: Readonly<Record<string, string>> }> = []
+    const adapter = createHTTPWebhookAdapter({ allowHosts: ['leads.example.test'], endpoint: 'https://leads.example.test/v1/leads', mapPayload: (value) => value.lead, secret: 'test-secret', timeoutMs: 1000 }, async (_url, options) => {
+      calls.push(options)
+      return { body: Buffer.alloc(0), headers: {}, status: 202, url: 'https://leads.example.test/v1/leads' }
+    })
+    await expect(adapter.deliver(attempt)).resolves.toEqual({ ok: true })
+    expect(calls[0]?.headers?.['idempotency-key']).toBe(attempt.idempotencyKey)
+    expect(calls[0]?.headers?.['x-webhook-signature']).toMatch(/^sha256=/)
+    expect(JSON.parse(String(calls[0]?.body))).toMatchObject({ phone: '+79991234567', sourcePage: '/nedvizhimost' })
+
+    const statusAdapter = (status: number) => createHTTPWebhookAdapter({ allowHosts: ['leads.example.test'], endpoint: 'https://leads.example.test/v1/leads', mapPayload: (value) => value.lead, secret: 'test-secret', timeoutMs: 1000 }, async () => ({ body: Buffer.alloc(0), headers: {}, status, url: 'https://leads.example.test/v1/leads' }))
+    await expect(statusAdapter(503).deliver(attempt)).resolves.toMatchObject({ kind: 'retryable' })
+    await expect(statusAdapter(401).deliver(attempt)).resolves.toMatchObject({ kind: 'permanent' })
   })
 
   it('normalizes phone, email and requires explicit consent', () => {

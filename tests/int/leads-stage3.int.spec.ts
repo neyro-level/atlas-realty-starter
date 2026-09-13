@@ -6,11 +6,12 @@ import { recoverOrphanedPayloadJobs } from '@/core/data-access/system/jobs/recov
 import { applyLeadRetentionPolicy } from '@/core/data-access/system/retention/leads'
 import { createPublicLead } from '@/project/leads/create-public-lead'
 import { getLeadChannelAdapter } from '@/project/leads/channels'
+import { LEAD_CHANNEL_PORT_VERSION } from '@/core/ports/lead-channel'
 import { getTestPayload, resetFoundationState } from '../helpers/payload'
 
 const command = (key: string) => ({
   company: '', consent: true as const, email: 'lead@example.test', formStartedAt: new Date(Date.now() - 3_000).toISOString(),
-  formType: 'general' as const, idempotencyKey: key, message: 'Call me', name: 'Lead', phone: '8 (999) 123-45-67', sourcePage: '/catalog',
+  formType: 'general' as const, idempotencyKey: key, message: 'Call me', name: 'Lead', phone: '8 (999) 123-45-67', sourcePage: '/nedvizhimost',
 })
 
 describe('Stage 3 transactional lead outbox', () => {
@@ -40,9 +41,9 @@ describe('Stage 3 transactional lead outbox', () => {
     const payload = await getTestPayload()
     const created = await createPublicLead(command('lead:unavailable:12345678'), { testDeliveryMode: 'unavailable' })
     const delivery = (await payload.find({ collection: 'lead-deliveries', limit: 1, overrideAccess: true })).docs[0]!
-    await expect(processLeadDelivery(payload, String(delivery.id), getLeadChannelAdapter)).resolves.toEqual({ status: 'dead' })
+    await expect(processLeadDelivery(payload, String(delivery.id), getLeadChannelAdapter)).resolves.toEqual({ status: 'failed' })
     const failed = await payload.findByID({ collection: 'lead-deliveries', id: delivery.id, overrideAccess: true })
-    expect(failed.status).toBe('dead')
+    expect(failed.status).toBe('failed')
     expect(failed.lastError).toBe('channel_unavailable')
     expect((await payload.findByID({ collection: 'leads', id: created.leadId, overrideAccess: true })).id).toBe(created.leadId)
   })
@@ -89,18 +90,51 @@ describe('Stage 3 transactional lead outbox', () => {
     expect(recovered).toMatchObject({ lastError: 'processing_timeout', status: 'failed' })
   })
 
-  it('rolls back a lead if its required outbox plan is absent', async () => {
+  it('uses a safe fallback delivery plan if intake context is incomplete', async () => {
     const payload = await getTestPayload()
     await expect(payload.create({
       collection: 'leads', context: { systemOperation: 'lead-intake' }, draft: false, overrideAccess: true,
       data: { consentVersion: '152-fz-v1', consentedAt: new Date().toISOString(), idempotencyKey: 'lead:rollback:12345678', normalizedPhone: '+79991234567', phone: '+79991234567', status: 'new' },
-    })).rejects.toThrow(/delivery plan/)
-    expect((await payload.count({ collection: 'leads', overrideAccess: true })).totalDocs).toBe(0)
+    })).resolves.toBeTruthy()
+    expect((await payload.count({ collection: 'leads', overrideAccess: true })).totalDocs).toBe(1)
+    expect((await payload.find({ collection: 'lead-deliveries', limit: 1, overrideAccess: true })).docs[0]).toMatchObject({ channel: 'ams-leads', status: 'pending' })
+  })
+
+  it('claims a delivery once across concurrent workers and reclaims a stale lock', async () => {
+    const payload = await getTestPayload()
+    await createPublicLead(command('lead:concurrent:12345678'))
+    const delivery = (await payload.find({ collection: 'lead-deliveries', limit: 1, overrideAccess: true })).docs[0]!
+    let delivered = 0
+    const resolver = () => ({
+      policy: { baseBackoffMs: 1, maxAttempts: 3, maxBackoffMs: 10, timeoutMs: 1000 },
+      adapter: { version: LEAD_CHANNEL_PORT_VERSION, deliver: async () => { delivered += 1; await new Promise((resolve) => setTimeout(resolve, 20)); return { ok: true as const } } },
+    })
+    const results = await Promise.all([
+      processLeadDelivery(payload, String(delivery.id), resolver),
+      processLeadDelivery(payload, String(delivery.id), resolver),
+    ])
+    expect(delivered).toBe(1)
+    expect(results.map((item) => item.status).sort()).toEqual(['delivered', 'skipped'])
+
+    await payload.update({ collection: 'lead-deliveries', data: { attempts: 1, deliveredAt: null, lockedAt: new Date(Date.now() - 11 * 60_000).toISOString(), status: 'processing' }, id: delivery.id, overrideAccess: true })
+    await expect(processLeadDelivery(payload, String(delivery.id), resolver)).resolves.toEqual({ status: 'delivered' })
+    expect(delivered).toBe(2)
+  })
+
+  it('rate-limits repeated intake by normalized phone without storing raw client IP', async () => {
+    const payload = await getTestPayload()
+    for (let index = 0; index < 3; index += 1) {
+      await createPublicLead({ ...command(`lead:limit:${index}:12345678`), requestFingerprint: 'a'.repeat(64) })
+    }
+    await expect(createPublicLead({ ...command('lead:limit:blocked:12345678'), requestFingerprint: 'a'.repeat(64) })).rejects.toThrow(/lead_rate_limited/)
+    const stored = (await payload.find({ collection: 'leads', limit: 1, overrideAccess: true })).docs[0]!
+    expect(stored.requestFingerprint).toBe('a'.repeat(64))
+    expect(stored).not.toHaveProperty('clientIp')
   })
 
   it('purges expired PII without retaining its original values', async () => {
     const payload = await getTestPayload()
-    const created = await createPublicLead(command('lead:retention:12345678'))
+    const created = await createPublicLead({ ...command('lead:retention:12345678'), requestFingerprint: 'b'.repeat(64) })
     await payload.update({ collection: 'leads', data: { createdAt: new Date(Date.now() - 31 * 24 * 60 * 60_000).toISOString() }, id: created.leadId, overrideAccess: true })
     const result = await applyLeadRetentionPolicy(payload, 30)
     expect(result.processed).toBe(1)
@@ -108,6 +142,7 @@ describe('Stage 3 transactional lead outbox', () => {
     expect(lead).toMatchObject({ email: null, message: null, name: null })
     expect(lead.phone).not.toContain('999')
     expect(lead.normalizedPhone).not.toContain('999')
+    expect(lead.requestFingerprint).toBeNull()
     expect(lead.personalDataPurgedAt).toBeTruthy()
   })
 })

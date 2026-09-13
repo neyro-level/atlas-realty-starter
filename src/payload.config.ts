@@ -34,13 +34,13 @@ import { projectConfig } from './project/config'
 import { resolveRuntimeReference, runtimeConfig } from './project/env'
 import { requestPublicRevalidation } from './project/cache/request-revalidation'
 import { getFeedParser } from './project/ingest/registry'
-import { getLeadChannelAdapter } from './project/leads/channels'
+import { getLeadChannel } from './project/leads/channels'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 const allowedOrigin = runtimeConfig.siteURL
 const applyLeadRetentionTask = createApplyLeadRetentionTask(runtimeConfig.leadRetentionDays)
-const deliverLeadTask = createDeliverLeadTask(getLeadChannelAdapter)
+const deliverLeadTask = createDeliverLeadTask(getLeadChannel)
 const importFeedTask = createImportFeedTask({
   externalImageHosts: runtimeConfig.externalImageHosts,
   feedOutboundHosts: runtimeConfig.feedOutboundHosts,
