@@ -8,6 +8,7 @@ import type {
 import { journalArticlePlaceholderImage } from "@/entities/article/journal-fallback";
 import { getArticleEditorialMeta, type ArticleTopicKey } from "@/entities/article/editorial";
 import { journalCategories, journalCategoryMap, type JournalCategoryKey } from "@/entities/article/journal-config";
+import { routes } from "@/project/routes";
 import { formatArticleDate, getArticleExcerpt } from "@/shared/lib/article";
 import { getSiteEngine } from "./index";
 
@@ -34,14 +35,14 @@ export async function getJournalHubPage(query = ""): Promise<JournalHubPageDto> 
   const engine = await getSiteEngine();
   const [articles, newBuildings] = await Promise.all([engine.getArticles(), engine.getNewBuildingCards()]);
   const filtered = query ? filterArticles(articles, query) : articles;
-  const sections = query ? [{ id: "journal-search", title: `Поиск: ${query}`, action: { href: "/journal", label: "Сбросить" }, articles: filtered.map(toArticleCard), emptyText: "По этому запросу материалы не найдены. Попробуйте другой запрос или откройте рубрики журнала." }] : [
-    { id: "journal-section-real-estate", title: "Статьи о недвижимости", action: { href: "/journal/category/kvartiry", label: "Посмотреть все" }, articles: pickByTopics(articles, ["buying", "selling", "doma"]).slice(0, 3).map(toArticleCard) },
-    { id: "journal-section-mortgage", title: "Ипотека и новостройки", action: { href: "/journal/category/ipoteka", label: "Посмотреть все" }, articles: pickByTopics(articles, ["ipoteka", "novostroyki"]).slice(0, 3).map(toArticleCard) },
-    { id: "journal-section-guides", title: "Инструкции и проверки", action: { href: "/journal/category/stroitelstvo", label: "Посмотреть все" }, articles: pickByTopics(articles, ["stroitelstvo", "uchastki"]).slice(0, 3).map(toArticleCard) },
+  const sections = query ? [{ id: "journal-search", title: `Поиск: ${query}`, action: { href: routes.journal(), label: "Сбросить" }, articles: filtered.map(toArticleCard), emptyText: "По этому запросу материалы не найдены. Попробуйте другой запрос или откройте рубрики журнала." }] : [
+    { id: "journal-section-real-estate", title: "Статьи о недвижимости", action: { href: routes.journalCategory("kvartiry"), label: "Посмотреть все" }, articles: pickByTopics(articles, ["buying", "selling", "doma"]).slice(0, 3).map(toArticleCard) },
+    { id: "journal-section-mortgage", title: "Ипотека и новостройки", action: { href: routes.journalCategory("ipoteka"), label: "Посмотреть все" }, articles: pickByTopics(articles, ["ipoteka", "novostroyki"]).slice(0, 3).map(toArticleCard) },
+    { id: "journal-section-guides", title: "Инструкции и проверки", action: { href: routes.journalCategory("stroitelstvo"), label: "Посмотреть все" }, articles: pickByTopics(articles, ["stroitelstvo", "uchastki"]).slice(0, 3).map(toArticleCard) },
   ];
   return {
     query,
-    categories: journalCategories.map((item) => ({ slug: item.slug, title: item.title, href: `/journal/category/${item.slug}` })),
+    categories: journalCategories.map((item) => ({ slug: item.slug, title: item.title, href: routes.journalCategory(item.slug) })),
     popular: articles.slice(0, 5).map(toArticleCard),
     sections,
     newBuildings: newBuildings.slice(0, 3),
@@ -67,8 +68,8 @@ export async function getJournalCategoryPage(categorySlug: string): Promise<Jour
   const featureArticle = articles.find((article) => !leadSlugs.has(article.slug)) ?? leadArticles[0] ?? null;
   const usedSlugs = new Set([...leadSlugs, featureArticle?.slug].filter(Boolean) as string[]);
   return {
-    category: { slug: category.slug, title: category.title, href: `/journal/category/${category.slug}`, active: true },
-    categories: journalCategories.map((item) => ({ slug: item.slug, title: item.title, href: `/journal/category/${item.slug}`, active: item.slug === category.slug })),
+    category: { slug: category.slug, title: category.title, href: routes.journalCategory(category.slug), active: true },
+    categories: journalCategories.map((item) => ({ slug: item.slug, title: item.title, href: routes.journalCategory(item.slug), active: item.slug === category.slug })),
     h1: config.h1,
     lead: config.lead,
     primaryArticles: leadArticles.map(toArticleCard),
@@ -88,7 +89,7 @@ export async function getJournalCategoryPage(categorySlug: string): Promise<Jour
 
 export function toArticleCard(article: ArticleDto): JournalArticleCardDto {
   const meta = getArticleEditorialMeta(article.slug);
-  return { id: article.id, slug: article.slug, href: `/journal/${article.slug}`, title: article.title, excerpt: getArticleExcerpt(article), image: article.coverImage || journalArticlePlaceholderImage, dateLabel: formatArticleDate(article.publishedAt), topicLabel: meta?.topicLabel ?? "Материал" };
+  return { id: article.id, slug: article.slug, href: routes.article(article.slug), title: article.title, excerpt: getArticleExcerpt(article), image: article.coverImage || journalArticlePlaceholderImage, dateLabel: formatArticleDate(article.publishedAt), topicLabel: meta?.topicLabel ?? "Материал" };
 }
 
 function pickByTopics(articles: ArticleDto[], topics: ArticleTopicKey[]) { return articles.filter((article) => { const topic = getArticleEditorialMeta(article.slug)?.topic; return topic ? topics.includes(topic) : false; }); }

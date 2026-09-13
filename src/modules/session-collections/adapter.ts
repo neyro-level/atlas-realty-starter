@@ -1,6 +1,7 @@
 import type { ListingCard, ListingCategoryKey } from "@/lib/catalog";
 import { isNewBuildingListingId } from "@/modules/new-buildings";
 import { getPropertyPath } from "@/project/site-config";
+import { routes } from "@/project/routes";
 import { tenant } from "@/project/tenant";
 import type { SessionListingItem } from "./types";
 
@@ -22,7 +23,7 @@ export function toSessionListingItem(listing: ListingCard, title: string, pathOv
   return {
     id: listing.id,
     slug: listing.slug,
-    path: pathOverride ?? (isNewBuilding ? `/${listing.slug}` : getPropertyPath(listing.slug)),
+    path: pathOverride ?? (isNewBuilding ? routes.residentialComplex(listing.slug) : getPropertyPath(listing.slug)),
     title,
     price: listing.price,
     address: listing.address,

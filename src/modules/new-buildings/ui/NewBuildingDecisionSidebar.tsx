@@ -10,12 +10,13 @@ import { toNewBuildingDetailDto } from "../to-detail-dto";
 import { RequestCta } from "./RequestCta";
 import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
 import { siteProfile } from "@/project/site-profile";
+import { routes } from "@/project/routes";
 
 export function NewBuildingDecisionSidebar({ complex }: { complex: NewBuilding }) {
   const { openPropertyChat } = useSiteOverlay();
   const [question, setQuestion] = useState("Здравствуйте! Хочу уточнить наличие квартир.");
   const [copied, setCopied] = useState(false);
-  const href = `/${complex.slug}`;
+  const href = routes.residentialComplex(complex.slug);
   const detail = toNewBuildingDetailDto(complex);
   const heroImage = resolveNewBuildingMedia(complex.media.hero);
   const sessionItem: SessionListingItem = {

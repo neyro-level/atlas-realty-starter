@@ -3,6 +3,7 @@ import type { CorporateHeroCardDto, CorporateHeroIconKeyDto, CorporateRelatedSer
 import { CATALOG_PAGE_SIZE, MAIN_CATALOG_PAGE_SIZE } from "@/lib/catalog";
 import { catalogPresets, type CatalogPreset } from "@/modules/catalog/presets";
 import { ABOUT_COMPANY_MEDIA, CAREERS_MEDIA, SELL_APARTMENT_MEDIA } from "@/project/site-media";
+import { routes } from "@/project/routes";
 import { tenant } from "@/project/tenant";
 export type CorporateHeroIconKey = CorporateHeroIconKeyDto;
 export type CorporateHeroCard = CorporateHeroCardDto;
@@ -399,7 +400,7 @@ export const corporatePages: CorporatePageConfig[] = [
 ];
 
 export const corporatePageSlugs = Array.from(new Set(corporatePages.map((page) => page.slug)));
-export const corporatePagePaths = corporatePageSlugs.map((slug) => `/${slug}`);
+export const corporatePagePaths = corporatePageSlugs.map(routes.rootPage);
 
 export const corporatePageMap = Object.fromEntries(
   corporatePages.map((page) => [page.slug, page]),
