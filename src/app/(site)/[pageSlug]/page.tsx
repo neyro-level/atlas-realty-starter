@@ -4,7 +4,7 @@ import { CorporateLandingPage } from "@/components/marketing/CorporateLandingPag
 import { corporatePageSlugs, getCorporatePage } from "@/project/corporate-pages";
 import { getCatalogPreset } from "@/modules/catalog/presets";
 import { resolveCatalogRobots } from "@/modules/catalog/seo";
-import { hasCatalogQueryFilters, resolveCatalogPageParam } from "@/modules/catalog/pagination";
+import { buildCatalogPaginationMetadata, hasCatalogQueryFilters, resolveCatalogPageParam, shouldNoIndexCatalogPage } from "@/modules/catalog/pagination";
 import { getNewBuilding, newBuildingSlugs, resolveNewBuildingMedia } from "@/modules/new-buildings";
 import { buildNewBuildingSeoDescription, buildNewBuildingSeoTitle } from "@/modules/new-buildings/seo";
 import { NewBuildingPage } from "@/modules/new-buildings/ui";
@@ -12,6 +12,7 @@ import { getSiteUrl, isIndexable, siteConfig } from "@/project/site-config";
 import { defaultSocialPreview, defaultSocialPreviewPath, socialImage } from "@/project/social-preview";
 import { loadCorporatePageData } from "@/site-engine/corporate-page-data";
 import { getSiteEngineMode } from "@/site-engine";
+import { routes } from "@/project/routes";
 
 type Props = {
   params: Promise<{ pageSlug: string }>;
@@ -40,7 +41,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     };
   }
 
-  const path = `/${page?.slug ?? residentialComplex?.slug ?? pageSlug}`;
+  const path = routes.rootPage(page?.slug ?? residentialComplex?.slug ?? pageSlug);
   const canonicalPath = catalogPreset && pagination.valid && pagination.page > 1
     ? `${path}?page=${pagination.page}`
     : path;
@@ -74,14 +75,21 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   }
 
   const title = pagination.page > 1 ? `${page.title} — страница ${pagination.page}` : page.title;
+  const paginationData = catalogPreset && pagination.valid
+    ? await loadCorporatePageData(page, resolvedSearchParams)
+    : null;
+  const totalPages = paginationData?.showcaseQuery && paginationData.showcase
+    ? Math.max(1, Math.ceil(paginationData.showcase.total / (paginationData.showcaseQuery.limit ?? 24)))
+    : 1;
   return {
     title: { absolute: title },
     description: page.description,
     alternates: { canonical: canonicalPath },
+    pagination: buildCatalogPaginationMetadata(path, pagination.page, totalPages),
     robots:
       resolveCatalogRobots({
         catalogPreset,
-        hasQueryFilters: hasQueryFilters || !pagination.valid,
+        hasQueryFilters: hasQueryFilters || !pagination.valid || shouldNoIndexCatalogPage(pagination.page),
         siteIndexable: isIndexable(),
       }) ?? (isIndexable() ? { index: true, follow: true } : { index: false, follow: false }),
     openGraph: {

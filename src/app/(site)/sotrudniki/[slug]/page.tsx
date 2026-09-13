@@ -18,6 +18,7 @@ import { JsonLd } from "@/shared/ui/JsonLd";
 import type { ListingCategoryKey } from "@/lib/catalog";
 import { getPublicSiteContacts } from "@/site-engine/site-contacts";
 import { getSiteEngine } from "@/site-engine";
+import { routes } from "@/project/routes";
 
 export const revalidate = 300;
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const profile = await loadEmployeeProfilePageData({ slug });
   if (!profile) return { title: "Специалист не найден", robots: { index: false, follow: false } };
-  const base = buildSeoMetadata({ path: `/sotrudniki/${slug}`, title: `${profile.employee.fullName} — ${profile.employee.position}`, description: profile.employee.bio, image: profile.employee.photoUrl ?? undefined });
+  const base = buildSeoMetadata({ path: routes.employee(slug), title: `${profile.employee.fullName} — ${profile.employee.position}`, description: profile.employee.bio, image: profile.employee.photoUrl ?? undefined });
   return { ...base, robots: { index: false, follow: true } };
 }
 
@@ -43,13 +44,13 @@ export default async function EmployeeProfilePage({ params, searchParams }: Prop
   if (!profile) notFound();
   const { employee } = profile;
   const publicPhone = resolvePublicEmployeePhone(employee.phone, contacts);
-  const path = `/sotrudniki/${employee.slug}`;
+  const path = routes.employee(employee.slug);
   const showsObjects = employee.teamSection === "sales";
   const showsReviews = showsObjects || employee.teamSection === "support";
   const breadcrumbItems = [
-    { label: "Главная", href: "/" },
+    { label: "Главная", href: routes.home() },
     { label: "Компания" },
-    { label: "Сотрудники", href: "/sotrudniki" },
+    { label: "Сотрудники", href: routes.employees() },
     { label: employee.fullName },
   ];
   const pageDto: EmployeeProfilePageDto = {
@@ -81,7 +82,7 @@ export default async function EmployeeProfilePage({ params, searchParams }: Prop
 
   return (
     <>
-      <JsonLd data={breadcrumbSchema([{ name: "Главная", url: "/" }, { name: "Сотрудники", url: "/sotrudniki" }, { name: employee.fullName, url: path }])} />
+      <JsonLd data={breadcrumbSchema([{ name: "Главная", url: routes.home() }, { name: "Сотрудники", url: routes.employees() }, { name: employee.fullName, url: path }])} />
       <JsonLd data={employeeProfileSchema({ fullName: employee.fullName, position: employee.position, photoUrl: employee.photoUrl ?? undefined, urlPath: path, reviewCount: employee.reviewCount, rating: employee.rating, reviews: profile.reviews })} />
       <EmployeeProfileView
         page={pageDto}
