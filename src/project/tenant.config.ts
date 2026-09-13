@@ -52,6 +52,9 @@ const tenantValues = {
     catalogZoom: 12,
   },
   leadChannels: ['ams-leads'],
+  leadDelivery: {
+    'ams-leads': { baseBackoffMs: 30_000, maxAttempts: 5, maxBackoffMs: 30 * 60_000, timeoutMs: 8_000 },
+  },
 } as const
 // END TENANT_VALUES
 
@@ -111,5 +114,6 @@ export const tenantConfig = {
 export const legalOperatorAddress = tenantValues.contacts.legalOperatorAddress
 export const productionDomain = tenantValues.productionDomain
 export const tenantLeadChannels = tenantValues.leadChannels
+export const tenantLeadDelivery = tenantValues.leadDelivery
 export const siteIdentity = tenantConfig
 export const siteProfile = tenantConfig

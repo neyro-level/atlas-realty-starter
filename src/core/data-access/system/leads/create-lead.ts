@@ -15,6 +15,8 @@ export async function createPublicLead(payload: Payload, command: PublicLeadComm
   const existing = await findExisting(payload, command.idempotencyKey)
   if (existing) return { duplicate: true, leadId: existing }
 
+  await assertLeadRateLimit(payload, normalizedPhone, command.requestFingerprint)
+
   const route = await resolveLeadRoute(payload, command, options.testDeliveryMode)
   const context = {
     ...systemContext('lead-intake'),
@@ -37,6 +39,7 @@ export async function createPublicLead(payload: Payload, command: PublicLeadComm
         normalizedPhone,
         phone: command.phone,
         property: command.propertyId,
+        requestFingerprint: command.requestFingerprint,
         sourcePage: command.sourcePage,
         status: 'new',
       },
@@ -50,6 +53,21 @@ export async function createPublicLead(payload: Payload, command: PublicLeadComm
     if (raced) return { duplicate: true, leadId: raced }
     throw error
   }
+}
+
+async function assertLeadRateLimit(payload: Payload, normalizedPhone: string, requestFingerprint?: string) {
+  const since = new Date(Date.now() - 15 * 60_000).toISOString()
+  const phoneCount = await payload.count({
+    collection: 'leads', overrideAccess: true,
+    where: { and: [{ createdAt: { greater_than_equal: since } }, { normalizedPhone: { equals: normalizedPhone } }] },
+  })
+  if (phoneCount.totalDocs >= 3) throw new Error('lead_rate_limited')
+  if (!requestFingerprint) return
+  const addressCount = await payload.count({
+    collection: 'leads', overrideAccess: true,
+    where: { and: [{ createdAt: { greater_than_equal: since } }, { requestFingerprint: { equals: requestFingerprint } }] },
+  })
+  if (addressCount.totalDocs >= 10) throw new Error('lead_rate_limited')
 }
 
 async function findExisting(payload: Payload, idempotencyKey: string) {

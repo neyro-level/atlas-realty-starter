@@ -1,10 +1,11 @@
 import type { TaskConfig } from 'payload'
 
-import { processLeadDelivery, type ResolveLeadChannelAdapter } from '../leads/delivery'
+import type { ResolveLeadChannel } from '@/core/ports/lead-channel'
+import { processLeadDelivery } from '../leads/delivery'
 
 type TaskContract = { input: { deliveryId: string }; output: { status: string } }
 
-export function createDeliverLeadTask(resolveAdapter: ResolveLeadChannelAdapter): TaskConfig<TaskContract> {
+export function createDeliverLeadTask(resolveAdapter: ResolveLeadChannel): TaskConfig<TaskContract> {
   return {
     slug: 'deliverLead',
     label: 'Deliver lead outbox item',

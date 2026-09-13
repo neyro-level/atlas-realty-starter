@@ -34,7 +34,7 @@ For local queue isolation, imports, lead delivery and schedules may be run with 
 
 ## Health and revalidation
 
-`GET /healthz` returns only `status: ok` or `status: unavailable` with HTTP 200 or 503. It exposes no database, release, environment or internal diagnostics.
+`GET /healthz` returns `status: ok | degraded | unavailable` with aggregate lead-delivery signals: counts of `dead`, `failed` and stuck `processing`, oldest pending age and machine-readable alerts. It exposes no lead PII, database credentials, release secrets or environment values. `dead_deliveries`, `stuck_processing` and `pending_queue_delayed` require operator attention.
 
 Public cache invalidation uses `POST /api/internal/revalidate`, an `x-revalidate-secret` header and a bounded list of known cache tags. It is operational and is not exposed by the public Nginx origin.
 
@@ -105,7 +105,8 @@ Core 4.0 local baseline on 2026-09-12, Windows 11 with native PostgreSQL 18 and 
 - Database: isolated locally managed PostgreSQL 18 database `atlas_realty_prod` with separate owner, migrator and runtime roles. This is an owner-approved reference/demo exception and must not be copied as the client-production baseline. Existing `seo_monitor_*` databases and roles are out of scope.
 - Runtime uses `atlas_runtime`; release migrations use `atlas_migrator` through a root-only migration environment file.
 - Media uses a private Timeweb S3 bucket. Public product reads go through the Public Gateway; anonymous raw Payload business APIs remain denied by collection access rules.
-- Leads use the transactional outbox and `ams-leads` adapter to the local AMS Leads API. Delivery credentials never enter Git or application logs.
+- Leads use the transactional outbox and the versioned `ams-leads` adapter. The worker uses an atomic conditional claim, a ten-minute stale-lock TTL and tenant-owned retry policy. Delivery credentials never enter Git, Payload Admin fields or application logs.
+- `dead` and `failed` deliveries appear in the Payload Admin recovery panel without lead PII. An authenticated owner/editor may use **Повторить**; the action resets the technical attempt state, creates one queue job and leaves the lead unchanged.
 - Indexing stays disabled by owner decision while the approved partner catalog is used as a product demonstration dataset.
 
 Partner content is staged outside Git in `.atlas-import/yandex`: `catalog.json`, `media-manifest.json`, `CATALOG.md` and optimized media. Technical URLs, external IDs, acquisition time and checksums stay only in this private package or protected system fields and are never selected into a public DTO.

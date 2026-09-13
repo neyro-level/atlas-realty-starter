@@ -1,7 +1,9 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
+import { headers } from "next/headers";
 import { createPublicLead } from "@/project/leads/create-public-lead";
+import { createLeadClientFingerprint } from "@/project/leads/client-fingerprint";
 import { leadSchema, type LeadFormData } from "./schema";
 
 export type CreateLeadActionResult = {
@@ -23,6 +25,7 @@ export async function createLeadAction(data: LeadFormData): Promise<CreateLeadAc
     : Date.now() - 3_000;
 
   try {
+    const requestHeaders = await headers();
     await createPublicLead({
       company: "",
       consent: true,
@@ -36,6 +39,7 @@ export async function createLeadAction(data: LeadFormData): Promise<CreateLeadAc
       propertyId,
       complexId,
       sourcePage: parsed.data.sourcePage,
+      requestFingerprint: createLeadClientFingerprint(requestHeaders),
     });
     return { ok: true, message: "Ваша заявка зафиксирована. Мы свяжемся с вами в ближайшее время." };
   } catch {

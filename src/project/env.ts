@@ -23,6 +23,7 @@ const environmentSchema = z.object({
   DATABASE_URL: z.string().optional(),
   EXTERNAL_IMAGE_HOSTS: z.string().optional(),
   FEED_OUTBOUND_HOSTS: z.string().optional(),
+  LEAD_OUTBOUND_HOSTS: z.string().optional(),
   LOCAL_FULL_CATALOG: z.enum(['true', 'false']).optional(),
   NEXT_PHASE: z.string().optional(),
   NEXT_PUBLIC_SITE_URL: z.string().optional(),
@@ -46,15 +47,21 @@ export function buildRuntimeConfig(input: EnvironmentSource) {
   const environment = resolveEnvironment(env)
   const protectedRuntime = environment === 'production' || environment === 'staging'
   const siteURL = readSiteURL(env.NEXT_PUBLIC_SITE_URL, protectedRuntime)
+  const amsLeads = readAmsLeadsConfig(env, protectedRuntime)
+  const leadOutboundHosts = readHostAllowlist(env.LEAD_OUTBOUND_HOSTS)
+  if (amsLeads && protectedRuntime && !leadOutboundHosts.includes(new URL(amsLeads.apiURL).hostname.toLowerCase())) {
+    throw new Error('AMS_LEADS_API_URL hostname must be listed in LEAD_OUTBOUND_HOSTS')
+  }
 
   return {
-    amsLeads: readAmsLeadsConfig(env, protectedRuntime),
+    amsLeads,
     databasePoolMax: readDatabasePoolMax(env.DATABASE_POOL_MAX, environment),
     databaseURL: requireRuntimeValue('DATABASE_URL', env.DATABASE_URL, protectedRuntime),
     environment,
     externalImageHosts: readHostAllowlist(env.EXTERNAL_IMAGE_HOSTS),
     feedOutboundHosts: readHostAllowlist(env.FEED_OUTBOUND_HOSTS),
     leadRetentionDays: 365,
+    leadOutboundHosts,
     localFullCatalog: env.LOCAL_FULL_CATALOG === 'true',
     payloadSecret: readPayloadSecret(env.PAYLOAD_SECRET, protectedRuntime),
     releaseSHA: env.RELEASE_SHA ?? 'local',

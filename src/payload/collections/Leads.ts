@@ -19,6 +19,7 @@ export const Leads = {
     { name: 'complex', type: 'relationship', relationTo: 'residential-complexes', index: true },
     { name: 'agent', type: 'relationship', relationTo: 'agents', index: true },
     { name: 'sourcePage', type: 'text' },
+    { name: 'requestFingerprint', type: 'text', index: true, admin: { hidden: true }, access: { read: () => false, update: () => false } },
     { name: 'consentVersion', type: 'text', required: true },
     { name: 'consentedAt', type: 'date', required: true },
     { name: 'idempotencyKey', type: 'text', required: true, unique: true, index: true },

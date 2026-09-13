@@ -42,6 +42,7 @@ describe('foundation security contracts', () => {
       AMS_LEADS_API_URL: 'https://leads.example.invalid/v1/leads',
       AMS_LEADS_PROJECT_ID: 'atlas',
       AMS_LEADS_SITE_KEY: 'atlas-test-site-key',
+      LEAD_OUTBOUND_HOSTS: 'leads.example.invalid',
       DATABASE_URL: 'postgres://example.invalid/db',
       NEXT_PUBLIC_SITE_URL: 'https://example.invalid',
       PAYLOAD_SECRET: '9f2c1d4e6a8b0c3d5e7f9a1b2c4d6e8f0a2b4c6d',

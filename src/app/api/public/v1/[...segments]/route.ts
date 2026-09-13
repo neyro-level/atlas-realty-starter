@@ -14,6 +14,7 @@ import {
 } from '@/project/public-gateway'
 import { getSitemapChunk, getSitemapIndex } from '@/core/data-access/public/sitemap'
 import { catalogQuerySchema, redirectQuerySchema, searchParamsRecord, slugSchema } from '@/core/query/public-api'
+import { createLeadClientFingerprint } from '@/project/leads/client-fingerprint'
 import { createPublicLead } from '@/project/leads/create-public-lead'
 import { sitemapPathFor } from '@/project/routes'
 import { idempotencyKeySchema, publicLeadSchema, readBoundedJSON } from '@/shared/types/public-lead'
@@ -60,7 +61,7 @@ export async function POST(request: Request, context: { params: Promise<{ segmen
   try {
     const idempotencyKey = idempotencyKeySchema.parse(request.headers.get('idempotency-key'))
     const input = publicLeadSchema.parse(await readBoundedJSON(request))
-    const result = await createPublicLead({ ...input, idempotencyKey })
+    const result = await createPublicLead({ ...input, idempotencyKey, requestFingerprint: createLeadClientFingerprint(request.headers) })
     return Response.json({ data: result }, {
       headers: { 'Cache-Control': 'no-store' },
       status: result.duplicate ? 200 : 201,
@@ -69,8 +70,9 @@ export async function POST(request: Request, context: { params: Promise<{ segmen
     if (error instanceof z.ZodError) {
       return Response.json({ error: 'invalid_request', issues: error.issues.map((issue) => ({ message: issue.message, path: issue.path })) }, { status: 400 })
     }
-    if (error instanceof Error && ['body_too_large', 'form_expired', 'form_too_fast', 'invalid_json', 'invalid_phone'].includes(error.message)) {
-      return Response.json({ error: error.message }, { status: error.message === 'body_too_large' ? 413 : 400 })
+    if (error instanceof Error && ['body_too_large', 'form_expired', 'form_too_fast', 'invalid_json', 'invalid_phone', 'lead_rate_limited', 'lead_source_page_forbidden'].includes(error.message)) {
+      const status = error.message === 'body_too_large' ? 413 : error.message === 'lead_rate_limited' ? 429 : 400
+      return Response.json({ error: error.message }, { headers: status === 429 ? { 'retry-after': '900' } : undefined, status })
     }
     if (error instanceof Error && error.message === 'lead_context_not_found') return notFound()
     return Response.json({ error: 'lead_intake_unavailable' }, { status: 503 })

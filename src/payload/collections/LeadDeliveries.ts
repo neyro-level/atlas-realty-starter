@@ -1,12 +1,17 @@
 import type { CollectionConfig } from 'payload'
 
 import { adminRead, systemManaged } from '../access/standard'
+import { retryLeadDelivery } from '@/core/data-access/system/leads/manual-retry'
 
 export const LeadDeliveries = {
   slug: 'lead-deliveries',
   labels: { plural: 'Доставки заявок', singular: 'Доставка заявки' },
   access: { create: systemManaged, delete: systemManaged, read: adminRead, update: systemManaged },
-  admin: { defaultColumns: ['lead', 'channel', 'status', 'attempts', 'nextAttemptAt'], group: 'Заявки', useAsTitle: 'channel' },
+  admin: {
+    components: { afterListTable: ['@/payload/components/LeadDeliveryRecoveryPanel#LeadDeliveryRecoveryPanel'] },
+    defaultColumns: ['lead', 'channel', 'status', 'attempts', 'nextAttemptAt'], group: 'Заявки', useAsTitle: 'channel',
+  },
+  endpoints: [{ handler: retryLeadDelivery, method: 'post', path: '/:id/retry' }],
   fields: [
     { name: 'lead', type: 'relationship', relationTo: 'leads', required: true, index: true },
     { name: 'channel', type: 'text', required: true, index: true },

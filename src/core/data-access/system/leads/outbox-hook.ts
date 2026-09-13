@@ -6,10 +6,13 @@ import { systemContext } from '../operations'
 
 export const createLeadOutbox: CollectionAfterChangeHook<Lead> = async ({ doc, operation, req }) => {
   if (operation !== 'create' || req.context?.systemOperation !== 'lead-intake') return doc
-  const plan = req.context.leadDeliveryPlan
-  if (!Array.isArray(plan) || plan.length === 0) throw new Error('Lead delivery plan is required')
+  const configuredPlan = req.context.leadDeliveryPlan
+  const plan: LeadDeliveryPlan[] = Array.isArray(configuredPlan) && configuredPlan.length > 0
+    ? configuredPlan as LeadDeliveryPlan[]
+    : [{ channel: 'ams-leads', routeReason: 'fallback' }]
+  if (plan !== configuredPlan) req.payload.logger.error({ leadId: doc.id }, 'lead_delivery_plan_fallback')
 
-  for (const item of plan as LeadDeliveryPlan[]) {
+  for (const item of plan) {
     const delivery = await req.payload.create({
       collection: 'lead-deliveries',
       context: systemContext('lead-outbox'),

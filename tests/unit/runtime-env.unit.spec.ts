@@ -8,6 +8,7 @@ const core = {
   AMS_LEADS_API_URL: 'https://leads.example.test/v1/leads',
   AMS_LEADS_PROJECT_ID: 'atlas',
   AMS_LEADS_SITE_KEY: 'atlas-test-site-key',
+  LEAD_OUTBOUND_HOSTS: 'leads.example.test',
   DATABASE_URL: 'postgres://db',
   NEXT_PUBLIC_SITE_URL: 'https://example.test',
   PAYLOAD_SECRET: strongSecret,

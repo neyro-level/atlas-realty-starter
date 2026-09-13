@@ -4,6 +4,7 @@ import type { IncomingHttpHeaders, IncomingMessage } from 'node:http'
 import { isPublicAddress } from './ip-policy'
 
 export type SafeHTTPOptions = {
+  allowErrorStatus?: boolean
   allowHosts: readonly string[]
   maxBytes?: number
   maxRedirects?: number
@@ -119,7 +120,7 @@ async function requestURL(
         requestURL(new URL(location, url), options, allowHosts, redirectCount + 1).then(resolve, reject)
         return
       }
-      if (status < 200 || status >= 300) {
+      if (!options.allowErrorStatus && (status < 200 || status >= 300)) {
         res.resume()
         reject(new Error(`Outbound request failed with status ${status}`))
         return

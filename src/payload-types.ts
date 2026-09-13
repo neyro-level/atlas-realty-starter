@@ -305,6 +305,7 @@ export interface Lead {
   complex?: (string | null) | ResidentialComplex;
   agent?: (string | null) | Agent;
   sourcePage?: string | null;
+  requestFingerprint?: string | null;
   consentVersion: string;
   consentedAt: string;
   idempotencyKey: string;
@@ -1142,6 +1143,7 @@ export interface LeadsSelect<T extends boolean = true> {
   complex?: T;
   agent?: T;
   sourcePage?: T;
+  requestFingerprint?: T;
   consentVersion?: T;
   consentedAt?: T;
   idempotencyKey?: T;

@@ -43,6 +43,13 @@ module.exports = {
       to: { path: '^src/core/data-access/(?:system|ingest)/' },
     },
     {
+      name: 'lead-adapters-use-safe-http-port',
+      severity: 'error',
+      comment: 'Lead adapters must use the centrally hardened outbound HTTP client.',
+      from: { path: '^src/project/leads/adapters/' },
+      to: { path: '^(?:node:http|node:https|http|https)$' },
+    },
+    {
       name: 'no-production-to-tests',
       severity: 'error',
       comment: 'Production code cannot import tests or fixtures.',

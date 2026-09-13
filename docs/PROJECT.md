@@ -71,7 +71,8 @@ The versioned headless API remains supported for external consumers; “headless
 - Public website: home, catalog/detail, new buildings, employees, journal, corporate/service/legal pages, reviews, favorites/comparison, leadgen and thank-you flows.
 - Canonical unfiltered catalog pages emit server-rendered `BreadcrumbList` and paginated `ItemList` structured data; filtered URLs remain noindex and do not emit a conflicting catalog list.
 - New-buildings module: one Payload-backed detail template for every residential complex; search and real `priceFrom` bounds on `/novostroyki`; compact mobile/tablet conversion flow, single-level Embla card carousel, map switch, universal purchase scenarios and complex-scoped lead relation.
-- Lead intake with bounded validation, consent, anti-spam checks, idempotency and transactional delivery records.
+- Lead intake with bounded validation, consent, honeypot/fill-time checks, normalized-phone and HMAC client-fingerprint rate limits, canonical source-page validation, idempotency and transactional delivery records.
+- Versioned lead-channel port, tenant-owned delivery policies, safe HMAC webhook adapter, atomic worker claims, stale-lock recovery, aggregate health alerts and PII-free Admin manual retry.
 - Payload Jobs for import, delivery, recovery and PII retention.
 - Optional persistent S3 storage; required by the protected production runtime.
 
