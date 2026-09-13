@@ -1,6 +1,6 @@
 import { lookup } from 'node:dns/promises'
-import { request } from 'node:https'
-import type { IncomingHttpHeaders, IncomingMessage } from 'node:http'
+import { request as httpRequest, type IncomingHttpHeaders, type IncomingMessage } from 'node:http'
+import { request as httpsRequest } from 'node:https'
 import { isPublicAddress } from './ip-policy'
 
 export type SafeHTTPOptions = {
@@ -60,7 +60,7 @@ async function requestStream(url: URL, options: SafeHTTPOptions, allowHosts: Rea
   if (!addresses.length || addresses.some((item) => !isPublicAddress(item.address))) throw new Error('Outbound hostname resolved to a forbidden IP range')
   const pinned = addresses[0]!
   const response = await new Promise<IncomingMessage>((resolve, reject) => {
-    const req = request(url, { headers: { accept: 'application/xml,text/xml', host: url.host, 'user-agent': 'AMS-Realty-Platform/2.1' }, lookup: (_hostname, _options, callback) => callback(null, pinned.address, pinned.family), servername: hostname, signal: options.signal }, resolve)
+    const req = httpsRequest(url, { headers: { accept: 'application/xml,text/xml', host: url.host, 'user-agent': 'AMS-Realty-Platform/2.1' }, lookup: (_hostname, _options, callback) => callback(null, pinned.address, pinned.family), servername: hostname, signal: options.signal }, resolve)
     req.setTimeout(options.timeoutMs ?? DEFAULT_TIMEOUT_MS, () => req.destroy(new Error('Outbound request timed out')))
     req.on('error', reject)
     req.end()
@@ -92,25 +92,33 @@ async function requestURL(
   allowHosts: ReadonlySet<string>,
   redirectCount: number,
 ): Promise<SafeHTTPResponse> {
-  if (url.protocol !== 'https:') throw new Error('Outbound HTTP allows HTTPS only')
+  const loopbackHTTP = url.protocol === 'http:' && url.hostname === '127.0.0.1'
+  if (url.protocol !== 'https:' && !loopbackHTTP) {
+    throw new Error('Outbound HTTP allows HTTPS or explicit 127.0.0.1 loopback only')
+  }
   if (url.username || url.password) throw new Error('Credentials in outbound URLs are forbidden')
   const hostname = url.hostname.toLowerCase()
   if (!allowHosts.has(hostname)) throw new Error('Outbound hostname is not allowlisted')
   if (redirectCount > (options.maxRedirects ?? 3)) throw new Error('Outbound redirect limit exceeded')
 
-  const addresses = await lookup(hostname, { all: true, verbatim: true })
+  const addresses = loopbackHTTP
+    ? [{ address: '127.0.0.1', family: 4 as const }]
+    : await lookup(hostname, { all: true, verbatim: true })
   if (addresses.length === 0) throw new Error('Outbound hostname did not resolve')
-  for (const address of addresses) {
-    if (!isPublicAddress(address.address)) throw new Error('Outbound hostname resolved to a forbidden IP range')
+  if (!loopbackHTTP) {
+    for (const address of addresses) {
+      if (!isPublicAddress(address.address)) throw new Error('Outbound hostname resolved to a forbidden IP range')
+    }
   }
   const pinned = addresses[0]!
 
   const response = await new Promise<SafeHTTPResponse>((resolve, reject) => {
+    const request = loopbackHTTP ? httpRequest : httpsRequest
     const req = request(url, {
       headers: { accept: '*/*', ...options.headers, host: url.host, 'user-agent': 'AMS-Realty-Platform/2.1' },
       lookup: (_hostname, _options, callback) => callback(null, pinned.address, pinned.family),
       method: options.method ?? 'GET',
-      servername: hostname,
+      ...(loopbackHTTP ? {} : { servername: hostname }),
       signal: options.signal,
     }, (res) => {
       const status = res.statusCode ?? 0
