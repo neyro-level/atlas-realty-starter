@@ -6,9 +6,6 @@ import { useEffect, useMemo, useRef, useState, type HTMLAttributes } from "react
 import { ExternalLink, MapPin } from "lucide-react";
 import { formatPrice } from "@/lib/catalog";
 import { newBuildingHref, type NewBuilding } from "@/modules/new-buildings";
-import { tenant } from "@/project/tenant.config";
-import { clientEnv } from "@/project/public-env";
-import { siteProfile } from "@/project/tenant.config";
 import { getMappableNewBuildings } from "./new-building-catalog-map-model";
 
 type YandexMap = {
@@ -30,7 +27,15 @@ declare global {
 }
 
 const MAP_SCRIPT_ID = "agency-yandex-maps-api";
-export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] }) {
+export type NewBuildingMapPublicConfig = {
+  apiKey: string | null | undefined;
+  center: readonly [number, number];
+  catalogZoom: number;
+  cityName: string;
+  cityGenitive: string;
+};
+
+export function NewBuildingCatalogMap({ complexes, config }: { complexes: NewBuilding[]; config: NewBuildingMapPublicConfig }) {
   const mapElementRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<YandexMap | null>(null);
   const mappableComplexes = useMemo(() => getMappableNewBuildings(complexes), [complexes]);
@@ -40,7 +45,7 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
 
   useEffect(() => {
     const element = mapElementRef.current;
-    const apiKey = clientEnv.yandexMapsApiKey;
+    const apiKey = config.apiKey;
     if (!element || !apiKey || !mappableComplexes.length) {
       setStatus("unavailable");
       return;
@@ -56,14 +61,14 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
 
       ymaps.ready(() => {
         if (cancelled || !mapElementRef.current) return;
-        const map = new ymaps.Map(mapElementRef.current, { center: [...siteProfile.map.center], zoom: siteProfile.map.catalogZoom }, { suppressMapOpenBlock: true });
+        const map = new ymaps.Map(mapElementRef.current, { center: [...config.center], zoom: config.catalogZoom }, { suppressMapOpenBlock: true });
         window.clearTimeout(availabilityTimer);
         mapRef.current = map;
 
         mappableComplexes.forEach((complex) => {
           const placemark = new ymaps.Placemark(
             [complex.location.latitude, complex.location.longitude],
-            { balloonContentHeader: complex.name, balloonContentBody: complex.location.address ?? complex.location.district ?? tenant.cityRu },
+            { balloonContentHeader: complex.name, balloonContentBody: complex.location.address ?? complex.location.district ?? config.cityName },
             { preset: "islands#redHomeIcon" },
           );
           placemark.events.add("click", () => setSelectedSlug(complex.slug));
@@ -95,7 +100,7 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
       mapRef.current?.destroy();
       mapRef.current = null;
     };
-  }, [mappableComplexes]);
+  }, [config, mappableComplexes]);
 
   function selectComplex(complex: NewBuilding) {
     setSelectedSlug(complex.slug);
@@ -121,7 +126,7 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
                 key={complex.slug}
                 type="button"
                 onClick={() => selectComplex(complex)}
-                className={`min-w-63.5 rounded-xl border bg-white px-3.5 py-3 text-left shadow-[var(--new-building-map-shadow-card)] transition duration-200 lg:min-w-0 ${
+                className={`min-w-63.5 rounded-xl border bg-[var(--surface-card)] px-3.5 py-3 text-left shadow-[var(--new-building-map-shadow-card)] transition duration-200 lg:min-w-0 ${
                   selected ? "border-[var(--accent)] shadow-[var(--new-building-map-shadow-selected)]" : "border-[var(--border)] hover:-translate-y-0.5 hover:border-[var(--new-building-map-border-hover)] hover:shadow-[var(--new-building-map-shadow-hover)]"
                 }`}
               >
@@ -138,10 +143,10 @@ export function NewBuildingCatalogMap({ complexes }: { complexes: NewBuilding[] 
           })}
         </div>
       }
-      canvas={<div ref={mapElementRef} data-testid="new-building-map-canvas" className="absolute inset-0" aria-label={`Карта жилых комплексов ${siteProfile.city.genitive}`} />}
+      canvas={<div ref={mapElementRef} data-testid="new-building-map-canvas" className="absolute inset-0" aria-label={`Карта жилых комплексов ${config.cityGenitive}`} />}
       statusMessage={status === "ready" ? null : status === "loading" ? "Загружаем карту жилых комплексов..." : "Карта временно недоступна. Выберите ЖК из списка слева."}
       action={selectedComplex ? (
-          <Link href={newBuildingHref(selectedComplex)} className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-white px-3 text-xs font-bold text-[var(--text-primary)] shadow-[var(--new-building-map-shadow-floating)] transition hover:text-[var(--accent)]">
+          <Link href={newBuildingHref(selectedComplex)} className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-[var(--surface-card)] px-3 text-xs font-bold text-[var(--text-primary)] shadow-[var(--new-building-map-shadow-floating)] transition hover:text-[var(--accent)]">
             Открыть выбранный ЖК
             <ExternalLink className="size-3.5" aria-hidden />
           </Link>

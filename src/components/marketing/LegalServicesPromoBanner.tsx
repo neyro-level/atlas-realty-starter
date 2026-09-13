@@ -52,7 +52,7 @@ export function LegalServicesPromoBanner({ placement }: Props) {
             <RequestModalButton
               type="button" variant="plain"
               request={{ title: "Получить консультацию юриста по недвижимости", subtitle: "Оставьте контакты. Юрист уточнит вашу ситуацию и подскажет следующий шаг.", source, formType: "legal_consultation", submitLabel: "Получить консультацию" }}
-              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[var(--legal-services-promo-banner-border-secondary)] bg-white px-6 text-center text-body font-semibold text-[var(--surface-dark)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[var(--legal-services-promo-banner-border-secondary)] bg-[var(--surface-card)] px-6 text-center text-body font-semibold text-[var(--surface-dark)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
             >
               Получить консультацию
             </RequestModalButton>
@@ -71,7 +71,7 @@ export function LegalServicesPromoBanner({ placement }: Props) {
   }
 
   return (
-    <section id="section-home-legal-services" className="bg-white py-10 sm:py-14 lg:py-20" aria-label="Юридические услуги агентства недвижимости">
+    <section id="section-home-legal-services" className="bg-[var(--surface-card)] py-10 sm:py-14 lg:py-20" aria-label="Юридические услуги агентства недвижимости">
       <div className="site-shell">{content}</div>
     </section>
   );

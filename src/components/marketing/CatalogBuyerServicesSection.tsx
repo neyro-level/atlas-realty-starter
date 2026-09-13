@@ -53,7 +53,7 @@ const BUYER_SERVICES = [
 export function CatalogBuyerServicesSection({ sourcePage }: CatalogBuyerServicesSectionProps) {
   return (
     <section
-      className="bg-white py-10 lg:py-14"
+      className="bg-[var(--surface-card)] py-10 lg:py-14"
       aria-label="Сервисы для покупателей"
       data-catalog-buyer-services
     >

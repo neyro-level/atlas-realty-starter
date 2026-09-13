@@ -4,13 +4,11 @@ import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
 import {
   PropertyCardView,
-  buildPropertyCardListTitle,
-  buildPropertyCardTitle,
-  cleanPropertyCardDisplayAddress,
   type PropertyCardCollectionActionProps,
   type SiteImageRendererProps,
   type SiteLinkRendererProps,
 } from "@starter/site-ui";
+import { buildPropertyCardListTitle, buildPropertyCardTitle, cleanPropertyCardDisplayAddress } from "@/modules/catalog/property-card-copy";
 import { type CatalogView, type ListingCard } from "@/lib/catalog";
 import { useSiteContacts } from "@/components/layout/SiteContactsProvider";
 import { shouldOptimizeCatalogImage } from "@/modules/media/image-optimization";
@@ -96,6 +94,8 @@ export function CatalogPropertyCard({ listing, variant = "grid", priority = fals
       phone={contacts.phone}
       phoneHref={phoneHref}
       addressParts={addressParts}
+      title={title}
+      listTitle={listTitle}
       imageRenderer={PropertyImageAdapter}
       linkRenderer={PropertyLinkAdapter}
       shouldOptimizeImage={shouldOptimizeCatalogImage}

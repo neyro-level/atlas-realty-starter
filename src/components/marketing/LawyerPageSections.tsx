@@ -1,4 +1,4 @@
-import { LawyerPageView } from "@starter/site-ui";
+import { LawyerPageView } from "./LawyerPageView";
 import { AgencyFaqAccordion } from "@/components/marketing/AgencyFaqAccordion";
 import { AgencyInlineLeadForm } from "@/components/marketing/AgencyInlineLeadForm";
 import type { AgencyFaqItem } from "@/components/marketing/agency-faq-content";

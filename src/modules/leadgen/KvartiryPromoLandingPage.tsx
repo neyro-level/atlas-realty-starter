@@ -1,5 +1,6 @@
 import Image, { type ImageProps } from "next/image";
-import { LeadgenPromoLandingView, type LeadgenPromoLandingAdapters, type SiteImageRendererProps } from "@starter/site-ui";
+import { type SiteImageRendererProps } from "@starter/site-ui";
+import { LeadgenPromoLandingView, type LeadgenPromoLandingAdapters } from "./LeadgenPromoLandingView";
 import { LeadgenApartmentShowcase } from "./LeadgenApartmentShowcase";
 import { LeadgenConstructionProjectShowcase } from "./LeadgenConstructionProjectShowcase";
 import { LeadgenCurrentDateBadge } from "./LeadgenCurrentDateBadge";

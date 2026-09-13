@@ -23,7 +23,7 @@ export function AgencyFaqSection({
   const titleId = `${id}-title`;
 
   return (
-    <section id={id} className="bg-white" aria-labelledby={titleId}>
+    <section id={id} className="bg-[var(--surface-card)]" aria-labelledby={titleId}>
       <div className="mx-auto max-w-site-frame px-5 py-20 md:py-24 lg:py-26">
         <div className="mb-12 max-w-230 text-left md:mb-14">
           {eyebrow ? (

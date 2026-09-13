@@ -16,7 +16,7 @@ export function SheetOverlay({ className, ...props }: ComponentProps<typeof Dial
 }
 
 const sheetVariants = cva(
-  "fixed z-50 grid gap-4 bg-white p-6 shadow-[var(--sheet-shadow-primary)] transition ease-in-out sm:p-8",
+  "fixed z-50 grid gap-4 bg-[var(--surface-card)] p-6 shadow-[var(--sheet-shadow-primary)] transition ease-in-out sm:p-8",
   {
     variants: {
       side: {

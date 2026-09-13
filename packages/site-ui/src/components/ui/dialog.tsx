@@ -33,7 +33,7 @@ export function DialogContent({ className, children, showClose = true, overlayCl
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "fixed left-1/2 z-50 grid w-[min(calc(100vw-32px),560px)] -translate-x-1/2 gap-4 rounded-[var(--radius-lg,12px)] border border-[var(--card-border,var(--border))] bg-white p-6 shadow-[var(--shadow-dialog)] outline-none md:p-8",
+          "fixed left-1/2 z-50 grid w-[min(calc(100vw-32px),560px)] -translate-x-1/2 gap-4 rounded-[var(--radius-lg,12px)] border border-[var(--card-border,var(--border))] bg-[var(--surface-card)] p-6 shadow-[var(--shadow-dialog)] outline-none md:p-8",
           placement === "center" && "top-1/2 -translate-y-1/2",
           placement === "bottom-mobile" && "bottom-2 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2",
           className,

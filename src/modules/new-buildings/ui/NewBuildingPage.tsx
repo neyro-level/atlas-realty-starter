@@ -1,5 +1,5 @@
 import { JsonLd } from "@/shared/ui/JsonLd";
-import { NewBuildingDetailPageView } from "@starter/site-ui";
+import { NewBuildingDetailPageView } from "./NewBuildingDetailPageView";
 import { Fragment } from "react";
 import { NewBuildingMobileConversionBar } from "@/components/marketing/NewBuildingMobileConversionBar";
 import { resolveNewBuildingMedia, type ResolvedNewBuildingMedia } from "../format";

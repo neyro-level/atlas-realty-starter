@@ -16,7 +16,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
   const titleId = `${id}-title`;
 
   return (
-    <section id={id} className="bg-white" aria-labelledby={titleId}>
+    <section id={id} className="bg-[var(--surface-card)]" aria-labelledby={titleId}>
       <div className="mx-auto max-w-site-frame px-5 py-18 md:py-22 lg:py-26">
         <div className="rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] p-5 md:p-8 lg:p-10">
           <div className="mx-auto mb-10 grid max-w-205 gap-5 text-center md:mb-12 lg:mb-14">
@@ -33,7 +33,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
             ) : null}
           </div>
 
-          <div className="grid overflow-hidden rounded-lg border border-[var(--border)] bg-white lg:grid-cols-3">
+          <div className="grid overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--surface-card)] lg:grid-cols-3">
             {steps.map((step, index) => {
               const number = step.number ?? String(index + 1).padStart(2, "0");
               const isLast = index === steps.length - 1;

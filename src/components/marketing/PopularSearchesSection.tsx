@@ -68,7 +68,7 @@ export const popularSearchGroups: PopularSearchGroup[] = [
 
 export function PopularSearchesSection() {
   return (
-    <section id="section-popular-searches" className="bg-white" aria-labelledby="section-popular-searches-title">
+    <section id="section-popular-searches" className="bg-[var(--surface-card)]" aria-labelledby="section-popular-searches-title">
       <div className="mx-auto max-w-site-frame px-5 pb-16 md:pb-20 lg:pb-24">
         <div className="border-t border-[var(--border)] pt-10 md:pt-12 lg:pt-14">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">

@@ -56,7 +56,7 @@ export function LawyerServicesGallery() {
               setActiveIndex(index);
               setIsPaused(true);
             }}
-            className={`size-2 rounded-full transition ${index === activeIndex ? "bg-white" : "bg-white/45 hover:bg-white/70"}`}
+            className={`size-2 rounded-full transition ${index === activeIndex ? "bg-[var(--surface-card)]" : "bg-[var(--surface-card)]/45 hover:bg-[var(--surface-card)]/70"}`}
             aria-label={`Показать фотографию ${index + 1}`}
             aria-current={index === activeIndex ? "true" : undefined}
           />
@@ -65,7 +65,7 @@ export function LawyerServicesGallery() {
           type="button"
           onClick={() => setIsPaused((current) => !current)}
           aria-pressed={isPaused}
-          className="ml-1 rounded-full border border-white/40 px-2.5 py-1 text-caption font-semibold text-white transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="ml-1 rounded-full border border-white/40 px-2.5 py-1 text-caption font-semibold text-white transition hover:bg-[var(--surface-card)]/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
         >
           {isPaused ? "Продолжить" : "Пауза"}
         </Button>
