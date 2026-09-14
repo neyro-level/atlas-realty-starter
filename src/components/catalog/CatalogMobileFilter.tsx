@@ -27,7 +27,7 @@ type Props = {
   query: CatalogQuery;
   catalog: CatalogSnapshot;
   sectionFilter: string;
-  mode?: "default" | "new-buildings";
+  mode?: "default" | "main-catalog" | "new-buildings";
   complexFilterIndex?: readonly ComplexFilterIndexItem[];
 };
 

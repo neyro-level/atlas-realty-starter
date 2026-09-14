@@ -97,6 +97,28 @@ test('mobile menu and filters preserve focus-safe overlays', async ({ page }, te
   await expect(page.getByRole('button', { name: 'Открыть меню' })).toBeFocused()
 })
 
+test('main catalog mobile conversion flow stays usable', async ({ page }, testInfo) => {
+  test.skip(!['390', '768'].includes(testInfo.project.name), 'Mobile and tablet state')
+  await page.goto('/nedvizhimost', { waitUntil: 'domcontentloaded' })
+  await settlePage(page)
+
+  await expect(page.getByRole('heading', { name: 'Популярные категории' })).toBeVisible()
+  await expect(page.getByRole('link', { name: /Квартиры:/ })).toBeVisible()
+
+  const filterButton = page.getByRole('button', { name: 'Фильтры и сортировка' })
+  await filterButton.click()
+  await expect(page.getByRole('dialog').getByText('Фильтры и сортировка')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(filterButton).toBeFocused()
+
+  await page.evaluate(() => window.scrollTo(0, 1_200))
+  await page.waitForTimeout(400)
+  const sticky = page.getByRole('complementary', { name: 'Быстрый подбор недвижимости' })
+  await expect(sticky).toBeVisible()
+  await sticky.getByRole('button', { name: 'Подобрать варианты' }).click()
+  await expect(page.getByRole('dialog', { name: /Подберём недвижимость/ })).toBeVisible()
+})
+
 test('catalog map has a stable interactive or fallback state', async ({ page }) => {
   await page.goto('/novostroyki?view=map', { waitUntil: 'domcontentloaded' })
   await settlePage(page)

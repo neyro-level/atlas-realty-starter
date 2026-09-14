@@ -53,7 +53,7 @@ type Props = {
   description?: string;
   emptyMessage?: string;
   servicePromo?: "mortgage" | "legal";
-  mode?: "default" | "new-buildings";
+  mode?: "default" | "main-catalog" | "new-buildings";
   defaultView?: CatalogView;
 };
 

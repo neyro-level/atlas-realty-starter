@@ -1,5 +1,6 @@
 import { Button } from '../../components/ui/button'
 import {
+  ArrowRight,
   Building2,
   ChevronLeft,
   ChevronRight,
@@ -153,7 +154,7 @@ export function PropertyCardGridLayout({
       </div>
 
       <div className={isList ? 'p-4 md:p-5' : 'pb-3 pt-3 md:pb-0 md:pt-2.5'}>
-        <div className="grid grid-cols-[minmax(0,1fr)_40px] gap-x-2 gap-y-1.5 lg:block">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1.5 lg:block">
           <div
             data-catalog-price-row
             className="flex min-w-0 items-center justify-between gap-2 pr-1 lg:pr-0"
@@ -163,30 +164,11 @@ export function PropertyCardGridLayout({
             </p>
             {showExclusiveBadge ? <ExclusiveBadge /> : null}
           </div>
-          <div
-            className="relative z-20 row-span-3 flex w-10 shrink-0 flex-col items-center gap-1.75 self-start justify-start lg:hidden"
-            onClick={stop}
-          >
-            <div className="flex w-10 flex-col items-center gap-1.75">
-              <a
-                href={phoneHref}
-                aria-label={`Позвонить: ${phone}`}
-                data-analytics-context="catalog_property_card_call"
-                data-analytics-item={listing.slug}
-                className="inline-flex size-10 items-center justify-center rounded-lg bg-[var(--surface-card-soft)] text-[var(--text-secondary)] transition hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
-              >
-                <Phone className="size-[18.7px]" strokeWidth={1.85} aria-hidden />
-              </a>
-              <Button
-                variant="plain"
-                type="button"
-                onClick={openPropertyChat}
-                aria-label="Открыть чат"
-                className="inline-flex items-center justify-center rounded-lg bg-[var(--surface-card-soft)] text-[var(--text-secondary)] transition hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
-              >
-                <MessageCircle className="" strokeWidth={1.85} aria-hidden />
-              </Button>
-            </div>
+          <div className="pointer-events-none col-start-2 row-start-3 flex shrink-0 self-end justify-end pb-0.5 lg:hidden">
+            <span className="inline-flex min-h-8 items-center gap-1 text-caption font-extrabold text-[var(--accent)]">
+              Подробнее
+              <ArrowRight className="size-3.5" strokeWidth={1.9} aria-hidden />
+            </span>
           </div>
           {!isNewBuildingCard && !isXmlCatalogCard ? (
             <div
@@ -209,10 +191,10 @@ export function PropertyCardGridLayout({
               })}
             </div>
           ) : null}
-          <h2 className="line-clamp-2 rounded-md text-card-compact font-extrabold leading-heading tracking-compact text-[var(--text-primary)] transition-colors group-active:text-[var(--accent)] md:text-card-compact-medium md:leading-card-compact-rem lg:mt-2 lg:text-card-compact-large lg:leading-step-body lg:group-hover:text-[var(--accent)]">
+          <h2 className="col-start-1 row-start-2 line-clamp-2 rounded-md text-card-compact font-extrabold leading-heading tracking-compact text-[var(--text-primary)] underline decoration-[var(--accent-border)] decoration-1 underline-offset-3 transition-colors group-active:text-[var(--accent)] md:text-card-compact-medium md:leading-card-compact-rem lg:mt-2 lg:text-card-compact-large lg:leading-step-body lg:no-underline lg:group-hover:text-[var(--accent)]">
             {title}
           </h2>
-          <div className="text-caption-dense leading-card-dense-rem tracking-copy text-[var(--text-muted)] md:text-caption md:leading-card-relaxed-rem lg:mt-2 lg:text-label lg:leading-step-body">
+          <div className="col-start-1 row-start-3 text-caption-dense leading-card-dense-rem tracking-copy text-[var(--text-muted)] md:text-caption md:leading-card-relaxed-rem lg:mt-2 lg:text-label lg:leading-step-body">
             <p className="flex min-w-0 items-center gap-1 font-semibold text-[var(--text-secondary)] md:gap-1.5">
               <MapPin className="size-3 shrink-0 text-[var(--accent)] md:size-3.5" aria-hidden />
               <AddressLine

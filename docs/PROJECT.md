@@ -150,6 +150,24 @@ The external starter audit and the local UI Core v5 audit are resolved through f
 - [x] Restore a complete Payload-backed local smoke with consistent media, then verify representative desktop/mobile routes before release.
 - [x] Run final review/gates, merge every epic, release one exact `main` artifact, perform live smoke and mirror the same SHA to GitHub.
 
+## Active mobile conversion program — 2026-09-14
+
+The verified mobile and tablet catalog patterns from the Bastion implementation are being adapted to this Payload-owned starter without copying tenant claims, global typography or legacy data access. Each epic is delivered through a separate `work/**` branch and Pull Request; production remains a separate owner decision.
+
+### Epic 14 — mobile catalog conversion
+
+- [x] Add a compact main-catalog hero and tenant-owned quick categories for apartments, houses, land and new buildings.
+- [x] Collapse the main mobile filter into one accessible filter-and-sort sheet while retaining category-page behavior.
+- [x] Replace duplicated mobile card contact icons with a clear full-card details affordance.
+- [x] Add mobile purchase benefits and a contextual bottom selection action without unverified promotional claims.
+
+### Epic 15 — mobile property detail conversion
+
+- [ ] Put price and essential facts directly after the gallery on mobile and tablet.
+- [ ] Move detailed characteristics before the description while preserving desktop order.
+- [ ] Hide desktop-only seller, building/district and viewing blocks below `lg`.
+- [ ] Add a property-scoped consultation action with full object context and focus-safe modal behavior.
+
 ### Production-readiness checklist
 
 - [ ] Tenant config contains approved brand, city grammar, domain, contacts, legal operator, map center and lead channels.

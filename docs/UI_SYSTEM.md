@@ -36,6 +36,8 @@ The new-buildings domain in `packages/site-ui` contains the catalog, detail and 
 
 Catalog, map, property-card and property-detail views are neutral modules of the internal package. Their contracts are presentation DTOs; application adapters remain responsible for translating `SiteEngine` DTOs. Catalog, property, session-collection and residential-complex views use semantic tokens and do not import `home.css` or Payload documents.
 
+On mobile and tablet, the main `/nedvizhimost` catalog uses a compact hero, tenant-owned quick-category copy, one collapsed filter-and-sort entry and a contextual bottom selection action. Grid cards keep their full-card link and expose a visible `Подробнее` affordance instead of duplicating phone and chat actions inside every card. Category pages retain their existing filter composition. Desktop layout and interactions remain unchanged.
+
 `packages/site-ui/src/lib/realty-format.ts` is the single presentation formatter for ruble prices, compact prices, areas, floor labels and Russian count forms. Shared and application views use this module instead of creating local `Intl` or pluralization implementations. Server DTO adapters remain independent from the UI package.
 
 New UI follows `reuse -> variant -> create`. Application components do not import Radix directly and do not recreate native controls when an admitted primitive or semantic variant exists.

@@ -9,6 +9,8 @@ export type CatalogHeroViewProps = {
   /** `stack` (default) — строки всегда; `inline` — на lg+ одна строка (для длинных H1 вроде /sotrudniki). */
   titleLinesDesktop?: "stack" | "inline";
   description?: string;
+  /** Короткое описание только для mobile/tablet, когда desktop-текст должен остаться прежним. */
+  mobileDescription?: string;
   descriptionLines?: string[];
   /** `lg+` (default) — описание только от desktop; `always` — и на mobile/tablet (короткие тексты вроде /sotrudniki). */
   descriptionVisibility?: "lg+" | "always";
@@ -22,6 +24,8 @@ export type CatalogHeroViewProps = {
   expandedDesktop?: boolean;
   /** Чуть поднять текстовый блок от нижнего края hero. */
   elevateContent?: boolean;
+  /** Использовать более компактный семантический размер H1 до desktop. */
+  compactMobileTitle?: boolean;
   imageRenderer: SiteImageRenderer;
   unoptimized?: boolean;
 };
@@ -33,6 +37,7 @@ export function CatalogHeroView({
   titleSize = "auto",
   titleLinesDesktop = "stack",
   description,
+  mobileDescription,
   descriptionLines,
   descriptionVisibility = "lg+",
   action,
@@ -42,6 +47,7 @@ export function CatalogHeroView({
   focusImageBottomDesktop = false,
   expandedDesktop = false,
   elevateContent = false,
+  compactMobileTitle = false,
   imageRenderer: ImageRenderer,
   unoptimized = false,
 }: CatalogHeroViewProps) {
@@ -53,15 +59,16 @@ export function CatalogHeroView({
   const isLongTitle = hasControlledLines || title.length > 48;
   const descriptionVisibleAlways = descriptionVisibility === "always";
   const actionVisibleAlways = actionVisibility === "always";
+  const mobileTitleClassName = compactMobileTitle ? 'text-section-title lg:text-page-title' : 'text-page-title'
   const titleClassName = isNewBuildingHero
     ? 'text-page-title font-extrabold leading-page-title text-white'
     : titleSize === 'standard'
-      ? 'text-page-title font-extrabold leading-page-title text-white'
+      ? `${mobileTitleClassName} font-extrabold leading-page-title text-white`
       : isLongTitle
-        ? `text-page-title font-extrabold leading-page-title text-white md:max-w-245${
+        ? `${mobileTitleClassName} font-extrabold leading-page-title text-white md:max-w-245${
             collapseTitleLinesOnDesktop ? ' lg:max-w-none lg:whitespace-nowrap' : ''
           }`
-        : 'text-page-title font-extrabold leading-page-title text-white lg:whitespace-nowrap'
+        : `${mobileTitleClassName} font-extrabold leading-page-title text-white lg:whitespace-nowrap`
   const contentClassName = hasControlledLines ? "max-w-245" : "max-w-195";
   const descriptionMaxWidth = hasControlledLines ? "max-w-245" : "max-w-190";
   const descriptionClassName = isNewBuildingHero
@@ -113,6 +120,11 @@ export function CatalogHeroView({
                     </span>
                   ))
                 : protectShortEnding(description ?? "")}
+            </p>
+          ) : null}
+          {mobileDescription ? (
+            <p className="mt-3 max-w-155 text-body font-medium leading-step-copy text-white/84 [text-wrap:pretty] lg:hidden">
+              {mobileDescription}
             </p>
           ) : null}
           {action ? (

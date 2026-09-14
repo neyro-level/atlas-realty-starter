@@ -1,11 +1,11 @@
 version: 1
-program: starter-remediation-2026-09-14
-source_of_truth: docs/PROJECT.md#active-remediation-program--2026-09-14
+program: mobile-catalog-property-conversion-2026-09-14
+source_of_truth: docs/PROJECT.md#active-mobile-conversion-program--2026-09-14
 delivery_profile: CRITICAL
 target_branch: main
-current_wave: completed
-current_epic: null
-next_step: maintenance-by-owner-priority
+current_wave: mobile-catalog
+current_epic: 14
+next_step: verify-and-deliver-epic-14
 epics:
   - id: 9
     branch: work/epic-09-tenant-residue
@@ -42,3 +42,14 @@ epics:
     pr: 80
     merge_sha: d76f05355f732478f53152da53edba9bdfade6e4
     gate_run: 107
+  - id: 14
+    branch: work/epic-14-mobile-catalog-conversion
+    status: ready_for_review
+    depends_on: [13]
+    pr: 82
+    gate: STANDARD
+  - id: 15
+    branch: work/epic-15-mobile-property-conversion
+    status: planned
+    depends_on: [14]
+    gate: STANDARD

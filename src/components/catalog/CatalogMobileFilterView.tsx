@@ -3,7 +3,7 @@
 import { Button, Checkbox, Input, Select, Sheet, SheetContent, SheetHeader, SheetTitle } from "@starter/site-ui/primitives";
 import { ArrowUpDown, Check, ChevronDown, Search, SlidersHorizontal } from "lucide-react";
 import type { CatalogFacetsDto } from "@starter/site-ui/contracts";
-import type { Dispatch, RefObject, SetStateAction } from "react";
+import { useRef, type Dispatch, type RefObject, type SetStateAction } from "react";
 
 export type MobileTypeId = "flat" | "new_building" | "house" | "land" | "commercial" | "construction";
 export type MobileRoomId = "studio" | "1" | "2" | "3" | "4plus";
@@ -26,7 +26,7 @@ const SORT_OPTIONS = [
 ] as const;
 
 export function CatalogMobileFilterView({ mode = "default", draft, setDraft, facets, typeSummary, sortLabel, sortOpen, setSortOpen, sortRef, advancedOpen, setAdvancedOpen, filtersSheetOpen, setFiltersSheetOpen, typeOpen, setTypeOpen, onToggleType, onToggleRoom, onClear, onApply, applyLabel }: {
-  mode?: "default" | "new-buildings";
+  mode?: "default" | "main-catalog" | "new-buildings";
   draft: MobileFilterDraftViewDto;
   setDraft: Dispatch<SetStateAction<MobileFilterDraftViewDto>>;
   facets: CatalogFacetsDto;
@@ -47,12 +47,19 @@ export function CatalogMobileFilterView({ mode = "default", draft, setDraft, fac
   onApply: () => void;
   applyLabel: string;
 }) {
+  const filterTriggerRef = useRef<HTMLButtonElement>(null);
+  function handleFiltersSheetOpenChange(open: boolean) {
+    setFiltersSheetOpen(open);
+    if (!open) requestAnimationFrame(() => filterTriggerRef.current?.focus());
+  }
+
   if (mode === "new-buildings") {
     return (
       <div className="mt-4 grid gap-2.5 lg:hidden" data-new-building-mobile-filter>
         <SearchField id="new-building-mobile-search" draft={draft} setDraft={setDraft} />
         <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] gap-2">
           <Button variant="plain"
+            ref={filterTriggerRef}
             type="button"
             onClick={() => setFiltersSheetOpen(true)}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-card)] px-3 text-support font-semibold text-[var(--text-primary)]"
@@ -62,7 +69,7 @@ export function CatalogMobileFilterView({ mode = "default", draft, setDraft, fac
           </Button>
           <ApplyButton label={applyLabel} onClick={onApply} />
         </div>
-        <Sheet open={filtersSheetOpen} onOpenChange={setFiltersSheetOpen}>
+        <Sheet open={filtersSheetOpen} onOpenChange={handleFiltersSheetOpenChange}>
           <SheetContent side="bottom" className="inset-x-0 bottom-0 max-h-[var(--viewport-dialog-max-height)] overflow-y-auto rounded-t-2xl border-0 bg-[var(--surface-card)] p-4 pb-[var(--spacing-safe-footer)] shadow-[var(--catalog-mobile-filter-shadow-drawer)] lg:hidden" showClose>
             <SheetHeader className="mb-4"><SheetTitle className="text-body-compact font-semibold">Фильтры новостроек</SheetTitle></SheetHeader>
             <div className="grid gap-3">
@@ -87,23 +94,48 @@ export function CatalogMobileFilterView({ mode = "default", draft, setDraft, fac
   }
 
   const fields = (showAdvancedAlways: boolean) => <MobileFilterFields searchId={showAdvancedAlways ? "catalog-sheet-search" : "catalog-mobile-search"} draft={draft} setDraft={setDraft} facets={facets} typeSummary={typeSummary} sortLabel={sortLabel} sortOpen={sortOpen} setSortOpen={setSortOpen} sortRef={sortRef} advancedOpen={advancedOpen} setAdvancedOpen={setAdvancedOpen} showAdvancedAlways={showAdvancedAlways} onOpenType={() => setTypeOpen(true)} onToggleRoom={onToggleRoom} onClear={onClear} />;
+  const typeSheet = <CatalogTypeSheet open={typeOpen} setOpen={setTypeOpen} draft={draft} onToggleType={onToggleType} />;
+
+  if (mode === "main-catalog") {
+    return <div className="mt-4 grid gap-2.5 lg:hidden" data-main-catalog-mobile-filter>
+      <div className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] gap-2">
+        <Button ref={filterTriggerRef} variant="plain" type="button" onClick={() => setFiltersSheetOpen(true)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[var(--surface-dark)] bg-[var(--surface-card)] px-3 text-support font-semibold text-[var(--text-primary)]">
+          <SlidersHorizontal aria-hidden />
+          Фильтры и сортировка
+        </Button>
+        <ApplyButton label={applyLabel} onClick={onApply} />
+      </div>
+      <Sheet open={filtersSheetOpen} onOpenChange={handleFiltersSheetOpenChange}>
+        <SheetContent side="bottom" className="inset-x-0 bottom-0 max-h-[var(--viewport-dialog-max-height)] overflow-y-auto rounded-t-2xl border-0 bg-[var(--surface-card)] p-4 pb-[var(--spacing-safe-footer)] shadow-[var(--catalog-mobile-filter-shadow-drawer)] lg:hidden" showClose>
+          <SheetHeader className="mb-3"><SheetTitle className="text-body-compact font-semibold">Фильтры и сортировка</SheetTitle></SheetHeader>
+          <div className="grid gap-2.5">{fields(true)}<ApplyButton label={applyLabel} onClick={onApply} /></div>
+        </SheetContent>
+      </Sheet>
+      {typeSheet}
+    </div>;
+  }
+
   return <div className="mt-4 grid gap-2.5 lg:hidden">
     {fields(false)}
     <ApplyButton label={applyLabel} onClick={onApply} />
-    <Sheet open={filtersSheetOpen} onOpenChange={setFiltersSheetOpen}>
+    <Sheet open={filtersSheetOpen} onOpenChange={handleFiltersSheetOpenChange}>
       <SheetContent side="bottom" className="inset-x-0 bottom-0 max-h-[var(--viewport-dialog-max-height)] overflow-y-auto rounded-t-2xl border-0 bg-[var(--surface-card)] p-4 pb-[var(--spacing-safe-footer)] shadow-[var(--catalog-mobile-filter-shadow-drawer)] lg:hidden" showClose>
         <SheetHeader className="mb-3"><SheetTitle className="text-body-compact font-semibold">Фильтры</SheetTitle></SheetHeader>
         <div className="grid gap-2.5">{fields(true)}<ApplyButton label={applyLabel} onClick={onApply} /></div>
       </SheetContent>
     </Sheet>
-    <Sheet open={typeOpen} onOpenChange={setTypeOpen}>
-      <SheetContent side="bottom" className="inset-x-0 bottom-0 max-h-[var(--viewport-dialog-max-height)] overflow-y-auto rounded-t-2xl border-0 bg-[var(--surface-card)] p-4 pb-[var(--spacing-safe-footer)] shadow-[var(--catalog-mobile-filter-shadow-drawer)] lg:hidden" showClose>
-        <SheetHeader className="mb-3"><SheetTitle className="text-body-compact font-semibold">Тип недвижимости</SheetTitle></SheetHeader>
-        <ul className="grid gap-0.5">{MOBILE_TYPE_VIEW_OPTIONS.map((option) => { const checked = draft.types.includes(option.id); return <li key={option.id}><Button variant="plain" type="button" onClick={() => onToggleType(option.id)} className="flex min-h-11 w-full items-center justify-between gap-3 rounded-lg px-2 text-left text-support font-medium text-[var(--text-primary)]"><span>{option.label}</span><span className={`inline-flex size-5 items-center justify-center rounded border ${checked ? "border-[var(--accent)] bg-[var(--accent)] text-white" : "border-[var(--input)] bg-[var(--surface-card)]"}`}>{checked ? <Check className="" aria-hidden /> : null}</span></Button></li>; })}</ul>
-        <Button variant="plain" type="button" onClick={() => setTypeOpen(false)} className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[var(--surface-dark)] text-support font-semibold text-white">Готово</Button>
-      </SheetContent>
-    </Sheet>
+    {typeSheet}
   </div>;
+}
+
+function CatalogTypeSheet({ open, setOpen, draft, onToggleType }: { open: boolean; setOpen: (open: boolean) => void; draft: MobileFilterDraftViewDto; onToggleType: (id: MobileTypeId) => void }) {
+  return <Sheet open={open} onOpenChange={setOpen}>
+    <SheetContent side="bottom" className="inset-x-0 bottom-0 max-h-[var(--viewport-dialog-max-height)] overflow-y-auto rounded-t-2xl border-0 bg-[var(--surface-card)] p-4 pb-[var(--spacing-safe-footer)] shadow-[var(--catalog-mobile-filter-shadow-drawer)] lg:hidden" showClose>
+      <SheetHeader className="mb-3"><SheetTitle className="text-body-compact font-semibold">Тип недвижимости</SheetTitle></SheetHeader>
+      <ul className="grid gap-0.5">{MOBILE_TYPE_VIEW_OPTIONS.map((option) => { const checked = draft.types.includes(option.id); return <li key={option.id}><Button variant="plain" type="button" onClick={() => onToggleType(option.id)} className="flex min-h-11 w-full items-center justify-between gap-3 rounded-lg px-2 text-left text-support font-medium text-[var(--text-primary)]"><span>{option.label}</span><span className={`inline-flex size-5 items-center justify-center rounded border ${checked ? "border-[var(--accent)] bg-[var(--accent)] text-white" : "border-[var(--input)] bg-[var(--surface-card)]"}`}>{checked ? <Check aria-hidden /> : null}</span></Button></li>; })}</ul>
+      <Button variant="plain" type="button" onClick={() => setOpen(false)} className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[var(--surface-dark)] text-support font-semibold text-white">Готово</Button>
+    </SheetContent>
+  </Sheet>;
 }
 
 function SearchField({ id, draft, setDraft }: { id: string; draft: MobileFilterDraftViewDto; setDraft: Dispatch<SetStateAction<MobileFilterDraftViewDto>> }) {

@@ -41,6 +41,11 @@ export {
   type CatalogViewOptionDto,
 } from './views/catalog/CatalogControlsView'
 export { CatalogHeroView, type CatalogHeroViewProps } from './views/catalog/CatalogHeroView'
+export {
+  CatalogMobileFeatureGridView,
+  type CatalogMobileFeatureIcon,
+  type CatalogMobileFeatureItem,
+} from './views/catalog/CatalogMobileFeatureGridView'
 export { CitySwitcherView } from './views/site-shell/CitySwitcherView'
 export { CookieNoticeView } from './views/site-shell/CookieNoticeView'
 export { DesktopSiteNavView } from './views/site-shell/DesktopSiteNavView'

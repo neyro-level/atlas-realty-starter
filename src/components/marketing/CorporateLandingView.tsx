@@ -9,6 +9,7 @@ type Props = {
   page: CorporateLandingPageDto;
   breadcrumbs: ReactNode;
   catalogHero: ReactNode;
+  afterHero: ReactNode;
   primaryAction: ReactNode;
   bodyBeforeRelated: ReactNode;
   secondaryBreadcrumbs: ReactNode;
@@ -23,7 +24,7 @@ type Props = {
 const ICONS = { building: Building2, calculation: Calculator, protection: ShieldCheck } as const;
 const DEFAULT_ORDER: CorporateHeroIconKeyDto[] = ["building", "calculation", "protection"];
 
-export function CorporateLandingView({ page, breadcrumbs, catalogHero, primaryAction, bodyBeforeRelated, secondaryBreadcrumbs, bodyAfterRelated, showcase, afterShowcase, footerContent, linkRenderer, imageRenderer: ImageRenderer }: Props) {
+export function CorporateLandingView({ page, breadcrumbs, catalogHero, afterHero, primaryAction, bodyBeforeRelated, secondaryBreadcrumbs, bodyAfterRelated, showcase, afterShowcase, footerContent, linkRenderer, imageRenderer: ImageRenderer }: Props) {
   return (
     <main className="min-h-screen bg-[var(--surface-card)] text-[var(--text-primary)]">
       {page.hasSecondaryCatalogIntro ? null : (
@@ -38,6 +39,7 @@ export function CorporateLandingView({ page, breadcrumbs, catalogHero, primaryAc
           </div>
         )}</div></section>
       )}
+      {afterHero}
       {bodyBeforeRelated}
       <CorporateRelatedServicesView links={page.relatedServices} linkRenderer={linkRenderer} />
       <CorporateRelatedArticlesView articles={page.relatedArticles} linkRenderer={linkRenderer} />
