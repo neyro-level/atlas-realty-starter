@@ -159,6 +159,10 @@ export {
 } from './views/corporate/CareersFinalCtaView'
 export { HtmlSitemapView } from './views/shared/HtmlSitemapView'
 export { HtmlSitemapListingView } from './views/shared/HtmlSitemapListingView'
+export {
+  MobileStickyConversionView,
+  type MobileStickyConversionViewProps,
+} from './views/shared/MobileStickyConversionView'
 export { CompareTableView } from './views/catalog/CompareTableView'
 export { SharedSelectionView } from './views/catalog/SharedSelectionView'
 export { SiteFooterView } from './views/site-shell/SiteFooterView'

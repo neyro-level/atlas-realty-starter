@@ -6,26 +6,26 @@ export function PropertyDetailPageView({
   breadcrumbs,
   gallery,
   summary,
-  inlineSidebar,
   description,
   details,
   building,
   viewing,
   related,
   desktopSidebar,
+  mobileConversion,
 }: {
   structuredData?: ReactNode;
   mobileTopBar: ReactNode;
   breadcrumbs: ReactNode;
   gallery: ReactNode;
   summary: ReactNode;
-  inlineSidebar: ReactNode;
   description?: ReactNode;
   details: ReactNode;
   building: ReactNode;
   viewing: ReactNode;
   related?: ReactNode;
   desktopSidebar: ReactNode;
+  mobileConversion: ReactNode;
 }) {
   return (
     <main className="min-h-screen overflow-clip bg-[var(--surface-card-soft)] text-[var(--text-primary)]">
@@ -37,16 +37,16 @@ export function PropertyDetailPageView({
           <div className="grid min-w-0 gap-4">
             <div>{gallery}</div>
             {summary}
-            {inlineSidebar}
-            {description}
-            {details}
-            {building}
-            {viewing}
-            {related}
+            <div className="order-4 lg:order-none">{description}</div>
+            <div className="order-3 lg:order-none">{details}</div>
+            <div className="hidden lg:block">{building}</div>
+            <div className="hidden lg:block">{viewing}</div>
+            <div className="order-5 lg:order-none">{related}</div>
           </div>
           {desktopSidebar}
         </section>
       </div>
+      {mobileConversion}
     </main>
   );
 }

@@ -3,9 +3,9 @@ program: mobile-catalog-property-conversion-2026-09-14
 source_of_truth: docs/PROJECT.md#active-mobile-conversion-program--2026-09-14
 delivery_profile: CRITICAL
 target_branch: main
-current_wave: mobile-catalog
-current_epic: 14
-next_step: verify-and-deliver-epic-14
+current_wave: completed
+current_epic: null
+next_step: maintenance-by-owner-priority
 epics:
   - id: 9
     branch: work/epic-09-tenant-residue
@@ -44,12 +44,15 @@ epics:
     gate_run: 107
   - id: 14
     branch: work/epic-14-mobile-catalog-conversion
-    status: ready_for_review
+    status: completed
     depends_on: [13]
     pr: 82
+    merge_sha: 6245d0287e75eb8f9a44db65bcb0cfd8366c473d
+    gate_run: 110
     gate: STANDARD
   - id: 15
     branch: work/epic-15-mobile-property-conversion
-    status: planned
+    status: completed
     depends_on: [14]
+    pr: 83
     gate: STANDARD

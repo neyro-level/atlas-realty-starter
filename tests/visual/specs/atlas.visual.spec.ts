@@ -119,6 +119,39 @@ test('main catalog mobile conversion flow stays usable', async ({ page }, testIn
   await expect(page.getByRole('dialog', { name: /Подберём недвижимость/ })).toBeVisible()
 })
 
+test('property detail keeps responsive order and consultation context', async ({ page }, testInfo) => {
+  await page.goto('/obekty/svetlaya-kvartira-v-centre', { waitUntil: 'domcontentloaded' })
+  await settlePage(page)
+
+  const details = page.locator('#object-details-title')
+  const description = page.locator('#object-description-title')
+  const detailsBox = await details.boundingBox()
+  const descriptionBox = await description.boundingBox()
+  expect(detailsBox).not.toBeNull()
+  expect(descriptionBox).not.toBeNull()
+
+  if (['390', '768'].includes(testInfo.project.name)) {
+    expect(detailsBox!.y).toBeLessThan(descriptionBox!.y)
+    await expect(page.locator('[data-property-mobile-price]')).toBeVisible()
+    await expect(page.locator('#object-building-title')).toBeHidden()
+    await expect(page.locator('#property-viewing-title')).toBeHidden()
+    await expect(page.getByLabel('Стоимость и специалист')).toBeHidden()
+
+    await page.evaluate(() => window.scrollTo(0, 1_000))
+    await page.waitForTimeout(400)
+    const sticky = page.getByRole('complementary', { name: 'Быстрая консультация по объекту' })
+    await expect(sticky).toBeVisible()
+    await sticky.getByRole('button', { name: 'Консультация по объекту' }).click()
+    await expect(page.getByRole('dialog', { name: 'Консультация по объекту' })).toBeVisible()
+  } else {
+    expect(descriptionBox!.y).toBeLessThan(detailsBox!.y)
+    await expect(page.locator('[data-property-mobile-price]')).toBeHidden()
+    await expect(page.locator('#object-building-title')).toBeVisible()
+    await expect(page.locator('#property-viewing-title')).toBeVisible()
+    await expect(page.getByLabel('Стоимость и специалист')).toBeVisible()
+  }
+})
+
 test('catalog map has a stable interactive or fallback state', async ({ page }) => {
   await page.goto('/novostroyki?view=map', { waitUntil: 'domcontentloaded' })
   await settlePage(page)

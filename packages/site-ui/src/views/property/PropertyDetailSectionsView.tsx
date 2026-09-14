@@ -19,12 +19,16 @@ export function PropertyDetailSummaryView({
   address,
   addressHidden = false,
   exclusive = false,
+  price,
+  meterPrice,
   items,
 }: {
   title: string;
   address?: string | null;
   addressHidden?: boolean;
   exclusive?: boolean;
+  price: string;
+  meterPrice?: string | null;
   items: PropertyDetailSummaryItemDto[];
 }) {
   return (
@@ -44,6 +48,16 @@ export function PropertyDetailSummaryView({
             <span>{address}{addressHidden ? <span aria-label="Номер дома скрыт" className="inline-flex select-none align-baseline text-slate-400">…</span> : null}</span>
           </p>
         ) : null}
+        <div className="mt-1 lg:hidden" data-property-mobile-price>
+          <p className="text-price-large font-extrabold leading-flat tabular-nums tracking-compact text-[var(--text-primary)]">
+            {price}
+          </p>
+          {meterPrice ? (
+            <p className="mt-1 text-caption font-semibold leading-step-small text-[var(--text-muted)]">
+              {meterPrice}
+            </p>
+          ) : null}
+        </div>
       </div>
       <div className="grid gap-1.5">
         <p className="text-label font-semibold uppercase tracking-overline-compact text-[var(--text-muted)]">Коротко об объекте</p>

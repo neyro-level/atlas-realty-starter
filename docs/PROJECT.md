@@ -163,10 +163,10 @@ The verified mobile and tablet catalog patterns from the Bastion implementation 
 
 ### Epic 15 — mobile property detail conversion
 
-- [ ] Put price and essential facts directly after the gallery on mobile and tablet.
-- [ ] Move detailed characteristics before the description while preserving desktop order.
-- [ ] Hide desktop-only seller, building/district and viewing blocks below `lg`.
-- [ ] Add a property-scoped consultation action with full object context and focus-safe modal behavior.
+- [x] Put price and essential facts directly after the gallery on mobile and tablet.
+- [x] Move detailed characteristics before the description while preserving desktop order.
+- [x] Hide desktop-only seller, building/district and viewing blocks below `lg`.
+- [x] Add a property-scoped consultation action with full object context and focus-safe modal behavior.
 
 ### Production-readiness checklist
 

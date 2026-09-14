@@ -2,6 +2,7 @@ import type { HouseProjectPreviewDto } from '@starter/site-contracts'
 import { type SiteLinkRendererProps } from "@starter/site-ui/contracts";
 import { HouseProjectPreviewView, PropertyBuildingView, PropertyDescriptionView, PropertyDetailsView, PropertyDetailSummaryView, PropertyRelatedView } from "@starter/site-ui/views";
 import { PropertyDetailPageView } from '@/components/property/PropertyDetailPageView'
+import { PropertyObjectMobileConversionBar } from '@/components/property/PropertyObjectMobileConversionBar'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -209,26 +210,10 @@ export default async function PropertyPage({ params }: Props) {
           address={visibleHeadingAddressParts.visiblePrefix}
           addressHidden={Boolean(visibleHeadingAddressParts.hiddenHousePart)}
           exclusive={listing.isExclusive}
+          price={formatPrice(listing.price)}
+          meterPrice={pricePerMeter}
           items={buildObjectSummarySpecs(listing)}
           title={visibleHeadingTitle}
-        />
-      }
-      inlineSidebar={
-        <PropertyObjectSidebar
-          agentId={listing.agentId}
-          agentName={listing.agentName}
-          agentPhotoUrl={listing.agentPhotoUrl}
-          className="lg:hidden"
-          meterPrice={pricePerMeter}
-          objectAddress={objectLeadAddress}
-          objectCode={listing.objectCode}
-          price={formatPrice(listing.price)}
-          propertyId={listing.id}
-          sessionItem={sessionItem}
-          sourcePage={path}
-          suggestedOffer={suggestedOffer}
-          title={visibleHeadingTitle}
-          variant="inline"
         />
       }
       description={
@@ -274,6 +259,16 @@ export default async function PropertyPage({ params }: Props) {
           sourcePage={path}
           suggestedOffer={suggestedOffer}
           title={visibleHeadingTitle}
+        />
+      }
+      mobileConversion={
+        <PropertyObjectMobileConversionBar
+          propertyId={listing.id}
+          agentId={listing.agentId}
+          propertyTitle={visibleHeadingTitle}
+          propertyAddress={objectLeadAddress}
+          propertyObjectCode={listing.objectCode}
+          propertyPath={path}
         />
       }
     />
