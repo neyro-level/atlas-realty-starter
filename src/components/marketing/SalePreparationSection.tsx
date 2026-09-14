@@ -1,7 +1,8 @@
 "use client";
 
 import Image, { type ImageProps } from "next/image";
-import { SalePreparationView, type SiteImageRendererProps } from "@starter/site-ui";
+import { type SiteImageRendererProps } from "@starter/site-ui/contracts";
+import { SalePreparationView } from "@starter/site-ui/views";
 import { SELL_APARTMENT_MEDIA } from "@/project/site-media";
 
 export function SalePreparationSection() {

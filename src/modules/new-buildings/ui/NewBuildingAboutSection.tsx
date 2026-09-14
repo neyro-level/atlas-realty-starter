@@ -1,4 +1,4 @@
-import { NewBuildingAboutView } from "@starter/site-ui";
+import { NewBuildingAboutView } from "@starter/site-ui/views";
 import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";
 

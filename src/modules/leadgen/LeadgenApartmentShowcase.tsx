@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@starter/site-ui";
+import { Button } from "@starter/site-ui/primitives";
 import Image from "next/image";
 import { Bed, BrickWall, Building2, Paintbrush, PencilRuler } from "lucide-react";
 import { useState, type MouseEvent } from "react";

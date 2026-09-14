@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { HomeCarouselScrollHintView, HomeNewBuildingsView, type SiteLinkRendererProps } from "@starter/site-ui";
+import { type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { HomeCarouselScrollHintView, HomeNewBuildingsView } from "@starter/site-ui/views";
 import { buildSearchParams } from "@/lib/catalog";
 import { CatalogNewBuildingSelectionCard } from "@/components/catalog/CatalogNewBuildingSelectionCard";
 import { CatalogResidentialComplexCard } from "@/components/catalog/CatalogResidentialComplexCard";

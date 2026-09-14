@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CookieNoticeView } from "@starter/site-ui";
+import { CookieNoticeView } from "@starter/site-ui/views";
 import { useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { COOKIE_NOTICE_EVENT, dismissCookieNotice, isCookieNoticeDismissed } from "./client";

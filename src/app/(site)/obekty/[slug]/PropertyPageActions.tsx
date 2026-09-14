@@ -1,6 +1,7 @@
 "use client";
 
-import { PropertyPageActionsView, type SiteImageRendererProps } from "@starter/site-ui";
+import { type SiteImageRendererProps } from "@starter/site-ui/contracts";
+import { PropertyPageActionsView } from "@starter/site-ui/views";
 import Image from "next/image";
 import { useState } from "react";
 import { useSiteContacts } from "@/components/layout/SiteContactsProvider";

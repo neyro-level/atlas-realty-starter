@@ -1,5 +1,6 @@
 import Image, { type ImageProps } from "next/image";
-import { HomeWhyChooseView, type SiteImageRendererProps } from "@starter/site-ui";
+import { type SiteImageRendererProps } from "@starter/site-ui/contracts";
+import { HomeWhyChooseView } from "@starter/site-ui/views";
 import { HOME_DIRECTOR, HOME_DIRECTOR_STATEMENT } from "@/project/home-page";
 
 function HomeImage({ alt, ...props }: SiteImageRendererProps) { return <Image alt={alt} {...props as Omit<ImageProps, "alt">} />; }

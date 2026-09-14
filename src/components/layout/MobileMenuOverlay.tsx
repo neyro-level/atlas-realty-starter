@@ -2,13 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import {
-  MobileMenuView,
-  type SiteCityOptionViewDto,
-  type SiteLinkRendererProps,
-  type SiteMobileMenuActionDto,
-  type SiteNavLinkDto,
-} from "@starter/site-ui";
+import { type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { MobileMenuView, type SiteCityOptionViewDto, type SiteMobileMenuActionDto, type SiteNavLinkDto } from "@starter/site-ui/views";
 import { BrandMark } from "@/components/layout/BrandMark";
 import {
   MOBILE_MENU_PROPERTY_LINKS,

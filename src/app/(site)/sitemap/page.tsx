@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { HtmlSitemapPageDto, SitemapColumnDto, SitemapLinkDto } from "@starter/site-contracts";
-import { HtmlSitemapView, type SiteLinkRendererProps } from "@starter/site-ui";
+import { type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { HtmlSitemapView } from "@starter/site-ui/views";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { journalCategories } from "@/entities/article/journal-config";
 import { catalogPresets } from "@/modules/catalog/presets";

@@ -1,4 +1,4 @@
-import { NewBuildingMobileCommercialView } from "@starter/site-ui";
+import { NewBuildingMobileCommercialView } from "@starter/site-ui/views";
 import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";
 import { RequestCta } from "./RequestCta";

@@ -1,13 +1,6 @@
 import type { HouseProjectPreviewDto } from '@starter/site-contracts'
-import {
-  HouseProjectPreviewView,
-  PropertyBuildingView,
-  PropertyDescriptionView,
-  PropertyDetailsView,
-  PropertyDetailSummaryView,
-  PropertyRelatedView,
-  type SiteLinkRendererProps,
-} from '@starter/site-ui'
+import { type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { HouseProjectPreviewView, PropertyBuildingView, PropertyDescriptionView, PropertyDetailsView, PropertyDetailSummaryView, PropertyRelatedView } from "@starter/site-ui/views";
 import { PropertyDetailPageView } from '@/components/property/PropertyDetailPageView'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'

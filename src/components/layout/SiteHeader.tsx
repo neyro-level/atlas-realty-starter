@@ -3,12 +3,8 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  SiteHeaderView,
-  type SiteCityOptionViewDto,
-  type SiteHeaderNavItemDto,
-  type SiteLinkRendererProps,
-} from "@starter/site-ui";
+import { type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { SiteHeaderView, type SiteCityOptionViewDto, type SiteHeaderNavItemDto } from "@starter/site-ui/views";
 import {
   ALL_REALTY_CATALOG_PATH,
   isCatalogShowcasePath,

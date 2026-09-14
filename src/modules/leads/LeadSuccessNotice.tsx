@@ -1,6 +1,6 @@
 "use client";
 
-import { LeadSuccessNoticeView } from "@starter/site-ui";
+import { LeadSuccessNoticeView } from "@starter/site-ui/views";
 import { useEffect, useRef, useState } from "react";
 import { PUBLIC_LEAD_SUCCESS_EVENT } from "@/modules/analytics";
 

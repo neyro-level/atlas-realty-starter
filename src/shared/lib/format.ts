@@ -1,4 +1,4 @@
-export { formatRublePrice as formatPrice } from "@starter/site-ui";
+export { formatRublePrice as formatPrice } from "@starter/site-ui/primitives";
 
 export function formatDateTime(value: Date | string | null | undefined): string {
   if (!value) return "нет данных";

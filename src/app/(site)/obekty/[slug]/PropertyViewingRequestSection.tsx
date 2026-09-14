@@ -1,7 +1,7 @@
 "use client";
 
 import type { PropertyViewingDateDto } from "@starter/site-contracts";
-import { PropertyViewingRequestView } from "@starter/site-ui";
+import { PropertyViewingRequestView } from "@starter/site-ui/views";
 import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
 import { useState, useTransition } from "react";

@@ -3,7 +3,7 @@ import type { CorporateHeroIconKeyDto, CorporateLandingPageDto } from "@starter/
 import type { ReactNode } from "react";
 import type { SiteImageRenderer, SiteLinkRenderer } from "@starter/site-ui/contracts";
 import { Card } from "@starter/site-ui/primitives";
-import { CorporateRelatedArticlesView, CorporateRelatedServicesView } from "@starter/site-ui";
+import { CorporateRelatedArticlesView, CorporateRelatedServicesView } from "@starter/site-ui/views";
 
 type Props = {
   page: CorporateLandingPageDto;

@@ -16,11 +16,11 @@ describe("UI shell and form contracts", () => {
   });
 
   it("ships request and footer styles with the internal UI entrypoint", () => {
-    const entrypoint = readFileSync("packages/site-ui/src/index.tsx", "utf8");
+    const entrypoint = readFileSync("packages/site-ui/src/views.ts", "utf8");
     const styles = readFileSync("packages/site-ui/src/styles.css", "utf8");
     const common = readFileSync("packages/site-ui/src/styles/shell.css", "utf8");
-    expect(entrypoint).toContain('export { RequestModalView } from "./views/site-shell/RequestModalView"');
-    expect(entrypoint).toContain('export { SiteFooterView } from "./views/site-shell/SiteFooterView"');
+    expect(entrypoint).toContain("RequestModalView");
+    expect(entrypoint).toContain("SiteFooterView");
     expect(styles).toContain('@import "./styles/request-modal.css"');
     expect(styles).toContain('@import "./styles/site-footer.css"');
     expect(common).not.toContain(".request-modal__panel");

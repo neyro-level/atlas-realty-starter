@@ -3,7 +3,7 @@ import type { ContactsPageDto } from "@starter/site-contracts";
 import type { ReactNode } from "react";
 import type { SiteImageRenderer } from "@starter/site-ui/contracts";
 import { Card } from "@starter/site-ui/primitives";
-import { RequestModalButton } from "@starter/site-ui";
+import { RequestModalButton } from "@starter/site-ui/views";
 
 type Props = { page: ContactsPageDto; phoneActions: Record<string, ReactNode>; routeActions: Record<string, ReactNode>; map: ReactNode; imageRenderer: SiteImageRenderer };
 

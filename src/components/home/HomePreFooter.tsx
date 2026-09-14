@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { HomePreFooterView, type SiteLinkRendererProps } from "@starter/site-ui";
+import { type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { HomePreFooterView } from "@starter/site-ui/views";
 import { popularSearchGroups } from "@/components/marketing/PopularSearchesSection";
 
 function HomeLink({ href, children, ariaLabel, ...props }: SiteLinkRendererProps) { return <Link href={href} aria-label={ariaLabel} {...props}>{children}</Link>; }

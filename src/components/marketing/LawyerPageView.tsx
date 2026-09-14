@@ -1,6 +1,6 @@
 import { Building2, Check, DraftingCompass, FileCheck2, Handshake, KeyRound, Landmark, SearchCheck, UserMinus, Workflow, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import { RequestModalButton } from "@starter/site-ui";
+import { RequestModalButton } from "@starter/site-ui/views";
 
 const APPROACH_ITEMS = [
   { title: "Специализация только на недвижимости", description: "Работаем с квартирами, домами, участками и коммерцией. Не ведём уголовные дела, семейные споры и другие направления.", Icon: Building2 },

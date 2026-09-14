@@ -1,4 +1,4 @@
-import { NewBuildingLocationView } from "@starter/site-ui";
+import { NewBuildingLocationView } from "@starter/site-ui/views";
 import { buildYandexCoordinateWidgetURL, buildYandexLocationURL, buildYandexSearchWidgetURL } from "@/core/integrations/maps/navigation";
 import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";

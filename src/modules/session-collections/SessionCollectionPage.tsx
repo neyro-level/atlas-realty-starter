@@ -3,7 +3,8 @@
 import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { CompareTableView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui";
+import { type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { CompareTableView } from "@starter/site-ui/views";
 import { SessionCollectionPageView } from "./SessionCollectionPageView";
 import { buildCollectionGroups, filterItemsByCollectionGroup, type CollectionGroupKey } from "./collection-groups";
 import { FavoriteArticleCard } from "./FavoriteArticleCard";

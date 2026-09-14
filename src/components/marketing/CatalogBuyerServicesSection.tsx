@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { RequestModalTrigger } from "@starter/site-ui";
+import { RequestModalTrigger } from "@starter/site-ui/views";
 
 type CatalogBuyerServicesSectionProps = {
   sourcePage: string;

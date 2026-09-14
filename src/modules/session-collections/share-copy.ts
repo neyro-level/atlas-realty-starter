@@ -1,4 +1,4 @@
-import { formatRussianCount } from "@starter/site-ui";
+import { formatRussianCount } from "@starter/site-ui/primitives";
 import { tenant } from "@/project/tenant.config";
 
 /** Neutral share packaging for `/izbrannoe/s/[token]` (messenger OG + Web Share). */

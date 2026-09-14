@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { EmployeeCardView } from "@starter/site-ui";
+import { EmployeeCardView } from "@starter/site-ui/views";
 import type { ReactNode } from "react";
 import { routes } from "@/project/routes";
 import type { EmployeeListItem } from "../types";

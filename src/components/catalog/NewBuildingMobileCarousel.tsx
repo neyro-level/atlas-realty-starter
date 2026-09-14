@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { NewBuildingMobileCarouselView, type SiteLinkRendererProps } from "@starter/site-ui";
+import { type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { NewBuildingMobileCarouselView } from "@starter/site-ui/views";
 import type { NewBuilding } from "@/modules/new-buildings";
 import { newBuildingHref, newBuildingToListingCard } from "@/modules/new-buildings";
 import { toNewBuildingCardDto } from "@/modules/new-buildings/to-detail-dto";

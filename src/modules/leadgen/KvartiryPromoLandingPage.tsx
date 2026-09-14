@@ -1,5 +1,5 @@
 import Image, { type ImageProps } from "next/image";
-import { type SiteImageRendererProps } from "@starter/site-ui";
+import { type SiteImageRendererProps } from "@starter/site-ui/contracts";
 import { LeadgenPromoLandingView, type LeadgenPromoLandingAdapters } from "./LeadgenPromoLandingView";
 import { LeadgenApartmentShowcase } from "./LeadgenApartmentShowcase";
 import { LeadgenConstructionProjectShowcase } from "./LeadgenConstructionProjectShowcase";

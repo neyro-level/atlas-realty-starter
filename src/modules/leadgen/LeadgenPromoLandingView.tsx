@@ -1,7 +1,7 @@
 import { Banknote, Check, Home, Landmark, ShieldCheck } from "lucide-react";
 import type { ElementType } from "react";
 import type { LeadgenPromoContentDto } from "@starter/site-contracts";
-import type { SiteImageRenderer } from "@starter/site-ui";
+import type { SiteImageRenderer } from "@starter/site-ui/contracts";
 import { BaseSectionPreview, CompactBenefitsSection, LeadgenFinalQuizCta, LeadgenPromoFooter, normalizeBaseSectionPoint, renderHeroTitle, renderTrustIcon } from "@starter/site-ui/views/leadgen/leadgen-promo-sections";
 import "@starter/site-ui/styles/promo.css";
 

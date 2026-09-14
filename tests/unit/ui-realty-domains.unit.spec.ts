@@ -12,11 +12,20 @@ describe("realty UI domain boundaries", () => {
   });
 
   it("exposes catalog, map and property views from the internal entrypoint", () => {
-    const entrypoint = readFileSync("packages/site-ui/src/index.tsx", "utf8");
+    const entrypoint = readFileSync("packages/site-ui/src/views.ts", "utf8");
     for (const item of ["CatalogMapFrameView", "CatalogShowcaseView", "PropertyCardView"]) {
       expect(entrypoint).toContain(item);
     }
     expect(entrypoint).not.toContain("PropertyDetailPageView");
+  });
+
+  it("keeps the compatibility root thin and routes consumers through explicit subpaths", () => {
+    const root = readFileSync("packages/site-ui/src/index.tsx", "utf8");
+    expect(root.trim().split(/\r?\n/)).toEqual([
+      "export * from './contracts'",
+      "export * from './primitives'",
+      "export * from './views'",
+    ]);
   });
 
   it("keeps Payload ownership outside presentation packages", () => {

@@ -1,4 +1,4 @@
-import { NewBuildingMobileWhyAgencyView } from "@starter/site-ui";
+import { NewBuildingMobileWhyAgencyView } from "@starter/site-ui/views";
 import { siteProfile, tenant } from "@/project/tenant.config";
 import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";

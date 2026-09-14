@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { NewBuildingSelectionView } from "@starter/site-ui";
+import { NewBuildingSelectionView } from "@starter/site-ui/views";
 import type { NewBuilding } from "../schema";
 import { toNewBuildingDetailDto } from "../to-detail-dto";
 import { RequestCta } from "./RequestCta";

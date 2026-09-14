@@ -1,5 +1,6 @@
 import Image, { type ImageProps } from "next/image";
-import { SaleNegotiationView, type SiteImageRendererProps } from "@starter/site-ui";
+import { type SiteImageRendererProps } from "@starter/site-ui/contracts";
+import { SaleNegotiationView } from "@starter/site-ui/views";
 import { SELL_APARTMENT_MEDIA } from "@/project/site-media";
 
 export function SaleNegotiationSection() {

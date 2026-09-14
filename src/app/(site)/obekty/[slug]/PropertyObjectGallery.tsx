@@ -1,6 +1,7 @@
 "use client";
 
-import { PropertyGalleryView, type PropertyGalleryViewProps, type SiteImageRendererProps } from "@starter/site-ui";
+import { type SiteImageRendererProps } from "@starter/site-ui/contracts";
+import { PropertyGalleryView, type PropertyGalleryViewProps } from "@starter/site-ui/views";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { shouldOptimizeCatalogImage } from "@/modules/media/image-optimization";

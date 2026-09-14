@@ -1,4 +1,4 @@
-import { Skeleton } from "@starter/site-ui";
+import { Skeleton } from "@starter/site-ui/primitives";
 
 export default function SiteLoading() {
   return (

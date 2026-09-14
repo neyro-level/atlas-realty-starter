@@ -1,6 +1,6 @@
 "use client";
 
-import { NewBuildingStickyConversionView } from "@starter/site-ui";
+import { NewBuildingStickyConversionView } from "@starter/site-ui/views";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { COOKIE_NOTICE_EVENT, isCookieNoticeDismissed } from "@/modules/analytics/client";
 import { tenant } from "@/project/tenant.config";

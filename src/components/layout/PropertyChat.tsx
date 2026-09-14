@@ -1,6 +1,6 @@
 "use client";
 
-import { PropertyChatView } from "@starter/site-ui";
+import { PropertyChatView } from "@starter/site-ui/views";
 import { useEffect, useRef, useState, useTransition, type FormEvent } from "react";
 import { createLeadAction, type CreateLeadActionResult } from "@/modules/leads";
 import { trackEvent } from "@/modules/analytics";

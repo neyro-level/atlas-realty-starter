@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Button } from "@starter/site-ui";
+import { Button } from "@starter/site-ui/primitives";
 import { routes } from "@/project/routes";
 import { tenant } from "@/project/tenant.config";
 

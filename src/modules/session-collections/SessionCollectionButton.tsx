@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@starter/site-ui";
+import { Button } from "@starter/site-ui/primitives";
 
 import { Heart, ListPlus } from "lucide-react";
 import type { MouseEvent } from "react";

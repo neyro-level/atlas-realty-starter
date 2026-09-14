@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Checkbox, Field, FieldError, FieldGroup, FieldLabel, Input } from "@starter/site-ui";
+import { Button, Checkbox, Field, FieldError, FieldGroup, FieldLabel, Input } from "@starter/site-ui/primitives";
 
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";

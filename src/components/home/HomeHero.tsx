@@ -1,6 +1,7 @@
 import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
-import { HomeHeroView, type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui";
+import { type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { HomeHeroView } from "@starter/site-ui/views";
 import type { HomePageDto } from "@starter/site-contracts";
 import { HOME_HERO_BRIEF, HOME_HERO_FEATURED_IMAGE } from "@/project/home-page";
 import { tenant } from "@/project/tenant.config";

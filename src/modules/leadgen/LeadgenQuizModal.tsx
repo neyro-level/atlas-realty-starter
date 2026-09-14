@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Checkbox, Input } from "@starter/site-ui";
+import { Button, Checkbox, Input } from "@starter/site-ui/primitives";
 
 import Image from "next/image";
 import { usePathname } from "next/navigation";

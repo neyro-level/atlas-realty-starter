@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@starter/site-ui";
+import { Button } from "@starter/site-ui/primitives";
 
-import { LegalDocumentModalView } from "@starter/site-ui";
+import { LegalDocumentModalView } from "@starter/site-ui/views";
 import { useEffect, useRef, useState } from "react";
 import { getLegalPage } from "@/project/legal-pages";
 

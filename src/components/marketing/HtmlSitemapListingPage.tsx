@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { HtmlSitemapListingView, type SiteLinkRendererProps } from "@starter/site-ui";
+import { type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { HtmlSitemapListingView } from "@starter/site-ui/views";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import type { SitemapListingKind, SitemapListingPageData } from "@/site-engine/sitemap-page-data";
 import { routes } from "@/project/routes";

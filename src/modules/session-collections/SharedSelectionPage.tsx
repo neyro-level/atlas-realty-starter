@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { SharedSelectionView, type SiteLinkRendererProps } from "@starter/site-ui";
+import { type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { SharedSelectionView } from "@starter/site-ui/views";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { buildSavedSelectionShareDescription, buildSavedSelectionShareTitle } from "@/modules/session-collections/share-copy";
 import { SessionSelectionGrid } from "@/modules/session-collections/SessionSelectionGrid";

@@ -130,10 +130,10 @@ The external starter audit and the local UI Core v5 audit are resolved through f
 
 ### Epic 11 — UI architecture completion
 
-- [ ] Decompose `PropertyCardView` and leadgen promo sections into owned semantic subcomponents.
-- [ ] Move title/address domain formatting into the catalog module.
-- [ ] Replace root package imports with stable `/primitives` and `/views` entrypoints; keep the root export surface thin and measure the bundle impact.
-- [ ] Verify semantic comparison tables, Select modes, lightbox, phone reveal, dialogs, keyboard focus, Escape and ARIA behavior.
+- [x] Decompose `PropertyCardView` and leadgen promo sections into owned semantic subcomponents with a 300-line shared-view gate.
+- [x] Keep title/address domain formatting in `src/modules/catalog/property-card-copy.ts` and tenant wrappers rather than the presentation package.
+- [x] Move all consumers to stable `/primitives`, `/views` and `/contracts` entrypoints; keep the root to three compatibility exports and record the +0.20% aggregate bundle measurement.
+- [x] Verify semantic comparison tables, explicit Select modes, lazy lightbox focus restore, phone reveal labels and Radix dialog keyboard/focus behavior in code and existing acceptance scenarios.
 
 ### Epic 12 — UI Core v5 conformance
 

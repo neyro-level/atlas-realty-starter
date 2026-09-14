@@ -1,11 +1,8 @@
 "use client";
 
 import Image, { type ImageProps } from "next/image";
-import {
-  CatalogMortgageHelpCardView,
-  type CatalogView,
-  type SiteImageRendererProps,
-} from "@starter/site-ui";
+import { type SiteImageRendererProps } from "@starter/site-ui/contracts";
+import { CatalogMortgageHelpCardView, type CatalogView } from "@starter/site-ui/views";
 import { useSiteOverlay } from "@/components/layout/SiteOverlayProvider";
 import { siteProfile } from "@/project/tenant.config";
 

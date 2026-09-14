@@ -1,6 +1,6 @@
 "use client";
 
-import { SiteOverlayProvider as UiSiteOverlayProvider, useSiteOverlay } from "@starter/site-ui";
+import { SiteOverlayProvider as UiSiteOverlayProvider, useSiteOverlay } from "@starter/site-ui/views";
 import { trackEvent } from "@/modules/analytics";
 
 export { useSiteOverlay };

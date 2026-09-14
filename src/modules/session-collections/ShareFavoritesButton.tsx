@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@starter/site-ui";
+import { Button } from "@starter/site-ui/primitives";
 
 import { Copy, Share2 } from "lucide-react";
 import { useMemo, useState } from "react";

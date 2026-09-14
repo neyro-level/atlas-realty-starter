@@ -1,9 +1,6 @@
 import Image, { type ImageProps } from "next/image";
-import {
-  CatalogHeroView,
-  type CatalogHeroViewProps,
-  type SiteImageRendererProps,
-} from "@starter/site-ui";
+import { type SiteImageRendererProps } from "@starter/site-ui/contracts";
+import { CatalogHeroView, type CatalogHeroViewProps } from "@starter/site-ui/views";
 import { IS_DEVELOPMENT } from "@/shared/lib/is-development";
 
 export const CATALOG_HERO_DESCRIPTION =

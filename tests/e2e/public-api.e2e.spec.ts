@@ -84,9 +84,11 @@ test.describe.serial('Headless public API', () => {
   })
 
   test('keeps raw anonymous Payload REST closed', async ({ request }) => {
+    const revalidateSecret = process.env.REVALIDATE_SECRET
+    expect(revalidateSecret).toBeTruthy()
     expect((await request.get('/api/properties')).status()).toBe(403)
     expect((await request.post('/api/internal/revalidate', { data: { tags: ['public:catalog:list'] } })).status()).toBe(401)
-    expect((await request.post('/api/internal/revalidate', { data: { tags: ['public:catalog:list'] }, headers: { 'x-revalidate-secret': 'f36c8091b47a25de6c18f903a74b52ed19c830f6a27b45de' } })).status()).toBe(200)
+    expect((await request.post('/api/internal/revalidate', { data: { tags: ['public:catalog:list'] }, headers: { 'x-revalidate-secret': revalidateSecret! } })).status()).toBe(200)
   })
 
   test('serves legacy aliases as permanent HTTP redirects', async ({ request }) => {

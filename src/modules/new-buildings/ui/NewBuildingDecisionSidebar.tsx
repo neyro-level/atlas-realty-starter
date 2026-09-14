@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { NewBuildingDecisionSidebarView } from "@starter/site-ui";
+import { NewBuildingDecisionSidebarView } from "@starter/site-ui/views";
 import { useState } from "react";
 import { SessionCollectionButton, type SessionListingItem } from "@/modules/session-collections";
 import { resolveNewBuildingMedia } from "../format";

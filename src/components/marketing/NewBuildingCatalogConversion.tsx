@@ -1,5 +1,6 @@
 import Image, { type ImageProps } from "next/image";
-import { NewBuildingCatalogWhyAgencyView, NewBuildingPurchaseProcessView, type SiteImageRendererProps } from "@starter/site-ui";
+import { type SiteImageRendererProps } from "@starter/site-ui/contracts";
+import { NewBuildingCatalogWhyAgencyView, NewBuildingPurchaseProcessView } from "@starter/site-ui/views";
 import { siteProfile } from "@/project/tenant.config";
 
 const BENEFITS = [

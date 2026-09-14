@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@starter/site-ui";
+import { Button } from "@starter/site-ui/primitives";
 
 import { ArrowRight } from "lucide-react";
 import { LeadgenQuizModal } from "@/modules/leadgen/LeadgenQuizModal";

@@ -1,6 +1,6 @@
 "use client";
 
-import { RequestModalView } from "@starter/site-ui";
+import { RequestModalView } from "@starter/site-ui/views";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useEffect, useRef, useState, useTransition, type FormEvent } from "react";

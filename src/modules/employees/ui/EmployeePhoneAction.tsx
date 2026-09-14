@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@starter/site-ui";
+import { Button } from "@starter/site-ui/primitives";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import { useState } from "react";

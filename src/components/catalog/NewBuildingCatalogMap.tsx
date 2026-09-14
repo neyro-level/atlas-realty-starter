@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, CatalogMapFrameView } from "@starter/site-ui";
+import { Button } from "@starter/site-ui/primitives";
+import { CatalogMapFrameView } from "@starter/site-ui/views";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type HTMLAttributes } from "react";
 import { ExternalLink, MapPin } from "lucide-react";

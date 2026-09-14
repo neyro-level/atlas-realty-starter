@@ -1,6 +1,7 @@
 "use client";
 
-import { PropertyMobileTopBarView, type SiteLinkRendererProps } from "@starter/site-ui";
+import { type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { PropertyMobileTopBarView } from "@starter/site-ui/views";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SessionCollectionButton, type SessionListingItem } from "@/modules/session-collections";

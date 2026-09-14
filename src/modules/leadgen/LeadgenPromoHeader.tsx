@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@starter/site-ui";
+import { Button } from "@starter/site-ui/primitives";
 import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Menu, Phone, X } from "lucide-react";

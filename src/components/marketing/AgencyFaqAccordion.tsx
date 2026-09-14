@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@starter/site-ui";
+import { Button } from "@starter/site-ui/primitives";
 import { useId, useState } from "react";
 import { faqItemToPlainAnswer, type AgencyFaqItem } from "@/components/marketing/agency-faq-content";
 

@@ -74,6 +74,7 @@ const businessClaim = /(?:бесплат|гарант|перезвонит\s+в\
 const hardcodedWhiteBackground = /\bbg-white\b/g;
 const buttonBlock = /<(?:Button|RequestModalButton)\b[\s\S]{0,900}?<\/(?:Button|RequestModalButton)>/g;
 const manuallySizedIcon = /<[A-Z][A-Za-z0-9]*\b[^>]*className=["'][^"']*\bsize-/;
+const rootPackageImport = /(?:from\s+|import\s*\(\s*)["']@starter\/site-ui["']/;
 
 for (const file of files) {
   const normalized = file.replaceAll("\\", "/");
@@ -88,6 +89,12 @@ for (const file of files) {
   }
   if (normalized === "packages/site-ui/src/index.tsx" && /export\s+(?:async\s+)?(?:function|const|class)\b/.test(source)) {
     errors.push("site-ui root barrel must contain re-exports only");
+  }
+  if (normalized !== "packages/site-ui/src/index.tsx" && rootPackageImport.test(source)) {
+    errors.push(`site-ui consumer must use an explicit subpath: ${normalized}`);
+  }
+  if (normalized.startsWith("packages/site-ui/src/views/") && source.split(/\r?\n/).length > 300) {
+    errors.push(`shared UI view exceeds 300 lines: ${normalized}`);
   }
   if (normalized.startsWith("src/components/ui/")) errors.push(`duplicate UI primitive outside site-ui package: ${normalized}`);
   if (normalized !== themePath && rawHex.test(source)) errors.push(`raw color outside theme: ${normalized}`);

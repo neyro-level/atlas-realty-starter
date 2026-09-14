@@ -2,12 +2,8 @@
 
 import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
-import {
-  PropertyCardView,
-  type PropertyCardCollectionActionProps,
-  type SiteImageRendererProps,
-  type SiteLinkRendererProps,
-} from "@starter/site-ui";
+import { type SiteImageRendererProps, type SiteLinkRendererProps } from "@starter/site-ui/contracts";
+import { PropertyCardView, type PropertyCardCollectionActionProps } from "@starter/site-ui/views";
 import { buildPropertyCardListTitle, buildPropertyCardTitle, cleanPropertyCardDisplayAddress } from "@/modules/catalog/property-card-copy";
 import { type CatalogView, type ListingCard } from "@/lib/catalog";
 import { useSiteContacts } from "@/components/layout/SiteContactsProvider";
