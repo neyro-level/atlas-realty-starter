@@ -309,9 +309,9 @@ export function LeadgenQuizModal({
 
             .leadgen-quiz-modal .leadgen-quiz-expert-text {
               color: var(--leadgen-quiz-modal-visual-subtle) !important;
-              font-size: 12px !important;
+              font-size: var(--site-type-label) !important;
               font-weight: 400 !important;
-              line-height: 1.5 !important;
+              line-height: var(--site-leading-default) !important;
             }
 
             .leadgen-quiz-modal .leadgen-quiz-option {
@@ -329,7 +329,7 @@ export function LeadgenQuizModal({
 
             .leadgen-quiz-modal .request-modal__input {
               min-height: 56px;
-              font-size: 15px;
+              font-size: var(--site-type-body-compact);
             }
 
             .leadgen-quiz-modal--final .request-modal__header {
@@ -365,8 +365,8 @@ export function LeadgenQuizModal({
 
               .leadgen-quiz-modal .request-modal__title {
                 max-width: 600px;
-                font-size: 14px;
-                line-height: 1.3;
+                font-size: var(--site-type-body);
+                line-height: var(--site-leading-card-default);
               }
 
               .leadgen-quiz-manager-photo {
@@ -469,8 +469,8 @@ export function LeadgenQuizModal({
               }
 
               .leadgen-quiz-modal .request-modal__title {
-                font-size: 24px;
-                line-height: 1.12;
+                font-size: var(--site-type-section-small);
+                line-height: var(--site-leading-heading-tight);
               }
 
               .leadgen-quiz-modal--final .request-modal__header {
@@ -478,16 +478,16 @@ export function LeadgenQuizModal({
               }
 
               .leadgen-quiz-modal--final .request-modal__title {
-                font-size: 23px;
+                font-size: var(--site-type-heading-medium);
               }
 
               .leadgen-quiz-modal .leadgen-quiz-final-title {
-                font-size: 20px;
+                font-size: var(--site-type-heading-small);
               }
 
               .leadgen-quiz-modal .leadgen-quiz-final-text {
-                font-size: 13px;
-                line-height: 1.62;
+                font-size: var(--site-type-support);
+                line-height: var(--site-leading-body-compact);
               }
 
               .leadgen-quiz-modal .request-modal__form {
@@ -497,7 +497,7 @@ export function LeadgenQuizModal({
 
               .leadgen-quiz-modal .request-modal__input {
                 min-height: 52px;
-                font-size: 16px;
+                font-size: var(--site-type-body-lg);
               }
 
               .leadgen-quiz-final-actions > div {
@@ -508,7 +508,7 @@ export function LeadgenQuizModal({
                 flex: 1;
                 width: auto;
                 min-height: 52px;
-                font-size: 15px;
+                font-size: var(--site-type-body-compact);
               }
             }
           `}
@@ -544,7 +544,7 @@ export function LeadgenQuizModal({
                   className={content.manager.photoFit === "contain" ? "object-contain p-1" : "object-cover object-top"}
                 />
               </div>
-              <p className="mt-4 text-label font-semibold leading-[1.4] text-[var(--accent)]">{quiz.title}</p>
+              <p className="mt-4 text-label font-semibold leading-supportive text-[var(--accent)]">{quiz.title}</p>
               <div
                 className="leadgen-quiz-expert-card"
                 style={{
@@ -552,11 +552,11 @@ export function LeadgenQuizModal({
                   background: "var(--leadgen-quiz-modal-effect-secondary)",
                 }}
               >
-                <p className="text-support font-semibold leading-tight text-[var(--text-primary)]">{content.manager.name}</p>
-                <p className="mt-1 text-caption font-normal leading-4 text-[var(--accent)]">{content.manager.role}</p>
-                <p className="leadgen-quiz-expert-text mt-3 text-label font-normal leading-[1.5] text-[var(--leadgen-quiz-modal-content-primary)]">{quiz.expertText}</p>
+                <p className="text-support font-semibold leading-tight-copy text-[var(--text-primary)]">{content.manager.name}</p>
+                <p className="mt-1 text-caption font-normal leading-step-small text-[var(--accent)]">{content.manager.role}</p>
+                <p className="leadgen-quiz-expert-text mt-3 text-label font-normal leading-default text-[var(--leadgen-quiz-modal-content-primary)]">{quiz.expertText}</p>
               </div>
-              <p className="leadgen-quiz-expert-note text-caption font-normal leading-[1.45] text-[var(--leadgen-quiz-modal-content-secondary)]">{quiz.expertNote}</p>
+              <p className="leadgen-quiz-expert-note text-caption font-normal leading-content-compact text-[var(--leadgen-quiz-modal-content-secondary)]">{quiz.expertNote}</p>
             </div>
 
             {!isFinalStep && currentStep ? (
@@ -566,10 +566,10 @@ export function LeadgenQuizModal({
                     <div className="leadgen-quiz-progress h-1.5 w-full overflow-hidden rounded-full bg-[var(--leadgen-quiz-modal-surface-primary)]" aria-label={`Заполнено ${progress}%`}>
                       <div className="h-full rounded-full bg-[var(--accent)] transition-all duration-300" style={{ width: `${progress}%` }} />
                     </div>
-                    <p className="mt-4 text-heading-compact font-extrabold leading-tight text-[var(--text-primary)] sm:text-section-base" id="leadgen-quiz-title">
+                    <p className="mt-4 text-heading-compact font-extrabold leading-tight-copy text-[var(--text-primary)] sm:text-section-base" id="leadgen-quiz-title">
                       {currentStep.question}
                     </p>
-                    <p className="mt-2 text-sm font-normal leading-6 text-[var(--leadgen-quiz-modal-content-tertiary)]">
+                    <p className="mt-2 text-body font-normal leading-step-copy text-[var(--leadgen-quiz-modal-content-tertiary)]">
                       {quiz.questionHint}
                     </p>
                   </div>
@@ -582,7 +582,7 @@ export function LeadgenQuizModal({
                           key={option}
                           type="button"
                           data-quiz-option
-                          className={`leadgen-quiz-option grid min-h-14.5 grid-cols-[24px_1fr] items-center gap-3 rounded-compact border px-4 text-left text-sm font-semibold transition ${
+                          className={`leadgen-quiz-option grid min-h-14.5 grid-cols-[24px_1fr] items-center gap-3 rounded-compact border px-4 text-left text-body font-semibold transition ${
                             isSelected
                               ? "border-[var(--accent)] bg-[var(--leadgen-quiz-modal-surface-secondary)] text-[var(--text-primary)] shadow-[var(--leadgen-quiz-modal-shadow-secondary)]"
                               : "border-[var(--border)] bg-white text-[var(--leadgen-quiz-modal-content-subtle)] hover:border-[var(--leadgen-quiz-modal-border-primary)] hover:bg-[var(--leadgen-quiz-modal-surface-secondary)]"
@@ -613,7 +613,7 @@ export function LeadgenQuizModal({
                     {errors.submit ? <p className="request-modal__error mb-3">{errors.submit}</p> : null}
 
                     <div className="flex items-center justify-between gap-3 pt-1">
-                      <p className="text-xs font-semibold text-[var(--leadgen-quiz-modal-content-muted)]">Шаг: {stepIndex + 1}/{totalSteps}</p>
+                      <p className="text-label font-semibold text-[var(--leadgen-quiz-modal-content-muted)]">Шаг: {stepIndex + 1}/{totalSteps}</p>
                       <div className="flex items-center gap-2">
                         <Button variant="plain"
                           type="button"
@@ -626,7 +626,7 @@ export function LeadgenQuizModal({
                         </Button>
                         <Button variant="plain"
                           type="button"
-                          className="inline-flex min-h-12 min-w-32.5 items-center justify-center rounded-compact bg-[var(--accent)] px-5 text-sm font-bold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-45"
+                          className="inline-flex min-h-12 min-w-32.5 items-center justify-center rounded-compact bg-[var(--accent)] px-5 text-body font-bold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-45"
                           onClick={goNext}
                         >
                           Далее
@@ -642,8 +642,8 @@ export function LeadgenQuizModal({
                   <div className="leadgen-quiz-progress h-1.5 w-full overflow-hidden rounded-full bg-[var(--leadgen-quiz-modal-surface-primary)]" aria-label={`Заполнено ${progress}%`}>
                     <div className="h-full rounded-full bg-[var(--accent)] transition-all duration-300" style={{ width: `${progress}%` }} />
                   </div>
-                  <h3 className="leadgen-quiz-final-title mt-4 text-section-base font-extrabold leading-tight text-[var(--text-primary)]" id="leadgen-quiz-title">{quiz.finalTitle}</h3>
-                  <p className="leadgen-quiz-final-text mt-4 max-w-150 text-sm font-normal leading-[1.55] text-[var(--leadgen-quiz-modal-content-strong)]">{quiz.finalText}</p>
+                  <h3 className="leadgen-quiz-final-title mt-4 text-section-base font-extrabold leading-tight-copy text-[var(--text-primary)]" id="leadgen-quiz-title">{quiz.finalTitle}</h3>
+                  <p className="leadgen-quiz-final-text mt-4 max-w-150 text-body font-normal leading-support text-[var(--leadgen-quiz-modal-content-strong)]">{quiz.finalText}</p>
                 </div>
 
                 <label className="request-modal__honeypot">
@@ -723,7 +723,7 @@ export function LeadgenQuizModal({
                 {result && !result.ok ? <p className="request-modal__submit-error" role="alert">{result.message}</p> : null}
 
                 <div className="leadgen-quiz-final-actions flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs font-semibold text-[var(--leadgen-quiz-modal-content-muted)]">Шаг: {totalSteps}/{totalSteps}</p>
+                  <p className="text-label font-semibold text-[var(--leadgen-quiz-modal-content-muted)]">Шаг: {totalSteps}/{totalSteps}</p>
                   <div className="flex items-center gap-2">
                     <Button variant="plain"
                       type="button"
@@ -734,7 +734,7 @@ export function LeadgenQuizModal({
                       <ChevronLeft className="" aria-hidden />
                     </Button>
                     <Button variant="plain"
-                      className="leadgen-quiz-final-submit inline-flex min-h-12 items-center justify-center rounded-compact bg-[var(--accent)] px-6 text-sm font-bold text-white shadow-[var(--leadgen-quiz-modal-shadow-tertiary)] transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="leadgen-quiz-final-submit inline-flex min-h-12 items-center justify-center rounded-compact bg-[var(--accent)] px-6 text-body font-bold text-white shadow-[var(--leadgen-quiz-modal-shadow-tertiary)] transition hover:bg-[var(--accent-hover)] disabled:cursor-not-allowed disabled:opacity-60"
                       type="submit"
                       disabled={isPending}
                     >

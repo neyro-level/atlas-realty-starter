@@ -16,7 +16,7 @@ export function AccordionTrigger({ className, children, trailing, ...props }: Co
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
-        className={cn("group/accordion flex flex-1 items-center justify-between gap-4 py-4 text-left text-sm font-semibold text-[var(--text-primary)] transition hover:text-[var(--accent)]", className)}
+        className={cn("group/accordion flex flex-1 items-center justify-between gap-4 py-4 text-left text-body font-semibold text-[var(--text-primary)] transition hover:text-[var(--accent)]", className)}
         {...props}
       >
         {children}
@@ -28,8 +28,8 @@ export function AccordionTrigger({ className, children, trailing, ...props }: Co
 
 export function AccordionContent({ className, children, ...props }: ComponentProps<typeof AccordionPrimitive.Content>) {
   return (
-    <AccordionPrimitive.Content data-slot="accordion-content" className="overflow-hidden text-sm text-[var(--accordion-content-primary)]" {...props}>
-      <div className={cn("pb-4 pt-0 leading-6", className)}>{children}</div>
+    <AccordionPrimitive.Content data-slot="accordion-content" className="overflow-hidden text-body text-[var(--accordion-content-primary)]" {...props}>
+      <div className={cn("pb-4 pt-0 leading-step-copy", className)}>{children}</div>
     </AccordionPrimitive.Content>
   );
 }

@@ -27,10 +27,10 @@ export function LegalDocumentModalView({
         aria-labelledby="legal-document-modal-title"
       >
         <div className="border-b border-[var(--border)] px-5 py-4 pr-14 text-left sm:px-7 sm:py-5">
-          <p className="text-overline font-semibold uppercase tracking-[0.14em] text-[var(--accent)] sm:text-caption">
+          <p className="text-overline font-semibold uppercase tracking-overline text-[var(--accent)] sm:text-caption">
             Редакция {updatedAt}
           </p>
-          <h2 id="legal-document-modal-title" className="mt-2 max-w-170 text-left text-heading-small font-semibold leading-tight text-[var(--text-primary)] sm:text-section-large">
+          <h2 id="legal-document-modal-title" className="mt-2 max-w-170 text-left text-heading-small font-semibold leading-tight-copy text-[var(--text-primary)] sm:text-section-large">
             {title}
           </h2>
           <Button
@@ -47,10 +47,10 @@ export function LegalDocumentModalView({
         </div>
 
         <div className="overflow-y-auto px-5 py-5 text-left sm:px-7 sm:py-6">
-          <div className="grid max-w-180 gap-6 text-left text-body font-normal leading-[1.7] text-[var(--legal-document-modal-content-primary)] sm:text-body-compact">
+          <div className="grid max-w-180 gap-6 text-left text-body font-normal leading-body text-[var(--legal-document-modal-content-primary)] sm:text-body-compact">
             {sections.map((section) => (
               <section key={section.title}>
-                <h3 className="text-left text-body-compact font-semibold leading-tight text-[var(--text-primary)] sm:text-base">{section.title}</h3>
+                <h3 className="text-left text-body-compact font-semibold leading-tight-copy text-[var(--text-primary)] sm:text-body-large">{section.title}</h3>
                 {section.paragraphs?.length ? (
                   <div className="mt-3 grid gap-3">
                     {section.paragraphs.map((paragraph) => (

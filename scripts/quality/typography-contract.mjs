@@ -16,15 +16,15 @@ const debt = {
   rawCssLetterSpacing: 0,
 }
 const patterns = {
-  tailwindTextSize: /\btext-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)\b/g,
+  tailwindTextSize: /\btext-(?:xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)(?=[\s"'`}])/g,
   arbitraryTextSize: /\btext-\[(?![^\]]*var\()[^\]]+\]/g,
-  tailwindLeading: /\bleading-(?:none|tight|snug|normal|relaxed|loose|[0-9]+)\b/g,
+  tailwindLeading: /\bleading-(?:none|tight|snug|normal|relaxed|loose|[0-9]+)(?=[\s"'`}])/g,
   arbitraryLeading: /\bleading-\[(?![^\]]*var\()[^\]]+\]/g,
-  tailwindTracking: /\btracking-(?:tighter|tight|normal|wide|wider|widest)\b/g,
+  tailwindTracking: /\btracking-(?:tighter|tight|normal|wide|wider|widest)(?=[\s"'`}])/g,
   arbitraryTracking: /\btracking-\[(?![^\]]*var\()[^\]]+\]/g,
-  rawCssFontSize: /font-size\s*:\s*(?!var\()[^;}]+/g,
-  rawCssLineHeight: /line-height\s*:\s*(?!var\()[^;}]+/g,
-  rawCssLetterSpacing: /letter-spacing\s*:\s*(?!var\(|0(?:\s*[;}]))[^;}]+/g,
+  rawCssFontSize: /font-size\s*:(?!\s*var\()\s*[^;}]+/g,
+  rawCssLineHeight: /line-height\s*:(?!\s*var\()\s*[^;}]+/g,
+  rawCssLetterSpacing: /letter-spacing\s*:(?!\s*(?:var\(|0(?:\s*[;}])))\s*[^;}]+/g,
 }
 
 const commercialHeadingFiles = files.filter((file) => {
@@ -82,7 +82,7 @@ if (process.argv.includes('--self-test')) {
 
 for (const file of files) {
   const normalized = file.replaceAll('\\', '/')
-  if (normalized.endsWith('payload-types.ts')) continue
+  if (normalized.endsWith('payload-types.ts') || normalized.endsWith('packages/site-ui/src/theme.css')) continue
 
   const source = await readFile(file, 'utf8')
   for (const [name, pattern] of Object.entries(patterns)) {

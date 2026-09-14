@@ -20,19 +20,19 @@ export function AboutCompanyDirectorView({ director, imageRenderer: ImageRendere
             <ImageRenderer src={director.image} alt={director.name} fill sizes="(max-width: 1024px) 100vw, 520px" className="object-cover object-top" />
           </figure>
           <div className="flex flex-col justify-center">
-            <blockquote className="max-w-190 text-section-small font-semibold leading-[1.25] text-[var(--text-primary)] sm:text-heading-large">{director.quote}</blockquote>
-            <p className="mt-6 max-w-190 text-body-large leading-7 text-[var(--about-company-director-content-primary)]">
+            <blockquote className="max-w-190 text-section-small font-semibold leading-tight-copy text-[var(--text-primary)] sm:text-heading-large">{director.quote}</blockquote>
+            <p className="mt-6 max-w-190 text-body-large leading-step-relaxed text-[var(--about-company-director-content-primary)]">
               Я не раз видел, как сделка срывалась перед подписанием, потому что документы проверили слишком поздно. Поэтому в агентстве недвижимости проверка начинается до аванса, а агент работает вместе с юристом и ипотечным брокером.
             </p>
             <div className="mt-6 border-l-2 border-[var(--accent)] pl-4">
               <p className="text-body-large font-semibold text-[var(--text-primary)]">{director.name}</p>
-              <p className="mt-1 text-body leading-6 text-[var(--about-company-director-content-primary)]">{director.role}</p>
+              <p className="mt-1 text-body leading-step-copy text-[var(--about-company-director-content-primary)]">{director.role}</p>
             </div>
             <div className="mt-8 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-card)]">
               {DIRECTOR_PRINCIPLES.map((item, index) => (
                 <article key={item.title} className={`grid grid-cols-[36px_1fr] gap-4 p-4 sm:p-5 ${index < DIRECTOR_PRINCIPLES.length - 1 ? "border-b border-[var(--border)]" : ""}`}>
                   <span className="text-support font-semibold text-[var(--accent)]">0{index + 1}</span>
-                  <div><h3 className="text-body-large font-semibold leading-snug text-[var(--text-primary)]">{item.title}</h3><p className="mt-2 text-body leading-6 text-[var(--about-company-director-content-primary)]">{item.description}</p></div>
+                  <div><h3 className="text-body-large font-semibold leading-compact-copy text-[var(--text-primary)]">{item.title}</h3><p className="mt-2 text-body leading-step-copy text-[var(--about-company-director-content-primary)]">{item.description}</p></div>
                 </article>
               ))}
             </div>

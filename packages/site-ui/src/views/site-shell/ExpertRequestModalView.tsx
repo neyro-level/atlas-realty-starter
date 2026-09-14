@@ -88,7 +88,7 @@ export function ExpertRequestModalView({
             </div>
           </div>
 
-          <h2 id="expert-request-title" className="text-center text-section-base font-extrabold leading-[1.14] text-[var(--text-primary)]">
+          <h2 id="expert-request-title" className="text-center text-section-base font-extrabold leading-editorial-title text-[var(--text-primary)]">
             Доверьте покупку эксперту агентства недвижимости
           </h2>
         </div>
@@ -111,7 +111,7 @@ export function ExpertRequestModalView({
 
           <div className="grid gap-4.5">
             {BULLETS.map(({ icon: Icon, text }) => (
-              <div key={text} className="grid grid-cols-[30px_minmax(0,1fr)] items-start gap-3 text-sm leading-5 text-[var(--text-secondary)]">
+              <div key={text} className="grid grid-cols-[30px_minmax(0,1fr)] items-start gap-3 text-body leading-step-body text-[var(--text-secondary)]">
                 <span className="grid size-[30px] place-items-center rounded-lg bg-[var(--accent-soft)] text-[var(--accent)]">
                   <Icon className="size-4" aria-hidden />
                 </span>
@@ -125,7 +125,7 @@ export function ExpertRequestModalView({
               Телефон
             </label>
             <div className="relative">
-              <span className="pointer-events-none absolute left-4 top-1/2 flex -translate-y-1/2 items-center gap-1 text-sm font-semibold text-[var(--text-primary)]">
+              <span className="pointer-events-none absolute left-4 top-1/2 flex -translate-y-1/2 items-center gap-1 text-body font-semibold text-[var(--text-primary)]">
                 <span aria-hidden>🇷🇺</span>
                 <span className="text-overline text-[var(--text-muted)]" aria-hidden>
                   ▼
@@ -143,13 +143,13 @@ export function ExpertRequestModalView({
                 inputMode="tel"
                 placeholder="+7 (9__) ___-__-__"
                 aria-invalid={Boolean(errors.phone)}
-                className="min-h-12 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] px-4 pl-17.5 text-base font-semibold tabular-nums text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:bg-[var(--surface-card)]"
+                className="min-h-12 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] px-4 pl-17.5 text-body-large font-semibold tabular-nums text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:bg-[var(--surface-card)]"
               />
             </div>
-            {errors.phone ? <span className="text-xs font-semibold text-[var(--error)]">{errors.phone}</span> : null}
+            {errors.phone ? <span className="text-label font-semibold text-[var(--error)]">{errors.phone}</span> : null}
           </div>
 
-          <label className="flex items-start gap-2 text-caption leading-4 text-[var(--text-secondary)]">
+          <label className="flex items-start gap-2 text-caption leading-step-small text-[var(--text-secondary)]">
             <Checkbox
               checked={consent}
               onCheckedChange={(checked) => onConsentChange(checked === true)}
@@ -157,10 +157,10 @@ export function ExpertRequestModalView({
             />
             <span>{consentContent}</span>
           </label>
-          {errors.consent ? <span className="text-xs font-semibold text-[var(--error)]">{errors.consent}</span> : null}
+          {errors.consent ? <span className="text-label font-semibold text-[var(--error)]">{errors.consent}</span> : null}
 
           {resultMessage ? (
-            <div className="rounded-lg border border-[var(--expert-request-modal-border-primary)] bg-[var(--expert-request-modal-surface-primary)] px-3 py-2 text-sm font-semibold text-[var(--error)]">
+            <div className="rounded-lg border border-[var(--expert-request-modal-border-primary)] bg-[var(--expert-request-modal-surface-primary)] px-3 py-2 text-body font-semibold text-[var(--error)]">
               {resultMessage}
             </div>
           ) : null}
@@ -168,7 +168,7 @@ export function ExpertRequestModalView({
           <Button variant="plain"
             type="submit"
             disabled={isPending}
-            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--text-primary)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--expert-request-modal-surface-secondary)] disabled:cursor-wait disabled:opacity-70"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[var(--text-primary)] px-5 text-body font-extrabold text-white transition hover:bg-[var(--expert-request-modal-surface-secondary)] disabled:cursor-wait disabled:opacity-70"
           >
             {isPending ? <Loader2 className="animate-spin" aria-hidden /> : null}
             {isPending ? "Отправляем" : "Позвоните мне"}

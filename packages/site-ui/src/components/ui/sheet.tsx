@@ -60,9 +60,9 @@ export function SheetFooter({ className, ...props }: ComponentProps<"div">) {
 }
 
 export function SheetTitle({ className, ...props }: ComponentProps<typeof DialogPrimitive.Title>) {
-  return <DialogPrimitive.Title data-slot="sheet-title" className={cn("text-xl font-semibold text-[var(--text-primary)]", className)} {...props} />;
+  return <DialogPrimitive.Title data-slot="sheet-title" className={cn("text-heading-small font-semibold text-[var(--text-primary)]", className)} {...props} />;
 }
 
 export function SheetDescription({ className, ...props }: ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description data-slot="sheet-description" className={cn("text-sm leading-6 text-[var(--sheet-content-primary)]", className)} {...props} />;
+  return <DialogPrimitive.Description data-slot="sheet-description" className={cn("text-body leading-step-copy text-[var(--sheet-content-primary)]", className)} {...props} />;
 }

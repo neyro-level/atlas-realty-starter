@@ -51,27 +51,27 @@ export function AgencyInlineLeadSection({
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--agency-inline-lead-section-effect-primary)_42%,var(--agency-inline-lead-section-effect-secondary)_100%)]" />
             <div className="absolute bottom-0 left-0 right-0 p-6 text-white md:p-8">
-              <p className="text-section-small font-extrabold leading-tight">{expertName}</p>
+              <p className="text-section-small font-extrabold leading-tight-copy">{expertName}</p>
               <p className="mt-2 text-body font-semibold text-white/78">{expertCaption}</p>
             </div>
           </div>
 
           <div className="flex flex-col justify-center p-6 md:p-10 lg:p-14">
-            <p className="mb-4 text-caption font-extrabold uppercase tracking-[0.16em] text-[var(--accent)]">
+            <p className="mb-4 text-caption font-extrabold uppercase tracking-emphasis text-[var(--accent)]">
               {eyebrow}
             </p>
             <h2
               id={titleId}
-              className="max-w-190 text-section-small font-extrabold leading-[1.1] text-[var(--text-primary)] [text-wrap:balance] sm:text-[length:var(--site-type-section)]"
+              className="max-w-190 text-section-small font-extrabold leading-section-tight text-[var(--text-primary)] [text-wrap:balance] sm:text-[length:var(--site-type-section)]"
             >
               {title}
             </h2>
-            <p className="mt-7 max-w-170 text-lead leading-8 text-[var(--text-primary)]">
+            <p className="mt-7 max-w-170 text-lead leading-step-airy text-[var(--text-primary)]">
               {text}
             </p>
 
             {trustItems.length > 0 ? (
-              <ul className="mt-8 grid gap-3 text-body-compact font-semibold leading-6 text-[var(--agency-inline-lead-section-content-primary)] md:grid-cols-3">
+              <ul className="mt-8 grid gap-3 text-body-compact font-semibold leading-step-copy text-[var(--agency-inline-lead-section-content-primary)] md:grid-cols-3">
                 {trustItems.map((item) => (
                   <li key={item} className="border-l border-[var(--accent)]/30 pl-4">
                     {item}

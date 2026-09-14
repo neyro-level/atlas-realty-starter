@@ -232,9 +232,9 @@ function CatalogFilterForm({
       <div className="grid gap-2 lg:grid-cols-[minmax(260px,1.4fr)_minmax(150px,0.7fr)_minmax(120px,0.55fr)_minmax(150px,0.7fr)]">
         <CatalogSearchFieldView defaultValue={query.q} placeholder="Район, улица, ЖК или код" />
         <CatalogRangePairView from="price_from" to="price_to" label="Цена" fromValue={query.priceFrom} toValue={query.priceTo} />
-        <label className="min-h-12 rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-3 py-1 text-caption font-bold uppercase tracking-[0.08em] text-[var(--text-muted)]">
+        <label className="min-h-12 rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-3 py-1 text-caption font-bold uppercase tracking-overline-compact text-[var(--text-muted)]">
           Комнаты
-          <Select variant="native" name="rooms" defaultValue={formatRoomsValue(query.rooms)} className="block w-full bg-transparent pt-0.5 text-sm font-semibold normal-case tracking-[0] text-[var(--text-primary)] outline-none">
+          <Select variant="native" name="rooms" defaultValue={formatRoomsValue(query.rooms)} className="block w-full bg-transparent pt-0.5 text-body font-semibold normal-case tracking-body text-[var(--text-primary)] outline-none">
             <option value="">Любые</option>
             {catalog.facets.rooms.map((room) => (
               <option key={room.value} value={room.value}>{room.value}</option>
@@ -242,7 +242,7 @@ function CatalogFilterForm({
           </Select>
         </label>
         {activeFilter === "flat" ? (
-          <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-3 text-sm font-semibold text-[var(--text-secondary)]">
+          <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-3 text-body font-semibold text-[var(--text-secondary)]">
             <Checkbox name="studio" value="1" defaultChecked={query.studio === true} />
             Студия
           </label>
@@ -254,7 +254,7 @@ function CatalogFilterForm({
           {select("district", query.district, catalog.facets.districts, "Район / квартал")}
           {!isLand ? <CatalogRangePairView from="floor_from" to="floor_to" label={isHouse ? "Этажность" : "Этаж"} fromValue={query.floorFrom} toValue={query.floorTo} /> : null}
           {activeFilter === "all" ? select("category", query.category, [...TYPE_FILTER_OPTIONS], "Тип объекта") : null}
-          <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-3 text-sm font-semibold text-[var(--text-secondary)]">
+          <label className="flex min-h-12 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-3 text-body font-semibold text-[var(--text-secondary)]">
             <Checkbox
               name="exclusive"
               value="1"
@@ -292,7 +292,7 @@ function CatalogFilterForm({
               <Link
                 href={basePath}
                 scroll={false}
-                className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-bold text-[var(--accent)]"
+                className="inline-flex min-h-11 items-center rounded-lg px-3 text-body font-bold text-[var(--accent)]"
               >
                 Очистить
               </Link>
@@ -305,7 +305,7 @@ function CatalogFilterForm({
 
 function CheckboxGroup({ items }: { items: Array<[string, string, boolean | undefined]> }) {
   return (
-    <div className="grid gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card)] p-3 text-sm font-semibold text-[var(--text-secondary)]">
+    <div className="grid gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card)] p-3 text-body font-semibold text-[var(--text-secondary)]">
       {items.map(([name, label, checked]) => (
         <label key={name} className="flex items-center gap-2">
           <Checkbox name={name} value="1" defaultChecked={checked} />

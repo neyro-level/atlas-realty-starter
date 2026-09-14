@@ -22,7 +22,7 @@ export function OfficePhoneReveal({ phone, phoneHref, office }: OfficePhoneRevea
         href={phoneHref}
         data-analytics-context="contacts_office"
         data-analytics-item={office}
-        className="inline-flex min-h-8 items-center gap-1.5 text-sm font-semibold tabular-nums text-[var(--text-primary)] transition hover:text-[var(--accent)]"
+        className="inline-flex min-h-8 items-center gap-1.5 text-body font-semibold tabular-nums text-[var(--text-primary)] transition hover:text-[var(--accent)]"
       >
         <Phone className="size-4 text-[var(--accent)]" aria-hidden />
         {phone}
@@ -37,7 +37,7 @@ export function OfficePhoneReveal({ phone, phoneHref, office }: OfficePhoneRevea
       data-analytics-context="contacts_office"
       data-analytics-item={office}
       onClick={() => setVisible(true)}
-      className="inline-flex min-h-8 items-center gap-1.5 text-sm font-semibold text-[var(--text-primary)] transition hover:text-[var(--accent)] focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+      className="inline-flex min-h-8 items-center gap-1.5 text-body font-semibold text-[var(--text-primary)] transition hover:text-[var(--accent)] focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
       aria-label={`Показать телефон офиса ${office}`}
     >
       <Phone className="text-[var(--accent)]" aria-hidden />

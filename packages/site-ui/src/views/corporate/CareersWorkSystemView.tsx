@@ -34,21 +34,21 @@ export function CareersWorkSystemView({ content: careersWorkSystem }: { content:
 
         <div className="mt-9 grid gap-5 lg:mt-12 lg:grid-cols-[minmax(0,1.08fr)_minmax(420px,0.92fr)] lg:gap-8">
           <div className="rounded-2xl bg-[var(--careers-work-system-surface-primary)] p-5 sm:p-7 lg:p-9">
-            <div className="max-w-175 grid gap-5 text-body-large leading-7 text-[var(--text-secondary)] sm:text-body-emphasis sm:leading-8">
+            <div className="max-w-175 grid gap-5 text-body-large leading-step-relaxed text-[var(--text-secondary)] sm:text-body-emphasis sm:leading-step-airy">
               {careersWorkSystem.intro.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
 
             <div className="mt-8 border-t border-[var(--careers-work-system-border-primary)] pt-7 sm:mt-10 sm:pt-9">
-              <h3 className="max-w-175 text-lead-compact font-semibold leading-7 text-[var(--text-primary)] sm:text-card-large sm:leading-8">
+              <h3 className="max-w-175 text-lead-compact font-semibold leading-step-relaxed text-[var(--text-primary)] sm:text-card-large sm:leading-step-airy">
                 {careersWorkSystem.principles.title}
               </h3>
               <ul className="mt-6 grid gap-4">
                 {careersWorkSystem.principles.items.map((item) => (
                   <li
                     key={item}
-                    className="grid grid-cols-[20px_minmax(0,1fr)] items-start gap-3 text-body-compact leading-6 text-[var(--text-secondary)]"
+                    className="grid grid-cols-[20px_minmax(0,1fr)] items-start gap-3 text-body-compact leading-step-copy text-[var(--text-secondary)]"
                   >
                     <span className="mt-0.5 flex size-5 items-center justify-center rounded-full bg-[var(--surface-card)] text-[var(--accent)]">
                       <Check className="size-3.5" strokeWidth={2} aria-hidden />
@@ -61,7 +61,7 @@ export function CareersWorkSystemView({ content: careersWorkSystem }: { content:
           </div>
 
           <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-card)] p-5 sm:p-7 lg:p-8">
-            <h3 className="text-body-compact font-medium leading-none text-[var(--text-secondary)]">
+            <h3 className="text-body-compact font-medium leading-flat text-[var(--text-secondary)]">
               {careersWorkSystem.stepsLabel}
             </h3>
             <ol className="mt-5">
@@ -80,10 +80,10 @@ export function CareersWorkSystemView({ content: careersWorkSystem }: { content:
                       <Icon className="size-[19px]" strokeWidth={1.6} aria-hidden />
                     </span>
                     <div>
-                      <p className="text-body-large font-semibold leading-6 text-[var(--text-primary)]">
+                      <p className="text-body-large font-semibold leading-step-copy text-[var(--text-primary)]">
                         {step.title}
                       </p>
-                      <p className="mt-1 text-body leading-5 text-[var(--careers-work-system-content-primary)]">
+                      <p className="mt-1 text-body leading-step-body text-[var(--careers-work-system-content-primary)]">
                         {step.description}
                       </p>
                     </div>

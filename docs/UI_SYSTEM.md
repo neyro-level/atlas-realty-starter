@@ -1,6 +1,6 @@
 # UI system
 
-This document implements AMS UI Development Constitution 3.1 for a public real-estate product. The active layering is `Project Design System -> Tailwind theme -> shadcn primitives -> shared UI -> realty domain UI -> page composition`. Payload Admin stays CMS-native.
+This document implements AMS UI Core v5.0 for a public real-estate product. The active layering is `Project Design System -> Tailwind theme -> shadcn primitives -> shared UI -> realty domain UI -> page composition`. Payload Admin stays CMS-native.
 
 ## Ownership
 
@@ -12,9 +12,11 @@ The root and package `components.json` files keep the same local ShadCN style, R
 
 `packages/site-ui/src/theme.css` is the only global token source. Manrope is the sole primary font. Brand, surfaces, text, borders, focus, status colors, radius, shadows, spacing and motion use semantic CSS variables. Application components must not add raw HEX values or import Radix directly; `pnpm ui:check` enforces both boundaries.
 
-The canonical token groups are `surface`, `content`, `border`, `action`, `status`, `typography`, `spacing`, `radius`, `shadow`, `container` and `motion`. The initial Constitution 3.1 inventory contained exactly 752 declarations: 67 semantic foundation tokens, 30 project/theme tokens, 579 used numbered component tokens and 76 compatibility or dead candidates. The completed migration contains 877 declared semantic/project/component-role tokens, zero numbered tokens, zero compatibility aliases and zero unresolved references. `pnpm ui:tokens` enforces that contract for every migrated domain.
+The package-owned `theme.css` decision is the accepted Project Design System implementation for this starter: it is portable with the repository and remains the only numeric token source. The completed v5 migration contains 1,004 referenced semantic, project and component-role declarations, zero numbered compatibility aliases and zero unresolved or unused root tokens. `pnpm ui:tokens` fails on both missing references and newly introduced dead root tokens.
 
-Typography is governed by the same token source. New page and component code must use the semantic Tailwind aliases emitted from `theme.css`: `text-body`, `text-body-compact`, `text-lead`, `text-heading-*`, `text-section-*`, `text-display-*`, plus the approved `site-type-*` variables when a CSS-only rule is unavoidable. Default Tailwind text sizes (`text-sm`, `text-base`, `text-xl`), raw `text-[...]`, raw `leading-[...]` and raw `tracking-[...]` remain legacy debt only. `pnpm ui:typography` records the current legacy count in `scripts/quality/typography-baseline.json` and fails if new UI increases it; each cleanup must lower the baseline in the same commit.
+Typography is governed by the same token source. Page and component code uses semantic Tailwind aliases emitted from `theme.css`; CSS-only rules use the corresponding `site-type`, `site-leading` and `site-tracking` variables. Default Tailwind text/leading/tracking scales and raw numeric typography are forbidden. `pnpm ui:typography` enforces a zero baseline across all nine tracked categories.
+
+Dark mode is class-based through `@custom-variant dark`, as required by UI Core v5.0. Atlas remains intentionally light-only: application code does not attach `.dark`, and `pnpm ui:check` rejects any attempt to activate it.
 
 The mortgage and lawyer service pages are the canonical reference for normal commercial page typography. Commercial first-screen H1 uses `text-page-title leading-page-title` (`clamp(30px, 3.75vw, 52px)`), and every ordinary commercial section H2 uses `text-section-title leading-section-title` (`clamp(24px, 1.8vw, 30px)`). Card titles use `text-body-emphasis`, `text-body-large` or an approved `text-heading-*` role; body copy uses `text-body` or `text-body-compact`; supporting labels use `text-support`, `text-caption` or `text-label`. The home page and shared marketing blocks obey the same scale and must not introduce a parallel H2 hierarchy.
 
@@ -48,7 +50,7 @@ The `/novostroyki` mobile showcase uses one large complex card with the edge of 
 
 - `pnpm test:visual` compares the key routes at 390, 768, 1280 and 1440 px.
 - `pnpm ui:check` rejects raw colors outside the theme, palette tokens, arbitrary shadows, native controls outside primitives, legacy modal event bridges, direct Radix imports outside primitives, oversized page compositions, identity drift, duplicate static images and static images above 512 KiB. All migrated UI debt ceilings are zero.
-- The Constitution 3.1 baseline in `scripts/quality/ui-debt-baseline.json` is zero in every covered category. The guard rejects numbered component tokens, repeated arbitrary typography/layout, unstyled controls, checkbox misuse, `space-x/y`, manual Button icon sizing, project assets and hardcoded business claims inside shared UI.
+- The UI Core v5 baseline in `scripts/quality/ui-debt-baseline.json` and `scripts/quality/typography-baseline.json` is zero in every covered category. The guards reject numbered or dead tokens, raw typography, repeated arbitrary layout, unstyled controls, checkbox misuse, `space-x/y`, manual Button icon sizing, project assets and hardcoded business claims inside shared UI.
 - `pnpm images:optimize` converts only oversized PNG files to high-quality WebP, updates tracked references and removes proven duplicates.
 - Logos, UI graphics, social previews and small fallbacks may stay in Git. Property and ЖК photography belongs to Payload Media and persistent local/S3 storage.
 

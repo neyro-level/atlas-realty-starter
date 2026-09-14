@@ -63,9 +63,9 @@ export function DialogFooter({ className, ...props }: ComponentProps<"div">) {
 }
 
 export function DialogTitle({ className, ...props }: ComponentProps<typeof DialogPrimitive.Title>) {
-  return <DialogPrimitive.Title data-slot="dialog-title" className={cn("text-2xl font-semibold text-[var(--text-primary)]", className)} {...props} />;
+  return <DialogPrimitive.Title data-slot="dialog-title" className={cn("text-section-small font-semibold text-[var(--text-primary)]", className)} {...props} />;
 }
 
 export function DialogDescription({ className, ...props }: ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description data-slot="dialog-description" className={cn("text-sm leading-6 text-[var(--dialog-content-primary)]", className)} {...props} />;
+  return <DialogPrimitive.Description data-slot="dialog-description" className={cn("text-body leading-step-copy text-[var(--dialog-content-primary)]", className)} {...props} />;
 }

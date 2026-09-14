@@ -4,7 +4,7 @@ import type { LeadgenPromoContentDto } from '@starter/site-contracts'
 import type { SiteImageRenderer } from '../../lib/adapters'
 
 const primaryButtonClass =
-  'inline-flex min-h-14 w-full items-center justify-center rounded-tight bg-[var(--accent)] px-7 text-center text-sm font-semibold text-white shadow-[var(--leadgen-promo-landing-shadow-primary)] transition hover:bg-[var(--accent-hover)] sm:w-auto'
+  'inline-flex min-h-14 w-full items-center justify-center rounded-tight bg-[var(--accent)] px-7 text-center text-body font-semibold text-white shadow-[var(--leadgen-promo-landing-shadow-primary)] transition hover:bg-[var(--accent-hover)] sm:w-auto'
 
 export function LeadgenFinalQuizCta({
   content,
@@ -55,7 +55,7 @@ export function LeadgenFinalQuizCta({
             />
             {showsExpertPortrait ? (
               <div className="absolute bottom-4 left-4 rounded-sm border border-white/70 bg-[var(--surface-card)]/90 px-4 py-3 shadow-[var(--leadgen-promo-landing-shadow-backdrop)] backdrop-blur-sm sm:bottom-6 sm:left-6">
-                <p className="text-support font-semibold leading-tight text-[var(--text-primary)]">
+                <p className="text-support font-semibold leading-tight-copy text-[var(--text-primary)]">
                   {content.manager.name}
                 </p>
                 <p className="mt-1 text-caption font-medium text-[var(--leadgen-promo-landing-content-elevated)]">
@@ -68,16 +68,16 @@ export function LeadgenFinalQuizCta({
                 <div className="rounded-[11px] bg-[var(--surface-card)] p-3">
                   <div className="flex items-start justify-between gap-3 border-b border-[var(--border)] pb-2.5">
                     <div>
-                      <p className="text-caption font-semibold leading-none text-[var(--accent)]">
+                      <p className="text-caption font-semibold leading-flat text-[var(--accent)]">
                         {hasConstructionPreview ? 'Расчет строительства' : 'Подборка новостроек'}
                       </p>
-                      <p className="mt-1 text-overline font-medium leading-4 text-[var(--text-muted)]">
+                      <p className="mt-1 text-overline font-medium leading-step-small text-[var(--text-muted)]">
                         {hasConstructionPreview
                           ? `${city.nominative} · каталог проектов`
                           : `${city.nominative} · расчет ипотеки`}
                       </p>
                     </div>
-                    <span className="rounded-tight bg-[var(--accent-soft)] px-2 py-1 text-overline font-semibold leading-none text-[var(--accent)]">
+                    <span className="rounded-tight bg-[var(--accent-soft)] px-2 py-1 text-overline font-semibold leading-flat text-[var(--accent)]">
                       {hasConstructionPreview ? 'смета' : 'по актуальным условиям'}
                     </span>
                   </div>
@@ -88,20 +88,20 @@ export function LeadgenFinalQuizCta({
                         className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-soft border border-[var(--leadgen-promo-landing-border-active)] bg-[var(--leadgen-promo-landing-surface-inverse)] px-2.5 py-2"
                       >
                         <div className="min-w-0">
-                          <p className="truncate text-caption font-semibold leading-4 text-[var(--text-primary)]">
+                          <p className="truncate text-caption font-semibold leading-step-small text-[var(--text-primary)]">
                             {project.material}
                           </p>
-                          <p className="mt-0.5 truncate text-micro font-medium leading-3 text-[var(--text-muted)]">
+                          <p className="mt-0.5 truncate text-micro font-medium leading-step-compact text-[var(--text-muted)]">
                             {project.area} · {project.buildTime}
                           </p>
                         </div>
-                        <p className="text-right text-overline font-semibold leading-3 text-[var(--accent)]">
+                        <p className="text-right text-overline font-semibold leading-step-compact text-[var(--accent)]">
                           {project.priceFrom}
                         </p>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-3 rounded-compact bg-[var(--text-primary)] px-3 py-2 text-center text-overline font-semibold leading-none text-white">
+                  <div className="mt-3 rounded-compact bg-[var(--text-primary)] px-3 py-2 text-center text-overline font-semibold leading-flat text-white">
                     {hasConstructionPreview
                       ? 'каталог и расчет в мессенджер'
                       : '3-5 вариантов в мессенджер'}
@@ -117,7 +117,7 @@ export function LeadgenFinalQuizCta({
                 {content.finalCta.title}
               </h2>
               {content.finalCta.bullets.length ? (
-                <ul className="mt-7 grid gap-4 text-body font-medium leading-6 text-[var(--text-secondary)] sm:text-body-compact">
+                <ul className="mt-7 grid gap-4 text-body font-medium leading-step-copy text-[var(--text-secondary)] sm:text-body-compact">
                   {content.finalCta.bullets.map((bullet) => {
                     const Icon = bullet.icon === 'clock' ? Clock3 : Check
 
@@ -146,7 +146,7 @@ export function LeadgenFinalQuizCta({
                 {content.finalCta.cta}
               </RequestButton>
               {content.finalCta.microtext ? (
-                <p className="mx-auto mt-3 px-2 text-center text-label font-medium leading-5 text-[var(--text-muted)]">
+                <p className="mx-auto mt-3 px-2 text-center text-label font-medium leading-step-body text-[var(--text-muted)]">
                   {content.finalCta.microtext}
                 </p>
               ) : null}
@@ -187,7 +187,7 @@ export function LeadgenFinalQuizCta({
                 className="mx-auto mb-2 h-1 w-10 rounded-full bg-[var(--text-primary)]/15"
                 aria-hidden
               />
-              <div className="rounded-soft bg-[var(--accent)] px-2 py-1 text-center text-micro-tight font-semibold leading-3 text-white">
+              <div className="rounded-soft bg-[var(--accent)] px-2 py-1 text-center text-micro-tight font-semibold leading-step-compact text-white">
                 Подборка агентства недвижимости
               </div>
               <div className="mt-2 grid gap-2">
@@ -213,11 +213,11 @@ export function LeadgenFinalQuizCta({
                         />
                       </div>
                       <div className="min-w-0 pt-0.5">
-                        <p className="truncate text-micro-tight font-semibold leading-3 text-[var(--text-primary)]">
+                        <p className="truncate text-micro-tight font-semibold leading-step-compact text-[var(--text-primary)]">
                           {rooms}
                           {area ? `, ${area} м²` : ''}
                         </p>
-                        <p className="mt-0.5 truncate text-micro-tight font-bold leading-3 text-[var(--accent)]">
+                        <p className="mt-0.5 truncate text-micro-tight font-bold leading-step-compact text-[var(--accent)]">
                           {apartment.price}
                         </p>
                       </div>
@@ -225,7 +225,7 @@ export function LeadgenFinalQuizCta({
                   )
                 })}
               </div>
-              <div className="mt-2 rounded-compact bg-[var(--accent-soft)] px-2 py-1.5 text-center text-micro-tight font-semibold leading-3 text-[var(--accent)]">
+              <div className="mt-2 rounded-compact bg-[var(--accent-soft)] px-2 py-1.5 text-center text-micro-tight font-semibold leading-step-compact text-[var(--accent)]">
                 5-10 вариантов в мессенджер
               </div>
             </div>
@@ -237,7 +237,7 @@ export function LeadgenFinalQuizCta({
             Пройдите тест за одну минуту и получите подборку квартир из{' '}
             <span className="text-[var(--accent)]">закрытой базы</span> по Вашим параметрам
           </h2>
-          <ul className="mt-8 grid gap-5 text-sm font-medium leading-6 text-[var(--leadgen-promo-landing-content-muted)] sm:text-body-compact">
+          <ul className="mt-8 grid gap-5 text-body font-medium leading-step-copy text-[var(--leadgen-promo-landing-content-muted)] sm:text-body-compact">
             <li className="grid grid-cols-[22px_minmax(0,1fr)] gap-3">
               <span className="mt-0.5 grid size-[18px] place-items-center rounded-micro bg-[var(--accent)] text-white">
                 <Check className="size-3.5" aria-hidden />

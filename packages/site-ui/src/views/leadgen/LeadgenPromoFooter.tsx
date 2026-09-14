@@ -15,7 +15,7 @@ export function LeadgenPromoFooter({
       className="bg-[var(--leadgen-promo-landing-surface-emphasis)] text-white"
     >
       <div className="mx-auto w-full max-w-290 px-5 py-8 sm:px-8 sm:py-9">
-        <div className="flex flex-col gap-4 border-t border-white/12 pt-5 text-xs font-medium leading-5 text-white/58 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 border-t border-white/12 pt-5 text-label font-medium leading-step-body text-white/58 sm:flex-row sm:items-center sm:justify-between">
           <p className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
             <span>{copyright}</span>
             <span>{registry}</span>

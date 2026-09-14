@@ -30,11 +30,11 @@ export function ArticleCardView({
       <span className="relative block aspect-[16/10] overflow-hidden rounded-lg bg-[var(--surface-muted)]">
         <ImageRenderer src={imageSrc} alt={imageAlt} fill sizes={imageSizes} unoptimized={imageSrc.startsWith("http") || imageSrc.startsWith("/")} className={imageClassName} />
       </span>
-      <h3 className="mt-3 line-clamp-2 text-body-large font-semibold leading-5 text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">
+      <h3 className="mt-3 line-clamp-2 text-body-large font-semibold leading-step-body text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">
         {title}
       </h3>
-      <p className="mt-2 line-clamp-2 text-support leading-5 text-[var(--text-secondary)]">{excerpt}</p>
-      <p className="mt-3 block text-caption leading-4 text-[var(--text-muted)]">{metaLabel}</p>
+      <p className="mt-2 line-clamp-2 text-support leading-step-body text-[var(--text-secondary)]">{excerpt}</p>
+      <p className="mt-3 block text-caption leading-step-small text-[var(--text-muted)]">{metaLabel}</p>
     </LinkRenderer>
   );
 }

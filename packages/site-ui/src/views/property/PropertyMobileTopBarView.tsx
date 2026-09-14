@@ -28,8 +28,8 @@ export function PropertyMobileTopBarView({
           <ArrowLeft className="size-5" aria-hidden />
         </LinkRenderer>
         <div className="min-w-0">
-          <p className="truncate text-support font-bold leading-[17px] tabular-nums text-[var(--text-primary)] sm:text-[14.5px] sm:leading-[19px]">{price}</p>
-          <p className="truncate text-label font-medium leading-[15px] text-[var(--text-muted)] sm:text-[13.25px] sm:leading-[17px]">{title}</p>
+          <p className="truncate text-support font-bold leading-support-pixel tabular-nums text-[var(--text-primary)] sm:text-body-fluid sm:leading-body-fluid-pixel">{price}</p>
+          <p className="truncate text-label font-medium leading-label text-[var(--text-muted)] sm:text-support-dense sm:leading-support-pixel">{title}</p>
         </div>
         <div className="flex items-center justify-end gap-1">
           {compareAction}

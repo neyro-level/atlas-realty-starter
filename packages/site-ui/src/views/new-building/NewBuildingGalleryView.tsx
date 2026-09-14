@@ -85,7 +85,7 @@ export function NewBuildingGalleryView({
             role="tab"
             aria-selected={activeTab === key}
             onClick={() => setActiveTab(key)}
-            className={`inline-flex min-h-10 items-center justify-center gap-1.5 rounded-lg border px-3 text-xs font-semibold transition sm:text-sm ${
+            className={`inline-flex min-h-10 items-center justify-center gap-1.5 rounded-lg border px-3 text-label font-semibold transition sm:text-body ${
               activeTab === key
                 ? "border-[var(--accent)] bg-[var(--accent)] text-white"
                 : "border-[var(--border)] bg-[var(--surface-card-soft)] text-[var(--text-secondary)] hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-[var(--accent)]"
@@ -132,7 +132,7 @@ function MapExternalLink({ href }: { href: string }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-[var(--surface-card)] px-3 text-xs font-semibold text-[var(--text-primary)] shadow-[var(--new-building-gallery-shadow-control)] transition hover:text-[var(--accent)] max-md:bottom-2 max-md:right-2"
+      className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-[var(--surface-card)] px-3 text-label font-semibold text-[var(--text-primary)] shadow-[var(--new-building-gallery-shadow-control)] transition hover:text-[var(--accent)] max-md:bottom-2 max-md:right-2"
     >
       <MapPin className="size-3.5" aria-hidden />
       Открыть на карте
@@ -169,7 +169,7 @@ function VideoPlaceholder() {
         </g>
       </svg>
       <div className="relative self-end pb-8 max-md:pb-5">
-        <p className="rounded-lg border border-white/70 bg-[var(--surface-card)]/88 px-5 py-3 text-base font-semibold leading-tight text-[var(--text-primary)] shadow-[var(--new-building-gallery-shadow-caption)] backdrop-blur-sm max-md:px-4 max-md:py-2.5 max-md:text-sm">
+        <p className="rounded-lg border border-white/70 bg-[var(--surface-card)]/88 px-5 py-3 text-body-large font-semibold leading-tight-copy text-[var(--text-primary)] shadow-[var(--new-building-gallery-shadow-caption)] backdrop-blur-sm max-md:px-4 max-md:py-2.5 max-md:text-body">
           Видео жилого комплекса не загружено
         </p>
       </div>
@@ -182,8 +182,8 @@ function NewBuildingMediaPlaceholder() {
     <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden bg-[var(--new-building-gallery-surface-inverse)] px-6 text-center text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,var(--new-building-gallery-accent-glow),transparent_35%),linear-gradient(var(--new-building-gallery-grid-line)_1px,transparent_1px),linear-gradient(90deg,var(--new-building-gallery-grid-line)_1px,transparent_1px)] bg-[size:auto,48px_48px,48px_48px]" />
       <span className="relative flex size-16 items-center justify-center rounded-lg border border-white/14 bg-[var(--surface-card)]/8"><Building2 className="size-8 text-[var(--new-building-gallery-accent-content)]" aria-hidden /></span>
-      <p className="relative mt-5 text-sm font-extrabold">Изображение ЖК готовится к публикации</p>
-      <p className="relative mt-2 max-w-xs text-xs leading-5 text-white/58">Покажем только проверенные материалы проекта</p>
+      <p className="relative mt-5 text-body font-extrabold">Изображение ЖК готовится к публикации</p>
+      <p className="relative mt-2 max-w-xs text-label leading-step-body text-white/58">Покажем только проверенные материалы проекта</p>
     </div>
   );
 }

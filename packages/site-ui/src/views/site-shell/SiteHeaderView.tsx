@@ -79,7 +79,7 @@ export function SiteHeaderView(props: SiteHeaderViewProps) {
           <div className={compactSticky ? "hidden h-full lg:block" : "h-full"}>
             <div className="flex h-full items-center gap-3 lg:h-14 xl:gap-4">
               <LinkRenderer href="/" ariaLabel={`${brandLabel} — на главную`} className="flex shrink-0 items-center" onClick={onCloseMobile}>{brand}</LinkRenderer>
-              <div className="hidden items-center gap-2 text-sm font-semibold text-[var(--text-secondary)] lg:flex xl:gap-3">
+              <div className="hidden items-center gap-2 text-body font-semibold text-[var(--text-secondary)] lg:flex xl:gap-3">
                 <CitySwitcherView variant="desktop" open={citySwitcherOpen} options={cityOptions} linkRenderer={LinkRenderer} onToggle={onToggleCity} onClose={onCloseCity} />
                 <PhoneRevealView variant="desktop" phone={contacts.phone} phoneHref={contacts.phoneHref} visible={phoneVisible} analyticsContext="site_header" onReveal={onRevealPhone} />
                 <LinkRenderer href="/kontakty" className="inline-flex min-h-10 items-center gap-2 rounded-md px-2.5 transition hover:bg-[var(--background)] hover:text-[var(--accent)]"><Building2 className="size-[18px] text-[var(--text-muted)]" aria-hidden />Наши офисы</LinkRenderer>
@@ -87,7 +87,7 @@ export function SiteHeaderView(props: SiteHeaderViewProps) {
               <div className="ml-auto flex shrink-0 items-center justify-end gap-2">
                 <div className="hidden items-center gap-1 lg:flex">
                   {compareAction}{favoritesAction}
-                  <Button asChild className="ml-2 min-h-10 px-4 text-sm"><LinkRenderer href="/prodazha-nedvizhimosti">Продать квартиру</LinkRenderer></Button>
+                  <Button asChild className="ml-2 min-h-10 px-4 text-body"><LinkRenderer href="/prodazha-nedvizhimosti">Продать квартиру</LinkRenderer></Button>
                 </div>
                 <Button ref={mobileButtonRef} type="button" variant="outline" size="icon" aria-label={mobileOpen ? "Закрыть меню" : "Открыть меню"} aria-expanded={mobileOpen} aria-controls="site-mobile-menu" className="bg-[var(--surface-card)] text-[var(--foreground)] lg:hidden" onClick={onToggleMobile}>
                   {mobileOpen ? <X className="" aria-hidden /> : <Menu className="" aria-hidden />}

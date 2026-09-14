@@ -65,10 +65,10 @@ export function CatalogHeroView({
   const contentClassName = hasControlledLines ? "max-w-245" : "max-w-195";
   const descriptionMaxWidth = hasControlledLines ? "max-w-245" : "max-w-190";
   const descriptionClassName = isNewBuildingHero
-    ? "mt-4 w-fit max-w-155 rounded-lg border border-white/20 bg-black/30 px-4 py-3 text-body-compact font-medium leading-6 text-white/92 shadow-[var(--catalog-hero-shadow-panel)] backdrop-blur-md [text-wrap:pretty] sm:text-base sm:leading-7 md:mt-5 md:px-5 md:py-4 md:text-body-emphasis lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none"
+    ? "mt-4 w-fit max-w-155 rounded-lg border border-white/20 bg-black/30 px-4 py-3 text-body-compact font-medium leading-step-copy text-white/92 shadow-[var(--catalog-hero-shadow-panel)] backdrop-blur-md [text-wrap:pretty] sm:text-body-large sm:leading-step-relaxed md:mt-5 md:px-5 md:py-4 md:text-body-emphasis lg:rounded-none lg:border-0 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none"
     : descriptionVisibleAlways
-    ? `mt-3 ${descriptionMaxWidth} text-body-compact font-medium leading-6 text-white/84 [text-wrap:pretty] sm:mt-4 sm:text-base sm:leading-7 md:mt-5 md:text-body-emphasis`
-    : `mt-5 hidden ${descriptionMaxWidth} text-base font-medium leading-7 text-white/84 [text-wrap:pretty] lg:block md:text-body-emphasis`;
+    ? `mt-3 ${descriptionMaxWidth} text-body-compact font-medium leading-step-copy text-white/84 [text-wrap:pretty] sm:mt-4 sm:text-body-large sm:leading-step-relaxed md:mt-5 md:text-body-emphasis`
+    : `mt-5 hidden ${descriptionMaxWidth} text-body-large font-medium leading-step-relaxed text-white/84 [text-wrap:pretty] lg:block md:text-body-emphasis`;
   const desktopHeightClassName = expandedDesktop ? "lg:min-h-115" : "lg:min-h-97.5";
   const shellClassName = isNewBuildingHero
     ? `relative z-10 flex min-h-85 flex-col justify-end p-5 pb-6 sm:min-h-90 sm:p-6 sm:pb-7 md:min-h-70 md:p-8 md:pb-9 ${desktopHeightClassName} lg:p-12`

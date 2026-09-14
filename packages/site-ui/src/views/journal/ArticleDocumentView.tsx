@@ -5,7 +5,7 @@ import { ArticleGalleryView } from "../journal/ArticleGalleryView";
 
 export function ArticleDocumentView({ page, imageRenderer: ImageRenderer, renderShowcase }: { page: JournalArticlePageDto; imageRenderer: SiteImageRenderer; renderShowcase: () => ReactNode }) {
   return <div className="grid gap-9 text-editorial-body leading-editorial-body text-[var(--journal-body)] md:gap-10">
-    {page.lead ? <p className="max-w-185 text-body-large leading-7 md:text-body-emphasis">{page.lead}</p> : null}
+    {page.lead ? <p className="max-w-185 text-body-large leading-step-relaxed md:text-body-emphasis">{page.lead}</p> : null}
     {page.galleryBeforeBody && page.gallery.length ? <div className="max-w-185"><ArticleGalleryView images={page.gallery} imageRenderer={ImageRenderer} /></div> : null}
     {page.sections.map((section, index) => {
       const showHere = page.showcase?.afterSectionIndex === index;

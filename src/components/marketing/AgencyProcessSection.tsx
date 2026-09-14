@@ -27,7 +27,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
               {title}
             </h2>
             {lead ? (
-              <p className="mx-auto max-w-160 text-body-large leading-7 text-[var(--agency-process-section-content-primary)] md:text-lead">
+              <p className="mx-auto max-w-160 text-body-large leading-step-relaxed text-[var(--agency-process-section-content-primary)] md:text-lead">
                 {lead}
               </p>
             ) : null}
@@ -46,12 +46,12 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
                   }`}
                 >
                   <span
-                    className="mb-6 block select-none text-[72px] font-black leading-none tracking-normal text-[var(--accent)]/14 md:text-[88px] lg:text-[104px]"
+                    className="mb-6 block select-none text-process-step font-black leading-flat tracking-body text-[var(--accent)]/14 md:text-process-step-medium lg:text-process-step-large"
                     aria-hidden
                   >
                     {number}
                   </span>
-                  <h3 className="flex min-h-12.25 max-w-100 flex-col justify-start text-heading-small font-bold leading-[1.22] text-[var(--text-primary)] md:min-h-13.5 md:text-heading-compact">
+                  <h3 className="flex min-h-12.25 max-w-100 flex-col justify-start text-heading-small font-bold leading-title-relaxed text-[var(--text-primary)] md:min-h-13.5 md:text-heading-compact">
                     {step.titleLines?.length
                       ? step.titleLines.map((line) => (
                           <span key={line} className="block">
@@ -60,7 +60,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
                         ))
                       : step.title}
                   </h3>
-                  <p className="mt-4 max-w-105 text-body-compact leading-7 text-[var(--agency-process-section-content-secondary)] md:text-body-large">
+                  <p className="mt-4 max-w-105 text-body-compact leading-step-relaxed text-[var(--agency-process-section-content-secondary)] md:text-body-large">
                     {step.text}
                   </p>
                 </article>

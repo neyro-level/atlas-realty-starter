@@ -33,16 +33,16 @@ function CatalogNewBuildingSelectionGridCard({ copy, source: _source, formType: 
         <div className="flex size-11 items-center justify-center rounded-lg bg-[var(--surface-card)] text-[var(--accent)] shadow-[var(--catalog-new-building-selection-card-shadow-subtle)]">
           <Building2 className="size-5" aria-hidden />
         </div>
-        <h3 className="mt-5 text-[1.18rem] font-extrabold leading-[1.25] text-[var(--text-primary)]">
+        <h3 className="mt-5 text-card-title-large font-extrabold leading-tight-copy text-[var(--text-primary)]">
           {copy.title}
         </h3>
-        <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
+        <p className="mt-3 text-body leading-step-copy text-[var(--text-secondary)]">
           {copy.description}
         </p>
         <Button
           type="button"
           onClick={onRequest}
-          className="mt-auto inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-center text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)]"
+          className="mt-auto inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-center text-body font-semibold text-white transition hover:bg-[var(--accent-hover)]"
         >
           {copy.action}
         </Button>
@@ -56,18 +56,18 @@ function CatalogNewBuildingSelectionListCard({ copy, source: _source, formType: 
     <article className="bg-transparent py-6">
       <div className="grid gap-5 rounded-lg border border-[var(--catalog-new-building-selection-card-border-default)] bg-[var(--accent-soft)] p-6 md:grid-cols-[minmax(0,1fr)_260px] md:items-end">
         <div className="max-w-2xl">
-          <p className="text-caption font-bold uppercase tracking-[0.1em] text-[var(--accent)]">{copy.eyebrow}</p>
-          <h3 className="mt-3 text-heading-medium font-extrabold leading-[1.16] text-[var(--text-primary)]">
+          <p className="text-caption font-bold uppercase tracking-caps text-[var(--accent)]">{copy.eyebrow}</p>
+          <h3 className="mt-3 text-heading-medium font-extrabold leading-card-title text-[var(--text-primary)]">
             {copy.title}
           </h3>
-          <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
+          <p className="mt-3 text-body leading-step-copy text-[var(--text-secondary)]">
             {copy.description}
           </p>
         </div>
         <Button
           type="button"
           onClick={onRequest}
-          className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-center text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)]"
+          className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-center text-body font-semibold text-white transition hover:bg-[var(--accent-hover)]"
         >
           {copy.action}
         </Button>

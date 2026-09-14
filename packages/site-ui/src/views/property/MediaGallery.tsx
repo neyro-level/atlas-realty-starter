@@ -64,7 +64,7 @@ export function MediaGallery({
 
   if (!safeImages.length) {
     if (emptyContent) return emptyContent;
-    return <div className="relative grid h-full place-items-center bg-muted px-6 text-center"><Skeleton className="absolute inset-0 rounded-none" /><span className="relative inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground"><Images className="size-5" aria-hidden />{emptyLabel}</span></div>;
+    return <div className="relative grid h-full place-items-center bg-muted px-6 text-center"><Skeleton className="absolute inset-0 rounded-none" /><span className="relative inline-flex items-center gap-2 text-body font-semibold text-muted-foreground"><Images className="size-5" aria-hidden />{emptyLabel}</span></div>;
   }
 
   const controlClass = variant === "light-controls"
@@ -84,7 +84,7 @@ export function MediaGallery({
           ))}
         </CarouselContent>
 
-        {hasMany ? <span className="absolute left-3 top-3 rounded-lg bg-[var(--surface-dark)]/82 px-3 py-1.5 text-xs font-semibold tabular-nums text-white backdrop-blur-sm">{index + 1} / {safeImages.length}</span> : null}
+        {hasMany ? <span className="absolute left-3 top-3 rounded-lg bg-[var(--surface-dark)]/82 px-3 py-1.5 text-label font-semibold tabular-nums text-white backdrop-blur-sm">{index + 1} / {safeImages.length}</span> : null}
         {hasMany ? <><Button variant="plain" type="button" onClick={() => api?.scrollPrev()} className={cn("absolute left-3 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg transition lg:left-5", controlClass)} aria-label="Предыдущее фото"><ChevronLeft className="" aria-hidden /></Button><Button variant="plain" type="button" onClick={() => api?.scrollNext()} className={cn("absolute right-3 top-1/2 z-10 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-lg transition lg:right-5", controlClass)} aria-label="Следующее фото"><ChevronRight className="" aria-hidden /></Button></> : null}
       </Carousel>
 

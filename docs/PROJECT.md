@@ -137,10 +137,10 @@ The external starter audit and the local UI Core v5 audit are resolved through f
 
 ### Epic 12 — UI Core v5 conformance
 
-- [ ] Record UI Core v5 as the active UI contract and document the accepted package-owned token-source decision.
-- [ ] Remove unused semantic tokens and add a dead-token regression gate.
-- [ ] Add the class-based dark-mode contract while keeping this project light-only.
-- [ ] Reduce tracked typography debt to zero without introducing raw colors, duplicate primitives or arbitrary component values.
+- [x] Record UI Core v5 as the active UI contract and document the accepted package-owned token-source decision.
+- [x] Remove unused semantic tokens and add a dead-token regression gate.
+- [x] Add the class-based dark-mode contract while keeping this project light-only.
+- [x] Reduce tracked typography debt to zero without introducing raw colors, duplicate primitives or arbitrary component values.
 
 ### Epic 13 — accessibility, visual acceptance and local proof
 

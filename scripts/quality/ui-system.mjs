@@ -75,11 +75,13 @@ const hardcodedWhiteBackground = /\bbg-white\b/g;
 const buttonBlock = /<(?:Button|RequestModalButton)\b[\s\S]{0,900}?<\/(?:Button|RequestModalButton)>/g;
 const manuallySizedIcon = /<[A-Z][A-Za-z0-9]*\b[^>]*className=["'][^"']*\bsize-/;
 const rootPackageImport = /(?:from\s+|import\s*\(\s*)["']@starter\/site-ui["']/;
+const activatesDarkMode = /(?:className\s*=\s*["'](?:dark(?:\s|["'])|[^"']+\sdark(?:\s|["']))|classList\.(?:add|toggle)\(\s*["']dark["'])/;
 
 for (const file of files) {
   const normalized = file.replaceAll("\\", "/");
   if (normalized.endsWith("payload-types.ts")) continue;
   const source = await readFile(file, "utf8");
+  if (activatesDarkMode.test(source)) errors.push(`light-only project must not activate .dark: ${normalized}`);
   if ((normalized.startsWith("packages/site-ui/src/") || normalized.startsWith("src/components/")) && hardcodedWhiteBackground.test(source)) {
     errors.push(`hardcoded white background outside theme: ${normalized}`);
   }

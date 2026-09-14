@@ -6,7 +6,7 @@ import { BaseSectionPreview, CompactBenefitsSection, LeadgenFinalQuizCta, Leadge
 import "@starter/site-ui/styles/promo.css";
 
 const primaryButtonClass =
-  "inline-flex min-h-14 w-full items-center justify-center rounded-tight bg-[var(--accent)] px-7 text-center text-sm font-semibold text-white shadow-[var(--leadgen-promo-landing-shadow-primary)] transition hover:bg-[var(--accent-hover)] sm:w-auto";
+  "inline-flex min-h-14 w-full items-center justify-center rounded-tight bg-[var(--accent)] px-7 text-center text-body font-semibold text-white shadow-[var(--leadgen-promo-landing-shadow-primary)] transition hover:bg-[var(--accent-hover)] sm:w-auto";
 
 export type LeadgenPromoLandingAdapters = {
   PromoHeader: ElementType;
@@ -68,7 +68,7 @@ export function LeadgenPromoLandingView({
           className={`relative mx-auto flex w-full max-w-290 items-center px-5 pb-24 pt-28 sm:px-8 sm:pb-28 sm:pt-29.5 lg:pb-36 lg:pt-35.5 ${isPromoNovostroy2 ? 'min-h-170 sm:min-h-190' : 'min-h-165 sm:min-h-185'}`}
         >
           <div className="mx-auto w-full max-w-280 text-center">
-            <p className="relative inline-flex max-w-full overflow-hidden rounded-md border border-white/14 bg-white/[0.07] px-3.5 py-2.5 text-support font-semibold text-white/92 shadow-[var(--leadgen-promo-landing-shadow-secondary)] backdrop-blur-lg min-[380px]:text-sm sm:px-4 sm:text-body-compact">
+            <p className="relative inline-flex max-w-full overflow-hidden rounded-md border border-white/14 bg-white/[0.07] px-3.5 py-2.5 text-support font-semibold text-white/92 shadow-[var(--leadgen-promo-landing-shadow-secondary)] backdrop-blur-lg min-[380px]:text-body sm:px-4 sm:text-body-compact">
               <span className="absolute inset-0 bg-[linear-gradient(110deg,var(--leadgen-promo-landing-effect-hover)_0%,var(--leadgen-promo-landing-effect-active)_46%,var(--leadgen-promo-landing-effect-selected)_100%)]" aria-hidden />
               <span className="absolute -left-8 top-1/2 size-14 -translate-y-1/2 rounded-full bg-[var(--accent)]/18 blur-2xl" aria-hidden />
               <span className="leadgen-typing-text relative z-10">
@@ -79,7 +79,7 @@ export function LeadgenPromoLandingView({
               {renderHeroTitle(content.hero.h1, content.hero.h1Accent)}
             </h1>
             {content.hero.subtitle ? (
-              <p className="mx-auto mt-5 max-w-205 text-body-compact font-medium leading-6 text-white/78 [text-wrap:balance] sm:text-body-emphasis sm:leading-7">
+              <p className="mx-auto mt-5 max-w-205 text-body-compact font-medium leading-step-copy text-white/78 [text-wrap:balance] sm:text-body-emphasis sm:leading-step-relaxed">
                 {content.hero.subtitle}
               </p>
             ) : null}
@@ -94,12 +94,12 @@ export function LeadgenPromoLandingView({
               >
                 {content.hero.cta}
               </RequestButton>
-              <p className="mt-4 text-xs font-medium text-white/74">{content.hero.microtext}</p>
+              <p className="mt-4 text-label font-medium text-white/74">{content.hero.microtext}</p>
             </div>
           </div>
         </div>
         {content.hero.badge ? (
-          <div className="pointer-events-none absolute bottom-8 right-5 hidden rounded-callout border border-white/16 bg-white/12 px-4 py-3 text-left text-label font-semibold leading-tight text-white/88 shadow-[var(--leadgen-promo-landing-shadow-subtle)] backdrop-blur-md sm:right-8 lg:block">
+          <div className="pointer-events-none absolute bottom-8 right-5 hidden rounded-callout border border-white/16 bg-white/12 px-4 py-3 text-left text-label font-semibold leading-tight-copy text-white/88 shadow-[var(--leadgen-promo-landing-shadow-subtle)] backdrop-blur-md sm:right-8 lg:block">
             {content.hero.badge}
           </div>
         ) : null}
@@ -122,7 +122,7 @@ export function LeadgenPromoLandingView({
                 className="group relative overflow-hidden rounded-sm border border-[var(--leadgen-promo-landing-border-primary)] bg-white p-4 shadow-[var(--leadgen-promo-landing-shadow-muted)] transition hover:-translate-y-1 hover:border-[var(--leadgen-promo-landing-border-secondary)] hover:shadow-[var(--leadgen-promo-landing-shadow-strong)] sm:min-h-53.5 sm:p-6 sm:shadow-[var(--leadgen-promo-landing-shadow-inverse)]"
               >
                 <div className="absolute inset-x-0 top-0 h-0.75 bg-[var(--accent)]" aria-hidden />
-                <div className="absolute right-4 top-4 text-caption font-bold tracking-[0.18em] text-[var(--leadgen-promo-landing-content-primary)]" aria-hidden>
+                <div className="absolute right-4 top-4 text-caption font-bold tracking-spaced text-[var(--leadgen-promo-landing-content-primary)]" aria-hidden>
                   {String(index + 1).padStart(2, "0")}
                 </div>
                 <div className="flex items-start justify-between gap-4 pr-10">
@@ -130,8 +130,8 @@ export function LeadgenPromoLandingView({
                     {renderTrustIcon(item.icon, index)}
                   </span>
                 </div>
-                <h3 className="mt-4 max-w-none pr-7 text-base font-semibold leading-tight text-[var(--text-primary)] [text-wrap:balance] sm:mt-6 sm:text-body-emphasis">{item.title}</h3>
-                <p className="mt-2 text-support font-medium leading-5 text-[var(--leadgen-promo-landing-content-secondary)] sm:mt-3 sm:text-sm sm:leading-6">{item.text}</p>
+                <h3 className="mt-4 max-w-none pr-7 text-body-large font-semibold leading-tight-copy text-[var(--text-primary)] [text-wrap:balance] sm:mt-6 sm:text-body-emphasis">{item.title}</h3>
+                <p className="mt-2 text-support font-medium leading-step-body text-[var(--leadgen-promo-landing-content-secondary)] sm:mt-3 sm:text-body sm:leading-step-copy">{item.text}</p>
               </article>
             ))}
           </div>
@@ -151,11 +151,11 @@ export function LeadgenPromoLandingView({
                 <span className="block text-[var(--accent)]">{content.baseSection.accentTitle}</span>
               ) : null}
             </h2>
-            <p className={`${content.baseSection.preview ? 'mt-8 font-semibold text-[var(--text-primary)]' : 'mt-5 text-[var(--leadgen-promo-landing-content-tertiary)]'} text-body-emphasis leading-7`}>
+            <p className={`${content.baseSection.preview ? 'mt-8 font-semibold text-[var(--text-primary)]' : 'mt-5 text-[var(--leadgen-promo-landing-content-tertiary)]'} text-body-emphasis leading-step-relaxed`}>
               {content.baseSection.subtitle}
             </p>
             {content.baseSection.badge ? (
-              <p className="mt-6 flex w-full items-center gap-3 rounded-sm bg-[var(--accent)] px-4 py-3 text-support font-semibold leading-5 text-white shadow-[var(--leadgen-promo-landing-shadow-active)] sm:inline-flex sm:w-auto sm:px-5 sm:text-sm">
+              <p className="mt-6 flex w-full items-center gap-3 rounded-sm bg-[var(--accent)] px-4 py-3 text-support font-semibold leading-step-body text-white shadow-[var(--leadgen-promo-landing-shadow-active)] sm:inline-flex sm:w-auto sm:px-5 sm:text-body">
                 <span className="grid size-6 shrink-0 place-items-center rounded-full bg-white/16" aria-hidden>
                   <Check className="size-3.5" />
                 </span>
@@ -180,8 +180,8 @@ export function LeadgenPromoLandingView({
                           {String(index + 1).padStart(2, "0")}
                         </span>
                       </div>
-                      {item.title ? <h3 className="text-sm font-semibold leading-5 text-[var(--text-primary)]">{item.title}</h3> : null}
-                      <p className={`${item.title ? 'mt-2' : ''} text-support font-medium leading-6 text-[var(--leadgen-promo-landing-content-muted)]`}>{item.text}</p>
+                      {item.title ? <h3 className="text-body font-semibold leading-step-body text-[var(--text-primary)]">{item.title}</h3> : null}
+                      <p className={`${item.title ? 'mt-2' : ''} text-support font-medium leading-step-copy text-[var(--leadgen-promo-landing-content-muted)]`}>{item.text}</p>
                       <div className="absolute inset-x-0 bottom-0 h-0.5 bg-[var(--accent)] opacity-0 transition group-hover:opacity-100" aria-hidden />
                     </div>
                   );
@@ -202,7 +202,7 @@ export function LeadgenPromoLandingView({
                     key={`${item.title ?? "point"}-${item.text}`}
                     className="grid grid-cols-[40px_minmax(0,1fr)] gap-x-4 border-b border-[var(--leadgen-promo-landing-border-muted)] py-6 last:border-b-0 sm:grid-cols-[42px_44px_minmax(0,1fr)] sm:items-center sm:gap-x-5 sm:py-7"
                   >
-                    <span className="pt-1 text-label font-bold tracking-[0.14em] text-[var(--accent)] sm:pt-0">
+                    <span className="pt-1 text-label font-bold tracking-overline text-[var(--accent)] sm:pt-0">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <span className="hidden size-11 place-items-center rounded-soft border border-[var(--leadgen-promo-landing-border-strong)] bg-white text-[var(--accent)] sm:grid">
@@ -211,8 +211,8 @@ export function LeadgenPromoLandingView({
                       {index === 2 ? <ShieldCheck className="size-5" aria-hidden /> : null}
                     </span>
                     <div>
-                      {item.title ? <h3 className="text-body-compact font-semibold leading-6 text-[var(--leadgen-promo-landing-content-strong)] sm:text-base">{item.title}</h3> : null}
-                      <p className={`${item.title ? 'mt-1.5' : 'font-semibold'} text-body leading-6 text-[var(--leadgen-promo-landing-content-inverse)] sm:text-body-compact`}>{item.text}</p>
+                      {item.title ? <h3 className="text-body-compact font-semibold leading-step-copy text-[var(--leadgen-promo-landing-content-strong)] sm:text-body-large">{item.title}</h3> : null}
+                      <p className={`${item.title ? 'mt-1.5' : 'font-semibold'} text-body leading-step-copy text-[var(--leadgen-promo-landing-content-inverse)] sm:text-body-compact`}>{item.text}</p>
                     </div>
                   </article>
                 );
@@ -245,7 +245,7 @@ export function LeadgenPromoLandingView({
           <div className="relative overflow-hidden rounded-sm border border-[var(--leadgen-promo-landing-border-primary)] bg-[var(--leadgen-promo-landing-surface-subtle)] p-4 shadow-[var(--leadgen-promo-landing-shadow-disabled)] sm:p-6 lg:p-7">
             <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_330px] lg:items-center">
               <div>
-                <p className="max-w-155 text-lead-compact font-semibold leading-tight text-[var(--text-secondary)] sm:text-card-large">
+                <p className="max-w-155 text-lead-compact font-semibold leading-tight-copy text-[var(--text-secondary)] sm:text-card-large">
                   {bonusSection.title}
                 </p>
                 <div className="mt-5 grid gap-3 md:grid-cols-2">
@@ -260,7 +260,7 @@ export function LeadgenPromoLandingView({
                         <span className="grid size-9 place-items-center rounded-compact bg-[var(--accent-soft)] text-[var(--accent)]">
                           <Icon className="size-[18px]" aria-hidden />
                         </span>
-                        <p className="text-support font-medium leading-6 text-[var(--leadgen-promo-landing-content-hover)]">{item}</p>
+                        <p className="text-support font-medium leading-step-copy text-[var(--leadgen-promo-landing-content-hover)]">{item}</p>
                       </div>
                     );
                   })}

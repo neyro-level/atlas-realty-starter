@@ -16,7 +16,7 @@ export function CareersComparisonView({ content: careersComparison }: { content:
           >
             {careersComparison.title}
           </h2>
-          <p className="mt-4 text-body-compact leading-7 text-[var(--careers-comparison-content-primary)] sm:text-body-large">
+          <p className="mt-4 text-body-compact leading-step-relaxed text-[var(--careers-comparison-content-primary)] sm:text-body-large">
             {careersComparison.description}
           </p>
         </div>
@@ -45,7 +45,7 @@ export function CareersComparisonView({ content: careersComparison }: { content:
         </div>
 
         <div className="mx-auto mt-10 max-w-245 border-t border-[var(--careers-comparison-border-secondary)] pt-8 text-center sm:mt-12 sm:pt-10">
-          <p className="text-heading-small font-semibold leading-8 text-[var(--text-primary)] sm:text-[clamp(21px,1.7vw,26px)] sm:leading-[1.4]">
+          <p className="text-heading-small font-semibold leading-step-airy text-[var(--text-primary)] sm:text-card-heading-fluid sm:leading-supportive">
             {careersComparison.conclusion}
           </p>
         </div>
@@ -73,14 +73,14 @@ function ComparisonPanel({
           : 'border border-[var(--border)] bg-[var(--surface-card)] text-[var(--text-primary)]'
       }`}
     >
-      <h3 className={`text-heading-small font-semibold leading-7 ${isBrand ? 'text-white' : 'text-[var(--text-secondary)]'}`}>
+      <h3 className={`text-heading-small font-semibold leading-step-relaxed ${isBrand ? 'text-white' : 'text-[var(--text-secondary)]'}`}>
         {label}
       </h3>
       <ul className="mt-6 grid gap-4">
         {items.map((item) => (
           <li
             key={item}
-            className={`grid grid-cols-[22px_minmax(0,1fr)] items-start gap-3 text-body-compact leading-6 ${
+            className={`grid grid-cols-[22px_minmax(0,1fr)] items-start gap-3 text-body-compact leading-step-copy ${
               isBrand ? 'text-white/82' : 'text-[var(--careers-comparison-content-primary)]'
             }`}
           >

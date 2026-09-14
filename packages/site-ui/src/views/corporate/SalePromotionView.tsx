@@ -33,7 +33,7 @@ export function SalePromotionView({ cityGenitive, cityPrepositional }: { cityGen
           >
             Ищем покупателя сами, а не ждём звонков
           </h2>
-          <p className="mt-4 max-w-190 text-body-compact leading-6 text-[var(--text-muted)] sm:text-body-large sm:leading-7">
+          <p className="mt-4 max-w-190 text-body-compact leading-step-copy text-[var(--text-muted)] sm:text-body-large sm:leading-step-relaxed">
             Размещаем объект на 5 площадках, продвигаем в соцсетях и показываем партнёрам-риелторам. Случайные звонки отсеиваем.
           </p>
         </div>
@@ -47,8 +47,8 @@ export function SalePromotionView({ cityGenitive, cityPrepositional }: { cityGen
               >
                 {icon}
               </span>
-              <h3 className="mt-5 text-body-large font-semibold leading-snug text-[var(--text-primary)]">{title}</h3>
-              <p className="mt-2 max-w-[var(--container-copy-measure)] text-support leading-5 text-[var(--text-muted)]">{description}</p>
+              <h3 className="mt-5 text-body-large font-semibold leading-compact-copy text-[var(--text-primary)]">{title}</h3>
+              <p className="mt-2 max-w-[var(--container-copy-measure)] text-support leading-step-body text-[var(--text-muted)]">{description}</p>
             </article>
           ))}
         </div>

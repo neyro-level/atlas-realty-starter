@@ -49,10 +49,10 @@ export function SalePricingPrinciplesView() {
               >
                 <Icon className="size-[18px]" strokeWidth={1.6} />
               </span>
-              <h3 className="mt-5 text-body-large font-semibold leading-snug text-[var(--text-primary)]">
+              <h3 className="mt-5 text-body-large font-semibold leading-compact-copy text-[var(--text-primary)]">
                 {title}
               </h3>
-              <p className="mt-2 max-w-[var(--container-copy-measure)] text-support leading-5 text-[var(--text-muted)]">{description}</p>
+              <p className="mt-2 max-w-[var(--container-copy-measure)] text-support leading-step-body text-[var(--text-muted)]">{description}</p>
             </article>
           ))}
         </div>

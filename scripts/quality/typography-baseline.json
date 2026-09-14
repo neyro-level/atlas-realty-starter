@@ -1,11 +1,11 @@
 {
-  "tailwindTextSize": 401,
-  "arbitraryTextSize": 31,
-  "tailwindLeading": 418,
-  "arbitraryLeading": 63,
-  "tailwindTracking": 2,
-  "arbitraryTracking": 77,
-  "rawCssFontSize": 68,
-  "rawCssLineHeight": 47,
-  "rawCssLetterSpacing": 23
+  "tailwindTextSize": 0,
+  "arbitraryTextSize": 0,
+  "tailwindLeading": 0,
+  "arbitraryLeading": 0,
+  "tailwindTracking": 0,
+  "arbitraryTracking": 0,
+  "rawCssFontSize": 0,
+  "rawCssLineHeight": 0,
+  "rawCssLetterSpacing": 0
 }

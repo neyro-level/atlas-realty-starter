@@ -73,7 +73,7 @@ export function PopularSearchesSection() {
         <div className="border-t border-[var(--border)] pt-10 md:pt-12 lg:pt-14">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
             <div className="shrink-0 lg:w-57.5">
-              <p className="mb-2 text-caption font-extrabold uppercase tracking-[0.16em] text-[var(--accent)]">
+              <p className="mb-2 text-caption font-extrabold uppercase tracking-emphasis text-[var(--accent)]">
                 Популярные подборки
               </p>
               <h2
@@ -93,7 +93,7 @@ export function PopularSearchesSection() {
                 >
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-caption font-bold tabular-nums text-[var(--accent)]">{group.kicker}</span>
-                    <h3 className="text-body-compact font-extrabold leading-tight text-[var(--text-primary)]">{group.title}</h3>
+                    <h3 className="text-body-compact font-extrabold leading-tight-copy text-[var(--text-primary)]">{group.title}</h3>
                   </div>
 
                   <div className="mt-4 grid gap-2">
@@ -101,7 +101,7 @@ export function PopularSearchesSection() {
                       <Link
                         key={link.href}
                         href={link.href}
-                        className="block text-body font-medium leading-5 text-[var(--text-secondary)] transition hover:text-[var(--accent)]"
+                        className="block text-body font-medium leading-step-body text-[var(--text-secondary)] transition hover:text-[var(--accent)]"
                       >
                         {link.label}
                       </Link>

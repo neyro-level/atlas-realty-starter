@@ -9,6 +9,8 @@ const declarations = new Set(sources.flatMap(({ source }) => [...source.matchAll
 const uses = sources.flatMap(({ file, source }) => [...source.matchAll(/var\(--([a-zA-Z0-9-_]+)/g)].map((match) => ({ file, name: match[1] })));
 const errors = [];
 const admittedOverrides = new Set(["card-bg", "card-border"]);
+const rootTheme = theme.slice(0, theme.indexOf("@theme"));
+const rootDeclarations = [...rootTheme.matchAll(/--([a-zA-Z0-9-_]+)\s*:/g)].map((match) => match[1]);
 
 for (const use of uses) {
   if (!declarations.has(use.name) && !admittedOverrides.has(use.name)) errors.push(`unknown token --${use.name}: ${use.file}`);
@@ -16,7 +18,7 @@ for (const use of uses) {
 
 const requiredTokens = [
   "surface-page", "content-strong", "border-default", "action-primary", "status-success",
-  "site-type-display", "spacing-section-default", "radius-control", "shadow-surface", "container-page", "motion-default",
+  "site-type-display", "site-section-space-desktop", "site-radius-sm", "shadow-card", "site-frame-max",
 ];
 for (const token of requiredTokens) {
   if (!declarations.has(token)) errors.push(`required semantic token is missing: --${token}`);
@@ -30,6 +32,10 @@ for (const name of declarations) {
 const compatibility = [...theme.matchAll(/--([a-z0-9-]+-(?:color|surface|content|border|shadow|effect|icon)-\d{2})\s*:/g)].map((match) => match[1]);
 for (const name of compatibility) {
   if (!uses.some((use) => use.name === name)) errors.push(`unused numbered compatibility token: --${name}`);
+}
+
+for (const name of rootDeclarations) {
+  if (!uses.some((use) => use.name === name)) errors.push(`unused root token: --${name}`);
 }
 
 if (errors.length) {

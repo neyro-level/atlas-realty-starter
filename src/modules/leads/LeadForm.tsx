@@ -114,10 +114,10 @@ export function RequestForm({
       </label>
 
       <div className={premiumCompact ? "mb-6" : "mb-5 border-b border-[var(--lead-form-border-secondary)] pb-4"}>
-        <p className={premiumCompact ? "text-xl font-semibold leading-tight text-[var(--text-primary)]" : "text-caption font-extrabold uppercase tracking-[0.08em] text-[var(--lead-form-content-primary)]"}>
+        <p className={premiumCompact ? "text-heading-small font-semibold leading-tight-copy text-[var(--text-primary)]" : "text-caption font-extrabold uppercase tracking-overline-compact text-[var(--lead-form-content-primary)]"}>
           {title}
         </p>
-        <p className={`mt-2 text-sm text-[var(--lead-form-content-secondary)] ${premiumCompact ? "leading-5" : "leading-6"}`}>{description}</p>
+        <p className={`mt-2 text-body text-[var(--lead-form-content-secondary)] ${premiumCompact ? "leading-step-body" : "leading-step-copy"}`}>{description}</p>
       </div>
 
       <FieldGroup className="gap-3">
@@ -125,7 +125,7 @@ export function RequestForm({
           <FieldLabel>Ваше имя</FieldLabel>
           <Input
             autoComplete="name"
-            className="min-h-11 rounded-lg border border-[var(--lead-form-border-tertiary)] bg-white px-3 text-base outline-none transition focus:border-[var(--lead-form-border-subtle)]"
+            className="min-h-11 rounded-lg border border-[var(--lead-form-border-tertiary)] bg-white px-3 text-body-large outline-none transition focus:border-[var(--lead-form-border-subtle)]"
             {...register("name")}
           />
         </Field>
@@ -137,7 +137,7 @@ export function RequestForm({
             autoComplete="tel"
             inputMode="tel"
             placeholder="+7 (9__) ___-__-__"
-            className="min-h-11 rounded-lg border border-[var(--lead-form-border-tertiary)] bg-white px-3 text-base font-medium tabular-nums outline-none transition placeholder:text-[var(--lead-form-content-subtle)] focus:border-[var(--lead-form-border-subtle)]"
+            className="min-h-11 rounded-lg border border-[var(--lead-form-border-tertiary)] bg-white px-3 text-body-large font-medium tabular-nums outline-none transition placeholder:text-[var(--lead-form-content-subtle)] focus:border-[var(--lead-form-border-subtle)]"
             {...register("phone")}
             value={phone}
             onFocus={() => {
@@ -154,7 +154,7 @@ export function RequestForm({
       </FieldGroup>
 
       <Field className="mt-4">
-        <label className={`flex text-xs leading-5 text-[var(--lead-form-content-muted)] ${premiumCompact ? "items-center gap-2.5" : "items-start gap-3"}`}>
+        <label className={`flex text-label leading-step-body text-[var(--lead-form-content-muted)] ${premiumCompact ? "items-center gap-2.5" : "items-start gap-3"}`}>
           <Controller control={control} name="consent" render={({ field }) => (
             <Checkbox checked={field.value} onCheckedChange={(checked) => field.onChange(checked === true)} aria-invalid={Boolean(errors.consent)} />
           )} />
@@ -164,7 +164,7 @@ export function RequestForm({
       </Field>
 
       {premiumCompact ? (
-        <p className="mt-4 flex items-center gap-2 text-caption leading-4 text-[var(--lead-form-content-strong)]">
+        <p className="mt-4 flex items-center gap-2 text-caption leading-step-small text-[var(--lead-form-content-strong)]">
           <ShieldCheck className="size-4 shrink-0 text-[var(--accent)]" aria-hidden />
           Невидимая защита от спама включена
         </p>
@@ -173,7 +173,7 @@ export function RequestForm({
       <Button variant="plain"
         type="submit"
         disabled={isPending}
-        className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-[var(--lead-form-surface-secondary)] px-5 text-sm font-bold text-white transition hover:bg-[var(--lead-form-surface-tertiary)] disabled:cursor-wait disabled:opacity-70"
+        className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md bg-[var(--lead-form-surface-secondary)] px-5 text-body font-bold text-white transition hover:bg-[var(--lead-form-surface-tertiary)] disabled:cursor-wait disabled:opacity-70"
       >
         {isPending ? "Отправляем..." : submitLabel}
         {!premiumCompact ? <ArrowRight className="" aria-hidden /> : null}
@@ -181,7 +181,7 @@ export function RequestForm({
 
       {result ? (
         <p
-          className={`mt-3 text-sm font-semibold ${
+          className={`mt-3 text-body font-semibold ${
             result.ok ? "text-[var(--lead-form-content-inverse)]" : "text-[var(--lead-form-content-primary)]"
           }`}
         >

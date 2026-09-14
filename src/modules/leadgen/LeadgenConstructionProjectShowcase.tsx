@@ -41,39 +41,39 @@ export function LeadgenConstructionProjectShowcase({
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--leadgen-construction-project-showcase-effect-primary)_44%,var(--leadgen-construction-project-showcase-effect-secondary)_100%)]" aria-hidden />
               <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between gap-3">
-                <span className="rounded-compact bg-white/90 px-2.5 py-1.5 text-caption font-medium leading-none text-[var(--text-secondary)] shadow-[var(--leadgen-construction-project-showcase-shadow-tertiary)] backdrop-blur-sm">
+                <span className="rounded-compact bg-white/90 px-2.5 py-1.5 text-caption font-medium leading-flat text-[var(--text-secondary)] shadow-[var(--leadgen-construction-project-showcase-shadow-tertiary)] backdrop-blur-sm">
                   {project.buildTime}
                 </span>
-                <span className="rounded-compact bg-[var(--accent)]/92 px-2.5 py-1.5 text-caption font-semibold leading-none text-white shadow-[var(--leadgen-construction-project-showcase-shadow-subtle)] backdrop-blur-sm">
+                <span className="rounded-compact bg-[var(--accent)]/92 px-2.5 py-1.5 text-caption font-semibold leading-flat text-white shadow-[var(--leadgen-construction-project-showcase-shadow-subtle)] backdrop-blur-sm">
                   {tenant.cityRu}
                 </span>
               </div>
             </div>
 
             <div className="flex flex-1 flex-col p-5 sm:p-6">
-              <p className="text-caption font-semibold uppercase tracking-[0.12em] text-[var(--accent)]">Материал</p>
-              <h3 className="mt-2 text-heading-compact font-semibold leading-tight text-[var(--text-primary)]">{project.material}</h3>
+              <p className="text-caption font-semibold uppercase tracking-wide-role text-[var(--accent)]">Материал</p>
+              <h3 className="mt-2 text-heading-compact font-semibold leading-tight-copy text-[var(--text-primary)]">{project.material}</h3>
 
               <div className="mt-5 grid grid-cols-2 gap-3">
                 <div className="rounded-sm bg-[var(--leadgen-construction-project-showcase-surface-primary)] p-3">
-                  <span className="flex items-center gap-1.5 text-overline font-semibold uppercase leading-none text-[var(--text-muted)]">
+                  <span className="flex items-center gap-1.5 text-overline font-semibold uppercase leading-flat text-[var(--text-muted)]">
                     <Ruler className="size-3.5" aria-hidden />
                     Площадь
                   </span>
-                  <p className="mt-2 text-lead-compact font-semibold leading-none text-[var(--text-primary)]">{project.area}</p>
+                  <p className="mt-2 text-lead-compact font-semibold leading-flat text-[var(--text-primary)]">{project.area}</p>
                 </div>
                 <div className="rounded-sm bg-[var(--leadgen-construction-project-showcase-surface-primary)] p-3">
-                  <span className="flex items-center gap-1.5 text-overline font-semibold uppercase leading-none text-[var(--text-muted)]">
+                  <span className="flex items-center gap-1.5 text-overline font-semibold uppercase leading-flat text-[var(--text-muted)]">
                     <Clock3 className="size-3.5" aria-hidden />
                     Срок
                   </span>
-                  <p className="mt-2 text-lead-compact font-semibold leading-none text-[var(--text-primary)]">{project.buildTime}</p>
+                  <p className="mt-2 text-lead-compact font-semibold leading-flat text-[var(--text-primary)]">{project.buildTime}</p>
                 </div>
               </div>
 
               <div className="mt-5 border-t border-[var(--border)] pt-5">
-                <p className="text-overline font-semibold uppercase leading-none text-[var(--text-muted)]">Стоимость</p>
-                <p className="mt-2 text-section-small font-semibold leading-tight text-[var(--accent)]">{project.priceFrom}</p>
+                <p className="text-overline font-semibold uppercase leading-flat text-[var(--text-muted)]">Стоимость</p>
+                <p className="mt-2 text-section-small font-semibold leading-tight-copy text-[var(--accent)]">{project.priceFrom}</p>
               </div>
             </div>
           </article>
@@ -82,7 +82,7 @@ export function LeadgenConstructionProjectShowcase({
 
       <div className="mt-9 flex flex-col items-center">
         <LeadgenRequestButton
-          className="inline-flex min-h-14 w-full items-center justify-center rounded-compact bg-[var(--accent)] px-7 text-center text-sm font-semibold text-white shadow-[var(--leadgen-construction-project-showcase-shadow-muted)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-hover)] hover:shadow-[var(--leadgen-construction-project-showcase-shadow-strong)] sm:w-auto"
+          className="inline-flex min-h-14 w-full items-center justify-center rounded-compact bg-[var(--accent)] px-7 text-center text-body font-semibold text-white shadow-[var(--leadgen-construction-project-showcase-shadow-muted)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-hover)] hover:shadow-[var(--leadgen-construction-project-showcase-shadow-strong)] sm:w-auto"
           mode="quiz"
           title={modalTitle}
           submitLabel={submitLabel}
@@ -91,7 +91,7 @@ export function LeadgenConstructionProjectShowcase({
         >
           Узнать стоимость моего варианта
         </LeadgenRequestButton>
-        <p className="mt-3 flex items-center gap-2 text-center text-label font-medium leading-5 text-[var(--text-muted)]">
+        <p className="mt-3 flex items-center gap-2 text-center text-label font-medium leading-step-body text-[var(--text-muted)]">
           <Home className="size-3.5 text-[var(--accent)]" aria-hidden />
           Расчет зависит от участка, комплектации и выбранных материалов
         </p>

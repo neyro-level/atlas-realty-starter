@@ -39,12 +39,12 @@ export function FavoriteArticleCard({ item, priority = false, showFavoriteContro
             />
           ) : null}
         </span>
-        <p className="mt-2 text-caption font-semibold uppercase tracking-[0.06em] text-[var(--accent)]">Статья</p>
-        <h3 className="mt-1.5 line-clamp-2 text-body-large font-semibold leading-5 text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">
+        <p className="mt-2 text-caption font-semibold uppercase tracking-eyebrow text-[var(--accent)]">Статья</p>
+        <h3 className="mt-1.5 line-clamp-2 text-body-large font-semibold leading-step-body text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">
           {item.title}
         </h3>
         {item.address && item.address !== "Журнал «АТЛАС»" ? (
-          <p className="mt-2 line-clamp-2 text-support leading-5 text-[var(--text-secondary)]">{item.address}</p>
+          <p className="mt-2 line-clamp-2 text-support leading-step-body text-[var(--text-secondary)]">{item.address}</p>
         ) : null}
       </Link>
     </article>

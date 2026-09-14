@@ -7,7 +7,7 @@ export function FieldSet({ className, ...props }: ComponentProps<"fieldset">) {
 }
 
 export function FieldLegend({ className, ...props }: ComponentProps<"legend">) {
-  return <legend data-slot="field-legend" className={cn("text-sm font-semibold text-[var(--text-primary)]", className)} {...props} />;
+  return <legend data-slot="field-legend" className={cn("text-body font-semibold text-[var(--text-primary)]", className)} {...props} />;
 }
 
 export function FieldGroup({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
@@ -23,15 +23,15 @@ export function FieldContent({ className, ...props }: HTMLAttributes<HTMLDivElem
 }
 
 export function FieldLabel({ className, ...props }: ComponentProps<typeof Label>) {
-  return <Label data-slot="field-label" className={cn("text-sm font-medium text-[var(--text-primary)]", className)} {...props} />;
+  return <Label data-slot="field-label" className={cn("text-body font-medium text-[var(--text-primary)]", className)} {...props} />;
 }
 
 export function FieldTitle({ className, ...props }: HTMLAttributes<HTMLParagraphElement>) {
-  return <p data-slot="field-title" className={cn("text-sm font-medium text-[var(--text-primary)]", className)} {...props} />;
+  return <p data-slot="field-title" className={cn("text-body font-medium text-[var(--text-primary)]", className)} {...props} />;
 }
 
 export function FieldDescription({ className, ...props }: HTMLAttributes<HTMLParagraphElement>) {
-  return <p data-slot="field-description" className={cn("text-xs leading-5 text-[var(--field-content-primary)]", className)} {...props} />;
+  return <p data-slot="field-description" className={cn("text-label leading-step-body text-[var(--field-content-primary)]", className)} {...props} />;
 }
 
 export function FieldSeparator({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
@@ -45,7 +45,7 @@ export function FieldError({ className, errors, children, ...props }: HTMLAttrib
   }
 
   return (
-    <p data-slot="field-error" className={cn("text-xs leading-5 text-[var(--accent)]", className)} {...props}>
+    <p data-slot="field-error" className={cn("text-label leading-step-body text-[var(--accent)]", className)} {...props}>
       {children ?? messages?.join(" ")}
     </p>
   );

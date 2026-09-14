@@ -23,7 +23,7 @@ export function PhoneRevealView({
   if (!phone || !phoneHref) return null;
 
   if (variant === "mobile") {
-    const className = "flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg bg-[var(--phone-reveal-surface-primary)] px-3 text-support font-medium tracking-[-0.01em] text-[var(--text-primary)] transition hover:bg-[var(--phone-reveal-surface-secondary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]";
+    const className = "flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg bg-[var(--phone-reveal-surface-primary)] px-3 text-support font-medium tracking-compact text-[var(--text-primary)] transition hover:bg-[var(--phone-reveal-surface-secondary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]";
 
     if (visible) {
       return (
@@ -50,8 +50,8 @@ export function PhoneRevealView({
   }
 
   const baseClassName = visible
-    ? "inline-flex min-h-10 w-47 items-center gap-2 rounded-md px-2.5 text-sm font-semibold text-[var(--text-secondary)]"
-    : "inline-flex min-h-10 w-29.5 items-center gap-1.5 rounded-md px-1.5 text-sm font-semibold text-[var(--text-secondary)]";
+    ? "inline-flex min-h-10 w-47 items-center gap-2 rounded-md px-2.5 text-body font-semibold text-[var(--text-secondary)]"
+    : "inline-flex min-h-10 w-29.5 items-center gap-1.5 rounded-md px-1.5 text-body font-semibold text-[var(--text-secondary)]";
   const interactiveClassName = `${baseClassName} transition hover:bg-[var(--background)] hover:text-[var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]`;
 
   if (visible) {

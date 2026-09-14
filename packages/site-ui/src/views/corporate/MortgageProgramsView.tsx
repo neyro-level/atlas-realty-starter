@@ -64,20 +64,20 @@ export function MortgageProgramsView({ cityPrepositional }: { cityPrepositional:
               <span className="flex size-10 items-center justify-center rounded-xl bg-[var(--surface-card)] text-[var(--text-secondary)] transition duration-300 group-hover:text-[var(--accent)]">
                 <program.Icon className="size-[18px]" strokeWidth={1.6} aria-hidden />
               </span>
-              <h3 className="mt-5 text-body-large font-semibold leading-snug text-[var(--text-primary)]">{program.title}</h3>
-              <p className="mt-2 text-support leading-5 text-[var(--text-muted)]">{program.description}</p>
-              <p className="mt-auto pt-6 text-body font-medium leading-none text-[var(--accent)]">{program.rate}</p>
+              <h3 className="mt-5 text-body-large font-semibold leading-compact-copy text-[var(--text-primary)]">{program.title}</h3>
+              <p className="mt-2 text-support leading-step-body text-[var(--text-muted)]">{program.description}</p>
+              <p className="mt-auto pt-6 text-body font-medium leading-flat text-[var(--accent)]">{program.rate}</p>
             </article>
           ))}
         </div>
 
         <div className="mt-10 border-t border-[var(--mortgage-programs-border-primary)] pt-7 sm:mt-12 sm:pt-8">
-          <h3 className="text-body-compact font-medium leading-none text-[var(--text-secondary)]">Сертификаты</h3>
+          <h3 className="text-body-compact font-medium leading-flat text-[var(--text-secondary)]">Сертификаты</h3>
           <ul className="mt-4 grid gap-3 sm:grid-cols-3">
             {SUPPORT_OPTIONS.map((option) => (
               <li key={option.title} className="flex min-h-14 items-center gap-3 rounded-xl bg-[var(--mortgage-programs-surface-secondary)] px-4 py-3.5">
                 <option.Icon className="size-[17px] shrink-0 text-[var(--text-muted)]" strokeWidth={1.6} aria-hidden />
-                <p className="text-body font-medium leading-5 text-[var(--mortgage-programs-content-primary)]">{option.title}</p>
+                <p className="text-body font-medium leading-step-body text-[var(--mortgage-programs-content-primary)]">{option.title}</p>
               </li>
             ))}
           </ul>

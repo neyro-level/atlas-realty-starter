@@ -28,7 +28,7 @@ export function CitySwitcherView({ open, variant, options, linkRenderer: LinkRen
           aria-haspopup="menu"
           aria-expanded={open}
           aria-controls={panelId}
-          className="flex min-h-11 w-full items-center justify-between gap-2 rounded-lg bg-[var(--city-switcher-surface-primary)] px-3 text-support font-medium tracking-[-0.01em] text-[var(--city-switcher-content-primary)] transition hover:bg-[var(--city-switcher-surface-secondary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+          className="flex min-h-11 w-full items-center justify-between gap-2 rounded-lg bg-[var(--city-switcher-surface-primary)] px-3 text-support font-medium tracking-compact text-[var(--city-switcher-content-primary)] transition hover:bg-[var(--city-switcher-surface-secondary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
           onClick={onToggle}
         >
           <span className="flex min-w-0 items-center gap-1.5">
@@ -51,7 +51,7 @@ export function CitySwitcherView({ open, variant, options, linkRenderer: LinkRen
             const content = (
               <>
                 <span className="flex items-center justify-between gap-3">
-                  <span className="font-medium tracking-[-0.01em]">{city.label}</span>
+                  <span className="font-medium tracking-compact">{city.label}</span>
                   {city.current ? (
                     <span className="size-1.5 rounded-full bg-[var(--accent)]" aria-hidden />
                   ) : (
@@ -85,7 +85,7 @@ export function CitySwitcherView({ open, variant, options, linkRenderer: LinkRen
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={panelId}
-        className="inline-flex min-h-10 items-center gap-2 rounded-md px-2.5 text-sm font-semibold text-[var(--text-secondary)] transition hover:bg-[var(--background)] hover:text-[var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+        className="inline-flex min-h-10 items-center gap-2 rounded-md px-2.5 text-body font-semibold text-[var(--text-secondary)] transition hover:bg-[var(--background)] hover:text-[var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
         onClick={onToggle}
       >
         <span className="flex min-w-0 items-center gap-2">
@@ -114,10 +114,10 @@ export function CitySwitcherView({ open, variant, options, linkRenderer: LinkRen
                   <ArrowRight className="size-4 shrink-0 text-[var(--accent)] opacity-70" aria-hidden />
                 )}
               </span>
-              <span className="mt-0.5 block truncate text-xs font-semibold text-[var(--text-muted)]">{city.domainLabel}</span>
+              <span className="mt-0.5 block truncate text-label font-semibold text-[var(--text-muted)]">{city.domainLabel}</span>
             </>
           );
-          const className = `block rounded-sm px-3 py-2.5 text-left text-sm transition ${
+          const className = `block rounded-sm px-3 py-2.5 text-left text-body transition ${
             city.current ? "bg-[var(--background)] text-[var(--text-primary)]" : "text-[var(--text-secondary)] hover:bg-[var(--background)] hover:text-[var(--accent)]"
           }`;
 

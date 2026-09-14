@@ -53,7 +53,7 @@ export function RequestCta({
         complexId: complexId ?? undefined,
         complexName,
       })}
-      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--request-cta-focus-01)] ${variants[variant]} ${className}`}
+      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 text-body font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--request-cta-focus-01)] ${variants[variant]} ${className}`}
     >
       {label}
       {showIcon ? <ArrowRight data-icon="inline-end" aria-hidden /> : null}

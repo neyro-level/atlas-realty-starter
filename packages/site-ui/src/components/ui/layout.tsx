@@ -38,9 +38,9 @@ export function SectionHeader({ eyebrow, title, description, action, className, 
   return (
     <header data-slot="section-header" className={cn("flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between", className)}>
       <div className="max-w-3xl">
-        {eyebrow ? <p className="text-xs font-semibold uppercase tracking-[0.12em] text-action-primary">{eyebrow}</p> : null}
+        {eyebrow ? <p className="text-label font-semibold uppercase tracking-wide-role text-action-primary">{eyebrow}</p> : null}
         <h2 id={titleId} className="text-[length:var(--site-type-section)] font-semibold leading-[var(--site-type-section-leading)] text-content-strong">{title}</h2>
-        {description ? <p className="mt-3 text-sm leading-6 text-content-default md:text-base">{description}</p> : null}
+        {description ? <p className="mt-3 text-body leading-step-copy text-content-default md:text-body-large">{description}</p> : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
     </header>

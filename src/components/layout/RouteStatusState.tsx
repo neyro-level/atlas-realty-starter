@@ -52,17 +52,17 @@ export function RouteStatusState({
         <section className="w-full max-w-180 text-center">
           <div className="grid gap-7">
             {eyebrow ? (
-              <Badge variant="soft" className="min-h-9 gap-2 rounded-md bg-[var(--surface-card)]/80 px-3 uppercase tracking-[0.14em] backdrop-blur-[2px]">
+              <Badge variant="soft" className="min-h-9 gap-2 rounded-md bg-[var(--surface-card)]/80 px-3 uppercase tracking-overline backdrop-blur-[2px]">
                 <SearchX aria-hidden />
                 {eyebrow}
               </Badge>
             ) : null}
 
             <div className="grid gap-5">
-              <h1 className="text-[clamp(2rem,4.4vw,3rem)] font-semibold leading-[1.06] tracking-[-0.01em] text-[var(--text-primary)] md:whitespace-nowrap">
+              <h1 className="text-route-status font-semibold leading-hero-tight tracking-compact text-[var(--text-primary)] md:whitespace-nowrap">
                 {title}
               </h1>
-              <p className="mx-auto max-w-140 text-body-compact leading-7 text-[var(--route-status-state-content-primary)] md:text-base md:leading-8">
+              <p className="mx-auto max-w-140 text-body-compact leading-step-relaxed text-[var(--route-status-state-content-primary)] md:text-body-large md:leading-step-airy">
                 {description}
               </p>
             </div>

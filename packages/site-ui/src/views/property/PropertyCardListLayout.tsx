@@ -127,14 +127,14 @@ export function PropertyCardListLayout({
 
       <div className="flex min-h-59.5 flex-col md:min-h-72">
         <div className="min-w-0">
-          <h3 className="text-[1.15rem] font-extrabold leading-6 tracking-[-0.01em] text-[var(--text-primary)]">
+          <h3 className="text-card-title font-extrabold leading-step-copy tracking-compact text-[var(--text-primary)]">
             {listTitle}
           </h3>
-          <div className="mt-2 grid gap-1.5 text-sm leading-5 tracking-[0.01em] text-[var(--text-muted)]">
+          <div className="mt-2 grid gap-1.5 text-body leading-step-body tracking-copy text-[var(--text-muted)]">
             {listing.district && listing.district !== cityName ? (
               <p className="font-semibold text-[var(--accent)]">{listing.district}</p>
             ) : null}
-            <p className="flex min-w-0 items-center gap-1.5 text-body-dense leading-[22px] text-[var(--text-secondary)] lg:text-sm lg:leading-5">
+            <p className="flex min-w-0 items-center gap-1.5 text-body-dense leading-heading-pixel text-[var(--text-secondary)] lg:text-body lg:leading-step-body">
               <MapPin className="size-3.5 shrink-0 text-[var(--accent)]" aria-hidden />
               <AddressLine
                 visiblePrefix={addressParts.visiblePrefix}
@@ -145,7 +145,7 @@ export function PropertyCardListLayout({
         </div>
 
         {listDescription ? (
-          <p className="mt-8 line-clamp-3 text-sm leading-6 tracking-[0.01em] text-[var(--text-primary)] md:mt-9">
+          <p className="mt-8 line-clamp-3 text-body leading-step-copy tracking-copy text-[var(--text-primary)] md:mt-9">
             {listDescription}
           </p>
         ) : null}
@@ -157,7 +157,7 @@ export function PropertyCardListLayout({
               onClick={stop}
               data-analytics-context="catalog_property_card"
               data-analytics-item={listing.slug}
-              className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-body-dense font-semibold tabular-nums text-white transition hover:bg-[var(--property-card-surface-action-hover)] lg:text-sm sm:min-w-47.5"
+              className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-body-dense font-semibold tabular-nums text-white transition hover:bg-[var(--property-card-surface-action-hover)] lg:text-body sm:min-w-47.5"
             >
               <Phone className="size-[17.6px] lg:size-4" aria-hidden />
               {phone}
@@ -173,7 +173,7 @@ export function PropertyCardListLayout({
                 stop(event)
                 setPhoneVisible(true)
               }}
-              className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-body-dense font-semibold text-white transition hover:bg-[var(--property-card-surface-action-hover)] lg:text-sm sm:min-w-47.5"
+              className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[var(--surface-dark)] px-5 text-center text-body-dense font-semibold text-white transition hover:bg-[var(--property-card-surface-action-hover)] lg:text-body sm:min-w-47.5"
             >
               <Phone className="" aria-hidden />
               Показать телефон
@@ -183,7 +183,7 @@ export function PropertyCardListLayout({
             variant="plain"
             type="button"
             onClick={openPropertyChat}
-            className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] px-5 text-center text-body-dense font-semibold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)] lg:text-sm sm:min-w-32.5"
+            className="relative z-20 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card-soft)] px-5 text-center text-body-dense font-semibold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)] lg:text-body sm:min-w-32.5"
           >
             <MessageCircle className="" aria-hidden />
             Написать
@@ -202,7 +202,7 @@ export function PropertyCardListLayout({
           }
         >
           <div data-catalog-price-row className="flex min-w-0 items-center gap-2 md:justify-end">
-            <p className="text-[1.2rem] font-extrabold leading-none tabular-nums tracking-[-0.01em] text-[var(--text-primary)]">
+            <p className="text-price-large font-extrabold leading-flat tabular-nums tracking-compact text-[var(--text-primary)]">
               {priceLabel}
             </p>
             {showExclusiveBadge ? <ExclusiveBadge /> : null}
@@ -225,7 +225,7 @@ export function PropertyCardListLayout({
         </div>
 
         {listingDate ? (
-          <p className="hidden text-right text-xs font-medium leading-5 text-[var(--text-muted)] md:block">
+          <p className="hidden text-right text-label font-medium leading-step-body text-[var(--text-muted)] md:block">
             {listingDate}
           </p>
         ) : null}

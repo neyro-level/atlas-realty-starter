@@ -158,7 +158,7 @@ export function PropertyCardGridLayout({
             data-catalog-price-row
             className="flex min-w-0 items-center justify-between gap-2 pr-1 lg:pr-0"
           >
-            <p className="min-w-0 text-[1.19rem] font-extrabold leading-none tabular-nums tracking-[-0.01em] text-[var(--text-primary)] md:text-[1.32rem] lg:text-[1.28rem]">
+            <p className="min-w-0 text-price font-extrabold leading-flat tabular-nums tracking-compact text-[var(--text-primary)] md:text-price-medium lg:text-price-large">
               {priceLabel}
             </p>
             {showExclusiveBadge ? <ExclusiveBadge /> : null}
@@ -209,10 +209,10 @@ export function PropertyCardGridLayout({
               })}
             </div>
           ) : null}
-          <h3 className="line-clamp-2 rounded-md text-[0.9rem] font-extrabold leading-[1.2] tracking-[-0.01em] text-[var(--text-primary)] transition-colors group-active:text-[var(--accent)] md:text-[0.99rem] md:leading-[1.32rem] lg:mt-2 lg:text-[0.98rem] lg:leading-5 lg:group-hover:text-[var(--accent)]">
+          <h3 className="line-clamp-2 rounded-md text-card-compact font-extrabold leading-heading tracking-compact text-[var(--text-primary)] transition-colors group-active:text-[var(--accent)] md:text-card-compact-medium md:leading-card-compact-rem lg:mt-2 lg:text-card-compact-large lg:leading-step-body lg:group-hover:text-[var(--accent)]">
             {title}
           </h3>
-          <div className="text-[10.45px] leading-[1.16rem] tracking-[0.01em] text-[var(--text-muted)] md:text-caption md:leading-[1.19rem] lg:mt-2 lg:text-xs lg:leading-5">
+          <div className="text-caption-dense leading-card-dense-rem tracking-copy text-[var(--text-muted)] md:text-caption md:leading-card-relaxed-rem lg:mt-2 lg:text-label lg:leading-step-body">
             <p className="flex min-w-0 items-center gap-1 font-semibold text-[var(--text-secondary)] md:gap-1.5">
               <MapPin className="size-3 shrink-0 text-[var(--accent)] md:size-3.5" aria-hidden />
               <AddressLine
@@ -224,12 +224,12 @@ export function PropertyCardGridLayout({
           </div>
         </div>
         {isList && listing.description ? (
-          <p className="mt-3 line-clamp-3 text-sm leading-6 tracking-[0.01em] text-[var(--text-secondary)]">
+          <p className="mt-3 line-clamp-3 text-body leading-step-copy tracking-copy text-[var(--text-secondary)]">
             {listing.description}
           </p>
         ) : null}
         {isList ? (
-          <p className="mt-3 text-caption font-bold uppercase tracking-[0.08em] text-[var(--text-muted)]">
+          <p className="mt-3 text-caption font-bold uppercase tracking-overline-compact text-[var(--text-muted)]">
             {listing.category} · база агентства недвижимости
           </p>
         ) : null}
@@ -243,7 +243,7 @@ export function PropertyCardGridLayout({
               onClick={stop}
               data-analytics-context="catalog_property_card"
               data-analytics-item={listing.slug}
-              className="relative z-20 inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-3 text-center text-sm font-bold tabular-nums text-white transition hover:bg-[var(--accent-hover)]"
+              className="relative z-20 inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-3 text-center text-body font-bold tabular-nums text-white transition hover:bg-[var(--accent-hover)]"
             >
               <Phone className="size-4" aria-hidden />
               {phone}
@@ -259,7 +259,7 @@ export function PropertyCardGridLayout({
                 stop(event)
                 setPhoneVisible(true)
               }}
-              className="relative z-20 inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-3 text-center text-sm font-bold text-white transition hover:bg-[var(--accent-hover)]"
+              className="relative z-20 inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-[var(--accent)] px-3 text-center text-body font-bold text-white transition hover:bg-[var(--accent-hover)]"
             >
               <Phone className="" aria-hidden />
               Показать телефон
@@ -269,7 +269,7 @@ export function PropertyCardGridLayout({
             variant="plain"
             type="button"
             onClick={openPropertyChat}
-            className="relative z-20 inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-3 text-center text-sm font-bold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            className="relative z-20 inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--surface-card)] px-3 text-center text-body font-bold text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
           >
             <MessageCircle className="" aria-hidden />
             Написать

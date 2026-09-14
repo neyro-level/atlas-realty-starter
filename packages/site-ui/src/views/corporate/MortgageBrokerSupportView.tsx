@@ -30,7 +30,7 @@ export function MortgageBrokerSupportView({ imageRenderer: ImageRenderer, imageS
                 <span className="pt-0.5 text-support font-medium tabular-nums text-[var(--accent)]">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <p className="text-body leading-6 text-[var(--text-secondary)]">{step}</p>
+                <p className="text-body leading-step-copy text-[var(--text-secondary)]">{step}</p>
               </li>
             ))}
           </ol>

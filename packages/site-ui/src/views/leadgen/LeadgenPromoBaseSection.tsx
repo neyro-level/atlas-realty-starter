@@ -8,9 +8,9 @@ function renderExpertPreviewCount(label: string) {
 
   return (
     <span className="shrink-0 rounded-soft bg-[var(--accent-soft)] px-3 py-2 text-right text-[var(--accent)]">
-      <span className="block text-lead font-semibold leading-none">{value}</span>
+      <span className="block text-lead font-semibold leading-flat">{value}</span>
       {description ? (
-        <span className="mt-1 block max-w-33 text-[10.5px] font-medium leading-[1.25] text-[var(--leadgen-promo-landing-content-overlay)]">
+        <span className="mt-1 block max-w-33 text-caption-relaxed font-medium leading-tight-copy text-[var(--leadgen-promo-landing-content-overlay)]">
           {description}
         </span>
       ) : null}
@@ -46,10 +46,10 @@ export function BaseSectionPreview({
           <div className="relative overflow-hidden rounded-soft border border-white/10 bg-[var(--surface-card)]">
             <div className="flex items-start justify-between gap-4 border-b border-[var(--leadgen-promo-landing-border-active)] p-4">
               <div className="min-w-0">
-                <p className="text-lead font-semibold leading-tight text-[var(--text-primary)] sm:text-heading-small">
+                <p className="text-lead font-semibold leading-tight-copy text-[var(--text-primary)] sm:text-heading-small">
                   {content.baseSection.preview.label}
                 </p>
-                <p className="mt-2 inline-flex items-center gap-1.5 rounded-compact bg-[var(--leadgen-promo-landing-surface-strong)] px-2.5 py-1.5 text-label font-medium leading-none text-[var(--accent)]">
+                <p className="mt-2 inline-flex items-center gap-1.5 rounded-compact bg-[var(--leadgen-promo-landing-surface-strong)] px-2.5 py-1.5 text-label font-medium leading-flat text-[var(--accent)]">
                   <MapPin className="size-3.5" aria-hidden />
                   {content.baseSection.preview.city}
                 </p>
@@ -65,8 +65,8 @@ export function BaseSectionPreview({
                 className="object-cover object-top"
               />
               <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,var(--leadgen-promo-landing-effect-overlay)_0%,var(--leadgen-promo-landing-effect-contrast)_100%)] p-5 pt-24 text-white">
-                <p className="text-lead font-semibold leading-tight">{content.manager.name}</p>
-                <p className="mt-1 text-caption font-medium leading-5 text-white/76">
+                <p className="text-lead font-semibold leading-tight-copy">{content.manager.name}</p>
+                <p className="mt-1 text-caption font-medium leading-step-body text-white/76">
                   {content.manager.role}
                 </p>
               </div>
@@ -91,14 +91,14 @@ export function BaseSectionPreview({
         <div className="relative rounded-soft border border-white/10 bg-[var(--surface-card)] p-3">
           <div className="flex items-center justify-between gap-3 border-b border-[var(--leadgen-promo-landing-border-active)] pb-3">
             <div>
-              <p className="text-caption font-bold uppercase tracking-[0.14em] text-[var(--accent)]">
+              <p className="text-caption font-bold uppercase tracking-overline text-[var(--accent)]">
                 {content.baseSection.preview.label}
               </p>
-              <p className="mt-1 text-sm font-semibold text-[var(--text-primary)]">
+              <p className="mt-1 text-body font-semibold text-[var(--text-primary)]">
                 {content.baseSection.preview.city}
               </p>
             </div>
-            <span className="rounded-compact bg-[var(--accent-soft)] px-3 py-2 text-xs font-semibold text-[var(--accent)]">
+            <span className="rounded-compact bg-[var(--accent-soft)] px-3 py-2 text-label font-semibold text-[var(--accent)]">
               {content.baseSection.preview.countLabel}
             </span>
           </div>
@@ -123,10 +123,10 @@ export function BaseSectionPreview({
                     className="h-19 w-20.5 rounded-compact object-cover"
                   />
                   <div className="min-w-0 py-1">
-                    <p className="text-caption font-semibold uppercase tracking-[0.1em] text-[var(--leadgen-promo-landing-content-emphasis)]">
+                    <p className="text-caption font-semibold uppercase tracking-caps text-[var(--leadgen-promo-landing-content-emphasis)]">
                       ID {apartment.id}
                     </p>
-                    <p className="mt-1 truncate text-sm font-bold text-[var(--text-primary)]">
+                    <p className="mt-1 truncate text-body font-bold text-[var(--text-primary)]">
                       {apartment.price}
                     </p>
                     <div className="mt-2 flex flex-wrap gap-1.5">

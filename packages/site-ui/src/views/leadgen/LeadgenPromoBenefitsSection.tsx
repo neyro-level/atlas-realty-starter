@@ -7,7 +7,7 @@ export function CompactBenefitsSection({ content }: { content: LeadgenPromoConte
       <div className="overflow-hidden rounded-sm border border-[var(--leadgen-promo-landing-border-inverse)] bg-[var(--surface-card)] shadow-[var(--leadgen-promo-landing-shadow-emphasis)]">
         <div className="grid bg-[var(--leadgen-promo-landing-surface-muted)] px-6 py-7 sm:px-8 lg:grid-cols-[270px_minmax(0,1fr)] lg:gap-8 lg:px-10 lg:py-9">
           <div className="border-b border-[var(--leadgen-promo-landing-border-hover)] pb-6 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-8">
-            <p className="text-caption font-bold uppercase tracking-[0.18em] text-[var(--accent)]">
+            <p className="text-caption font-bold uppercase tracking-spaced text-[var(--accent)]">
               Результат опроса
             </p>
             <h2 className="mt-3 text-section-title font-semibold leading-section-title text-[var(--text-primary)]">
@@ -24,14 +24,14 @@ export function CompactBenefitsSection({ content }: { content: LeadgenPromoConte
                   <span className="grid size-10 place-items-center rounded-sm bg-[var(--surface-card)] text-[var(--accent)] shadow-[var(--leadgen-promo-landing-shadow-contrast)]">
                     {renderTrustIcon(item.icon, index)}
                   </span>
-                  <span className="text-caption font-bold tracking-[0.16em] text-[var(--leadgen-promo-landing-content-active)]">
+                  <span className="text-caption font-bold tracking-emphasis text-[var(--leadgen-promo-landing-content-active)]">
                     0{index + 1}
                   </span>
                 </div>
-                <h3 className="mt-5 text-body-emphasis font-semibold leading-tight text-[var(--text-primary)]">
+                <h3 className="mt-5 text-body-emphasis font-semibold leading-tight-copy text-[var(--text-primary)]">
                   {item.title}
                 </h3>
-                <p className="mt-3 text-support font-medium leading-6 text-[var(--leadgen-promo-landing-content-selected)]">
+                <p className="mt-3 text-support font-medium leading-step-copy text-[var(--leadgen-promo-landing-content-selected)]">
                   {item.text}
                 </p>
               </article>

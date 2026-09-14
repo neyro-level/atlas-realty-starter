@@ -70,11 +70,11 @@ function CatalogMortgageInlineGridCard({ source, formType, imageRenderer: ImageR
 
         <div className="flex min-h-63 flex-col justify-center p-6 sm:p-8 lg:px-10 lg:py-8">
           <div className="max-w-160">
-            <p className="text-caption font-bold uppercase tracking-[0.1em] text-[var(--accent)]">{content.eyebrow}</p>
-            <h3 className="mt-4 text-heading-medium font-extrabold leading-[1.16] tracking-[-0.01em] text-[var(--text-primary)] md:text-[1.75rem]">
+            <p className="text-caption font-bold uppercase tracking-caps text-[var(--accent)]">{content.eyebrow}</p>
+            <h3 className="mt-4 text-heading-medium font-extrabold leading-card-title tracking-compact text-[var(--text-primary)] md:text-section-prominent">
               {content.title}
             </h3>
-            <p className="mt-3 max-w-140 text-sm leading-6 tracking-[0.01em] text-[var(--text-secondary)] md:text-body-compact">
+            <p className="mt-3 max-w-140 text-body leading-step-copy tracking-copy text-[var(--text-secondary)] md:text-body-compact">
               {content.subtitle}
             </p>
           </div>
@@ -83,7 +83,7 @@ function CatalogMortgageInlineGridCard({ source, formType, imageRenderer: ImageR
             <Button
               type="button"
               onClick={() => onRequest?.(source, formType)}
-              className="inline-flex min-h-10 items-center justify-center rounded-lg bg-[var(--surface-dark)] px-5 text-sm font-semibold text-white transition hover:bg-[var(--accent)]"
+              className="inline-flex min-h-10 items-center justify-center rounded-lg bg-[var(--surface-dark)] px-5 text-body font-semibold text-white transition hover:bg-[var(--accent)]"
             >
               {content.buttonLabel}
             </Button>
@@ -108,11 +108,11 @@ function CatalogMortgageGridCard({ source, formType, imageRenderer: ImageRendere
       </div>
 
       <div className="flex flex-1 flex-col p-5 text-center">
-        <p className="text-caption font-bold uppercase tracking-[0.1em] text-[var(--accent)]">{content.eyebrow}</p>
-        <h3 className="mt-3 text-card-large font-extrabold leading-[1.16] tracking-[0] text-[var(--text-primary)]">
+        <p className="text-caption font-bold uppercase tracking-caps text-[var(--accent)]">{content.eyebrow}</p>
+        <h3 className="mt-3 text-card-large font-extrabold leading-card-title tracking-body text-[var(--text-primary)]">
           {content.title}
         </h3>
-        <p className="mx-auto mt-4 max-w-80 text-sm leading-6 text-[var(--text-secondary)]">
+        <p className="mx-auto mt-4 max-w-80 text-body leading-step-copy text-[var(--text-secondary)]">
           {content.subtitle}
         </p>
 
@@ -120,7 +120,7 @@ function CatalogMortgageGridCard({ source, formType, imageRenderer: ImageRendere
           <Button
             type="button"
             onClick={() => onRequest?.(source, formType)}
-            className="inline-flex min-h-9 items-center justify-center border-b border-[var(--accent)]/35 px-0 text-sm font-extrabold text-[var(--accent)] transition hover:border-[var(--accent-hover)] hover:text-[var(--accent-hover)]"
+            className="inline-flex min-h-9 items-center justify-center border-b border-[var(--accent)]/35 px-0 text-body font-extrabold text-[var(--accent)] transition hover:border-[var(--accent-hover)] hover:text-[var(--accent-hover)]"
           >
             {content.buttonLabel} <span aria-hidden="true" className="ml-1 transition group-hover:translate-x-0.5">→</span>
           </Button>
@@ -138,14 +138,14 @@ function CatalogMortgageEditorialListCard({ source, formType, imageRenderer: Ima
           <div className="flex min-h-66.5 flex-col justify-between gap-8 p-6 sm:p-8 lg:p-10">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-3">
-                <p className="text-caption font-bold uppercase tracking-[0.1em] text-[var(--text-muted)]">{content.contextLabel}</p>
+                <p className="text-caption font-bold uppercase tracking-caps text-[var(--text-muted)]">{content.contextLabel}</p>
                 <span className="h-px w-10 bg-[var(--accent)]/24" aria-hidden />
-                <p className="text-caption font-bold uppercase tracking-[0.1em] text-[var(--accent)]">{content.eyebrow}</p>
+                <p className="text-caption font-bold uppercase tracking-caps text-[var(--accent)]">{content.eyebrow}</p>
               </div>
-              <h3 className="mt-4 max-w-172.5 text-heading-medium font-extrabold leading-[1.16] tracking-[-0.01em] text-[var(--text-primary)] md:text-[1.8rem]">
+              <h3 className="mt-4 max-w-172.5 text-heading-medium font-extrabold leading-card-title tracking-compact text-[var(--text-primary)] md:text-card-section">
                 {content.title}
               </h3>
-              <p className="mt-3 max-w-147.5 text-sm leading-6 tracking-[0.01em] text-[var(--text-secondary)] md:text-body-compact">
+              <p className="mt-3 max-w-147.5 text-body leading-step-copy tracking-copy text-[var(--text-secondary)] md:text-body-compact">
                 {content.subtitle}
               </p>
             </div>
@@ -174,7 +174,7 @@ function MortgageHelpButton({ source, formType, label, onRequest }: Pick<CardPro
     <Button
       type="button"
       onClick={() => onRequest?.(source, formType)}
-      className="inline-flex min-h-11 w-fit items-center justify-center rounded-lg bg-[var(--surface-dark)] px-5 text-center text-sm font-semibold text-white transition hover:bg-[var(--catalog-mortgage-help-card-surface-action-hover)]"
+      className="inline-flex min-h-11 w-fit items-center justify-center rounded-lg bg-[var(--surface-dark)] px-5 text-center text-body font-semibold text-white transition hover:bg-[var(--catalog-mortgage-help-card-surface-action-hover)]"
     >
       {label}
     </Button>

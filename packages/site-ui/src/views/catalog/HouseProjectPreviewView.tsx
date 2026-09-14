@@ -25,7 +25,7 @@ export function HouseProjectPreviewView({
         <div className="mb-4">{breadcrumbs}</div>
         <Link
           href={project.backHref}
-          className="inline-flex min-h-11 items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface-card)] px-4 text-sm font-semibold transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          className="inline-flex min-h-11 items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface-card)] px-4 text-body font-semibold transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
         >
           <ArrowLeft className="size-4" aria-hidden />
           Вернуться к строительству
@@ -47,10 +47,10 @@ export function HouseProjectPreviewView({
           </Card>
 
           <Card className="rounded-lg border-[var(--border)] bg-[var(--surface-card-soft)] p-6">
-            <Badge variant="soft" className="border-0 rounded-md px-3 py-1 text-sm font-bold">Preview-проект</Badge>
-            <h1 className="mt-5 text-4xl font-extrabold leading-tight">{project.title}</h1>
-            <p className="mt-4 text-3xl font-extrabold tabular-nums text-[var(--accent)]">{project.areaLabel}</p>
-            <p className="mt-5 text-sm leading-7 text-[var(--text-secondary)]">{project.description}</p>
+            <Badge variant="soft" className="border-0 rounded-md px-3 py-1 text-body font-bold">Preview-проект</Badge>
+            <h1 className="mt-5 text-display-base font-extrabold leading-tight-copy">{project.title}</h1>
+            <p className="mt-4 text-heading-large font-extrabold tabular-nums text-[var(--accent)]">{project.areaLabel}</p>
+            <p className="mt-5 text-body leading-step-relaxed text-[var(--text-secondary)]">{project.description}</p>
             {actions}
           </Card>
         </section>

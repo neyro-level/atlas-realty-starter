@@ -11,18 +11,18 @@ export function SaleFinalCtaView({ microtext }: { microtext: string }) {
           >
             Работаем за фиксированную комиссию без скрытых платежей
           </h2>
-          <p className="mx-auto mt-4 max-w-180 text-body-compact leading-6 text-white/70 sm:text-body-large sm:leading-7">
+          <p className="mx-auto mt-4 max-w-180 text-body-compact leading-step-copy text-white/70 sm:text-body-large sm:leading-step-relaxed">
             Оценка, фотосъёмка, реклама, переговоры и регистрация уже включены в эту сумму.
           </p>
 
           <RequestModalButton
             type="button" variant="plain"
             request={{ title: "Получите план продаж объекта недвижимости.", subtitle: "Оценка, фотосъёмка, реклама, переговоры и регистрация уже включены в эту сумму.", source: "corporate:prodazha-nedvizhimosti:final", formType: "corporate_prodazha_nedvizhimosti_city" }}
-            className="mt-8 inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[var(--accent)] px-6 text-sm font-semibold text-white transition hover:bg-[var(--accent-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto sm:min-w-65"
+            className="mt-8 inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[var(--accent)] px-6 text-body font-semibold text-white transition hover:bg-[var(--accent-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:w-auto sm:min-w-65"
           >
             Получить план продажи
           </RequestModalButton>
-          <p className="mt-3 text-label leading-5 text-white/55">
+          <p className="mt-3 text-label leading-step-body text-white/55">
             {microtext}
           </p>
         </div>

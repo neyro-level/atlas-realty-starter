@@ -137,7 +137,7 @@ function MobileFilterFields({ draft, setDraft, facets, typeSummary, sortLabel, s
 }
 
 function SmallSelect({ title, value, options, onChange }: { title: string; value: string; options: Array<{ value: string; label: string }>; onChange: (value: string) => void }) {
-  return <label className="block text-overline font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)]">{title}<Select variant="native" value={value} onChange={(event) => onChange(event.target.value)} className="mt-1 min-h-10 w-full rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-control)] px-3 text-support font-medium normal-case tracking-[0] text-[var(--text-primary)]"><option value="">Любой</option>{options.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</Select></label>;
+  return <label className="block text-overline font-semibold uppercase tracking-overline-compact text-[var(--text-muted)]">{title}<Select variant="native" value={value} onChange={(event) => onChange(event.target.value)} className="mt-1 min-h-10 w-full rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-control)] px-3 text-support font-medium normal-case tracking-body text-[var(--text-primary)]"><option value="">Любой</option>{options.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</Select></label>;
 }
 
 function RangeField({ from, to, onFrom, onTo, fromPlaceholder, toPlaceholder, inputMode = "numeric", numericOnly = true }: { from: string; to: string; onFrom: (value: string) => void; onTo: (value: string) => void; fromPlaceholder: string; toPlaceholder: string; inputMode?: "none" | "text" | "tel" | "url" | "email" | "numeric" | "decimal" | "search"; numericOnly?: boolean }) {

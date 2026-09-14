@@ -15,7 +15,7 @@ export function PropertyRelatedView({
 
   return (
     <section className="scroll-mt-35 grid gap-4 rounded-lg border border-[var(--border)] bg-[var(--surface-card)] p-5 shadow-[var(--shadow-card)] md:p-6" aria-labelledby="object-similar-title">
-      <h2 id="object-similar-title" className="scroll-mt-32.5 text-heading-compact font-semibold leading-tight text-[var(--text-primary)]">
+      <h2 id="object-similar-title" className="scroll-mt-32.5 text-heading-compact font-semibold leading-tight-copy text-[var(--text-primary)]">
         Похожие объекты рядом
       </h2>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -44,14 +44,14 @@ export function PropertyRelatedView({
               )}
             </div>
             <div className="grid gap-2 p-3">
-              <p className="text-body-emphasis font-semibold leading-none tabular-nums text-[var(--text-primary)]">{item.priceLabel}</p>
-              <h3 className="line-clamp-2 text-support font-semibold leading-5 text-[var(--text-primary)]">{item.title}</h3>
-              <p className="flex min-w-0 items-center gap-1.5 text-caption leading-4 text-[var(--text-muted)]">
+              <p className="text-body-emphasis font-semibold leading-flat tabular-nums text-[var(--text-primary)]">{item.priceLabel}</p>
+              <h3 className="line-clamp-2 text-support font-semibold leading-step-body text-[var(--text-primary)]">{item.title}</h3>
+              <p className="flex min-w-0 items-center gap-1.5 text-caption leading-step-small text-[var(--text-muted)]">
                 <MapPin className="size-3 shrink-0 text-[var(--accent)]" aria-hidden />
                 <span className="truncate">{item.address}</span>
               </p>
               {item.facts.length ? (
-                <div className="flex flex-wrap gap-1.5 text-overline font-semibold leading-4 text-[var(--text-secondary)]">
+                <div className="flex flex-wrap gap-1.5 text-overline font-semibold leading-step-small text-[var(--text-secondary)]">
                   {item.facts.map((fact) => <span key={fact} className="rounded-md bg-[var(--background)] px-2 py-1">{fact}</span>)}
                 </div>
               ) : null}

@@ -84,7 +84,7 @@ export default async function ReviewsPage({ searchParams }: Props) {
               <RequestModalButton
                 type="button" variant="plain"
                 request={{ title: "Консультация по недвижимости", subtitle: "Ответим на ваши вопросы и подскажем следующий шаг по покупке, продаже, ипотеке или документам.", showSubtitle: true, source: "corporate:reviews:hero", formType: "corporate_reviews" }}
-                className="inline-flex min-h-12 w-full max-w-full shrink-0 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-sm font-semibold whitespace-nowrap text-white transition hover:bg-[var(--accent-hover)] sm:w-auto sm:min-w-63 sm:px-6"
+                className="inline-flex min-h-12 w-full max-w-full shrink-0 items-center justify-center rounded-lg bg-[var(--accent)] px-4 text-body font-semibold whitespace-nowrap text-white transition hover:bg-[var(--accent-hover)] sm:w-auto sm:min-w-63 sm:px-6"
               >
                 Получить консультацию
               </RequestModalButton>

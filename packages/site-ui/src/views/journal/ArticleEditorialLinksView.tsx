@@ -10,7 +10,7 @@ export function ArticleEditorialLinksView({ links, variant, linkRenderer: LinkRe
       <h2 className="text-heading-small font-semibold leading-heading">Следующий шаг</h2>
       <div className="mt-4 grid gap-3 md:grid-cols-3">{links.map((link) => (
         <LinkRenderer key={link.href} href={link.href} className="group rounded-lg border border-[var(--border)] bg-[var(--surface-card)] p-4 transition hover:border-[var(--journal-border-hover)] hover:bg-[var(--accent-soft)]">
-          <span className="block font-semibold leading-snug transition group-hover:text-[var(--accent)]">{link.label}</span>
+          <span className="block font-semibold leading-compact-copy transition group-hover:text-[var(--accent)]">{link.label}</span>
           <span className="mt-2 block text-body leading-body text-[var(--journal-copy-muted)]">{link.description}</span>
         </LinkRenderer>
       ))}</div>

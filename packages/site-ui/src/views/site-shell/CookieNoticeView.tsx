@@ -19,7 +19,7 @@ export function CookieNoticeView({ onAccept, linkRenderer: LinkRenderer }: Cooki
       <div className="grid gap-2.5 sm:grid-cols-[minmax(0,1fr)_180px] sm:items-center sm:gap-5">
         <div className="flex min-w-0 items-start gap-2.5 sm:items-center sm:gap-3">
           <Cookie className="mt-0.5 size-4 shrink-0 fill-[var(--cookie-notice-icon-primary)] text-[var(--cookie-notice-content-primary)] sm:mt-0 sm:size-6" aria-hidden />
-          <p id="cookie-notice-description" className="text-pretty text-caption font-medium leading-4 text-[var(--cookie-notice-content-secondary)] sm:text-sm sm:leading-6">
+          <p id="cookie-notice-description" className="text-pretty text-caption font-medium leading-step-small text-[var(--cookie-notice-content-secondary)] sm:text-body sm:leading-step-copy">
             <span className="sm:hidden">Используем cookie для работы сайта и аналитики. </span>
             <span className="hidden sm:inline">Мы, как и вы, ценим комфорт и безопасность. Чтобы сайт был удобным и помогал быстрее находить подходящую недвижимость, </span>
             <LinkRenderer href="/politika-cookie" className="font-semibold text-[var(--cookie-notice-content-tertiary)] transition hover:text-[var(--cookie-notice-content-subtle)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]">
@@ -32,7 +32,7 @@ export function CookieNoticeView({ onAccept, linkRenderer: LinkRenderer }: Cooki
         <Button
           type="button"
           onClick={onAccept}
-          className="min-h-11 w-full rounded-md bg-[var(--accent)] px-3 text-xs font-bold text-white hover:bg-[var(--cookie-notice-surface-primary)] sm:min-h-12 sm:px-6 sm:text-sm"
+          className="min-h-11 w-full rounded-md bg-[var(--accent)] px-3 text-label font-bold text-white hover:bg-[var(--cookie-notice-surface-primary)] sm:min-h-12 sm:px-6 sm:text-body"
         >
           Принять
         </Button>

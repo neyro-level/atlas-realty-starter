@@ -39,12 +39,12 @@ export function EmployeeCardView({
         </div>
       </LinkRenderer>
       <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <p className="text-caption font-semibold uppercase tracking-[0.1em] text-[var(--accent)]">{position}</p>
-        <h3 className="mt-2 text-lg font-semibold leading-6 text-[var(--text-primary)]">{fullName}</h3>
-        <p className="mt-3 text-sm leading-6 text-[var(--employee-card-content-primary)]">{summary}</p>
+        <p className="text-caption font-semibold uppercase tracking-caps text-[var(--accent)]">{position}</p>
+        <h3 className="mt-2 text-lead font-semibold leading-step-copy text-[var(--text-primary)]">{fullName}</h3>
+        <p className="mt-3 text-body leading-step-copy text-[var(--employee-card-content-primary)]">{summary}</p>
         <div className="mt-auto pt-5">
           {phoneAction}
-          <LinkRenderer href={profileHref} className={`${phoneAction ? "mt-3 " : ""}inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[var(--text-primary)] underline decoration-[var(--employee-card-control-01)] underline-offset-4 transition hover:text-[var(--accent)] hover:decoration-[var(--accent)]`}>
+          <LinkRenderer href={profileHref} className={`${phoneAction ? "mt-3 " : ""}inline-flex min-h-11 items-center gap-2 text-body font-semibold text-[var(--text-primary)] underline decoration-[var(--employee-card-control-01)] underline-offset-4 transition hover:text-[var(--accent)] hover:decoration-[var(--accent)]`}>
             {profileLabel}
             <ArrowUpRight className="size-4" aria-hidden />
           </LinkRenderer>

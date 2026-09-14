@@ -16,11 +16,11 @@ export function CardHeader({ className, ...props }: HTMLAttributes<HTMLDivElemen
 }
 
 export function CardTitle({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) {
-  return <h3 data-slot="card-title" className={cn("text-lg font-semibold leading-tight", className)} {...props} />;
+  return <h3 data-slot="card-title" className={cn("text-lead font-semibold leading-tight-copy", className)} {...props} />;
 }
 
 export function CardDescription({ className, ...props }: HTMLAttributes<HTMLParagraphElement>) {
-  return <p data-slot="card-description" className={cn("text-sm leading-6 text-[var(--text-secondary,var(--card-visual-primary))]", className)} {...props} />;
+  return <p data-slot="card-description" className={cn("text-body leading-step-copy text-[var(--text-secondary,var(--card-visual-primary))]", className)} {...props} />;
 }
 
 export function CardAction({ className, ...props }: HTMLAttributes<HTMLDivElement>) {

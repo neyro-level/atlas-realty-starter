@@ -30,17 +30,17 @@ export function LeadSuccessNoticeView({ onClose, closeButtonRef }: LeadSuccessNo
         <span className="mx-auto grid size-14 place-items-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]">
           <Check className="size-7" strokeWidth={2} aria-hidden />
         </span>
-        <h2 id="lead-success-title" className="mt-5 text-2xl font-semibold leading-tight text-[var(--text-primary)]">
+        <h2 id="lead-success-title" className="mt-5 text-section-small font-semibold leading-tight-copy text-[var(--text-primary)]">
           Спасибо за обращение
         </h2>
-        <p className="mx-auto mt-3 max-w-80 text-sm leading-6 text-[var(--lead-success-notice-content-secondary)]">
+        <p className="mx-auto mt-3 max-w-80 text-body leading-step-copy text-[var(--lead-success-notice-content-secondary)]">
           Ваша заявка зафиксирована. Мы свяжемся с вами в ближайшее время.
         </p>
         <Button
           ref={closeButtonRef}
           type="button"
           onClick={onClose}
-          className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[var(--accent)] px-5 text-sm font-semibold text-white hover:bg-[var(--accent-hover)]"
+          className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[var(--accent)] px-5 text-body font-semibold text-white hover:bg-[var(--accent-hover)]"
         >
           Хорошо
         </Button>

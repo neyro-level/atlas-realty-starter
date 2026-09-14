@@ -172,7 +172,7 @@ function MobileActionGroup({
             <Button variant="plain"
               key={`${action.actionId}-${action.label}`}
               type="button"
-              className={`flex min-h-11 w-full items-center justify-between gap-3 px-4 text-left text-support font-medium tracking-[-0.01em] text-[var(--mobile-menu-content-primary)] transition hover:bg-[var(--surface-card-soft)] hover:text-[var(--accent)] ${index > 0 ? "border-t border-[var(--mobile-menu-border-tertiary)]" : ""}`}
+              className={`flex min-h-11 w-full items-center justify-between gap-3 px-4 text-left text-support font-medium tracking-compact text-[var(--mobile-menu-content-primary)] transition hover:bg-[var(--surface-card-soft)] hover:text-[var(--accent)] ${index > 0 ? "border-t border-[var(--mobile-menu-border-tertiary)]" : ""}`}
               onClick={() => {
                 onAction(action);
                 onNavigate();
@@ -217,7 +217,7 @@ function MobileRowLink({
   onNavigate: () => void;
   bordered: boolean;
 }) {
-  const className = `flex min-h-11 items-center justify-between gap-3 px-4 text-support font-medium tracking-[-0.01em] text-[var(--mobile-menu-content-primary)] transition hover:bg-[var(--surface-card-soft)] hover:text-[var(--accent)] ${bordered ? "border-t border-[var(--mobile-menu-border-tertiary)]" : ""}`;
+  const className = `flex min-h-11 items-center justify-between gap-3 px-4 text-support font-medium tracking-compact text-[var(--mobile-menu-content-primary)] transition hover:bg-[var(--surface-card-soft)] hover:text-[var(--accent)] ${bordered ? "border-t border-[var(--mobile-menu-border-tertiary)]" : ""}`;
   const content = (
     <>
       <span>{label}</span>

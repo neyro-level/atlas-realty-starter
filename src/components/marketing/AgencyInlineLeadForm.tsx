@@ -157,16 +157,16 @@ export function AgencyInlineLeadForm({
           required={requireName}
           autoComplete="name"
           placeholder={requireName ? "Имя" : "Ваше Имя"}
-          className="min-h-14.5 rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-[var(--surface-card)] px-5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
+          className="min-h-14.5 rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-[var(--surface-card)] px-5 text-body-large font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
         />
 
         <label className="sr-only" htmlFor={`${formType}-phone`}>
           +7 (000) 000-00-00
         </label>
         <div className="relative">
-          <span className="pointer-events-none absolute left-5 top-1/2 flex -translate-y-1/2 items-center gap-1 text-base font-semibold text-[var(--text-primary)]">
+          <span className="pointer-events-none absolute left-5 top-1/2 flex -translate-y-1/2 items-center gap-1 text-body-large font-semibold text-[var(--text-primary)]">
             <span aria-hidden>🇷🇺</span>
-            <span className="text-xs text-[var(--agency-inline-lead-form-content-secondary)]" aria-hidden>
+            <span className="text-label text-[var(--agency-inline-lead-form-content-secondary)]" aria-hidden>
               ▼
             </span>
           </span>
@@ -182,21 +182,21 @@ export function AgencyInlineLeadForm({
             onFocus={onPhoneFocus}
             aria-invalid={Boolean(errorMessage)}
             aria-describedby={errorMessage ? errorId : undefined}
-            className="min-h-14.5 w-full rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-[var(--surface-card)] px-5 pl-19.5 text-base font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
+            className="min-h-14.5 w-full rounded-lg border border-[var(--agency-inline-lead-form-border-primary)] bg-[var(--surface-card)] px-5 pl-19.5 text-body-large font-semibold text-[var(--text-primary)] outline-none transition placeholder:text-[var(--agency-inline-lead-form-content-primary)] focus:border-[var(--accent)]"
           />
         </div>
 
         <Button variant="plain"
           type="submit"
           disabled={isPending}
-          className="min-h-14.5 rounded-lg bg-[var(--accent)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70 xl:whitespace-nowrap"
+          className="min-h-14.5 rounded-lg bg-[var(--accent)] px-5 text-body font-extrabold text-white transition hover:bg-[var(--accent-hover)] disabled:cursor-wait disabled:opacity-70 xl:whitespace-nowrap"
         >
           {submitLabel}
         </Button>
       </div>
 
       <label
-        className={`mx-auto mt-5 flex max-w-155 items-start gap-3 text-xs leading-5 text-[var(--agency-inline-lead-form-content-tertiary)] ${
+        className={`mx-auto mt-5 flex max-w-155 items-start gap-3 text-label leading-step-body text-[var(--agency-inline-lead-form-content-tertiary)] ${
           centerConsent ? "justify-center text-center" : ""
         }`}
       >
@@ -209,7 +209,7 @@ export function AgencyInlineLeadForm({
       </label>
 
       {errorMessage ? (
-        <p id={errorId} className="mt-4 text-sm font-semibold text-[var(--accent)]">
+        <p id={errorId} className="mt-4 text-body font-semibold text-[var(--accent)]">
           {errorMessage}
         </p>
       ) : null}

@@ -44,11 +44,11 @@ export function BrandMark({
         />
       </span>
       <span className="grid min-w-0 gap-0.5">
-        <span className={`site-brand-mark__word text-lead-compact font-extrabold leading-none tracking-[0.19em] lg:text-card-large ${wordClass}`}>
+        <span className={`site-brand-mark__word text-lead-compact font-extrabold leading-flat tracking-expanded lg:text-card-large ${wordClass}`}>
           {tenant.brand}
         </span>
         {!compact && showSlogan ? (
-          <span className={`max-w-43 text-micro font-semibold leading-[1.18] tracking-[0.02em] ${sloganClass}`}>
+          <span className={`max-w-43 text-micro font-semibold leading-card-title-relaxed tracking-subtle ${sloganClass}`}>
             {siteConfig.tagline}
           </span>
         ) : null}

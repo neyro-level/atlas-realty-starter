@@ -8,7 +8,7 @@ export function Breadcrumb({ className, ...props }: ComponentProps<"nav">) {
 }
 
 export function BreadcrumbList({ className, ...props }: ComponentProps<"ol">) {
-  return <ol data-slot="breadcrumb-list" className={cn("flex flex-wrap items-center gap-1.5 text-sm text-[var(--breadcrumb-content-primary)]", className)} {...props} />;
+  return <ol data-slot="breadcrumb-list" className={cn("flex flex-wrap items-center gap-1.5 text-body text-[var(--breadcrumb-content-primary)]", className)} {...props} />;
 }
 
 export function BreadcrumbItem({ className, ...props }: ComponentProps<"li">) {

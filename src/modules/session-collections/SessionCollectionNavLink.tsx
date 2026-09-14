@@ -48,7 +48,7 @@ export function SessionCollectionNavLink({
         <Icon className="size-3.5 shrink-0" strokeWidth={1.85} aria-hidden />
         <span>{label}</span>
         {count > 0 ? (
-          <span className="inline-flex min-w-4 items-center justify-center rounded-full bg-[var(--accent)] px-1 text-micro font-semibold tabular-nums leading-4 text-white">
+          <span className="inline-flex min-w-4 items-center justify-center rounded-full bg-[var(--accent)] px-1 text-micro font-semibold tabular-nums leading-step-small text-white">
             {count}
           </span>
         ) : null}
@@ -61,7 +61,7 @@ export function SessionCollectionNavLink({
       <Link
         href={href}
         onClick={onNavigate}
-        className="relative inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-[var(--session-collection-nav-link-surface-default)] px-3 text-support font-medium tracking-[-0.01em] text-[var(--session-collection-nav-link-content-strong)] transition hover:bg-[var(--session-collection-nav-link-surface-hover)] hover:text-[var(--accent)]"
+        className="relative inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-[var(--session-collection-nav-link-surface-default)] px-3 text-support font-medium tracking-compact text-[var(--session-collection-nav-link-content-strong)] transition hover:bg-[var(--session-collection-nav-link-surface-hover)] hover:text-[var(--accent)]"
       >
         <Icon className="size-[16px] shrink-0 text-[var(--session-collection-nav-link-content-muted)]" strokeWidth={1.75} aria-hidden />
         <span>{label}</span>
@@ -78,7 +78,7 @@ export function SessionCollectionNavLink({
     <Link
       href={href}
       onClick={onNavigate}
-      className={`relative inline-flex min-h-10 items-center gap-2 rounded-md text-sm font-semibold text-[var(--text-secondary)] transition hover:bg-[var(--background)] hover:text-[var(--accent)] ${
+      className={`relative inline-flex min-h-10 items-center gap-2 rounded-md text-body font-semibold text-[var(--text-secondary)] transition hover:bg-[var(--background)] hover:text-[var(--accent)] ${
         compact ? "px-2.5" : "px-3"
       }`}
     >

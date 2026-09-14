@@ -86,9 +86,9 @@ export function NewBuildingCatalogMap({ complexes, config }: { complexes: NewBui
                 <span className="flex items-start gap-2.5">
                   <MapPin className={`mt-0.5 size-4 shrink-0 ${mapped ? "text-[var(--accent)]" : "text-[var(--new-building-map-content-muted)]"}`} aria-hidden />
                   <span className="min-w-0">
-                    <span className="block line-clamp-2 text-sm font-bold leading-5 text-[var(--text-primary)]">{complex.name}</span>
-                    <span className="mt-1.5 block line-clamp-1 text-xs leading-4 text-[var(--new-building-map-content-default)]">{complex.location.district ?? complex.location.address ?? "Адрес уточняется"}</span>
-                    <span className="mt-2.5 block text-sm font-extrabold text-[var(--text-primary)]">{complex.facts.priceFrom ? `от ${formatPrice(complex.facts.priceFrom)}` : "Цена уточняется"}</span>
+                    <span className="block line-clamp-2 text-body font-bold leading-step-body text-[var(--text-primary)]">{complex.name}</span>
+                    <span className="mt-1.5 block line-clamp-1 text-label leading-step-small text-[var(--new-building-map-content-default)]">{complex.location.district ?? complex.location.address ?? "Адрес уточняется"}</span>
+                    <span className="mt-2.5 block text-body font-extrabold text-[var(--text-primary)]">{complex.facts.priceFrom ? `от ${formatPrice(complex.facts.priceFrom)}` : "Цена уточняется"}</span>
                   </span>
                 </span>
               </Button>
@@ -99,7 +99,7 @@ export function NewBuildingCatalogMap({ complexes, config }: { complexes: NewBui
       canvas={<div ref={mapElementRef} data-testid="new-building-map-canvas" className="absolute inset-0" aria-label={`Карта жилых комплексов ${config.cityGenitive}`} />}
       statusMessage={status === "ready" ? null : <p role="status" aria-live="polite">{status === "loading" ? "Загружаем карту жилых комплексов..." : "Карта временно недоступна. Выберите ЖК из списка слева."}</p>}
       action={selectedComplex ? (
-          <Link href={newBuildingHref(selectedComplex)} className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-[var(--surface-card)] px-3 text-xs font-bold text-[var(--text-primary)] shadow-[var(--new-building-map-shadow-floating)] transition hover:text-[var(--accent)]">
+          <Link href={newBuildingHref(selectedComplex)} className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-[var(--surface-card)] px-3 text-label font-bold text-[var(--text-primary)] shadow-[var(--new-building-map-shadow-floating)] transition hover:text-[var(--accent)]">
             Открыть выбранный ЖК
             <ExternalLink className="size-3.5" aria-hidden />
           </Link>

@@ -3,7 +3,7 @@ import * as React from 'react'
 import { cn } from '../../lib/utils'
 
 export function Table({ className, ...props }: React.ComponentProps<'table'>) {
-  return <table data-slot="table" className={cn('w-full caption-bottom border-collapse text-sm', className)} {...props} />
+  return <table data-slot="table" className={cn('w-full caption-bottom border-collapse text-body', className)} {...props} />
 }
 
 export function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {

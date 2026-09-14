@@ -35,8 +35,8 @@ export function LeadgenCurrentDateBadge({ className = "mt-6" }: LeadgenCurrentDa
         <CalendarDays className="size-3.5" aria-hidden />
       </span>
       <span className="grid gap-0.5">
-        <span className="text-[8.5px] font-semibold uppercase leading-none tracking-[0.08em] text-[var(--text-muted)]">Актуально на дату</span>
-        <time dateTime={currentDate.split(".").reverse().join("-")} className="text-label font-semibold leading-none tabular-nums text-[var(--accent)]">
+        <span className="text-caption-tight font-semibold uppercase leading-flat tracking-overline-compact text-[var(--text-muted)]">Актуально на дату</span>
+        <time dateTime={currentDate.split(".").reverse().join("-")} className="text-label font-semibold leading-flat tabular-nums text-[var(--accent)]">
           {currentDate}
         </time>
       </span>

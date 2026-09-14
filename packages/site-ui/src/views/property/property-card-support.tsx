@@ -74,7 +74,7 @@ export function CatalogBadgeStack({ imageBadge, className }: { imageBadge?: stri
 
   return (
     <div data-catalog-badge-stack className={`absolute z-10 flex flex-col items-start gap-1.5 ${className}`}>
-      <span data-sales-leader-badge className="inline-flex min-h-6 items-center rounded-md bg-[var(--accent)] px-2.5 text-overline font-bold leading-none text-white shadow-[var(--property-card-shadow-sales-badge)]">
+      <span data-sales-leader-badge className="inline-flex min-h-6 items-center rounded-md bg-[var(--accent)] px-2.5 text-overline font-bold leading-flat text-white shadow-[var(--property-card-shadow-sales-badge)]">
         {imageBadge}
       </span>
     </div>
@@ -86,7 +86,7 @@ export function ExclusiveBadge() {
     <span
       data-exclusive-badge
       data-exclusive-placement="price"
-      className="inline-flex min-h-6 shrink-0 items-center rounded-md bg-[var(--accent)] px-2 text-micro font-bold leading-none text-white shadow-[var(--property-card-shadow-sales-badge)] sm:text-overline"
+      className="inline-flex min-h-6 shrink-0 items-center rounded-md bg-[var(--accent)] px-2 text-micro font-bold leading-flat text-white shadow-[var(--property-card-shadow-sales-badge)] sm:text-overline"
     >
       Эксклюзив
     </span>

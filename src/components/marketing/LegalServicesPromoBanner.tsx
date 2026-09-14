@@ -26,19 +26,19 @@ export function LegalServicesPromoBanner({ placement }: Props) {
         </div>
 
         <div className="flex flex-col justify-center px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
-          <p className="text-caption font-bold uppercase tracking-[0.12em] text-[var(--accent)]">
+          <p className="text-caption font-bold uppercase tracking-wide-role text-[var(--accent)]">
             Юридический отдел агентства недвижимости
           </p>
           {isCatalog ? (
-            <h3 className="mt-4 max-w-170 text-section-small font-extrabold leading-[1.1] text-[var(--text-primary)] sm:text-[length:var(--site-type-section)]">
+            <h3 className="mt-4 max-w-170 text-section-small font-extrabold leading-section-tight text-[var(--text-primary)] sm:text-[length:var(--site-type-section)]">
               Проверим документы до задатка и выхода на сделку
             </h3>
           ) : (
-            <h2 className="mt-4 max-w-170 text-section-small font-extrabold leading-[1.1] text-[var(--text-primary)] sm:text-[length:var(--site-type-section)]">
+            <h2 className="mt-4 max-w-170 text-section-small font-extrabold leading-section-tight text-[var(--text-primary)] sm:text-[length:var(--site-type-section)]">
               Проверим документы до задатка и выхода на сделку
             </h2>
           )}
-          <p className="mt-4 max-w-160 text-body-compact leading-6 text-[var(--legal-services-promo-banner-content-primary)] sm:text-body-large sm:leading-7">
+          <p className="mt-4 max-w-160 text-body-compact leading-step-copy text-[var(--legal-services-promo-banner-content-primary)] sm:text-body-large sm:leading-step-relaxed">
             Разберём документы старого образца, наследство, регистрацию права и ситуации, в которых вопрос приходится решать через суд.
           </p>
 

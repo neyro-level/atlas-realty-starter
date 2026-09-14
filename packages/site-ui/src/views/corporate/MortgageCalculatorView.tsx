@@ -91,7 +91,7 @@ export function MortgageCalculatorView() {
           >
             Ипотечный калькулятор
           </h2>
-          <p className="mt-2 text-support leading-5 text-[var(--text-muted)]">Рассчитайте ориентировочный платёж по подходящей программе.</p>
+          <p className="mt-2 text-support leading-step-body text-[var(--text-muted)]">Рассчитайте ориентировочный платёж по подходящей программе.</p>
         </div>
 
         <div className="mt-6 grid gap-3 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] lg:gap-5">
@@ -152,8 +152,8 @@ export function MortgageCalculatorView() {
 
           <aside className="flex flex-col rounded-2xl bg-[var(--surface-dark)] p-5 text-white sm:p-6">
             <p className="text-support font-medium text-white/65">Ежемесячный платёж</p>
-            <p className="mt-3 text-[clamp(1.9rem,3.4vw,2.35rem)] font-semibold leading-none tabular-nums">от {formatCurrency(payment)} ₽</p>
-            <div className="mt-5 border-t border-white/15 pt-4 text-support leading-5 text-white/65">
+            <p className="mt-3 text-calculator-result font-semibold leading-flat tabular-nums">от {formatCurrency(payment)} ₽</p>
+            <div className="mt-5 border-t border-white/15 pt-4 text-support leading-step-body text-white/65">
               <p>Демонстрационная ставка <span className="font-medium text-white">{program.rate}%</span></p>
               <p className="mt-1">Сумма кредита {formatCurrency(loan)} ₽</p>
             </div>
@@ -164,7 +164,7 @@ export function MortgageCalculatorView() {
             >
               Получить предложение
             </Button>
-            <p className="mt-3 text-caption leading-4 text-white/45">Расчёт демонстрационный и не является предложением банка. Актуальные условия настройте перед публикацией.</p>
+            <p className="mt-3 text-caption leading-step-small text-white/45">Расчёт демонстрационный и не является предложением банка. Актуальные условия настройте перед публикацией.</p>
           </aside>
         </div>
       </div>

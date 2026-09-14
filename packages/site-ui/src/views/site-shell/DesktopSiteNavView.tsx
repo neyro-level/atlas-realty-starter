@@ -120,7 +120,7 @@ function DesktopNavItemView({
           {item.megaSections?.length ? (
             <div className="p-3">
               <div className="mb-3 flex items-center justify-center rounded-sm border border-[var(--border)] bg-[var(--background)] p-3 text-center text-[var(--text-primary)]">
-                <SmartLink item={item} linkRenderer={linkRenderer} onNavigate={onNavigate} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-3 text-sm font-semibold transition hover:bg-[var(--surface-card)] hover:text-[var(--accent)]">
+                <SmartLink item={item} linkRenderer={linkRenderer} onNavigate={onNavigate} className="inline-flex min-h-10 items-center justify-center gap-2 rounded-md px-3 text-body font-semibold transition hover:bg-[var(--surface-card)] hover:text-[var(--accent)]">
                   <span>{item.label === "Недвижимость" ? "Вся недвижимость" : item.label}</span>
                   <ArrowRight className="size-4 text-[var(--accent)]" aria-hidden />
                 </SmartLink>
@@ -129,18 +129,18 @@ function DesktopNavItemView({
                 {item.megaSections.map((section) => (
                   <section key={section.title} className="rounded-sm border border-[var(--border)] bg-[var(--surface-card)] p-3">
                     <SmartLink item={section} linkRenderer={linkRenderer} onNavigate={onNavigate} className="group block rounded-compact px-2 py-2 text-[var(--text-primary)] transition hover:bg-[var(--background)] hover:text-[var(--accent)]">
-                      <span className="flex items-center justify-between gap-3 text-sm font-semibold">
+                      <span className="flex items-center justify-between gap-3 text-body font-semibold">
                         <span className="flex min-w-0 items-center gap-2">
                           <MegaSectionIcon title={section.title} />
                           <span>{section.title}</span>
                         </span>
                         <ArrowRight className="size-4 shrink-0 text-[var(--accent)] opacity-70 transition group-hover:translate-x-0.5 group-hover:opacity-100" aria-hidden />
                       </span>
-                      {section.description ? <span className="mt-1 block text-xs leading-5 text-[var(--text-muted)]">{section.description}</span> : null}
+                      {section.description ? <span className="mt-1 block text-label leading-step-body text-[var(--text-muted)]">{section.description}</span> : null}
                     </SmartLink>
                     <div className="mt-2 grid gap-0.5">
                       {section.links.map((link) => (
-                        <SmartLink key={`${section.title}-${link.label}`} item={link} linkRenderer={linkRenderer} onNavigate={onNavigate} className="block rounded-compact px-2 py-1.5 text-xs font-semibold leading-5 text-[var(--text-secondary)] transition hover:bg-[var(--background)] hover:text-[var(--accent)]">
+                        <SmartLink key={`${section.title}-${link.label}`} item={link} linkRenderer={linkRenderer} onNavigate={onNavigate} className="block rounded-compact px-2 py-1.5 text-label font-semibold leading-step-body text-[var(--text-secondary)] transition hover:bg-[var(--background)] hover:text-[var(--accent)]">
                           {link.label}
                         </SmartLink>
                       ))}
@@ -151,8 +151,8 @@ function DesktopNavItemView({
             </div>
           ) : item.showOverviewLink !== false ? (
             <SmartLink item={item} linkRenderer={linkRenderer} onNavigate={onNavigate} className="mx-2 block rounded-sm border-b border-[var(--surface-muted)] px-3 py-3 text-[var(--text-primary)] transition hover:bg-[var(--background)] hover:text-[var(--accent)]">
-              <span className="block text-sm font-extrabold">{item.label}</span>
-              {item.description ? <span className="mt-1 block text-xs leading-5 text-[var(--text-muted)]">{item.description}</span> : null}
+              <span className="block text-body font-extrabold">{item.label}</span>
+              {item.description ? <span className="mt-1 block text-label leading-step-body text-[var(--text-muted)]">{item.description}</span> : null}
             </SmartLink>
           ) : null}
 
@@ -160,11 +160,11 @@ function DesktopNavItemView({
             <div className="grid">
               {item.children.map((child) => (
                 <SmartLink key={`${item.label}-${child.label}`} item={child} linkRenderer={linkRenderer} onNavigate={onNavigate} className="group mx-2 grid rounded-sm px-3 py-3 text-[var(--text-primary)] transition hover:bg-[var(--background)] hover:text-[var(--accent)]">
-                  <span className="flex items-center justify-between gap-4 text-sm font-bold">
+                  <span className="flex items-center justify-between gap-4 text-body font-bold">
                     {child.label}
                     <ChevronDown className="size-4 -rotate-90 text-[var(--accent)] opacity-0 transition group-hover:opacity-100" aria-hidden />
                   </span>
-                  {child.description ? <span className="mt-1 text-xs leading-5 text-[var(--text-muted)]">{child.description}</span> : null}
+                  {child.description ? <span className="mt-1 text-label leading-step-body text-[var(--text-muted)]">{child.description}</span> : null}
                 </SmartLink>
               ))}
             </div>

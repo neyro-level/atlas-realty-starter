@@ -146,9 +146,9 @@ export function LeadgenInlinePhoneForm({
     >
       <div className="absolute inset-x-4 top-0 h-0.5 rounded-b-full bg-[var(--accent)]/80" aria-hidden />
       <div className="mb-4">
-        <p className="text-body-emphasis font-semibold leading-tight text-[var(--text-primary)]">{title}</p>
+        <p className="text-body-emphasis font-semibold leading-tight-copy text-[var(--text-primary)]">{title}</p>
         {description ? (
-          <p className="mt-2 text-label font-medium leading-5 text-[var(--leadgen-inline-phone-form-content-primary)]">{description}</p>
+          <p className="mt-2 text-label font-medium leading-step-body text-[var(--leadgen-inline-phone-form-content-primary)]">{description}</p>
         ) : null}
       </div>
       <label className="sr-only" htmlFor={`${formType}-website`}>
@@ -180,7 +180,7 @@ export function LeadgenInlinePhoneForm({
           onFocus={onPhoneFocus}
           aria-invalid={Boolean(errorMessage)}
           aria-describedby={errorMessage ? errorId : undefined}
-          className="min-h-12.5 w-full rounded-compact border border-[var(--leadgen-inline-phone-form-border-secondary)] bg-white/88 px-4 text-base font-medium text-[var(--text-primary)] outline-none transition placeholder:text-[var(--leadgen-inline-phone-form-content-secondary)] focus:border-[var(--accent)] focus:bg-white sm:text-body"
+          className="min-h-12.5 w-full rounded-compact border border-[var(--leadgen-inline-phone-form-border-secondary)] bg-white/88 px-4 text-body-large font-medium text-[var(--text-primary)] outline-none transition placeholder:text-[var(--leadgen-inline-phone-form-content-secondary)] focus:border-[var(--accent)] focus:bg-white sm:text-body"
         />
       </div>
 
@@ -192,7 +192,7 @@ export function LeadgenInlinePhoneForm({
         {isPending ? "Отправляем..." : submitLabel}
       </Button>
 
-      <label className="mx-auto mt-3 flex w-full items-center justify-center gap-1 whitespace-nowrap text-center text-micro font-medium leading-none text-[var(--leadgen-inline-phone-form-content-tertiary)] sm:text-micro">
+      <label className="mx-auto mt-3 flex w-full items-center justify-center gap-1 whitespace-nowrap text-center text-micro font-medium leading-flat text-[var(--leadgen-inline-phone-form-content-tertiary)] sm:text-micro">
         <Checkbox
           checked={consent}
           onCheckedChange={(checked) => {
@@ -206,7 +206,7 @@ export function LeadgenInlinePhoneForm({
       </label>
 
       {errorMessage ? (
-        <p id={errorId} className="mt-3 text-center text-xs font-medium text-[var(--accent)]" role="alert">
+        <p id={errorId} className="mt-3 text-center text-label font-medium text-[var(--accent)]" role="alert">
           {errorMessage}
         </p>
       ) : null}

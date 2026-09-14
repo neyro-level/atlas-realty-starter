@@ -15,7 +15,7 @@ export function ReviewsConsultationSection() {
           >
             Оставьте заявку — специалист ответит на вопросы и подскажет следующий шаг
           </h2>
-          <p className="mx-auto mt-4 max-w-190 text-body-compact leading-7 text-[var(--reviews-consultation-section-content-secondary)]">
+          <p className="mx-auto mt-4 max-w-190 text-body-compact leading-step-relaxed text-[var(--reviews-consultation-section-content-secondary)]">
             Расскажите, что планируете: купить или продать недвижимость, оформить ипотеку либо проверить документы перед сделкой.
           </p>
           <div className="mx-auto mt-8 max-w-150 text-left text-[var(--reviews-consultation-section-content-primary)] [&>form]:mt-0">

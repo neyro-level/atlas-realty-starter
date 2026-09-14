@@ -68,16 +68,16 @@ export function LeadgenPromoHeader({ content = kvartiryPromoContent }: LeadgenPr
           <BrandMark showSlogan={false} />
         </Link>
 
-        <div className="hidden min-h-10 items-center gap-2 text-sm font-medium text-[var(--leadgen-promo-header-content-primary)] sm:inline-flex">
+        <div className="hidden min-h-10 items-center gap-2 text-body font-medium text-[var(--leadgen-promo-header-content-primary)] sm:inline-flex">
           <MapPin className="size-4 text-[var(--accent)]" aria-hidden />
           <span>{tenant.cityRu}</span>
         </div>
 
         <div className="hidden min-h-9 items-center justify-center gap-1.5 rounded-callout bg-[var(--leadgen-promo-header-surface-primary)] px-3.5 text-center text-[var(--leadgen-promo-header-content-secondary)] min-[1120px]:inline-flex">
           {content.headerTrust.value ? (
-            <span className="text-lead font-normal leading-none text-[var(--accent)]">{content.headerTrust.value}</span>
+            <span className="text-lead font-normal leading-flat text-[var(--accent)]">{content.headerTrust.value}</span>
           ) : null}
-          <span className="text-support font-normal leading-tight text-[var(--leadgen-promo-header-content-tertiary)]">{content.headerTrust.label}</span>
+          <span className="text-support font-normal leading-tight-copy text-[var(--leadgen-promo-header-content-tertiary)]">{content.headerTrust.label}</span>
         </div>
 
         <div className="ml-auto flex shrink-0 items-center gap-4 lg:gap-6">
@@ -88,15 +88,15 @@ export function LeadgenPromoHeader({ content = kvartiryPromoContent }: LeadgenPr
               data-analytics-item={content.route}
               className="hidden min-h-11 items-center text-right transition hover:text-[var(--accent)] md:inline-flex"
             >
-              <span className="grid leading-tight">
-                <span className="text-sm font-semibold text-[var(--text-primary)]">{content.phone}</span>
+              <span className="grid leading-tight-copy">
+                <span className="text-body font-semibold text-[var(--text-primary)]">{content.phone}</span>
                 {content.hours ? <span className="text-overline font-medium text-[var(--leadgen-promo-header-content-subtle)]">{content.hours}</span> : null}
               </span>
             </a>
           ) : null}
 
           <LeadgenRequestButton
-            className="hidden min-h-11 items-center rounded-md bg-[var(--accent)] px-5 text-sm font-bold text-white shadow-[var(--leadgen-promo-header-shadow-tertiary)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-hover)] hover:shadow-[var(--leadgen-promo-header-shadow-subtle)] sm:inline-flex"
+            className="hidden min-h-11 items-center rounded-md bg-[var(--accent)] px-5 text-body font-bold text-white shadow-[var(--leadgen-promo-header-shadow-tertiary)] transition hover:-translate-y-0.5 hover:bg-[var(--accent-hover)] hover:shadow-[var(--leadgen-promo-header-shadow-subtle)] sm:inline-flex"
             mode="request"
             title="Заказать звонок"
             subtitle={headerRequestSubtitle}
@@ -139,12 +139,12 @@ export function LeadgenPromoHeader({ content = kvartiryPromoContent }: LeadgenPr
             />
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold leading-tight text-[var(--text-primary)]">{content.manager.name}</p>
-            <p className="mt-1 text-caption font-medium leading-4 text-[var(--accent)]">{content.manager.role}</p>
+            <p className="text-body font-semibold leading-tight-copy text-[var(--text-primary)]">{content.manager.name}</p>
+            <p className="mt-1 text-caption font-medium leading-step-small text-[var(--accent)]">{content.manager.role}</p>
           </div>
         </div>
 
-        <p className="mt-3.5 text-label font-normal leading-[1.58] text-[var(--leadgen-promo-header-content-primary)]">
+        <p className="mt-3.5 text-label font-normal leading-body-snug text-[var(--leadgen-promo-header-content-primary)]">
           {content.mobileMenuText ?? mobileMenuText}
         </p>
 

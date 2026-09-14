@@ -93,9 +93,9 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             align-items: center;
             gap: 8px;
             color: var(--leadgen-apartment-showcase-visual-secondary);
-            font-size: 12px;
+            font-size: var(--site-type-label);
             font-weight: 500;
-            line-height: 1.35;
+            line-height: var(--site-leading-card-relaxed);
           }
 
           .leadgen-catalog-card__fact svg {
@@ -117,9 +117,9 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
             background: var(--accent);
             color: var(--surface);
             cursor: pointer;
-            font-size: 13px;
+            font-size: var(--site-type-support);
             font-weight: 600;
-            line-height: 1.35;
+            line-height: var(--site-leading-card-relaxed);
             padding: 0 14px;
             box-shadow: 0 10px 22px var(--leadgen-apartment-showcase-effect-strong);
             transition:
@@ -207,13 +207,13 @@ export function LeadgenApartmentShowcase({ apartments, formPrefix = "leadgen_kva
 
             .leadgen-catalog-card__fact {
               align-items: flex-start;
-              font-size: 12px;
-              line-height: 1.35;
+              font-size: var(--site-type-label);
+              line-height: var(--site-leading-card-relaxed);
             }
 
             .leadgen-catalog-card__quick-cta {
               min-height: 46px;
-              font-size: 14px;
+              font-size: var(--site-type-body);
             }
           }
         `}
@@ -283,8 +283,8 @@ function LeadgenApartmentCard({ apartment, formPrefix }: { apartment: PromoApart
 
       <div className="leadgen-catalog-card__body">
         <div className="grid gap-3">
-          <p className="text-lead font-bold leading-tight tabular-nums text-[var(--text-primary)]">{apartment.price}</p>
-          <p className="text-support font-semibold leading-tight text-[var(--text-secondary)]">{roomsLabel}</p>
+          <p className="text-lead font-bold leading-tight-copy tabular-nums text-[var(--text-primary)]">{apartment.price}</p>
+          <p className="text-support font-semibold leading-tight-copy text-[var(--text-secondary)]">{roomsLabel}</p>
         </div>
 
         <div className="grid gap-3">

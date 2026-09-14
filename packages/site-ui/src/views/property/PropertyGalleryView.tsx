@@ -77,7 +77,7 @@ export function PropertyGalleryView({
                 allowFullScreen
                 className="h-full w-full border-0"
               />
-              {safeVideoUrls.length > 1 ? <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2 rounded-[15px] bg-[var(--surface-dark)]/80 p-1.5 backdrop-blur-sm">{safeVideoUrls.map((url, index) => <Button variant="plain" key={url} type="button" onClick={() => setActiveVideoIndex(index)} className={`min-h-9 rounded-md px-3 text-xs font-semibold transition ${index === activeVideoIndex ? "bg-[var(--surface-card)] text-[var(--text-primary)]" : "text-white hover:bg-[var(--surface-card)]/15"}`}>{videoProviderLabel(url)}</Button>)}</div> : null}
+              {safeVideoUrls.length > 1 ? <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2 rounded-[15px] bg-[var(--surface-dark)]/80 p-1.5 backdrop-blur-sm">{safeVideoUrls.map((url, index) => <Button variant="plain" key={url} type="button" onClick={() => setActiveVideoIndex(index)} className={`min-h-9 rounded-md px-3 text-label font-semibold transition ${index === activeVideoIndex ? "bg-[var(--surface-card)] text-[var(--text-primary)]" : "text-white hover:bg-[var(--surface-card)]/15"}`}>{videoProviderLabel(url)}</Button>)}</div> : null}
             </div>
           ) : (
             <MediaPlaceholder title="Видео объекта не загружено" />
@@ -98,7 +98,7 @@ export function PropertyGalleryView({
               rel="noreferrer"
               data-analytics-event="map_open"
               data-analytics-context="property_gallery_map"
-              className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-[var(--surface-card)] px-3 text-xs font-semibold text-[var(--text-primary)] shadow-[var(--property-gallery-shadow-control)] transition hover:text-[var(--accent)] max-md:bottom-2 max-md:right-2"
+              className="absolute bottom-3 right-3 inline-flex min-h-10 items-center gap-2 rounded-lg bg-[var(--surface-card)] px-3 text-label font-semibold text-[var(--text-primary)] shadow-[var(--property-gallery-shadow-control)] transition hover:text-[var(--accent)] max-md:bottom-2 max-md:right-2"
             >
               <MapPin className="size-3.5" aria-hidden />
               Открыть на карте
@@ -165,7 +165,7 @@ function MediaPlaceholder({
         </g>
       </svg>
       <div className="relative self-end pb-8 max-md:pb-5">
-        <p className="rounded-lg border border-white/70 bg-[var(--surface-card)]/88 px-5 py-3 text-base font-semibold leading-tight text-[var(--text-primary)] shadow-[var(--property-gallery-shadow-caption)] backdrop-blur-sm max-md:px-4 max-md:py-2.5 max-md:text-sm">
+        <p className="rounded-lg border border-white/70 bg-[var(--surface-card)]/88 px-5 py-3 text-body-large font-semibold leading-tight-copy text-[var(--text-primary)] shadow-[var(--property-gallery-shadow-caption)] backdrop-blur-sm max-md:px-4 max-md:py-2.5 max-md:text-body">
           {title}
         </p>
       </div>

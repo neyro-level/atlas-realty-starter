@@ -30,8 +30,8 @@ export function DeferredYandexMap({ widgetUrl, yandexUrl, title }: DeferredYande
           aria-label="Загрузить интерактивную карту"
         >
           <span>
-            <strong className="block text-lg font-semibold text-[var(--text-primary)]">Показать карту</strong>
-            <span className="mt-2 block text-sm leading-6 text-[var(--deferred-yandex-map-content-primary)]">Карта Яндекса загрузится только после нажатия.</span>
+            <strong className="block text-lead font-semibold text-[var(--text-primary)]">Показать карту</strong>
+            <span className="mt-2 block text-body leading-step-copy text-[var(--deferred-yandex-map-content-primary)]">Карта Яндекса загрузится только после нажатия.</span>
           </span>
         </Button>
       )}
@@ -39,7 +39,7 @@ export function DeferredYandexMap({ widgetUrl, yandexUrl, title }: DeferredYande
         href={yandexUrl}
         target="_blank"
         rel="noreferrer"
-        className="absolute bottom-3 right-3 hidden min-h-10 items-center rounded-lg bg-white px-3 text-xs font-semibold text-[var(--text-primary)] shadow-[var(--deferred-yandex-map-shadow-primary)] transition hover:text-[var(--accent)] lg:inline-flex"
+        className="absolute bottom-3 right-3 hidden min-h-10 items-center rounded-lg bg-white px-3 text-label font-semibold text-[var(--text-primary)] shadow-[var(--deferred-yandex-map-shadow-primary)] transition hover:text-[var(--accent)] lg:inline-flex"
       >
         Открыть в Яндекс.Картах
       </a>

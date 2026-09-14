@@ -13,12 +13,12 @@ body {
   background: var(--surface-page);
   color: var(--content-strong);
   font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: 0.01em;
+  letter-spacing: var(--site-tracking-copy);
 }
 
 .admin-root {
   font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: 0;
+  letter-spacing: var(--site-tracking-normal);
 }
 
 button,

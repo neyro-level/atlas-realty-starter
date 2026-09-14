@@ -16,14 +16,14 @@ export function CareersFinalCtaView({ content: careersFinalCta, quizButton }: { 
           >
             {careersFinalCta.title}
           </h2>
-          <div className="mx-auto mt-4 max-w-205 text-body-compact leading-7 text-[var(--careers-final-cta-content-primary)] sm:text-body-large">
+          <div className="mx-auto mt-4 max-w-205 text-body-compact leading-step-relaxed text-[var(--careers-final-cta-content-primary)] sm:text-body-large">
             {careersFinalCta.description.map((line) => (
               <p key={line}>{line}</p>
             ))}
           </div>
 
           <div className="mx-auto mt-8 max-w-190 border-t border-[var(--careers-final-cta-border-primary)] pt-8">
-            <h3 className="text-card-large font-semibold leading-8 text-[var(--text-primary)] sm:text-section-small">
+            <h3 className="text-card-large font-semibold leading-step-airy text-[var(--text-primary)] sm:text-section-small">
               {careersFinalCta.selection.title}
             </h3>
 
@@ -31,7 +31,7 @@ export function CareersFinalCtaView({ content: careersFinalCta, quizButton }: { 
               {careersFinalCta.selection.items.map((item) => (
                 <li
                   key={item}
-                  className="grid grid-cols-[20px_auto] items-center gap-3 text-body-compact leading-6 text-[var(--text-secondary)]"
+                  className="grid grid-cols-[20px_auto] items-center gap-3 text-body-compact leading-step-copy text-[var(--text-secondary)]"
                 >
                   <span className="flex size-5 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]">
                     <Check className="size-3.5" strokeWidth={2} aria-hidden />
@@ -45,12 +45,12 @@ export function CareersFinalCtaView({ content: careersFinalCta, quizButton }: { 
               {quizButton}
             </div>
 
-            <p className="mx-auto mt-5 max-w-130 text-support leading-5 text-[var(--text-muted)]">
+            <p className="mx-auto mt-5 max-w-130 text-support leading-step-body text-[var(--text-muted)]">
               {careersFinalCta.responseNote}
             </p>
           </div>
 
-          <div className="mx-auto mt-7 max-w-205 border-t border-[var(--careers-final-cta-border-primary)] pt-6 text-body leading-6 text-[var(--careers-final-cta-content-primary)]">
+          <div className="mx-auto mt-7 max-w-205 border-t border-[var(--careers-final-cta-border-primary)] pt-6 text-body leading-step-copy text-[var(--careers-final-cta-content-primary)]">
             {careersFinalCta.disclaimer.map((line) => (
               <p key={line}>{line}</p>
             ))}

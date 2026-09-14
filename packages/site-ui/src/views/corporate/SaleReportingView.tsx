@@ -12,7 +12,7 @@ export function SaleReportingView() {
             >
               Вы видите реальную динамику продажи, а не слушаете обещания
             </h2>
-            <p className="mt-4 max-w-180 text-body-compact leading-6 text-[var(--text-muted)] sm:text-body-large sm:leading-7">
+            <p className="mt-4 max-w-180 text-body-compact leading-step-copy text-[var(--text-muted)] sm:text-body-large sm:leading-step-relaxed">
               Каждую неделю — отчёт по просмотрам, звонкам и показам. Цену снижаем только с вашего согласия и только там, где это требует рынок.
             </p>
           </div>

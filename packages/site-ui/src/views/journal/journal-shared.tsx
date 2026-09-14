@@ -35,9 +35,9 @@ export function JournalArticleImage({ article, className, sizes, priority = fals
       <span className={`relative block overflow-hidden rounded-lg bg-[var(--surface-muted)] ${className}`}>
         <ImageRenderer src={article.image} alt="" fill priority={priority} unoptimized={article.image.startsWith("http") || article.image.startsWith("/")} sizes={sizes} className="object-cover transition duration-500 group-hover:scale-[1.03]" />
       </span>
-      <h2 className={`mt-4 max-w-190 font-semibold leading-snug text-[var(--text-primary)] transition group-hover:text-[var(--accent)] ${titleClassName}`}>{article.title}</h2>
-      {showExcerpt ? <p className="mt-2 max-w-190 text-sm leading-6 text-[var(--text-secondary)]">{article.excerpt}</p> : null}
-      <span className="mt-2 block text-caption leading-4 text-[var(--text-muted)]">{article.dateLabel} · {article.topicLabel}</span>
+      <h2 className={`mt-4 max-w-190 font-semibold leading-compact-copy text-[var(--text-primary)] transition group-hover:text-[var(--accent)] ${titleClassName}`}>{article.title}</h2>
+      {showExcerpt ? <p className="mt-2 max-w-190 text-body leading-step-copy text-[var(--text-secondary)]">{article.excerpt}</p> : null}
+      <span className="mt-2 block text-caption leading-step-small text-[var(--text-muted)]">{article.dateLabel} · {article.topicLabel}</span>
     </LinkRenderer>
   );
 }
@@ -50,8 +50,8 @@ export function JournalSectionHeader({ id, title, action, linkRenderer: LinkRend
 }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <h2 id={id} className="text-heading-medium font-semibold leading-tight text-[var(--text-primary)]">{title}</h2>
-      <LinkRenderer href={action.href} className="inline-flex shrink-0 items-center gap-1 text-xs font-semibold text-[var(--text-secondary)] transition hover:text-[var(--accent)]">
+      <h2 id={id} className="text-heading-medium font-semibold leading-tight-copy text-[var(--text-primary)]">{title}</h2>
+      <LinkRenderer href={action.href} className="inline-flex shrink-0 items-center gap-1 text-label font-semibold text-[var(--text-secondary)] transition hover:text-[var(--accent)]">
         {action.label}<ChevronRight className="size-4" aria-hidden />
       </LinkRenderer>
     </div>
@@ -59,5 +59,5 @@ export function JournalSectionHeader({ id, title, action, linkRenderer: LinkRend
 }
 
 export function JournalBreadcrumbs({ items, className = "", linkRenderer: LinkRenderer }: { items: Array<{ label: string; href?: string }>; className?: string; linkRenderer: SiteLinkRenderer }) {
-  return <Breadcrumb className={`breadcrumbs overflow-x-auto py-0.5 text-sm leading-5 text-[var(--text-muted)] ${className}`}><BreadcrumbList className="flex-nowrap gap-x-2 text-inherit">{items.map((item, index) => <Fragment key={`${item.label}-${index}`}>{index ? <BreadcrumbSeparator className="shrink-0 self-center text-[var(--journal-breadcrumb-separator)]"><ChevronRight className="size-3.5" aria-hidden /></BreadcrumbSeparator> : null}<BreadcrumbItem className="min-w-0">{item.href && index < items.length - 1 ? <BreadcrumbLink asChild className="shrink-0 whitespace-nowrap font-medium leading-5 hover:text-[var(--accent)]"><LinkRenderer href={item.href}>{item.label}</LinkRenderer></BreadcrumbLink> : <BreadcrumbPage className="min-w-0 truncate font-semibold leading-5">{item.label}</BreadcrumbPage>}</BreadcrumbItem></Fragment>)}</BreadcrumbList></Breadcrumb>;
+  return <Breadcrumb className={`breadcrumbs overflow-x-auto py-0.5 text-body leading-step-body text-[var(--text-muted)] ${className}`}><BreadcrumbList className="flex-nowrap gap-x-2 text-inherit">{items.map((item, index) => <Fragment key={`${item.label}-${index}`}>{index ? <BreadcrumbSeparator className="shrink-0 self-center text-[var(--journal-breadcrumb-separator)]"><ChevronRight className="size-3.5" aria-hidden /></BreadcrumbSeparator> : null}<BreadcrumbItem className="min-w-0">{item.href && index < items.length - 1 ? <BreadcrumbLink asChild className="shrink-0 whitespace-nowrap font-medium leading-step-body hover:text-[var(--accent)]"><LinkRenderer href={item.href}>{item.label}</LinkRenderer></BreadcrumbLink> : <BreadcrumbPage className="min-w-0 truncate font-semibold leading-step-body">{item.label}</BreadcrumbPage>}</BreadcrumbItem></Fragment>)}</BreadcrumbList></Breadcrumb>;
 }

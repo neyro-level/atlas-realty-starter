@@ -79,15 +79,15 @@ export function CatalogBuyerServicesSection({ sourcePage }: CatalogBuyerServices
                 aria-label={`${modalTitle}. Получить консультацию`}
               >
                 <div className="flex min-h-55 flex-col p-5 md:min-h-60 md:p-6">
-                  <h3 className="max-w-90 text-heading-small font-semibold leading-[1.16] text-[var(--text-primary)] [text-wrap:balance]">
+                  <h3 className="max-w-90 text-heading-small font-semibold leading-card-title text-[var(--text-primary)] [text-wrap:balance]">
                     {title}
                   </h3>
-                  <p className="mt-4 max-w-90 text-body leading-[1.6] text-[var(--catalog-buyer-services-section-content-primary)]">
+                  <p className="mt-4 max-w-90 text-body leading-content text-[var(--catalog-buyer-services-section-content-primary)]">
                     <ServiceText text={service.text} highlight={service.highlight} />
                   </p>
                   <div className="mt-auto pt-7">
                     <span
-                      className="inline-flex min-h-10 items-center justify-center border-b border-[var(--accent)]/35 bg-transparent px-0 text-support font-medium leading-none text-[var(--accent)] transition hover:border-[var(--accent)] hover:text-[var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]"
+                      className="inline-flex min-h-10 items-center justify-center border-b border-[var(--accent)]/35 bg-transparent px-0 text-support font-medium leading-flat text-[var(--accent)] transition hover:border-[var(--accent)] hover:text-[var(--accent-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)]"
                       aria-hidden
                     >
                       Получить консультацию
