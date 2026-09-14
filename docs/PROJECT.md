@@ -61,7 +61,7 @@ The versioned headless API remains supported for external consumers; “headless
 
 ## Active platform capabilities
 
-- Payload Admin with `owner` and `editor` roles.
+- Payload Admin with `owner` and `editor` roles; all Admin screens use the self-hosted PT Root UI Variable (`PTRootUIWebVF`) interface font.
 - PostgreSQL adapter, strict environment parsing and append-only `src/payload/migrations-v2`.
 - Collections: users, media, pages, posts, properties, layouts, residential complexes, buildings, developers, agents, feed sources, import runs/issues, prepared catalog stats, leads and lead deliveries.
 - Global: site settings.

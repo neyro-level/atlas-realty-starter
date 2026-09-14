@@ -26,4 +26,12 @@ describe("UI shell and form contracts", () => {
     expect(common).not.toContain(".request-modal__panel");
     expect(common).not.toContain(".site-footer");
   });
+
+  it("keeps the Payload login reachable from the public footer without indexing it", () => {
+    const navigation = readFileSync("src/project/navigation-config.ts", "utf8");
+    const footer = readFileSync("src/components/layout/SiteFooter.tsx", "utf8");
+
+    expect(navigation).toContain('{ label: "Личный кабинет", href: "/admin/login", nofollow: true }');
+    expect(footer).toContain('rel: link.nofollow ? "nofollow" : undefined');
+  });
 });

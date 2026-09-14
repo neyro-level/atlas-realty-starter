@@ -21,7 +21,7 @@ export function MobileStickyConversionView({ visible, ariaLabel, title, note, la
           <p className="truncate text-label font-extrabold leading-step-small">{title}</p>
           <p className="mt-0.5 truncate text-caption font-semibold leading-step-small text-[var(--text-secondary)]">{note}</p>
         </div>
-        <RequestModalButton type="button" tabIndex={visible ? undefined : -1} request={request} className="min-h-12 max-w-44 whitespace-normal px-3 text-center text-label leading-title-compact">
+        <RequestModalButton type="button" tabIndex={visible ? undefined : -1} request={request} className="min-h-12 max-w-44 whitespace-normal px-3 text-center text-label leading-title-compact text-white [&_svg]:text-white">
           <Sparkles data-icon="inline-start" aria-hidden />
           {label}
         </RequestModalButton>

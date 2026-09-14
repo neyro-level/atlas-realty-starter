@@ -1,13 +1,185 @@
+/* PT Root UI by Paratype, SIL Open Font License 1.1. License: /fonts/pt-root-ui/OFL.txt */
+@font-face {
+  font-display: swap;
+  font-family: "PTRootUIWebVF";
+  font-style: normal;
+  font-weight: 300 700;
+  src: url("/fonts/pt-root-ui/pt-root-ui-variable.woff2") format("woff2");
+}
+
 :root {
+  --font-body: "PTRootUIWebVF", "PT Root UI", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
   --sz-admin-navy: #06253a;
+  --sz-admin-navy-hover: #0b334d;
   --sz-admin-red: #8a1515;
   --sz-admin-bg: #eef2f5;
   --sz-admin-border: #e2e8f0;
   --sz-admin-muted: #64748b;
+  --ams-admin-login-canvas: #f3f1ed;
+  --ams-admin-login-ink: #171717;
 }
 
 body {
   background: var(--sz-admin-bg);
+  font-family: var(--font-body);
+}
+
+/* The login keeps Payload's native auth form while giving the project a quiet, premium shell. */
+body:has(.login) {
+  background: var(--ams-admin-login-canvas);
+}
+
+.template-minimal.login {
+  background: transparent;
+  min-height: 100dvh;
+  padding: clamp(20px, 6vw, 64px) 20px;
+}
+
+.login > .template-minimal__wrap {
+  background: #fff;
+  border: 1px solid rgba(23, 23, 23, .07);
+  border-radius: 20px;
+  box-shadow:
+    0 24px 72px rgba(23, 23, 23, .09),
+    0 3px 12px rgba(23, 23, 23, .045);
+  max-width: 420px;
+  padding: clamp(30px, 6vw, 42px);
+}
+
+.login__brand {
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.ams-admin-login-heading {
+  color: var(--ams-admin-login-ink);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+  margin: 0;
+  text-align: center;
+}
+
+.login__form__inputWrap {
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.login__form .field-type {
+  position: relative;
+}
+
+.login__form .field-label {
+  color: #77716a;
+  font-size: 11px;
+  font-weight: 550;
+  left: 16px;
+  letter-spacing: .015em;
+  line-height: 1;
+  margin: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 11px;
+  z-index: 2;
+}
+
+.login__form .field-type.text input,
+.login__form .field-type.password input {
+  background: #faf9f7;
+  border: 1px solid #dedad4;
+  border-radius: 11px;
+  box-shadow: none;
+  color: var(--ams-admin-login-ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  height: 58px;
+  padding: 23px 16px 7px;
+}
+
+.login__form .field-type.text input:hover,
+.login__form .field-type.password input:hover {
+  border-color: #bdb8b0;
+  box-shadow: none;
+}
+
+.login__form .field-type.text input:focus,
+.login__form .field-type.password input:focus {
+  background: #fff;
+  border-color: var(--sz-admin-navy);
+  box-shadow: 0 0 0 3px rgba(6, 37, 58, .1);
+}
+
+.login__form input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #faf9f7 inset;
+  -webkit-text-fill-color: var(--ams-admin-login-ink);
+}
+
+.login__form > a {
+  display: none;
+}
+
+.login__form .form-submit,
+.login__form .form-submit .btn {
+  width: 100%;
+}
+
+.login__form .form-submit .btn {
+  background: var(--sz-admin-navy);
+  border: 1px solid var(--sz-admin-navy);
+  border-radius: 11px;
+  box-shadow: 0 10px 24px rgba(6, 37, 58, .18);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 650;
+  min-height: 54px;
+}
+
+.login__form .form-submit .btn:hover,
+.login__form .form-submit .btn:focus-visible {
+  background: var(--sz-admin-navy-hover);
+  border-color: var(--sz-admin-navy-hover);
+  color: #fff;
+}
+
+.ams-admin-login-back {
+  color: #66615b;
+  display: block;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 550;
+  margin-top: 18px;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ams-admin-login-back:hover,
+.ams-admin-login-back:focus-visible {
+  color: var(--sz-admin-navy);
+}
+
+@media (max-width: 480px) {
+  .template-minimal.login {
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .login > .template-minimal__wrap {
+    border-radius: 18px;
+    margin-top: max(6vh, 28px);
+    padding: 28px 22px;
+  }
+
+  .login__brand {
+    justify-content: flex-start;
+  }
+
+  .ams-admin-login-heading {
+    font-size: 26px;
+    text-align: left;
+  }
 }
 
 .sz-admin-nav {

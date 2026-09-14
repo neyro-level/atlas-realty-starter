@@ -51,6 +51,12 @@ const importFeedTask = createImportFeedTask({
 
 export default buildConfig({
   admin: {
+    components: {
+      afterLogin: ['@/payload/components/AdminLoginHeading#AdminLoginBackLink'],
+      graphics: {
+        Logo: '@/payload/components/AdminLoginHeading#AdminLoginHeading',
+      },
+    },
     importMap: { baseDir: path.resolve(dirname) },
     meta: {
       description: 'Payload Admin for the full-stack AMS Realty Platform Starter',

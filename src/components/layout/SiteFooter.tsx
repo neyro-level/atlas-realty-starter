@@ -46,7 +46,10 @@ export function SiteFooter({ contacts }: { contacts: PublicSiteContacts }) {
       brandLabel={siteIdentity.brand}
       contacts={contacts}
       columns={FOOTER_COLUMNS}
-      legalLinks={FOOTER_LEGAL_LINKS}
+      legalLinks={FOOTER_LEGAL_LINKS.map((link) => ({
+        ...link,
+        rel: link.nofollow ? "nofollow" : undefined,
+      }))}
       meta={FOOTER_META}
       socials={socials}
       linkRenderer={FooterLink}

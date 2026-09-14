@@ -35,8 +35,10 @@ describe('mobile property conversion contract', () => {
   it('uses the neutral shared sticky view instead of a property-specific duplicate', () => {
     const propertyBar = readFileSync('src/components/property/PropertyObjectMobileConversionBar.tsx', 'utf8')
     const newBuildingView = readFileSync('packages/site-ui/src/views/new-building/NewBuildingStickyConversionView.tsx', 'utf8')
+    const sharedView = readFileSync('packages/site-ui/src/views/shared/MobileStickyConversionView.tsx', 'utf8')
 
     expect(propertyBar).toContain('MobileStickyConversionView')
     expect(newBuildingView).toContain('MobileStickyConversionView')
+    expect(sharedView).toContain('text-white [&_svg]:text-white')
   })
 })

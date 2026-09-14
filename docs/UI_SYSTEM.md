@@ -1,6 +1,6 @@
 # UI system
 
-This document implements AMS UI Core v5.0 for a public real-estate product. The active layering is `Project Design System -> Tailwind theme -> shadcn primitives -> shared UI -> realty domain UI -> page composition`. Payload Admin stays CMS-native.
+This document implements AMS UI Core v5.0 for a public real-estate product. The active layering is `Project Design System -> Tailwind theme -> shadcn primitives -> shared UI -> realty domain UI -> page composition`. Payload Admin stays CMS-native in structure and interaction while using the project-owned internal-workspace font.
 
 ## Ownership
 
@@ -10,7 +10,7 @@ The root and package `components.json` files keep the same local ShadCN style, R
 
 ## Tokens
 
-`packages/site-ui/src/theme.css` is the only global token source. Manrope is the sole primary font. Brand, surfaces, text, borders, focus, status colors, radius, shadows, spacing and motion use semantic CSS variables. Application components must not add raw HEX values or import Radix directly; `pnpm ui:check` enforces both boundaries.
+`packages/site-ui/src/theme.css` is the only global token source for the public site. Manrope is the sole primary font of the public commercial interface. Payload Admin and any future authenticated internal workspace use **PT Root UI Variable** with the CSS family name `PTRootUIWebVF` as their sole primary interface font. The two fonts are context-specific and must not be mixed within one interface. The Admin font is self-hosted from `public/fonts/pt-root-ui/` and licensed under SIL Open Font License 1.1. Brand, surfaces, text, borders, focus, status colors, radius, shadows, spacing and motion use semantic CSS variables. Application components must not add raw HEX values or import Radix directly; `pnpm ui:check` enforces both boundaries.
 
 The package-owned `theme.css` decision is the accepted Project Design System implementation for this starter: it is portable with the repository and remains the only numeric token source. The completed v5 migration contains 1,004 referenced semantic, project and component-role declarations, zero numbered compatibility aliases and zero unresolved or unused root tokens. `pnpm ui:tokens` fails on both missing references and newly introduced dead root tokens.
 

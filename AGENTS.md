@@ -26,6 +26,7 @@
 - `/api/public/v1` remains the versioned headless integration contract.
 - `packages/site-contracts` owns presentation DTOs and the `SiteEngine` interface; `packages/site-ui` is presentation-only and must not import Payload or database code; `packages/site-fixtures` is the deterministic fixture adapter.
 - Payload is the sole backend, auth, Admin, schema and migration owner. Prisma and a second backend/Admin/auth are forbidden.
+- Public commercial UI uses Manrope; Payload Admin and future authenticated internal workspaces use only PT Root UI Variable (`PTRootUIWebVF`).
 - Data access zones are `core/data-access/public`, `system` and `ingest`. A user zone is added only for a real authenticated product UI outside Payload Admin.
 - Raw anonymous Payload REST for business collections and globals is denied.
 - User-context Local API sets `overrideAccess: false`; update/delete also set `overrideLock: false`.

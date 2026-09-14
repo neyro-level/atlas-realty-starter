@@ -190,6 +190,7 @@ export const footerColumns: FooterColumn[] = [
 
 export const legalLinks: LegalLink[] = [
   { label: "Правовая информация", href: "/legal" },
+  { label: "Личный кабинет", href: "/admin/login", nofollow: true },
   { label: "Разработан в АМС-24", href: "https://ams24.ru/", external: true },
 ];
 
