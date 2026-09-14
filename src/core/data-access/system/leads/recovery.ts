@@ -9,7 +9,7 @@ export async function recoverLeadDeliveries(payload: Payload, req?: PayloadReque
   const now = new Date()
   const stale = new Date(now.getTime() - PROCESSING_TIMEOUT_MS).toISOString()
   const result = await payload.find({
-    collection: 'lead-deliveries', depth: 0, limit: RECOVERY_LIMIT, overrideAccess: true, pagination: false, req,
+    collection: 'lead-deliveries', depth: 0, limit: RECOVERY_LIMIT, overrideAccess: true, req,
     sort: 'createdAt',
     where: { or: [
       { and: [{ status: { in: ['pending', 'failed'] } }, { nextAttemptAt: { less_than_equal: now.toISOString() } }] },

@@ -1,4 +1,5 @@
 export const LEAD_CHANNEL_PORT_VERSION = 'v1' as const
+export const LEAD_CHANNEL_IDEMPOTENCY = 'receiver-enforced' as const
 
 export type DeliveryLeadSnapshot = {
   email?: string | null
@@ -22,6 +23,7 @@ export type DeliveryResult =
   | { code: string; kind: 'permanent' | 'retryable'; ok: false }
 
 export type LeadChannelAdapter = {
+  readonly idempotency: typeof LEAD_CHANNEL_IDEMPOTENCY
   readonly version: typeof LEAD_CHANNEL_PORT_VERSION
   deliver(attempt: DeliveryAttempt): Promise<DeliveryResult>
 }

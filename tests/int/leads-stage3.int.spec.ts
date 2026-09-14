@@ -6,7 +6,7 @@ import { recoverOrphanedPayloadJobs } from '@/core/data-access/system/jobs/recov
 import { applyLeadRetentionPolicy } from '@/core/data-access/system/retention/leads'
 import { createPublicLead } from '@/project/leads/create-public-lead'
 import { getLeadChannelAdapter } from '@/project/leads/channels'
-import { LEAD_CHANNEL_PORT_VERSION } from '@/core/ports/lead-channel'
+import { LEAD_CHANNEL_IDEMPOTENCY, LEAD_CHANNEL_PORT_VERSION } from '@/core/ports/lead-channel'
 import { getTestPayload, resetFoundationState } from '../helpers/payload'
 
 const command = (key: string) => ({
@@ -88,6 +88,11 @@ describe('Stage 3 transactional lead outbox', () => {
     await expect(recoverLeadDeliveries(payload)).resolves.toEqual({ queued: 1 })
     const recovered = await payload.findByID({ collection: 'lead-deliveries', id: delivery.id, overrideAccess: true })
     expect(recovered).toMatchObject({ lastError: 'processing_timeout', status: 'failed' })
+    const pendingJobs = await payload.find({
+      collection: 'payload-jobs', limit: 10, overrideAccess: true,
+      where: { and: [{ taskSlug: { equals: 'deliverLead' } }, { completedAt: { exists: false } }] },
+    })
+    expect(pendingJobs.totalDocs).toBe(1)
   })
 
   it('uses a safe fallback delivery plan if intake context is incomplete', async () => {
@@ -107,7 +112,7 @@ describe('Stage 3 transactional lead outbox', () => {
     let delivered = 0
     const resolver = () => ({
       policy: { baseBackoffMs: 1, maxAttempts: 3, maxBackoffMs: 10, timeoutMs: 1000 },
-      adapter: { version: LEAD_CHANNEL_PORT_VERSION, deliver: async () => { delivered += 1; await new Promise((resolve) => setTimeout(resolve, 20)); return { ok: true as const } } },
+      adapter: { idempotency: LEAD_CHANNEL_IDEMPOTENCY, version: LEAD_CHANNEL_PORT_VERSION, deliver: async () => { delivered += 1; await new Promise((resolve) => setTimeout(resolve, 20)); return { ok: true as const } } },
     })
     const results = await Promise.all([
       processLeadDelivery(payload, String(delivery.id), resolver),
@@ -130,6 +135,23 @@ describe('Stage 3 transactional lead outbox', () => {
     const stored = (await payload.find({ collection: 'leads', limit: 1, overrideAccess: true })).docs[0]!
     expect(stored.requestFingerprint).toBe('a'.repeat(64))
     expect(stored).not.toHaveProperty('clientIp')
+  })
+
+  it('rejects an external source page and rate-limits a fingerprint across different phones', async () => {
+    await expect(createPublicLead({ ...command('lead:source:12345678'), sourcePage: 'https://evil.example.test/offer' })).rejects.toThrow(/lead_source_page_forbidden/)
+
+    for (let index = 0; index < 10; index += 1) {
+      await createPublicLead({
+        ...command(`lead:fingerprint:${index}:12345678`),
+        phone: `+7 900 000 00 ${String(index).padStart(2, '0')}`,
+        requestFingerprint: 'c'.repeat(64),
+      })
+    }
+    await expect(createPublicLead({
+      ...command('lead:fingerprint:blocked:12345678'),
+      phone: '+7 900 000 01 00',
+      requestFingerprint: 'c'.repeat(64),
+    })).rejects.toThrow(/lead_rate_limited/)
   })
 
   it('purges expired PII without retaining its original values', async () => {

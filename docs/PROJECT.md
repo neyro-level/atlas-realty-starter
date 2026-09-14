@@ -123,10 +123,10 @@ The external starter audit and the local UI Core v5 audit are resolved through f
 
 ### Epic 10 — lead delivery reliability
 
-- [ ] Make recovery queries unambiguously bounded for Payload 3.88.0.
-- [ ] Make adapter idempotency by `idempotencyKey` a mandatory port contract and prove two-worker behavior.
-- [ ] Prevent recovery from enqueueing a second job when a scheduled job already owns the delivery.
-- [ ] Enforce canonical source-page normalization and public rate limits by IP fingerprint plus normalized phone.
+- [x] Keep recovery queries unambiguously bounded by the explicit 200-document limit supported by Payload 3.88.0.
+- [x] Make receiver-enforced idempotency by `idempotencyKey` a mandatory adapter contract and prove two-worker behavior.
+- [x] Use Payload job concurrency keys with supersession so recovery replaces an older pending job instead of accumulating duplicates.
+- [x] Prove canonical source-page rejection and independent limits by HMAC request fingerprint plus normalized phone without storing raw IP.
 
 ### Epic 11 — UI architecture completion
 

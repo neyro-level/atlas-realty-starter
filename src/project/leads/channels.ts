@@ -1,4 +1,5 @@
 import {
+  LEAD_CHANNEL_IDEMPOTENCY,
   LEAD_CHANNEL_PORT_VERSION,
   type LeadChannelAdapter,
   type LeadChannelBinding,
@@ -13,6 +14,7 @@ const DEFAULT_POLICY: LeadChannelPolicy = tenantLeadDelivery['ams-leads']
 const UNAVAILABLE_POLICY: LeadChannelPolicy = { ...DEFAULT_POLICY, maxAttempts: 3 }
 
 const testAdapter: LeadChannelAdapter = {
+  idempotency: LEAD_CHANNEL_IDEMPOTENCY,
   version: LEAD_CHANNEL_PORT_VERSION,
   async deliver(attempt) {
     if (attempt.deliveryId.startsWith('test-permanent:')) return { code: 'rejected', kind: 'permanent', ok: false }
@@ -54,7 +56,7 @@ export function getLeadChannel(channel: string): LeadChannelBinding {
   if (runtimeConfig.environment === 'test' && channel.startsWith('test-')) {
     return {
       policy: { ...DEFAULT_POLICY, maxAttempts: 2 },
-      adapter: { version: LEAD_CHANNEL_PORT_VERSION, deliver: (attempt) => testAdapter.deliver({ ...attempt, deliveryId: `${channel}:${attempt.deliveryId}` }) },
+      adapter: { idempotency: LEAD_CHANNEL_IDEMPOTENCY, version: LEAD_CHANNEL_PORT_VERSION, deliver: (attempt) => testAdapter.deliver({ ...attempt, deliveryId: `${channel}:${attempt.deliveryId}` }) },
     }
   }
   return { policy: UNAVAILABLE_POLICY }

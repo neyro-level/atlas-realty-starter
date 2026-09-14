@@ -9,7 +9,10 @@ export function createDeliverLeadTask(resolveAdapter: ResolveLeadChannel): TaskC
   return {
     slug: 'deliverLead',
     label: 'Deliver lead outbox item',
-    concurrency: ({ input }) => `lead-delivery:${input.deliveryId}`,
+    concurrency: {
+      key: ({ input }) => `lead-delivery:${input.deliveryId}`,
+      supersedes: true,
+    },
     inputSchema: [{ name: 'deliveryId', type: 'text', required: true }],
     outputSchema: [{ name: 'status', type: 'text', required: true }],
     retries: 0,

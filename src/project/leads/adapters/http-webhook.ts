@@ -2,6 +2,7 @@ import { createHmac } from 'node:crypto'
 
 import { safeHTTPSRequest, type SafeHTTPResponse } from '@/core/security/outbound-http/client'
 import {
+  LEAD_CHANNEL_IDEMPOTENCY,
   LEAD_CHANNEL_PORT_VERSION,
   type DeliveryAttempt,
   type DeliveryResult,
@@ -19,6 +20,7 @@ export function createHTTPWebhookAdapter(config: {
   timeoutMs: number
 }, requestClient: RequestClient = safeHTTPSRequest): LeadChannelAdapter {
   return {
+    idempotency: LEAD_CHANNEL_IDEMPOTENCY,
     version: LEAD_CHANNEL_PORT_VERSION,
     async deliver(attempt): Promise<DeliveryResult> {
       const body = JSON.stringify(config.mapPayload(attempt))

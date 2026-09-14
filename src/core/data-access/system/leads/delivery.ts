@@ -6,6 +6,7 @@ import type {
   LeadChannelPolicy,
   ResolveLeadChannel,
 } from '@/core/ports/lead-channel'
+import { LEAD_CHANNEL_IDEMPOTENCY } from '@/core/ports/lead-channel'
 import type { LeadDelivery } from '@/payload-types'
 
 import { systemContext } from '../operations'
@@ -148,6 +149,9 @@ export function redactDeliveryError(value: string) {
 }
 
 async function safeDeliver(adapter: LeadChannelAdapter, input: Parameters<LeadChannelAdapter['deliver']>[0]) {
+  if (adapter.idempotency !== LEAD_CHANNEL_IDEMPOTENCY) {
+    return { code: 'adapter_idempotency_contract_missing', kind: 'permanent' as const, ok: false as const }
+  }
   try { return await adapter.deliver(input) }
   catch { return { code: 'network_error', kind: 'retryable' as const, ok: false as const } }
 }

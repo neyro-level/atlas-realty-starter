@@ -5,6 +5,7 @@ import { createHTTPWebhookAdapter } from '@/project/leads/adapters/http-webhook'
 import { isAllowedLeadSourcePagePath } from '@/modules/leads/source-page-policy'
 import { leadSchema } from '@/modules/leads/schema'
 import { LEAD_BODY_LIMIT_BYTES, assertMinimumFillTime, idempotencyKeySchema, normalizeLeadPhone, publicLeadSchema, readBoundedJSON } from '@/shared/types/public-lead'
+import { LEAD_CHANNEL_IDEMPOTENCY } from '@/core/ports/lead-channel'
 
 describe('Stage 3 public lead contract', () => {
   it('accepts semantic residential-complex routes without opening arbitrary root paths', () => {
@@ -23,6 +24,7 @@ describe('Stage 3 public lead contract', () => {
       calls.push(options)
       return { body: Buffer.alloc(0), headers: {}, status: 202, url: 'https://leads.example.test/v1/leads' }
     })
+    expect(adapter.idempotency).toBe(LEAD_CHANNEL_IDEMPOTENCY)
     await expect(adapter.deliver(attempt)).resolves.toEqual({ ok: true })
     expect(calls[0]?.headers?.['idempotency-key']).toBe(attempt.idempotencyKey)
     expect(calls[0]?.headers?.['x-webhook-signature']).toMatch(/^sha256=/)

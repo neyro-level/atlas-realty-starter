@@ -4,18 +4,19 @@ source_of_truth: docs/PROJECT.md#active-remediation-program--2026-09-14
 delivery_profile: CRITICAL
 target_branch: main
 current_wave: foundation
-current_epic: 9
-next_step: review-and-deliver-epic-9
+current_epic: 10
+next_step: review-and-deliver-epic-10
 epics:
   - id: 9
     branch: work/epic-09-tenant-residue
-    status: in_progress
-    pr: null
-    head_sha: null
+    status: completed
+    pr: 76
+    merge_sha: df7c99e1a9d66061a27f0f93fc9acd7fbaf437aa
+    gate_run: 102
     gate: RISKY
   - id: 10
     branch: work/epic-10-lead-delivery-polish
-    status: pending
+    status: in_progress
     depends_on: [9]
   - id: 11
     branch: work/epic-11-ui-finish
