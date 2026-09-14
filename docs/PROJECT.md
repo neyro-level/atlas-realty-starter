@@ -147,8 +147,8 @@ The external starter audit and the local UI Core v5 audit are resolved through f
 - [x] Fix confirmed contrast failures, footer brand contrast and the unnamed home hero link.
 - [x] Fix catalog heading order and the mobile search field name/id contract.
 - [x] Repair fixture filtering used by empty-state visual tests and accept only reviewed visual baselines.
-- [ ] Restore a complete Payload-backed local smoke with consistent media, then verify representative desktop/mobile routes before release.
-- [ ] Run final review/gates, merge every epic, release one exact `main` artifact, perform live smoke and mirror the same SHA to GitHub.
+- [x] Restore a complete Payload-backed local smoke with consistent media, then verify representative desktop/mobile routes before release.
+- [x] Run final review/gates, merge every epic, release one exact `main` artifact, perform live smoke and mirror the same SHA to GitHub.
 
 ### Production-readiness checklist
 

@@ -3,9 +3,9 @@ program: starter-remediation-2026-09-14
 source_of_truth: docs/PROJECT.md#active-remediation-program--2026-09-14
 delivery_profile: CRITICAL
 target_branch: main
-current_wave: visual-release-proof
-current_epic: 13
-next_step: restore-local-media-and-deliver-epic-13
+current_wave: completed
+current_epic: null
+next_step: maintenance-by-owner-priority
 epics:
   - id: 9
     branch: work/epic-09-tenant-residue
@@ -37,5 +37,8 @@ epics:
     gate_run: 106
   - id: 13
     branch: work/epic-13-visual-release-proof
-    status: in_progress
+    status: completed
     depends_on: [12]
+    pr: 80
+    merge_sha: d76f05355f732478f53152da53edba9bdfade6e4
+    gate_run: 107
