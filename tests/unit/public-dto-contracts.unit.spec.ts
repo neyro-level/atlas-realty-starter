@@ -7,6 +7,7 @@ import {
   PropertyDetailDtoSchema,
 } from "@starter/site-contracts";
 import {
+  createFixtureEngine,
   fixtureNewBuildings,
   fixtureProperties,
   fixturePropertyDetails,
@@ -24,5 +25,11 @@ describe("public runtime DTO contracts", () => {
   it("rejects malformed records before they reach presentation code", () => {
     const malformed = { ...fixtureProperties[0], price: "5000000" };
     expect(PropertyCardDtoSchema.safeParse(malformed).success).toBe(false);
+  });
+
+  it("applies catalog search in fixture mode for deterministic empty states", async () => {
+    const engine = createFixtureEngine();
+    expect((await engine.getCatalog({ q: "светлая" })).total).toBe(1);
+    expect((await engine.getCatalog({ q: "__visual_no_results__" })).total).toBe(0);
   });
 });

@@ -50,7 +50,7 @@ export function HomeHeroView({ featured, content, linkRenderer: LinkRenderer, im
               </p>
             </div>
           </div>
-          <LinkRenderer href={featured.href} className="home-hero__featured group">
+          <LinkRenderer href={featured.href} ariaLabel={`Открыть объект: ${featured.title}`} className="home-hero__featured group">
             <div className="home-hero__featured-media" aria-hidden>
               <ImageRenderer
                 src={content.image}

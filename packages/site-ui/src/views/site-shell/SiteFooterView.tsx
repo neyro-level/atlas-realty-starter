@@ -126,7 +126,6 @@ function FooterPhoneReveal({ phone, phoneHref }: { phone: string; phoneHref: str
       data-analytics-event="phone_reveal"
       data-analytics-context="site_footer"
       onClick={() => setVisible(true)}
-      aria-label="Показать номер телефона"
     >
       <Phone className="site-footer__phone-icon" aria-hidden />
       <span>+7...Показать</span>

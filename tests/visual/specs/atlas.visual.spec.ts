@@ -20,6 +20,13 @@ async function settlePage(page: Page) {
   await page.locator('main:not([aria-busy="true"])').waitFor({ state: 'visible' })
   await page.evaluate(async () => {
     await document.fonts.ready
+
+    const viewportStep = Math.max(window.innerHeight, 1)
+    for (let offset = 0; offset < document.documentElement.scrollHeight; offset += viewportStep) {
+      window.scrollTo(0, offset)
+      await new Promise<void>((resolve) => setTimeout(resolve, 50))
+    }
+
     await Promise.all(
       Array.from(document.images).map((image) => {
         if (image.complete) return Promise.resolve()

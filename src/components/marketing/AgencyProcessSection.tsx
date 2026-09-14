@@ -46,7 +46,7 @@ export function AgencyProcessSection({ id, title, lead, steps }: AgencyProcessSe
                   }`}
                 >
                   <span
-                    className="mb-6 block select-none text-process-step font-black leading-flat tracking-body text-[var(--accent)]/14 md:text-process-step-medium lg:text-process-step-large"
+                    className="mb-6 block select-none text-process-step font-black leading-flat tracking-body text-[var(--accent)]/60 md:text-process-step-medium lg:text-process-step-large"
                     aria-hidden
                   >
                     {number}

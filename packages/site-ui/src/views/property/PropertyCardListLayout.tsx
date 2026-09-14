@@ -127,9 +127,9 @@ export function PropertyCardListLayout({
 
       <div className="flex min-h-59.5 flex-col md:min-h-72">
         <div className="min-w-0">
-          <h3 className="text-card-title font-extrabold leading-step-copy tracking-compact text-[var(--text-primary)]">
+          <h2 className="text-card-title font-extrabold leading-step-copy tracking-compact text-[var(--text-primary)]">
             {listTitle}
-          </h3>
+          </h2>
           <div className="mt-2 grid gap-1.5 text-body leading-step-body tracking-copy text-[var(--text-muted)]">
             {listing.district && listing.district !== cityName ? (
               <p className="font-semibold text-[var(--accent)]">{listing.district}</p>

@@ -3,9 +3,9 @@ program: starter-remediation-2026-09-14
 source_of_truth: docs/PROJECT.md#active-remediation-program--2026-09-14
 delivery_profile: CRITICAL
 target_branch: main
-current_wave: ui-constitution
-current_epic: 12
-next_step: review-and-deliver-epic-12
+current_wave: visual-release-proof
+current_epic: 13
+next_step: restore-local-media-and-deliver-epic-13
 epics:
   - id: 9
     branch: work/epic-09-tenant-residue
@@ -30,9 +30,12 @@ epics:
     gate_run: 105
   - id: 12
     branch: work/epic-12-ui-core-v5
-    status: in_progress
+    status: completed
     depends_on: [11]
+    pr: 79
+    merge_sha: b6efa637ae706fb62d683ceb395d9f2cbac918b2
+    gate_run: 106
   - id: 13
     branch: work/epic-13-visual-release-proof
-    status: pending
+    status: in_progress
     depends_on: [12]

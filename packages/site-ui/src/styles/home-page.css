@@ -494,7 +494,7 @@
   border: 0;
   background: transparent;
   padding: 0;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font: inherit;
   font-size: var(--site-type-body-lg);
   font-weight: 700;
@@ -727,7 +727,7 @@
 
 .home-why__stat dd {
   margin: 0;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: var(--site-type-support);
   line-height: var(--site-leading-card-relaxed);
 }
@@ -782,7 +782,7 @@
 
 .home-why__quote {
   margin: 0;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: var(--site-type-body);
   font-weight: 800;
   line-height: var(--site-leading-support);
@@ -800,7 +800,7 @@
 
 .home-why__director-role {
   margin: 0;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: var(--site-type-support);
   letter-spacing: var(--site-tracking-copy);
   line-height: var(--site-leading-default);
@@ -852,7 +852,7 @@
 
 .home-prefooter__group-title h3 {
   margin: 0;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: var(--site-type-label);
   font-weight: 700;
   line-height: var(--site-leading-heading);

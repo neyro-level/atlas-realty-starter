@@ -144,9 +144,9 @@ The external starter audit and the local UI Core v5 audit are resolved through f
 
 ### Epic 13 — accessibility, visual acceptance and local proof
 
-- [ ] Fix confirmed contrast failures, footer brand contrast and the unnamed home hero link.
-- [ ] Fix catalog heading order and the mobile search field name/id contract.
-- [ ] Repair fixture filtering used by empty-state visual tests and accept only reviewed visual baselines.
+- [x] Fix confirmed contrast failures, footer brand contrast and the unnamed home hero link.
+- [x] Fix catalog heading order and the mobile search field name/id contract.
+- [x] Repair fixture filtering used by empty-state visual tests and accept only reviewed visual baselines.
 - [ ] Restore a complete Payload-backed local smoke with consistent media, then verify representative desktop/mobile routes before release.
 - [ ] Run final review/gates, merge every epic, release one exact `main` artifact, perform live smoke and mirror the same SHA to GitHub.
 

@@ -42,7 +42,7 @@ export function SiteFooter({ contacts }: { contacts: PublicSiteContacts }) {
 
   return (
     <SiteFooterView
-      brand={<BrandMark showSlogan={false} />}
+      brand={<BrandMark inverted showSlogan={false} />}
       brandLabel={siteIdentity.brand}
       contacts={contacts}
       columns={FOOTER_COLUMNS}

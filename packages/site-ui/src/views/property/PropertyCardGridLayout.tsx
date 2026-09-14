@@ -209,9 +209,9 @@ export function PropertyCardGridLayout({
               })}
             </div>
           ) : null}
-          <h3 className="line-clamp-2 rounded-md text-card-compact font-extrabold leading-heading tracking-compact text-[var(--text-primary)] transition-colors group-active:text-[var(--accent)] md:text-card-compact-medium md:leading-card-compact-rem lg:mt-2 lg:text-card-compact-large lg:leading-step-body lg:group-hover:text-[var(--accent)]">
+          <h2 className="line-clamp-2 rounded-md text-card-compact font-extrabold leading-heading tracking-compact text-[var(--text-primary)] transition-colors group-active:text-[var(--accent)] md:text-card-compact-medium md:leading-card-compact-rem lg:mt-2 lg:text-card-compact-large lg:leading-step-body lg:group-hover:text-[var(--accent)]">
             {title}
-          </h3>
+          </h2>
           <div className="text-caption-dense leading-card-dense-rem tracking-copy text-[var(--text-muted)] md:text-caption md:leading-card-relaxed-rem lg:mt-2 lg:text-label lg:leading-step-body">
             <p className="flex min-w-0 items-center gap-1 font-semibold text-[var(--text-secondary)] md:gap-1.5">
               <MapPin className="size-3 shrink-0 text-[var(--accent)] md:size-3.5" aria-hidden />

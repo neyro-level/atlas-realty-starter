@@ -22,10 +22,10 @@ export function Breadcrumbs({ items, className = "", tone = "light" }: Breadcrum
 
   const tones = {
     light: {
-      nav: "text-[var(--text-muted)]",
+      nav: "text-[var(--text-secondary)]",
       link: "shrink-0 whitespace-nowrap font-medium leading-step-body transition hover:text-[var(--accent)]",
       current: "min-w-0 truncate font-semibold leading-step-body text-[var(--text-primary)]",
-      parent: "shrink-0 whitespace-nowrap font-medium leading-step-body text-[var(--text-muted)]",
+      parent: "shrink-0 whitespace-nowrap font-medium leading-step-body text-[var(--text-secondary)]",
       separator: "size-3.5 shrink-0 self-center text-[var(--breadcrumbs-content-primary)]",
     },
     dark: {

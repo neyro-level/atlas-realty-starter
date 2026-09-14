@@ -50,7 +50,7 @@ export function CatalogMobileFilterView({ mode = "default", draft, setDraft, fac
   if (mode === "new-buildings") {
     return (
       <div className="mt-4 grid gap-2.5 lg:hidden" data-new-building-mobile-filter>
-        <SearchField draft={draft} setDraft={setDraft} />
+        <SearchField id="new-building-mobile-search" draft={draft} setDraft={setDraft} />
         <div className="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] gap-2">
           <Button variant="plain"
             type="button"
@@ -66,7 +66,7 @@ export function CatalogMobileFilterView({ mode = "default", draft, setDraft, fac
           <SheetContent side="bottom" className="inset-x-0 bottom-0 max-h-[var(--viewport-dialog-max-height)] overflow-y-auto rounded-t-2xl border-0 bg-[var(--surface-card)] p-4 pb-[var(--spacing-safe-footer)] shadow-[var(--catalog-mobile-filter-shadow-drawer)] lg:hidden" showClose>
             <SheetHeader className="mb-4"><SheetTitle className="text-body-compact font-semibold">Фильтры новостроек</SheetTitle></SheetHeader>
             <div className="grid gap-3">
-              <SearchField draft={draft} setDraft={setDraft} />
+              <SearchField id="new-building-sheet-search" draft={draft} setDraft={setDraft} />
               <div>
                 <p className="mb-1.5 text-caption font-semibold uppercase text-[var(--text-muted)]">Цена</p>
                 <RangeField from={draft.priceFrom} to={draft.priceTo} onFrom={(value) => setDraft((current) => ({ ...current, priceFrom: value }))} onTo={(value) => setDraft((current) => ({ ...current, priceTo: value }))} fromPlaceholder="от 3 млн" toPlaceholder="до 12 млн" inputMode="decimal" numericOnly={false} />
@@ -86,7 +86,7 @@ export function CatalogMobileFilterView({ mode = "default", draft, setDraft, fac
     );
   }
 
-  const fields = (showAdvancedAlways: boolean) => <MobileFilterFields draft={draft} setDraft={setDraft} facets={facets} typeSummary={typeSummary} sortLabel={sortLabel} sortOpen={sortOpen} setSortOpen={setSortOpen} sortRef={sortRef} advancedOpen={advancedOpen} setAdvancedOpen={setAdvancedOpen} showAdvancedAlways={showAdvancedAlways} onOpenType={() => setTypeOpen(true)} onToggleRoom={onToggleRoom} onClear={onClear} />;
+  const fields = (showAdvancedAlways: boolean) => <MobileFilterFields searchId={showAdvancedAlways ? "catalog-sheet-search" : "catalog-mobile-search"} draft={draft} setDraft={setDraft} facets={facets} typeSummary={typeSummary} sortLabel={sortLabel} sortOpen={sortOpen} setSortOpen={setSortOpen} sortRef={sortRef} advancedOpen={advancedOpen} setAdvancedOpen={setAdvancedOpen} showAdvancedAlways={showAdvancedAlways} onOpenType={() => setTypeOpen(true)} onToggleRoom={onToggleRoom} onClear={onClear} />;
   return <div className="mt-4 grid gap-2.5 lg:hidden">
     {fields(false)}
     <ApplyButton label={applyLabel} onClick={onApply} />
@@ -106,20 +106,20 @@ export function CatalogMobileFilterView({ mode = "default", draft, setDraft, fac
   </div>;
 }
 
-function SearchField({ draft, setDraft }: { draft: MobileFilterDraftViewDto; setDraft: Dispatch<SetStateAction<MobileFilterDraftViewDto>> }) {
-  return <label className="flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-control)] px-3"><Search className="size-4 shrink-0 text-[var(--text-muted)]" aria-hidden /><span className="sr-only">Поиск по новостройкам</span><Input variant="plain" value={draft.q} onChange={(event) => setDraft((current) => ({ ...current, q: event.target.value }))} placeholder="Название ЖК, район или застройщик" className="min-w-0 flex-1 bg-transparent text-support font-medium outline-none placeholder:text-[var(--text-muted)]" /></label>;
+function SearchField({ id, draft, setDraft }: { id: string; draft: MobileFilterDraftViewDto; setDraft: Dispatch<SetStateAction<MobileFilterDraftViewDto>> }) {
+  return <label htmlFor={id} className="flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-control)] px-3"><Search className="size-4 shrink-0 text-[var(--text-muted)]" aria-hidden /><span className="sr-only">Поиск по новостройкам</span><Input id={id} name="q" type="search" variant="plain" value={draft.q} onChange={(event) => setDraft((current) => ({ ...current, q: event.target.value }))} placeholder="Название ЖК, район или застройщик" className="min-w-0 flex-1 bg-transparent text-support font-medium outline-none placeholder:text-[var(--text-muted)]" /></label>;
 }
 
 function ApplyButton({ label, onClick }: { label: string; onClick: () => void }) {
   return <Button variant="plain" type="button" onClick={onClick} className="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[var(--surface-dark)] px-4 text-support font-semibold text-white transition hover:bg-[var(--catalog-mobile-filter-surface-inverse)]">{label}</Button>;
 }
 
-function MobileFilterFields({ draft, setDraft, facets, typeSummary, sortLabel, sortOpen, setSortOpen, sortRef, advancedOpen, setAdvancedOpen, showAdvancedAlways, onOpenType, onToggleRoom, onClear }: {
-  draft: MobileFilterDraftViewDto; setDraft: Dispatch<SetStateAction<MobileFilterDraftViewDto>>; facets: CatalogFacetsDto; typeSummary: string; sortLabel: string; sortOpen: boolean; setSortOpen: (open: boolean) => void; sortRef: RefObject<HTMLDivElement | null>; advancedOpen: boolean; setAdvancedOpen: Dispatch<SetStateAction<boolean>>; showAdvancedAlways: boolean; onOpenType: () => void; onToggleRoom: (id: MobileRoomId) => void; onClear: () => void;
+function MobileFilterFields({ searchId, draft, setDraft, facets, typeSummary, sortLabel, sortOpen, setSortOpen, sortRef, advancedOpen, setAdvancedOpen, showAdvancedAlways, onOpenType, onToggleRoom, onClear }: {
+  searchId: string; draft: MobileFilterDraftViewDto; setDraft: Dispatch<SetStateAction<MobileFilterDraftViewDto>>; facets: CatalogFacetsDto; typeSummary: string; sortLabel: string; sortOpen: boolean; setSortOpen: (open: boolean) => void; sortRef: RefObject<HTMLDivElement | null>; advancedOpen: boolean; setAdvancedOpen: Dispatch<SetStateAction<boolean>>; showAdvancedAlways: boolean; onOpenType: () => void; onToggleRoom: (id: MobileRoomId) => void; onClear: () => void;
 }) {
   const advancedVisible = showAdvancedAlways || advancedOpen;
   return <>
-    <label className="flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-control)] px-3"><Search className="size-4 shrink-0 text-[var(--text-muted)]" aria-hidden /><span className="sr-only">Поиск по каталогу</span><Input variant="plain" value={draft.q} onChange={(event) => setDraft((current) => ({ ...current, q: event.target.value }))} placeholder="Поиск ЖК, улицы, района" className="min-w-0 flex-1 bg-transparent text-support font-medium outline-none placeholder:text-[var(--text-muted)]" /></label>
+    <label htmlFor={searchId} className="flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-control)] px-3"><Search className="size-4 shrink-0 text-[var(--text-muted)]" aria-hidden /><span className="sr-only">Поиск по каталогу</span><Input id={searchId} name="q" type="search" variant="plain" value={draft.q} onChange={(event) => setDraft((current) => ({ ...current, q: event.target.value }))} placeholder="Поиск ЖК, улицы, района" className="min-w-0 flex-1 bg-transparent text-support font-medium outline-none placeholder:text-[var(--text-muted)]" /></label>
     <Button variant="plain" type="button" onClick={onOpenType} className="flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-control)] px-3 text-left text-support font-medium text-[var(--text-primary)]"><span className="min-w-0 truncate">{typeSummary}</span><ChevronDown className="shrink-0 text-[var(--text-muted)]" aria-hidden /></Button>
     <div className="grid grid-cols-[minmax(0,1.5fr)_repeat(4,minmax(0,1fr))] gap-1.5">{ROOM_CHIPS.map((chip) => { const active = draft.rooms.includes(chip.id); return <Button variant="plain" key={chip.id} type="button" onClick={() => onToggleRoom(chip.id)} className={`min-h-11 w-full rounded-lg border px-3 py-2 text-center text-label font-semibold transition ${active ? "border-[var(--surface-dark)] bg-[var(--surface-dark)] text-white" : "border-[var(--border)] bg-[var(--catalog-mobile-filter-surface-control)] text-[var(--text-secondary)]"}`}>{chip.label}</Button>; })}</div>
     <div className="grid grid-cols-1 gap-2"><RangeField from={draft.priceFrom} to={draft.priceTo} onFrom={(value) => setDraft((current) => ({ ...current, priceFrom: value }))} onTo={(value) => setDraft((current) => ({ ...current, priceTo: value }))} fromPlaceholder="от 1,5 млн" toPlaceholder="до 50 млн" inputMode="decimal" numericOnly={false} /><RangeField from={draft.areaFrom} to={draft.areaTo} onFrom={(value) => setDraft((current) => ({ ...current, areaFrom: value }))} onTo={(value) => setDraft((current) => ({ ...current, areaTo: value }))} fromPlaceholder="от 20 м²" toPlaceholder="до 250 м²" /></div>

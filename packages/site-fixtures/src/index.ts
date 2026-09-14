@@ -390,9 +390,11 @@ export const fixtureEngine: SiteEngine = {
     };
   },
   async getCatalog(query = {}) {
+    const search = query.q?.trim().toLocaleLowerCase("ru-RU");
     const items = fixtureProperties
       .filter((item) => !query.category || item.categoryKey === query.category)
       .filter((item) => !query.dealType || item.dealType === query.dealType)
+      .filter((item) => !search || [item.title, item.address, item.category].some((value) => value.toLocaleLowerCase("ru-RU").includes(search)))
       .slice(0, query.limit ?? fixtureProperties.length);
     return { total: items.length, items, query };
   },
