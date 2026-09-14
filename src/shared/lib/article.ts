@@ -1,4 +1,5 @@
 import type { ArticleSummary } from "@/entities/article/model";
+import { tenant } from "@/project/tenant.config";
 
 const articleDateFormatter = new Intl.DateTimeFormat("ru-RU", {
   day: "numeric",
@@ -30,7 +31,7 @@ export function getArticleExcerpt(article: Pick<ArticleSummary, "excerpt" | "con
     .trim()
     .slice(0, 220);
 
-  return fallback || `${article.title} — материал агентства недвижимости по недвижимости в Краснодаре.`;
+  return fallback || `${article.title} — материал агентства недвижимости по недвижимости в ${tenant.cityRuLocative}.`;
 }
 
 export function splitArticleContent(content: string | null | undefined) {

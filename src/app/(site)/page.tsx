@@ -4,22 +4,21 @@ import { siteConfig } from "@/project/site-config";
 import { defaultSocialPreview, defaultSocialPreviewPath } from "@/project/social-preview";
 import { routes } from "@/project/routes";
 import { getSiteEngine } from "@/site-engine";
+import { tenant } from "@/project/tenant.config";
 
 export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: {
-    absolute: "АТЛАС — агентство недвижимости в Краснодаре",
+    absolute: `${tenant.brand} — агентство недвижимости в ${tenant.cityRuLocative}`,
   },
-  description:
-    "АТЛАС — современное агентство недвижимости в Краснодаре. Помогаем купить, продать и проверить объект, подобрать ипотеку и уверенно пройти сделку.",
+  description: `${tenant.brand} — современное агентство недвижимости в ${tenant.cityRuLocative}. Помогаем купить, продать и проверить объект, подобрать ипотеку и уверенно пройти сделку.`,
   alternates: {
     canonical: routes.home(),
   },
   openGraph: {
-    title: "АТЛАС — агентство недвижимости в Краснодаре",
-    description:
-      "Проверенная недвижимость в Краснодаре: квартиры, дома, новостройки, ипотека и сопровождение сделки.",
+    title: `${tenant.brand} — агентство недвижимости в ${tenant.cityRuLocative}`,
+    description: `Проверенная недвижимость в ${tenant.cityRuLocative}: квартиры, дома, новостройки, ипотека и сопровождение сделки.`,
     url: routes.home(),
     siteName: siteConfig.clientFullName,
     type: "website",
@@ -27,9 +26,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "АТЛАС — агентство недвижимости в Краснодаре",
-    description:
-      "Проверенная недвижимость в Краснодаре: квартиры, дома, новостройки, ипотека и сопровождение сделки.",
+    title: `${tenant.brand} — агентство недвижимости в ${tenant.cityRuLocative}`,
+    description: `Проверенная недвижимость в ${tenant.cityRuLocative}: квартиры, дома, новостройки, ипотека и сопровождение сделки.`,
     images: [defaultSocialPreviewPath],
   },
 };

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { RouteStatusState } from "@/components/layout/RouteStatusState";
+import { tenant } from "@/project/tenant.config";
 
 export const metadata: Metadata = {
   title: "Страница не найдена",
@@ -12,7 +13,7 @@ export default function NotFound() {
     <RouteStatusState
       eyebrow="404 / страница не найдена"
       title="Такой страницы нет"
-      description="Адрес мог измениться или в ссылке есть ошибка. Перейдите в каталог недвижимости Краснодара или вернитесь на главную страницу."
+      description={`Адрес мог измениться или в ссылке есть ошибка. Перейдите в каталог недвижимости ${tenant.cityRuGenitive} или вернитесь на главную страницу.`}
       primaryHref="/nedvizhimost"
       primaryLabel="Перейти в каталог"
       secondaryHref="/"

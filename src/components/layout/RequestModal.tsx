@@ -9,6 +9,7 @@ import { trackEvent } from "@/modules/analytics";
 import { useRequestModalRealtorAvatars } from "@/components/layout/RequestModalRealtorAvatarsProvider";
 import { PrivacyConsentText } from "@/components/forms/PrivacyConsentText";
 import { formatRuMobilePhone, isValidRuMobilePhone } from "@/modules/leads/phone";
+import { tenant } from "@/project/tenant.config";
 
 export type RequestModalDetail = {
   title?: string;
@@ -95,7 +96,7 @@ export function buildModalTitle(detail: RequestModalDetail, visiblePageTitle = g
   const triggerTitle = detail.title?.replace(/\s+/g, " ").trim() || "";
   const pageContext = normalizeTitleContext(visiblePageTitle);
   if (detail.formType === "home_hero" || /подобрать проверенный объект/i.test(triggerTitle)) {
-    return { kind: "lines", lines: ["Подберём проверенную", "недвижимость", "в Краснодаре"] };
+    return { kind: "lines", lines: ["Подберём проверенную", "недвижимость", `в ${tenant.cityRuLocative}`] };
   }
 
   if (/подобрать проверенный вариант/i.test(triggerTitle) && pageContext) {

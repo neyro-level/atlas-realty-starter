@@ -4,6 +4,7 @@ import type { PublicComplex } from '@/shared/types/public-content'
 import { getPublicComplexBySlug, getPublicComplexes } from '@/project/public-gateway'
 import { routes } from '@/project/routes'
 import type { NewBuilding, NewBuildingMediaAsset } from '@/modules/new-buildings'
+import { tenant } from '@/project/tenant.config'
 
 export async function getPayloadNewBuilding(slug: string): Promise<NewBuilding | null> {
   const complex = await getPublicComplexBySlug(slug)
@@ -24,13 +25,13 @@ export function toNewBuilding(complex: PublicComplex): NewBuilding {
     src: image.src,
   }))
   const hero = media[0] ?? null
-  const positioning = complex.description || `${complex.name} — жилой комплекс в Краснодаре. Поможем уточнить доступные квартиры и условия покупки.`
+  const positioning = complex.description || `${complex.name} — жилой комплекс в ${tenant.cityRuLocative}. Поможем уточнить доступные квартиры и условия покупки.`
   return {
     sourceId: complex.id,
     about: {
       intro: positioning,
       features: [
-        { title: 'Расположение', text: complex.address ?? 'Краснодар' },
+        { title: 'Расположение', text: complex.address ?? tenant.cityRu },
         { title: 'Застройщик', text: complex.developer ?? 'Информация доступна у специалиста' },
         { title: 'Класс жилья', text: complex.classLabel ?? 'Уточняется для выбранного корпуса' },
         { title: 'Этажность', text: complex.floorsLabel ?? 'Зависит от выбранного корпуса' },
@@ -38,7 +39,7 @@ export function toNewBuilding(complex: PublicComplex): NewBuilding {
     },
     audiences: [
       { title: 'Для жизни', text: 'Подберём квартиру под состав семьи, бюджет и ежедневные маршруты.' },
-      { title: 'Для переезда', text: 'Сравним районы Краснодара и варианты рядом с нужной инфраструктурой.' },
+      { title: 'Для переезда', text: `Сравним районы ${tenant.cityRuGenitive} и варианты рядом с нужной инфраструктурой.` },
       { title: 'Для инвестиций', text: 'Проверим ликвидность планировки и условия приобретения квартиры.' },
       { title: 'Для ипотеки', text: 'Рассчитаем доступный платёж и подготовим документы для банка.' },
     ],
@@ -76,12 +77,12 @@ export function toNewBuilding(complex: PublicComplex): NewBuilding {
     ],
     infrastructure: {
       intro: `Покажем расположение ${complex.name} и поможем оценить ежедневные маршруты.`,
-      items: [{ text: complex.address ?? 'Краснодар', timeLabel: null, title: 'Адрес комплекса' }],
+      items: [{ text: complex.address ?? tenant.cityRu, timeLabel: null, title: 'Адрес комплекса' }],
     },
     layouts: [{ areaFrom: null, areaTo: null, id: 'available-layouts', image: media[1] ?? hero, label: 'Доступные планировки', priceFrom: complex.priceFromMinorUnits ? complex.priceFromMinorUnits / 100 : null }],
     location: {
       address: complex.address ?? null,
-      city: 'Краснодар',
+      city: tenant.cityRu,
       district: complex.district ?? null,
       latitude: complex.latitude ?? null,
       longitude: complex.longitude ?? null,

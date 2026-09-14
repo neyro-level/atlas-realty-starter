@@ -59,7 +59,7 @@ if (securityHeaders.includes('Content-Security-Policy-Report-Only')) {
   violations.push({ file: 'src/core/security/headers.ts', rule: 'csp-must-be-enforced' })
 }
 
-for (const variable of ['DATABASE_URL', 'PAYLOAD_SECRET', 'NEXT_PUBLIC_SITE_URL', 'REVALIDATE_SECRET', 'AMS_LEADS_API_URL', 'AMS_LEADS_PROJECT_ID', 'AMS_LEADS_SITE_KEY', 'LEAD_OUTBOUND_HOSTS', 'S3_ACCESS_KEY_ID', 'S3_BUCKET', 'S3_REGION', 'S3_SECRET_ACCESS_KEY']) {
+for (const variable of ['DATABASE_URL', 'PAYLOAD_SECRET', 'NEXT_PUBLIC_SITE_URL', 'RELEASE_CHECK_SITE_URL', 'REVALIDATE_SECRET', 'AMS_LEADS_API_URL', 'AMS_LEADS_PROJECT_ID', 'AMS_LEADS_SITE_KEY', 'LEAD_OUTBOUND_HOSTS', 'S3_ACCESS_KEY_ID', 'S3_BUCKET', 'S3_REGION', 'S3_SECRET_ACCESS_KEY']) {
   if (!new RegExp(`^# @required [^\\n]+\\n${variable}=`, 'mu').test(envExample)) {
     violations.push({ file: '.env.example', rule: 'required-environment-marker', value: variable })
   }

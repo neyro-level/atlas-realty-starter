@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@starter/site-ui";
 import { routes } from "@/project/routes";
+import { tenant } from "@/project/tenant.config";
 
 export const revalidate = 300;
 
@@ -36,7 +37,7 @@ export default function ThanksPage() {
         </div>
 
         <div className="mx-auto mt-8 flex max-w-5xl flex-col gap-3 px-5 sm:flex-row sm:flex-wrap">
-          <Button asChild size="lg"><Link href={routes.rootPage("nedvizhimost")}>Открыть недвижимость Краснодара</Link></Button>
+          <Button asChild size="lg"><Link href={routes.rootPage("nedvizhimost")}>Открыть недвижимость {tenant.cityRuGenitive}</Link></Button>
           <Button asChild size="lg" variant="outline"><Link href={routes.rootPage("kvartiry")}>Открыть маршрут квартир</Link></Button>
           <Button asChild size="lg" variant="outline"><Link href={routes.contacts()}>Контакты агентства</Link></Button>
         </div>

@@ -1,4 +1,5 @@
 import { buildSearchParams, type CatalogQuery } from "@/lib/catalog";
+import { tenant } from "@/project/tenant.config";
 
 export function buildNewBuildingQuickSelectionModel(basePath: string, query: CatalogQuery, affordableCount: number, total: number) {
   const mapActive = query.view === "map";
@@ -13,7 +14,7 @@ export function buildNewBuildingQuickSelectionModel(basePath: string, query: Cat
     {
       id: "map",
       title: mapActive ? "К списку" : "На карте",
-      description: mapActive ? "Вернуться к витрине" : `${total} ЖК Краснодара`,
+      description: mapActive ? "Вернуться к витрине" : `${total} ЖК ${tenant.cityRuGenitive}`,
       href: catalogHref(basePath, query, { view: mapActive ? "list" : "map" }),
       active: mapActive,
     },

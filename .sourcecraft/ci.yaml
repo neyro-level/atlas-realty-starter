@@ -1,4 +1,4 @@
-# SourceCraft CI/CD - Atlas Realty Starter
+# SourceCraft CI/CD - AMS Realty Platform Starter
 # Pushes and pull requests intentionally run no workflows. Merge gates and
 # release packaging are manual and fail closed on the selected full commit SHA.
 
@@ -8,7 +8,7 @@ workflows:
       expected_commit_sha:
         type: string
         required: true
-        description: "Full 40-character SHA reviewed for the STANDARD merge"
+        description: 'Full 40-character SHA reviewed for the STANDARD merge'
     tasks:
       - name: standard-gate
         checkout:
@@ -31,13 +31,18 @@ workflows:
       expected_commit_sha:
         type: string
         required: true
-        description: "Full 40-character SHA reviewed for the RISKY merge"
+        description: 'Full 40-character SHA reviewed for the RISKY merge'
+      release_check_site_url:
+        type: string
+        required: true
+        description: 'Explicit HTTPS origin used by the production-shaped build check'
     tasks:
       - name: risky-gate
         checkout:
           fetch_depth: 1
         env:
           EXPECTED_COMMIT_SHA: ${{ inputs.expected_commit_sha }}
+          RELEASE_CHECK_SITE_URL: ${{ inputs.release_check_site_url }}
         cubes:
           - name: production-contract
             image: docker.io/library/node:24.20.0-bookworm
@@ -48,23 +53,27 @@ workflows:
               - pnpm install --frozen-lockfile
               - pnpm verify:schema
               - pnpm verify
-              - NEXT_PUBLIC_SITE_URL=https://atlas.ams24.ru NEXT_PUBLIC_INDEXABLE=false pnpm build
-              - NEXT_PUBLIC_SITE_URL=https://atlas.ams24.ru NEXT_PUBLIC_INDEXABLE=false pnpm build:public-env:check
+              - pnpm release:build:check
+              - pnpm release:public-env:check
 
   release:
     inputs:
       expected_commit_sha:
         type: string
         required: true
-        description: "Full 40-character SHA from canonical SourceCraft main"
+        description: 'Full 40-character SHA from canonical SourceCraft main'
       confirm_release:
         type: choice
         required: true
-        description: "Must select release after owner approval"
-        default: "no"
+        description: 'Must select release after owner approval'
+        default: 'no'
         options:
-          - "no"
-          - "release"
+          - 'no'
+          - 'release'
+      release_check_site_url:
+        type: string
+        required: true
+        description: 'Explicit HTTPS production origin embedded into the release artifact'
     tasks:
       - name: exact-main-artifact
         checkout:
@@ -73,6 +82,7 @@ workflows:
         env:
           EXPECTED_COMMIT_SHA: ${{ inputs.expected_commit_sha }}
           CONFIRM_RELEASE: ${{ inputs.confirm_release }}
+          RELEASE_CHECK_SITE_URL: ${{ inputs.release_check_site_url }}
           SOURCECRAFT_REPOSITORY: integrator-p/atlas-realty-starter
         cubes:
           - name: build-and-package
@@ -89,8 +99,8 @@ workflows:
               - pnpm generate:types
               - pnpm generate:importmap
               - git diff --exit-code -- src/payload-types.ts 'src/app/(payload)/admin/importMap.js'
-              - NEXT_PUBLIC_SITE_URL=https://atlas.ams24.ru NEXT_PUBLIC_INDEXABLE=false pnpm build
-              - NEXT_PUBLIC_SITE_URL=https://atlas.ams24.ru NEXT_PUBLIC_INDEXABLE=false pnpm build:public-env:check
+              - pnpm release:build:check
+              - pnpm release:public-env:check
               - pnpm release:pack
             artifacts:
               paths:

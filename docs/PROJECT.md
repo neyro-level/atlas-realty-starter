@@ -26,15 +26,15 @@ The starter itself does not become a client production system. A concrete clone 
 
 This project uses the compact document set required by Realty Platform Core 4.0 and does not duplicate it with parallel files.
 
-| Canonical role                                   | Source of truth                                                  |
-| ------------------------------------------------ | ---------------------------------------------------------------- |
-| Product, profile, modules and current state      | this file                                                        |
+| Canonical role                                   | Source of truth                                                             |
+| ------------------------------------------------ | --------------------------------------------------------------------------- |
+| Product, profile, modules and current state      | this file                                                                   |
 | Architecture and data model                      | `AMS_REALTY_PLATFORM_CORE_STANDARD_4.0_SOLO_AI.md` plus code and migrations |
-| Security, roles and PII                          | `../SECURITY.md`                                                 |
-| Local runtime, CI, deploy, rollback and recovery | `OPERATIONS.md`                                                  |
-| Versions and compatibility check                 | `VERSION_MATRIX.md`                                              |
-| UI system, components and media rules            | `UI_SYSTEM.md`                                                   |
-| Difficult boundary decisions                     | `adr/`                                                           |
+| Security, roles and PII                          | `../SECURITY.md`                                                            |
+| Local runtime, CI, deploy, rollback and recovery | `OPERATIONS.md`                                                             |
+| Versions and compatibility check                 | `VERSION_MATRIX.md`                                                         |
+| UI system, components and media rules            | `UI_SYSTEM.md`                                                              |
+| Difficult boundary decisions                     | `adr/`                                                                      |
 
 ## Full-stack boundary
 
@@ -109,6 +109,46 @@ Lead PII retention default is 365 days and the baseline consent text version is 
 - The configured clone remains non-indexable while demonstration content is present, source rights are not approved or any production-readiness item remains open.
 - Core 4.0 remediation is implemented and re-attested: clean and existing-database migrations, import safety, layout/unit separation, prepared catalog aggregates, public DTO isolation and the 50k capacity target are covered by the repository checks.
 - Production readiness is asserted only for an exact merged `main` SHA after the RISKY SourceCraft gate, release artifact verification and live smoke from `OPERATIONS.md`.
+
+## Active remediation program — 2026-09-14
+
+The external starter audit and the local UI Core v5 audit are resolved through five sequential epics. Each epic is one `work/**` branch and one Pull Request into canonical `main`; production is released once from the final exact merged SHA.
+
+### Epic 9 — tenant residue and release isolation
+
+- [x] Require an explicit `RELEASE_CHECK_SITE_URL` for production-shaped builds and SourceCraft release workflows.
+- [x] Replace client-named package commands with a tenant-driven `seed:demo` command.
+- [x] Remove provider scraping, coordinate enrichment and private Atlas catalog import commands from the reusable starter tooling.
+- [x] Add a fail-closed tenant-residue check to `security:check`; tenant identity remains only in explicit tenant, fixture, historical and reference-demo zones.
+
+### Epic 10 — lead delivery reliability
+
+- [ ] Make recovery queries unambiguously bounded for Payload 3.88.0.
+- [ ] Make adapter idempotency by `idempotencyKey` a mandatory port contract and prove two-worker behavior.
+- [ ] Prevent recovery from enqueueing a second job when a scheduled job already owns the delivery.
+- [ ] Enforce canonical source-page normalization and public rate limits by IP fingerprint plus normalized phone.
+
+### Epic 11 — UI architecture completion
+
+- [ ] Decompose `PropertyCardView` and leadgen promo sections into owned semantic subcomponents.
+- [ ] Move title/address domain formatting into the catalog module.
+- [ ] Replace root package imports with stable `/primitives` and `/views` entrypoints; keep the root export surface thin and measure the bundle impact.
+- [ ] Verify semantic comparison tables, Select modes, lightbox, phone reveal, dialogs, keyboard focus, Escape and ARIA behavior.
+
+### Epic 12 — UI Core v5 conformance
+
+- [ ] Record UI Core v5 as the active UI contract and document the accepted package-owned token-source decision.
+- [ ] Remove unused semantic tokens and add a dead-token regression gate.
+- [ ] Add the class-based dark-mode contract while keeping this project light-only.
+- [ ] Reduce tracked typography debt to zero without introducing raw colors, duplicate primitives or arbitrary component values.
+
+### Epic 13 — accessibility, visual acceptance and local proof
+
+- [ ] Fix confirmed contrast failures, footer brand contrast and the unnamed home hero link.
+- [ ] Fix catalog heading order and the mobile search field name/id contract.
+- [ ] Repair fixture filtering used by empty-state visual tests and accept only reviewed visual baselines.
+- [ ] Restore a complete Payload-backed local smoke with consistent media, then verify representative desktop/mobile routes before release.
+- [ ] Run final review/gates, merge every epic, release one exact `main` artifact, perform live smoke and mirror the same SHA to GitHub.
 
 ### Production-readiness checklist
 

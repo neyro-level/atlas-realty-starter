@@ -47,6 +47,7 @@ import { getHouseProject } from '@/modules/house-projects'
 import { toSessionListingItem } from '@/modules/session-collections'
 import { appendBrandOnce, truncateSeoText } from '@/modules/seo/metadata'
 import { getPropertyPath, getSiteUrl, siteConfig } from '@/project/site-config'
+import { tenant } from '@/project/tenant.config'
 import {
   defaultSocialPreview,
   defaultSocialPreviewPath,
@@ -65,7 +66,7 @@ export async function generateMetadata({ params }: Props) {
 
   if (houseProject) {
     const title = `Проект строительства дома ${String(houseProject.number).padStart(2, '0')} - ${houseProject.area} м²`
-    const description = `Preview проекта строительства дома ${houseProject.area} м² в Краснодаре. Стоимость, материалы и сроки уточняются после разбора участка и задачи.`
+    const description = `Preview проекта строительства дома ${houseProject.area} м² в ${tenant.cityRuLocative}. Стоимость, материалы и сроки уточняются после разбора участка и задачи.`
     return {
       alternates: { canonical: getPropertyPath(houseProject.slug) },
       description,

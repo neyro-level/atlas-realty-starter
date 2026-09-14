@@ -18,7 +18,7 @@ import { NewBuildingHero } from "./NewBuildingHero";
 import { NewBuildingLayoutsSection } from "./NewBuildingLayoutsSection";
 import { NewBuildingLocationSection } from "./NewBuildingLocationSection";
 import { NewBuildingMobileCommercialSection } from "./NewBuildingMobileCommercialSection";
-import { NewBuildingMobileWhyAtlasSection } from "./NewBuildingMobileWhyAtlasSection";
+import { NewBuildingMobileWhyAgencySection } from "./NewBuildingMobileWhyAgencySection";
 import { NewBuildingPurchaseTermsSection } from "./NewBuildingPurchaseTermsSection";
 import { NewBuildingRelatedSection } from "./NewBuildingRelatedSection";
 
@@ -75,7 +75,7 @@ function renderNewBuildingDetailSection(
     case "purchaseTerms":
       return <NewBuildingPurchaseTermsSection key={section} complex={context.complex} contained />;
     case "selectionBanner":
-      return <Fragment key={section}><div className="hidden lg:block"><NewBuildingLayoutsSection complex={context.complex} contained /></div><NewBuildingMobileWhyAtlasSection complex={context.complex} /></Fragment>;
+      return <Fragment key={section}><div className="hidden lg:block"><NewBuildingLayoutsSection complex={context.complex} contained /></div><NewBuildingMobileWhyAgencySection complex={context.complex} /></Fragment>;
     case "location":
       return <div key={section} className="hidden lg:block"><NewBuildingLocationSection complex={context.complex} contained /></div>;
     case "related":

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { BrandMark } from "@/components/layout/BrandMark";
 import { LeadgenRequestButton } from "./LeadgenRequestButton";
 import { kvartiryPromoContent, type LeadgenPromoContent } from "./kvartiry-promo-content";
+import { tenant } from "@/project/tenant.config";
 
 const mobileMenuText =
   "Поможем выбрать выгодный вариант из нашей закрытой базы эксклюзивных предложений. Все варианты проверены юристами. Оставьте свои данные и мы пришлем вам подборку бесплатно.";
@@ -69,7 +70,7 @@ export function LeadgenPromoHeader({ content = kvartiryPromoContent }: LeadgenPr
 
         <div className="hidden min-h-10 items-center gap-2 text-sm font-medium text-[var(--leadgen-promo-header-content-primary)] sm:inline-flex">
           <MapPin className="size-4 text-[var(--accent)]" aria-hidden />
-          <span>Краснодар</span>
+          <span>{tenant.cityRu}</span>
         </div>
 
         <div className="hidden min-h-9 items-center justify-center gap-1.5 rounded-callout bg-[var(--leadgen-promo-header-surface-primary)] px-3.5 text-center text-[var(--leadgen-promo-header-content-secondary)] min-[1120px]:inline-flex">

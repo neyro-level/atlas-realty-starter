@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Clock3, Home, Ruler } from "lucide-react";
 import { LeadgenRequestButton } from "./LeadgenRequestButton";
 import type { LeadgenPromoConstructionExample } from "./kvartiry-promo-content";
+import { tenant } from "@/project/tenant.config";
 
 type LeadgenConstructionProjectShowcaseProps = {
   examples: readonly LeadgenPromoConstructionExample[];
@@ -44,7 +45,7 @@ export function LeadgenConstructionProjectShowcase({
                   {project.buildTime}
                 </span>
                 <span className="rounded-compact bg-[var(--accent)]/92 px-2.5 py-1.5 text-caption font-semibold leading-none text-white shadow-[var(--leadgen-construction-project-showcase-shadow-subtle)] backdrop-blur-sm">
-                  Краснодар
+                  {tenant.cityRu}
                 </span>
               </div>
             </div>

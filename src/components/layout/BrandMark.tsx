@@ -31,8 +31,8 @@ export function BrandMark({
         : "size-[42px]");
 
   return (
-    <span className="atlas-brand-mark inline-flex shrink-0 items-center gap-2.5" aria-label={tenant.brand}>
-      <span className={`atlas-brand-mark__symbol relative block shrink-0 ${markSize}`}>
+    <span className="site-brand-mark inline-flex shrink-0 items-center gap-2.5" aria-label={tenant.brand}>
+      <span className={`site-brand-mark__symbol relative block shrink-0 ${markSize}`}>
         <Image
           src={siteConfig.logo}
           alt=""
@@ -44,7 +44,7 @@ export function BrandMark({
         />
       </span>
       <span className="grid min-w-0 gap-0.5">
-        <span className={`atlas-brand-mark__word text-lead-compact font-extrabold leading-none tracking-[0.19em] lg:text-card-large ${wordClass}`}>
+        <span className={`site-brand-mark__word text-lead-compact font-extrabold leading-none tracking-[0.19em] lg:text-card-large ${wordClass}`}>
           {tenant.brand}
         </span>
         {!compact && showSlogan ? (

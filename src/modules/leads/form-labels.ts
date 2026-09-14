@@ -1,4 +1,5 @@
 import { normalizeAllowedLeadSourcePage } from "./source-page-policy";
+import { tenant } from "@/project/tenant.config";
 
 const EXACT_FORM_LABELS: Record<string, string> = {
   lead: "Заявка с сайта",
@@ -7,8 +8,8 @@ const EXACT_FORM_LABELS: Record<string, string> = {
   max_delivery_smoke: "Служебная проверка доставки MAX",
   home_hero: "Главная: подбор проверенного объекта",
   home_new_building_budget_selection: "Главная: подбор новостроек по бюджету",
-  home_new_building_quiz: "Подбор новостроек в Краснодаре",
-  corporate_novostroyki: "Новостройки Краснодара: подбор квартиры в ЖК",
+  home_new_building_quiz: `Подбор новостроек в ${tenant.cityRuLocative}`,
+  corporate_novostroyki: `Новостройки ${tenant.cityRuGenitive}: подбор квартиры в ЖК`,
   home_new_building_selection_request: "Главная: подбор новостроек",
   property_purchase_split: "Подбор недвижимости с экспертом агентства недвижимости",
   mortgage_request: "Ипотека: расчет платежа",
@@ -50,8 +51,8 @@ const EXACT_FORM_LABELS: Record<string, string> = {
   leadgen_kvartiry_promo_mobile_menu_quiz: "Подбор квартир",
   leadgen_kvartiry_promo_base_inline: "Подбор квартир",
   leadgen_kvartiry_promo_example_request: "Подбор квартир",
-  leadgen_new_buildings_promo_quiz: "Новостройки Краснодара — квиз",
-  leadgen_new_buildings_promo_final_quiz: "Новостройки Краснодара — квиз",
+  leadgen_new_buildings_promo_quiz: `Новостройки ${tenant.cityRuGenitive} — квиз`,
+  leadgen_new_buildings_promo_final_quiz: `Новостройки ${tenant.cityRuGenitive} — квиз`,
   leadgen_izhs_promo_header_callback: "Расчет строительства дома",
   leadgen_izhs_promo_hero_request: "Расчет строительства дома",
   leadgen_izhs_promo_quiz: "Расчет строительства дома",
@@ -64,7 +65,7 @@ const EXACT_FORM_LABELS: Record<string, string> = {
 
 const EXACT_SOURCE_LABELS: Record<string, string> = {
   "home-services:new-building-budget": "Главная: подбор новостроек по бюджету",
-  "home-services:new-building-quiz": "Подбор новостроек в Краснодаре",
+  "home-services:new-building-quiz": `Подбор новостроек в ${tenant.cityRuLocative}`,
   "catalog:new-building-selection-card": "Каталог: подбор новостроек",
   "catalog:mortgage-help-card": "Каталог: помощь с ипотекой",
   "catalog-buyer-services:selection": "Каталог: помощь эксперта",
@@ -79,7 +80,7 @@ const EXACT_SOURCE_LABELS: Record<string, string> = {
 
 const LEADGEN_PAGE_LABELS: Record<string, string> = {
   "/promo/kvartiry": "Подбор квартир",
-  "/promo/novostroyki": "Новостройки Краснодара",
+  "/promo/novostroyki": `Новостройки ${tenant.cityRuGenitive}`,
 
   "/promo/stroitelstvo-domov": "Расчет строительства дома",
 };
@@ -163,7 +164,7 @@ function resolveContextualLabel(baseLabel: string, formType: string, sourcePage:
   if (formType !== "property_purchase_split") return baseLabel;
 
   if (sourcePage === "/") return "Главная: подбор недвижимости с экспертом агентства недвижимости";
-  if (sourcePage === "/nedvizhimost") return "Недвижимость в Краснодаре: подбор недвижимости с экспертом агентства недвижимости";
+  if (sourcePage === "/nedvizhimost") return `Недвижимость в ${tenant.cityRuLocative}: подбор недвижимости с экспертом агентства недвижимости`;
 
   return baseLabel;
 }

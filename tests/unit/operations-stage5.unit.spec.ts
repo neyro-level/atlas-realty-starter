@@ -8,7 +8,7 @@ describe('Stage 5 operations contract', () => {
   it('keeps every reusable core area independent from project composition', () => {
     const cruiser = read('.dependency-cruiser.cjs')
     expect(cruiser).toContain("from: { path: '^src/core/' }")
-    expect(cruiser).not.toContain("^src/core/(?!data-access/)")
+    expect(cruiser).not.toContain('^src/core/(?!data-access/)')
   })
 
   it('builds a standalone artifact before deployment', () => {
@@ -30,6 +30,7 @@ describe('Stage 5 operations contract', () => {
     expect(pack).toContain('buildBeforeDeploy: true')
     expect(read('scripts/prepare-standalone.mjs')).toContain("'.env.production.local'")
     const ci = read('.sourcecraft/ci.yaml')
+    const releaseCheck = read('scripts/run-release-check.mjs')
     const standardGate = ci.slice(ci.indexOf('  merge-standard:'), ci.indexOf('  merge-risky:'))
     const riskyGate = ci.slice(ci.indexOf('  merge-risky:'), ci.indexOf('  release:'))
     const release = ci.slice(ci.indexOf('  release:'))
@@ -39,16 +40,21 @@ describe('Stage 5 operations contract', () => {
     expect(standardGate).toContain('expected_commit_sha')
     expect(riskyGate).toContain('expected_commit_sha')
     expect(release).toContain('expected_commit_sha')
+    expect(riskyGate).toContain('release_check_site_url')
+    expect(release).toContain('release_check_site_url')
     expect(standardGate).toContain('test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT_SHA"')
     expect(riskyGate).toContain('test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT_SHA"')
     expect(release).toContain('test "$(git rev-parse HEAD)" = "$EXPECTED_COMMIT_SHA"')
     expect(standardGate).toContain('pnpm verify')
     expect(standardGate).not.toContain('pnpm build')
     expect(riskyGate).toContain('pnpm verify')
-    expect(riskyGate).toContain('pnpm build')
+    expect(riskyGate).toContain('pnpm release:build:check')
     expect(release).not.toContain('pnpm verify')
-    expect(release).toContain('pnpm build')
+    expect(release).toContain('pnpm release:build:check')
     expect(release).toContain('pnpm release:pack')
+    expect(releaseCheck).toContain('RELEASE_CHECK_SITE_URL')
+    expect(releaseCheck).toContain('NEXT_PUBLIC_SITE_URL: siteURL.origin')
+    expect(releaseCheck).toContain("NEXT_PUBLIC_INDEXABLE: 'false'")
     expect(standardGate).toContain('pnpm verify:schema')
     expect(riskyGate).toContain('pnpm verify:schema')
     expect(release).toContain('git diff --exit-code -- src/payload-types.ts')
@@ -75,10 +81,18 @@ describe('Stage 5 operations contract', () => {
     expect(installer).toContain('runuser -u "${APP_RELEASE_USER}"')
     expect(installer).toContain('-xzf - -C "${release_dir}" < "${ARCHIVE}"')
     expect(installer).not.toContain('chown -R "${APP_USER}:${APP_USER}" "${release_dir}"')
-    expect(read('deploy/bootstrap-server.sh')).toContain('-mindepth 1 -xdev ! -type l -exec chown root:"${APP_USER}"')
-    expect(read('deploy/bootstrap-server.sh')).toContain('DEPLOYMENT_PROFILE="${DEPLOYMENT_PROFILE:-CLIENT_PRODUCTION}"')
-    expect(read('deploy/bootstrap-server.sh')).toContain('ENABLE_LOGICAL_BACKUP="${ENABLE_LOGICAL_BACKUP:-false}"')
-    expect(read('deploy/bootstrap-server.sh')).not.toMatch(/apt-get install[^\n]*postgresql-18(?:\s|$)/)
+    expect(read('deploy/bootstrap-server.sh')).toContain(
+      '-mindepth 1 -xdev ! -type l -exec chown root:"${APP_USER}"',
+    )
+    expect(read('deploy/bootstrap-server.sh')).toContain(
+      'DEPLOYMENT_PROFILE="${DEPLOYMENT_PROFILE:-CLIENT_PRODUCTION}"',
+    )
+    expect(read('deploy/bootstrap-server.sh')).toContain(
+      'ENABLE_LOGICAL_BACKUP="${ENABLE_LOGICAL_BACKUP:-false}"',
+    )
+    expect(read('deploy/bootstrap-server.sh')).not.toMatch(
+      /apt-get install[^\n]*postgresql-18(?:\s|$)/,
+    )
     expect(installer).toContain('source "${MIGRATION_ENV_FILE}"')
     expect(installer).toContain('MIGRATION_DATABASE_URL')
   })
@@ -88,7 +102,9 @@ describe('Stage 5 operations contract', () => {
     const recovery = read('scripts/recover-orphaned-payload-jobs.mts')
     expect(worker).toContain('--all-queues --handle-schedules')
     expect(worker).toContain('current/node_modules/.bin/payload jobs:run')
-    expect(worker).toContain('current/node_modules/.bin/tsx scripts/recover-orphaned-payload-jobs.mts')
+    expect(worker).toContain(
+      'current/node_modules/.bin/tsx scripts/recover-orphaned-payload-jobs.mts',
+    )
     expect(worker).toContain('NODE_OPTIONS=--conditions=react-server')
     expect(worker).toContain('ProtectSystem=strict')
     expect(worker).toContain('ReadWritePaths=/opt/ams-platform/atlas-realty/shared')

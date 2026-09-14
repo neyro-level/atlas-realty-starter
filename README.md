@@ -49,7 +49,7 @@ See `docs/LOCAL_START.md` for the one-minute project runbook and `docs/OPERATION
 - `pnpm ui:check` — design-token, ShadCN registry and static-image guard.
 - `pnpm init:tenant -- --help` — show the one-command tenant initialization contract; actual overwrite requires explicit `--force`.
 - `pnpm template:profile -- --input <profile.json>` — generate a reviewed city profile, brand asset manifest and deployment checklist in `.ams-client/` without overwriting the active profile.
-- `pnpm atlas:content:verify-live` — legacy-named verification command for the currently configured demo dataset; rename it during a client clone.
+- `pnpm seed:demo` — создаёт небольшой обезличенный набор демонстрационных объектов из текущего tenant-конфига.
 
 Production release is never performed from a feature branch.
 

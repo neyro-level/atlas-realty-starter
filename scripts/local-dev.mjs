@@ -342,7 +342,7 @@ async function start() {
     return
   }
   if (!(await isPortAvailable(3000))) {
-    throw new Error('порт 3000 занят другим процессом, но Atlas на нём не отвечает корректно.')
+    throw new Error('порт 3000 занят другим процессом, но локальный сайт на нём не отвечает корректно.')
   }
   const pid = startNext(projectEnv)
   await waitUntilReady(pid)
@@ -379,7 +379,7 @@ async function stop() {
   const commandLine = commandLineForPid(pid)
   const normalizedCommand = commandLine.toLowerCase()
   if (!normalizedCommand.includes('node_modules\\next\\dist\\bin\\next')) {
-    throw new Error(`PID ${pid} больше не похож на процесс Atlas; остановка отменена.`)
+    throw new Error(`PID ${pid} больше не похож на процесс текущего проекта; остановка отменена.`)
   }
   const result = spawnSync('taskkill.exe', ['/PID', String(pid), '/T', '/F'], {
     encoding: 'utf8',
@@ -389,7 +389,7 @@ async function stop() {
     throw new Error(`не удалось остановить PID ${pid}.`)
   }
   fs.rmSync(pidPath, { force: true })
-  console.log('Локальный Atlas остановлен. PostgreSQL не затронут.')
+  console.log('Локальный сайт остановлен. PostgreSQL не затронут.')
 }
 
 const command = process.argv[2] || 'status'

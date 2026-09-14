@@ -27,8 +27,8 @@ export function buildObjectSeoTitle(
   { hideHouseNumber = false }: { hideHouseNumber?: boolean } = {},
 ) {
   const action = listing.dealType === 'rent' ? 'Сдаётся' : 'Продаётся'
-  const city = listing.city ?? 'Краснодаре'
-  const cityPhrase = city.toLowerCase().includes('город') ? 'в Краснодаре' : `в ${city}`
+  const city = listing.city ?? tenant.cityRuLocative
+  const cityPhrase = city.toLowerCase().includes('город') ? `в ${tenant.cityRuLocative}` : `в ${city}`
   const category = buildSeoCategoryLabel(listing)
   const area = listing.area ? `, ${formatNumber(listing.area)} м²` : ''
   const address = buildSeoAddressLabel(listing, hideHouseNumber)
@@ -421,15 +421,16 @@ function buildSeoAddressLabel(listing: PropertyListing, hideHouseNumber = false)
 
 function compactAddress(value?: null | string) {
   if (!value) return null
+  const city = escapeRegExp(tenant.cityRu)
   const address = value
     .replace(/\s+/gu, ' ')
     .replace(/\s*,\s*/gu, ', ')
     .replace(/^Россия,\s*/iu, '')
     .replace(/^Российская Федерация,\s*/iu, '')
     .replace(/^региона,\s*/iu, '')
-    .replace(/^г\.?\s*Краснодар,\s*/iu, '')
-    .replace(/^город\s+Краснодар,\s*/iu, '')
-    .replace(/^Краснодар,\s*/iu, '')
+    .replace(new RegExp(`^г\\.?\\s*${city},\\s*`, 'iu'), '')
+    .replace(new RegExp(`^город\\s+${city},\\s*`, 'iu'), '')
+    .replace(new RegExp(`^${city},\\s*`, 'iu'), '')
     .replace(/,\s*$/u, '')
     .trim()
   return address || null

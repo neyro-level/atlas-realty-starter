@@ -2,10 +2,10 @@ import { mkdir } from 'node:fs/promises'
 import path from 'node:path'
 import { chromium } from '@playwright/test'
 
-const baseUrl = process.env.VISUAL_BASE_URL ?? 'https://atlas.ams24.ru'
+const baseUrl = process.env.VISUAL_BASE_URL ?? 'http://127.0.0.1:3012'
 const outputRoot = path.resolve(process.env.VISUAL_OUTPUT_DIR ?? 'tests/visual/baseline')
-const propertySlug = process.env.VISUAL_PROPERTY_SLUG ?? 'atlas-demo-30'
-const complexSlug = process.env.VISUAL_COMPLEX_SLUG ?? 'domrf-50184'
+const propertySlug = process.env.VISUAL_PROPERTY_SLUG ?? 'svetlaya-kvartira-v-centre'
+const complexSlug = process.env.VISUAL_COMPLEX_SLUG ?? 'aura'
 
 const routes = [
   ['home', '/'],

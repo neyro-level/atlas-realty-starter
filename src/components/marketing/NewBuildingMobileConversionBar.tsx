@@ -3,6 +3,7 @@
 import { NewBuildingStickyConversionView } from "@starter/site-ui";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { COOKIE_NOTICE_EVENT, isCookieNoticeDismissed } from "@/modules/analytics/client";
+import { tenant } from "@/project/tenant.config";
 
 const MIN_SCROLL_OFFSET = 180;
 const VIEWPORT_SCROLL_RATIO = 0.3;
@@ -43,7 +44,7 @@ export function NewBuildingMobileConversionBar({ complexName, complexSlug, compl
 
   const isDetail = Boolean(complexName && complexSlug);
   const visible = pastIntro && cookieDismissed && !isScrolling && !footerEndVisible;
-  return <NewBuildingStickyConversionView visible={visible} title={isDetail ? "Цены и планировки" : "Актуальные цены и наличие"} note={isDetail ? complexName! : "Подбор бесплатный"} label={isDetail ? "Получить цены" : "Получить подбор"} request={{ title: isDetail ? `Получить цены и планировки в ${complexName}` : "Получить подборку новостроек", subtitle: isDetail ? `Проверим актуальное наличие квартир в ${complexName}, запросим цены и пришлём подходящие планировки.` : "Уточним ваши требования и подберём подходящие квартиры в новостройках Краснодара.", source: isDetail ? `new_building:${complexSlug}:mobile_sticky` : "catalog:novostroyki:mobile_sticky", formType: isDetail ? "new_building_prices_plans_request" : "new_building_catalog_selection", submitLabel: isDetail ? "Получить цены" : "Получить подбор", showSubtitle: true, complexId: complexId ?? undefined, complexName }} />;
+  return <NewBuildingStickyConversionView visible={visible} title={isDetail ? "Цены и планировки" : "Актуальные цены и наличие"} note={isDetail ? complexName! : "Подбор бесплатный"} label={isDetail ? "Получить цены" : "Получить подбор"} request={{ title: isDetail ? `Получить цены и планировки в ${complexName}` : "Получить подборку новостроек", subtitle: isDetail ? `Проверим актуальное наличие квартир в ${complexName}, запросим цены и пришлём подходящие планировки.` : `Уточним ваши требования и подберём подходящие квартиры в новостройках ${tenant.cityRuGenitive}.`, source: isDetail ? `new_building:${complexSlug}:mobile_sticky` : "catalog:novostroyki:mobile_sticky", formType: isDetail ? "new_building_prices_plans_request" : "new_building_catalog_selection", submitLabel: isDetail ? "Получить цены" : "Получить подбор", showSubtitle: true, complexId: complexId ?? undefined, complexName }} />;
 }
 
 function subscribeToCookieNotice(onChange: () => void) {

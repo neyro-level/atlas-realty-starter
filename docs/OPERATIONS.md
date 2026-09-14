@@ -60,11 +60,11 @@ Release input is a clean exact merged SourceCraft `main` SHA.
   `merge-standard` or risk-specific `merge-risky` workflow with the current full PR head SHA. The
   workflow rejects a checkout whose SHA differs from that input. A new push invalidates prior proof.
 - `merge-standard` regenerates Payload artifacts, rejects generated-file drift and runs `pnpm verify`.
-- `merge-risky` adds the production build and public-environment check for changes that affect data,
-  access, dependencies, runtime, CI or release behavior.
-- After owner approval, the manual `release` workflow accepts only the exact canonical `main` SHA,
-  builds with `NEXT_PUBLIC_SITE_URL=https://atlas.ams24.ru` and `NEXT_PUBLIC_INDEXABLE=false`, checks
-  the embedded public values and packages one immutable standalone release with `pnpm release:pack`.
+- `merge-risky` requires an explicit `release_check_site_url`, then adds the production build and
+  public-environment check for changes that affect data, access, dependencies, runtime, CI or release behavior.
+- After owner approval, the manual `release` workflow accepts only the exact canonical `main` SHA
+  and an explicit `release_check_site_url`, builds with that origin and `NEXT_PUBLIC_INDEXABLE=false`,
+  checks the embedded public values and packages one immutable standalone release with `pnpm release:pack`.
 - SourceCraft stores bounded archive parts plus a manifest containing order, sizes, per-part SHA-256 and reconstructed archive SHA-256.
 - The server never runs `pnpm install` or `pnpm build`.
 

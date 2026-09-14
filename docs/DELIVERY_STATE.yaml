@@ -1,0 +1,31 @@
+version: 1
+program: starter-remediation-2026-09-14
+source_of_truth: docs/PROJECT.md#active-remediation-program--2026-09-14
+delivery_profile: CRITICAL
+target_branch: main
+current_wave: foundation
+current_epic: 9
+next_step: review-and-deliver-epic-9
+epics:
+  - id: 9
+    branch: work/epic-09-tenant-residue
+    status: in_progress
+    pr: null
+    head_sha: null
+    gate: RISKY
+  - id: 10
+    branch: work/epic-10-lead-delivery-polish
+    status: pending
+    depends_on: [9]
+  - id: 11
+    branch: work/epic-11-ui-finish
+    status: pending
+    depends_on: [10]
+  - id: 12
+    branch: work/epic-12-ui-core-v5
+    status: pending
+    depends_on: [11]
+  - id: 13
+    branch: work/epic-13-visual-release-proof
+    status: pending
+    depends_on: [12]

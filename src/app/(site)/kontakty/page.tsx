@@ -10,16 +10,17 @@ import { getSiteEngine } from "@/site-engine";
 import { ContactsMapFrame } from "./ContactsMapFrame";
 import { OfficeNavigatorRouteLink } from "./OfficeNavigatorRouteLink";
 import { OfficePhoneReveal } from "./OfficePhoneReveal";
+import { tenant } from "@/project/tenant.config";
 
 const officeService = "Покупка, продажа и консультации по сделкам";
 
 export const metadata: Metadata = {
-  title: "Офисы в Краснодаре",
-  description: "Офисы агентства недвижимости в Краснодаре: адреса, телефон, график работы и запись на встречу.",
+  title: `Офисы в ${tenant.cityRuLocative}`,
+  description: `Офисы агентства недвижимости в ${tenant.cityRuLocative}: адреса, телефон, график работы и запись на встречу.`,
   alternates: { canonical: routes.contacts() },
   openGraph: {
-    title: "Офисы в Краснодаре",
-    description: "Офисы агентства недвижимости в Краснодаре: адреса, телефон, график работы и запись на встречу.",
+    title: `Офисы в ${tenant.cityRuLocative}`,
+    description: `Офисы агентства недвижимости в ${tenant.cityRuLocative}: адреса, телефон, график работы и запись на встречу.`,
     url: routes.contacts(),
     siteName: siteConfig.clientFullName,
     type: "website",
@@ -32,7 +33,7 @@ export default async function ContactsPage() {
   const publicContacts = shell.contacts;
   const mapSrc = offices.find((office) => office.mapUrl)?.mapUrl ?? null;
   const page: ContactsPageDto = {
-    title: "Офисы в Краснодаре",
+    title: `Офисы в ${tenant.cityRuLocative}`,
     serviceLabel: officeService,
     contacts: publicContacts,
     offices,

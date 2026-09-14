@@ -4,6 +4,7 @@ import { NewBuildingQuickSelectionsView, type NewBuildingQuickSelectionItem, typ
 import type { CatalogQuery } from "@/lib/catalog";
 import { filterNewBuildings, type NewBuilding } from "@/modules/new-buildings";
 import { buildNewBuildingQuickSelectionModel } from "./new-building-quick-selections-model";
+import { tenant } from "@/project/tenant.config";
 
 export function NewBuildingQuickSelections({ basePath, query, complexes }: { basePath: string; query: CatalogQuery; complexes: readonly NewBuilding[] }) {
   const affordableCount = filterNewBuildings(complexes, { priceTo: 6_000_000 }).length;
@@ -34,7 +35,7 @@ export function NewBuildingQuickSelections({ basePath, query, complexes }: { bas
       icon: Sparkles,
       request: {
         title: "Получить подборку новостроек",
-        subtitle: "Оставьте контакты. Уточним требования и сравним подходящие квартиры в жилых комплексах Краснодара.",
+        subtitle: `Оставьте контакты. Уточним требования и сравним подходящие квартиры в жилых комплексах ${tenant.cityRuGenitive}.`,
         source: model[3].source,
         formType: model[3].formType,
         submitLabel: "Получить подбор",

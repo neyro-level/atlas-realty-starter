@@ -18,8 +18,10 @@ type JournalPageProps = { searchParams?: Promise<Record<string, string | string[
 export async function generateMetadata({ searchParams }: JournalPageProps): Promise<Metadata> {
   const params = searchParams ? await searchParams : {};
   const hasSearch = Boolean(normalizeQuery(params.q));
-  if (hasSearch) return buildSeoMetadata({ path: routes.journal(), title: "Журнал агентства: как выбрать и проверить недвижимость в Краснодаре", description: "Экспертные материалы агентства недвижимости о квартирах, ипотеке, земле, строительстве и новостройках в Краснодаре.", noIndex: true });
-  return { title: "Журнал агентства: как выбрать и проверить недвижимость в Краснодаре", description: "Экспертные материалы агентства недвижимости о квартирах, ипотеке, земле, строительстве и новостройках в Краснодаре.", alternates: { canonical: routes.journal() }, openGraph: { title: "Журнал агентства: как выбрать и проверить недвижимость в Краснодаре", description: "Экспертные материалы агентства недвижимости о квартирах, ипотеке, земле, строительстве и новостройках в Краснодаре.", url: routes.journal(), siteName: siteConfig.clientFullName, type: "website", images: [defaultSocialPreview] }, twitter: { card: "summary_large_image", title: "Журнал агентства: как выбрать и проверить недвижимость в Краснодаре", description: "Экспертные материалы агентства недвижимости о квартирах, ипотеке, земле, строительстве и новостройках в Краснодаре.", images: [defaultSocialPreviewPath] } };
+  const title = `Журнал агентства: как выбрать и проверить недвижимость в ${siteProfile.city.prepositional}`;
+  const description = `Экспертные материалы агентства недвижимости о квартирах, ипотеке, земле, строительстве и новостройках в ${siteProfile.city.prepositional}.`;
+  if (hasSearch) return buildSeoMetadata({ path: routes.journal(), title, description, noIndex: true });
+  return { title, description, alternates: { canonical: routes.journal() }, openGraph: { title, description, url: routes.journal(), siteName: siteConfig.clientFullName, type: "website", images: [defaultSocialPreview] }, twitter: { card: "summary_large_image", title, description, images: [defaultSocialPreviewPath] } };
 }
 
 function JournalLink({ href, children, ...props }: SiteLinkRendererProps) { return <Link href={href} {...props}>{children}</Link>; }
