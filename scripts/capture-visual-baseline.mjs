@@ -45,7 +45,9 @@ try {
         timeout: 90_000,
         waitUntil: 'domcontentloaded',
       })
-      await page.locator('main').waitFor({ state: 'visible', timeout: 30_000 })
+      await page
+        .locator('main:not([aria-busy="true"])')
+        .waitFor({ state: 'visible', timeout: 30_000 })
       await page.evaluate(async () => {
         await document.fonts.ready
         await Promise.all(
